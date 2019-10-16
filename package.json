@@ -1,0 +1,33 @@
+{
+  "name": "material-rule-34",
+  "version": "1.0.0",
+  "description": "project",
+  "main": "dist/",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VoidlessSeven7/material-rule-34.git"
+  },
+  "author": "VoidlessSeven7",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/VoidlessSeven7/material-rule-34/issues"
+  },
+  "homepage": "https://github.com/VoidlessSeven7/material-rule-34#readme",
+  "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^1.2.0",
+    "autoprefixer": "^9.6.1",
+    "cssnano": "^4.1.10",
+    "del": "^5.0.0",
+    "gulp": "^4.0.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-htmlclean": "^2.7.22",
+    "gulp-imagemin": "^6.0.0",
+    "gulp-postcss": "^8.0.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-terser": "^1.2.0",
+    "postcss-assets": "^5.0.0"
+  }
+}
