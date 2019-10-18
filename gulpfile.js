@@ -13,7 +13,7 @@ const
     terser = require('gulp-terser'),
     del = require("del"),
 
-    concat = require('gulp-concat'), // Added for MDBGulp
+    tailwind = require('tailwindcss'), // Added for MR34
 
     // Directories
     dirSource = './src/',
@@ -24,7 +24,8 @@ const
         autoprefixer({
             overrideBrowserslist: ['last 10 versions'],
             cascade: false
-        })
+        }),
+        tailwind()
     ],
 
     minifiers = [
