@@ -14,18 +14,3 @@ export default Vue.extend({
   }
 });
 </script>
-
-<style>
-h1 {
-  color: white;
-  background-color: black;
-}
-</style>
-<style lang="scss">
-$primary-color: white;
-$bg: black;
-h1 {
-  color: $primary-color;
-  background-color: $bg;
-}
-</style>

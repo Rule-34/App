@@ -1,4 +1,5 @@
-let mix = require('laravel-mix');
+const mix = require('laravel-mix');
+require('mix-tailwindcss');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,10 +12,18 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js('src/app.js', 'dist/')
-    .sass('src/app.scss', 'dist/')
-    .copy(['src/**/*.png', 'src/**/*.txt', 'src/**/*.html'], 'dist/')
+mix.copy(['src/**/*.png', 'src/**/*.txt', 'src/**/*.html'], 'public/')
+    .js('src/app.js', 'public/')
+    .sass('src/app.scss', 'public/')
+    .tailwind()
+    // .browserSync({
+    //     open: 'external',
+    //     host: 'material-rule34.test',
+    //     proxy: 'material-rule34.test',
+    //     files: ['src/**/*', 'public/**/*']
+    // })
     .disableNotifications();
+
 
 
 // Full API

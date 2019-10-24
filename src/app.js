@@ -1,9 +1,17 @@
-import Vue from 'vue';
+import Vue from 'vue'; // Import components
+import axios from 'axios'; // Import components
+import Header from './js/components/Header';
+import SideNav from './js/components/SideNav';
+import LatestPosts from './js/components/LatestPosts';
+import Footer from './js/components/Footer';
 
-// Import components
-import App from './js/components/Example';
 
 new Vue({
     el: '#app',
-    render: h => h(App),
+    components: {
+        Header,
+        SideNav,
+        LatestPosts,
+        Footer
+    }
 });

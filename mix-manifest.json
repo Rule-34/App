@@ -1,7 +1,7 @@
 {
-    "/dist/app.js": "/dist/app.js",
-    "/dist/app.css": "/dist/app.css",
-    "/dist/favicon.png": "/dist/favicon.png",
-    "/dist/robots.txt": "/dist/robots.txt",
-    "/dist/index.html": "/dist/index.html"
+    "/public/app.js": "/public/app.js",
+    "/public/app.css": "/public/app.css",
+    "/public/favicon.png": "/public/favicon.png",
+    "/public/robots.txt": "/public/robots.txt",
+    "/public/index.html": "/public/index.html"
 }
