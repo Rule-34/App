@@ -1,0 +1,17 @@
+// Post CONTAINER
+.card-container {
+    @apply .bg-white .mx-auto .w-full
+}
+
+// Individual posts
+.card-post-container {
+    @apply .border .rounded-lg .bg-white .m-5 .overflow-hidden .shadow
+}
+
+.card-post-img {
+    @apply .bg-cover .w-full
+}
+
+.card-post-tags {
+    @apply .inline-block
+}
