@@ -15,5 +15,5 @@ module.exports = {
     }
   },
   variants: {},
-  plugins: [require('tailwindcss-gradients')()]
+  // plugins: [require('tailwindcss-gradients')()]
 };
