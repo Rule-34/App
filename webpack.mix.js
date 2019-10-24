@@ -22,6 +22,10 @@ mix.copy(['src/**/*.png', 'src/**/*.txt', 'src/**/*.html'], 'public/')
     //     proxy: 'material-rule34.test',
     //     files: ['src/**/*', 'public/**/*']
     // })
+    .options({
+        extractVueStyles: true,
+        // purifyCss: true,
+    })
     .disableNotifications();
 
 

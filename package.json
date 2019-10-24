@@ -30,6 +30,8 @@
     "del-cli": "^3.0.0",
     "laravel-mix": "^5.0.0",
     "mix-tailwindcss": "^1.2.0",
+    "purify-css": "^1.2.5",
+    "purifycss-webpack": "^0.7.0",
     "resolve-url-loader": "^3.1.0",
     "sass": "^1.23.0",
     "sass-loader": "^8.0.0",
