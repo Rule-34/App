@@ -1,4 +1,11 @@
-.bg-gradient-lilac-blue {
-    background: rgb(155, 155, 224);
-    background: linear-gradient(152deg, rgba(155, 155, 224, 1) 38%, rgba(0, 212, 255, 1) 100%);
+.navigation-toggler {
+    @apply .w-12 .h-12 .m-3 .bg-gradient-lilac-blue .border .rounded-full .shadow-lg .select-none
+}
+
+.sidebar {
+    @apply .fixed .w-full .min-h-screen .bg-white .border .rounded-l-lg .shadow .z-10
+}
+
+.sidebar-img {
+    @apply .w-full .h-full .object-cover
 }

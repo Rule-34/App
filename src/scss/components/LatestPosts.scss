@@ -4,14 +4,10 @@
 }
 
 // Individual posts
-.card-post-container {
+.post-container {
     @apply .border .rounded-lg .bg-white .m-5 .overflow-hidden .shadow
 }
 
-.card-post-img {
+.post-img {
     @apply .object-cover .w-full
-}
-
-.card-post-tags {
-    @apply .inline-block
 }

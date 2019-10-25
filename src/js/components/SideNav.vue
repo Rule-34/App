@@ -2,22 +2,15 @@
   <div>
     <!-- Navigation Bar Toggler -->
     <div class="fixed z-20">
-      <button
-        class="w-12 h-12 m-3 bg-gradient-lilac-blue border rounded-full shadow-lg select-none"
-        @click="toggleNav"
-        title="Menu"
-      >&nbsp;</button>
+      <button class="navigation-toggler" @click="toggleNav" title="Menu">&nbsp;</button>
     </div>
 
     <!-- Actual Navigation Bar -->
-    <nav
-      class="fixed w-full md:w-1/4 min-h-screen bg-white border rounded-l-lg shadow z-10"
-      v-if="isActive"
-    >
+    <nav class="sidebar md:w-1/4" v-if="isActive">
       <!-- Hero Image -->
       <div class="w-full h-40">
         <img
-          class="w-full h-full object-cover"
+          class="sidebar-img"
           src="img/logo.png"
           alt="Material Rule 34 Logo"
           title="Material Rule 34"
