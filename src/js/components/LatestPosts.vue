@@ -1,23 +1,25 @@
 <template>
   <div class="card-container md:w-4/5">
     <!-- POSITION ABSOLUTE AS A TEMPORAL FIX -->
-    <div class="card-post-container text-center" v-if="errors">
+    <div class="post-container text-center p-2" v-if="errors">
       <h1 class="bold" v-text="errors"></h1>
       <a href="#" @click="getPosts">Try again?</a>
     </div>
     <!-- Loop for every post -->
-    <div class="card-post-container" v-for="post in posts" :key="post.id">
+    <div class="post-container" v-for="post in posts" :key="post.id">
       <!-- Image -->
-      <img class="card-post-img" :src="post.file_url" :alt="post.type" v-if="post.type === 'image'" />
+      <img class="post-img" v-lazy="post.file_url" v-if="post.type === 'image'" />
+      <!-- Video -->
       <video
-        class="card-post-img"
+        class="post-img"
         :alt="post.type"
         v-if="post.type == 'video'"
         controls
         autoplay
+        muted
         loop
       >
-        <source :src="post.file_url" />Your browser doesnt support HTML5 video.
+        <source v-lazy="post.file_url" />Your browser doesnt support HTML5 video.
       </video>
       <!-- Details like comments, tags and source -->
       <div class="p-6">
@@ -76,9 +78,9 @@ export default {
 
       try {
         const response = await axios.get(
-          "https://r34-json-api.herokuapp.com/posts"
+          "https://r34-json.herokuapp.com/posts"
         );
-        this.posts = response.data;
+        this.posts = response.data.posts;
         // console.log(response);
       } catch (error) {
         // console.error(error);
