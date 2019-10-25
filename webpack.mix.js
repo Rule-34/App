@@ -1,5 +1,6 @@
 const mix = require('laravel-mix');
 require('mix-tailwindcss');
+require('laravel-mix-purgecss');
 
 /*
  |--------------------------------------------------------------------------
@@ -12,20 +13,23 @@ require('mix-tailwindcss');
  |
  */
 
-mix.copy(['src/**/*.png', 'src/**/*.txt', 'src/**/*.html'], 'public/')
-    .js('src/app.js', 'public/')
-    .sass('src/app.scss', 'public/')
+mix.copy(['src/**/*.png', 'src/**/*.jpg', 'src/**/*.svg'], 'public/img')
+    .copy(['src/**/*.txt', 'src/**/*.html'], 'public/')
+    .js('src/app.js', 'public/js')
+    .sass('src/app.scss', 'public/css')
     .tailwind()
+    .purgeCss({
+        folders: ['src/'],
+    })
     // .browserSync({
     //     open: 'external',
     //     host: 'material-rule34.test',
     //     proxy: 'material-rule34.test',
     //     files: ['src/**/*', 'public/**/*']
     // })
-    .options({
-        extractVueStyles: true,
-        // purifyCss: true,
-    })
+    // .options({
+    // extractVueStyles: true,
+    // })
     .disableNotifications();
 
 

@@ -1,7 +1,9 @@
 {
-    "/public/app.js": "/public/app.js",
-    "/public/app.css": "/public/app.css",
-    "/public/favicon.png": "/public/favicon.png",
+    "/public/js/app.js": "/public/js/app.js",
+    "/public/css/app.css": "/public/css/app.css",
+    "/public/img/favicon.png": "/public/img/favicon.png",
+    "/public/img/logo.png": "/public/img/logo.png",
+    "/public/img/menu.svg": "/public/img/menu.svg",
     "/public/robots.txt": "/public/robots.txt",
     "/public/index.html": "/public/index.html"
 }

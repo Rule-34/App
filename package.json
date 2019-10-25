@@ -29,6 +29,7 @@
     "cross-env": "^6.0.3",
     "del-cli": "^3.0.0",
     "laravel-mix": "^5.0.0",
+    "laravel-mix-purgecss": "^4.2.0",
     "mix-tailwindcss": "^1.2.0",
     "purify-css": "^1.2.5",
     "purifycss-webpack": "^0.7.0",
