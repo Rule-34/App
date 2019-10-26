@@ -10,17 +10,12 @@
       <!-- Image -->
       <img class="post-img" v-lazy="post.file_url" v-if="post.type === 'image'" />
       <!-- Video -->
-      <video
-        class="post-img"
-        :alt="post.type"
-        v-if="post.type == 'video'"
-        controls
-        autoplay
-        muted
-        loop
-      >
-        <source v-lazy="post.file_url" />Your browser doesnt support HTML5 video.
-      </video>
+      <lazy-component v-if="post.type == 'video'">
+        <video class="post-img" :alt="post.type" controls autoplay muted loop>
+          <source :src="post.file_url" />Your browser doesnt support HTML5 video.
+        </video>
+      </lazy-component>
+
       <!-- Details like comments, tags and source -->
       <div class="p-6">
         <div class="card-post-details">
@@ -62,11 +57,14 @@ export default {
   },
   // computed: {},
   created() {
-    this.$store.dispatch("getLatestPostsData");
+    this.getPosts();
   },
   methods: {
     getPosts: function() {
-      this.$store.dispatch("getLatestPostsData");
+      this.$store.dispatch("axiosGet", {
+        url: "posts",
+        mutationToReturn: "newLatestPostsData"
+      });
     }
   }
 };

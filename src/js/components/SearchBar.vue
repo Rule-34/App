@@ -7,9 +7,16 @@ export default {
   name: "search-bar",
   // props: ["category"],
   data() {
-    return {};
+    return this.$store.state.searchData;
   },
-  methods: {}
+  methods: {
+    getPosts: function() {
+      this.$store.dispatch("axiosGet", {
+        url: "posts",
+        mutationToReturn: "newLatestPostsData"
+      });
+    }
+  }
 };
 </script>
 
