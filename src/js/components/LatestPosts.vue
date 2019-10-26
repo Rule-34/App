@@ -1,12 +1,12 @@
 <template>
   <div class="card-container md:w-4/5">
-    <!-- POSITION ABSOLUTE AS A TEMPORAL FIX -->
+    <!-- If Axios request got errors -->
     <div class="post-container text-center p-2" v-if="errors">
       <h1 class="bold" v-text="errors"></h1>
       <a href="#" @click="getPosts">Try again?</a>
     </div>
     <!-- Loop for every post -->
-    <div class="post-container" v-for="post in posts" :key="post.id">
+    <div class="post-container" v-for="post in data.posts" :key="post.id">
       <!-- Image -->
       <img class="post-img" v-lazy="post.file_url" v-if="post.type === 'image'" />
       <!-- Video -->
@@ -55,39 +55,19 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   name: "latest-posts",
-  // props: ["category"],
   data() {
-    return {
-      posts: "",
-      comments: "",
-      errors: ""
-    };
+    return this.$store.state.latestPostsData;
   },
   // computed: {},
   created() {
-    this.getPosts();
+    this.$store.dispatch("getLatestPostsData");
   },
   methods: {
-    getPosts: async function(url) {
-      // Reset errors cause we're trying again
-      this.errors = "";
-
-      try {
-        const response = await axios.get(
-          "https://r34-json.herokuapp.com/posts"
-        );
-        this.posts = response.data.posts;
-        // console.log(response);
-      } catch (error) {
-        // console.error(error);
-        this.errors = error;
-      }
+    getPosts: function() {
+      this.$store.dispatch("getLatestPostsData");
     }
   }
 };
 </script>
-

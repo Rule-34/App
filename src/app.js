@@ -3,12 +3,15 @@ import {
     track,
     parameters
 } from "insights-js";
-import Vue from 'vue'; // Import components
-import CoolBar from './js/components/CoolBar';
+import Vue from 'vue';
+import store from './store/store.js';
+import CoolBar from './js/components/CoolBar'; // Import components
 import SideNav from './js/components/SideNav';
+import SearchBar from './js/components/SearchBar';
 import LatestPosts from './js/components/LatestPosts';
-import Footer from './js/components/Footer';
-import VueLazyload from 'vue-lazyload';
+import VueLazyload from 'vue-lazyload'; // Import lazyloading
+
+
 
 // Lazy load images
 Vue.use(VueLazyload, {
@@ -24,11 +27,14 @@ Vue.use(VueLazyload, {
 
 new Vue({
     el: '#app',
+    // provide the store using the "store" option.
+    // this will inject the store instance to all child components.
+    store,
     components: {
         CoolBar,
         SideNav,
-        LatestPosts,
-        Footer
+        SearchBar,
+        LatestPosts
     }
 });
 
