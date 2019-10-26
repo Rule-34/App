@@ -1,6 +1,7 @@
 const mix = require('laravel-mix');
 require('mix-tailwindcss');
 require('laravel-mix-purgecss');
+require('mix-html-builder');
 
 /*
  |--------------------------------------------------------------------------
@@ -13,14 +14,26 @@ require('laravel-mix-purgecss');
  |
  */
 
-mix.copy(['src/**/*.png', 'src/**/*.jpg', 'src/**/*.svg'], 'public/img')
-    .copy(['src/**/*.txt', 'src/**/*.html'], 'public/')
+mix.html({
+        htmlRoot: 'src/index.html',
+        output: 'public',
+        partialRoot: 'src/html/partials',
+        minify: {
+            removeComments: true,
+            removeRedundantAttributes: true,
+            useShortDoctype: true
+        }
+    })
+    .copy(['src/img/*.png', 'src/img/*.jpg', 'src/img/*.svg'], 'public/img') // Images
+    .copy('src/img/favicon/*', 'public/img/favicon/') // Favicon related
+    .copy('src/*.txt', 'public/') // Robots.txt
     .js('src/app.js', 'public/js')
     .sass('src/app.scss', 'public/css')
     .tailwind()
     .purgeCss({
         folders: ['src/'],
     })
+
     // .browserSync({
     //     open: 'external',
     //     host: 'material-rule34.test',
