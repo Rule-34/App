@@ -15,7 +15,11 @@ import VueLazyload from 'vue-lazyload'; // Import lazyloading
 
 // Lazy load images
 Vue.use(VueLazyload, {
-    // set observer to true
+    lazyComponent: true,
+    preLoad: 1.5,
+    // error: 'dist/error.png',
+    // loading: 'dist/loading.gif', // Add skeletonBox
+    attempt: 1,
     observer: true,
 
     // optional
