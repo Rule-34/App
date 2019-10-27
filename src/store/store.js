@@ -12,32 +12,39 @@ export default new Vuex.Store({
     state: {
         latestPostsData: {
             data: "",
-            errors: ""
+            errors: "",
+            pid: 1, // Page id
         },
         searchData: {
             data: "",
             errors: ""
         },
-        apiUrl: "https://r34-json.herokuapp.com/",
+        apiUrl: "https://r34-json.herokuapp.com/", // Default api
 
     },
     mutations: {
+        // Handler for post's data changes
         newLatestPostsData(state, payload) {
-            if (payload.data) {
+            if (payload.data !== undefined) {
+                // console.log(payload.data);
                 state.latestPostsData.data = payload.data;
             }
-            // if (payload.errors) {
             state.latestPostsData.errors = payload.errors;
-            // }
+
+            if (payload.pid !== undefined) {
+                // console.log(payload.pid);
+                state.latestPostsData.pid = payload.pid;
+            }
 
         },
+        // Handler for api changes
         newApiUrl(state, payload) {
             state.apiUrl = payload.newUrl;
         },
     },
     actions: {
 
-        // This an Ajax Get
+        // This a customisable Get request
         async axiosGet({
             commit,
             dispatch
@@ -48,6 +55,8 @@ export default new Vuex.Store({
                 errors: ""
             });
 
+            // Debugging what url does it get
+            // console.log(dataObj.url);
             try {
                 const response = await axios.get(
                     this.state.apiUrl + dataObj.url
@@ -72,6 +81,7 @@ export default new Vuex.Store({
             }
         },
 
+        // Change api to an alternative one
         async changeApi({
             commit
         }, dataObj) {
