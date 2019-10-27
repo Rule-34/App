@@ -4,8 +4,7 @@ import {
     parameters
 } from "insights-js";
 import Vue from 'vue';
-import store from './store/store.js';
-import CoolBar from './js/components/CoolBar'; // Import components
+import store from './store/store.js'; // Import components
 import SideNav from './js/components/SideNav';
 import SearchBar from './js/components/SearchBar';
 import LatestPosts from './js/components/LatestPosts';
@@ -35,7 +34,6 @@ new Vue({
     // this will inject the store instance to all child components.
     store,
     components: {
-        CoolBar,
         SideNav,
         SearchBar,
         LatestPosts
