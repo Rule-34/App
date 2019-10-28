@@ -1,22 +1,25 @@
 <template>
-  <div class="card-container md:w-4/5"></div>
+  <div class="search-bar" :class="{active: searchData.isActive}">
+    <div class="flex h-screen bg-black-10">
+      <div class="post-container p-2 m-auto">
+        <input
+          class="outline-none inline-block border-r-2"
+          type="search"
+          placeholder="Search: eg. dragons"
+        />
+        <button class="inline-block pl-1" type="submit">Search</button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "search-bar",
-  // props: ["category"],
-  data() {
-    return this.$store.state.searchData;
-  },
-  methods: {
-    getPosts: function() {
-      this.$store.dispatch("axiosGet", {
-        url: "posts",
-        mutationToReturn: "newLatestPostsData"
-      });
-    }
-  }
+  // Get data() from vuex store "searchData"
+  computed: mapState(["searchData"]),
+  methods: {}
 };
 </script>
-

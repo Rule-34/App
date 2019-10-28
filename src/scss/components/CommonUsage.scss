@@ -1,4 +1,8 @@
 // Element related
+button:focus {
+    outline: 0;
+}
+
 a {
     @apply .text-blue-400
 }
@@ -20,6 +24,10 @@ a:hover {
 .cool-bar {
     height: 10px;
     @apply .w-full .block .bg-gradient-lilac-blue
+}
+
+.card-container {
+    @apply .bg-white .mx-auto .w-full
 }
 
 // Animations 

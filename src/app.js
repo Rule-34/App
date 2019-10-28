@@ -6,7 +6,6 @@ import {
 import Vue from 'vue';
 import store from './store/store.js'; // Import components
 import SideNav from './js/components/SideNav';
-import SearchBar from './js/components/SearchBar';
 import LatestPosts from './js/components/LatestPosts';
 import VueLazyload from 'vue-lazyload'; // Import lazyloading
 
@@ -35,7 +34,6 @@ new Vue({
     store,
     components: {
         SideNav,
-        SearchBar,
         LatestPosts
     }
 });
