@@ -18,7 +18,7 @@ Vue.use(VueLazyload, {
     preLoad: 1.5,
     // error: 'dist/error.png',
     // loading: 'dist/loading.gif', // Add skeletonBox
-    attempt: 1,
+    attempt: 2,
     observer: true,
 
     // optional

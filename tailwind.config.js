@@ -2,15 +2,21 @@ module.exports = {
   theme: {
     extend: {
 
-      linearGradients: theme => ({
-        colors: theme('colors'),
-      }),
-      radialGradients: theme => ({
-        colors: theme('colors'),
-      }),
-      conicGradients: theme => ({
-        colors: theme('colors'),
-      }),
+      inset: {
+        'minus-1/4': '-25%',
+        'minus-3/4': '-75%',
+        'minus-100': '-100%',
+      }
+
+      // linearGradients: theme => ({
+      //   colors: theme('colors'),
+      // }),
+      // radialGradients: theme => ({
+      //   colors: theme('colors'),
+      // }),
+      // conicGradients: theme => ({
+      //   colors: theme('colors'),
+      // }),
 
     }
   },
