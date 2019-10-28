@@ -1,3 +1,4 @@
+// Element related
 a {
     @apply .text-blue-400
 }
@@ -6,7 +7,19 @@ a:hover {
     @apply .text-blue-600
 }
 
+// Color related
 .bg-gradient-lilac-blue {
-    background: rgb(155, 155, 224);
     background: linear-gradient(152deg, rgba(155, 155, 224, 1) 38%, rgba(0, 212, 255, 1) 100%);
 }
+
+.bg-gradient-blue-lilac {
+    background: linear-gradient(160deg, rgba(0, 212, 255, 1) 38%, rgba(155, 155, 224, 1) 100%);
+}
+
+// Specific element related
+.cool-bar {
+    height: 10px;
+    @apply .w-full .block .bg-gradient-lilac-blue
+}
+
+// Animations 

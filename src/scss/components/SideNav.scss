@@ -1,11 +1,73 @@
+/* ----- Navigation toggler related ----- */
+.navigation-toggler-button {
+    @apply .w-12 .h-12 .m-4 .bg-gradient-lilac-blue .border .rounded-full .shadow-lg .select-none .block
+}
+
+.navigation-search-button {
+    @apply .w-10 .h-10 .m-5 .bg-gradient-blue-lilac .border .rounded-full .shadow-lg .select-none .block
+}
+
 .navigation-toggler {
-    @apply .w-12 .h-12 .m-3 .bg-gradient-lilac-blue .border .rounded-full .shadow-lg .select-none
+    top: 25px;
+    left: -35px;
+    transition: left 0.3s ease-in-out;
+    @apply .fixed .z-20
 }
 
+.navigation-toggler:hover {
+    @apply .left-0
+}
+
+/* ----- Sidebar related ----- */
+.sidebar-container {
+    transition: all 0.35s ease-in-out;
+    @apply .fixed .flex .z-10 .min-h-screen .w-full .left-minus-100
+}
+
+// Make full width when on small devices
 .sidebar {
-    @apply .fixed .w-full .min-h-screen .bg-white .border .rounded-l-lg .shadow .z-10
+    @apply .w-full .bg-white .border .shadow
 }
 
+// Hide clickable close area when on small devices
+.sidebar-close-area {
+    @apply .hidden .bg-transparent
+}
+
+.sidebar-container.active {
+    @apply .left-0
+}
+
+// Changes for medium screens
+@screen md {
+
+    // Navigation toggler related
+    .navigation-toggler-button {
+        @apply .w-16 .h-16 .m-2
+    }
+
+    .navigation-search-button {
+        @apply .w-12 .h-12 .m-4
+    }
+
+    // Sidebar related
+    .sidebar-container {
+        @apply .left-minus-100
+    }
+
+    // Make the sidebar one fourth of the screen on medium devices
+    .sidebar {
+        @apply .w-1/4 .bg-white .border .shadow
+    }
+
+    // Make the close area occupy the rest of the screen on medium devices
+    .sidebar-close-area {
+        @apply .w-3/4 .block
+    }
+
+}
+
+/* ----- Rest of things related ----- */
 .sidebar-img {
     @apply .w-full .h-full .object-cover
 }
