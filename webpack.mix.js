@@ -3,6 +3,10 @@ require('mix-tailwindcss');
 require('laravel-mix-purgecss');
 require('mix-html-builder');
 
+// const purgeCssWhitelist = ['.search-bar.active', '.sidebar-container.active'];
+const purgeCssWhitelistPatterns = [/active/];
+// const purgeCssWhitelistPatternsChildren = [/active$/];
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -32,6 +36,9 @@ mix.html({
     .tailwind()
     .purgeCss({
         folders: ['src/'],
+        // whitelist: purgeCssWhitelist,
+        whitelistPatterns: purgeCssWhitelistPatterns,
+        // whitelistPatternsChildren: purgeCssWhitelistPatternsChildren,
     })
 
     // .browserSync({
