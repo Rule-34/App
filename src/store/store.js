@@ -17,7 +17,8 @@ export default new Vuex.Store({
         },
         searchData: {
             data: "",
-            errors: ""
+            errors: "",
+            isActive: false,
         },
         apiUrl: "https://r34-json.herokuapp.com/", // Default api
 
@@ -40,6 +41,9 @@ export default new Vuex.Store({
         // Handler for api changes
         newApiUrl(state, payload) {
             state.apiUrl = payload.newUrl;
+        },
+        newSearchData(state, payload) {
+            state.searchData.isActive = payload.isActive;
         },
     },
     actions: {
@@ -92,6 +96,22 @@ export default new Vuex.Store({
                 type: "newApiUrl",
                 newUrl: "https://r34-api-clone.herokuapp.com/"
             });
+        },
+
+        async toggleSearchComponent({
+            commit
+        }, dataObj) {
+            if (this.state.searchData.isActive) {
+                commit({
+                    type: "newSearchData",
+                    isActive: false
+                });
+            } else if (!this.state.searchData.isActive) {
+                commit({
+                    type: "newSearchData",
+                    isActive: true
+                });
+            }
         }
     },
 

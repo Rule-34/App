@@ -3,11 +3,11 @@
     <!-- Side Bar Toggler -->
     <div class="navigation-toggler">
       <button class="navigation-toggler-button" @click="toggleNav" title="Menu">&nbsp;</button>
-      <button class="navigation-search-button" @click="toggleNav" title="Search">S</button>
+      <button class="navigation-search-button" @click="toggleSearch" title="Search">S</button>
     </div>
 
     <!-- Side bar -->
-    <div class="sidebar-container" :class="{active: isActive}">
+    <div class="sidebar-container" :class="{active: isNavActive}">
       <!-- Actual Navigation Bar -->
       <nav class="sidebar">
         <!-- Hero Image -->
@@ -35,26 +35,36 @@
       <!-- Space for clicking out of the menu -->
       <div class="sidebar-close-area" @click="toggleNav"></div>
     </div>
+
+    <!-- Search component -->
+    <search-bar />
   </div>
 </template>
 
 <script>
+import SearchBar from "./SearchBar";
+
 export default {
   name: "side-nav",
+  components: { SearchBar },
   data() {
     return {
-      isActive: false
+      isNavActive: false,
+      isSearchActive: false
     };
   },
   methods: {
     toggleNav: function() {
-      if (this.isActive) {
-        this.isActive = false;
+      if (this.isNavActive) {
+        this.isNavActive = false;
         return;
-      } else if (!this.isActive) {
-        this.isActive = true;
+      } else if (!this.isNavActive) {
+        this.isNavActive = true;
         return;
       }
+    },
+    toggleSearch: function() {
+      this.$store.dispatch("toggleSearchComponent");
     }
   }
 };

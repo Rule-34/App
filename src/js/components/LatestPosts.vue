@@ -67,12 +67,12 @@ import { mapState } from "vuex";
 
 export default {
   name: "latest-posts",
+  // Get data() from vuex store "latestPostsData"
   computed: mapState(["latestPostsData"]),
+
+  // Get posts as fast as possible
   beforeMount() {
     this.getPosts();
-  },
-  mounted() {
-    // this.scroll();
   },
   methods: {
     // Get posts from api
@@ -115,6 +115,10 @@ export default {
     //     }
     //   };
     // }
+  },
+
+  mounted() {
+    // this.scroll();
   }
 };
 </script>

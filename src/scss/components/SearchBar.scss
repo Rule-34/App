@@ -1,0 +1,7 @@
+.search-bar {
+    @apply .fixed .min-h-screen .w-full .hidden .z-10
+}
+
+.search-bar.active {
+    @apply .block
+}
