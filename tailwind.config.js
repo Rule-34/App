@@ -4,6 +4,9 @@ module.exports = {
 
       colors: {
         'black-10': 'rgba(0, 0, 0, 0.1)',
+        'black-15': 'rgba(0, 0, 0, 0.15)',
+        'black-80': 'rgba(0, 0, 0, 0.8)',
+        'black-90': 'rgba(0, 0, 0, 0.9)',
         'white-10': 'rgba(255, 255, 255, 0.1)',
       },
 

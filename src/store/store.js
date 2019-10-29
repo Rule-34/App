@@ -10,7 +10,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        latestPostsData: {
+        dashBoardData: {
             data: "",
             errors: "",
             pid: 1, // Page id
@@ -18,34 +18,66 @@ export default new Vuex.Store({
         searchData: {
             data: "",
             errors: "",
+            query: "",
             isActive: false,
         },
+        generalData: {
+            limit: 20,
+        },
         apiUrl: "https://r34-json.herokuapp.com/", // Default api
+        searchApiUrl: "https://r34-json.herokuapp.com/", // Default api
 
     },
+
+    // Necessary for debugging and keeping track of state variables
     mutations: {
+
         // Handler for post's data changes
-        newLatestPostsData(state, payload) {
+        newDashBoardData(state, payload) {
+
+            // Data
             if (payload.data !== undefined) {
                 // console.log(payload.data);
-                state.latestPostsData.data = payload.data;
+                state.dashBoardData.data = payload.data;
             }
-            state.latestPostsData.errors = payload.errors;
 
+            // Errors
+            state.dashBoardData.errors = payload.errors;
+
+            // Page ID
             if (payload.pid !== undefined) {
                 // console.log(payload.pid);
-                state.latestPostsData.pid = payload.pid;
+                state.dashBoardData.pid = payload.pid;
             }
 
         },
+
         // Handler for api changes
         newApiUrl(state, payload) {
+            // New url
             state.apiUrl = payload.newUrl;
         },
+
+        // Handler for Search changes
         newSearchData(state, payload) {
-            state.searchData.isActive = payload.isActive;
+
+            // Apply "active" css class
+            if (payload.isActive !== undefined) {
+                state.searchData.isActive = payload.isActive;
+            }
+
+            // Errors
+            state.searchData.errors = payload.errors;
+
+            // Data
+            if (payload.data !== undefined) {
+                // console.log(payload.data);
+                state.searchData.data = payload.data;
+            }
         },
     },
+
+    // Like mutations but asynchronous
     actions: {
 
         // This a customisable Get request
@@ -53,6 +85,7 @@ export default new Vuex.Store({
             commit,
             dispatch
         }, dataObj) {
+
             // Reset errors cause we're trying again
             commit({
                 type: dataObj.mutationToReturn,
@@ -61,6 +94,8 @@ export default new Vuex.Store({
 
             // Debugging what url does it get
             // console.log(dataObj.url);
+
+            // Actual axios get
             try {
                 const response = await axios.get(
                     this.state.apiUrl + dataObj.url
@@ -98,6 +133,7 @@ export default new Vuex.Store({
             });
         },
 
+        // Toggles the search (This is the way i found it to work since i cannot get components to talk to each other and im not doing a bus if i have vueX)
         async toggleSearchComponent({
             commit
         }, dataObj) {
