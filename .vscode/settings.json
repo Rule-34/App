@@ -1,4 +1,4 @@
 {
     "eslint.enable": false,
-    "liveServer.settings.multiRootWorkspaceName": "material-rule-34"
+    "scss.validate": false
 }

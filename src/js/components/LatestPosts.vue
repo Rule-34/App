@@ -11,6 +11,7 @@
       <div class="post-container" v-for="post in latestPostsData.data.posts" :key="post.id">
         <!-- Image -->
         <img class="post-img" v-lazy="post.file_url" v-if="post.type === 'image'" />
+        <!-- :style="{height: post.height + 'px'}" -->
 
         <!-- Video -->
         <lazy-component v-if="post.type == 'video'">
@@ -56,7 +57,13 @@
       v-if="!latestPostsData.errors && latestPostsData"
     >
       <a href="#" class="w-1/3 button" title="Load last page" @click="getLastPage">&lt; Last page</a>
-      <p class="w-1/3" v-text="latestPostsData.pid"></p>
+      <a
+        href="#"
+        class="w-1/3"
+        title="Load specific page"
+        v-text="latestPostsData.pid"
+        @click="getSpecificPage"
+      ></a>
       <a href="#" class="w-1/3 button" title="Load next page" @click="getNextPage">Next page &gt;</a>
     </div>
   </div>
@@ -96,6 +103,17 @@ export default {
         pid: parseInt(this.latestPostsData.pid) - 1
       });
       this.getPosts();
+    },
+    getSpecificPage() {
+      let specificPage = prompt("What page do you want to go to?", "69");
+      if (!isNaN(specificPage)) {
+        this.$store.commit("newLatestPostsData", {
+          pid: specificPage
+        });
+        this.getPosts();
+      } else {
+        alert("Wrong input, only numbers please");
+      }
     }
     // Test for bottom of page, and then load next page
     // scroll() {

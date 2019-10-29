@@ -14,16 +14,15 @@ import VueLazyload from 'vue-lazyload'; // Import lazyloading
 // Lazy load images
 Vue.use(VueLazyload, {
     lazyComponent: true,
-    preLoad: 1.5,
+    preLoad: 2,
     // error: 'dist/error.png',
     // loading: 'dist/loading.gif', // Add skeletonBox
-    attempt: 2,
-    observer: true,
 
     // optional
+    observer: true,
     observerOptions: {
         rootMargin: '0px',
-        threshold: 0.1
+        threshold: 0.01
     }
 });
 
