@@ -10,7 +10,7 @@
       <!-- Loop for every post -->
       <div class="post-container" v-for="post in dashBoardData.data.posts" :key="post.id">
         <!-- Image -->
-        <img class="post-img" v-lazy="post.file_url" v-if="post.type === 'image'" />
+        <img class="post-img" :alt="post.type" v-lazy="post.file_url" v-if="post.type === 'image'" />
         <!-- :style="{height: post.height + 'px'}" -->
 
         <!-- Video -->
@@ -35,14 +35,11 @@
             </div>-->
             <!-- Tags and source -->
             <div class="flex items-baseline overflow-hidden text-sm">
+              <!-- Tags -->
               <div class="w-5/6 pr-1 truncate" v-if="post.tags">
-                <a
-                  v-for="tag in post.tags"
-                  :key="post[tag]"
-                  rel="noreferrer"
-                  target="_blank"
-                >{{tag + "&nbsp;"}}</a>
+                <a v-for="tag in post.tags" :key="post[tag]">{{tag + "&nbsp;"}}</a>
               </div>
+              <!-- Source -->
               <div class="w-1/6 pl-1 text-right" v-if="post.source">
                 <a :href="post.source" rel="noreferrer" target="_blank">Source</a>
               </div>
