@@ -1,14 +1,14 @@
 <template>
   <div class="card-container md:w-4/5">
     <!-- If Axios request got errors -->
-    <div class="post-container text-center p-2" v-if="latestPostsData.errors">
-      <h1 class="bold" v-text="latestPostsData.errors"></h1>
+    <div class="post-container text-center p-2" v-if="dashBoardData.errors">
+      <h1 class="bold" v-text="dashBoardData.errors"></h1>
       <a href="#" @click="getPosts">Try again?</a>
     </div>
     <!-- Test for api data before rendering anything -->
-    <div v-if="latestPostsData">
+    <div v-if="dashBoardData">
       <!-- Loop for every post -->
-      <div class="post-container" v-for="post in latestPostsData.data.posts" :key="post.id">
+      <div class="post-container" v-for="post in dashBoardData.data.posts" :key="post.id">
         <!-- Image -->
         <img class="post-img" v-lazy="post.file_url" v-if="post.type === 'image'" />
         <!-- :style="{height: post.height + 'px'}" -->
@@ -51,17 +51,15 @@
         </div>
       </div>
     </div>
-    <!-- Controls for next and last pages -->
-    <div
-      class="post-container text-center p-2 flex"
-      v-if="!latestPostsData.errors && latestPostsData"
-    >
+
+    <!-- Controls for navigating pages -->
+    <div class="post-container text-center p-2 flex" v-if="!dashBoardData.errors && dashBoardData">
       <a href="#" class="w-1/3 button" title="Load last page" @click="getLastPage">&lt; Last page</a>
       <a
         href="#"
         class="w-1/3"
         title="Load specific page"
-        v-text="latestPostsData.pid"
+        v-text="dashBoardData.pid"
         @click="getSpecificPage"
       ></a>
       <a href="#" class="w-1/3 button" title="Load next page" @click="getNextPage">Next page &gt;</a>
@@ -73,9 +71,9 @@
 import { mapState } from "vuex";
 
 export default {
-  name: "latest-posts",
-  // Get data() from vuex store "latestPostsData"
-  computed: mapState(["latestPostsData"]),
+  name: "dash-board",
+  // Get data() from vuex store "dashBoardData"
+  computed: mapState(["dashBoardData", "generalData"]),
 
   // Get posts as fast as possible
   beforeMount() {
@@ -84,30 +82,30 @@ export default {
   methods: {
     // Get posts from api
     getPosts() {
-      // console.log(`${this.latestPostsData.pid} GET`);
+      // console.log(`${this.dashBoardData.pid} GET`);
       this.$store.dispatch("axiosGet", {
-        url: `posts?pid=${this.latestPostsData.pid}&limit=20`,
-        mutationToReturn: "newLatestPostsData"
+        url: `posts?pid=${this.dashBoardData.pid}&limit=${this.generalData.limit}`,
+        mutationToReturn: "newDashBoardData"
       });
     },
     // Get next page from api
     getNextPage() {
-      this.$store.commit("newLatestPostsData", {
-        pid: parseInt(this.latestPostsData.pid) + 1
+      this.$store.commit("newDashBoardData", {
+        pid: parseInt(this.dashBoardData.pid) + 1
       });
       this.getPosts();
     },
     // Get last page from api
     getLastPage() {
-      this.$store.commit("newLatestPostsData", {
-        pid: parseInt(this.latestPostsData.pid) - 1
+      this.$store.commit("newDashBoardData", {
+        pid: parseInt(this.dashBoardData.pid) - 1
       });
       this.getPosts();
     },
     getSpecificPage() {
       let specificPage = prompt("What page do you want to go to?", "69");
       if (!isNaN(specificPage)) {
-        this.$store.commit("newLatestPostsData", {
+        this.$store.commit("newDashBoardData", {
           pid: specificPage
         });
         this.getPosts();

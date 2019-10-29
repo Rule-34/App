@@ -6,10 +6,11 @@ import {
 import Vue from 'vue';
 import store from './store/store.js'; // Import components
 import SideNav from './js/components/SideNav';
-import LatestPosts from './js/components/LatestPosts';
+import DashBoard from './js/components/DashBoard';
 import VueLazyload from 'vue-lazyload'; // Import lazyloading
+import vueDebounce from 'vue-debounce'; // Debouncing
 
-
+/* -------- Vue plugins -------- */
 
 // Lazy load images
 Vue.use(VueLazyload, {
@@ -26,6 +27,11 @@ Vue.use(VueLazyload, {
     }
 });
 
+// Vue debouncing
+Vue.use(vueDebounce);
+
+/* -------- Vue -------- */
+
 new Vue({
     el: '#app',
     // provide the store using the "store" option.
@@ -33,11 +39,12 @@ new Vue({
     store,
     components: {
         SideNav,
-        LatestPosts
+        DashBoard
     }
 });
 
-// Analytics
+/* -------- Analytics -------- */
+
 init("kQrGvntXWy9eDO4h");
 track({
     id: "user-usage",
