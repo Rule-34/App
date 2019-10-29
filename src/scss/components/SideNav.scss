@@ -42,6 +42,16 @@
 @screen md {
 
     // Navigation toggler related
+    $navigation-toggler-md-left: 10px;
+
+    .navigation-toggler {
+        left: $navigation-toggler-md-left;
+    }
+
+    .navigation-toggler:hover {
+        left: $navigation-toggler-md-left;
+    }
+
     .navigation-toggler-button {
         @apply .w-16 .h-16 .m-2
     }
