@@ -21,7 +21,7 @@ const purgeCssWhitelistPatterns = [/active/];
 mix.setPublicPath('public')
     .html({
         htmlRoot: 'src/index.html',
-        output: 'public',
+        output: '.',
         partialRoot: 'src/html/partials',
         minify: {
             removeComments: true,

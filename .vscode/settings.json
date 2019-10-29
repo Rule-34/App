@@ -1,4 +1,5 @@
 {
-    "eslint.enable": false,
-    "scss.validate": false
+    "scss.validate": false,
+    "liveServer.settings.root": "/public",
+    "liveServer.settings.CustomBrowser": "chrome",
 }
