@@ -18,7 +18,8 @@ const purgeCssWhitelistPatterns = [/active/];
  |
  */
 
-mix.html({
+mix.setPublicPath('public')
+    .html({
         htmlRoot: 'src/index.html',
         output: 'public',
         partialRoot: 'src/html/partials',
@@ -28,29 +29,26 @@ mix.html({
             useShortDoctype: true
         }
     })
-    .copy(['src/img/*.png', 'src/img/*.jpg', 'src/img/*.svg'], 'public/img') // Images
-    .copy('src/img/favicon/*', 'public/img/favicon/') // Favicon related
+    .copyDirectory('src/img/', 'public/img') // Images
     .copy('src/*.txt', 'public/') // Robots.txt
     .js('src/app.js', 'public/js')
+    .extract(['vue', 'vue-debounce', 'vue-lazyload', 'vuex', 'axios', 'insights-js'])
     .sass('src/app.scss', 'public/css')
     .tailwind()
-    .purgeCss({
+    .options({
+        processCssUrls: true
+    })
+    .disableNotifications();
+
+if (mix.inProduction()) {
+    // mix.version()
+    mix.purgeCss({
         folders: ['src/'],
         // whitelist: purgeCssWhitelist,
         whitelistPatterns: purgeCssWhitelistPatterns,
         // whitelistPatternsChildren: purgeCssWhitelistPatternsChildren,
-    })
-
-    // .browserSync({
-    //     open: 'external',
-    //     host: 'material-rule34.test',
-    //     proxy: 'material-rule34.test',
-    //     files: ['src/**/*', 'public/**/*']
-    // })
-    // .options({
-    // extractVueStyles: true,
-    // })
-    .disableNotifications();
+    });
+}
 
 
 
