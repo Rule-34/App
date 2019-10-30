@@ -61,7 +61,9 @@ export default {
       if (this.searchQuery.length >= 3) {
         // console.log(`${this.dashBoardData.pid} GET`);
         this.$store.dispatch("axiosGet", {
-          url: `tags?name=${this.searchQuery}*&order_by=posts&limit=${this.generalData.limit}`,
+          url: `tags?name=${this.searchQuery
+            .trim()
+            .toLowerCase()}*&order_by=posts&limit=${this.generalData.limit}`,
           mutationToReturn: "newSearchData"
         });
       } else {

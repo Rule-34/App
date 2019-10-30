@@ -35,13 +35,13 @@
             </div>
             </div>-->
             <!-- Tags and source -->
-            <div class="flex overflow-hidden text-sm">
+            <div class="flex flex-wrap overflow-hidden text-sm">
               <!-- Tags -->
-              <div class="w-11/12 tag-container" v-if="post.tags">
+              <div class="w-full md:w-11/12 tag-container" v-if="post.tags">
                 <a class="tag" v-for="tag in post.tags" :key="post[tag]" v-text="tag"></a>
               </div>
               <!-- Source -->
-              <div class="w-1/12 text-center m-auto" v-if="post.source">
+              <div class="w-full mt-3 -m-1 text-center md:w-1/12 md:m-auto" v-if="post.source">
                 <a
                   class="inline-flex items-baseline"
                   :href="post.source"
