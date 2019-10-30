@@ -45,14 +45,19 @@ new Vue({
 
 /* -------- Analytics -------- */
 
-init("kQrGvntXWy9eDO4h");
-track({
-    id: "user-usage",
-    parameters: {
-        path: parameters.path(),
-        locale: parameters.locale(),
-        screenType: parameters.screenType(),
-        referrer: parameters.referrer(),
-        duration: parameters.durationInterval(5000)
-    }
-});
+const debug = process.env.NODE_ENV !== 'production';
+
+if (!debug) {
+
+    init("kQrGvntXWy9eDO4h");
+    track({
+        id: "user-usage",
+        parameters: {
+            path: parameters.path(),
+            locale: parameters.locale(),
+            screenType: parameters.screenType(),
+            referrer: parameters.referrer(),
+            duration: parameters.durationInterval(5000)
+        }
+    });
+}

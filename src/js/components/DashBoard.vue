@@ -6,10 +6,10 @@
       <a href="#" @click="getPosts">Try again?</a>
     </div>
     <!-- Test for api data before rendering anything -->
-    <div v-if="dashBoardData">
+    <div>
       <!-- Loop for every post -->
       <div class="post-container" v-for="post in dashBoardData.data.posts" :key="post.id">
-        <!-- style="max-height: 80vh;" -->
+        <!-- style="max-height: 80vh;" TODO: good for image previews -->
         <!-- Image -->
         <img class="post-img" :alt="post.type" v-lazy="post.file_url" v-if="post.type === 'image'" />
         <!-- :style="{height: post.height + 'px'}" -->
@@ -21,11 +21,10 @@
           </video>
         </lazy-component>
 
-        <!-- Details like comments, tags and source -->
-        <div class="p-6">
-          <div class="card-post-details">
-            <!-- Loop if the post has comment -->
-            <!-- <div class="card-post-comments" v-if="post.has_comments">
+        <!-- Details like comments, tags and source TODO: Maybe add p-4 again -->
+        <div class="p-2">
+          <!-- Loop if the post has comment -->
+          <!-- <div class="card-post-comments" v-if="post.has_comments">
             <div v-for="comment in comments" :key="comment.id">
               // TODO
               <div class="card-comment">
@@ -33,25 +32,24 @@
                 <h4 class="card-comment-text" v-text="comment.body"></h4>
               </div>
             </div>
-            </div>-->
-            <!-- Tags and source -->
-            <div class="flex flex-wrap overflow-hidden text-sm">
-              <!-- Tags -->
-              <div class="w-full md:w-11/12 tag-container" v-if="post.tags">
-                <a class="tag" v-for="tag in post.tags" :key="post[tag]" v-text="tag"></a>
-              </div>
-              <!-- Source -->
-              <div class="w-full mt-3 -m-1 text-center md:w-1/12 md:m-auto" v-if="post.source">
-                <a
-                  class="inline-flex items-baseline"
-                  :href="post.source"
-                  rel="noreferrer noopener nofollow"
-                  target="_blank"
-                >
-                  <p>Source</p>
-                  <external-link-icon class="icon ml-2 text-black w-4 h-4"></external-link-icon>
-                </a>
-              </div>
+          </div>-->
+          <!-- Tags and source -->
+          <div class="flex flex-wrap overflow-hidden text-sm">
+            <!-- Tags -->
+            <div class="w-full md:w-11/12 tag-container" v-if="post.tags">
+              <a class="tag" v-for="tag in post.tags" :key="post[tag]" v-text="tag"></a>
+            </div>
+            <!-- Source -->
+            <div class="w-full md:w-1/12 md:m-auto mt-3 -m-1 text-center" v-if="post.source">
+              <a
+                class="inline-flex items-baseline"
+                :href="post.source"
+                rel="noreferrer noopener nofollow"
+                target="_blank"
+              >
+                <p>Source</p>
+                <external-link-icon class="icon ml-2 text-black w-4 h-4"></external-link-icon>
+              </a>
             </div>
           </div>
         </div>
@@ -81,7 +79,7 @@
 <script>
 import { mapState } from "vuex";
 
-// Icons
+// Import icons from package
 import {
   ExternalLinkIcon,
   ArrowRightIcon,
@@ -95,8 +93,8 @@ export default {
     ArrowRightIcon,
     ArrowLeftIcon
   },
-  // Get data() from vuex store "dashBoardData"
-  computed: mapState(["dashBoardData", "generalData"]),
+  // Get data() from vuex stores
+  computed: mapState(["dashBoardData", "searchData", "generalData"]),
 
   // Get posts as fast as possible
   beforeMount() {
@@ -113,17 +111,31 @@ export default {
     },
     // Get next page from api
     getNextPage() {
-      this.$store.commit("newDashBoardData", {
-        pid: parseInt(this.dashBoardData.pid) + 1
+      // Get next PID
+      this.$store.dispatch("changePID", {
+        function: "add"
       });
-      this.getPosts();
+
+      // If we have tags added then load next page of tags, else load normal latest posts
+      if (this.searchData.tags.length > 0) {
+        this.$store.dispatch("getAddedTags");
+      } else {
+        this.getPosts();
+      }
     },
     // Get last page from api
     getLastPage() {
-      this.$store.commit("newDashBoardData", {
-        pid: parseInt(this.dashBoardData.pid) - 1
+      // Get last PID
+      this.$store.dispatch("changePID", {
+        function: "subtract"
       });
-      this.getPosts();
+
+      // If we have tags added then load last page of tags, else load normal latest posts
+      if (this.searchData.tags.length > 0) {
+        this.$store.dispatch("getAddedTags");
+      } else {
+        this.getPosts();
+      }
     },
     getSpecificPage() {
       let specificPage = prompt("What page do you want to go to?", "69");

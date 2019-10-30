@@ -3,9 +3,16 @@ require('mix-tailwindcss');
 require('laravel-mix-purgecss');
 require('mix-html-builder');
 
+/* -------- Purge CSS whitelisting of javascript-injected css -------- */
 // const purgeCssWhitelist = ['.search-bar.active', '.sidebar-container.active'];
 const purgeCssWhitelistPatterns = [/active/];
 // const purgeCssWhitelistPatternsChildren = [/active$/];
+
+
+/* -------- Dynamic export of dependencies -------- */
+// const package = require("./package.json");
+// const dependencies = Object.keys(package.dependencies);
+// .extract(dependencies)
 
 /*
  |--------------------------------------------------------------------------
@@ -31,12 +38,15 @@ mix.setPublicPath('public')
     })
     .copyDirectory('src/img/', 'public/img') // Images
     .copy('src/*.txt', 'public/') // Robots.txt
-    .js('src/app.js', 'public/js')
     .extract(['vue', 'vue-debounce', 'vue-lazyload', 'vuex', 'axios', 'insights-js'])
+    .js('src/app.js', 'public/js')
     .sass('src/app.scss', 'public/css')
     .tailwind()
     .options({
-        processCssUrls: true
+        extractVueStyles: true,
+        processCssUrls: true,
+        purifyCss: false,
+        clearConsole: false,
     })
     .disableNotifications();
 

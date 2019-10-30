@@ -11,12 +11,12 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         dashBoardData: {
-            data: "",
+            data: "", // Data that is rendered to the web app
             pid: 0, // Page id
         },
         searchData: {
-            data: "",
-            query: "",
+            data: "", // Data received while searching for tags
+            tags: [],
             isActive: false,
         },
         generalData: {
@@ -77,6 +77,23 @@ export default new Vuex.Store({
                 // console.log(payload.data);
                 state.searchData.data = payload.data;
             }
+
+            // Added tags
+            if (payload.tag !== undefined) {
+                // console.log(payload.tag.function);
+
+                if (payload.tag.function === "add") {
+                    // console.log(payload.tag.name);
+                    state.searchData.tags.push(payload.tag.name);
+                }
+                if (payload.tag.function === "remove") {
+                    // console.log(payload.tag.name);
+                    state.searchData.tags = state.searchData.tags.filter(function (ele) {
+                        return ele != payload.tag.name;
+                    });
+                }
+            }
+
         },
     },
 
@@ -96,7 +113,7 @@ export default new Vuex.Store({
             });
 
             // Debugging what url does it get
-            console.log(dataObj.url);
+            // console.log(dataObj.url);
 
             // Actual axios get
             try {
@@ -139,6 +156,29 @@ export default new Vuex.Store({
             }
         },
 
+        // Change api to an alternative one
+        async changePID({
+            commit
+        }, dataObj) {
+
+            if (dataObj.function === "add") {
+                commit("newDashBoardData", {
+                    pid: parseInt(this.state.dashBoardData.pid) + 1
+                });
+            } else if (dataObj.function === "subtract") {
+                commit("newDashBoardData", {
+                    pid: parseInt(this.state.dashBoardData.pid) - 1
+                });
+            } else if (dataObj.function === "reset") {
+                commit("newDashBoardData", {
+                    pid: 0
+                });
+            }
+
+
+
+        },
+
         // Toggles the search (This is the way i found it to work since i cannot get components to talk to each other and im not doing a bus if i have vueX)
         async toggleSearchComponent({
             commit
@@ -154,6 +194,18 @@ export default new Vuex.Store({
                     isActive: true
                 });
             }
+        },
+
+        async getAddedTags({
+            commit,
+            dispatch
+        }, dataObj) {
+            dispatch("axiosGet", {
+                url: `posts?pid=${this.state.dashBoardData.pid}&limit=${
+                  this.state.generalData.postLimit
+                }&tags=${this.state.searchData.tags.join("+")}`,
+                mutationToReturn: "newDashBoardData"
+            });
         }
     },
 
