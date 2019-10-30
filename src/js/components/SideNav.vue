@@ -5,7 +5,7 @@
       <button class="navigation-toggler-button" @click="toggleNav" title="Menu">&nbsp;</button>
       <button class="navigation-search-button" @click="toggleSearch" title="Search">
         <!-- Search Icon -->
-        <search-icon class="text-white w-6 h-6 inline-flex"></search-icon>
+        <search-icon class="icon text-white w-6 h-6 inline-flex"></search-icon>
       </button>
     </div>
 

@@ -20,18 +20,28 @@ module.exports = {
         'percent-25': '25%',
       },
 
-      // linearGradients: theme => ({
-      //   colors: theme('colors'),
-      // }),
-      // radialGradients: theme => ({
-      //   colors: theme('colors'),
-      // }),
-      // conicGradients: theme => ({
-      //   colors: theme('colors'),
-      // }),
+      maxHeight: {
+        '1/4': '25%',
+        '1/2': '50%',
+        '3/4': '75%',
+      },
+
+      minHeight: {
+        '1/4': '25%',
+        '1/2': '50%',
+        '3/4': '75%',
+      },
 
     }
   },
-  variants: {},
+  // Recommended variant order
+  // ['responsive', 'group-hover', 'focus-within', 'first', 'last', 'odd', 'even', 'hover', 'focus', 'active', 'visited', 'disabled']
+
+  // Every variant possible
+  // variants: ['responsive', 'group-hover', 'focus-within', 'first', 'last', 'odd', 'even', 'hover', 'focus', 'active', 'visited', 'disabled'],
+  variants: {
+    textColor: ['responsive', 'group-hover', 'hover', 'focus'],
+  }
+
   // plugins: [require('tailwindcss-gradients')()]
 };

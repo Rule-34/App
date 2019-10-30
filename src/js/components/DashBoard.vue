@@ -49,7 +49,7 @@
                   target="_blank"
                 >
                   <p>Source</p>
-                  <external-link-icon class="ml-2 text-black w-4 h-4"></external-link-icon>
+                  <external-link-icon class="icon ml-2 text-black w-4 h-4"></external-link-icon>
                 </a>
               </div>
             </div>
@@ -61,7 +61,7 @@
     <!-- Controls for navigating pages -->
     <div class="post-container text-center p-2 flex" v-if="!dashBoardData.errors && dashBoardData">
       <a href="#" class="w-1/3 button" title="Load last page" @click="getLastPage">
-        <arrow-left-icon class="w-4 h-4 inline"></arrow-left-icon>Last page
+        <arrow-left-icon class="icon w-4 h-4 inline"></arrow-left-icon>Last page
       </a>
       <a
         href="#"
@@ -72,7 +72,7 @@
       ></a>
       <a href="#" class="w-1/3 button" title="Load next page" @click="getNextPage">
         Next page
-        <arrow-right-icon class="w-4 h-4 inline"></arrow-right-icon>
+        <arrow-right-icon class="icon w-4 h-4 inline"></arrow-right-icon>
       </a>
     </div>
   </div>

@@ -34,6 +34,7 @@ a:hover {
     @apply .bg-white .mx-auto .w-full
 }
 
+// Tags
 .tag-container {
     @apply .inline-flex .flex-wrap
 }
@@ -43,3 +44,16 @@ a:hover {
 }
 
 // Animations 
+
+// Icons
+.icon {
+    @apply .stroke-width-1 .pointer-events-none
+}
+
+.stroke-width-1 {
+    stroke-width: 1.5;
+}
+
+// html {
+//     @apply .font-light
+// }
