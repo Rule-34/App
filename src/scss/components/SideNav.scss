@@ -20,7 +20,7 @@
 
 /* ----- Sidebar related ----- */
 .sidebar-container {
-    transition: all 0.35s ease-in-out;
+    transition: left 0.35s ease-in-out;
     @apply .fixed .flex .z-10 .min-h-screen .w-full .left-minus-100
 }
 

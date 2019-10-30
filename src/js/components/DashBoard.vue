@@ -9,6 +9,7 @@
     <div v-if="dashBoardData">
       <!-- Loop for every post -->
       <div class="post-container" v-for="post in dashBoardData.data.posts" :key="post.id">
+        <!-- style="max-height: 80vh;" -->
         <!-- Image -->
         <img class="post-img" :alt="post.type" v-lazy="post.file_url" v-if="post.type === 'image'" />
         <!-- :style="{height: post.height + 'px'}" -->
@@ -34,14 +35,22 @@
             </div>
             </div>-->
             <!-- Tags and source -->
-            <div class="flex items-baseline overflow-hidden text-sm">
+            <div class="flex overflow-hidden text-sm">
               <!-- Tags -->
-              <div class="w-5/6 pr-1 truncate" v-if="post.tags">
-                <a v-for="tag in post.tags" :key="post[tag]">{{tag + "&nbsp;"}}</a>
+              <div class="w-11/12 tag-container" v-if="post.tags">
+                <a class="tag" v-for="tag in post.tags" :key="post[tag]" v-text="tag"></a>
               </div>
               <!-- Source -->
-              <div class="w-1/6 pl-1 text-right" v-if="post.source">
-                <a :href="post.source" rel="noreferrer" target="_blank">Source</a>
+              <div class="w-1/12 text-center m-auto" v-if="post.source">
+                <a
+                  class="inline-flex items-baseline"
+                  :href="post.source"
+                  rel="noreferrer noopener nofollow"
+                  target="_blank"
+                >
+                  <p>Source</p>
+                  <external-link-icon class="ml-2 text-black w-4 h-4"></external-link-icon>
+                </a>
               </div>
             </div>
           </div>
@@ -51,7 +60,9 @@
 
     <!-- Controls for navigating pages -->
     <div class="post-container text-center p-2 flex" v-if="!dashBoardData.errors && dashBoardData">
-      <a href="#" class="w-1/3 button" title="Load last page" @click="getLastPage">&lt; Last page</a>
+      <a href="#" class="w-1/3 button" title="Load last page" @click="getLastPage">
+        <arrow-left-icon class="w-4 h-4 inline"></arrow-left-icon>Last page
+      </a>
       <a
         href="#"
         class="w-1/3"
@@ -59,7 +70,10 @@
         v-text="dashBoardData.pid"
         @click="getSpecificPage"
       ></a>
-      <a href="#" class="w-1/3 button" title="Load next page" @click="getNextPage">Next page &gt;</a>
+      <a href="#" class="w-1/3 button" title="Load next page" @click="getNextPage">
+        Next page
+        <arrow-right-icon class="w-4 h-4 inline"></arrow-right-icon>
+      </a>
     </div>
   </div>
 </template>
@@ -67,8 +81,20 @@
 <script>
 import { mapState } from "vuex";
 
+// Icons
+import {
+  ExternalLinkIcon,
+  ArrowRightIcon,
+  ArrowLeftIcon
+} from "vue-feather-icons";
+
 export default {
   name: "dash-board",
+  components: {
+    ExternalLinkIcon,
+    ArrowRightIcon,
+    ArrowLeftIcon
+  },
   // Get data() from vuex store "dashBoardData"
   computed: mapState(["dashBoardData", "generalData"]),
 
