@@ -12,20 +12,20 @@ export default new Vuex.Store({
     state: {
         dashBoardData: {
             data: "",
-            errors: "",
-            pid: 1, // Page id
+            pid: 0, // Page id
         },
         searchData: {
             data: "",
-            errors: "",
             query: "",
             isActive: false,
         },
         generalData: {
-            limit: 20,
+            apiUrl: "https://r34-json.herokuapp.com/", // Default api
+            backupApiUrl: "https://r34-api-clone.herokuapp.com/",
+            postLimit: 20,
+            errors: undefined,
         },
-        apiUrl: "https://r34-json.herokuapp.com/", // Default api
-        searchApiUrl: "https://r34-json.herokuapp.com/", // Default api
+
 
     },
 
@@ -42,7 +42,9 @@ export default new Vuex.Store({
             }
 
             // Errors
-            state.dashBoardData.errors = payload.errors;
+            if (payload.errors !== undefined) {
+                state.generalData.errors = payload.errors;
+            }
 
             // Page ID
             if (payload.pid !== undefined) {
@@ -55,7 +57,7 @@ export default new Vuex.Store({
         // Handler for api changes
         newApiUrl(state, payload) {
             // New url
-            state.apiUrl = payload.newUrl;
+            state.generalData.apiUrl = payload.newUrl;
         },
 
         // Handler for Search changes
@@ -67,8 +69,9 @@ export default new Vuex.Store({
             }
 
             // Errors
-            state.searchData.errors = payload.errors;
-
+            if (payload.errors !== undefined) {
+                state.generalData.errors = payload.errors;
+            }
             // Data
             if (payload.data !== undefined) {
                 // console.log(payload.data);
@@ -89,16 +92,16 @@ export default new Vuex.Store({
             // Reset errors cause we're trying again
             commit({
                 type: dataObj.mutationToReturn,
-                errors: ""
+                errors: undefined
             });
 
             // Debugging what url does it get
-            // console.log(dataObj.url);
+            console.log(dataObj.url);
 
             // Actual axios get
             try {
                 const response = await axios.get(
-                    this.state.apiUrl + dataObj.url
+                    this.state.generalData.apiUrl + dataObj.url
                 );
 
                 commit({
@@ -125,12 +128,15 @@ export default new Vuex.Store({
             commit
         }, dataObj) {
 
-            console.log(`${dataObj.errors}, changing to alternative api`);
+            if (this.state.generalData.apiUrl !== this.state.generalData.backupApiUrl) {
 
-            commit({
-                type: "newApiUrl",
-                newUrl: "https://r34-api-clone.herokuapp.com/"
-            });
+                console.log(`${dataObj.errors}, changing to alternative api`);
+
+                commit({
+                    type: "newApiUrl",
+                    newUrl: "https://r34-api-clone.herokuapp.com/"
+                });
+            }
         },
 
         // Toggles the search (This is the way i found it to work since i cannot get components to talk to each other and im not doing a bus if i have vueX)

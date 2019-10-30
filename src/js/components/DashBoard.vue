@@ -1,8 +1,8 @@
 <template>
   <div class="card-container md:w-4/5">
     <!-- If Axios request got errors -->
-    <div class="post-container text-center p-2" v-if="dashBoardData.errors">
-      <h1 class="bold" v-text="dashBoardData.errors"></h1>
+    <div class="post-container text-center p-2" v-if="generalData.errors">
+      <h1 class="bold" v-text="generalData.errors"></h1>
       <a href="#" @click="getPosts">Try again?</a>
     </div>
     <!-- Test for api data before rendering anything -->
@@ -59,7 +59,7 @@
     </div>
 
     <!-- Controls for navigating pages -->
-    <div class="post-container text-center p-2 flex" v-if="!dashBoardData.errors && dashBoardData">
+    <div class="post-container text-center p-2 flex" v-if="!generalData.errors && dashBoardData">
       <a href="#" class="w-1/3 button" title="Load last page" @click="getLastPage">
         <arrow-left-icon class="icon w-4 h-4 inline"></arrow-left-icon>Last page
       </a>
@@ -107,7 +107,7 @@ export default {
     getPosts() {
       // console.log(`${this.dashBoardData.pid} GET`);
       this.$store.dispatch("axiosGet", {
-        url: `posts?pid=${this.dashBoardData.pid}&limit=${this.generalData.limit}`,
+        url: `posts?pid=${this.dashBoardData.pid}&limit=${this.generalData.postLimit}`,
         mutationToReturn: "newDashBoardData"
       });
     },
