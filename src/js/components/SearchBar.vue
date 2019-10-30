@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="search-bar fixed min-h-screen w-full z-10 right-minus-100 bg-transparent"
-    :class="{active: searchData.isActive}"
-  >
+  <div class="search-bar" :class="{active: searchData.isActive}">
     <!-- Centered container -->
     <div class="flex flex-wrap md:flex-no-wrap h-screen">
       <!-- Separator -->
@@ -25,7 +22,7 @@
       </div>
 
       <!-- Results -->
-      <div class="post-container max-h-3/4 min-h-1/2 w-full md:w-2/6 flex flex-col p-2 my-auto">
+      <div class="search-bar-results w-full md:w-2/6 max-h-3/4 min-h-1/2">
         <!-- Show if theres nothing -->
 
         <!-- If theres errors -->
@@ -41,13 +38,13 @@
         >Search something!</h1>
 
         <!-- Added tags -->
-        <div class="tag-container border-b rounded-b mb-2" v-if="addedTags">
+        <div class="tag-container border-b rounded-b mb-2" v-if="searchData.tags">
           <a
             class="tag group"
-            v-for="tag in addedTags"
+            v-for="tag in searchData.tags"
             :key="tag"
             v-text="tag"
-            @click="removeAddedTag(tag)"
+            @click="removeTag(tag)"
           ></a>
         </div>
 
@@ -70,7 +67,7 @@
         <!-- Apply tags -->
         <button
           class="btn text-white bg-gradient-lilac-blue mt-auto shadow-md"
-          @click="getAddedTags"
+          @click="dispatchGetAddedTags"
         >Apply tags</button>
       </div>
 
@@ -89,15 +86,11 @@ export default {
   components: { SearchIcon },
   data() {
     return {
-      searchQuery: "",
-      addedTags: []
+      searchQuery: ""
     };
   },
   // Get data() from vuex store "searchData"
   computed: {
-    tagUrl() {
-      return;
-    },
     // mix this into the outer object with the object spread operator
     ...mapState(["dashBoardData", "searchData", "generalData"])
   },
@@ -107,24 +100,35 @@ export default {
     },
     addTag: function(tagName) {
       // console.log(tagName);
-      this.addedTags.push(tagName);
-    },
-    removeAddedTag: function(tag) {
-      this.addedTags = this.addedTags.filter(function(ele) {
-        return ele != tag;
+      this.$store.commit("newSearchData", {
+        tag: {
+          name: tagName,
+          function: "add"
+        }
       });
     },
-    getAddedTags: function() {
-      this.$store.dispatch("axiosGet", {
-        url: `posts?pid=${this.dashBoardData.pid}&limit=${
-          this.generalData.postLimit
-        }&tags=${this.addedTags.join("+")}`,
-        mutationToReturn: "newDashBoardData"
+    removeTag: function(tagName) {
+      this.$store.commit("newSearchData", {
+        tag: {
+          name: tagName,
+          function: "remove"
+        }
       });
+    },
+    dispatchGetAddedTags: function() {
+      // Set PID to 0 since we're searching for new tags
+      this.$store.dispatch("changePID", {
+        function: "reset"
+      });
+
+      // Search for the tags
+      this.$store.dispatch("getAddedTags");
+
+      // And hide the search bar
       this.toggleSearch();
     },
     getTags() {
-      if (this.searchQuery.length >= 3) {
+      if (this.searchQuery.length > 2) {
         // console.log(`${this.dashBoardData.pid} GET`);
         this.$store.dispatch("axiosGet", {
           url: `tags?name=${this.searchQuery.trim().toLowerCase()}*&limit=${
