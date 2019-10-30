@@ -1,9 +1,10 @@
 .search-bar {
-    @apply .fixed .min-h-screen .w-full .hidden .z-10
+    transition: right 0.35s ease-in-out, background 2s ease-in-out;
+
 }
 
 .search-bar.active {
-    @apply .block
+    @apply .bg-black-15 .right-0
 }
 
 // Button related

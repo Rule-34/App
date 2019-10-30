@@ -17,7 +17,7 @@ Vue.use(VueLazyload, {
     lazyComponent: true,
     preLoad: 2,
     // error: 'dist/error.png',
-    // loading: 'dist/loading.gif', // Add skeletonBox
+    // loading: 'dist/loading.gif', // TODO: Add skeletonBox
 
     // optional
     observer: true,
@@ -49,6 +49,7 @@ init("kQrGvntXWy9eDO4h");
 track({
     id: "user-usage",
     parameters: {
+        path: parameters.path(),
         locale: parameters.locale(),
         screenType: parameters.screenType(),
         referrer: parameters.referrer(),
