@@ -1,20 +1,22 @@
 # Material-Rule-34
-Rule 34 redesigned in a beautiful and stunning material style
 
-## What is it?
+> Rule 34 redesigned in a beautiful and stunning material style
 
-A redesigned rule 34 web client, that hopes to accomplish great things
+## Build Setup
 
-## Usage
+``` bash
+# install dependencies
+$ npm run install
 
-Install all dependencies with 
+# serve with hot reload at localhost:3000
+$ npm run dev
 
-``` npm install ```
+# build for production and launch server
+$ npm run build
+$ npm run start
 
-### Building for production
+# generate static project
+$ npm run generate
+```
 
-``` npm run prod ```
-
-### Building for testing
-
-``` npm run watch ```
+For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
