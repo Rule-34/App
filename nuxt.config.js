@@ -23,10 +23,7 @@ export default {
   /*
    ** Global CSS
    */
-  // css: ['~assets/app.scss'],
-  // styleResources: {
-  //   scss: ['~assets/app.scss']
-  // },
+  // css: [],
   /*
    ** Plugins to load before mounting the App
    */
@@ -58,8 +55,24 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
-    '@nuxtjs/style-resources'
+    'nuxt-purgecss'
   ],
+
+  pwa: {
+    manifest: {
+      name: 'Material Rule 34',
+      lang: 'en'
+    },
+    meta: {
+      /* meta options */
+      ogHost: 'https://r34.app'
+    }
+  },
+
+  purgeCSS: {
+    // whitelist: ['defaults-and-this-class']
+    whitelistPatterns: [/active/]
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
@@ -69,6 +82,7 @@ export default {
    ** Build configuration
    */
   build: {
+    extractCSS: true,
     /*
      ** You can extend webpack config here
      */

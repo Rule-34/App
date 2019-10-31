@@ -23,7 +23,7 @@
         <div class="w-full h-40">
           <img
             class="sidebar-img"
-            src="/img/icon.png"
+            src="/icon.png"
             alt="Material Rule 34 Logo"
             title="Material Rule 34"
           />
