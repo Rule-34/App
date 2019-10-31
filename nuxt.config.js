@@ -23,11 +23,21 @@ export default {
   /*
    ** Global CSS
    */
-  css: [],
+  // css: ['~assets/app.scss'],
+  // styleResources: {
+  //   scss: ['~assets/app.scss']
+  // },
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: [
+    {
+      src: '~/plugins/v-debounce.js',
+      mode: 'client'
+    },
+    { src: '~/plugins/v-lazy.js', mode: 'client' },
+    { src: '~/plugins/insights.js', mode: 'client' }
+  ],
   /*
    ** Nuxt.js dev-modules
    */
@@ -37,13 +47,18 @@ export default {
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
     '@nuxtjs/tailwindcss'
   ],
+  tailwindcss: {
+    configPath: '~tailwind.config.js',
+    cssPath: '~/assets/app.scss'
+  },
   /*
    ** Nuxt.js modules
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    '@nuxtjs/style-resources'
   ],
   /*
    ** Axios module configuration
@@ -57,6 +72,7 @@ export default {
     /*
      ** You can extend webpack config here
      */
+    // eslint-disable-next-line no-unused-vars
     extend(config, ctx) {}
   }
 }

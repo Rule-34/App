@@ -1,23 +1,33 @@
 <template>
   <div class="card-container md:w-4/5">
     <!-- If Axios request got errors -->
-    <div class="post-container text-center p-2" v-if="generalData.errors">
-      <h1 class="bold" v-text="generalData.errors"></h1>
+    <div v-if="generalData.errors" class="post-container text-center p-2">
+      <h1 class="bold" v-text="generalData.errors" />
       <a href="#" @click="getPosts">Try again?</a>
     </div>
     <!-- Test for api data before rendering anything -->
     <div>
       <!-- Loop for every post -->
-      <div class="post-container" v-for="post in dashBoardData.data.posts" :key="post.id">
+      <div
+        v-for="post in dashBoardData.data.posts"
+        :key="post.id"
+        class="post-container"
+      >
         <!-- style="max-height: 80vh;" TODO: good for image previews -->
         <!-- Image -->
-        <img class="post-img" :alt="post.type" v-lazy="post.file_url" v-if="post.type === 'image'" />
+        <img
+          v-if="post.type === 'image'"
+          v-lazy="post.file_url"
+          class="post-img"
+          :alt="post.type"
+        />
         <!-- :style="{height: post.height + 'px'}" -->
 
         <!-- Video -->
         <lazy-component v-if="post.type == 'video'">
           <video class="post-img" :alt="post.type" controls autoplay muted loop>
-            <source :src="post.file_url" />Your browser doesnt support HTML5 video.
+            <source :src="post.file_url" />
+            Your browser doesnt support HTML5 video.
           </video>
         </lazy-component>
 
@@ -36,11 +46,19 @@
           <!-- Tags and source -->
           <div class="flex flex-wrap overflow-hidden text-sm">
             <!-- Tags -->
-            <div class="w-full md:w-11/12 tag-container" v-if="post.tags">
-              <a class="tag" v-for="tag in post.tags" :key="post[tag]" v-text="tag"></a>
+            <div v-if="post.tags" class="w-full md:w-11/12 tag-container">
+              <a
+                v-for="tag in post.tags"
+                :key="post[tag]"
+                class="tag"
+                v-text="tag"
+              />
             </div>
             <!-- Source -->
-            <div class="w-full md:w-1/12 md:m-auto mt-3 -m-1 text-center" v-if="post.source">
+            <div
+              v-if="post.source"
+              class="w-full md:w-1/12 md:m-auto mt-3 -m-1 text-center"
+            >
               <a
                 class="inline-flex items-baseline"
                 :href="post.source"
@@ -48,7 +66,7 @@
                 target="_blank"
               >
                 <p>Source</p>
-                <external-link-icon class="icon ml-2 text-black w-4 h-4"></external-link-icon>
+                <external-link-icon class="icon ml-2 text-black w-4 h-4" />
               </a>
             </div>
           </div>
@@ -57,20 +75,33 @@
     </div>
 
     <!-- Controls for navigating pages -->
-    <div class="post-container text-center p-2 flex" v-if="!generalData.errors && dashBoardData">
-      <a href="#" class="w-1/3 button" title="Load last page" @click="getLastPage">
-        <arrow-left-icon class="icon w-4 h-4 inline"></arrow-left-icon>Last page
+    <div
+      v-if="!generalData.errors && dashBoardData"
+      class="post-container text-center p-2 flex"
+    >
+      <a
+        href="#"
+        class="w-1/3 button"
+        title="Load last page"
+        @click="getLastPage"
+      >
+        <arrow-left-icon class="icon w-4 h-4 inline" />Last page
       </a>
       <a
         href="#"
         class="w-1/3"
         title="Load specific page"
-        v-text="dashBoardData.pid"
         @click="getSpecificPage"
-      ></a>
-      <a href="#" class="w-1/3 button" title="Load next page" @click="getNextPage">
+        v-text="dashBoardData.pid"
+      />
+      <a
+        href="#"
+        class="w-1/3 button"
+        title="Load next page"
+        @click="getNextPage"
+      >
         Next page
-        <arrow-right-icon class="icon w-4 h-4 inline"></arrow-right-icon>
+        <arrow-right-icon class="icon w-4 h-4 inline" />
       </a>
     </div>
   </div>
@@ -87,7 +118,7 @@ import {
 } from 'vue-feather-icons'
 
 export default {
-  name: 'dash-board',
+  name: 'DashBoard',
   components: {
     ExternalLinkIcon,
     ArrowRightIcon,
@@ -99,6 +130,10 @@ export default {
   // Get posts as fast as possible
   beforeMount() {
     this.getPosts()
+  },
+
+  mounted() {
+    // this.scroll();
   },
   methods: {
     // Get posts from api
@@ -166,10 +201,6 @@ export default {
     //     }
     //   };
     // }
-  },
-
-  mounted() {
-    // this.scroll();
   }
 }
 </script>

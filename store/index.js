@@ -117,7 +117,7 @@ export const actions = {
   },
 
   // Change api to an alternative one
-  async changeApi({ commit }, dataObj) {
+  async changeApi({ commit }) {
     if (this.state.generalData.apiUrl !== this.state.generalData.backupApiUrl) {
       //   console.log(`${dataObj.errors}, changing to alternative api`)
 
@@ -146,7 +146,7 @@ export const actions = {
   },
 
   // Toggles the search (This is the way i found it to work since i cannot get components to talk to each other and im not doing a bus if i have vueX)
-  async toggleSearchComponent({ commit }, dataObj) {
+  async toggleSearchComponent({ commit }) {
     if (this.state.searchData.isActive) {
       await commit({
         type: 'newSearchData',
@@ -160,7 +160,7 @@ export const actions = {
     }
   },
 
-  async getAddedTags({ commit, dispatch }, dataObj) {
+  async getAddedTags({ dispatch }) {
     await dispatch('axiosGet', {
       url: `posts?pid=${this.state.dashBoardData.pid}&limit=${
         this.state.generalData.postLimit
