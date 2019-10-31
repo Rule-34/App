@@ -131,10 +131,6 @@ export default {
   beforeMount() {
     this.getPosts()
   },
-
-  mounted() {
-    // this.scroll();
-  },
   methods: {
     // Get posts from api
     getPosts() {
@@ -201,6 +197,10 @@ export default {
     //     }
     //   };
     // }
+    //
+    // mounted() {
+    //   // this.scroll();
+    // },
   }
 }
 </script>

@@ -105,7 +105,7 @@ export default {
     ...mapState(['dashBoardData', 'searchData', 'generalData'])
   },
   methods: {
-    toggleSearch: () => {
+    toggleSearch() {
       this.$store.dispatch('toggleSearchComponent')
     },
     addTag: function(tagName) {
@@ -125,7 +125,7 @@ export default {
         }
       })
     },
-    dispatchGetAddedTags: () => {
+    dispatchGetAddedTags() {
       // Set PID to 0 since we're searching for new tags
       this.$store.dispatch('changePID', {
         function: 'reset'

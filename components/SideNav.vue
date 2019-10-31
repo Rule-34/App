@@ -44,14 +44,10 @@
       <!-- Space for clicking out of the menu -->
       <div class="sidebar-close-area" @click="toggleNav" />
     </div>
-
-    <!-- Search component -->
-    <search-bar />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { SearchIcon } from 'vue-feather-icons'
 
 export default {
@@ -62,9 +58,8 @@ export default {
       isNavActive: false
     }
   },
-  computed: mapState(['searchData']),
   methods: {
-    toggleNav: () => {
+    toggleNav() {
       if (this.isNavActive) {
         this.isNavActive = false
         return ''
@@ -73,7 +68,7 @@ export default {
         return ''
       }
     },
-    toggleSearch: () => {
+    toggleSearch() {
       this.$store.dispatch('toggleSearchComponent')
     }
   }

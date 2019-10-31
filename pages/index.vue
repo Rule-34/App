@@ -1,7 +1,7 @@
 <template>
   <div>
-    <search-bar />
     <side-nav />
+    <search-bar />
     <dash-board />
   </div>
 </template>
@@ -16,9 +16,6 @@ export default {
     DashBoard,
     SearchBar,
     SideNav
-  },
-  data() {
-    return {}
   }
 }
 </script>
