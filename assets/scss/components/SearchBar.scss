@@ -1,0 +1,21 @@
+.search-bar {
+    transition: right 0.35s ease-in-out, background 2s ease-in-out;
+    @apply fixed min-h-screen w-full z-10 right-minus-100 bg-transparent
+}
+
+.search-bar.active {
+    @apply .bg-black-15 .right-0
+}
+
+.search-bar-results {
+    @apply post-container w-full flex flex-col p-2 my-auto
+}
+
+// Button related
+.btn {
+    @apply .font-bold .py-2 .px-4 .rounded
+}
+
+.btn:hover {
+    filter: brightness(0.9);
+}
