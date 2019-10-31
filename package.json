@@ -1,52 +1,50 @@
 {
   "name": "material-rule-34",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "description": "Rule 34 redesigned in a beautiful and stunning material style",
+  "author": "Alejandro Akbal",
+  "private": true,
   "scripts": {
-    "clean": "del-cli public",
-    "dev": "npm run development",
-    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "watch": "npm run development -- --watch",
-    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "prod": "npm run production",
-    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/VoidlessSeven7/material-rule-34.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/VoidlessSeven7/material-rule-34/issues"
-  },
-  "homepage": "https://github.com/VoidlessSeven7/material-rule-34#readme",
-  "devDependencies": {
-    "cross-env": "^6.0.3",
-    "del-cli": "^3.0.0",
-    "laravel-mix": "^5.0.0",
-    "laravel-mix-purgecss": "^4.2.0",
-    "mix-html-builder": "^0.3.1",
-    "mix-tailwindcss": "^1.2.0",
-    "posthtml": "^0.12.0",
-    "posthtml-include": "^1.3.2",
-    "posthtml-loader": "^1.0.2",
-    "purify-css": "^1.2.5",
-    "resolve-url-loader": "^3.1.0",
-    "sass": "^1.23.0",
-    "sass-loader": "^8.0.0",
-    "vue-template-compiler": "^2.6.10"
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "lintfix": "eslint --fix --ext .js,.vue --ignore-path .gitignore .",
+    "test": "ava",
+    "test:unit": "cross-env TEST=unit ava --config unit.config.js",
+    "test:e2e": "cross-env TEST=e2e ava --config e2e.config.js"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/pwa": "^3.0.0-0",
     "insights-js": "^1.2.8",
-    "tailwindcss": "^1.1.2",
-    "vue": "^2.6.10",
+    "nuxt": "^2.0.0",
     "vue-debounce": "^2.1.0",
     "vue-feather-icons": "^5.0.0",
-    "vue-lazyload": "^1.3.3",
-    "vuex": "^3.1.1"
+    "vue-lazyload": "^1.3.3"
+  },
+  "devDependencies": {
+    "@nuxtjs/eslint-config": "^1.0.1",
+    "@nuxtjs/eslint-module": "^1.0.0",
+    "@nuxtjs/tailwindcss": "^1.0.0",
+    "@vue/test-utils": "^1.0.0-beta.27",
+    "ava": "^2.2.0",
+    "babel-eslint": "^10.0.3",
+    "babel-plugin-module-resolver": "^3.2.0",
+    "browser-env": "^3.2.5",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-loader": "^3.0.2",
+    "eslint-plugin-nuxt": ">=0.4.2",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-vue": "^5.2.3",
+    "node-sass": "^4.13.0",
+    "nuxt-purgecss": "^0.2.1",
+    "prettier": "^1.18.2",
+    "require-extension-hooks": "^0.3.3",
+    "require-extension-hooks-babel": "^1.0.0",
+    "require-extension-hooks-vue": "^2.0.0",
+    "sass-loader": "^8.0.0"
   }
 }

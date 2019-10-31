@@ -1,5 +1,4 @@
 {
-    "scss.validate": false,
-    "liveServer.settings.root": "/public",
+    "liveServer.settings.root": "/dist",
     "liveServer.settings.CustomBrowser": "chrome",
 }
