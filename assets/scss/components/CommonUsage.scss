@@ -1,0 +1,59 @@
+// Element related
+html {
+    scroll-behavior: smooth;
+}
+
+button:focus {
+    outline: 0;
+}
+
+a {
+    @apply .no-underline .text-blue-400
+}
+
+a:hover {
+    @apply .text-blue-600
+}
+
+// Color related
+.bg-gradient-lilac-blue {
+    background: linear-gradient(152deg, rgba(155, 155, 224, 1) 38%, rgba(0, 212, 255, 1) 100%);
+}
+
+.bg-gradient-blue-lilac {
+    background: linear-gradient(160deg, rgba(0, 212, 255, 1) 38%, rgba(155, 155, 224, 1) 100%);
+}
+
+// Specific element related
+.cool-bar {
+    height: 10px;
+    @apply .w-full .block .bg-gradient-lilac-blue
+}
+
+.card-container {
+    @apply .bg-white .mx-auto .w-full
+}
+
+// Tags
+.tag-container {
+    @apply .inline-flex .flex-wrap
+}
+
+.tag {
+    @apply .px-1 .m-1 .rounded .border
+}
+
+// Animations 
+
+// Icons
+.icon {
+    @apply .stroke-width-1 .pointer-events-none
+}
+
+.stroke-width-1 {
+    stroke-width: 1.5;
+}
+
+// html {
+//     @apply .font-light
+// }
