@@ -19,9 +19,10 @@ export const state = () => ({
 export const mutations = {
   // Handler for post's data changes
   newDashBoardData(state, payload) {
+    // console.log(payload.data)
     // Data
     if (payload.data !== undefined) {
-      // console.log(payload.data);
+      // console.log(payload.data)
       state.dashBoardData.data = payload.data
     }
 
@@ -89,7 +90,8 @@ export const actions = {
     })
 
     // Debugging what url does it get
-    // console.log(dataObj.url);
+    // console.log(dataObj.url)
+    // console.log(dataObj.mutationToReturn)
 
     // Actual axios get
     try {
@@ -99,9 +101,10 @@ export const actions = {
 
       commit({
         type: dataObj.mutationToReturn,
-        data: response.data
+        data: response
+        // Sometimes its response sometimes its response.data
       })
-      // console.log(response);
+      // console.log(response)
     } catch (error) {
       // console.error(error);
       commit({
