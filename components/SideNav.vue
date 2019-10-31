@@ -51,18 +51,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { SearchIcon } from 'vue-feather-icons'
-import SearchBar from './SearchBar'
 
 export default {
   name: 'SideNav',
-  components: { SearchBar, SearchIcon },
+  components: { SearchIcon },
   data() {
     return {
-      isNavActive: false,
-      isSearchActive: false
+      isNavActive: false
     }
   },
+  computed: mapState(['searchData']),
   methods: {
     toggleNav: () => {
       if (this.isNavActive) {

@@ -138,7 +138,7 @@ export default {
   methods: {
     // Get posts from api
     getPosts() {
-      // console.log(`${this.dashBoardData.pid} GET`);
+      // console.log(`${this.dashBoardData.pid} GET`)
       this.$store.dispatch('axiosGet', {
         url: `posts?pid=${this.dashBoardData.pid}&limit=${this.generalData.postLimit}`,
         mutationToReturn: 'newDashBoardData'
