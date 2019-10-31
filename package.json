@@ -18,7 +18,6 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/pwa": "^3.0.0-0",
-    "@nuxtjs/style-resources": "^1.0.0",
     "insights-js": "^1.2.8",
     "nuxt": "^2.0.0",
     "vue-debounce": "^2.1.0",
@@ -41,6 +40,7 @@
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-vue": "^5.2.3",
     "node-sass": "^4.13.0",
+    "nuxt-purgecss": "^0.2.1",
     "prettier": "^1.18.2",
     "require-extension-hooks": "^0.3.3",
     "require-extension-hooks-babel": "^1.0.0",

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="cool-bar"></div>
     <side-nav />
     <search-bar />
     <dash-board />
