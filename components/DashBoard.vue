@@ -3,7 +3,7 @@
     <!-- If Axios request got errors -->
     <div v-if="generalData.errors" class="post-container text-center p-2">
       <h1 class="bold" v-text="generalData.errors" />
-      <a href="#" @click="getPosts">Try again?</a>
+      <a href="javascript:void(0)" @click="getPosts">Try again?</a>
     </div>
     <!-- Every post in their own component -->
     <post
@@ -104,12 +104,22 @@ export default {
       }
     },
     getSpecificPage() {
+      // Ask for page to go to
       let specificPage = prompt('What page do you want to go to?', '69')
+
+      // Test if something was input
       if (!isNaN(specificPage)) {
-        this.$store.commit('newDashBoardData', {
-          pid: specificPage
-        })
-        this.getPosts()
+        // If we have tags added then load specific page of tags, else load normal latest posts
+        if (this.searchData.tags.length > 0) {
+          // Set PID
+          this.$store.commit('newDashBoardData', {
+            pid: specificPage
+          })
+          // And load the next tag page
+          this.$store.dispatch('getAddedTags')
+        } else {
+          this.getPosts()
+        }
       } else {
         alert('Wrong input, only numbers please')
       }
