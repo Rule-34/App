@@ -32,11 +32,41 @@
         <!-- Navbar Links -->
         <div class="p-3">
           <ul class="text-center md:text-left">
-            <li>Home</li>
-            <li>Posts</li>
-            <li>Comments</li>
-            <li>Categories</li>
-            <li>About</li>
+            <li>
+              <nuxt-link to="/">
+                Dashboard
+              </nuxt-link>
+            </li>
+
+            <li>
+              <nuxt-link to="/comments">
+                Comments
+              </nuxt-link>
+            </li>
+
+            <li>
+              <nuxt-link to="/tags">
+                Tags
+              </nuxt-link>
+            </li>
+
+            <li>
+              <nuxt-link to="/faq">
+                FAQ
+              </nuxt-link>
+            </li>
+
+            <li>
+              <nuxt-link to="/about">
+                About
+              </nuxt-link>
+            </li>
+
+            <li>
+              <nuxt-link to="/testing">
+                testing
+              </nuxt-link>
+            </li>
           </ul>
         </div>
       </nav>
