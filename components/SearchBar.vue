@@ -27,8 +27,8 @@
 
         <!-- If theres errors -->
         <div
-          v-if="generalData.errors"
-          class="text-center font-hairline m-auto text-xl"
+          v-if="generalData.errors !== null"
+          class="text-center text-black font-hairline m-auto text-xl"
         >
           <h1 v-text="generalData.errors" />
           <a href="#" @click="getTags">Try again?</a>
