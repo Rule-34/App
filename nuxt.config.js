@@ -19,7 +19,20 @@ export default {
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  loading: {
+    css: false,
+    color: 'white',
+    failedColor: 'red',
+    height: '10px'
+  },
+  /*
+   ** Customize the splash loading indicator
+   */
+  loadingIndicator: {
+    name: 'cube-grid',
+    color: 'white',
+    background: 'linear-gradient(152deg, #9b9be0 38%, #00d4ff 100%)'
+  },
   /*
    ** Global CSS
    */
