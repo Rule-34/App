@@ -1,7 +1,10 @@
 <template>
   <div class="card-container md:w-4/5">
     <!-- If Axios request got errors -->
-    <div v-if="generalData.errors" class="post-container text-center p-2">
+    <div
+      v-if="generalData.errors !== null"
+      class="post-container text-center p-2"
+    >
       <h1 class="bold" v-text="generalData.errors" />
       <a href="javascript:void(0)" @click="getPosts">Try again?</a>
     </div>

@@ -12,7 +12,7 @@ export const state = () => ({
     apiUrl: 'https://r34-json.herokuapp.com/', // Default api
     backupApiUrl: 'https://r34-api-clone.herokuapp.com/',
     postLimit: 20,
-    errors: undefined
+    errors: null
   }
 })
 
@@ -86,7 +86,7 @@ export const actions = {
     // Reset errors cause we're trying again
     commit({
       type: dataObj.mutationToReturn,
-      errors: undefined
+      errors: null
     })
 
     // Debugging what url does it get
