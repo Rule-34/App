@@ -6,7 +6,7 @@ Vue.use(VueLazyload, {
   lazyComponent: true,
   preLoad: 2,
   error: '/img/error.png',
-  loading: '/icon.png', // TODO: Add skeletonBox
+  // loading: '/icon.png', // TODO: Add skeletonBox
 
   // optional
   observer: true,
