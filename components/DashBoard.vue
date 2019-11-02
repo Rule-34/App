@@ -26,7 +26,7 @@
         title="Load last page"
         @click="getLastPage"
       >
-        <arrow-left-icon class="icon w-4 h-4 inline" />Last page
+        <arrow-left-icon class="icon w-4 h-4 inline" /> Last page
       </a>
       <a
         href="#"

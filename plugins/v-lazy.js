@@ -5,8 +5,8 @@ import VueLazyload from 'vue-lazyload' // Import lazyloading
 Vue.use(VueLazyload, {
   lazyComponent: true,
   preLoad: 2,
-  // error: 'dist/error.png',
-  // loading: 'dist/loading.gif', // TODO: Add skeletonBox
+  error: '/img/error.png',
+  loading: '/icon.png', // TODO: Add skeletonBox
 
   // optional
   observer: true,
