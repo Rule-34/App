@@ -73,12 +73,13 @@
         </div>
 
         <!-- Apply tags -->
-        <button
-          class="btn text-white bg-gradient-lilac-blue mt-auto shadow-md"
+        <a
+          href="#"
+          class="btn text-white text-center bg-gradient-lilac-blue mt-auto shadow-md"
           @click="dispatchGetAddedTags"
         >
           Apply tags
-        </button>
+        </a>
       </div>
 
       <div class="hidden md:block w-1/6" @click.self="toggleSearch" />
