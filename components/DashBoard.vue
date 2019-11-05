@@ -1,5 +1,6 @@
 <template>
-  <div class="card-container md:w-4/5">
+  <!-- Width on medium screens -->
+  <div class="card-container md:w-1/2">
     <!-- If Axios request got errors -->
     <div
       v-if="generalData.errors !== null"
