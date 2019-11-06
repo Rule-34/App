@@ -1,0 +1,41 @@
+<template>
+  <div>
+    <!-- TODO: hacerlos collapsibles -->
+    <div class="cool-bar" />
+    <SideNav :show-search="false" />
+    <div class="card-container md:w-2/3 xl:w-1/2">
+      <div class="flex h-screen p-3">
+        <div class="post-container m-auto p-5 shadow-xl">
+          <a
+            href="https://akbal.dev/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              class="mx-auto mb-5"
+              src="https://akbal.dev/images/ALogo.png"
+              alt="Akbal logo"
+            />
+          </a>
+          <div class="text-center">
+            <h1 class="btn">Alejandro Akbal</h1>
+            <small>
+              I'm a web developer and this PWA is a project that I do in my free
+              time
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Donation -->
+    </div>
+  </div>
+</template>
+
+<script>
+import SideNav from "~/components/navigation/SideNav.vue";
+
+export default {
+  components: { SideNav }
+};
+</script>
