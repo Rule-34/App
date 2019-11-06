@@ -1,6 +1,6 @@
-# Material-Rule-34
+# rule-34-progressive-web-app
 
-> Rule 34 redesigned in a beautiful and stunning material style
+> Rule 34 redesigned
 
 ## Build Setup
 

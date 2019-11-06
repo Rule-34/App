@@ -1,50 +1,28 @@
 {
-  "name": "material-rule-34",
+  "name": "rule-34-progressive-web-app",
   "version": "1.0.0",
-  "description": "Rule 34 redesigned in a beautiful and stunning material style",
+  "description": "Rule 34 redesigned",
   "author": "Alejandro Akbal",
   "private": true,
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "lintfix": "eslint --fix --ext .js,.vue --ignore-path .gitignore .",
-    "test": "ava",
-    "test:unit": "cross-env TEST=unit ava --config unit.config.js",
-    "test:e2e": "cross-env TEST=e2e ava --config e2e.config.js"
+    "generate": "nuxt generate"
   },
   "dependencies": {
+    "nuxt": "^2.0.0",
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/pwa": "^3.0.0-0",
-    "insights-js": "^1.2.8",
-    "nuxt": "^2.0.0",
     "vue-debounce": "^2.1.0",
     "vue-feather-icons": "^5.0.0",
-    "vue-lazyload": "^1.3.3"
+    "vue-lazyload": "^1.3.3",
+    "insights-js": "^1.2.8"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config": "^1.0.1",
-    "@nuxtjs/eslint-module": "^1.0.0",
     "@nuxtjs/tailwindcss": "^1.0.0",
-    "@vue/test-utils": "^1.0.0-beta.27",
-    "ava": "^2.2.0",
-    "babel-eslint": "^10.0.3",
-    "babel-plugin-module-resolver": "^3.2.0",
-    "browser-env": "^3.2.5",
-    "eslint": "^6.6.0",
-    "eslint-config-prettier": "^4.3.0",
-    "eslint-loader": "^3.0.2",
-    "eslint-plugin-nuxt": ">=0.4.2",
-    "eslint-plugin-prettier": "^3.1.1",
-    "eslint-plugin-vue": "^5.2.3",
-    "node-sass": "^4.13.0",
     "nuxt-purgecss": "^0.2.1",
-    "prettier": "^1.18.2",
-    "require-extension-hooks": "^0.3.3",
-    "require-extension-hooks-babel": "^1.0.0",
-    "require-extension-hooks-vue": "^2.0.0",
+    "node-sass": "^4.13.0",
     "sass-loader": "^8.0.0"
   }
 }
