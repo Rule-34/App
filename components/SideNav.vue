@@ -6,6 +6,7 @@
         &nbsp;
       </button>
       <button
+        v-if="showSearch"
         class="navigation-search-button"
         title="Search"
         @click="toggleSearch"
@@ -83,6 +84,7 @@ import { SearchIcon } from 'vue-feather-icons'
 export default {
   name: 'SideNav',
   components: { SearchIcon },
+  props: { showSearch: { type: Boolean, default: true } },
   data() {
     return {
       isNavActive: false
