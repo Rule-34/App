@@ -2,6 +2,9 @@
 
 > Rule 34 redesigned
 
+## VSCode dependencies
+ESLint, Vetur
+
 ## Build Setup
 
 ``` bash

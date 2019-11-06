@@ -61,7 +61,7 @@
           target="_blank"
         >
           <p>Source</p>
-          <external-link-icon class="icon ml-2 text-black w-4 h-4" />
+          <ExternalLinkIcon class="icon ml-2 text-black w-4 h-4" />
         </a>
       </div>
     </div>
@@ -70,28 +70,35 @@
 </template>
 
 <script>
-import { ExternalLinkIcon } from 'vue-feather-icons'
+import { ExternalLinkIcon } from "vue-feather-icons";
 
 export default {
-  name: 'Post',
+  name: "Post",
   components: { ExternalLinkIcon },
-  props: { postData: Object },
+  props: {
+    postData: {
+      type: Object,
+      default() {
+        return {};
+      }
+    }
+  },
   data() {
     return {
       post: this.postData,
       isActive: false
-    }
+    };
   },
   methods: {
     toggleTags() {
       if (this.isActive) {
-        this.isActive = false
-        return ''
+        this.isActive = false;
+        return "";
       } else if (!this.isActive) {
-        this.isActive = true
-        return ''
+        this.isActive = true;
+        return "";
       }
     }
   }
-}
+};
 </script>

@@ -8,9 +8,9 @@
 </template>
 
 <script>
-import DashBoard from "~/components/DashBoard.vue";
-import SearchBar from "~/components/SearchBar.vue";
-import SideNav from "~/components/SideNav.vue";
+import DashBoard from "~/components/dashboard/DashBoard.vue";
+import SearchBar from "~/components/dashboard/SearchBar.vue";
+import SideNav from "~/components/navigation/SideNav.vue";
 
 export default {
   components: {

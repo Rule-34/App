@@ -2,7 +2,9 @@
   <div>
     <!-- Side Bar Toggler -->
     <div class="navigation-toggler">
-      <button class="navigation-toggler-button" title="Menu" @click="toggleNav">&nbsp;</button>
+      <button class="navigation-toggler-button" title="Menu" @click="toggleNav">
+        &nbsp;
+      </button>
       <button
         v-if="showSearch"
         class="navigation-search-button"
@@ -10,7 +12,7 @@
         @click="toggleSearch"
       >
         <!-- Search Icon -->
-        <search-icon class="icon text-white w-6 h-6 inline-flex" />
+        <SearchIcon class="icon text-white w-6 h-6 inline-flex" />
       </button>
     </div>
 
@@ -20,7 +22,12 @@
       <nav class="sidebar">
         <!-- Hero Image -->
         <div class="w-full h-40">
-          <img class="sidebar-img" src="/icon.png" alt="Rule 34 PWA Logo" title="Rule 34 PWA" />
+          <img
+            class="sidebar-img"
+            src="/icon.png"
+            alt="Rule 34 PWA Logo"
+            title="Rule 34 PWA"
+          />
         </div>
 
         <!-- Navbar Links -->
@@ -30,25 +37,25 @@
               <nuxt-link to="/">Dashboard</nuxt-link>
             </li>
 
-            <li>
+            <!-- <li>
               <nuxt-link to="/comments">Comments</nuxt-link>
             </li>
 
             <li>
               <nuxt-link to="/tags">Tags</nuxt-link>
-            </li>
+            </li> -->
 
             <li>
-              <nuxt-link to="/faq">FAQ</nuxt-link>
+              <nuxt-link to="/faq">Faq</nuxt-link>
             </li>
 
             <li>
               <nuxt-link to="/about">About</nuxt-link>
             </li>
 
-            <li>
+            <!-- <li>
               <nuxt-link to="/testing">testing</nuxt-link>
-            </li>
+            </li> -->
           </ul>
         </div>
       </nav>
@@ -65,7 +72,7 @@ import { SearchIcon } from "vue-feather-icons";
 export default {
   name: "SideNav",
   components: { SearchIcon },
-  props: { showSearch: { type: Boolean, default: true } },
+  props: { showSearch: { type: Boolean, default: true, required: false } },
   data() {
     return {
       isNavActive: false
