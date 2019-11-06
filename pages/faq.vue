@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="cool-bar" />
-    <side-nav :show-search="false" />
+    <SideNav :show-search="false" />
 
     <!-- Can be turned to component -->
     <div class="card-container md:w-1/2">
       <div class="post-container p-3">
         <div class="flex inline-flex align-baseline">
-          <info-icon class="icon w-4 h-4" />
+          <InfoIcon class="icon w-4 h-4" />
           <h1 class>
             Analytics
           </h1>
@@ -21,7 +21,8 @@
               href="https://getinsights.io/"
               target="_blank"
               rel="noopener noreferrer"
-            >check them here</a>!
+              >check them here</a
+            >!
           </p>
         </div>
       </div>
@@ -30,10 +31,10 @@
 </template>
 
 <script>
-import SideNav from '~/components/SideNav.vue'
-import { InfoIcon } from 'vue-feather-icons'
+import SideNav from "~/components/SideNav.vue";
+import { InfoIcon } from "vue-feather-icons";
 
 export default {
   components: { SideNav, InfoIcon }
-}
+};
 </script>
