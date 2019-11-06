@@ -2,9 +2,7 @@
   <div>
     <!-- Side Bar Toggler -->
     <div class="navigation-toggler">
-      <button class="navigation-toggler-button" title="Menu" @click="toggleNav">
-        &nbsp;
-      </button>
+      <button class="navigation-toggler-button" title="Menu" @click="toggleNav">&nbsp;</button>
       <button
         v-if="showSearch"
         class="navigation-search-button"
@@ -22,51 +20,34 @@
       <nav class="sidebar">
         <!-- Hero Image -->
         <div class="w-full h-40">
-          <img
-            class="sidebar-img"
-            src="/icon.png"
-            alt="Material Rule 34 Logo"
-            title="Material Rule 34"
-          />
+          <img class="sidebar-img" src="/icon.png" alt="Rule 34 PWA Logo" title="Rule 34 PWA" />
         </div>
 
         <!-- Navbar Links -->
         <div class="p-3">
           <ul class="text-center md:text-left">
             <li>
-              <nuxt-link to="/">
-                Dashboard
-              </nuxt-link>
+              <nuxt-link to="/">Dashboard</nuxt-link>
             </li>
 
             <li>
-              <nuxt-link to="/comments">
-                Comments
-              </nuxt-link>
+              <nuxt-link to="/comments">Comments</nuxt-link>
             </li>
 
             <li>
-              <nuxt-link to="/tags">
-                Tags
-              </nuxt-link>
+              <nuxt-link to="/tags">Tags</nuxt-link>
             </li>
 
             <li>
-              <nuxt-link to="/faq">
-                FAQ
-              </nuxt-link>
+              <nuxt-link to="/faq">FAQ</nuxt-link>
             </li>
 
             <li>
-              <nuxt-link to="/about">
-                About
-              </nuxt-link>
+              <nuxt-link to="/about">About</nuxt-link>
             </li>
 
             <li>
-              <nuxt-link to="/testing">
-                testing
-              </nuxt-link>
+              <nuxt-link to="/testing">testing</nuxt-link>
             </li>
           </ul>
         </div>
@@ -79,30 +60,30 @@
 </template>
 
 <script>
-import { SearchIcon } from 'vue-feather-icons'
+import { SearchIcon } from "vue-feather-icons";
 
 export default {
-  name: 'SideNav',
+  name: "SideNav",
   components: { SearchIcon },
   props: { showSearch: { type: Boolean, default: true } },
   data() {
     return {
       isNavActive: false
-    }
+    };
   },
   methods: {
     toggleNav() {
       if (this.isNavActive) {
-        this.isNavActive = false
-        return ''
+        this.isNavActive = false;
+        return "";
       } else if (!this.isNavActive) {
-        this.isNavActive = true
-        return ''
+        this.isNavActive = true;
+        return "";
       }
     },
     toggleSearch() {
-      this.$store.dispatch('toggleSearchComponent')
+      this.$store.dispatch("toggleSearchComponent");
     }
   }
-}
+};
 </script>
