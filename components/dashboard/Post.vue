@@ -50,7 +50,7 @@
       <!-- Tags -->
       <div
         v-if="post.tags && isActive"
-        class="post-extra w-full md:w-11/12 tag-container"
+        class="post-extra w-full md:w-10/12 tag-container"
         :class="{ 'md:w-full': !post.source }"
       >
         <a
@@ -62,7 +62,7 @@
         />
       </div>
       <!-- Source -->
-      <div v-if="post.source" class="w-full md:w-1/12 md:m-auto text-center">
+      <div v-if="post.source" class="w-full md:w-2/12 md:m-auto text-center">
         <a
           class="inline-flex items-baseline"
           :href="post.source"
