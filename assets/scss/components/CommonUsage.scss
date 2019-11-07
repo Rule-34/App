@@ -30,6 +30,11 @@ a:hover {
     @apply .w-full .block .bg-gradient-lilac-blue
 }
 
+.h-perfect {
+    height: 100vh;
+    height: calc(100vh - 10px);
+}
+
 .card-container {
     @apply .bg-white .mx-auto .w-full
 }
