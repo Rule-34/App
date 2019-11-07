@@ -17,7 +17,7 @@ export default () => ({
   // These settings are saved to localStorage
   userSettings: [
     { name: "Dark Theme", value: false },
-    { name: "Hover Controls", value: true },
+    { name: "Hover Controls", value: false },
     { name: "NSFW", value: true }
   ]
 });

@@ -48,6 +48,10 @@ a:hover {
     @apply .px-1 .m-1 .rounded .border .overflow-hidden
 }
 
+.nsfw-disabled {
+    filter: blur(20px);
+}
+
 // Animations 
 
 // Icons
