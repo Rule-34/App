@@ -8,7 +8,7 @@
       <div class="w-full md:w-2/6 m-auto">
         <div class="post-container p-2 inline-flex w-3/4">
           <!-- Search Icon -->
-          <search-icon class="icon text-black w-6 h-6 mr-2" />
+          <SearchIcon class="icon text-black w-6 h-6 mr-2" />
           <!-- Input -->
           <input
             v-model="searchQuery"
@@ -89,70 +89,70 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { SearchIcon } from 'vue-feather-icons'
+import { mapState } from "vuex";
+import { SearchIcon } from "vue-feather-icons";
 
 export default {
-  name: 'SearchBar',
+  name: "SearchBar",
   components: { SearchIcon },
   data() {
     return {
-      searchQuery: ''
-    }
+      searchQuery: ""
+    };
   },
   // Get data() from vuex store "searchData"
   computed: {
     // mix this into the outer object with the object spread operator
-    ...mapState(['dashBoardData', 'searchData', 'generalData'])
+    ...mapState(["dashBoardData", "searchData", "generalData"])
   },
   methods: {
     toggleSearch() {
-      this.$store.dispatch('toggleSearchComponent')
+      this.$store.dispatch("toggleSearchComponent");
     },
     addTag: function(tagName) {
       // console.log(tagName);
-      this.$store.commit('newSearchData', {
+      this.$store.commit("newSearchData", {
         tag: {
           name: tagName,
-          function: 'add'
+          function: "add"
         }
-      })
+      });
     },
     removeTag: function(tagName) {
-      this.$store.commit('newSearchData', {
+      this.$store.commit("newSearchData", {
         tag: {
           name: tagName,
-          function: 'remove'
+          function: "remove"
         }
-      })
+      });
     },
     dispatchGetAddedTags() {
       // Set PID to 0 since we're searching for new tags
-      this.$store.dispatch('changePID', {
-        function: 'reset'
-      })
+      this.$store.dispatch("changePID", {
+        function: "reset"
+      });
 
       // Search for the tags
-      this.$store.dispatch('getAddedTags')
+      this.$store.dispatch("getAddedTags");
 
       // And hide the search bar
-      this.toggleSearch()
+      this.toggleSearch();
     },
     getTags() {
       if (this.searchQuery.length > 2) {
         // console.log(`${this.dashBoardData.pid} GET`);
-        this.$store.dispatch('axiosGet', {
+        this.$store.dispatch("axiosGet", {
           url: `tags?name=${this.searchQuery.trim().toLowerCase()}*&limit=${
             this.generalData.postLimit
           }&order_by=posts`,
-          mutationToReturn: 'newSearchData'
-        })
+          mutationToReturn: "newSearchData"
+        });
       } else {
-        this.$store.commit('newSearchData', {
-          data: ''
-        })
+        this.$store.commit("newSearchData", {
+          data: ""
+        });
       }
     }
   }
-}
+};
 </script>

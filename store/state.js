@@ -14,8 +14,10 @@ export default () => ({
     postLimit: 20,
     errors: null
   },
+  // These settings are saved to localStorage
   userSettings: [
     { name: "Dark Theme", value: false },
-    { name: "Hover Controls", value: true }
+    { name: "Hover Controls", value: true },
+    { name: "NSFW", value: true }
   ]
 });
