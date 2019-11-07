@@ -1,4 +1,10 @@
 export default {
+  /**
+   *
+   * DASHBOARD related
+   *
+   **/
+
   // Handler for post's data changes
   newDashBoardData(state, payload) {
     // console.log(payload);
@@ -25,6 +31,12 @@ export default {
     // New url
     state.generalData.apiUrl = payload.newUrl;
   },
+
+  /**
+   *
+   * SEARCH BAR related
+   *
+   **/
 
   // Handler for Search changes
 
@@ -58,6 +70,20 @@ export default {
           return ele !== payload.tag.name;
         });
       }
+    }
+  },
+
+  /**
+   *
+   * SETTINGS related
+   *
+   **/
+
+  changeUserSetting(state, payload) {
+    // Change value
+    if (payload !== undefined) {
+      // console.log(payload);
+      state.userSettings[payload.index].value = payload.value;
     }
   }
 };

@@ -37,14 +37,6 @@
               <nuxt-link to="/">Dashboard</nuxt-link>
             </li>
 
-            <!-- <li>
-              <nuxt-link to="/comments">Comments</nuxt-link>
-            </li>
-
-            <li>
-              <nuxt-link to="/tags">Tags</nuxt-link>
-            </li> -->
-
             <li>
               <nuxt-link to="/faq">Faq</nuxt-link>
             </li>
@@ -53,9 +45,9 @@
               <nuxt-link to="/about">About</nuxt-link>
             </li>
 
-            <!-- <li>
-              <nuxt-link to="/testing">testing</nuxt-link>
-            </li> -->
+            <li>
+              <nuxt-link to="/settings">Settings</nuxt-link>
+            </li>
           </ul>
         </div>
       </nav>

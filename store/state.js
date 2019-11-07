@@ -13,5 +13,9 @@ export default () => ({
     backupApiUrl: "https://r34-api-clone.herokuapp.com/",
     postLimit: 20,
     errors: null
-  }
+  },
+  userSettings: [
+    { name: "Dark Theme", value: false },
+    { name: "Hover Controls", value: true }
+  ]
 });
