@@ -8,13 +8,22 @@
       v-lazy="post.file_url"
       class="post-img"
       :alt="post.type"
+      :class="{ 'nsfw-disabled': !userSettings[2].value }"
       @click="toggleTags"
     />
     <!-- :style="{height: post.height + 'px'}" -->
 
     <!-- Video -->
     <lazy-component v-if="post.type == 'video'" @click="toggleTags">
-      <video class="post-img" :alt="post.type" controls autoplay muted loop>
+      <video
+        class="post-img"
+        :alt="post.type"
+        controls
+        autoplay
+        muted
+        loop
+        :class="{ 'nsfw-disabled': !userSettings[2].value }"
+      >
         <!-- prettier-ignore -->
         <source :src="post.file_url">
         Your browser doesnt support HTML5 video.
@@ -70,6 +79,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { ExternalLinkIcon } from "vue-feather-icons";
 
 export default {
@@ -89,6 +99,7 @@ export default {
       isActive: false
     };
   },
+  computed: mapState(["userSettings"]),
   methods: {
     toggleTags() {
       if (this.isActive) {
