@@ -9,8 +9,15 @@
           class="post-container w-full md:w-2/3 xl:w-1/2 m-auto p-5 shadow-xl"
         >
           <div class="flex flex-wrap">
-            <div class="w-2/5 m-auto">
-              <h1 class="text-center text-lg">Settings</h1>
+            <div class="w-2/5 m-auto text-center">
+              <h1 class=" text-lg">Settings</h1>
+              <button
+                title="Use me when something is not working!"
+                class="text-xs border rounded-full px-2 align-middle shadow"
+                @click="removeLocalStorage"
+              >
+                Reset
+              </button>
             </div>
             <div class="w-3/5 m-auto flex">
               <div class="mx-auto">
@@ -38,6 +45,12 @@ import SettingSwitch from "~/components/settings/SettingSwitch.vue";
 
 export default {
   components: { SideNav, SettingSwitch },
-  computed: mapState(["userSettings"])
+  computed: mapState(["userSettings"]),
+  methods: {
+    removeLocalStorage() {
+      localStorage.removeItem("vuex");
+      location.reload();
+    }
+  }
 };
 </script>
