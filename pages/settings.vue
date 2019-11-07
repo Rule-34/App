@@ -20,6 +20,7 @@
                   :value="setting.value"
                   :text="setting.name"
                   :switch-id="index"
+                  :description="setting.description"
                 />
               </div>
             </div>
