@@ -37,6 +37,7 @@ export default {
    ** Plugins to load before mounting the App
    */
   plugins: [
+    { src: "~/plugins/vuex-persist.js", mode: "client", ssr: false },
     {
       src: "~/plugins/v-debounce.js",
       mode: "client",
