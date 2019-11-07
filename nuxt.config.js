@@ -39,10 +39,11 @@ export default {
   plugins: [
     {
       src: "~/plugins/v-debounce.js",
-      mode: "client"
+      mode: "client",
+      ssr: false
     },
-    { src: "~/plugins/v-lazy.js", mode: "client" },
-    { src: "~/plugins/insights.js", mode: "client" }
+    { src: "~/plugins/v-lazy.js", mode: "client", ssr: false },
+    { src: "~/plugins/insights.js", mode: "client", ssr: false }
   ],
   /*
    ** Nuxt.js dev-modules
