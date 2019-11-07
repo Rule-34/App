@@ -3,32 +3,44 @@
   <div class="post-container">
     <!-- style="max-height: 80vh;" TODO: good for image previews -->
     <!-- Image -->
-    <img
-      v-if="post.type === 'image'"
-      v-lazy="post.file_url"
-      class="post-img"
-      :alt="post.type"
-      :class="{ 'nsfw-disabled': !userSettings[2].value }"
-      @click="toggleTags"
-    />
-    <!-- :style="{height: post.height + 'px'}" -->
-
+    <template v-if="post.type === 'image'">
+      <template v-if="userSettings.fullSizeImages.value">
+        <img
+          v-lazy="post.file_url"
+          class="post-img"
+          :alt="post.type"
+          :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
+          @click="toggleTags"
+        />
+      </template>
+      <template v-else>
+        <img
+          v-lazy="post.sample_url"
+          class="post-img"
+          :alt="post.type"
+          :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
+          @click="toggleTags"
+        />
+      </template>
+    </template>
+    <!-- :style="{ height: post.height + 'px', width: post.width + 'px' }" -->
+    <template v-else>
+      <lazy-component @click="toggleTags">
+        <video
+          class="post-img"
+          :alt="post.type"
+          controls
+          autoplay
+          muted
+          loop
+          :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
+        >
+          <source :src="post.file_url" />
+          Your browser doesnt support HTML5 video.
+        </video>
+      </lazy-component>
+    </template>
     <!-- Video -->
-    <lazy-component v-if="post.type == 'video'" @click="toggleTags">
-      <video
-        class="post-img"
-        :alt="post.type"
-        controls
-        autoplay
-        muted
-        loop
-        :class="{ 'nsfw-disabled': !userSettings[2].value }"
-      >
-        <!-- prettier-ignore -->
-        <source :src="post.file_url">
-        Your browser doesnt support HTML5 video.
-      </video>
-    </lazy-component>
 
     <!-- Details like comments, tags and source TODO: Maybe add p-4 again -->
     <!-- <div class="p-2"> -->

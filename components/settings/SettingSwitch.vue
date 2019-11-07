@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :title="description">
     <div class="form-switch inline-block align-middle">
       <!-- When input changes commit reverse value so it toggles between true and false -->
       <input
@@ -29,9 +29,10 @@ export default {
   name: "SettingSwitch",
   // Define all props needed for this component
   props: {
-    switchId: { type: Number, default: 0, required: true },
+    switchId: { type: String, default: "", required: true },
     value: { type: Boolean, default: false, required: true },
-    text: { type: String, default: "", required: true }
+    text: { type: String, default: "", required: true },
+    description: { type: String, default: "", required: false }
   },
   // Basic data function to keep track of local values
   data() {
