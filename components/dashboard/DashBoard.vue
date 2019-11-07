@@ -113,15 +113,18 @@ export default {
 
       // Test if something was input
       if (!isNaN(specificPage)) {
+        // Set PID to indicated
+        // console.log(specificPage);
+        this.$store.commit("newDashBoardData", {
+          pid: specificPage
+        });
+
         // If we have tags added then load specific page of tags, else load normal latest posts
         if (this.searchData.tags.length > 0) {
-          // Set PID
-          this.$store.commit("newDashBoardData", {
-            pid: specificPage
-          });
-          // And load the next tag page
+          // Load the next tag page
           this.$store.dispatch("getAddedTags");
         } else {
+          // Or load normal posts
           this.getPosts();
         }
       } else {
