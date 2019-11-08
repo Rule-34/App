@@ -118,7 +118,7 @@ export default {
   computed: mapState(["userSettings"]),
   methods: {
     ...mapMutations(["newSearchData"]),
-    ...mapActions(["changePID", "getAddedTags"]),
+    ...mapActions(["pidManager", "tagManager"]),
     // Toggle showing tags on click
     toggleTags() {
       if (this.isActive) {
@@ -129,7 +129,7 @@ export default {
     },
     getSpecificTag(tag) {
       // Set PID to 0 since we're searching for new tags
-      this.changePID({
+      this.pidManager({
         function: "reset"
       });
 
@@ -149,7 +149,7 @@ export default {
       });
 
       // Search for the tag
-      this.getAddedTags();
+      this.tagManager({ function: "getPostsByTags" });
     }
   }
 };
