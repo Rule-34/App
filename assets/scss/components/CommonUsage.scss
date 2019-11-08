@@ -1,4 +1,6 @@
-// Element related
+/** 
+**          DOCUMENT DEFAULTS
+**/
 html {
     scroll-behavior: smooth;
 }
@@ -15,7 +17,17 @@ a:hover {
     @apply .text-blue-600
 }
 
-// Color related
+/** 
+**          BUILDING CLASSES
+**/
+.material-container {
+    @apply .border .rounded-lg .bg-white .m-5 .overflow-hidden .shadow
+}
+
+.card-container {
+    @apply .bg-white .mx-auto .w-full
+}
+
 .bg-gradient-lilac-blue {
     background: linear-gradient(152deg, rgba(155, 155, 224, 1) 38%, rgba(0, 212, 255, 1) 100%);
 }
@@ -24,7 +36,6 @@ a:hover {
     background: linear-gradient(160deg, rgba(0, 212, 255, 1) 38%, rgba(155, 155, 224, 1) 100%);
 }
 
-// Specific element related
 .cool-bar {
     height: 10px;
     @apply .w-full .block .bg-gradient-lilac-blue
@@ -35,46 +46,18 @@ a:hover {
     height: calc(100vh - 10px);
 }
 
-.card-container {
-    @apply .bg-white .mx-auto .w-full
+.btn {
+    @apply .font-bold .py-2 .px-4 .rounded
 }
 
-// Tags
-.tag-container {
-    @apply .inline-flex .flex-wrap
-}
+// .btn:hover {
+//     filter: brightness(0.9);
+// }
 
-.tag {
-    @apply .px-1 .m-1 .rounded .border .overflow-hidden
-}
+/** 
+**          ICON RELATED
+**/
 
-.nsfw-disabled {
-    filter: blur(20px);
-}
-
-.hover-controls {
-    @apply shadow-md w-full my-2 mx-auto
-    
-}
-
-.hover-controls-container {
-    @apply fixed bottom-0 z-10 w-full p-2
-}
-
-@screen md {
-    .hover-controls-container {
-        @apply w-2/3 
-    }
-}
-@screen xl {
-    .hover-controls-container {
-        @apply w-1/2 
-    }
-}
-
-// Animations 
-
-// Icons
 .icon {
     @apply .stroke-width-1 .pointer-events-none .align-middle
 }
@@ -82,7 +65,3 @@ a:hover {
 .stroke-width-1 {
     stroke-width: 1.5;
 }
-
-// html {
-//     @apply .font-light
-// }
