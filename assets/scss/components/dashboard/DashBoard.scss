@@ -21,11 +21,13 @@
 **/
 
 /* NSFW SETTING */
+
 .nsfw-disabled {
     filter: blur(20px);
 }
 
 /* HOVER CONTROLS SETTING */
+
 .hover-controls {
     @apply shadow-md w-full my-2 mx-auto 
     
@@ -46,26 +48,12 @@
     }
 }
 
+/* ZOOM SETTING */
 
+.zoom {
+    transition: transform .2s
+}
 
-
-
-
-
-
-
-
-
-
-
-// .post-extra {
-//     transition: all 0.35s ease-in-out;
-// }
-
-// .post-extra-tags {
-//     transition: all 0.35s ease-in-out;
-//     @apply .max-h-0 .invisible
-// }
-// .post-extra-tags.active {
-//     @apply .max-h-screen .visible
-// }
+.zoom:hover {
+    transform: scale(1.1);
+  }

@@ -81,3 +81,11 @@
 .sidebar-img {
     @apply .w-full .h-full .object-cover
 }
+
+.nav-links li{
+    transition: all .2s ease;
+    @apply relative
+}
+.nav-links li:hover {
+    transform: translateX(5px);
+}

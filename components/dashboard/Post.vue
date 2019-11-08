@@ -1,6 +1,6 @@
 <template>
   <!-- Loop for every post -->
-  <div class="material-container">
+  <div class="material-container" :class="{ zoom: userSettings.zoom.value }">
     <!-- style="max-height: 80vh;" TODO: good for image previews -->
     <!-- Image -->
     <template v-if="post.type === 'image'">

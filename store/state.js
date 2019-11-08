@@ -37,6 +37,12 @@ export default () => ({
       description: "Load posts as you scroll down",
       value: false
     },
+    // TODO: slider for how much zoom
+    zoom: {
+      name: "Hover Zoom",
+      description: "Zoom when you hover posts, useful for videos",
+      value: false
+    },
     nsfw: {
       name: "NSFW",
       description: "If deactivated all media will be blurred",
