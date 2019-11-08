@@ -1,16 +1,67 @@
-// Individual posts
-.material-container {
-    @apply .border .rounded-lg .bg-white .m-5 .overflow-hidden .shadow
-}
-
+/** 
+**          POST RELATED
+**/
 .post-img {
     @apply .object-cover .w-full
 }
 
+/** 
+**          TAG RELATED
+**/
+.tag-container {
+    @apply .inline-flex .flex-wrap
+}
+
+.tag {
+    @apply .px-1 .m-1 .rounded .border .overflow-hidden
+}
+
+/** 
+**          SETTINGS RELATED
+**/
+
+/* NSFW SETTING */
+.nsfw-disabled {
+    filter: blur(20px);
+}
+
+/* HOVER CONTROLS SETTING */
+.hover-controls {
+    @apply shadow-md w-full my-2 mx-auto 
+    
+}
+
+.hover-controls-container {
+    @apply fixed bottom-0 z-10 w-full p-2
+}
+
+@screen md {
+    .hover-controls-container {
+        @apply w-2/3 
+    }
+}
+@screen xl {
+    .hover-controls-container {
+        @apply w-1/2 
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 // .post-extra {
 //     transition: all 0.35s ease-in-out;
 // }
-// 
+
 // .post-extra-tags {
 //     transition: all 0.35s ease-in-out;
 //     @apply .max-h-0 .invisible

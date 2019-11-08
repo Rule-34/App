@@ -1,14 +1,8 @@
 <template>
   <div>
     <!-- If theres request got errors -->
-    <div
-      v-if="generalData.errors !== null"
-      class="material-container text-center p-2"
-    >
-      <h1 class="bold" v-text="generalData.errors" />
-      <a href="javascript:void(0)" @click="getPosts">Try again?</a>
-    </div>
-    <!-- Every post in their own component -->
+    <Errors />
+    <!-- every post in their own component -->
     <Post
       v-for="post in dashBoardData.data.posts"
       :key="post.id"
@@ -17,23 +11,27 @@
 
     <!-- Controls for navigating pages -->
     <Controls />
+
+    <div v-if="userSettings.hoverControls" class="my-6">&nbsp;</div>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import Errors from "./Errors.vue";
 import Post from "./Post.vue";
 import Controls from "./Controls.vue";
 
 export default {
   name: "DashBoard",
   components: {
+    Errors,
     Post,
     Controls
   },
   // Get data() from vuex stores
   computed: {
-    ...mapState(["dashBoardData", "searchData", "generalData"])
+    ...mapState(["dashBoardData", "searchData", "generalData", "userSettings"])
   }
 };
 </script>
