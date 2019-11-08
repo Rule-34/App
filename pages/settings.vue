@@ -6,7 +6,7 @@
     <div class="card-container md:w-2/3 xl:w-1/2">
       <div class="flex h-perfect p-3">
         <div
-          class="post-container w-full md:w-2/3 xl:w-1/2 m-auto p-5 shadow-xl"
+          class="material-container w-full md:w-2/3 xl:w-1/2 m-auto p-5 shadow-xl"
         >
           <div class="flex flex-wrap">
             <div class="w-2/5 m-auto text-center">

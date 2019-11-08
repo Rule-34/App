@@ -1,33 +1,38 @@
 <template>
   <!-- Controls for navigating pages -->
   <div
-    v-if="!generalData.errors && dashBoardData"
-    class="post-container text-center p-2 flex"
+    :class="{ 'hover-controls-container': userSettings.hoverControls.value }"
   >
-    <a
-      href="#"
-      class="w-1/3 button"
-      title="Load last page"
-      @click="getLastPage"
+    <div
+      v-if="!generalData.errors && dashBoardData"
+      :class="{ 'hover-controls': userSettings.hoverControls.value }"
+      class="material-container text-center p-2 flex"
     >
-      <ArrowLeftIcon class="icon w-4 h-4 inline" /> Last page
-    </a>
-    <a
-      href="#"
-      class="w-1/3"
-      title="Load specific page"
-      @click="getSpecificPage"
-      v-text="dashBoardData.pid"
-    />
-    <a
-      href="#"
-      class="w-1/3 button"
-      title="Load next page"
-      @click="getNextPage"
-    >
-      Next page
-      <ArrowRightIcon class="icon w-4 h-4 inline" />
-    </a>
+      <a
+        href="#"
+        class="w-1/3 button"
+        title="Load last page"
+        @click="getLastPage"
+      >
+        <ArrowLeftIcon class="icon w-4 h-4 inline" /> Last page
+      </a>
+      <a
+        href="#"
+        class="w-1/3"
+        title="Load specific page"
+        @click="getSpecificPage"
+        v-text="dashBoardData.pid"
+      />
+      <a
+        href="#"
+        class="w-1/3 button"
+        title="Load next page"
+        @click="getNextPage"
+      >
+        Next page
+        <ArrowRightIcon class="icon w-4 h-4 inline" />
+      </a>
+    </div>
   </div>
 </template>
 
@@ -45,7 +50,7 @@ export default {
   },
   // Map data to the store following's
   computed: {
-    ...mapState(["dashBoardData", "searchData", "generalData"])
+    ...mapState(["dashBoardData", "searchData", "generalData", "userSettings"])
   },
 
   methods: {

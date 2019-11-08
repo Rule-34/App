@@ -52,6 +52,26 @@ a:hover {
     filter: blur(20px);
 }
 
+.hover-controls {
+    @apply shadow-md w-full my-2 mx-auto
+    
+}
+
+.hover-controls-container {
+    @apply fixed bottom-0 z-10 w-full p-2
+}
+
+@screen md {
+    .hover-controls-container {
+        @apply w-2/3 
+    }
+}
+@screen xl {
+    .hover-controls-container {
+        @apply w-1/2 
+    }
+}
+
 // Animations 
 
 // Icons

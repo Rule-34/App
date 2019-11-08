@@ -6,7 +6,7 @@
       <div class="hidden md:block w-1/6" @click.self="toggleSearch" />
       <!-- Search bar -->
       <div class="w-full md:w-2/6 m-auto">
-        <div class="post-container p-2 inline-flex w-3/4">
+        <div class="material-container p-2 inline-flex w-3/4">
           <!-- Search Icon -->
           <SearchIcon class="icon text-black w-6 h-6 mr-2" />
           <!-- Input -->

@@ -1,10 +1,9 @@
 <template>
-  <!-- Width on medium screens -->
-  <div class="card-container md:w-2/3 xl:w-1/2">
-    <!-- If Axios request got errors -->
+  <div>
+    <!-- If theres request got errors -->
     <div
       v-if="generalData.errors !== null"
-      class="post-container text-center p-2"
+      class="material-container text-center p-2"
     >
       <h1 class="bold" v-text="generalData.errors" />
       <a href="javascript:void(0)" @click="getPosts">Try again?</a>
