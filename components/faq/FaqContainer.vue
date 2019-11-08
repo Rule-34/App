@@ -1,7 +1,7 @@
 <template>
   <!-- Loop for every info container -->
   <div class="card-container">
-    <div class="post-container p-3">
+    <div class="material-container p-3">
       <!-- Head -->
       <div class="flex inline-flex align-middle mb-2">
         <InfoIcon class="icon text-green-500" />

@@ -5,7 +5,7 @@
     <SideNav :show-search="false" />
     <div class="card-container md:w-2/3 xl:w-1/2">
       <div class="flex h-perfect p-3">
-        <div class="post-container m-auto p-5 shadow-xl">
+        <div class="material-container m-auto p-5 shadow-xl">
           <a
             href="https://akbal.dev/"
             target="_blank"

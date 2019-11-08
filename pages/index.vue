@@ -3,7 +3,8 @@
     <div class="cool-bar" />
     <SideNav />
     <SearchBar />
-    <DashBoard />
+    <!-- Different width depending on screen -->
+    <DashBoard class="card-container md:w-2/3 xl:w-1/2" />
   </div>
 </template>
 

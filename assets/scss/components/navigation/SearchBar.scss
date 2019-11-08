@@ -1,6 +1,6 @@
 .search-bar {
     transition: right 0.35s ease-in-out, background 2s ease-in-out;
-    @apply fixed min-h-screen w-full z-10 right-minus-100 bg-transparent
+    @apply fixed min-h-screen w-full z-20 right-minus-100 bg-transparent
 }
 
 .search-bar.active {
@@ -8,7 +8,7 @@
 }
 
 .search-bar-results {
-    @apply post-container w-full flex flex-col p-2 my-auto
+    @apply material-container w-full flex flex-col p-2 my-auto
 }
 
 // Button related
