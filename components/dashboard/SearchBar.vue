@@ -3,7 +3,10 @@
     <!-- Centered container -->
     <div class="flex flex-wrap md:flex-no-wrap h-screen">
       <!-- Separator -->
-      <div class="hidden md:block w-1/6" @click.self="toggleSearch" />
+      <div
+        class="hidden md:block w-1/6"
+        @click.self="toggleSearchComponent()"
+      />
       <!-- Search bar -->
       <div class="w-full md:w-2/6 m-auto">
         <div class="material-container p-2 inline-flex w-3/4">
@@ -42,7 +45,7 @@
           Search something!
         </h1>
 
-        <!-- Added tags -->
+        <!-- Added tags, click them to remove them -->
         <div
           v-if="searchData.tags"
           class="tag-container border-b rounded-b mb-2"
@@ -51,18 +54,32 @@
             v-for="tag in searchData.tags"
             :key="tag"
             class="tag group"
-            @click="removeTag(tag)"
+            @click="
+              newSearchData({
+                tag: {
+                  name: tag,
+                  function: 'remove'
+                }
+              })
+            "
             v-text="tag"
           />
         </div>
 
-        <!-- Tags -->
+        <!-- Tags, click them to add them -->
         <div v-if="searchData.data" class="tag-container">
           <a
             v-for="tag in searchData.data"
             :key="tag.name"
             class="tag group"
-            @click="addTag(tag.name)"
+            @click="
+              newSearchData({
+                tag: {
+                  name: tag.name,
+                  function: 'add'
+                }
+              })
+            "
           >
             {{ tag.name }}
             <span
@@ -82,14 +99,17 @@
         </a>
       </div>
 
-      <div class="hidden md:block w-1/6" @click.self="toggleSearch" />
+      <div
+        class="hidden md:block w-1/6"
+        @click.self="toggleSearchComponent()"
+      />
       <!--  -->
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 import { SearchIcon } from "vue-feather-icons";
 
 export default {
@@ -106,49 +126,37 @@ export default {
     ...mapState(["dashBoardData", "searchData", "generalData"])
   },
   methods: {
-    toggleSearch() {
-      this.$store.dispatch("toggleSearchComponent");
-    },
-    addTag: function(tagName) {
-      // console.log(tagName);
-      this.$store.commit("newSearchData", {
-        tag: {
-          name: tagName,
-          function: "add"
-        }
-      });
-    },
-    removeTag: function(tagName) {
-      this.$store.commit("newSearchData", {
-        tag: {
-          name: tagName,
-          function: "remove"
-        }
-      });
-    },
+    ...mapMutations(["newSearchData"]),
+    ...mapActions([
+      "toggleSearchComponent",
+      "changePID",
+      "getAddedTags",
+      "axiosGet"
+    ]),
     dispatchGetAddedTags() {
       // Set PID to 0 since we're searching for new tags
-      this.$store.dispatch("changePID", {
+      this.changePID({
         function: "reset"
       });
 
       // Search for the tags
-      this.$store.dispatch("getAddedTags");
+      this.getAddedTags();
 
       // And hide the search bar
-      this.toggleSearch();
+      this.toggleSearchComponent();
     },
     getTags() {
       if (this.searchQuery.length > 2) {
         // console.log(`${this.dashBoardData.pid} GET`);
-        this.$store.dispatch("axiosGet", {
+        this.axiosGet({
           url: `tags?name=${this.searchQuery.trim().toLowerCase()}*&limit=${
             this.generalData.postLimit
           }&order_by=posts`,
           mutationToReturn: "newSearchData"
         });
       } else {
-        this.$store.commit("newSearchData", {
+        // Remove search data cause search limit is 3 characters
+        this.newSearchData({
           data: ""
         });
       }
