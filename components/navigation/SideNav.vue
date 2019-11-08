@@ -21,7 +21,7 @@
       <!-- Actual Navigation Bar -->
       <nav class="sidebar">
         <!-- Hero Image -->
-        <div class="w-full h-40">
+        <div class="w-full h-48 overflow-hidden">
           <img
             class="sidebar-img"
             src="/icon.png"
