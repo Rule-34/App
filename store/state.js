@@ -1,10 +1,10 @@
 export default () => ({
   dashBoardData: {
-    data: "", // Data that is rendered to the web app
+    data: {}, // Data that is rendered to the web app
     pid: 0 // Page id
   },
   searchData: {
-    data: "", // Data received while searching for tags
+    data: {}, // Data received while searching for tags
     tags: [],
     isActive: false
   },

@@ -56,17 +56,17 @@ export default {
   methods: {
     // Map actions and mutations from store following's
     ...mapMutations(["newDashBoardData"]),
-    ...mapActions(["getPosts", "changePID", "getAddedTags"]),
+    ...mapActions(["getPosts", "pidManager", "tagManager"]),
     // Get next page from api
     getNextPage() {
       // Get next PID
-      this.changePID({
+      this.pidManager({
         function: "add"
       });
 
       // If we have tags added then load next page of tags, else load normal latest posts
       if (this.searchData.tags.length > 0) {
-        this.getAddedTags();
+        this.tagManager({ function: "getPostsByTags" });
       } else {
         this.getPosts();
       }
@@ -74,13 +74,13 @@ export default {
     // Get last page from api
     getLastPage() {
       // Get last PID
-      this.changePID({
+      this.pidManager({
         function: "subtract"
       });
 
       // If we have tags added then load last page of tags, else load normal latest posts
       if (this.searchData.tags.length > 0) {
-        this.getAddedTags();
+        this.tagManager({ function: "getPostsByTags" });
       } else {
         this.getPosts();
       }
@@ -100,7 +100,7 @@ export default {
         // If we have tags added then load specific page of tags, else load normal latest posts
         if (this.searchData.tags.length > 0) {
           // Load the next tag page
-          this.getAddedTags();
+          this.tagManager({ function: "getPostsByTags" });
         } else {
           // Or load normal posts
           this.getPosts();

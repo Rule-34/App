@@ -129,18 +129,18 @@ export default {
     ...mapMutations(["newSearchData"]),
     ...mapActions([
       "toggleSearchComponent",
-      "changePID",
-      "getAddedTags",
+      "pidManager",
+      "tagManager",
       "axiosGet"
     ]),
     dispatchGetAddedTags() {
       // Set PID to 0 since we're searching for new tags
-      this.changePID({
+      this.pidManager({
         function: "reset"
       });
 
       // Search for the tags
-      this.getAddedTags();
+      this.tagManager({ function: "getPostsByTags" });
 
       // And hide the search bar
       this.toggleSearchComponent();

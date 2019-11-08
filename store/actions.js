@@ -31,7 +31,7 @@ export default {
       });
 
       // Change to another Api
-      dispatch("changeApi", {
+      dispatch("apiManager", {
         errors: error
       });
     }
@@ -46,7 +46,7 @@ export default {
   },
 
   // Change api to an alternative one
-  async changeApi({ commit }) {
+  async apiManager({ commit }) {
     if (this.state.generalData.apiUrl !== this.state.generalData.backupApiUrl) {
       //   console.log(`${dataObj.errors}, changing to alternative api`)
 
@@ -58,7 +58,7 @@ export default {
   },
 
   // Change api to an alternative one
-  async changePID({ commit }, dataObj) {
+  async pidManager({ commit }, dataObj) {
     if (dataObj.function === "add") {
       await commit("newDashBoardData", {
         pid: parseInt(this.state.dashBoardData.pid) + 1
@@ -89,12 +89,26 @@ export default {
     }
   },
 
-  async getAddedTags({ dispatch }) {
-    await dispatch("axiosGet", {
-      url: `posts?pid=${this.state.dashBoardData.pid}&limit=${
-        this.state.generalData.postLimit
-      }&tags=${this.state.searchData.tags.join("+")}`,
-      mutationToReturn: "newDashBoardData"
-    });
+  async tagManager({ commit, dispatch }, dataObj) {
+    // Get posts with included tags
+    if (dataObj.function === "getPostsByTags") {
+      await dispatch("axiosGet", {
+        url: `posts?pid=${this.state.dashBoardData.pid}&limit=${
+          this.state.generalData.postLimit
+        }&tags=${this.state.searchData.tags.join("+")}`,
+        mutationToReturn: "newDashBoardData"
+      });
+      // Reset tags
+    } else if (dataObj.function === "reset") {
+      // Reset tags
+      await commit({
+        type: "newSearchData",
+        tag: {
+          function: "reset"
+        }
+      });
+      // And show search
+      await dispatch("toggleSearchComponent");
+    }
   }
 };
