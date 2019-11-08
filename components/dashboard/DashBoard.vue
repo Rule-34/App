@@ -12,7 +12,7 @@
     <!-- Controls for navigating pages -->
     <Controls />
 
-    <div v-if="userSettings.hoverControls" class="my-6">&nbsp;</div>
+    <div v-if="userSettings.hoverControls.value" class="my-6">&nbsp;</div>
   </div>
 </template>
 

@@ -17,24 +17,29 @@ export default () => ({
   // These settings are saved to localStorage
   userSettings: {
     darkTheme: {
-      name: "Dark Theme",
+      name: "Dark Theme WIP",
       description: "Enable dark theme app-wide",
       value: false
+    },
+    fullSizeImages: {
+      name: "Full size images",
+      description:
+        "Load full images instead of downscaled size images, data intensive",
+      value: true
     },
     hoverControls: {
       name: "Hover Controls",
       description: "Next and last posts will be floating on the bottom",
       value: false
     },
+    infiniteLoad: {
+      name: "Infinite loading WIP",
+      description: "Load posts as you scroll down",
+      value: false
+    },
     nsfw: {
       name: "NSFW",
       description: "If deactivated all media will be blurred",
-      value: true
-    },
-    fullSizeImages: {
-      name: "Full size images",
-      description:
-        "Load full images instead of downscaled size images, data intensive",
       value: true
     }
   }
