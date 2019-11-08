@@ -103,6 +103,7 @@ export default {
       // Reset tags
       await commit({
         type: "newSearchData",
+        // We reset this way since its a tag function
         tag: {
           function: "reset"
         }
