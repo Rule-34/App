@@ -19,8 +19,22 @@
       <!-- Copyright -->
       <FaqContainer
         title="Do you own the media content?"
-        text="No, the images/videos/media are directly served from rule34.xxx so I do not own anything"
+        text="No, the images/videos/media are directly served from rule34.xxx so I do not own anything."
       >
+      </FaqContainer>
+
+      <!-- Github -->
+      <FaqContainer
+        title="Can I report an error?"
+        text="Yes, you can report any error that you may find or suggest something you want to be added in the next link."
+      >
+        <!-- Slot -->
+        <a
+          href="https://github.com/VoidlessSeven7/Rule-34-PWA-Public"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub</a
+        >
       </FaqContainer>
 
       <!-- Analytics -->
@@ -37,22 +51,12 @@
         >
       </FaqContainer>
 
-      <!-- Github -->
-      <FaqContainer
-        title="Can I report an error?"
-        text="Yes, you can report any error that you may find or suggest something you want to be added in the next link"
-      >
-        <!-- Slot -->
-        <a href="https://example.com/" target="_blank" rel="noopener noreferrer"
-          >GitHub</a
-        >
-      </FaqContainer>
-
       <!-- Donations -->
       <!-- TODO: poner estrellita azul -->
       <FaqContainer
         title="Can I donate for your efforts?"
-        text="Yeah, I've been working really hard on this PWA, so I appreciate all donations."
+        icon="donation"
+        text="Yes! I've been working really hard on this PWA, I really appreciate every donation."
       >
         <!-- Slot -->
         <a
@@ -67,8 +71,11 @@
       <!-- TODO: poner estrellita amarilla -->
       <FaqContainer
         title="Credits"
+        icon="star"
         text="Thanks to Jessica for drawing the logo, and me for programming the PWA."
       >
+        <!-- Slot -->
+        <small class="text-gray-500">And you, the user!</small>
       </FaqContainer>
     </div>
   </div>
