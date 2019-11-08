@@ -59,11 +59,11 @@
 </template>
 
 <script>
-import { SearchIcon, SettingsIcon } from "vue-feather-icons";
+import { SearchIcon } from "vue-feather-icons";
 
 export default {
   name: "SideNav",
-  components: { SearchIcon, SettingsIcon },
+  components: { SearchIcon },
   props: { showSearch: { type: Boolean, default: true, required: false } },
   data() {
     return {

@@ -70,7 +70,8 @@
           v-for="tag in post.tags"
           :key="post[tag]"
           class="tag"
-          href="javascript:void(0)"
+          href="#"
+          @click="getSpecificTag(tag)"
           v-text="tag"
         />
       </div>
@@ -92,7 +93,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 import { ExternalLinkIcon } from "vue-feather-icons";
 
 export default {
@@ -108,20 +109,47 @@ export default {
   },
   data() {
     return {
+      // Save data so we can use
       post: this.postData,
+      // Internal toggle for showing tags
       isActive: false
     };
   },
   computed: mapState(["userSettings"]),
   methods: {
+    ...mapMutations(["newSearchData"]),
+    ...mapActions(["changePID", "getAddedTags"]),
+    // Toggle showing tags on click
     toggleTags() {
       if (this.isActive) {
         this.isActive = false;
-        return "";
       } else if (!this.isActive) {
         this.isActive = true;
-        return "";
       }
+    },
+    getSpecificTag(tag) {
+      // Set PID to 0 since we're searching for new tags
+      this.changePID({
+        function: "reset"
+      });
+
+      // Reset all tags
+      this.newSearchData({
+        tag: {
+          function: "reset"
+        }
+      });
+
+      // Add clicked tag
+      this.newSearchData({
+        tag: {
+          name: tag,
+          function: "add"
+        }
+      });
+
+      // Search for the tag
+      this.getAddedTags();
     }
   }
 };
