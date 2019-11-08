@@ -27,16 +27,17 @@ export default () => ({
         "Load full images instead of downscaled size images, data intensive",
       value: true
     },
-    hoverControls: {
-      name: "Hover Controls",
-      description: "Next and last posts will be floating on the bottom",
-      value: false
-    },
     infiniteLoad: {
       name: "Infinite loading WIP",
       description: "Load posts as you scroll down",
       value: false
     },
+    hoverControls: {
+      name: "Hover Controls",
+      description: "Next and last posts will be floating on the bottom",
+      value: false
+    },
+
     // TODO: slider for how much zoom
     zoom: {
       name: "Hover Zoom",

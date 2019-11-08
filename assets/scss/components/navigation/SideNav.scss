@@ -79,7 +79,12 @@
 
 /* ----- Rest of things related ----- */
 .sidebar-img {
+    transition: transform .5s ease;
+    transition-delay: .35s;
     @apply .w-full .h-full .object-cover
+}
+.sidebar-img:hover {
+    transform: scale(1.5);
 }
 
 .nav-links li{
