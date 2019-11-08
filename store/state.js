@@ -25,7 +25,7 @@ export default () => ({
       name: "Full size images",
       description:
         "Load full images instead of downscaled size images, data intensive",
-      value: true
+      value: false
     },
     infiniteLoad: {
       name: "Infinite loading WIP",

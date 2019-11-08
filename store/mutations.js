@@ -63,12 +63,14 @@ export default {
       if (payload.tag.function === "add") {
         // console.log(payload.tag.name);
         state.searchData.tags.push(payload.tag.name);
-      }
-      if (payload.tag.function === "remove") {
+      } else if (payload.tag.function === "remove") {
         // console.log(payload.tag.name);
         state.searchData.tags = state.searchData.tags.filter(function(ele) {
           return ele !== payload.tag.name;
         });
+      } else if (payload.tag.function === "reset") {
+        // console.log(payload.tag.name);
+        state.searchData.tags = [];
       }
     }
   },
