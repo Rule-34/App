@@ -32,7 +32,7 @@
 
         <!-- Navbar Links -->
         <div class="p-3">
-          <ul class="text-center md:text-left">
+          <ul class="nav-links text-center md:text-left leading-loose">
             <li>
               <nuxt-link to="/">Dashboard</nuxt-link>
             </li>
@@ -59,11 +59,11 @@
 </template>
 
 <script>
-import { SearchIcon } from "vue-feather-icons";
+import { SearchIcon, SettingsIcon } from "vue-feather-icons";
 
 export default {
   name: "SideNav",
-  components: { SearchIcon },
+  components: { SearchIcon, SettingsIcon },
   props: { showSearch: { type: Boolean, default: true, required: false } },
   data() {
     return {
