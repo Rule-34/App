@@ -4,7 +4,12 @@
     <div class="material-container p-3">
       <!-- Head -->
       <div class="flex inline-flex align-middle mb-2">
-        <InfoIcon class="icon text-green-500" />
+        <InfoIcon v-if="icon === 'info'" class="text-blue-500" />
+        <StarIcon v-else-if="icon === 'star'" class="text-yellow-500" />
+        <DollarSignIcon
+          v-else-if="icon === 'donation'"
+          class="text-green-500"
+        />
         <h1 class="ml-2 text-lg" v-text="title"></h1>
       </div>
 
@@ -19,14 +24,15 @@
 </template>
 
 <script>
-import { InfoIcon } from "vue-feather-icons";
+import { InfoIcon, StarIcon, DollarSignIcon } from "vue-feather-icons";
 
 export default {
   name: "FaqContainer",
-  components: { InfoIcon },
+  components: { InfoIcon, StarIcon, DollarSignIcon },
   props: {
     title: { type: String, required: true },
-    text: { type: String, required: true }
+    text: { type: String, required: true },
+    icon: { type: String, required: false, default: "info" }
   }
 };
 </script>
