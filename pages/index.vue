@@ -17,6 +17,10 @@ export default {
     DashBoard,
     SearchBar,
     SideNav
+  },
+  // Load the store with posts
+  async fetch({ store }) {
+    await store.dispatch("getPosts");
   }
 };
 </script>
