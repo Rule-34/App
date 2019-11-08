@@ -36,6 +36,14 @@ export default {
       });
     }
   },
+  // Get posts from api
+  async getPosts({ dispatch }) {
+    // console.log(`${this.dashBoardData.pid} GET`)
+    await dispatch("axiosGet", {
+      url: `posts?pid=${this.state.dashBoardData.pid}&limit=${this.state.generalData.postLimit}`,
+      mutationToReturn: "newDashBoardData"
+    });
+  },
 
   // Change api to an alternative one
   async changeApi({ commit }) {

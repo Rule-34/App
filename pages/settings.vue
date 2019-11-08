@@ -47,6 +47,7 @@ export default {
   components: { SideNav, SettingSwitch },
   computed: mapState(["userSettings"]),
   methods: {
+    // Remove the localStorage object and reload the window
     removeLocalStorage() {
       localStorage.removeItem("vuex");
       location.reload();
