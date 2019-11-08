@@ -25,7 +25,7 @@
     </template>
     <!-- :style="{ height: post.height + 'px', width: post.width + 'px' }" -->
     <template v-else>
-      <lazy-component @click="toggleTags">
+      <lazy-component>
         <video
           class="post-img"
           :alt="post.type"
@@ -34,6 +34,7 @@
           muted
           loop
           :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
+          @click="toggleTags"
         >
           <source :src="post.file_url" />
           Your browser doesnt support HTML5 video.
