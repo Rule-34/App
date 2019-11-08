@@ -26,16 +26,10 @@
 
       <!-- Results -->
       <div class="search-bar-results w-full md:w-2/6 max-h-3/4 min-h-1/2">
-        <!-- Show if theres nothing -->
+        <!-- ERROR HANDLING AND SEARCH RESULTS -->
 
         <!-- If theres errors -->
-        <div
-          v-if="generalData.errors !== null"
-          class="text-center text-black font-hairline m-auto text-xl"
-        >
-          <h1 v-text="generalData.errors" />
-          <a href="#" @click="getTags">Try again?</a>
-        </div>
+        <Errors />
 
         <!-- If nothing searched -->
         <h1
@@ -110,13 +104,15 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
+import Errors from "./Errors.vue";
 import { SearchIcon } from "vue-feather-icons";
 
 export default {
   name: "SearchBar",
-  components: { SearchIcon },
+  components: { Errors, SearchIcon },
   data() {
     return {
+      // Content from the search input
       searchQuery: ""
     };
   },

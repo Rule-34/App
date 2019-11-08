@@ -4,7 +4,7 @@ export default () => ({
     pid: 0 // Page id
   },
   searchData: {
-    data: {}, // Data received while searching for tags
+    data: [], // Data received while searching for tags
     tags: [],
     isActive: false
   },

@@ -15,6 +15,14 @@
         >Reset tags?</a
       >
     </template>
+
+    <!-- Not useful -->
+    <!-- <template v-else-if="!searchData.data.length">
+      <h1 class="bold" v-text="'No tags found'" />
+      <a href="javascript:void(0)" @click="tagManager({ function: 'reset' })"
+        >Reset tags?</a
+      >
+    </template> -->
   </div>
 </template>
 
