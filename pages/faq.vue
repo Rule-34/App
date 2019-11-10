@@ -63,7 +63,6 @@ All information is anonymized and respects the 'Do not track' directive, so if y
       />
 
       <!-- Donations -->
-      <!-- TODO: poner estrellita azul -->
       <ContentContainer
         title="Can I donate for your efforts?"
         text="Yes! I've been working really hard on this PWA, I really appreciate every donation."
@@ -73,7 +72,6 @@ All information is anonymized and respects the 'Do not track' directive, so if y
       />
 
       <!-- Credits -->
-      <!-- TODO: poner estrellita amarilla -->
       <ContentContainer
         title="Credits"
         text="Thanks to Jessica for drawing the logo, and me for programming the PWA."

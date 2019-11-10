@@ -1,9 +1,10 @@
 <template>
   <!-- Loop for every post -->
   <div class="material-container" :class="{ zoom: userSettings.zoom.value }">
-    <!-- style="max-height: 80vh;" TODO: good for image previews -->
-    <!-- Image -->
+    <!-- TODO: style="max-height: 80vh;" TODO: good for image previews -->
+    <!-- if Image -->
     <template v-if="post.type === 'image'">
+      <!-- If image in full size -->
       <template v-if="userSettings.fullSizeImages.value">
         <img
           v-lazy="post.file_url"
@@ -13,6 +14,7 @@
           @click="toggleTags"
         />
       </template>
+      <!-- If image NOT in full size -->
       <template v-else>
         <img
           v-lazy="post.sample_url"
@@ -41,7 +43,6 @@
         </video>
       </lazy-component>
     </template>
-    <!-- Video -->
 
     <!-- Details like comments, tags and source TODO: Maybe add p-4 again -->
     <!-- <div class="p-2"> -->
