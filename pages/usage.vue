@@ -10,6 +10,12 @@
       />
 
       <ContentContainer
+        title="Search"
+        text="When searching, toggling the filter button will ban from appearing the next clicked tags "
+        img="/img/examples/search-filter.png"
+      />
+
+      <ContentContainer
         title="Full size images"
         text="While activated, images will be higher resolution, consuming more data."
         img="/img/examples/fullsize.png"

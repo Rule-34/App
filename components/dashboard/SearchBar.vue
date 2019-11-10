@@ -9,23 +9,32 @@
       />
       <!-- Search bar -->
       <div class="w-full md:w-2/6 m-auto">
-        <div class="material-container p-2 inline-flex w-3/4">
+        <div class="material-container p-2 w-3/4 flex justify-between">
           <!-- Search Icon -->
-          <SearchIcon class="icon text-black w-6 h-6 mr-2" />
-          <!-- Input -->
-          <input
-            v-model="searchQuery"
-            v-debounce:300ms="getTags"
-            class="w-full ml-1 outline-none font-light"
-            type="search"
-            placeholder="Search: e.g. dragon"
-            autofocus
-          />
+          <div class="w-full inline-flex">
+            <SearchIcon class="icon text-black w-6 h-6 mr-2" />
+            <!-- Input -->
+            <input
+              v-model="searchQuery"
+              v-debounce:300ms="getTags"
+              class="w-full ml-1 outline-none font-light"
+              type="search"
+              placeholder="Search: e.g. dragon"
+              autofocus
+            />
+          </div>
+          <button></button>
+          <div title="Filter out" @click="toggleFilter()">
+            <FilterIcon
+              class="icon w-6 h-6 mr-1"
+              :class="{ 'text-red-400': isFilterActive }"
+            />
+          </div>
         </div>
       </div>
 
       <!-- Results -->
-      <div class="search-bar-results w-full md:w-2/6 max-h-3/4 min-h-1/2">
+      <div class="search-bar-results w-full md:w-2/6 min-h-1/2 overflow-y-auto">
         <!-- ERROR HANDLING AND SEARCH RESULTS -->
 
         <!-- If theres errors -->
@@ -62,17 +71,27 @@
 
         <!-- Tags, click them to add them -->
         <div v-if="searchData.data" class="tag-container">
+          <!-- Add tag to array of added tags, if filter is active then append '-' -->
           <a
             v-for="tag in searchData.data"
             :key="tag.name"
             class="tag group"
             @click="
-              newSearchData({
-                tag: {
-                  name: tag.name,
-                  function: 'add'
-                }
-              })
+              if (isFilterActive) {
+                newSearchData({
+                  tag: {
+                    name: '-' + tag.name,
+                    function: 'add'
+                  }
+                });
+              } else {
+                newSearchData({
+                  tag: {
+                    name: tag.name,
+                    function: 'add'
+                  }
+                });
+              }
             "
           >
             {{ tag.name }}
@@ -105,20 +124,20 @@
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
 import Errors from "./Errors.vue";
-import { SearchIcon } from "vue-feather-icons";
+import { SearchIcon, FilterIcon } from "vue-feather-icons";
 
 export default {
   name: "SearchBar",
-  components: { Errors, SearchIcon },
+  components: { Errors, SearchIcon, FilterIcon },
   data() {
     return {
       // Content from the search input
-      searchQuery: ""
+      searchQuery: "",
+      isFilterActive: false
     };
   },
   // Get data() from vuex store "searchData"
   computed: {
-    // mix this into the outer object with the object spread operator
     ...mapState(["dashBoardData", "searchData", "generalData"])
   },
   methods: {
@@ -129,6 +148,10 @@ export default {
       "tagManager",
       "axiosGet"
     ]),
+    toggleFilter() {
+      console.log("hola");
+      this.isFilterActive = !this.isFilterActive;
+    },
     dispatchGetAddedTags() {
       // Set PID to 0 since we're searching for new tags
       this.pidManager({
