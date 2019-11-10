@@ -27,28 +27,30 @@
       <FaqContainer
         title="Can I report an error?"
         text="Yes, you can report any error that you may find or suggest something you want to be added in the next link."
+        link="https://github.com/VoidlessSeven7/Rule-34-PWA-Public"
+        link-text="GitHub"
       >
         <!-- Slot -->
-        <a
-          href="https://github.com/VoidlessSeven7/Rule-34-PWA-Public"
-          target="_blank"
-          rel="noopener noreferrer"
-          >GitHub</a
-        >
+      </FaqContainer>
+
+      <!-- Roadmap -->
+      <FaqContainer
+        title="Is there any new feature planned?"
+        text="Im glad you asked, the development is going quite nicely, and you can see everything that is planned in the next link."
+        link="https://github.com/users/VoidlessSeven7/projects/1"
+        link-text="GitHub Project"
+      >
+        <!-- Slot -->
       </FaqContainer>
 
       <!-- Analytics -->
       <FaqContainer
         title="Analytics"
         text="Analytics are used and they respect your privacy: all information is anonymized and follows the 'Do not track' directive, so if you dont want to be tracked, you wont."
+        link="https://getinsights.io/"
+        link-text="Check the analytics platform"
       >
         <!-- Slot -->
-        <a
-          href="https://getinsights.io/"
-          target="_blank"
-          rel="noopener noreferrer"
-          >Check the analytics platform</a
-        >
       </FaqContainer>
 
       <!-- Donations -->
@@ -57,14 +59,10 @@
         title="Can I donate for your efforts?"
         icon="donation"
         text="Yes! I've been working really hard on this PWA, I really appreciate every donation."
+        link="https://www.paypal.me/Alejandrorr7"
+        link-text="Paypal"
       >
         <!-- Slot -->
-        <a
-          href="https://www.paypal.me/Alejandrorr7"
-          target="_blank"
-          rel="noopener noreferrer"
-          >Paypal</a
-        >
       </FaqContainer>
 
       <!-- Credits -->

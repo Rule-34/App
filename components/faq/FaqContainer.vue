@@ -17,6 +17,14 @@
       <div class="text-sm">
         <p class="mb-1" v-text="text"></p>
         <!-- We can insert extra info here -->
+        <a
+          v-if="link && linkText"
+          :href="link"
+          target="_blank"
+          rel="noopener noreferrer"
+          v-text="linkText"
+        ></a>
+        <!-- Slot for extra info -->
         <slot></slot>
       </div>
     </div>
@@ -32,6 +40,8 @@ export default {
   props: {
     title: { type: String, required: true },
     text: { type: String, required: true },
+    link: { type: String, required: false, default: undefined },
+    linkText: { type: String, required: false, default: undefined },
     icon: { type: String, required: false, default: "info" }
   }
 };
