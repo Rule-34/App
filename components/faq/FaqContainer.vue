@@ -15,7 +15,7 @@
 
       <!-- Body -->
       <div class="text-sm">
-        <p class="mb-1" v-text="text"></p>
+        <p class="mb-1 whitespace-pre-line" v-text="text"></p>
         <!-- We can insert extra info here -->
         <a
           v-if="link && linkText"
@@ -23,7 +23,7 @@
           target="_blank"
           rel="noopener noreferrer"
           v-text="linkText"
-        ></a>
+        />
         <!-- Slot for extra info -->
         <slot></slot>
       </div>
