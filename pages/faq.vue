@@ -7,12 +7,12 @@
       <FaqContainer
         title="What is this?"
         text="This is a Progressive Web App, essentially a installable web page, that acts as a client for rule34.xxx,
-        This means that it gets the images and displays them, nothing is stored in any server."
+This means that it gets the images from a official Api wrapper and displays them, nothing is stored in any server."
       >
         <!-- Slot -->
         <small class="text-gray-500"
           >If you're the owner of rule34.xxx and want to cease this PWA please
-          go to GitHub and leave an issue</small
+          go to GitHub and leave an issue.</small
         >
       </FaqContainer>
 
@@ -21,6 +21,15 @@
         title="Do you own the media content?"
         text="No, the images/videos/media are directly served from rule34.xxx so I do not own anything."
       >
+      </FaqContainer>
+
+      <!-- Settings -->
+      <FaqContainer
+        title="What does 'X' setting do?"
+        text="All settings have a hover description, just hover your mouse on top of the setting.
+There is also detailed information in the next link."
+      >
+        <nuxt-link to="/usage">Usage information</nuxt-link>
       </FaqContainer>
 
       <!-- Github -->
@@ -36,7 +45,7 @@
       <!-- Roadmap -->
       <FaqContainer
         title="Is there any new feature planned?"
-        text="Im glad you asked, the development is going quite nicely, and you can see everything that is planned in the next link."
+        text="Im glad you asked, the development is going quite nicely, you can see everything that is planned in the next link."
         link="https://github.com/users/VoidlessSeven7/projects/1"
         link-text="GitHub Project"
       >
@@ -46,7 +55,8 @@
       <!-- Analytics -->
       <FaqContainer
         title="Analytics"
-        text="Analytics are used and they respect your privacy: all information is anonymized and follows the 'Do not track' directive, so if you dont want to be tracked, you wont."
+        text="Analytics are used and they respect your privacy:
+All information is anonymized and respects the 'Do not track' directive, so if you dont want to be tracked, you wont."
         link="https://getinsights.io/"
         link-text="Check the analytics platform"
       >
