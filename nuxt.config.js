@@ -91,7 +91,7 @@ export default {
    */
   purgeCSS: {
     // whitelist: ['defaults-and-this-class']
-    whitelistPatterns: [/active/, /nsfw-disabled/]
+    whitelistPatterns: [/active/, /nsfw-disabled/, /fade/]
   },
   /*
    ** Axios module configuration

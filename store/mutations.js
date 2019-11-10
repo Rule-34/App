@@ -62,7 +62,9 @@ export default {
 
       if (payload.tag.function === "add") {
         // console.log(payload.tag.name);
-        state.searchData.tags.push(payload.tag.name);
+        if (!state.searchData.tags.includes(payload.tag.name)) {
+          state.searchData.tags.push(payload.tag.name);
+        }
       } else if (payload.tag.function === "remove") {
         // console.log(payload.tag.name);
         state.searchData.tags = state.searchData.tags.filter(function(ele) {
