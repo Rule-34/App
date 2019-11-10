@@ -1,0 +1,42 @@
+
+/** 
+**          SETTINGS RELATED
+**/
+
+/* NSFW SETTING */
+
+.nsfw-disabled {
+    filter: blur(20px);
+}
+
+/* HOVER CONTROLS SETTING */
+
+.hover-controls {
+    @apply shadow-md w-full my-2 mx-auto 
+    
+}
+
+.hover-controls-container {
+    @apply fixed bottom-0 z-10 w-full p-2
+}
+
+@screen md {
+    .hover-controls-container {
+        @apply w-2/3 
+    }
+}
+@screen xl {
+    .hover-controls-container {
+        @apply w-1/2 
+    }
+}
+
+/* ZOOM SETTING */
+
+.zoom {
+    transition: transform .2s
+}
+
+.zoom:hover {
+    transform: scale(1.1);
+  }

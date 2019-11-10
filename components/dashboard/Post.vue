@@ -56,40 +56,53 @@
               </div>
             </div>
       </div>-->
+
     <!-- Tags and source -->
-    <div
-      v-if="post.source || (post.tags && isActive)"
-      class="flex flex-wrap overflow-hidden text-sm p-1"
-    >
-      <!-- Tags -->
-      <div
-        v-if="post.tags && isActive"
-        class="post-extra w-full md:w-10/12 tag-container"
-        :class="{ 'md:w-full': !post.source }"
-      >
-        <a
-          v-for="tag in post.tags"
-          :key="post[tag]"
-          class="tag"
-          href="#"
-          @click="getSpecificTag(tag)"
-          v-text="tag"
-        />
-      </div>
-      <!-- Source -->
-      <div v-if="post.source" class="w-full md:w-2/12 md:m-auto text-center">
-        <a
-          class="inline-flex items-baseline"
-          :href="post.source"
-          rel="noreferrer noopener nofollow"
-          target="_blank"
+    <!-- Double transition since i cant figure out how to make it in one for both when theres source and when there isnt -->
+    <transition name="fade">
+      <div v-if="post.source || (post.tags && isActive)">
+        <!-- Tags -->
+        <transition-group
+          name="fade"
+          tag="div"
+          class="flex flex-wrap overflow-hidden text-sm p-1"
         >
-          <p>Source</p>
-          <ExternalLinkIcon class="icon ml-2 text-black w-4 h-4" />
-        </a>
+          <div
+            v-if="post.tags && isActive"
+            key="tags"
+            class="post-extra w-full md:w-10/12 tag-container"
+            :class="{ 'md:w-full': !post.source }"
+          >
+            <a
+              v-for="tag in post.tags"
+              :key="post[tag]"
+              class="tag"
+              href="#"
+              @click="getSpecificTag(tag)"
+              v-text="tag"
+            />
+          </div>
+
+          <!-- Source -->
+          <div
+            v-if="post.source"
+            key="source"
+            class="w-full md:w-2/12 md:m-auto text-center transition-all-35"
+          >
+            <a
+              class="inline-flex items-baseline"
+              :href="post.source"
+              rel="noreferrer noopener nofollow"
+              target="_blank"
+            >
+              <p>Source</p>
+              <ExternalLinkIcon class="icon ml-2 text-black w-4 h-4" />
+            </a>
+          </div>
+        </transition-group>
       </div>
-    </div>
-    <!-- </div> -->
+      <!-- </div> -->
+    </transition>
   </div>
 </template>
 
