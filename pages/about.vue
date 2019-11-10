@@ -4,8 +4,11 @@
     <div class="cool-bar" />
     <SideNav :show-search="false" />
     <div class="card-container md:w-2/3 xl:w-1/2">
-      <div class="flex h-perfect p-3">
-        <div class="material-container m-auto p-5 shadow-xl">
+      <div class="flex h-perfect p-3 overflow-hidden">
+        <div
+          class="material-container m-auto p-5 shadow-xl"
+          :class="{ zoom: userSettings.zoom.value }"
+        >
           <a
             href="https://akbal.dev/"
             target="_blank"
@@ -29,9 +32,11 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import SideNav from "~/components/navigation/SideNav.vue";
 
 export default {
-  components: { SideNav }
+  components: { SideNav },
+  computed: mapState(["userSettings"])
 };
 </script>

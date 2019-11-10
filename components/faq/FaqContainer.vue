@@ -1,6 +1,6 @@
 <template>
   <!-- Loop for every info container -->
-  <div class="card-container">
+  <div class="card-container" :class="{ zoom: userSettings.zoom.value }">
     <div class="material-container p-3">
       <!-- Head -->
       <div class="flex inline-flex align-middle mb-2">
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { InfoIcon, StarIcon, DollarSignIcon } from "vue-feather-icons";
 
 export default {
@@ -43,6 +44,7 @@ export default {
     link: { type: String, required: false, default: undefined },
     linkText: { type: String, required: false, default: undefined },
     icon: { type: String, required: false, default: "info" }
-  }
+  },
+  computed: mapState(["userSettings"])
 };
 </script>
