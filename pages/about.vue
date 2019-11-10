@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- TODO: hacerlos collapsibles -->
     <div class="cool-bar" />
     <SideNav :show-search="false" />
     <div class="card-container md:w-2/3 xl:w-1/2">
