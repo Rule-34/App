@@ -121,11 +121,7 @@ export default {
     ...mapActions(["pidManager", "tagManager"]),
     // Toggle showing tags on click
     toggleTags() {
-      if (this.isActive) {
-        this.isActive = false;
-      } else if (!this.isActive) {
-        this.isActive = true;
-      }
+      this.isActive = !this.isActive;
     },
     getSpecificTag(tag) {
       // Set PID to 0 since we're searching for new tags

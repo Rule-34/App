@@ -76,13 +76,7 @@ export default {
   },
   methods: {
     toggleNav() {
-      if (this.isNavActive) {
-        this.isNavActive = false;
-        return "";
-      } else if (!this.isNavActive) {
-        this.isNavActive = true;
-        return "";
-      }
+      this.isNavActive = !this.isNavActive;
     },
     toggleSearch() {
       this.$store.dispatch("toggleSearchComponent");
