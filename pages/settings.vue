@@ -4,13 +4,14 @@
     <div class="cool-bar" />
     <SideNav :show-search="false" />
     <div class="card-container md:w-2/3 xl:w-1/2">
-      <div class="flex h-perfect p-3">
+      <div class="flex flex-col h-perfect p-3">
         <div
           class="material-container w-full md:w-2/3 xl:w-1/2 m-auto p-5 shadow-xl"
         >
           <div class="flex flex-wrap">
             <div class="w-2/5 m-auto text-center">
               <h1 class=" text-lg">Settings</h1>
+
               <button
                 title="Use me when something is not working!"
                 class="text-xs border rounded-full px-2 align-middle shadow"
@@ -32,6 +33,9 @@
               </div>
             </div>
           </div>
+        </div>
+        <div class="mx-auto">
+          <nuxt-link to="/usage" class="text-xs">What does X do?</nuxt-link>
         </div>
       </div>
     </div>
