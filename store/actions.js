@@ -76,17 +76,10 @@ export default {
 
   // Toggles the search (This is the way i found it to work since i cannot get components to talk to each other and im not doing a bus if i have vueX)
   async toggleSearchComponent({ commit }) {
-    if (this.state.searchData.isActive) {
-      await commit({
-        type: "newSearchData",
-        isActive: false
-      });
-    } else if (!this.state.searchData.isActive) {
-      await commit({
-        type: "newSearchData",
-        isActive: true
-      });
-    }
+    await commit({
+      type: "newSearchData",
+      isActive: !this.state.searchData.isActive
+    });
   },
 
   async tagManager({ commit, dispatch }, dataObj) {
