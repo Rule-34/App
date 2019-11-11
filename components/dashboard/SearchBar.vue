@@ -125,6 +125,7 @@
 import { mapState, mapActions, mapMutations } from "vuex";
 import Errors from "./Errors.vue";
 import { SearchIcon, FilterIcon } from "vue-feather-icons";
+import fireAnalytics from "~/assets/js/insights.tags"; //Import analytics
 
 export default {
   name: "SearchBar",
@@ -161,8 +162,12 @@ export default {
       // Search for the tags
       this.tagManager({ function: "getPostsByTags" });
 
-      // And hide the search bar
+      // Hide the search bar
       this.toggleSearchComponent();
+
+      // And fire analytics
+      fireAnalytics("tags", this.searchData.tags);
+      // .then(console.log);
     },
     getTags() {
       if (this.searchQuery.length > 2) {
