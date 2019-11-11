@@ -1,5 +1,4 @@
-import { init, track } from "insights-js";
-init("kQrGvntXWy9eDO4h");
+import { track } from "insights-js";
 
 let defaultSettings = {
   darkTheme: {
