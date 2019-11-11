@@ -5,14 +5,27 @@
     <div class="card-container md:w-2/3 xl:w-1/2">
       <!-- Examples -->
       <ContentContainer
-        title="Explained settings"
-        text="All user settings of this PWA are explained below"
+        title="General usage"
+        text="Normal usage of the PWA is explained below"
+        :separator="true"
       />
 
       <ContentContainer
         title="Search"
         text="When searching, toggling the filter button will ban from appearing the next clicked tags "
         img="/img/examples/search-filter.png"
+      />
+
+      <ContentContainer
+        title="Navigation"
+        text="When having a keyboard, right and left arrows will navigate like clicking the buttons"
+        img="/img/examples/navigation.png"
+      />
+
+      <ContentContainer
+        title="User settings"
+        text="Customizable settings are explained below"
+        :separator="true"
       />
 
       <ContentContainer

@@ -32,6 +32,24 @@ export default {
   // Get data() from vuex stores
   computed: {
     ...mapState(["dashBoardData", "searchData", "generalData", "userSettings"])
+  },
+
+  mounted() {
+    document.addEventListener("keyup", this.Navigation);
+  },
+
+  destroyed() {
+    document.removeEventListener("keyup", this.Navigation);
+  },
+
+  methods: {
+    nextItem() {
+      if (event.keyCode == 39) {
+        this.currentItem--;
+      } else if (event.keyCode == 37) {
+        this.currentItem++;
+      }
+    }
   }
 };
 </script>
