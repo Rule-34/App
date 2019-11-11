@@ -13,7 +13,7 @@
       <ContentContainer
         title="Search"
         text="When searching, toggling the filter button will ban from appearing the next clicked tags."
-        img="/img/examples/search-filter.png"
+        img="/img/examples/search_filter.png"
       />
 
       <ContentContainer
@@ -37,7 +37,7 @@
       <ContentContainer
         title="Video controls"
         text="While activated, videos will have controls, but clicking it won't show tags."
-        img="/img/examples/fullsize.png"
+        img="/img/examples/video_controls.png"
       />
 
       <ContentContainer
