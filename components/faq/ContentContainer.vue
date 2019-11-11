@@ -1,6 +1,6 @@
 <template>
   <!-- Loop for every info container -->
-  <div class="card-container" :class="{ zoom: userSettings.zoom.value }">
+  <div class="container" :class="{ zoom: userSettings.zoom.value }">
     <!-- If separator -->
     <template v-if="separator">
       <div

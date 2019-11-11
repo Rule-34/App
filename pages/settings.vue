@@ -2,7 +2,7 @@
   <div>
     <div class="cool-bar" />
     <SideNav :show-search="false" />
-    <div class="card-container md:w-2/3 xl:w-1/2">
+    <div class="container md:w-2/3 xl:w-1/2">
       <div class="flex flex-col h-perfect p-3">
         <div
           class="material-container w-full md:w-2/3 xl:w-1/2 m-auto p-5 shadow-xl"
