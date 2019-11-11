@@ -21,6 +21,11 @@ export default () => ({
       description: "Enable dark theme app-wide",
       value: false
     },
+    videoControls: {
+      name: "Video controls",
+      description: "Enable usage of video controls",
+      value: false
+    },
     fullSizeImages: {
       name: "Full size images",
       description:
