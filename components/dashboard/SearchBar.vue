@@ -149,7 +149,7 @@ export default {
       "axiosGet"
     ]),
     toggleFilter() {
-      console.log("hola");
+      // console.log("hola");
       this.isFilterActive = !this.isFilterActive;
     },
     dispatchGetAddedTags() {
