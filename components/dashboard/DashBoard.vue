@@ -10,7 +10,7 @@
     />
 
     <!-- Controls for navigating pages -->
-    <Controls />
+    <Controls ref="controls" />
 
     <div v-if="userSettings.hoverControls.value" class="my-6">&nbsp;</div>
   </div>
@@ -35,19 +35,27 @@ export default {
   },
 
   mounted() {
-    document.addEventListener("keyup", this.Navigation);
+    document.addEventListener("keyup", this.navigation);
   },
 
   destroyed() {
-    document.removeEventListener("keyup", this.Navigation);
+    document.removeEventListener("keyup", this.navigation);
   },
 
   methods: {
-    nextItem() {
+    scrollToTop() {
+      window.scrollTo(0, 0);
+    },
+    // Navigation with keyboard
+    navigation() {
       if (event.keyCode == 39) {
-        this.currentItem--;
+        this.$refs.controls.getNextPage();
+        this.scrollToTop();
+        // console.log("derecha");
       } else if (event.keyCode == 37) {
-        this.currentItem++;
+        // console.log("izquierda");
+        this.$refs.controls.getLastPage();
+        this.scrollToTop();
       }
     }
   }

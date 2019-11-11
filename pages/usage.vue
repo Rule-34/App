@@ -12,13 +12,13 @@
 
       <ContentContainer
         title="Search"
-        text="When searching, toggling the filter button will ban from appearing the next clicked tags "
+        text="When searching, toggling the filter button will ban from appearing the next clicked tags."
         img="/img/examples/search-filter.png"
       />
 
       <ContentContainer
         title="Navigation"
-        text="When having a keyboard, right and left arrows will navigate like clicking the buttons"
+        text="Keyboard's right and left arrows will navigate like clicking the control's buttons."
         img="/img/examples/navigation.png"
       />
 
@@ -49,7 +49,7 @@
       <ContentContainer title="NSFW" img="/img/examples/nsfw.png">
         <!-- Slot -->
         <template slot="textRich">
-          <p>While <u>deactivated</u>, posts will be blurred</p>
+          <p>While <u>deactivated</u>, posts will be blurred.</p>
         </template>
       </ContentContainer>
     </div>

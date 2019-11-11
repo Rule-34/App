@@ -3,6 +3,11 @@
     <div class="cool-bar" />
     <SideNav :show-search="false" />
     <div class="container md:w-2/3 xl:w-1/2">
+      <ContentContainer
+        title="General"
+        text="Questions related to the PWA/website and its content"
+        :separator="true"
+      />
       <!-- What is this -->
       <ContentContainer
         title="What is this?"
@@ -60,6 +65,12 @@ All information is anonymized and respects the 'Do not track' directive, so if y
         icon="info"
         link="https://getinsights.io/"
         link-text="Check the analytics platform"
+      />
+
+      <ContentContainer
+        title="Miscellaneous"
+        text="Extra information that you should read"
+        :separator="true"
       />
 
       <!-- Donations -->
