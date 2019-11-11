@@ -31,7 +31,7 @@
         <video
           class="post-img"
           :alt="post.type"
-          controls
+          :controls="userSettings.videoControls.value"
           autoplay
           muted
           loop

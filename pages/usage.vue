@@ -35,6 +35,12 @@
       />
 
       <ContentContainer
+        title="Video controls"
+        text="While activated, videos will have controls, but clicking it won't show tags."
+        img="/img/examples/fullsize.png"
+      />
+
+      <ContentContainer
         title="Hover Controls"
         text="While activated, controls will hover over content."
         img="/img/examples/controls.png"
