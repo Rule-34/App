@@ -3,18 +3,18 @@
   <div class="container" :class="{ zoom: userSettings.zoom.value }">
     <!-- If separator -->
     <template v-if="separator">
-      <div
-        class="material-container w-fit-content mx-auto p-3 text-center bg-gradient-blue-lilac text-white"
-      >
-        <!-- Head -->
-        <div class="mb-2">
-          <h1 class="text-lg underline" v-text="title"></h1>
-        </div>
+      <div class="material-container p-3 bg-gradient-blue-lilac">
+        <div class="text-center text-white">
+          <!-- Head -->
+          <div class="mb-2">
+            <h1 class="text-lg underline" v-text="title"></h1>
+          </div>
 
-        <!-- Body -->
-        <div v-if="text" class="text-sm">
-          <p class="mb-1" v-text="text"></p>
-          <!-- Slot for extra info -->
+          <!-- Body -->
+          <div v-if="text" class="text-sm">
+            <p class="mb-1" v-text="text"></p>
+            <!-- Slot for extra info -->
+          </div>
         </div>
       </div>
     </template>
