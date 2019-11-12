@@ -18,20 +18,11 @@
       <div v-if="userSettings.hoverControls.value" class="my-6">&nbsp;</div>
     </template>
     <template v-else>
-      <div class="mx-auto">
-        <p
-          class="text-center text-gray-500 pb-2"
-          @click="
-            pidManager({
-              function: 'add'
-            });
-
-            getPosts('concat');
-          "
-        >
+      <Intersect class="mx-auto" @enter="concatPost">
+        <p class="text-center text-gray-500 pb-2" @click="concatPost()">
           Loading more posts...
         </p>
-      </div>
+      </Intersect>
     </template>
   </div>
 </template>
@@ -41,13 +32,15 @@ import { mapState, mapActions } from "vuex";
 import Errors from "./Errors.vue";
 import Post from "./Post.vue";
 import Controls from "./Controls.vue";
+import Intersect from "vue-intersect";
 
 export default {
   name: "DashBoard",
   components: {
     Errors,
     Post,
-    Controls
+    Controls,
+    Intersect
   },
   // Get data() from vuex stores
   computed: {
@@ -60,22 +53,10 @@ export default {
     }
   },
 
-  mounted() {
-    window.onscroll = () => {
-      if (this.isBottomVisible()) {
-        this.concatPost();
-      }
-    };
-  },
-
   destroyed() {
     // Navigation with keyboard
     if (this.userSettings.keyboardControls.value) {
       document.removeEventListener("keyup", this.navigation);
-    }
-    // If infinite loading is enabled
-    if (this.userSettings.infiniteLoad.value) {
-      window.removeEventListener("scroll", this.infiniteTester);
     }
   },
 
@@ -84,21 +65,6 @@ export default {
 
     scrollToTop() {
       window.scrollTo(0, 0);
-    },
-
-    bottomOfWindow() {
-      return (
-        document.documentElement.scrollTop + window.innerHeight ===
-        document.documentElement.offsetHeight
-      );
-    },
-
-    isBottomVisible() {
-      const scrollY = window.scrollY;
-      const visible = document.documentElement.clientHeight;
-      const pageHeight = document.documentElement.scrollHeight;
-      const bottomOfPage = visible + scrollY >= pageHeight;
-      return bottomOfPage || pageHeight < visible;
     },
 
     // Infinite loading
