@@ -16,11 +16,10 @@
             <!-- Input -->
             <input
               v-model="searchQuery"
-              v-debounce:300ms="getTags"
               class="w-full ml-1 outline-none font-light"
               type="search"
               placeholder="Search: e.g. dragon"
-              autofocus
+              @input="debounceInput"
             />
           </div>
           <button></button>
@@ -125,6 +124,7 @@
 import { mapState, mapActions, mapMutations } from "vuex";
 import Errors from "./Errors.vue";
 import { SearchIcon, FilterIcon } from "vue-feather-icons";
+import { debounce } from "lodash";
 import fireAnalytics from "~/assets/js/insights.custom"; //Import analytics
 
 export default {
@@ -185,7 +185,11 @@ export default {
           data: ""
         });
       }
-    }
+    },
+    debounceInput: debounce(function() {
+      this.getTags();
+      // console.log("hola");
+    }, 300)
   }
 };
 </script>

@@ -42,11 +42,6 @@ export default {
    */
   plugins: [
     { src: "~/plugins/vuex-persist.js", mode: "client", ssr: false },
-    {
-      src: "~/plugins/v-debounce.js",
-      mode: "client",
-      ssr: false
-    },
     { src: "~/plugins/v-lazy.js", mode: "client", ssr: false },
     { src: "~/plugins/insights.js", mode: "client", ssr: false }
   ],
