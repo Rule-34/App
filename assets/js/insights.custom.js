@@ -39,14 +39,18 @@ export default async function fireAnalytics(type, data) {
       // console.log("Tag analytics fired:", data);
 
       if (data.length > 0) {
-        Object.keys(data).forEach(function(key) {
+        Object.keys(data).forEach(function(key, index) {
           // console.log(key, data[key]);
-          track({
-            id: "user-usage",
-            parameters: {
-              searchedTags: data[key]
-            }
-          });
+
+          setTimeout(function() {
+            console.log("Sent tag: ", data[key]);
+            track({
+              id: "user-usage",
+              parameters: {
+                searchedTags: data[key]
+              }
+            });
+          }, 500 * index);
         });
 
         return Promise.resolve("Tags executed succesfully");
@@ -66,14 +70,18 @@ export default async function fireAnalytics(type, data) {
       if (difference.length > 0) {
         // console.log("There are changed settings", difference);
 
-        Object.keys(difference).forEach(function(key) {
+        Object.keys(difference).forEach(function(key, index) {
           // console.log(key, difference[key]);
-          track({
-            id: "user-usage",
-            parameters: {
-              userSettings: difference[key]
-            }
-          });
+
+          setTimeout(function() {
+            console.log("Sent tag: ", difference[key]);
+            track({
+              id: "user-usage",
+              parameters: {
+                userSettings: difference[key]
+              }
+            });
+          }, 500 * index);
         });
         return Promise.resolve("Settings executed succesfully");
       }

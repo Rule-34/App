@@ -35,6 +35,11 @@
       />
 
       <ContentContainer
+        title="Minimum score"
+        text="Sets the required score for a post to show. Set to 0 to deactivate"
+      />
+
+      <ContentContainer
         title="Video controls"
         text="While activated, videos will have controls, but clicking it won't show tags."
         img="/img/examples/video_controls.png"
