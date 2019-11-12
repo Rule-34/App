@@ -140,7 +140,7 @@ export default {
     ...mapActions(["pidManager", "tagManager", "getPosts"]),
     // Check if its an url
     isUrl() {
-      if (this.post.source.startsWith("http", "www", /www*/)) {
+      if (this.post.source.startsWith("http", "www")) {
         // console.log("its a url", this.post.source);
         return true;
       } else {

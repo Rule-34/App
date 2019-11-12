@@ -33,9 +33,9 @@ export default () => ({
       value: false
     },
     score: {
-      name: "Minimum score for posts",
+      name: "Minimum score",
       description: "Only show posts that have the indicated score or more",
-      value: 100
+      value: 0
     },
     videoControls: {
       name: "Video controls",

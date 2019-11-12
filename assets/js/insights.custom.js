@@ -4,13 +4,16 @@ let defaultSettings = {
   darkTheme: {
     value: false
   },
-  videoControls: {
+  infiniteLoad: {
     value: false
   },
   fullSizeImages: {
     value: false
   },
-  infiniteLoad: {
+  score: {
+    value: 0
+  },
+  videoControls: {
     value: false
   },
   hoverControls: {
