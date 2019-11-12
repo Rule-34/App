@@ -19,7 +19,18 @@
     </template>
     <template v-else>
       <div class="mx-auto">
-        <p class="text-center text-gray-500 pb-2">Loading more posts...</p>
+        <p
+          class="text-center text-gray-500 pb-2"
+          @click="
+            pidManager({
+              function: 'add'
+            });
+
+            getPosts('concat');
+          "
+        >
+          Loading more posts...
+        </p>
       </div>
     </template>
   </div>
@@ -57,7 +68,6 @@ export default {
     }
   },
   created() {
-    let self = this;
     // Navigation with keyboard
     if (this.userSettings.keyboardControls.value) {
       document.addEventListener("keyup", this.navigation);
@@ -106,7 +116,7 @@ export default {
     // Infinite loading
     concatPost() {
       if (this.isBottomVisible()) {
-        // console.log("Loaded more posts");
+        console.log("Loaded more posts");
         // Get next PID
         this.pidManager({
           function: "add"
