@@ -4,6 +4,6 @@ const debug = process.env.NODE_ENV !== "production";
 
 /* -------- Analytics -------- */
 if (!debug) {
-  init("kQrGvntXWy9eDO4h");
-  trackPages();
+  init("lM7bTMlOwFtKXoMJ");
+  trackPages({ options: { search: true, hash: true } });
 }
