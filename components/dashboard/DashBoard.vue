@@ -49,35 +49,23 @@ export default {
     Post,
     Controls
   },
-  // Infinite loading
-  data() {
-    return {
-      bottom: false
-    };
-  },
   // Get data() from vuex stores
   computed: {
     ...mapState(["dashBoardData", "userSettings"])
-  },
-  // Infinite loading
-  watch: {
-    bottom(bottom) {
-      if (bottom) {
-        this.concatPost();
-      }
-    }
   },
   created() {
     // Navigation with keyboard
     if (this.userSettings.keyboardControls.value) {
       document.addEventListener("keyup", this.navigation);
     }
+  },
 
-    // If infinite loading is enabled
-    if (this.userSettings.infiniteLoad.value) {
-      // console.log("Injected scroll");
-      window.addEventListener("scroll", this.infiniteTester);
-    }
+  mounted() {
+    window.onscroll = () => {
+      if (this.isBottomVisible()) {
+        this.concatPost();
+      }
+    };
   },
 
   destroyed() {
@@ -98,13 +86,13 @@ export default {
       window.scrollTo(0, 0);
     },
 
-    // Infinite loading
-    infiniteTester() {
-      this.bottom = this.isBottomVisible();
-      // console.log("Fired scroll");
+    bottomOfWindow() {
+      return (
+        document.documentElement.scrollTop + window.innerHeight ===
+        document.documentElement.offsetHeight
+      );
     },
 
-    // Infinite loading
     isBottomVisible() {
       const scrollY = window.scrollY;
       const visible = document.documentElement.clientHeight;
@@ -115,16 +103,14 @@ export default {
 
     // Infinite loading
     concatPost() {
-      if (this.isBottomVisible()) {
-        console.log("Loaded more posts");
-        // Get next PID
-        this.pidManager({
-          function: "add"
-        });
+      console.log("Loaded more posts");
+      // Get next PID
+      this.pidManager({
+        function: "add"
+      });
 
-        // And load next posts
-        this.getPosts("concat");
-      }
+      // And load next posts
+      this.getPosts("concat");
     },
     // Navigation with keyboard
     navigation() {
