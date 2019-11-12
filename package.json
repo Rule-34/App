@@ -14,6 +14,7 @@
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/pwa": "^3.0.0-0",
     "insights-js": "^1.2.8",
+    "lodash": "^4.17.15",
     "nuxt": "^2.0.0",
     "vue-debounce": "^2.1.0",
     "vue-feather-icons": "^5.0.0",
