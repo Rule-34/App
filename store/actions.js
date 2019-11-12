@@ -19,7 +19,8 @@ export default {
 
       commit({
         type: dataObj.mutationToReturn,
-        data: response
+        data: response,
+        mode: dataObj.mode
         // Sometimes its response sometimes its response.data
       });
       // console.log(response)
@@ -37,15 +38,18 @@ export default {
     }
   },
   // Get posts from api
-  async getPosts({ dispatch }) {
+  async getPosts({ dispatch }, mode) {
     // console.log(`${this.dashBoardData.pid} GET`)
+    // console.log(mode);
     await dispatch("axiosGet", {
       url: `posts?pid=${this.state.dashBoardData.pid}&limit=${
         this.state.generalData.postLimit
       }&tags=${this.state.searchData.tags.join("+")}+score:>=${
         this.state.userSettings.score.value
       }`,
-      mutationToReturn: "newDashBoardData"
+      mutationToReturn: "newDashBoardData",
+      // Add with the mode passed or with add so its retrocompatible
+      mode: mode || "add"
     });
   },
 
