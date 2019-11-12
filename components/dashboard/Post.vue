@@ -144,7 +144,7 @@ export default {
         // console.log("its a url", this.post.source);
         return true;
       } else {
-        console.log("Not a url", this.post.source);
+        // console.log("Not a url", this.post.source);
         return false;
       }
     },

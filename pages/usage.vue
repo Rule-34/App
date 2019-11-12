@@ -17,12 +17,6 @@
       />
 
       <ContentContainer
-        title="Navigation"
-        text="Keyboard's right and left arrows will navigate like clicking the control's buttons."
-        img="/img/examples/navigation.png"
-      />
-
-      <ContentContainer
         title="User settings"
         text="Customizable settings are explained below"
         :separator="true"
@@ -49,6 +43,12 @@
         title="Hover Controls"
         text="While activated, controls will hover over content."
         img="/img/examples/controls.png"
+      />
+
+      <ContentContainer
+        title="Keyboard navigation"
+        text="While active, keyboard's right and left arrows will navigate like clicking the control's buttons."
+        img="/img/examples/navigation.png"
       />
 
       <ContentContainer

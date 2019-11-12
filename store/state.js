@@ -1,6 +1,6 @@
 export default () => ({
   dashBoardData: {
-    data: {}, // Data that is rendered to the web app
+    data: [], // Data that is rendered to the web app
     pid: 0 // Page id
   },
   searchData: {
@@ -22,23 +22,23 @@ export default () => ({
       value: false
     },
     infiniteLoad: {
-      name: "Infinite loading WIP",
+      name: "Infinite Loading",
       description: "Load posts as you scroll down",
       value: false
     },
+    score: {
+      name: "Minimum Score",
+      description: "Only show posts that have the indicated score or more",
+      value: 0
+    },
     fullSizeImages: {
-      name: "Full size images",
+      name: "Full Size Images",
       description:
         "Load full images instead of downscaled size images, data intensive",
       value: false
     },
-    score: {
-      name: "Minimum score",
-      description: "Only show posts that have the indicated score or more",
-      value: 0
-    },
     videoControls: {
-      name: "Video controls",
+      name: "Video Controls",
       description: "Enable usage of video controls",
       value: false
     },
@@ -52,6 +52,11 @@ export default () => ({
       name: "Hover Zoom",
       description: "Zoom when you hover posts, useful for videos",
       value: false
+    },
+    keyboardControls: {
+      name: "Keyboard Controls",
+      description: "Control next and last page with keyboard's arrows",
+      value: true
     },
     nsfw: {
       name: "NSFW",

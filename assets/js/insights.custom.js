@@ -7,11 +7,11 @@ let defaultSettings = {
   infiniteLoad: {
     value: false
   },
-  fullSizeImages: {
-    value: false
-  },
   score: {
     value: 0
+  },
+  fullSizeImages: {
+    value: false
   },
   videoControls: {
     value: false
@@ -21,6 +21,9 @@ let defaultSettings = {
   },
   zoom: {
     value: false
+  },
+  keyboardControls: {
+    value: true
   },
   nsfw: {
     value: true

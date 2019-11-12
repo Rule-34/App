@@ -11,7 +11,16 @@ export default {
     // Data
     if (payload.data !== undefined) {
       // console.log(payload.data)
-      state.dashBoardData.data = payload.data;
+
+      if (payload.mode === "add") {
+        state.dashBoardData.data = payload.data;
+      } else if (payload.mode === "concat") {
+        // console.log(state.dashBoardData.data);
+        // console.log(payload.data);
+        state.dashBoardData.data.posts = state.dashBoardData.data.posts.concat(
+          payload.data.posts
+        );
+      }
     }
 
     // Errors
