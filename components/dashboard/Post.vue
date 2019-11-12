@@ -137,7 +137,7 @@ export default {
   computed: mapState(["userSettings"]),
   methods: {
     ...mapMutations(["newSearchData"]),
-    ...mapActions(["pidManager", "tagManager"]),
+    ...mapActions(["pidManager", "tagManager", "getPosts"]),
     // Check if its an url
     isUrl() {
       if (this.post.source.startsWith("http", "www", /www*/)) {
@@ -174,7 +174,7 @@ export default {
       });
 
       // Search for the tag
-      this.tagManager({ function: "getPostsByTags" });
+      this.getPosts();
     }
   }
 };

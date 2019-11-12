@@ -21,9 +21,9 @@ export default () => ({
       description: "Enable dark theme app-wide",
       value: false
     },
-    videoControls: {
-      name: "Video controls",
-      description: "Enable usage of video controls",
+    infiniteLoad: {
+      name: "Infinite loading WIP",
+      description: "Load posts as you scroll down",
       value: false
     },
     fullSizeImages: {
@@ -32,9 +32,14 @@ export default () => ({
         "Load full images instead of downscaled size images, data intensive",
       value: false
     },
-    infiniteLoad: {
-      name: "Infinite loading WIP",
-      description: "Load posts as you scroll down",
+    score: {
+      name: "Minimum score for posts",
+      description: "Only show posts that have the indicated score or more",
+      value: 100
+    },
+    videoControls: {
+      name: "Video controls",
+      description: "Enable usage of video controls",
       value: false
     },
     hoverControls: {
@@ -42,7 +47,6 @@ export default () => ({
       description: "Next and last posts will be floating on the bottom",
       value: false
     },
-
     // TODO: slider for how much zoom
     zoom: {
       name: "Hover Zoom",
