@@ -45,15 +45,14 @@
 import { mapState } from "vuex";
 import SideNav from "~/components/navigation/SideNav.vue";
 import SettingSwitch from "~/components/settings/SettingSwitch.vue";
-import fireAnalytics from "~/assets/js/insights.tags"; //Import analytics
+import fireAnalytics from "~/assets/js/insights.custom"; //Import analytics
 
 export default {
   components: { SideNav, SettingSwitch },
   computed: mapState(["userSettings"]),
   // Fire analytics when exiting settings
   destroyed() {
-    fireAnalytics("settings", this.userSettings);
-    // .then(console.log);
+    fireAnalytics("settings", this.userSettings); // .then(console.log);
   },
   methods: {
     // Remove the localStorage object and reload the window

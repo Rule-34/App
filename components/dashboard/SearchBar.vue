@@ -125,7 +125,7 @@
 import { mapState, mapActions, mapMutations } from "vuex";
 import Errors from "./Errors.vue";
 import { SearchIcon, FilterIcon } from "vue-feather-icons";
-import fireAnalytics from "~/assets/js/insights.tags"; //Import analytics
+import fireAnalytics from "~/assets/js/insights.custom"; //Import analytics
 
 export default {
   name: "SearchBar",
