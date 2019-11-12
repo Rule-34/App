@@ -147,6 +147,7 @@ export default {
       "toggleSearchComponent",
       "pidManager",
       "tagManager",
+      "getPosts",
       "axiosGet"
     ]),
     toggleFilter() {
@@ -160,7 +161,7 @@ export default {
       });
 
       // Search for the tags
-      this.tagManager({ function: "getPostsByTags" });
+      this.getPosts();
 
       // Hide the search bar
       this.toggleSearchComponent();
