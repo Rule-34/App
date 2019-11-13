@@ -2,7 +2,7 @@
   <div>
     <div class="cool-bar" />
     <SideNav />
-    <SearchBar />
+    <Search />
     <!-- Different width depending on screen -->
     <DashBoard class="container md:w-2/3 xl:w-1/2" />
   </div>
@@ -10,13 +10,13 @@
 
 <script>
 import DashBoard from "~/components/dashboard/DashBoard.vue";
-import SearchBar from "~/components/dashboard/SearchBar.vue";
+import Search from "~/components/dashboard/Search.vue";
 import SideNav from "~/components/navigation/SideNav.vue";
 
 export default {
   components: {
     DashBoard,
-    SearchBar,
+    Search,
     SideNav
   },
   // Load the store with posts
