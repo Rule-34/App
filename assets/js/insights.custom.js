@@ -5,7 +5,7 @@ let defaultSettings = {
     value: false
   },
   infiniteLoad: {
-    value: false
+    value: true
   },
   score: {
     value: 0
@@ -23,7 +23,7 @@ let defaultSettings = {
     value: false
   },
   keyboardControls: {
-    value: true
+    value: false
   },
   nsfw: {
     value: true
