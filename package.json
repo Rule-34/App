@@ -1,14 +1,15 @@
 {
   "name": "rule-34-progressive-web-app",
   "version": "1.0.0",
-  "description": "Rule 34 redesigned",
+  "description": "Rule 34 redesigned in a beautiful and stunning style",
   "author": "Alejandro Akbal",
   "private": true,
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate"
+    "generate": "nuxt generate",
+    "analyze": "nuxt build --analyze"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
