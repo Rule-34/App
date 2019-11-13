@@ -24,7 +24,7 @@ export default {
         // Sometimes its response sometimes its response.data
       });
 
-      // Check when loading more posts if theres no more posts
+      // Check when loading more posts if theres no more posts TODO: Did real bad, do again but better in the future
       try {
         if (!response.posts.length) {
           commit({
@@ -94,7 +94,7 @@ export default {
     }
   },
 
-  async tagManager({ commit, dispatch }, dataObj) {
+  async tagManager({ commit }, dataObj) {
     // Reset tags
     if (dataObj.function === "reset") {
       // Reset tags
