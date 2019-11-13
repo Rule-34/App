@@ -40,7 +40,8 @@
 import { mapState, mapActions, mapMutations } from "vuex";
 
 // Import icons from package
-import { ArrowRightIcon, ArrowLeftIcon } from "vue-feather-icons";
+import ArrowLeftIcon from "vue-feather-icons";
+import ArrowRightIcon from "vue-feather-icons";
 
 export default {
   name: "Controls",

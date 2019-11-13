@@ -113,7 +113,7 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
-import { ExternalLinkIcon } from "vue-feather-icons";
+import ExternalLinkIcon from "vue-feather-icons";
 
 export default {
   name: "Post",
