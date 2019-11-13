@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import { mapMutations, mapState } from "vuex";
 import { SearchIcon } from "vue-feather-icons";
 
 export default {
@@ -74,12 +75,19 @@ export default {
       isNavActive: false
     };
   },
+
+  computed: {
+    ...mapState(["searchData"])
+  },
   methods: {
+    ...mapMutations(["newSearchData"]),
     toggleNav() {
       this.isNavActive = !this.isNavActive;
     },
     toggleSearch() {
-      this.$store.dispatch("toggleSearchComponent");
+      this.newSearchData({
+        isActive: !this.searchData.isActive
+      });
     }
   }
 };

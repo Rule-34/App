@@ -55,6 +55,10 @@ export default {
       state.searchData.isActive = payload.isActive;
     }
 
+    if (payload.isFilterActive !== undefined) {
+      state.searchData.isFilterActive = payload.isFilterActive;
+    }
+
     // Errors
     if (payload.errors !== undefined) {
       state.generalData.errors = payload.errors;
@@ -74,6 +78,9 @@ export default {
         if (!state.searchData.tags.includes(payload.tag.name)) {
           state.searchData.tags.push(payload.tag.name);
         }
+        // Instead of adding one, add multiple with concat
+      } else if (payload.tag.function === "concat") {
+        state.searchData.tags = state.searchData.tags.concat(payload.tag.name);
       } else if (payload.tag.function === "remove") {
         // console.log(payload.tag.name);
         state.searchData.tags = state.searchData.tags.filter(function(ele) {

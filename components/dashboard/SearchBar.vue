@@ -1,178 +1,94 @@
 <template>
-  <div class="search-bar" :class="{ active: searchData.isActive }">
-    <!-- Centered container -->
-    <div class="flex flex-wrap md:flex-no-wrap h-screen">
-      <!-- Separator -->
-      <div
-        class="hidden md:block w-1/6"
-        @click.self="toggleSearchComponent()"
-      />
-      <!-- Search bar -->
-      <div class="w-full md:w-2/6 m-auto">
-        <div class="material-container p-2 w-3/4 flex justify-between">
-          <!-- Search Icon -->
-          <div class="w-full inline-flex">
-            <SearchIcon class="icon text-black w-6 h-6 mr-2" />
-            <!-- Input -->
-            <input
-              v-model="searchQuery"
-              class="w-full ml-1 outline-none font-light"
-              type="search"
-              placeholder="Search: e.g. dragon"
-              @input="debounceInput"
-            />
-          </div>
-          <button></button>
-          <div title="Filter out" @click="toggleFilter()">
-            <FilterIcon
-              class="icon w-6 h-6 mr-1"
-              :class="{ 'text-red-400': isFilterActive }"
-            />
-          </div>
-        </div>
+  <div>
+    <!-- Search bar -->
+    <div class="material-container p-2 w-3/4 flex justify-between">
+      <!-- Search Icon -->
+      <div class="w-full inline-flex">
+        <SearchIcon class="icon text-black w-6 h-6 mr-2" />
+        <!-- Input -->
+        <input
+          v-model="searchQuery"
+          class="w-full ml-1 outline-none font-light"
+          type="search"
+          placeholder="Search: e.g. dragon"
+          @input="debounceInput"
+        />
       </div>
 
-      <!-- Results -->
-      <div class="search-bar-results w-full md:w-2/6 min-h-1/2 overflow-y-auto">
-        <!-- ERROR HANDLING AND SEARCH RESULTS -->
-
-        <!-- If theres errors -->
-        <Errors />
-
-        <!-- If nothing searched -->
-        <h1
-          v-if="!searchData.data && !generalData.errors"
-          class="text-center font-hairline m-auto text-xl"
-        >
-          Search something!
-        </h1>
-
-        <!-- Added tags, click them to remove them -->
-        <div
-          v-if="searchData.tags"
-          class="tag-container border-b rounded-b pb-1"
-        >
-          <a
-            v-for="tag in searchData.tags"
-            :key="tag"
-            class="tag group"
-            @click="
-              newSearchData({
-                tag: {
-                  name: tag,
-                  function: 'remove'
-                }
-              })
-            "
-            v-text="tag"
-          />
-        </div>
-
-        <!-- Tags, click them to add them -->
-        <div v-if="searchData.data" class="tag-container mt-1">
-          <!-- Add tag to array of added tags, if filter is active then append '-' -->
-          <a
-            v-for="tag in searchData.data"
-            :key="tag.name"
-            class="tag group"
-            @click="
-              if (isFilterActive) {
-                newSearchData({
-                  tag: {
-                    name: '-' + tag.name,
-                    function: 'add'
-                  }
-                });
-              } else {
-                newSearchData({
-                  tag: {
-                    name: tag.name,
-                    function: 'add'
-                  }
-                });
-              }
-            "
-          >
-            {{ tag.name }}
-            <span
-              class="text-gray-400 group-hover:text-gray-600"
-              v-text="'(' + tag.posts + ')'"
-            />
-          </a>
-        </div>
-
-        <!-- Apply tags -->
-        <a
-          href="#"
-          class="btn text-white text-center bg-gradient-lilac-blue mt-auto shadow-md"
-          @click="dispatchGetAddedTags"
-        >
-          Apply tags
-        </a>
+      <!-- Filter content -->
+      <div
+        title="Automatic filters"
+        :class="{
+          'text-orange-400': ContentMode.mode === 'furry'
+        }"
+        @click="toggleContentMode()"
+      >
+        <component :is="ContentMode.icon" class="icon w-6 h-6 mr-1" />
       </div>
 
-      <div
-        class="hidden md:block w-1/6"
-        @click.self="toggleSearchComponent()"
-      />
-      <!--  -->
+      <!-- Filter content -->
+      <div title="Filter content" @click="toggleFilter()">
+        <FilterIcon
+          class="icon w-6 h-6 mr-1"
+          :class="{ 'text-red-400': searchData.isFilterActive }"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
-import Errors from "./Errors.vue";
-import { FilterIcon, SearchIcon } from "vue-feather-icons";
+import {
+  FilterIcon,
+  SearchIcon,
+  TrashIcon,
+  GitlabIcon
+} from "vue-feather-icons";
 import debounce from "lodash/debounce";
-import fireAnalytics from "~/assets/js/insights.custom"; //Import analytics
 
 export default {
-  name: "SearchBar",
-  components: { Errors, SearchIcon, FilterIcon },
+  name: "Search",
+  components: { SearchIcon, FilterIcon, TrashIcon, GitlabIcon },
   data() {
     return {
       // Content from the search input
       searchQuery: "",
-      isFilterActive: false
+      ContentMode: { mode: "reset", icon: "TrashIcon" }
     };
   },
   // Get data() from vuex store "searchData"
   computed: {
-    ...mapState(["dashBoardData", "searchData", "generalData"])
+    ...mapState(["searchData", "generalData"])
   },
   methods: {
     ...mapMutations(["newSearchData"]),
-    ...mapActions([
-      "toggleSearchComponent",
-      "pidManager",
-      "tagManager",
-      "getPosts",
-      "axiosGet"
-    ]),
-    toggleFilter() {
+    ...mapActions(["tagManager", "axiosGet"]),
+    async toggleContentMode() {
       // console.log("hola");
-      this.isFilterActive = !this.isFilterActive;
-    },
-    dispatchGetAddedTags() {
-      // Set PID to 0 since we're searching for new tags
-      this.pidManager({
-        function: "reset"
-      });
 
-      // Search for the tags
-      this.getPosts();
+      // Reset tags
+      if (this.ContentMode.mode === "reset") {
+        this.tagManager({ function: "reset" });
+        return (this.ContentMode = { mode: "furry", icon: "GitlabIcon" });
 
-      // Hide the search bar
-      this.toggleSearchComponent();
-
-      // And fire analytics
-      fireAnalytics("tags", this.searchData.tags);
-      // .then(console.log);
+        // Remove furry content
+      } else if (this.ContentMode.mode === "furry") {
+        const response = await this.$axios.$get(
+          "https://gist.githubusercontent.com/VoidlessSeven7/c0b379d617b1d26c54158e90a1f096cd/raw/filter_anti_furry_r34.app.txt"
+        );
+        this.newSearchData({
+          tag: {
+            name: response,
+            function: "concat"
+          }
+        });
+        return (this.ContentMode = { mode: "reset", icon: "TrashIcon" });
+        // Return to default
+      }
     },
     getTags() {
       if (this.searchQuery.length > 2) {
-        // console.log(`${this.dashBoardData.pid} GET`);
         this.axiosGet({
           url: `tags?name=${this.searchQuery.trim().toLowerCase()}*&limit=${
             this.generalData.postLimit
@@ -189,7 +105,12 @@ export default {
     debounceInput: debounce(function() {
       this.getTags();
       // console.log("hola");
-    }, 300)
+    }, 300),
+    toggleFilter() {
+      this.newSearchData({
+        isFilterActive: !this.searchData.isFilterActive
+      });
+    }
   }
 };
 </script>

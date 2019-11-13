@@ -6,7 +6,8 @@ export default () => ({
   searchData: {
     data: [], // Data received while searching for tags
     tags: [],
-    isActive: false
+    isActive: false, // Is search bar active
+    isFilterActive: false
   },
   generalData: {
     apiUrl: "https://r34-json.herokuapp.com/", // Default api
