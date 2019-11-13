@@ -19,9 +19,13 @@
     </template>
     <template v-else>
       <Intersect class="mx-auto" @enter="concatPost">
-        <p class="text-center text-gray-500 pb-2" @click="concatPost()">
-          Loading more posts...
-        </p>
+        <!-- If theres more posts -->
+        <div>
+          <p class="text-center text-gray-500 pb-2" @click="concatPost()">
+            Loading more posts...
+          </p>
+          <Errors />
+        </div>
       </Intersect>
     </template>
   </div>

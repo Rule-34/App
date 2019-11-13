@@ -23,6 +23,18 @@ export default {
         mode: dataObj.mode
         // Sometimes its response sometimes its response.data
       });
+
+      // Check when loading more posts if theres no more posts
+      try {
+        if (!response.posts.length) {
+          commit({
+            type: dataObj.mutationToReturn,
+            errors: "There are no more posts to load!"
+          });
+        }
+      } catch {
+        // console.log("Error");
+      }
       // console.log(response)
     } catch (error) {
       // console.error(error);
