@@ -65,9 +65,7 @@
 
 <script>
 import { mapState } from "vuex";
-import InfoIcon from "vue-feather-icons";
-import StarIcon from "vue-feather-icons";
-import DollarSignIcon from "vue-feather-icons";
+import { InfoIcon, StarIcon, DollarSignIcon } from "vue-feather-icons";
 
 export default {
   name: "ContentContainer",

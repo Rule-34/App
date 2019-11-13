@@ -123,8 +123,7 @@
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
 import Errors from "./Errors.vue";
-import FilterIcon from "vue-feather-icons";
-import SearchIcon from "vue-feather-icons";
+import { FilterIcon, SearchIcon } from "vue-feather-icons";
 import debounce from "lodash/debounce";
 import fireAnalytics from "~/assets/js/insights.custom"; //Import analytics
 

@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import SearchIcon from "vue-feather-icons";
+import { SearchIcon } from "vue-feather-icons";
 
 export default {
   name: "SideNav",

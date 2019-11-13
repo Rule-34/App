@@ -13,7 +13,7 @@
       <ContentContainer
         title="Search"
         text="When searching, toggling the filter button will ban from appearing the next clicked tags."
-        img="/img/examples/search_filter.png"
+        img="/img/examples/filter.webp"
       />
 
       <ContentContainer
@@ -25,7 +25,7 @@
       <ContentContainer
         title="Full size images"
         text="While activated, images will be higher resolution, consuming more data."
-        img="/img/examples/fullsize.png"
+        img="/img/examples/fullsize.webp"
       />
 
       <ContentContainer
@@ -36,28 +36,28 @@
       <ContentContainer
         title="Video controls"
         text="While activated, videos will have controls, but clicking it won't show tags."
-        img="/img/examples/video_controls.png"
+        img="/img/examples/video_controls.webp"
       />
 
       <ContentContainer
         title="Hover Controls"
         text="While activated, controls will hover over content."
-        img="/img/examples/controls.png"
+        img="/img/examples/controls.webp"
       />
 
       <ContentContainer
         title="Keyboard navigation"
         text="While active, keyboard's right and left arrows will navigate like clicking the control's buttons."
-        img="/img/examples/navigation.png"
+        img="/img/examples/navigation.webp"
       />
 
       <ContentContainer
         title="Hover Zoom"
         text="While activated, posts hovered will enlarge."
-        img="/img/examples/zoom.png"
+        img="/img/examples/zoom.webp"
       />
 
-      <ContentContainer title="NSFW" img="/img/examples/nsfw.png">
+      <ContentContainer title="NSFW" img="/img/examples/nsfw.webp">
         <!-- Slot -->
         <template slot="textRich">
           <p>While <u>deactivated</u>, posts will be blurred.</p>
