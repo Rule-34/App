@@ -24,6 +24,7 @@
                 <SettingSwitch
                   v-for="(setting, index) in userSettings"
                   :key="setting.name"
+                  class="my-1"
                   :value="setting.value"
                   :text="setting.name"
                   :switch-id="index"

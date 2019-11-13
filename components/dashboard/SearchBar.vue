@@ -50,7 +50,7 @@
         <!-- Added tags, click them to remove them -->
         <div
           v-if="searchData.tags"
-          class="tag-container border-b rounded-b mb-2"
+          class="tag-container border-b rounded-b pb-1"
         >
           <a
             v-for="tag in searchData.tags"
@@ -69,7 +69,7 @@
         </div>
 
         <!-- Tags, click them to add them -->
-        <div v-if="searchData.data" class="tag-container">
+        <div v-if="searchData.data" class="tag-container mt-1">
           <!-- Add tag to array of added tags, if filter is active then append '-' -->
           <a
             v-for="tag in searchData.data"
