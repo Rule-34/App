@@ -12,7 +12,7 @@
           :class="{ zoom: userSettings.zoom.value }"
         >
           <div>
-            <img class="mx-auto mb-5" src="/img/ALogo.png" alt="Akbal logo" />
+            <img class="mx-auto mb-5" src="/img/ALogo.webp" alt="Akbal logo" />
 
             <h1
               class="py-1 px-3 border rounded-full w-fit-content mx-auto bg-gray-900 text-gray-300 shadow-md mb-1"
