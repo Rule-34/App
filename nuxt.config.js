@@ -103,9 +103,9 @@ export default {
      */
     // eslint-disable-next-line no-unused-vars
     extend(config, { isClient }) {
-      if (isClient) {
-        config.devtool = "source-map";
-      }
+      // if (isClient) {
+      //   config.devtool = "source-map";
+      // }
     }
   }
 };
