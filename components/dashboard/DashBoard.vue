@@ -84,16 +84,25 @@ export default {
     },
     // Navigation with keyboard
     navigation() {
-      if (event.keyCode == 39) {
-        this.$refs.controls.getNextPage();
-        this.scrollToTop();
-        // console.log("Loading next page");
-      } else if (event.keyCode == 37) {
-        // console.log("Loading last page");
-        this.$refs.controls.getLastPage();
-        this.scrollToTop();
-      } else {
-        return false;
+      try {
+        switch (event.keyCode) {
+          case 39:
+            this.$refs.controls.getNextPage();
+            this.scrollToTop();
+            // console.log("Loading next page");
+            break;
+
+          case 37:
+            this.$refs.controls.getLastPage();
+            this.scrollToTop();
+            // console.log("Loading last page");
+            break;
+        }
+      } catch (error) {
+        console.error(
+          "Couldnt load next page, most likely because infinite loading is enabled.",
+          error
+        );
       }
     }
   }

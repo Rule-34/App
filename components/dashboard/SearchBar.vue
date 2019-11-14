@@ -54,6 +54,7 @@ export default {
     return {
       // Content from the search input
       searchQuery: "",
+      preMadeFilter: [],
       ContentMode: { mode: "reset", icon: "TrashIcon" }
     };
   },
@@ -64,27 +65,29 @@ export default {
   methods: {
     ...mapMutations(["newSearchData"]),
     ...mapActions(["tagManager", "axiosGet"]),
+
     async toggleContentMode() {
-      // console.log("hola");
+      this.preMadeFilter = await this.$axios.$get(
+        "https://gist.githubusercontent.com/VoidlessSeven7/c0b379d617b1d26c54158e90a1f096cd/raw/filter_anti_furry_r34.app.txt"
+      );
 
-      // Reset tags
-      if (this.ContentMode.mode === "reset") {
-        this.tagManager({ function: "reset" });
-        return (this.ContentMode = { mode: "furry", icon: "GitlabIcon" });
+      switch (this.ContentMode.mode) {
+        case "reset":
+          this.tagManager({ function: "reset" });
+          this.ContentMode = { mode: "furry", icon: "GitlabIcon" };
 
-        // Remove furry content
-      } else if (this.ContentMode.mode === "furry") {
-        const response = await this.$axios.$get(
-          "https://gist.githubusercontent.com/VoidlessSeven7/c0b379d617b1d26c54158e90a1f096cd/raw/filter_anti_furry_r34.app.txt"
-        );
-        this.newSearchData({
-          tag: {
-            name: response,
-            function: "concat"
-          }
-        });
-        return (this.ContentMode = { mode: "reset", icon: "TrashIcon" });
-        // Return to default
+          return true;
+
+        case "furry":
+          this.newSearchData({
+            tag: {
+              name: this.preMadeFilter,
+              function: "concat"
+            }
+          });
+          this.ContentMode = { mode: "reset", icon: "TrashIcon" };
+
+          return true;
       }
     },
     getTags() {
