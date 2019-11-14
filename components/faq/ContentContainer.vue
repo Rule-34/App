@@ -41,12 +41,16 @@
           <!-- We can insert extra info here -->
 
           <!-- Image -->
-          <img
-            v-if="img"
-            class="mx-auto mt-2"
-            :src="img"
-            :alt="title + ' Example'"
-          />
+          <picture v-if="img">
+            <source :srcset="img + '.webp'" type="image/webp" />
+            <source :srcset="img + '.png'" type="image/png" />
+            <img
+              class="mx-auto mt-2"
+              :src="img + '.png'"
+              :alt="title + ' Example'"
+            />
+          </picture>
+
           <!-- Links -->
           <a
             v-if="link && linkText"
