@@ -15,3 +15,4 @@ jobs:
         BRANCH: gh-pages # The branch the action should deploy to.
         FOLDER: dist # The folder the action should deploy.
         BUILD_SCRIPT: npm install && npm run-script generate # The build script the action should run prior to deploying.
+        CNAME: r34.app 
