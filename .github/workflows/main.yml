@@ -1,5 +1,8 @@
 name: Build and Deploy
-on: [push]
+on:
+  push:	
+    branches:	
+      - master
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -7,12 +10,15 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
 
+    - name: Install
+      run: |
+        npm install
+        npm run-script generate
+
     - name: Build and Deploy
-      uses: JamesIves/github-pages-deploy-action@2.0.3
-      env:
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         BASE_BRANCH: master # The branch the action should deploy from.
         BRANCH: gh-pages # The branch the action should deploy to.
         FOLDER: dist # The folder the action should deploy.
-        BUILD_SCRIPT: npm install && npm run-script generate # The build script the action should run prior to deploying.
-        CNAME: r34.app 
