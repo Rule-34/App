@@ -1,5 +1,6 @@
 <template>
   <div>
+  <p> HOLA </p>
     <div class="cool-bar" />
     <SideNav />
     <Search />
@@ -21,6 +22,7 @@ export default {
   },
   // Load the store with posts
   async fetch({ store }) {
+  
     await store.dispatch("getPosts");
   }
 };
