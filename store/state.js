@@ -25,7 +25,7 @@ export default () => ({
     infiniteLoad: {
       name: "Infinite Loading",
       description: "Load posts as you scroll down",
-      value: true
+      value: false
     },
     score: {
       name: "Minimum Score",
@@ -57,7 +57,7 @@ export default () => ({
     keyboardControls: {
       name: "Keyboard Controls",
       description: "Control next and last page with keyboard's arrows",
-      value: false
+      value: true
     },
     nsfw: {
       name: "NSFW",
