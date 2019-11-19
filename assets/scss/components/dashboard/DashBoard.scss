@@ -7,15 +7,13 @@
 
 .fade-enter-active, .fade-leave-active {
     max-height: 300px;
-    transition: all .35s ease;
+    transition-duration: .35s;
+    transition-timing-function: ease;
+    transition-property: opacity, max-height;
   }
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     max-height: 0px;
     opacity: 0;
-  }
-
-  .transition-all-35 {
-      transition: all .5s ease;
   }
 
 /** 
