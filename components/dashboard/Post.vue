@@ -114,6 +114,7 @@
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
 import { ExternalLinkIcon } from "vue-feather-icons";
+import fireAnalytics from "~/assets/js/insights.custom"; //Import analytics
 
 export default {
   name: "Post",
@@ -134,7 +135,7 @@ export default {
       isActive: false
     };
   },
-  computed: mapState(["userSettings"]),
+  computed: mapState(["searchData", "userSettings"]),
   methods: {
     ...mapMutations(["newSearchData"]),
     ...mapActions(["pidManager", "tagManager", "getPosts"]),
@@ -175,6 +176,9 @@ export default {
 
       // Search for the tag
       this.getPosts();
+
+      // And fire analytics
+      fireAnalytics("tags", this.searchData.tags); //.then(console.log);
     }
   }
 };
