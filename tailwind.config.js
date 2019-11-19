@@ -9,11 +9,7 @@ module.exports = {
         "white-10": "rgba(255, 255, 255, 0.1)"
       },
 
-      inset: {
-        "minus-1/4": "-25%",
-        "minus-3/4": "-75%",
-        "minus-100": "-100%"
-      },
+      inset: {},
       // Width and height
       spacing: {
         "percent-25": "25%",

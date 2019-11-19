@@ -9,19 +9,20 @@
 
 .navigation-toggler {
     top: 25px;
-    left: -35px;
-    transition: left 0.3s ease-in-out;
-    @apply .fixed z-50
+    transform: translateX(-35px);
+    transition: transform 0.3s ease-in-out;
+    @apply .fixed .z-50
 }
 
 .navigation-toggler:hover {
-    @apply .left-0
+    transform: translateX(0px);
 }
 
 /* ----- Sidebar related ----- */
 .sidebar-container {
-    transition: left 0.35s ease-in-out;
-    @apply .fixed .flex .z-10 .min-h-screen .w-full .left-minus-100
+    transition: transform 0.35s ease-in-out;
+    transform: translateX(-100vw);
+    @apply .fixed .flex .z-10 .min-h-screen .w-full
 }
 
 // Make full width when on small devices
@@ -35,21 +36,15 @@
 }
 
 .sidebar-container.active {
-    @apply .left-0
+    transform: translateX(0px);
 }
 
 // Changes for medium screens
 @screen md {
 
     // Navigation toggler related
-    $navigation-toggler-md-left: 10px;
-
     .navigation-toggler {
-        left: $navigation-toggler-md-left;
-    }
-
-    .navigation-toggler:hover {
-        left: $navigation-toggler-md-left;
+        transform: translateX(0px);
     }
 
     .navigation-toggler-button {
@@ -61,13 +56,10 @@
     }
 
     // Sidebar related
-    .sidebar-container {
-        @apply .left-minus-100
-    }
 
     // Make the sidebar one fourth of the screen on medium devices
     .sidebar {
-        @apply .w-1/4 .bg-white .border .shadow
+        @apply .w-1/4
     }
 
     // Make the close area occupy the rest of the screen on medium devices
@@ -89,7 +81,7 @@
 
 .nav-links li{
     transition: all .2s ease;
-    @apply relative
+    @apply .relative
 }
 .nav-links li:hover {
     transform: translateX(5px);
