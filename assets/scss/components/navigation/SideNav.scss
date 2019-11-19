@@ -80,7 +80,7 @@
 }
 
 .nav-links li{
-    transition: all .2s ease;
+    transition: transform .2s ease;
     @apply .relative
 }
 .nav-links li:hover {

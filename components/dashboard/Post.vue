@@ -86,7 +86,7 @@
           <div
             v-if="post.source"
             key="source"
-            class="w-full m-auto text-center transition-all-35"
+            class="w-full m-auto text-center"
           >
             <template v-if="isUrl()">
               <a
