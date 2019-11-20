@@ -74,6 +74,11 @@ import ContentContainer from "~/components/faq/ContentContainer.vue";
 
 export default {
   components: { SideNav, ContentContainer },
-  computed: mapState(["userSettings"])
+  computed: mapState(["userSettings"]),
+  head() {
+    return {
+      title: "Usage | Rule 34 PWA"
+    };
+  }
 };
 </script>
