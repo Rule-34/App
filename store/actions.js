@@ -53,7 +53,6 @@ export default {
   },
   // Get posts from api
   async getPosts({ dispatch }, mode) {
-    // console.log(`${this.dashBoardData.pid} GET`)
     // console.log(mode);
     await dispatch("axiosGet", {
       url: `posts?pid=${this.state.dashBoardData.pid}&limit=${
@@ -70,29 +69,37 @@ export default {
   // Change api to an alternative one
   async apiManager({ commit }) {
     if (this.state.generalData.apiUrl !== this.state.generalData.backupApiUrl) {
-      //   console.log(`${dataObj.errors}, changing to alternative api`)
+      console.log("changing to alternative api");
 
       await commit({
         type: "newApiUrl",
         newUrl: "https://r34-api-clone.herokuapp.com/"
       });
+    } else {
+      console.warn("The backup API is already being used");
     }
   },
 
   // Change api to an alternative one
   async pidManager({ commit }, dataObj) {
-    if (dataObj.function === "add") {
-      await commit("newDashBoardData", {
-        pid: parseInt(this.state.dashBoardData.pid) + 1
-      });
-    } else if (dataObj.function === "subtract") {
-      await commit("newDashBoardData", {
-        pid: parseInt(this.state.dashBoardData.pid) - 1
-      });
-    } else if (dataObj.function === "reset") {
-      await commit("newDashBoardData", {
-        pid: 0
-      });
+    switch (dataObj.function) {
+      case "add":
+        await commit("newDashBoardData", {
+          pid: parseInt(this.state.dashBoardData.pid) + 1
+        });
+        break;
+
+      case "subtract":
+        await commit("newDashBoardData", {
+          pid: parseInt(this.state.dashBoardData.pid) - 1
+        });
+        break;
+
+      case "reset":
+        await commit("newDashBoardData", {
+          pid: 0
+        });
+        break;
     }
   },
 
