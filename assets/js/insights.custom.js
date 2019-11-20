@@ -43,7 +43,7 @@ export default async function fireAnalytics(type, data) {
         // console.log(key, data[key]);
 
         setTimeout(function() {
-          console.log("Sent tag: ", data[key]);
+          // console.log("Sent tag: ", data[key]);
           track({
             id: "user-usage",
             parameters: {
@@ -74,7 +74,7 @@ export default async function fireAnalytics(type, data) {
         // console.log(key, difference[key]);
 
         setTimeout(function() {
-          console.log("Sent tag: ", difference[key]);
+          // console.log("Sent setting: ", difference[key]);
           track({
             id: "user-usage",
             parameters: {
