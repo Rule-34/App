@@ -79,7 +79,6 @@
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
 import Errors from "./Errors.vue";
-import fireAnalytics from "~/assets/js/insights.custom"; //Import analytics
 
 export default {
   name: "SearchResults",
@@ -106,8 +105,7 @@ export default {
       });
 
       // And fire analytics
-      fireAnalytics("tags", this.searchData.tags);
-      // .then(console.log);
+      this.analytics("tags");
     }
   }
 };

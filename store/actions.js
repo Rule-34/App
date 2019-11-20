@@ -1,3 +1,5 @@
+import fireAnalytics from "~/assets/js/insights.custom"; //Import analytics
+
 export default {
   // This a customisable Get request
   async axiosGet({ commit, dispatch }, dataObj) {
@@ -112,6 +114,19 @@ export default {
           isActive: !this.state.searchData.isActive
         });
       }
+    }
+  },
+  // eslint-disable-next-line no-unused-vars
+  async analytics({ commit }, execution) {
+    // console.log(execution);
+    switch (execution) {
+      case "tags":
+        fireAnalytics("tags", this.state.searchData.tags).then(console.log);
+        break;
+
+      case "settings":
+        fireAnalytics("settings", this.state.userSettings).then(console.log);
+        break;
     }
   }
 };
