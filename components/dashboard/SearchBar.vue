@@ -48,13 +48,13 @@ import {
 import debounce from "lodash/debounce";
 
 export default {
-  name: "Search",
+  name: "SearchBar",
   components: { SearchIcon, FilterIcon, TrashIcon, GitlabIcon },
   data() {
     return {
       // Content from the search input
       searchQuery: "",
-      preMadeFilter: [],
+      filterData: [],
       ContentMode: { mode: "reset", icon: "TrashIcon" }
     };
   },
@@ -67,9 +67,13 @@ export default {
     ...mapActions(["tagManager", "axiosGet"]),
 
     async toggleContentMode() {
-      this.preMadeFilter = await this.$axios.$get(
-        "https://gist.githubusercontent.com/VoidlessSeven7/c0b379d617b1d26c54158e90a1f096cd/raw/filter_anti_furry_r34.app.txt"
-      );
+      // Populate filterData data and reuse later
+      if (!this.filterData.length) {
+        const filterData = await this.$axios.$get(
+          "https://gist.githubusercontent.com/VoidlessSeven7/c0b379d617b1d26c54158e90a1f096cd/raw/filter_anti_furry_r34.app.txt"
+        );
+        this.filterData = filterData;
+      }
 
       switch (this.ContentMode.mode) {
         case "reset":
@@ -81,7 +85,7 @@ export default {
         case "furry":
           this.newSearchData({
             tag: {
-              name: this.preMadeFilter,
+              name: this.filterData,
               function: "concat"
             }
           });
