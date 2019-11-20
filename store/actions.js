@@ -128,11 +128,11 @@ export default {
     // console.log(execution);
     switch (execution) {
       case "tags":
-        fireAnalytics("tags", this.state.searchData.tags).then(console.log);
+        fireAnalytics("tags", this.state.searchData.tags); //.then(console.log);
         break;
 
       case "settings":
-        fireAnalytics("settings", this.state.userSettings).then(console.log);
+        fireAnalytics("settings", this.state.userSettings); //.then(console.log);
         break;
     }
   }
