@@ -56,7 +56,7 @@ export default {
    ** TailwindCSS settings
    */
   tailwindcss: {
-    configPath: "~tailwind.config.js",
+    configPath: "~/tailwind.config.js",
     cssPath: "~/assets/app.scss"
   },
   /*
