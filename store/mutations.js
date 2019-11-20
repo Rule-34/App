@@ -7,19 +7,18 @@ export default {
 
   // Handler for post's data changes
   newDashBoardData(state, payload) {
-    // console.log(payload);
-    // Data
+    // Data related
     if (payload.data !== undefined) {
-      // console.log(payload.data)
+      switch (payload.mode) {
+        case "add":
+          state.dashBoardData.data = payload.data;
+          break;
 
-      if (payload.mode === "add") {
-        state.dashBoardData.data = payload.data;
-      } else if (payload.mode === "concat") {
-        // console.log(state.dashBoardData.data);
-        // console.log(payload.data);
-        state.dashBoardData.data.posts = state.dashBoardData.data.posts.concat(
-          payload.data.posts
-        );
+        case "concat":
+          state.dashBoardData.data.posts = state.dashBoardData.data.posts.concat(
+            payload.data.posts
+          );
+          break;
       }
     }
 
@@ -30,7 +29,6 @@ export default {
 
     // Page ID
     if (payload.pid !== undefined) {
-      // console.log(payload.pid);
       state.dashBoardData.pid = payload.pid;
     }
   },
@@ -48,7 +46,6 @@ export default {
    **/
 
   // Handler for Search changes
-
   newSearchData(state, payload) {
     // Apply "active" css class
     if (payload.isActive !== undefined) {
@@ -73,22 +70,30 @@ export default {
     if (payload.tag !== undefined) {
       // console.log(payload.tag.function);
 
-      if (payload.tag.function === "add") {
-        // console.log(payload.tag.name);
-        if (!state.searchData.tags.includes(payload.tag.name)) {
-          state.searchData.tags.push(payload.tag.name);
-        }
+      switch (payload.tag.function) {
+        // Add if it doesnt already exist
+        case "add":
+          if (!state.searchData.tags.includes(payload.tag.name)) {
+            state.searchData.tags.push(payload.tag.name);
+          }
+          break;
+
         // Instead of adding one, add multiple with concat
-      } else if (payload.tag.function === "concat") {
-        state.searchData.tags = state.searchData.tags.concat(payload.tag.name);
-      } else if (payload.tag.function === "remove") {
-        // console.log(payload.tag.name);
-        state.searchData.tags = state.searchData.tags.filter(function(ele) {
-          return ele !== payload.tag.name;
-        });
-      } else if (payload.tag.function === "reset") {
-        // console.log(payload.tag.name);
-        state.searchData.tags = [];
+        case "concat":
+          state.searchData.tags = state.searchData.tags.concat(
+            payload.tag.name
+          );
+          break;
+
+        case "remove":
+          state.searchData.tags = state.searchData.tags.filter(function(ele) {
+            return ele !== payload.tag.name;
+          });
+          break;
+
+        case "reset":
+          state.searchData.tags = [];
+          break;
       }
     }
   },
