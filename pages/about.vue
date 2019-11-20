@@ -45,6 +45,11 @@ import SideNav from "~/components/navigation/SideNav.vue";
 
 export default {
   components: { SideNav },
-  computed: mapState(["userSettings"])
+  computed: mapState(["userSettings"]),
+  head() {
+    return {
+      title: "About | Rule 34 PWA"
+    };
+  }
 };
 </script>

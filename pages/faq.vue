@@ -100,6 +100,11 @@ import SideNav from "~/components/navigation/SideNav.vue";
 import ContentContainer from "~/components/faq/ContentContainer.vue";
 
 export default {
-  components: { SideNav, ContentContainer }
+  components: { SideNav, ContentContainer },
+  head() {
+    return {
+      title: "Faq | Rule 34 PWA"
+    };
+  }
 };
 </script>

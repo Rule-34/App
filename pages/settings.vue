@@ -61,6 +61,11 @@ export default {
       localStorage.removeItem("vuex");
       location.reload();
     }
+  },
+  head() {
+    return {
+      title: "Settings | Rule 34 PWA"
+    };
   }
 };
 </script>
