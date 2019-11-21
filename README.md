@@ -1,9 +1,36 @@
-# rule-34-progressive-web-app
+# Rule 34 Progressive Web App (PWA)
 
-> Rule 34 redesigned
+Rule 34 redesigned in a beautiful and stunning style
+
+![Dashboard Preview](.github/images/dashboard.png)
+![Settings Preview](.github/images/settings.png)
+
+## Visit it
+**You can try it online on the next links, both run the same code from this repository**
+
+[https://r34.app/](https://r34.app/)
+> Powered by Github Pages
+
+Or backup
+
+[https://rule34-pwa.netlify.com/](https://rule34-pwa.netlify.com/)
+> Powered by Netlify
+
+## Technologies used
+
+#### Languages 
+HTML, SCSS, Javascript
+
+#### Technologies
+NodeJS, NPM, NuxtJS, VueJS, Webpack, etc.
+
+You should read [package.json](package.json) for the full list
 
 ## VSCode dependencies
-ESLint, Vetur
+ESLint, Prettier, Vetur
+
+###### Recommended for developing
+> File utils, Calamity theme
 
 ## Build Setup
 
