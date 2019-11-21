@@ -11,10 +11,14 @@ Rule 34 redesigned in a beautiful and stunning style
 [https://r34.app/](https://r34.app/)
 > Powered by Github Pages
 
+![Uptime Robot status](https://img.shields.io/uptimerobot/status/m783780173-8cc12bab199ae89671203f69?style=for-the-badge)
+
 Or backup
 
 [https://rule34-pwa.netlify.com/](https://rule34-pwa.netlify.com/)
 > Powered by Netlify
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/703629e2-193f-4bb0-9349-f02a22d50ed1/deploy-status)](https://app.netlify.com/sites/rule34-pwa/deploys)
 
 ## Technologies used
 
