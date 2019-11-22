@@ -10,7 +10,7 @@ export default () => ({
     isFilterActive: false
   },
   generalData: {
-    apiUrl: "https://r34-json.herokuapp.com/", // Default api
+    apiUrl: "https://r34-app-api.herokuapp.com/", // Default api
     backupApiUrl: "https://r34-api-clone.herokuapp.com/",
     postLimit: 20,
     errors: null
