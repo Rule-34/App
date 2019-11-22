@@ -22,6 +22,12 @@ export default () => ({
       description: "Enable dark theme app-wide",
       value: false
     },
+    lazyLoading: {
+      name: "Lazy Load Media",
+      description:
+        "Load media when it enters view, so you only use data when you see it",
+      value: true
+    },
     infiniteLoad: {
       name: "Infinite Loading",
       description: "Load posts as you scroll down",

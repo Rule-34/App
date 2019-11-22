@@ -4,30 +4,77 @@
     <!-- TODO: style="max-height: 80vh;" TODO: good for image previews -->
     <!-- if Image -->
     <template v-if="post.type === 'image'">
-      <!-- If image in full size -->
-      <template v-if="userSettings.fullSizeImages.value">
-        <img
-          v-lazy="post.file_url"
-          class="post-img"
-          :alt="post.type"
-          :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-          @click="toggleTags"
-        />
+      <!-- If lazy loading enabled -->
+      <template v-if="userSettings.lazyLoading.value">
+        <!-- If image in full size -->
+        <template v-if="userSettings.fullSizeImages.value">
+          <img
+            v-lazy="post.file_url"
+            class="post-img"
+            :alt="post.type"
+            :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
+            @click="toggleTags"
+          />
+        </template>
+        <!-- If image NOT in full size -->
+        <template v-else>
+          <img
+            v-lazy="post.sample_url"
+            class="post-img"
+            :alt="post.type"
+            :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
+            @click="toggleTags"
+          />
+        </template>
       </template>
-      <!-- If image NOT in full size -->
+
+      <!-- If lazy loading disabled -->
       <template v-else>
-        <img
-          v-lazy="post.sample_url"
-          class="post-img"
-          :alt="post.type"
-          :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-          @click="toggleTags"
-        />
+        <!-- If image in full size -->
+        <template v-if="userSettings.fullSizeImages.value">
+          <img
+            :src="post.file_url"
+            class="post-img"
+            :alt="post.type"
+            :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
+            @click="toggleTags"
+          />
+        </template>
+        <!-- If image NOT in full size -->
+        <template v-else>
+          <img
+            :src="post.sample_url"
+            class="post-img"
+            :alt="post.type"
+            :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
+            @click="toggleTags"
+          />
+        </template>
       </template>
     </template>
     <!-- :style="{ height: post.height + 'px', width: post.width + 'px' }" -->
-    <template v-else>
-      <lazy-component>
+
+    <!-- if Video -->
+    <template v-else-if="post.type === 'video'">
+      <!-- If lazy loading enabled -->
+      <template v-if="userSettings.lazyLoading.value">
+        <lazy-component>
+          <video
+            class="post-img"
+            :alt="post.type"
+            :controls="userSettings.videoControls.value"
+            autoplay
+            muted
+            loop
+            :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
+            @click="toggleTags"
+          >
+            <source :src="post.file_url" />
+            Your browser doesnt support HTML5 video.
+          </video>
+        </lazy-component>
+      </template>
+      <template v-else>
         <video
           class="post-img"
           :alt="post.type"
@@ -41,21 +88,11 @@
           <source :src="post.file_url" />
           Your browser doesnt support HTML5 video.
         </video>
-      </lazy-component>
+      </template>
     </template>
 
-    <!-- Details like comments, tags and source TODO: Maybe add p-4 again -->
-    <!-- <div class="p-2"> -->
-    <!-- Loop if the post has comment -->
-    <!-- <div class="card-post-comments" v-if="post.has_comments">
-            <div v-for="comment in comments" :key="comment.id">
-              // TODO
-              <div class="card-comment">
-                <h5 class="card-comment-user" v-text="comment.creator"></h5>
-                <h4 class="card-comment-text" v-text="comment.body"></h4>
-              </div>
-            </div>
-      </div>-->
+    <!-- if Anything else -->
+    <template v-else> Unknown type of media: {{ post.type }} </template>
 
     <!-- Tags and source -->
     <!-- Double transition since i cant figure out how to make it in one for both when theres source and when there isnt -->
