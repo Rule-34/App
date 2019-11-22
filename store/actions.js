@@ -82,7 +82,7 @@ export default {
 
   // Change api to an alternative one
   async pidManager({ commit }, dataObj) {
-    switch (dataObj.function) {
+    switch (dataObj.operation) {
       case "add":
         await commit("newDashBoardData", {
           pid: parseInt(this.state.dashBoardData.pid) + 1
@@ -105,13 +105,13 @@ export default {
 
   async tagManager({ commit }, dataObj) {
     // Reset tags
-    if (dataObj.function === "reset") {
+    if (dataObj.operation === "reset") {
       // Reset tags
       await commit({
         type: "newSearchData",
         // We reset this way since its a tag function
         tag: {
-          function: "reset"
+          operation: "reset"
         }
       });
       // And show search

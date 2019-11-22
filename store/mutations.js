@@ -68,9 +68,9 @@ export default {
 
     // Added tags
     if (payload.tag !== undefined) {
-      // console.log(payload.tag.function);
+      // console.log(payload.tag.operation);
 
-      switch (payload.tag.function) {
+      switch (payload.tag.operation) {
         // Add if it doesnt already exist
         case "add":
           if (!state.searchData.tags.includes(payload.tag.name)) {

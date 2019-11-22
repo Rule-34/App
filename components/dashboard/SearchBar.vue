@@ -77,7 +77,7 @@ export default {
 
       switch (this.ContentMode.mode) {
         case "reset":
-          this.tagManager({ function: "reset" });
+          this.tagManager({ operation: "reset" });
           this.ContentMode = { mode: "furry", icon: "GitlabIcon" };
 
           return true;
@@ -86,7 +86,7 @@ export default {
           this.newSearchData({
             tag: {
               name: this.filterData,
-              function: "concat"
+              operation: "concat"
             }
           });
           this.ContentMode = { mode: "reset", icon: "TrashIcon" };
