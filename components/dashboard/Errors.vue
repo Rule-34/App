@@ -15,7 +15,7 @@
 
     <template v-else-if="dashBoardData.data.count === '0'">
       <h1 class="bold" v-text="'Nothing found'" />
-      <a href="javascript:void(0)" @click="tagManager({ function: 'reset' })"
+      <a href="javascript:void(0)" @click="tagManager({ operation: 'reset' })"
         >Reset tags?</a
       >
     </template>
@@ -29,7 +29,7 @@
     <!-- Not useful -->
     <!-- <template v-else-if="!searchData.data.length">
       <h1 class="bold" v-text="'No tags found'" />
-      <a href="javascript:void(0)" @click="tagManager({ function: 'reset' })"
+      <a href="javascript:void(0)" @click="tagManager({ operation: 'reset' })"
         >Reset tags?</a
       >
     </template> -->

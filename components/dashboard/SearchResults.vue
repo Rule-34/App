@@ -24,7 +24,7 @@
           newSearchData({
             tag: {
               name: tag,
-              function: 'remove'
+              operation: 'remove'
             }
           })
         "
@@ -44,14 +44,14 @@
             newSearchData({
               tag: {
                 name: '-' + tag.name,
-                function: 'add'
+                operation: 'add'
               }
             });
           } else {
             newSearchData({
               tag: {
                 name: tag.name,
-                function: 'add'
+                operation: 'add'
               }
             });
           }
@@ -93,7 +93,7 @@ export default {
     dispatchGetAddedTags() {
       // Set PID to 0 since we're searching for new tags
       this.pidManager({
-        function: "reset"
+        operation: "reset"
       });
 
       // Search for the tags

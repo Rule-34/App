@@ -76,7 +76,7 @@ export default {
       console.log("Loaded more posts");
       // Get next PID
       this.pidManager({
-        function: "add"
+        operation: "add"
       });
 
       // And load next posts

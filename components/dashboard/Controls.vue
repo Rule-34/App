@@ -61,7 +61,7 @@ export default {
     getNextPage() {
       // Get next PID
       this.pidManager({
-        function: "add"
+        operation: "add"
       });
 
       // If we have tags added then load next page of tags, else load normal latest posts
@@ -71,7 +71,7 @@ export default {
     getLastPage() {
       // Get last PID
       this.pidManager({
-        function: "subtract"
+        operation: "subtract"
       });
 
       // If we have tags added then load last page of tags, else load normal latest posts
