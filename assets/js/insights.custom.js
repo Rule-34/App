@@ -4,6 +4,9 @@ let defaultSettings = {
   darkTheme: {
     value: false
   },
+  lazyLoading: {
+    value: true
+  },
   infiniteLoad: {
     value: false
   },
