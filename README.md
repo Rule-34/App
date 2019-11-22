@@ -6,6 +6,7 @@ Rule 34 redesigned in a beautiful and stunning style
 ![Settings Preview](.github/images/settings.png)
 
 ## Visit it
+
 **You can try it online on the next links, both run the same code from this repository**
 
 [https://r34.app/](https://r34.app/)
@@ -23,7 +24,8 @@ Or backup
 # API
 
 This PWA uses a json wrapper for the rule34.xxx XML API, it is developed and mantained by Kurozenzen and can be found [here](https://github.com/kurozenzen/r34-json-api).
-The wrapper used in the PWA is a custom [forked version](https://github.com/VoidlessSeven7/Rule-34-PWA-API) from Kurozenzen that I have developed that has removed his analytics and has less usage since its only used by this PWA.
+
+The wrapper used in the PWA is a custom [forked version](https://github.com/VoidlessSeven7/Rule-34-PWA-API) from Kurozenzen that I have developed that has **removed analytics and has less usage since its only used by this PWA.**
 
 ## Technologies used
 
