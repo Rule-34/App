@@ -2,54 +2,35 @@
   <!-- Loop for every post -->
   <div class="material-container" :class="{ zoom: userSettings.zoom.value }">
     <!-- TODO: style="max-height: 80vh;" TODO: good for image previews -->
+
+    <!--  @@@@@@@@@@@@@@@@@@@@@@@@ 
+          @@@@@@@@@@@@@@@@@@@@@@@@ Images and videos
+          @@@@@@@@@@@@@@@@@@@@@@@@
+    -->
+
     <!-- if Image -->
     <template v-if="post.type === 'image'">
       <!-- If lazy loading enabled -->
       <template v-if="userSettings.lazyLoading.value">
-        <!-- If image in full size -->
-        <template v-if="userSettings.fullSizeImages.value">
-          <img
-            v-lazy="post.file_url"
-            class="post-img"
-            :alt="post.type"
-            :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-            @click="toggleTags"
-          />
-        </template>
-        <!-- If image NOT in full size -->
-        <template v-else>
-          <img
-            v-lazy="post.sample_url"
-            class="post-img"
-            :alt="post.type"
-            :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-            @click="toggleTags"
-          />
-        </template>
+        <img
+          v-lazy="imageSource"
+          class="post-img"
+          :alt="post.type"
+          :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
+          @click="toggleTags"
+        />
       </template>
 
       <!-- If lazy loading disabled -->
       <template v-else>
-        <!-- If image in full size -->
-        <template v-if="userSettings.fullSizeImages.value">
-          <img
-            :src="post.file_url"
-            class="post-img"
-            :alt="post.type"
-            :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-            @click="toggleTags"
-          />
-        </template>
-        <!-- If image NOT in full size -->
-        <template v-else>
-          <img
-            :src="post.sample_url"
-            class="post-img"
-            :alt="post.type"
-            :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-            @click="toggleTags"
-          />
-        </template>
+        <!-- Source is a computed poperty for better code -->
+        <img
+          :src="imageSource"
+          class="post-img"
+          :alt="post.type"
+          :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
+          @click="toggleTags"
+        />
       </template>
     </template>
     <!-- :style="{ height: post.height + 'px', width: post.width + 'px' }" -->
@@ -94,7 +75,10 @@
     <!-- if Anything else -->
     <template v-else> Unknown type of media: {{ post.type }} </template>
 
-    <!-- Tags and source -->
+    <!--  @@@@@@@@@@@@@@@@@@@@@@@@ 
+          @@@@@@@@@@@@@@@@@@@@@@@@ Tags and source 
+          @@@@@@@@@@@@@@@@@@@@@@@@
+    -->
     <!-- Double transition since i cant figure out how to make it in one for both when theres source and when there isnt -->
     <transition name="fade">
       <div v-if="post.source || (post.tags && isActive)">
@@ -171,7 +155,14 @@ export default {
       isActive: false
     };
   },
-  computed: mapState(["searchData", "userSettings"]),
+  computed: {
+    ...mapState(["searchData", "userSettings"]),
+    imageSource() {
+      return this.userSettings.fullSizeImages.value
+        ? this.post.file_url
+        : this.post.sample_url;
+    }
+  },
   methods: {
     ...mapMutations(["newSearchData"]),
     ...mapActions(["pidManager", "tagManager", "getPosts", "analytics"]),
@@ -192,13 +183,13 @@ export default {
     getSpecificTag(tag) {
       // Set PID to 0 since we're searching for new tags
       this.pidManager({
-        function: "reset"
+        operation: "reset"
       });
 
       // Reset all tags
       this.newSearchData({
         tag: {
-          function: "reset"
+          operation: "reset"
         }
       });
 
@@ -206,7 +197,7 @@ export default {
       this.newSearchData({
         tag: {
           name: tag,
-          function: "add"
+          operation: "add"
         }
       });
 
