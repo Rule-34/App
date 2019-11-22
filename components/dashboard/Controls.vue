@@ -74,12 +74,8 @@ export default {
         operation: "subtract"
       });
 
-      // If we have tags added then load last page of tags, else load normal latest posts
-      if (this.searchData.tags.length > 0) {
-        this.getPosts();
-      } else {
-        this.getPosts();
-      }
+      // Load last page
+      this.getPosts();
     },
     getSpecificPage() {
       // Ask for page to go to
@@ -93,14 +89,8 @@ export default {
           pid: specificPage
         });
 
-        // If we have tags added then load specific page of tags, else load normal latest posts
-        if (this.searchData.tags.length > 0) {
-          // Load the next tag page
-          this.getPosts();
-        } else {
-          // Or load normal posts
-          this.getPosts();
-        }
+        // And load specific page
+        this.getPosts();
       } else {
         alert("Wrong input, only numbers please");
       }

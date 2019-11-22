@@ -11,9 +11,21 @@
       />
 
       <ContentContainer
-        title="Search"
-        text="When searching, toggling the filter button will ban from appearing the next clicked tags."
-        img="/img/examples/filter"
+        title="Search removal"
+        text="This button toggles between states, first state will delete all added tags."
+        img="/img/examples/search_delete"
+      />
+
+      <ContentContainer
+        title="Search premade filter"
+        text="Second state will fetch a dynamic filter that applies tags that will ban unpleasant posts from showing."
+        img="/img/examples/search_premade_filter"
+      />
+
+      <ContentContainer
+        title="Search filter"
+        text="Toggling the filter will ban from appearing the next clicked tags."
+        img="/img/examples/search_filter"
       />
 
       <ContentContainer
@@ -24,7 +36,7 @@
 
       <ContentContainer
         title="Full size images"
-        text="While activated, images will be higher resolution, consuming more data."
+        text="While active, images will be higher resolution, consuming more data."
         img="/img/examples/fullsize"
       />
 
@@ -35,13 +47,13 @@
 
       <ContentContainer
         title="Video controls"
-        text="While activated, videos will have controls, but clicking it won't show tags."
+        text="While active, videos will have controls, but clicking it won't show tags."
         img="/img/examples/video_controls"
       />
 
       <ContentContainer
         title="Hover Controls"
-        text="While activated, controls will hover over content."
+        text="While active, controls will hover over content."
         img="/img/examples/controls"
       />
 
@@ -53,14 +65,14 @@
 
       <ContentContainer
         title="Hover Zoom"
-        text="While activated, posts hovered will enlarge."
+        text="While active, posts hovered will enlarge."
         img="/img/examples/zoom"
       />
 
       <ContentContainer title="NSFW" img="/img/examples/nsfw">
         <!-- Slot -->
         <template slot="textRich">
-          <p>While <u>deactivated</u>, posts will be blurred.</p>
+          <p>While <u>not active</u>, posts will be blurred.</p>
         </template>
       </ContentContainer>
     </div>
