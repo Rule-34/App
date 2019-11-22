@@ -9,7 +9,8 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "analyze": "nuxt build --analyze"
+    "analyze": "nuxt build --analyze",
+    "webp": "for i in static/img/examples/*.png; do cwebp -q 80 ${i%%.*}.png -o ${i%%.*}.webp; done"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
