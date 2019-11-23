@@ -74,14 +74,13 @@ a:hover {
   stroke-width: 1.5;
 }
 
-page-enter-active,
+.page-enter-active,
 .page-leave-active {
-  transition-property: opacity, filter;
-  transition-duration: 0.75s;
+  transition-property: opacity;
+  transition-duration: 0.35s;
 }
 .page-enter,
-.page-leave-active {
+.page-leave-to {
   opacity: 0;
-  filter: blur(5px);
   //   filter: invert(100%);
 }
