@@ -1,15 +1,20 @@
 export default () => ({
   dashBoardData: {
     data: [], // Data that is rendered to the web app
-    pid: 0, // Page id
+    pid: 0 // Page id
+  },
+
+  sideNav: {
     isActive: false
   },
+
   searchData: {
     data: [], // Data received while searching for tags
     tags: [],
     isActive: false, // Is search bar active
     isFilterActive: false
   },
+
   generalData: {
     apiUrl: "https://r34-app-api.herokuapp.com/", // Default api
     backupApiUrl: "https://r34-api-clone.herokuapp.com/",

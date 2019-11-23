@@ -1,21 +1,5 @@
 <template>
   <div>
-    <!-- Side Bar Toggler -->
-    <div class="navigation-toggler">
-      <button class="navigation-toggler-button" title="Menu" @click="toggleNav">
-        &nbsp;
-      </button>
-      <button
-        v-if="showSearch"
-        class="navigation-search-button"
-        title="Search"
-        @click="toggleSearch"
-      >
-        <!-- Search Icon -->
-        <SearchIcon class="icon text-white w-6 h-6 inline-flex" />
-      </button>
-    </div>
-
     <!-- Side bar -->
     <div class="sidebar-container" :class="{ active: isNavActive }">
       <!-- Actual Navigation Bar -->
@@ -57,38 +41,25 @@
       </nav>
 
       <!-- Space for clicking out of the menu -->
-      <div class="sidebar-close-area" @click="toggleNav" />
+      <div
+        class="sidebar-close-area"
+        @click="sideNavManager({ operation: 'toggle' })"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import { mapMutations, mapState } from "vuex";
-import { SearchIcon } from "vue-feather-icons";
 
 export default {
   name: "SideNav",
-  components: { SearchIcon },
-  props: { showSearch: { type: Boolean, default: true, required: false } },
-  data() {
-    return {
-      isNavActive: false
-    };
-  },
 
   computed: {
     ...mapState(["searchData"])
   },
   methods: {
-    ...mapMutations(["newSearchData"]),
-    toggleNav() {
-      this.isNavActive = !this.isNavActive;
-    },
-    toggleSearch() {
-      this.newSearchData({
-        isActive: !this.searchData.isActive
-      });
-    }
+    ...mapMutations(["newSearchData", "sideNavManager"])
   }
 };
 </script>
