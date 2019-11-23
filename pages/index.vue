@@ -2,9 +2,11 @@
   <div>
     <div class="cool-bar" />
 
+    <NavToggler />
+
     <!-- Transition for sidenav -->
     <transition name="sidenav">
-      <SideNav v-if="dashBoardData.isActive" />
+      <SideNav v-if="sideNav.isActive" />
     </transition>
 
     <!-- Transition for Searchbar -->
@@ -22,15 +24,17 @@ import { mapState } from "vuex";
 import DashBoard from "~/components/dashboard/DashBoard.vue";
 import Search from "~/components/dashboard/Search.vue";
 import SideNav from "~/components/navigation/SideNav.vue";
+import NavToggler from "~/components/navigation/NavToggler.vue";
 
 export default {
   components: {
     DashBoard,
     Search,
-    SideNav
+    SideNav,
+    NavToggler
   },
   computed: {
-    ...mapState(["searchData", "dashBoardData"])
+    ...mapState(["searchData", "sideNav"])
   },
   // Load the store with posts
   async fetch({ store }) {
