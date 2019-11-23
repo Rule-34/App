@@ -1,8 +1,8 @@
 <template>
   <!-- Side Nav Toggler -->
-  <div class="navigation-toggler fixed z-50">
+  <div class="navigation-toggler">
     <button
-      class="navigation-toggler-button w-12 h-12 m-4 bg-gradient-lilac-blue rounded-full shadow-lg select-none block"
+      class="navigation-toggler-button"
       title="Menu"
       @click="$emit('toggle-sidenav')"
     >
@@ -10,7 +10,7 @@
     </button>
     <button
       v-if="showSearchBar"
-      class="navigation-search-button w-10 h-10 m-5 bg-gradient-blue-lilac rounded-full shadow-lg select-none block"
+      class="navigation-search-button"
       title="Search"
       @click="newSearchData({ isActive: !searchData.isActive })"
     >
