@@ -2,52 +2,60 @@
 **          DOCUMENT DEFAULTS
 **/
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 button:focus {
-    outline: 0;
+  outline: 0;
 }
 
 a {
-    @apply .no-underline .text-blue-400
+  @apply .no-underline .text-blue-400;
 }
 
 a:hover {
-    @apply .text-blue-600
+  @apply .text-blue-600;
 }
 
 /** 
 **          BUILDING CLASSES
 **/
 .material-container {
-    @apply .border .rounded-lg .bg-white .m-5 .overflow-hidden .shadow
+  @apply .border .rounded-lg .bg-white .m-5 .overflow-hidden .shadow;
 }
 
 .container {
-    @apply .mx-auto .w-full
+  @apply .mx-auto .w-full;
 }
 
 .bg-gradient-lilac-blue {
-    background: linear-gradient(152deg, rgba(155, 155, 224, 1) 38%, rgba(0, 212, 255, 1) 100%);
+  background: linear-gradient(
+    152deg,
+    rgba(155, 155, 224, 1) 38%,
+    rgba(0, 212, 255, 1) 100%
+  );
 }
 
 .bg-gradient-blue-lilac {
-    background: linear-gradient(160deg, rgba(0, 212, 255, 1) 38%, rgba(155, 155, 224, 1) 100%);
+  background: linear-gradient(
+    160deg,
+    rgba(0, 212, 255, 1) 38%,
+    rgba(155, 155, 224, 1) 100%
+  );
 }
 
 .cool-bar {
-    height: 10px;
-    @apply .w-full .block .bg-gradient-lilac-blue
+  height: 10px;
+  @apply .w-full .block .bg-gradient-lilac-blue;
 }
 
 .h-perfect {
-    height: 100vh;
-    height: calc(100vh - 10px);
+  height: 100vh;
+  height: calc(100vh - 10px);
 }
 
 .btn {
-    @apply .font-bold .py-2 .px-4 .rounded
+  @apply .font-bold .py-2 .px-4 .rounded;
 }
 
 // .btn:hover {
@@ -59,9 +67,21 @@ a:hover {
 **/
 
 .icon {
-    @apply .stroke-width-1 .pointer-events-none .align-middle
+  @apply .stroke-width-1 .pointer-events-none .align-middle;
 }
 
 .stroke-width-1 {
-    stroke-width: 1.5;
+  stroke-width: 1.5;
+}
+
+page-enter-active,
+.page-leave-active {
+  transition-property: opacity, filter;
+  transition-duration: 0.75s;
+}
+.page-enter,
+.page-leave-active {
+  opacity: 0;
+  filter: blur(5px);
+  //   filter: invert(100%);
 }

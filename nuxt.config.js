@@ -19,12 +19,7 @@ export default {
   /*
    ** Customize the progress-bar color
    */
-  loading: {
-    css: false,
-    color: "white",
-    failedColor: "red",
-    height: "10px"
-  },
+  loading: false,
   /*
    ** Customize the splash loading indicator
    */
