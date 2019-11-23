@@ -3,6 +3,12 @@
   transform: translateX(100vw);
 }
 
+// Toggled stated
+.search-enter-to {
+  transform: translateX(0px);
+  @apply .bg-black-15;
+}
+
 // Transition that is gonna be applied
 .search-enter-active, .search-leave-active {
   transition-property: transform, background;
@@ -11,11 +17,7 @@
     //   @apply .bg-black-15;
 }
 
-// Toggled stated
-.search-enter-to {
-    transform: translateX(0px);
-    @apply .bg-black-15;
-}
+
 
 
 .search-bar-results {
