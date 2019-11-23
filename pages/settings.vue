@@ -1,7 +1,16 @@
 <template>
   <div>
     <div class="cool-bar" />
-    <SideNav :show-search="false" />
+
+    <NavToggler
+      :show-search="false"
+      @toggle-sidenav="sideNav.isActive = !sideNav.isActive"
+    />
+
+    <transition name="sidenav">
+      <SideNav v-if="sideNav.isActive" class="sidebar-container" />
+    </transition>
+
     <div class="container md:w-2/3 xl:w-1/2">
       <div class="flex flex-col h-perfect p-3">
         <div
@@ -44,16 +53,26 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import NavToggler from "~/components/navigation/NavToggler.vue";
 import SideNav from "~/components/navigation/SideNav.vue";
 import SettingSwitch from "~/components/settings/SettingSwitch.vue";
 
 export default {
-  components: { SideNav, SettingSwitch },
+  components: { SideNav, SettingSwitch, NavToggler },
+
+  data() {
+    return {
+      sideNav: { isActive: false }
+    };
+  },
+
   computed: mapState(["userSettings"]),
+
   // Fire analytics when exiting settings
   destroyed() {
     this.analytics("settings");
   },
+
   methods: {
     ...mapActions(["analytics"]),
     // Remove the localStorage object and reload the window
@@ -62,6 +81,7 @@ export default {
       location.reload();
     }
   },
+
   head() {
     return {
       title: "Settings | Rule 34 PWA"
