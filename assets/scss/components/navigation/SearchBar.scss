@@ -1,14 +1,23 @@
-.search-bar {
-    transition: transform 0.35s ease-in-out, background 2s ease-in-out;
-    transform: translateX(100vw);
-    @apply .fixed .min-h-screen .w-full .z-20 .bg-transparent
+// Initial state
+.search-enter, .search-leave-to {
+  transform: translateX(100vw);
 }
 
-.search-bar.active {
-    transform: translateX(0px);
-    @apply .bg-black-15
+// Transition that is gonna be applied
+.search-enter-active, .search-leave-active {
+  transition-property: transform, background;
+  transition-duration: 0.35s;
+  transition-timing-function: ease-in-out;
+    //   @apply .bg-black-15;
 }
+
+// Toggled stated
+.search-enter-to {
+    transform: translateX(0px);
+    @apply .bg-black-15;
+}
+
 
 .search-bar-results {
-    @apply .material-container .w-full .flex .flex-col .p-2 .my-auto
+  @apply .material-container .w-full .flex .flex-col .p-2 .my-auto;
 }
