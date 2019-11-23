@@ -69,11 +69,13 @@ export default {
   pwa: {
     manifest: {
       name: "Rule 34 PWA",
-      lang: "en"
+      lang: "en",
+      theme_color: "white"
     },
     meta: {
       /* meta options */
-      ogHost: "https://r34.app"
+      ogHost: "https://r34.app",
+      mobileAppIOS: true
     }
   },
   /*
