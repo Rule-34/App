@@ -12,9 +12,9 @@
         href="#"
         class="w-1/3 button"
         title="Load last page"
-        @click="getLastPage"
+        @click="getPrevPage"
       >
-        <ArrowLeftIcon class="icon w-4 h-4 inline" /> Last page
+        <ArrowLeftIcon class="icon w-4 h-4 inline" /> Prev page
       </a>
       <a
         href="#"
@@ -68,7 +68,7 @@ export default {
       this.getPosts();
     },
     // Get last page from api
-    getLastPage() {
+    getPrevPage() {
       // Get last PID
       this.pidManager({
         operation: "subtract"
