@@ -1,5 +1,5 @@
 <template>
-  <div class="search-bar" :class="{ active: searchData.isActive }">
+  <div class="fixed min-h-screen w-full z-20 bg-transparent">
     <!-- Centered container -->
     <div class="flex flex-wrap md:flex-no-wrap h-screen">
       <!-- Separator -->
