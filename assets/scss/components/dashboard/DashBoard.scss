@@ -2,27 +2,37 @@
 **          POST RELATED
 **/
 .post-img {
-    @apply .object-cover .w-full;
+  @apply .object-cover .w-full;
 }
 
-.fade-enter-active, .fade-leave-active {
-    max-height: 300px;
-    transition-duration: .35s;
-    transition-timing-function: ease;
-    transition-property: opacity, max-height;
-  }
-  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    max-height: 0px;
-    opacity: 0;
-  }
+// Initial state
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  max-height: 0px;
+  opacity: 0;
+}
+
+// Toggled stated
+.fade-enter-to, .fade-leave {
+  max-height: 300px;
+}
+
+// Transition that is gonna be applied
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 0.35s;
+  transition-timing-function: ease;
+  transition-property: opacity, max-height;
+}
+
+
 
 /** 
 **          TAG RELATED
 **/
 .tag-container {
-    @apply .inline-flex .flex-wrap;
+  @apply .inline-flex .flex-wrap;
 }
 
 .tag {
-    @apply .px-1 .m-1 .rounded .border .overflow-hidden select-none;
+  @apply .px-1 .m-1 .rounded .border .overflow-hidden select-none;
 }
