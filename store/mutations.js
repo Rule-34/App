@@ -33,16 +33,6 @@ export default {
     }
   },
 
-  sideNavManager(state, payload) {
-    if (payload.operation !== undefined) {
-      switch (payload.operation) {
-        case "toggle":
-          state.sideNav.isActive = !state.sideNav.isActive;
-          break;
-      }
-    }
-  },
-
   // Handler for api changes
   newApiUrl(state, payload) {
     // New url

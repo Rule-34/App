@@ -4,10 +4,6 @@ export default () => ({
     pid: 0 // Page id
   },
 
-  sideNav: {
-    isActive: false
-  },
-
   searchData: {
     data: [], // Data received while searching for tags
     tags: [],

@@ -2,11 +2,11 @@
   <div>
     <div class="cool-bar" />
 
-    <NavToggler />
+    <NavToggler @toggle-sidenav="sideNav.isActive = !sideNav.isActive" />
 
     <!-- Transition for sidenav -->
     <transition name="sidenav">
-      <SideNav v-if="sideNav.isActive" />
+      <SideNav v-if="sideNav.isActive" class="sidebar-container" />
     </transition>
 
     <!-- Transition for Searchbar -->
@@ -23,8 +23,8 @@
 import { mapState } from "vuex";
 import DashBoard from "~/components/dashboard/DashBoard.vue";
 import Search from "~/components/dashboard/Search.vue";
-import SideNav from "~/components/navigation/SideNav.vue";
 import NavToggler from "~/components/navigation/NavToggler.vue";
+import SideNav from "~/components/navigation/SideNav.vue";
 
 export default {
   components: {
@@ -33,9 +33,17 @@ export default {
     SideNav,
     NavToggler
   },
-  computed: {
-    ...mapState(["searchData", "sideNav"])
+
+  data() {
+    return {
+      sideNav: { isActive: false }
+    };
   },
+
+  computed: {
+    ...mapState(["searchData"])
+  },
+
   // Load the store with posts
   async fetch({ store }) {
     await store.dispatch("getPosts");

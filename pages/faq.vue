@@ -1,7 +1,16 @@
 <template>
   <div>
     <div class="cool-bar" />
-    <SideNav :show-search="false" />
+
+    <NavToggler
+      :show-search="false"
+      @toggle-sidenav="sideNav.isActive = !sideNav.isActive"
+    />
+
+    <transition name="sidenav">
+      <SideNav v-if="sideNav.isActive" class="sidebar-container" />
+    </transition>
+
     <div class="container md:w-2/3 xl:w-1/2">
       <ContentContainer
         title="General"
@@ -96,11 +105,19 @@ All information is anonymized and respects the 'Do not track' directive, so if y
 </template>
 
 <script>
+import NavToggler from "~/components/navigation/NavToggler.vue";
 import SideNav from "~/components/navigation/SideNav.vue";
 import ContentContainer from "~/components/faq/ContentContainer.vue";
 
 export default {
-  components: { SideNav, ContentContainer },
+  components: { SideNav, ContentContainer, NavToggler },
+
+  data() {
+    return {
+      sideNav: { isActive: false }
+    };
+  },
+
   head() {
     return {
       title: "Faq | Rule 34 PWA"

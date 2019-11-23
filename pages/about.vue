@@ -1,7 +1,16 @@
 <template>
   <div>
     <div class="cool-bar" />
-    <SideNav :show-search="false" />
+
+    <NavToggler
+      :show-search="false"
+      @toggle-sidenav="sideNav.isActive = !sideNav.isActive"
+    />
+
+    <transition name="sidenav">
+      <SideNav v-if="sideNav.isActive" class="sidebar-container" />
+    </transition>
+
     <div class="container md:w-2/3 xl:w-1/2">
       <div class="flex h-perfect p-3 overflow-hidden">
         <a
@@ -41,11 +50,20 @@
 
 <script>
 import { mapState } from "vuex";
+import NavToggler from "~/components/navigation/NavToggler.vue";
 import SideNav from "~/components/navigation/SideNav.vue";
 
 export default {
-  components: { SideNav },
+  components: { SideNav, NavToggler },
+
+  data() {
+    return {
+      sideNav: { isActive: false }
+    };
+  },
+
   computed: mapState(["userSettings"]),
+
   head() {
     return {
       title: "About | Rule 34 PWA"

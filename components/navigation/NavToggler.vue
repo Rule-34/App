@@ -4,12 +4,12 @@
     <button
       class="navigation-toggler-button w-12 h-12 m-4 bg-gradient-lilac-blue rounded-full shadow-lg select-none block"
       title="Menu"
-      @click="sideNavManager({ operation: 'toggle' })"
+      @click="$emit('toggle-sidenav')"
     >
       &nbsp;
     </button>
     <button
-      v-if="showSearch"
+      v-if="showSearchBar"
       class="navigation-search-button w-10 h-10 m-5 bg-gradient-blue-lilac rounded-full shadow-lg select-none block"
       title="Search"
       @click="newSearchData({ isActive: !searchData.isActive })"
@@ -29,9 +29,18 @@ export default {
   components: { SearchIcon },
   props: { showSearch: { type: Boolean, default: true, required: false } },
 
+  data() {
+    return { showSearchBar: true };
+  },
+
   computed: {
     ...mapState(["searchData"])
   },
+
+  mounted() {
+    this.showSearchBar = this.showSearch;
+  },
+
   methods: {
     ...mapMutations(["newSearchData", "sideNavManager"])
   }
