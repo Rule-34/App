@@ -93,9 +93,9 @@ export default {
             break;
 
           case 37:
-            this.$refs.controls.getLastPage();
+            this.$refs.controls.getPrevPage();
             this.scrollToTop();
-            // console.log("Loading last page");
+            // console.log("Loading Prev page");
             break;
         }
       } catch (error) {
