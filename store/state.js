@@ -49,7 +49,7 @@ export default () => ({
     videoControls: {
       name: "Video Controls",
       description: "Enable usage of video controls",
-      value: false
+      value: true
     },
     hoverControls: {
       name: "Hover Controls",
