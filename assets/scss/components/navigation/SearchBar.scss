@@ -6,7 +6,7 @@
 // Toggled stated
 .search-enter-to {
   transform: translateX(0px);
-  @apply .bg-black-15;
+  // @apply .bg-black-15;
 }
 
 // Transition that is gonna be applied
@@ -16,9 +16,6 @@
   transition-timing-function: ease-in-out;
     //   @apply .bg-black-15;
 }
-
-
-
 
 .search-bar-results {
   @apply .material-container .w-full .flex .flex-col .p-2 .my-auto;
