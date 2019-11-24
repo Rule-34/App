@@ -44,7 +44,6 @@
             class="post-img"
             :alt="post.type"
             :controls="userSettings.videoControls.value"
-            autoplay
             muted
             loop
             :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
@@ -60,7 +59,6 @@
           class="post-img"
           :alt="post.type"
           :controls="userSettings.videoControls.value"
-          autoplay
           muted
           loop
           :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"

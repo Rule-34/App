@@ -17,7 +17,7 @@ let defaultSettings = {
     value: false
   },
   videoControls: {
-    value: false
+    value: true
   },
   hoverControls: {
     value: false
