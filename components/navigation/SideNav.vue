@@ -1,62 +1,68 @@
 <template>
   <div>
     <!-- Actual Navigation Bar -->
-    <nav class="sidebar">
-      <!-- Hero Image -->
-      <div class="w-full h-48 overflow-hidden">
-        <img
-          class="sidebar-img"
-          src="/icon.png"
-          alt="Rule 34 PWA Logo"
-          title="Rule 34 PWA"
-        />
-      </div>
+    <v-navigation-drawer v-model="drawer" absolute temporary>
+      <v-list-item>
+        <v-list-item-avatar>
+          <v-img src="/icon.png"></v-img>
+        </v-list-item-avatar>
 
-      <!-- Navbar Links -->
-      <div class="p-3">
-        <ul class="nav-links text-center md:text-left leading-loose">
-          <li>
-            <nuxt-link to="/">Dashboard</nuxt-link>
-          </li>
+        <v-list-item-content>
+          <v-list-item-title>Rule 34 PWA</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
 
-          <li>
-            <nuxt-link to="/faq">Faq</nuxt-link>
-          </li>
+      <v-divider></v-divider>
 
-          <li>
-            <nuxt-link to="/usage">Usage</nuxt-link>
-          </li>
+      <v-list dense>
+        <!-- Loop of links -->
+        <v-list-item
+          v-for="item in items"
+          :key="item.title"
+          :to="item.link ? item.link : item.title.toLowerCase()"
+          nuxt
+          link
+        >
+          <!-- Icon -->
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
 
-          <li>
-            <nuxt-link to="/about">About</nuxt-link>
-          </li>
-
-          <li>
-            <nuxt-link to="/settings">Settings</nuxt-link>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <!-- Space for clicking out of the menu -->
-    <div
-      class="sidebar-close-area"
-      @click="sideNavManager({ operation: 'toggle' })"
-    />
+          <!-- Text -->
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title" />
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
   </div>
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapMutations, mapState } from 'vuex'
+import { mdiViewDashboard, mdiHelpCircle, mdiSettings } from '@mdi/js'
 
 export default {
-  name: "SideNav",
+  name: 'SideNav',
+
+  data() {
+    return {
+      drawer: true,
+      items: [
+        { title: 'Home', icon: mdiViewDashboard, link: '/' },
+        { title: 'Faq', icon: mdiHelpCircle },
+        { title: 'Usage', icon: mdiViewDashboard },
+        { title: 'About', icon: mdiViewDashboard },
+        { title: 'Settings', icon: mdiSettings }
+      ]
+    }
+  },
 
   computed: {
-    ...mapState(["searchData"])
+    ...mapState(['searchData'])
   },
   methods: {
-    ...mapMutations(["newSearchData", "sideNavManager"])
+    ...mapMutations(['newSearchData', 'sideNavManager'])
   }
-};
+}
 </script>
