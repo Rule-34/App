@@ -52,6 +52,7 @@ export default {
    ** TailwindCSS settings
    */
   tailwindcss: {
+    defaultAssets: false,
     configPath: '~/tailwind.config.js',
     cssPath: '~/assets/app.scss'
   },
@@ -59,7 +60,6 @@ export default {
    ** Vuetify settings
    */
   vuetify: {
-    defaultAssets: false,
     customVariables: ['~/assets/variables.scss'],
     optionsPath: './vuetify.options.js'
   },

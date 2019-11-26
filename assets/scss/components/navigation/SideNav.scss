@@ -11,7 +11,7 @@
   top: 25px;
   transform: translateX(-35px);
   transition: transform 0.3s ease-in-out;
-  @apply .fixed;
+  @apply .fixed .z-50;
 }
 
 .navigation-toggler:hover {

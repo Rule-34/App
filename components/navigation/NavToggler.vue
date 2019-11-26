@@ -1,34 +1,48 @@
 <template>
   <!-- Side Nav Toggler -->
-  <v-container class="navigation-toggler">
+  <div class="navigation-toggler">
     <button
-      @click="$emit('toggle-sidenav')"
       class="navigation-toggler-button"
       title="Menu"
+      @click="$emit('toggle-sidenav')"
     >
       &nbsp;
     </button>
     <button
-      v-if="showSearch"
-      @click="$emit('toggle-search')"
+      v-if="showSearchBar"
       class="navigation-search-button"
       title="Search"
+      @click="newSearchData({ isActive: !searchData.isActive })"
     >
       <!-- Search Icon -->
-      <v-icon medium color="white">{{ mdiMagnify }}</v-icon>
+      <SearchIcon class="icon text-white w-6 h-6 inline-flex" />
     </button>
-  </v-container>
+  </div>
 </template>
 
 <script>
-import { mdiMagnify } from '@mdi/js'
+import { mapMutations, mapState } from "vuex";
+import { SearchIcon } from "vue-feather-icons";
 
 export default {
-  name: 'NavToggler',
-  props: { showSearch: { type: Boolean, default: false, required: false } },
+  name: "NavToggler",
+  components: { SearchIcon },
+  props: { showSearch: { type: Boolean, default: true, required: false } },
 
   data() {
-    return { mdiMagnify }
+    return { showSearchBar: true };
+  },
+
+  computed: {
+    ...mapState(["searchData"])
+  },
+
+  mounted() {
+    this.showSearchBar = this.showSearch;
+  },
+
+  methods: {
+    ...mapMutations(["newSearchData", "sideNavManager"])
   }
-}
+};
 </script>
