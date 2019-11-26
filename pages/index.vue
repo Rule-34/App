@@ -1,8 +1,13 @@
 <template>
-  <div>
+  <div
+    v-touch="{
+      left: () => toggleSideNav('close'),
+      right: () => toggleSideNav('open')
+    }"
+  >
     <div class="cool-bar" />
 
-    <NavToggler @toggle-sidenav="sideNav.isActive = !sideNav.isActive" />
+    <NavToggler @toggle-sidenav="toggleSideNav" />
 
     <!-- Transition for sidenav -->
     <transition name="sidenav">
@@ -20,11 +25,12 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import DashBoard from "~/components/dashboard/DashBoard.vue";
-import Search from "~/components/dashboard/Search.vue";
-import NavToggler from "~/components/navigation/NavToggler.vue";
-import SideNav from "~/components/navigation/SideNav.vue";
+import { mapState } from 'vuex'
+import { Touch } from 'vuetify/es5/directives/touch'
+import DashBoard from '~/components/dashboard/DashBoard.vue'
+import Search from '~/components/dashboard/Search.vue'
+import NavToggler from '~/components/navigation/NavToggler.vue'
+import SideNav from '~/components/navigation/SideNav.vue'
 
 export default {
   components: {
@@ -34,19 +40,39 @@ export default {
     NavToggler
   },
 
+  directives: { Touch },
+
   data() {
     return {
       sideNav: { isActive: false }
-    };
+    }
   },
 
   computed: {
-    ...mapState(["searchData"])
+    ...mapState(['searchData'])
   },
 
   // Load the store with posts
   async fetch({ store }) {
-    await store.dispatch("getPosts");
+    await store.dispatch('getPosts')
+  },
+
+  methods: {
+    toggleSideNav(operation) {
+      switch (operation) {
+        case 'close':
+          this.sideNav.isActive = false
+          break
+
+        case 'open':
+          this.sideNav.isActive = true
+          break
+
+        default:
+          this.sideNav.isActive = !this.sideNav.isActive
+          break
+      }
+    }
   }
-};
+}
 </script>
