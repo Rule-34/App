@@ -25,7 +25,6 @@
     "vuex-persist": "^2.1.1"
   },
   "devDependencies": {
-    "@mdi/js": "^4.6.95",
     "@nuxtjs/eslint-config": "^1.1.2",
     "@nuxtjs/eslint-module": "^1.1.0",
     "@nuxtjs/tailwindcss": "^1.0.0",
