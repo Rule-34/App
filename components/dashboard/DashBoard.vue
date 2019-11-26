@@ -18,93 +18,94 @@
       <div v-if="userSettings.hoverControls.value" class="my-6">&nbsp;</div>
     </template>
     <template v-else>
-      <Intersect class="mx-auto" @enter="concatPost">
-        <!-- If theres more posts -->
-        <div>
-          <p class="text-center text-gray-500 pb-2" @click="concatPost()">
-            Loading more posts...
-          </p>
-          <Errors />
-        </div>
-      </Intersect>
+      <!-- If theres more posts -->
+      <div v-intersect.quiet="concatPost" class="mx-auto">
+        <p @click="concatPost()" class="text-center text-gray-500 pb-2">
+          Loading more posts...
+        </p>
+        <Errors />
+      </div>
     </template>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import Errors from "./Errors.vue";
-import Post from "./Post.vue";
-import Controls from "./Controls.vue";
-import Intersect from "vue-intersect";
+import { mapState, mapActions } from 'vuex'
+import { Intersect } from 'vuetify/es5/directives/intersect'
+import Errors from './Errors.vue'
+import Post from './Post.vue'
+import Controls from './Controls.vue'
 
 export default {
-  name: "DashBoard",
+  name: 'DashBoard',
   components: {
     Errors,
     Post,
-    Controls,
+    Controls
+  },
+  directives: {
     Intersect
   },
   // Get data() from vuex stores
   computed: {
-    ...mapState(["dashBoardData", "userSettings"])
+    ...mapState(['dashBoardData', 'userSettings'])
   },
   created() {
     // Navigation with keyboard
     if (this.userSettings.keyboardControls.value) {
-      document.addEventListener("keyup", this.navigation);
+      // eslint-disable-next-line nuxt/no-globals-in-created
+      document.addEventListener('keyup', this.navigation)
     }
   },
 
   destroyed() {
     // Navigation with keyboard
     if (this.userSettings.keyboardControls.value) {
-      document.removeEventListener("keyup", this.navigation);
+      document.removeEventListener('keyup', this.navigation)
     }
   },
 
   methods: {
-    ...mapActions(["pidManager", "getPosts"]),
+    ...mapActions(['pidManager', 'getPosts']),
 
     scrollToTop() {
-      window.scrollTo(0, 0);
+      window.scrollTo(0, 0)
     },
 
     // Infinite loading
     concatPost() {
-      console.log("Loaded more posts");
+      console.log('Loaded more posts')
       // Get next PID
       this.pidManager({
-        operation: "add"
-      });
+        operation: 'add'
+      })
 
       // And load next posts
-      this.getPosts("concat");
+      this.getPosts('concat')
     },
     // Navigation with keyboard
     navigation() {
       try {
         switch (event.keyCode) {
           case 39:
-            this.$refs.controls.getNextPage();
-            this.scrollToTop();
+            this.$refs.controls.getNextPage()
+            this.scrollToTop()
             // console.log("Loading next page");
-            break;
+            break
 
           case 37:
-            this.$refs.controls.getPrevPage();
-            this.scrollToTop();
+            this.$refs.controls.getPrevPage()
+            this.scrollToTop()
             // console.log("Loading Prev page");
-            break;
+            break
         }
       } catch (error) {
         console.error(
-          "Couldnt load next page, most likely because infinite loading is enabled.",
+          'Couldnt load next page, most likely because infinite loading is enabled.',
           error
-        );
+        )
       }
     }
   }
-};
+}
 </script>
