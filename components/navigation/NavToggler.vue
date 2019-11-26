@@ -2,7 +2,7 @@
   <!-- Side Nav Toggler -->
   <div class="navigation-toggler">
     <button
-      @click="$emit('toggle-sidenav')"
+      @click="sideNavManager"
       class="navigation-toggler-button"
       title="Menu"
     >
@@ -34,7 +34,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['newSearchData'])
+    ...mapMutations(['newSearchData', 'sideNavManager'])
   }
 }
 </script>
