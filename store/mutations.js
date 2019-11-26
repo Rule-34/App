@@ -34,9 +34,11 @@ export default {
   },
 
   // Handler for api changes
-  newApiUrl(state, payload) {
+  apiManager(state, payload) {
     // New url
-    state.generalData.apiUrl = payload.newUrl
+    if (payload !== undefined) {
+      state.generalData.apiUrl = payload.newUrl
+    }
   },
 
   /**
