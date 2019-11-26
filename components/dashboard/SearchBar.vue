@@ -1,112 +1,97 @@
 <template>
   <div>
     <!-- Search bar -->
-    <div class="material-container tw-p-2 tw-flex tw-justify-between">
+    <div class="material-container p-2 w-3/4 flex justify-between">
       <!-- Search Icon -->
       <div class="w-full inline-flex">
-        <v-icon v-text="mdiMagnify" color="black" />
+        <SearchIcon class="icon text-black w-6 h-6 mr-2" />
         <!-- Input -->
         <input
           v-model="searchQuery"
-          @input="debounceInput"
           class="w-full ml-1 outline-none font-light"
           type="search"
           placeholder="Search: e.g. dragon"
+          @input="debounceInput"
         />
       </div>
 
-      <!-- Automatic filter -->
-      <v-tooltip left>
-        <template v-slot:activator="{ on }">
-          <div v-on="on" @click="toggleContentMode()">
-            <v-icon
-              :class="{
-                'orange--text': ContentMode.mode === 'furry'
-              }"
-              v-text="ContentMode.icon"
-            />
-          </div>
-        </template>
-        <span>Delete tags / automatic filter</span>
-      </v-tooltip>
+      <!-- Filter content -->
+      <div
+        title="Automatic filters"
+        :class="{
+          'text-orange-400': ContentMode.mode === 'furry'
+        }"
+        @click="toggleContentMode()"
+      >
+        <component :is="ContentMode.icon" class="icon w-6 h-6 mr-1" />
+      </div>
 
       <!-- Filter content -->
-      <v-tooltip left>
-        <template v-slot:activator="{ on }">
-          <div v-on="on" @click="toggleFilter">
-            <v-icon
-              v-text="mdiFilterOutline"
-              :class="{ 'red--text': searchData.isFilterActive }"
-              class="text--lighten-1"
-            />
-          </div>
-        </template>
-        <span>Filter content out</span>
-      </v-tooltip>
-
-      <!--  -->
+      <div title="Filter content" @click="toggleFilter()">
+        <FilterIcon
+          class="icon w-6 h-6 mr-1"
+          :class="{ 'text-red-400': searchData.isFilterActive }"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions, mapMutations } from "vuex";
 import {
-  mdiMagnify,
-  mdiFilterOutline,
-  mdiTrashCanOutline,
-  mdiGitlab
-} from '@mdi/js'
-import debounce from 'lodash/debounce'
+  FilterIcon,
+  SearchIcon,
+  TrashIcon,
+  GitlabIcon
+} from "vue-feather-icons";
+import debounce from "lodash/debounce";
 
 export default {
-  name: 'SearchBar',
+  name: "SearchBar",
+  components: { SearchIcon, FilterIcon, TrashIcon, GitlabIcon },
   data() {
     return {
       // Content from the search input
-      searchQuery: '',
+      searchQuery: "",
       filterData: [],
-      ContentMode: { mode: 'reset', icon: mdiTrashCanOutline },
-      mdiFilterOutline,
-      mdiMagnify,
-      mdiTrashCanOutline,
-      mdiGitlab
-    }
+      ContentMode: { mode: "reset", icon: "TrashIcon" }
+    };
   },
   // Get data() from vuex store "searchData"
   computed: {
-    ...mapState(['searchData', 'generalData'])
+    ...mapState(["searchData", "generalData"])
   },
   methods: {
-    ...mapMutations(['newSearchData']),
-    ...mapActions(['tagManager', 'axiosGet']),
+    ...mapMutations(["newSearchData"]),
+    ...mapActions(["tagManager", "axiosGet"]),
 
     async toggleContentMode() {
       // Populate filterData data and reuse later
       if (!this.filterData.length) {
         const filterData = await this.$axios.$get(
-          'https://gist.githubusercontent.com/VoidlessSeven7/c0b379d617b1d26c54158e90a1f096cd/raw/filter_anti_furry_r34.app.txt'
-        )
-        this.filterData = filterData
+          "https://gist.githubusercontent.com/VoidlessSeven7/c0b379d617b1d26c54158e90a1f096cd/raw/filter_anti_furry_r34.app.txt"
+        );
+        this.filterData = filterData;
       }
 
       switch (this.ContentMode.mode) {
-        case 'reset':
-          this.tagManager({ operation: 'reset' })
-          this.ContentMode = { mode: 'furry', icon: mdiGitlab }
+        case "reset":
+          this.tagManager({ operation: "reset" });
+          this.ContentMode = { mode: "furry", icon: "GitlabIcon" };
 
-          return true
+          return true;
 
-        case 'furry':
+        case "furry":
           this.newSearchData({
             tag: {
               name: this.filterData,
-              operation: 'concat'
+              operation: "concat"
             }
-          })
-          this.ContentMode = { mode: 'reset', icon: mdiTrashCanOutline }
+          });
+          this.ContentMode = { mode: "reset", icon: "TrashIcon" };
 
-          return true
+          return true;
       }
     },
     getTags() {
@@ -115,24 +100,24 @@ export default {
           url: `tags?name=${this.searchQuery.trim().toLowerCase()}*&limit=${
             this.generalData.postLimit
           }&order_by=posts`,
-          mutationToReturn: 'newSearchData'
-        })
+          mutationToReturn: "newSearchData"
+        });
       } else {
         // Remove search data cause search limit is 3 characters
         this.newSearchData({
-          data: ''
-        })
+          data: ""
+        });
       }
     },
     debounceInput: debounce(function() {
-      this.getTags()
+      this.getTags();
       // console.log("hola");
     }, 300),
     toggleFilter() {
       this.newSearchData({
         isFilterActive: !this.searchData.isFilterActive
-      })
+      });
     }
   }
-}
+};
 </script>

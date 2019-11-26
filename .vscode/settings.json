@@ -16,8 +16,5 @@
     "eslint.autoFixOnSave": true,
     "editor.formatOnSave": false,
     "vetur.validation.template": false,
-    "files.eol": "\n",
-    "editor.quickSuggestions": {
-        "strings": true,
-      }
+    "files.eol": "\n"
 }

@@ -28,10 +28,6 @@ a:hover {
   @apply .mx-auto .w-full;
 }
 
-.bg-transparent-important {
-  @apply bg-transparent #{!important};
-}
-
 .bg-gradient-lilac-blue {
   background: linear-gradient(
     152deg,
@@ -46,6 +42,11 @@ a:hover {
     rgba(0, 212, 255, 1) 38%,
     rgba(155, 155, 224, 1) 100%
   );
+}
+
+.cool-bar {
+  height: 10px;
+  @apply .w-full .block .bg-gradient-lilac-blue;
 }
 
 .h-perfect {

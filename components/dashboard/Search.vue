@@ -1,50 +1,55 @@
 <template>
-  <v-navigation-drawer
-    :value="isActive"
-    app
-    fixed
-    temporary
-    right
-    width="100%"
-    class="bg-transparent-important"
-  >
-    <v-container fluid fill-height>
-      <v-row no-gutters class="h-full tw-mx-auto">
-        <!-- Space occupier -->
-        <v-col cols="12" sm="1"> </v-col>
-        <!-- Search  -->
-        <v-col cols="12" sm="3" class="m-auto">
-          <SearchBar @filter-toggled="isFilterActive = !isFilterActive" />
-        </v-col>
-        <!-- Search results -->
-        <v-col cols="12" sm="7" class="m-auto">
-          <SearchResults />
-        </v-col>
+  <div class="fixed min-h-screen w-full z-20 bg-transparent">
+    <!-- Centered container -->
+    <div class="flex flex-wrap md:flex-no-wrap h-screen">
+      <!-- Separator -->
+      <div
+        class="hidden md:block w-1/6"
+        @click.self="
+          newSearchData({
+            isActive: !searchData.isActive
+          })
+        "
+      />
 
-        <!-- Space occupier -->
-        <v-col cols="12" sm="1"> </v-col>
-      </v-row>
-    </v-container>
-  </v-navigation-drawer>
+      <!-- Search  -->
+      <SearchBar class="w-full md:w-2/6 m-auto" />
+
+      <!-- Search results -->
+      <SearchResults
+        class="search-bar-results w-full md:w-2/6 min-h-1/2 overflow-y-auto"
+      />
+
+      <div
+        class="hidden md:block w-1/6"
+        @click.self="
+          newSearchData({
+            isActive: !searchData.isActive
+          })
+        "
+      />
+      <!--  -->
+    </div>
+  </div>
 </template>
 
 <script>
-import SearchBar from './SearchBar.vue'
-import SearchResults from './SearchResults.vue'
+import { mapState, mapMutations } from "vuex";
+import SearchBar from "./SearchBar.vue";
+import SearchResults from "./SearchResults.vue";
 
 export default {
-  name: 'Search',
+  name: "Search",
   components: {
     SearchBar,
     SearchResults
   },
-
-  props: { isActive: { type: Boolean, required: true, default: false } },
-
-  data() {
-    return {
-      isFilterActive: false
-    }
+  // Get data() from vuex store "searchData"
+  computed: {
+    ...mapState(["searchData"])
+  },
+  methods: {
+    ...mapMutations(["newSearchData"])
   }
-}
+};
 </script>

@@ -1,38 +1,26 @@
 <template>
   <v-app>
-    <v-app-bar
-      absolute
-      app
-      height="10px"
-      color="transparent"
-      class="bg-gradient-lilac-blue"
-      flat
-    />
+    <div class="cool-bar" />
 
-    <NavToggler
-      @toggle-sidenav="sideNav.isActive = !sideNav.isActive"
-      @toggle-search="search.isActive = !search.isActive"
-      show-search
-      class="tw-z-20"
-    />
+    <NavToggler @toggle-sidenav="sideNav.isActive = !sideNav.isActive" />
 
-    <!-- Sidenav -->
-    <SideNav :isActive="sideNav.isActive" />
+    <!-- Transition for sidenav -->
+    <transition name="sidenav">
+      <SideNav v-if="sideNav.isActive" class="sidebar-container" />
+    </transition>
 
     <!-- Transition for Searchbar -->
-    <Search
-      @toggle-search="search.isActive = !search.isActive"
-      :isActive="search.isActive"
-    />
+    <transition name="search">
+      <Search v-if="searchData.isActive" />
+    </transition>
 
-    <!-- Content -->
-    <v-content>
-      <DashBoard />
-    </v-content>
+    <!-- Different width depending on screen -->
+    <DashBoard class="container md:w-2/3 xl:w-1/2" />
   </v-app>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import DashBoard from '~/components/dashboard/DashBoard.vue'
 import Search from '~/components/dashboard/Search.vue'
 import NavToggler from '~/components/navigation/NavToggler.vue'
@@ -48,13 +36,12 @@ export default {
 
   data() {
     return {
-      sideNav: { isActive: false },
-      search: { isActive: false }
+      sideNav: { isActive: false }
     }
   },
 
   computed: {
-    // ...mapState([''])
+    ...mapState(['searchData'])
   },
 
   // Load the store with posts
