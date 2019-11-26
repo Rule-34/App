@@ -1,18 +1,18 @@
 <template>
   <!-- Loop for every info container -->
-  <div class="container" :class="{ zoom: userSettings.zoom.value }">
+  <div :class="{ zoom: userSettings.zoom.value }" class="container">
     <!-- If separator -->
     <template v-if="separator">
       <div class="material-container p-3 bg-gradient-blue-lilac">
         <div class="text-center text-white">
           <!-- Head -->
           <div class="mb-2">
-            <h1 class="text-lg underline" v-text="title"></h1>
+            <h1 v-text="title" class="text-lg underline" />
           </div>
 
           <!-- Body -->
           <div v-if="text" class="text-sm">
-            <p class="mb-1" v-text="text"></p>
+            <p v-text="text" class="mb-1"></p>
             <!-- Slot for extra info -->
           </div>
         </div>
@@ -21,21 +21,21 @@
 
     <!-- If normal post -->
     <template v-else>
-      <div class="material-container p-3" :class="{ 'text-center': separator }">
+      <div :class="{ 'text-center': separator }" class="material-container p-3">
         <!-- Head -->
-        <div class="flex inline-flex align-middle mb-2">
+        <div class="flex inline-flex align-middle">
           <InfoIcon v-if="icon === 'info'" class="mr-2 text-blue-500" />
           <StarIcon v-else-if="icon === 'star'" class="mr-2 text-yellow-500" />
           <DollarSignIcon
             v-else-if="icon === 'donation'"
             class="mr-2 text-green-500"
           />
-          <h1 class="text-lg" v-text="title"></h1>
+          <h1 v-text="title" class="text-lg font-bold" />
         </div>
 
         <!-- Body -->
         <div class="text-sm">
-          <p v-if="text" class="mb-1 whitespace-pre-line" v-text="text" />
+          <p v-if="text" v-text="text" class="mb-1 whitespace-pre-line" />
 
           <slot name="textRich" />
           <!-- We can insert extra info here -->
@@ -45,9 +45,9 @@
             <source :srcset="img + '.webp'" type="image/webp" />
             <source :srcset="img + '.png'" type="image/png" />
             <img
-              class="mx-auto mt-2"
               :src="img + '.png'"
               :alt="title + ' Example'"
+              class="mx-auto mt-2"
             />
           </picture>
 
@@ -55,9 +55,9 @@
           <a
             v-if="link && linkText"
             :href="link"
+            v-text="linkText"
             target="_blank"
             rel="noopener noreferrer"
-            v-text="linkText"
           />
           <!-- Slot for extra info -->
           <slot />
@@ -68,11 +68,11 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { InfoIcon, StarIcon, DollarSignIcon } from "vue-feather-icons";
+import { mapState } from 'vuex'
+import { InfoIcon, StarIcon, DollarSignIcon } from 'vue-feather-icons'
 
 export default {
-  name: "ContentContainer",
+  name: 'ContentContainer',
   components: { InfoIcon, StarIcon, DollarSignIcon },
   props: {
     // For separating text
@@ -88,6 +88,6 @@ export default {
     // For images
     img: { type: String, required: false, default: undefined }
   },
-  computed: mapState(["userSettings"])
-};
+  computed: mapState(['userSettings'])
+}
 </script>
