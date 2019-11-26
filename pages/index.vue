@@ -63,7 +63,7 @@ export default {
         // If swipìng left and menu is not open then open search
         case 'left':
           if (!this.sideNavData.isActive) {
-            this.newSearchData({ isActive: !this.searchData.isActive })
+            this.newSearchData({ isActive: true })
           } else {
             this.sideNavManager('close')
           }
@@ -73,7 +73,7 @@ export default {
         // If swiping right and search is open then close search
         case 'right':
           if (!this.sideNavData.isActive && this.searchData.isActive) {
-            this.newSearchData({ isActive: !this.searchData.isActive })
+            this.newSearchData({ isActive: false })
           } else {
             this.sideNavManager('open')
           }
