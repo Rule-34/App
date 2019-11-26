@@ -1,22 +1,24 @@
 <template>
-  <div>
+  <div
+    v-touch="{
+      left: () => sideNavManager('close'),
+      right: () => sideNavManager('open')
+    }"
+  >
     <div class="cool-bar" />
 
-    <NavToggler
-      :show-search="false"
-      @toggle-sidenav="sideNav.isActive = !sideNav.isActive"
-    />
+    <NavToggler />
 
     <transition name="sidenav">
-      <SideNav v-if="sideNav.isActive" class="sidebar-container" />
+      <SideNav v-if="sideNavData.isActive" class="sidebar-container" />
     </transition>
 
     <div class="container md:w-2/3 xl:w-1/2">
       <!-- Examples -->
       <ContentContainer
+        :separator="true"
         title="General usage"
         text="Normal usage of the PWA is explained below"
-        :separator="true"
       />
 
       <ContentContainer
@@ -38,9 +40,9 @@
       />
 
       <ContentContainer
+        :separator="true"
         title="User settings"
         text="Customizable settings are explained below"
-        :separator="true"
       />
 
       <ContentContainer
@@ -89,26 +91,36 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import NavToggler from "~/components/navigation/NavToggler.vue";
-import SideNav from "~/components/navigation/SideNav.vue";
-import ContentContainer from "~/components/faq/ContentContainer.vue";
+import { mapState, mapMutations } from 'vuex'
+import { Touch } from 'vuetify/es5/directives/touch'
+import NavToggler from '~/components/navigation/NavToggler.vue'
+import SideNav from '~/components/navigation/SideNav.vue'
+import ContentContainer from '~/components/faq/ContentContainer.vue'
 
 export default {
   components: { SideNav, ContentContainer, NavToggler },
+  directives: { Touch },
 
   data() {
     return {
       sideNav: { isActive: false }
-    };
+    }
   },
 
-  computed: mapState(["userSettings"]),
+  computed: mapState(['userSettings', 'sideNavData']),
+
+  beforeDestroy() {
+    this.sideNavManager('close')
+  },
+
+  methods: {
+    ...mapMutations(['sideNavManager'])
+  },
 
   head() {
     return {
-      title: "Usage | Rule 34 PWA"
-    };
+      title: 'Usage | Rule 34 PWA'
+    }
   }
-};
+}
 </script>
