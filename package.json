@@ -2,7 +2,7 @@
   "name": "rule-34-progressive-web-app",
   "version": "1.0.0",
   "description": "Rule 34 redesigned in a beautiful and stunning style",
-  "author": "VoidlessSeven7",
+  "author": "Alejandro Akbal",
   "private": true,
   "scripts": {
     "dev": "nuxt",
@@ -25,15 +25,13 @@
     "vuex-persist": "^2.1.1"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config": "^1.1.2",
-    "@nuxtjs/eslint-module": "^1.1.0",
     "@nuxtjs/tailwindcss": "^1.0.0",
-    "@nuxtjs/vuetify": "^1.9.0",
     "babel-eslint": "^10.0.3",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.6.0",
-    "eslint-plugin-nuxt": "^0.5.0",
+    "eslint-loader": "^3.0.2",
     "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-vue": "^5.2.3",
     "node-sass": "^4.13.0",
     "nuxt-purgecss": "^0.2.1",
     "prettier": "^1.19.1",
