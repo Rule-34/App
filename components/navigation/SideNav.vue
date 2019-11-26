@@ -39,24 +39,21 @@
     </nav>
 
     <!-- Space for clicking out of the menu -->
-    <div
-      class="sidebar-close-area"
-      @click="sideNavManager({ operation: 'toggle' })"
-    />
+    <div @click="$emit('toggle-sidenav')" class="sidebar-close-area" />
   </div>
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapMutations, mapState } from 'vuex'
 
 export default {
-  name: "SideNav",
+  name: 'SideNav',
 
   computed: {
-    ...mapState(["searchData"])
+    ...mapState(['searchData'])
   },
   methods: {
-    ...mapMutations(["newSearchData", "sideNavManager"])
+    ...mapMutations(['newSearchData'])
   }
-};
+}
 </script>

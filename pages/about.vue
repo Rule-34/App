@@ -1,24 +1,26 @@
 <template>
-  <div>
+  <div
+    v-touch="{
+      left: () => sideNavManager('close'),
+      right: () => sideNavManager('open')
+    }"
+  >
     <div class="cool-bar" />
 
-    <NavToggler
-      :show-search="false"
-      @toggle-sidenav="sideNav.isActive = !sideNav.isActive"
-    />
+    <NavToggler />
 
     <transition name="sidenav">
-      <SideNav v-if="sideNav.isActive" class="sidebar-container" />
+      <SideNav v-if="sideNavData.isActive" class="sidebar-container" />
     </transition>
 
     <div class="container md:w-2/3 xl:w-1/2">
       <div class="flex h-perfect p-3 overflow-hidden">
         <a
+          :class="{ zoom: userSettings.zoom.value }"
           href="https://akbal.dev/"
           target="_blank"
           rel="noopener noreferrer"
           class="material-container m-auto p-5 shadow-xl"
-          :class="{ zoom: userSettings.zoom.value }"
         >
           <div>
             <picture>
@@ -49,25 +51,35 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import NavToggler from "~/components/navigation/NavToggler.vue";
-import SideNav from "~/components/navigation/SideNav.vue";
+import { mapState, mapMutations } from 'vuex'
+import { Touch } from 'vuetify/es5/directives/touch'
+import NavToggler from '~/components/navigation/NavToggler.vue'
+import SideNav from '~/components/navigation/SideNav.vue'
 
 export default {
   components: { SideNav, NavToggler },
+  directives: { Touch },
 
   data() {
     return {
       sideNav: { isActive: false }
-    };
+    }
   },
 
-  computed: mapState(["userSettings"]),
+  computed: mapState(['userSettings', 'sideNavData']),
+
+  beforeDestroy() {
+    this.sideNavManager('close')
+  },
+
+  methods: {
+    ...mapMutations(['sideNavManager'])
+  },
 
   head() {
     return {
-      title: "About | Rule 34 PWA"
-    };
+      title: 'About | Rule 34 PWA'
+    }
   }
-};
+}
 </script>

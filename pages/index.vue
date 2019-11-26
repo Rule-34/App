@@ -1,17 +1,17 @@
 <template>
   <div
     v-touch="{
-      left: () => toggleSideNav('close'),
-      right: () => toggleSideNav('open')
+      left: () => sideNavManager('close'),
+      right: () => sideNavManager('open')
     }"
   >
     <div class="cool-bar" />
 
-    <NavToggler @toggle-sidenav="toggleSideNav" />
+    <NavToggler :show-search="true" />
 
     <!-- Transition for sidenav -->
     <transition name="sidenav">
-      <SideNav v-if="sideNav.isActive" class="sidebar-container" />
+      <SideNav v-if="sideNavData.isActive" class="sidebar-container" />
     </transition>
 
     <!-- Transition for Searchbar -->
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { Touch } from 'vuetify/es5/directives/touch'
 import DashBoard from '~/components/dashboard/DashBoard.vue'
 import Search from '~/components/dashboard/Search.vue'
@@ -42,14 +42,8 @@ export default {
 
   directives: { Touch },
 
-  data() {
-    return {
-      sideNav: { isActive: false }
-    }
-  },
-
   computed: {
-    ...mapState(['searchData'])
+    ...mapState(['searchData', 'sideNavData'])
   },
 
   // Load the store with posts
@@ -57,22 +51,12 @@ export default {
     await store.dispatch('getPosts')
   },
 
+  beforeDestroy() {
+    this.sideNavManager('close')
+  },
+
   methods: {
-    toggleSideNav(operation) {
-      switch (operation) {
-        case 'close':
-          this.sideNav.isActive = false
-          break
-
-        case 'open':
-          this.sideNav.isActive = true
-          break
-
-        default:
-          this.sideNav.isActive = !this.sideNav.isActive
-          break
-      }
-    }
+    ...mapMutations(['sideNavManager'])
   }
 }
 </script>

@@ -10,33 +10,56 @@ export default {
     // Data related
     if (payload.data !== undefined) {
       switch (payload.mode) {
-        case "add":
-          state.dashBoardData.data = payload.data;
-          break;
+        case 'add':
+          state.dashBoardData.data = payload.data
+          break
 
-        case "concat":
+        case 'concat':
           state.dashBoardData.data.posts = state.dashBoardData.data.posts.concat(
             payload.data.posts
-          );
-          break;
+          )
+          break
       }
     }
 
     // Errors
     if (payload.errors !== undefined) {
-      state.generalData.errors = payload.errors;
+      state.generalData.errors = payload.errors
     }
 
     // Page ID
     if (payload.pid !== undefined) {
-      state.dashBoardData.pid = payload.pid;
+      state.dashBoardData.pid = payload.pid
     }
   },
 
   // Handler for api changes
   newApiUrl(state, payload) {
     // New url
-    state.generalData.apiUrl = payload.newUrl;
+    state.generalData.apiUrl = payload.newUrl
+  },
+
+  /**
+   *
+   * Side Nav related
+   *
+   **/
+
+  sideNavManager(state, payload) {
+    switch (payload) {
+      case 'close':
+        state.sideNavData.isActive = false
+        break
+
+      case 'open':
+        state.sideNavData.isActive = true
+        break
+
+      default:
+        // Toggle
+        state.sideNavData.isActive = !state.sideNavData.isActive
+        break
+    }
   },
 
   /**
@@ -49,21 +72,21 @@ export default {
   newSearchData(state, payload) {
     // Apply "active" css class
     if (payload.isActive !== undefined) {
-      state.searchData.isActive = payload.isActive;
+      state.searchData.isActive = payload.isActive
     }
 
     if (payload.isFilterActive !== undefined) {
-      state.searchData.isFilterActive = payload.isFilterActive;
+      state.searchData.isFilterActive = payload.isFilterActive
     }
 
     // Errors
     if (payload.errors !== undefined) {
-      state.generalData.errors = payload.errors;
+      state.generalData.errors = payload.errors
     }
     // Data
     if (payload.data !== undefined) {
       // console.log(payload.data);
-      state.searchData.data = payload.data;
+      state.searchData.data = payload.data
     }
 
     // Added tags
@@ -72,28 +95,26 @@ export default {
 
       switch (payload.tag.operation) {
         // Add if it doesnt already exist
-        case "add":
+        case 'add':
           if (!state.searchData.tags.includes(payload.tag.name)) {
-            state.searchData.tags.push(payload.tag.name);
+            state.searchData.tags.push(payload.tag.name)
           }
-          break;
+          break
 
         // Instead of adding one, add multiple with concat
-        case "concat":
-          state.searchData.tags = state.searchData.tags.concat(
-            payload.tag.name
-          );
-          break;
+        case 'concat':
+          state.searchData.tags = state.searchData.tags.concat(payload.tag.name)
+          break
 
-        case "remove":
+        case 'remove':
           state.searchData.tags = state.searchData.tags.filter(function(ele) {
-            return ele !== payload.tag.name;
-          });
-          break;
+            return ele !== payload.tag.name
+          })
+          break
 
-        case "reset":
-          state.searchData.tags = [];
-          break;
+        case 'reset':
+          state.searchData.tags = []
+          break
       }
     }
   },
@@ -108,7 +129,7 @@ export default {
     // Change value
     if (payload !== undefined) {
       // console.log(payload);
-      state.userSettings[payload.index].value = payload.value;
+      state.userSettings[payload.index].value = payload.value
     }
   }
-};
+}

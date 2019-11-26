@@ -2,17 +2,17 @@
   <!-- Side Nav Toggler -->
   <div class="navigation-toggler">
     <button
+      @click="$emit('toggle-sidenav')"
       class="navigation-toggler-button"
       title="Menu"
-      @click="$emit('toggle-sidenav')"
     >
       &nbsp;
     </button>
     <button
-      v-if="showSearchBar"
+      v-if="showSearch"
+      @click="newSearchData({ isActive: !searchData.isActive })"
       class="navigation-search-button"
       title="Search"
-      @click="newSearchData({ isActive: !searchData.isActive })"
     >
       <!-- Search Icon -->
       <SearchIcon class="icon text-white w-6 h-6 inline-flex" />
@@ -21,28 +21,20 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
-import { SearchIcon } from "vue-feather-icons";
+import { mapMutations, mapState } from 'vuex'
+import { SearchIcon } from 'vue-feather-icons'
 
 export default {
-  name: "NavToggler",
+  name: 'NavToggler',
   components: { SearchIcon },
-  props: { showSearch: { type: Boolean, default: true, required: false } },
-
-  data() {
-    return { showSearchBar: true };
-  },
+  props: { showSearch: { type: Boolean, default: false, required: false } },
 
   computed: {
-    ...mapState(["searchData"])
-  },
-
-  mounted() {
-    this.showSearchBar = this.showSearch;
+    ...mapState(['searchData'])
   },
 
   methods: {
-    ...mapMutations(["newSearchData", "sideNavManager"])
+    ...mapMutations(['newSearchData'])
   }
-};
+}
 </script>

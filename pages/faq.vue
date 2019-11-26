@@ -1,21 +1,23 @@
 <template>
-  <div>
+  <div
+    v-touch="{
+      left: () => sideNavManager('close'),
+      right: () => sideNavManager('open')
+    }"
+  >
     <div class="cool-bar" />
 
-    <NavToggler
-      :show-search="false"
-      @toggle-sidenav="sideNav.isActive = !sideNav.isActive"
-    />
+    <NavToggler />
 
     <transition name="sidenav">
-      <SideNav v-if="sideNav.isActive" class="sidebar-container" />
+      <SideNav v-if="sideNavData.isActive" class="sidebar-container" />
     </transition>
 
     <div class="container md:w-2/3 xl:w-1/2">
       <ContentContainer
+        :separator="true"
         title="General"
         text="Questions related to the PWA/website and its content"
-        :separator="true"
       />
       <!-- What is this -->
       <ContentContainer
@@ -77,9 +79,9 @@ All information is anonymized and respects the 'Do not track' directive, so if y
       />
 
       <ContentContainer
+        :separator="true"
         title="Miscellaneous"
         text="Extra information that you should read"
-        :separator="true"
       />
 
       <!-- Donations -->
@@ -105,23 +107,38 @@ All information is anonymized and respects the 'Do not track' directive, so if y
 </template>
 
 <script>
-import NavToggler from "~/components/navigation/NavToggler.vue";
-import SideNav from "~/components/navigation/SideNav.vue";
-import ContentContainer from "~/components/faq/ContentContainer.vue";
+import { mapState, mapMutations } from 'vuex'
+import { Touch } from 'vuetify/es5/directives/touch'
+import NavToggler from '~/components/navigation/NavToggler.vue'
+import SideNav from '~/components/navigation/SideNav.vue'
+import ContentContainer from '~/components/faq/ContentContainer.vue'
 
 export default {
   components: { SideNav, ContentContainer, NavToggler },
+  directives: { Touch },
 
   data() {
     return {
       sideNav: { isActive: false }
-    };
+    }
+  },
+
+  computed: {
+    ...mapState(['sideNavData'])
+  },
+
+  beforeDestroy() {
+    this.sideNavManager('close')
+  },
+
+  methods: {
+    ...mapMutations(['sideNavManager'])
   },
 
   head() {
     return {
-      title: "Faq | Rule 34 PWA"
-    };
+      title: 'Faq | Rule 34 PWA'
+    }
   }
-};
+}
 </script>
