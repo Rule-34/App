@@ -21,20 +21,27 @@
         text="Normal usage of the PWA is explained below"
       />
 
+      <ContentContainer title="Touch navigation">
+        <template slot="textRich">
+          On devices with touch support, swiping <u>right</u> will open the
+          menu, and swiping <u>left</u> will open the search.
+        </template>
+      </ContentContainer>
+
       <ContentContainer
-        title="Search removal"
+        title="Search: remove tags"
         text="This button toggles between states, first state will delete all added tags."
         img="/img/examples/search_delete"
       />
 
       <ContentContainer
-        title="Search premade filter"
+        title="Search: premade filter"
         text="Second state will fetch a dynamic filter that applies tags that will ban unpleasant posts from showing."
         img="/img/examples/search_premade_filter"
       />
 
       <ContentContainer
-        title="Search filter"
+        title="Search: filter content"
         text="Toggling the filter will ban from appearing the next clicked tags."
         img="/img/examples/search_filter"
       />
@@ -83,7 +90,7 @@
       <ContentContainer title="NSFW" img="/img/examples/nsfw">
         <!-- Slot -->
         <template slot="textRich">
-          <p>While <u>not active</u>, posts will be blurred.</p>
+          While <u>not active</u>, posts will be blurred.
         </template>
       </ContentContainer>
     </div>
