@@ -15,7 +15,7 @@
 }
 
 .navigation-toggler:hover {
-  transform: translateX(0px);
+  transform: translateX(1vw);
 }
 
 /* ----- Sidebar related ----- */
@@ -37,7 +37,7 @@
 @screen md {
   // Navigation toggler related
   .navigation-toggler {
-    transform: translateX(0px);
+    transform: translateX(1vw);
   }
 
   .navigation-toggler-button {
