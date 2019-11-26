@@ -1,4 +1,5 @@
 module.exports = {
+  prefix: 'tw-',
   theme: {
     extend: {
       colors: {
@@ -12,21 +13,21 @@ module.exports = {
       inset: {},
       // Width and height
       spacing: {
-        "percent-25": "25%",
-        "fit-content": "fit-content"
+        'percent-25': '25%',
+        'fit-content': 'fit-content'
       },
 
       maxHeight: {
-        "0": "0px",
-        "1/4": "25%",
-        "1/2": "50%",
-        "3/4": "75%"
+        '0': '0px',
+        '1/4': '25%',
+        '1/2': '50%',
+        '3/4': '75%'
       },
 
       minHeight: {
-        "1/4": "25%",
-        "1/2": "50%",
-        "3/4": "75%"
+        '1/4': '25%',
+        '1/2': '50%',
+        '3/4': '75%'
       }
     }
   },
@@ -36,8 +37,8 @@ module.exports = {
   // Every variant possible
   // variants: ['responsive', 'group-hover', 'focus-within', 'first', 'last', 'odd', 'even', 'hover', 'focus', 'active', 'visited', 'disabled'],
   variants: {
-    textColor: ["responsive", "group-hover", "hover", "focus"]
+    textColor: ['responsive', 'group-hover', 'hover', 'focus']
   }
 
   // plugins: [require('tailwindcss-gradients')()]
-};
+}

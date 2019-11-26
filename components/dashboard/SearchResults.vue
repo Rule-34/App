@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-card class="flex flex-column min-h-full p-1">
     <!-- Results -->
     <!-- ERROR HANDLING AND SEARCH RESULTS -->
 
@@ -9,17 +9,15 @@
     <!-- If nothing searched -->
     <h1
       v-if="!searchData.data && !generalData.errors"
+      v-text="'Search something!'"
       class="text-center font-hairline m-auto text-xl"
-    >
-      Search something!
-    </h1>
+    />
 
     <!-- Added tags, click them to remove them -->
     <div v-if="searchData.tags" class="tag-container border-b rounded-b pb-1">
       <a
         v-for="tag in searchData.tags"
         :key="tag"
-        class="tag group"
         @click="
           newSearchData({
             tag: {
@@ -29,6 +27,7 @@
           })
         "
         v-text="tag"
+        class="tag group"
       />
     </div>
 
@@ -38,7 +37,6 @@
       <a
         v-for="tag in searchData.data"
         :key="tag.name"
-        class="tag group"
         @click="
           if (searchData.isFilterActive) {
             newSearchData({
@@ -46,67 +44,68 @@
                 name: '-' + tag.name,
                 operation: 'add'
               }
-            });
+            })
           } else {
             newSearchData({
               tag: {
                 name: tag.name,
                 operation: 'add'
               }
-            });
+            })
           }
         "
+        class="tag group"
       >
         {{ tag.name }}
         <span
-          class="text-gray-400 group-hover:text-gray-600"
           v-text="'(' + tag.posts + ')'"
+          class="text-gray-400 group-hover:text-gray-600"
         />
       </a>
     </div>
 
     <!-- Apply tags -->
     <a
-      href="#"
-      class="btn text-white text-center bg-gradient-lilac-blue mt-auto shadow-md"
       @click="dispatchGetAddedTags"
+      href="#"
+      class="btn text-white text-center bg-gradient-lilac-blue mt-auto shadow-md p-1"
     >
       Apply tags
     </a>
-  </div>
+  </v-card>
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from "vuex";
-import Errors from "./Errors.vue";
+import { mapState, mapMutations, mapActions } from 'vuex'
+import Errors from './Errors.vue'
 
 export default {
-  name: "SearchResults",
+  name: 'SearchResults',
   components: { Errors },
   // Get data() from vuex store "searchData"
   computed: {
-    ...mapState(["searchData", "generalData"])
+    ...mapState(['searchData', 'generalData'])
   },
   methods: {
-    ...mapMutations(["newSearchData"]),
-    ...mapActions(["pidManager", "getPosts", "analytics"]),
+    ...mapMutations(['newSearchData']),
+    ...mapActions(['pidManager', 'getPosts', 'analytics']),
     dispatchGetAddedTags() {
       // Set PID to 0 since we're searching for new tags
       this.pidManager({
-        operation: "reset"
-      });
+        operation: 'reset'
+      })
 
       // Search for the tags
-      this.getPosts();
+      this.getPosts()
 
       // Hide the search bar
       this.newSearchData({
         isActive: !this.searchData.isActive
-      });
+      })
 
       // And fire analytics
-      this.analytics("tags");
+      this.analytics('tags')
     }
   }
-};
+}
 </script>
