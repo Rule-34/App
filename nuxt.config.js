@@ -63,8 +63,14 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
-    'nuxt-purgecss'
+    'nuxt-purgecss',
+    '@nuxtjs/sitemap'
   ],
+  /*
+   ** Axios module configuration
+   ** See https://axios.nuxtjs.org/options
+   */
+  axios: {},
   /*
    ** Progressive web app
    */
@@ -88,10 +94,18 @@ export default {
     whitelistPatterns: [/active/, /nsfw-disabled/, /fade/, /enter/, /leave/]
   },
   /*
-   ** Axios module configuration
-   ** See https://axios.nuxtjs.org/options
+   ** Sitemap configuration
    */
-  axios: {},
+  sitemap: {
+    hostname: 'https://r34.app',
+    gzip: true,
+    defaults: {
+      changefreq: 'daily',
+      priority: 1,
+      lastmod: new Date(),
+      lastmodrealtime: true
+    }
+  },
   /*
    ** Build configuration
    */
