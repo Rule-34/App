@@ -55,7 +55,7 @@ export default {
   async getPosts({ dispatch }, mode) {
     // console.log(mode);
     await dispatch('axiosGet', {
-      url: `xxx/posts?pid=${this.state.dashBoardData.pid}&limit=${
+      url: `posts?pid=${this.state.dashBoardData.pid}&limit=${
         this.state.generalData.postLimit
       }&tags=${this.state.searchData.tags.join('+')}&score=${
         this.state.userSettings.score.value
@@ -69,7 +69,7 @@ export default {
   // Change api to an alternative one
   async apiManager({ commit }) {
     if (this.state.generalData.apiUrl !== this.state.generalData.backupApiUrl) {
-      console.log('changing to alternative api')
+      console.log('changing to alternative api') // TODO: Do something with this
 
       await commit({
         type: 'apiManager',
@@ -124,15 +124,15 @@ export default {
     }
   },
   // eslint-disable-next-line no-unused-vars
-  analytics({ commit }, execution) {
+  async analytics(execution) {
     // console.log(execution);
     switch (execution) {
       case 'tags':
-        fireAnalytics('tags', this.state.searchData.tags) // .then(console.log);
+        await fireAnalytics('tags', this.state.searchData.tags) // .then(console.log);
         break
 
       case 'settings':
-        fireAnalytics('settings', this.state.userSettings) // .then(console.log);
+        await fireAnalytics('settings', this.state.userSettings) // .then(console.log);
         break
     }
   },

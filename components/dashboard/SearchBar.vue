@@ -8,29 +8,29 @@
         <!-- Input -->
         <input
           v-model="searchQuery"
+          @input="debounceInput"
           class="w-full ml-1 outline-none font-light"
           type="search"
           placeholder="Search: e.g. dragon"
-          @input="debounceInput"
         />
       </div>
 
       <!-- Filter content -->
       <div
-        title="Automatic filters"
         :class="{
-          'text-orange-400': ContentMode.mode === 'furry'
+          'text-orange-400': ContentMode.mode === 'furry',
         }"
         @click="toggleContentMode()"
+        title="Automatic filters"
       >
         <component :is="ContentMode.icon" class="icon w-6 h-6 mr-1" />
       </div>
 
       <!-- Filter content -->
-      <div title="Filter content" @click="toggleFilter()">
+      <div @click="toggleFilter()" title="Filter content">
         <FilterIcon
-          class="icon w-6 h-6 mr-1"
           :class="{ 'text-red-400': searchData.isFilterActive }"
+          class="icon w-6 h-6 mr-1"
         />
       </div>
     </div>
@@ -38,86 +38,86 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations } from 'vuex'
 import {
   FilterIcon,
   SearchIcon,
   TrashIcon,
-  GitlabIcon
-} from "vue-feather-icons";
-import debounce from "lodash/debounce";
+  GitlabIcon,
+} from 'vue-feather-icons'
+import debounce from 'lodash/debounce'
 
 export default {
-  name: "SearchBar",
+  name: 'SearchBar',
   components: { SearchIcon, FilterIcon, TrashIcon, GitlabIcon },
   data() {
     return {
       // Content from the search input
-      searchQuery: "",
+      searchQuery: '',
       filterData: [],
-      ContentMode: { mode: "reset", icon: "TrashIcon" }
-    };
+      ContentMode: { mode: 'reset', icon: 'TrashIcon' },
+    }
   },
   // Get data() from vuex store "searchData"
   computed: {
-    ...mapState(["searchData", "generalData"])
+    ...mapState(['searchData', 'generalData']),
   },
   methods: {
-    ...mapMutations(["newSearchData"]),
-    ...mapActions(["tagManager", "axiosGet"]),
+    ...mapMutations(['newSearchData']),
+    ...mapActions(['tagManager', 'axiosGet']),
 
     async toggleContentMode() {
       // Populate filterData data and reuse later
       if (!this.filterData.length) {
         const filterData = await this.$axios.$get(
-          "https://gist.githubusercontent.com/VoidlessSeven7/c0b379d617b1d26c54158e90a1f096cd/raw/filter_anti_furry_r34.app.txt"
-        );
-        this.filterData = filterData;
+          'https://gist.githubusercontent.com/VoidlessSeven7/c0b379d617b1d26c54158e90a1f096cd/raw/filter_anti_furry_r34.app.txt'
+        )
+        this.filterData = filterData
       }
 
       switch (this.ContentMode.mode) {
-        case "reset":
-          this.tagManager({ operation: "reset" });
-          this.ContentMode = { mode: "furry", icon: "GitlabIcon" };
+        case 'reset':
+          this.tagManager({ operation: 'reset' })
+          this.ContentMode = { mode: 'furry', icon: 'GitlabIcon' }
 
-          return true;
+          return true
 
-        case "furry":
+        case 'furry':
           this.newSearchData({
             tag: {
               name: this.filterData,
-              operation: "concat"
-            }
-          });
-          this.ContentMode = { mode: "reset", icon: "TrashIcon" };
+              operation: 'concat',
+            },
+          })
+          this.ContentMode = { mode: 'reset', icon: 'TrashIcon' }
 
-          return true;
+          return true
       }
     },
     getTags() {
       if (this.searchQuery.length > 2) {
         this.axiosGet({
-          url: `tags?name=${this.searchQuery.trim().toLowerCase()}*&limit=${
+          url: `tags?tag=${this.searchQuery.trim().toLowerCase()}&limit=${
             this.generalData.postLimit
-          }&order_by=posts`,
-          mutationToReturn: "newSearchData"
-        });
+          }`,
+          mutationToReturn: 'newSearchData',
+        })
       } else {
         // Remove search data cause search limit is 3 characters
         this.newSearchData({
-          data: ""
-        });
+          data: '',
+        })
       }
     },
     debounceInput: debounce(function() {
-      this.getTags();
+      this.getTags()
       // console.log("hola");
     }, 300),
     toggleFilter() {
       this.newSearchData({
-        isFilterActive: !this.searchData.isFilterActive
-      });
-    }
-  }
-};
+        isFilterActive: !this.searchData.isFilterActive,
+      })
+    },
+  },
+}
 </script>
