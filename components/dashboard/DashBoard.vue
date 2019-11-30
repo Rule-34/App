@@ -41,14 +41,14 @@ export default {
   components: {
     Errors,
     Post,
-    Controls
+    Controls,
   },
   directives: {
-    Intersect
+    Intersect,
   },
   // Get data() from vuex stores
   computed: {
-    ...mapState(['dashBoardData', 'userSettings'])
+    ...mapState(['dashBoardData', 'userSettings']),
   },
   created() {
     // Navigation with keyboard
@@ -77,7 +77,7 @@ export default {
       console.log('Loaded more posts')
       // Get next PID
       this.pidManager({
-        operation: 'add'
+        operation: 'add',
       })
 
       // And load next posts
@@ -105,7 +105,7 @@ export default {
           error
         )
       }
-    }
-  }
+    },
+  },
 }
 </script>

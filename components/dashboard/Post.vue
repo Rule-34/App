@@ -1,6 +1,6 @@
 <template>
   <!-- Loop for every post -->
-  <div class="material-container" :class="{ zoom: userSettings.zoom.value }">
+  <div :class="{ zoom: userSettings.zoom.value }" class="material-container">
     <!-- TODO: style="max-height: 80vh;" TODO: good for image previews -->
 
     <!--  @@@@@@@@@@@@@@@@@@@@@@@@ 
@@ -13,11 +13,11 @@
       <!-- If lazy loading enabled -->
       <template v-if="userSettings.lazyLoading.value">
         <img
-          v-lazy="imageSource"
-          class="post-img"
+          v-lazy="imageSource()"
           :alt="post.type"
           :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
           @click="toggleTags"
+          class="post-img"
         />
       </template>
 
@@ -25,11 +25,11 @@
       <template v-else>
         <!-- Source is a computed poperty for better code -->
         <img
-          :src="imageSource"
-          class="post-img"
+          :src="imageSource()"
           :alt="post.type"
           :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
           @click="toggleTags"
+          class="post-img"
         />
       </template>
     </template>
@@ -41,13 +41,13 @@
       <template v-if="userSettings.lazyLoading.value">
         <lazy-component>
           <video
-            class="post-img"
             :alt="post.type"
             :controls="userSettings.videoControls.value"
-            muted
-            loop
             :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
             @click="toggleTags"
+            class="post-img"
+            muted
+            loop
           >
             <source :src="post.file_url" />
             Your browser doesnt support HTML5 video.
@@ -56,13 +56,13 @@
       </template>
       <template v-else>
         <video
-          class="post-img"
           :alt="post.type"
           :controls="userSettings.videoControls.value"
-          muted
-          loop
           :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
           @click="toggleTags"
+          class="post-img"
+          muted
+          loop
         >
           <source :src="post.file_url" />
           Your browser doesnt support HTML5 video.
@@ -87,30 +87,30 @@
         >
           <!-- Tags -->
           <div
-            v-if="post.tags && isActive"
             key="tags"
+            v-if="post.tags && isActive"
             class="w-full tag-container"
           >
             <a
               v-for="tag in post.tags"
               :key="post[tag]"
-              class="tag"
-              href="#"
               @click="getSpecificTag(tag)"
               v-text="tag"
+              class="tag"
+              href="#"
             />
           </div>
 
           <!-- Source -->
           <div
-            v-if="post.source"
             key="source"
+            v-if="post.source"
             class="w-full m-auto text-center"
           >
             <template v-if="isUrl()">
               <a
-                class="inline-flex items-baseline"
                 :href="post.source"
+                class="inline-flex items-baseline"
                 rel="noreferrer noopener nofollow"
                 target="_blank"
               >
@@ -120,7 +120,7 @@
             </template>
 
             <template v-else>
-              <p title="Source" v-text="post.source" />
+              <p v-text="post.source" title="Source" />
             </template>
           </div>
         </transition-group>
@@ -131,80 +131,87 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from "vuex";
-import { ExternalLinkIcon } from "vue-feather-icons";
+import { mapState, mapMutations, mapActions } from 'vuex'
+import { ExternalLinkIcon } from 'vue-feather-icons'
 
 export default {
-  name: "Post",
+  name: 'Post',
   components: { ExternalLinkIcon },
   props: {
     postData: {
       type: Object,
       default() {
-        return {};
-      }
-    }
+        return {}
+      },
+    },
   },
   data() {
     return {
       // Save data so we can use
       post: this.postData,
       // Internal toggle for showing tags
-      isActive: false
-    };
-  },
-  computed: {
-    ...mapState(["searchData", "userSettings"]),
-    imageSource() {
-      return this.userSettings.fullSizeImages.value
-        ? this.post.file_url
-        : this.post.sample_url;
+      isActive: false,
     }
   },
+  computed: {
+    ...mapState(['searchData', 'userSettings']),
+  },
   methods: {
-    ...mapMutations(["newSearchData"]),
-    ...mapActions(["pidManager", "tagManager", "getPosts", "analytics"]),
+    ...mapMutations(['newSearchData']),
+    ...mapActions(['pidManager', 'tagManager', 'getPosts', 'analytics']),
     // Check if its an url
     isUrl() {
-      if (this.post.source.startsWith("http", "www")) {
+      if (this.post.source.startsWith('http', 'www')) {
         // console.log("its a url", this.post.source);
-        return true;
+        return true
       } else {
         // console.log("Not a url", this.post.source);
-        return false;
+        return false
       }
     },
+
+    // Image source
+    imageSource() {
+      if (this.userSettings.fullSizeImages.value) {
+        // console.log('returned full size', this.post.high_res_file)
+        return this.post.high_res_file
+      } else {
+        // console.log('returned low size', this.post.low_res_file)
+        return this.post.low_res_file || this.post.high_res_file // TODO: test to see if this works
+      }
+    },
+
     // Toggle showing tags on click
     toggleTags() {
-      this.isActive = !this.isActive;
+      this.isActive = !this.isActive
     },
     getSpecificTag(tag) {
       // Set PID to 0 since we're searching for new tags
       this.pidManager({
-        operation: "reset"
-      });
+        operation: 'reset',
+      })
 
       // Reset all tags
       this.newSearchData({
         tag: {
-          operation: "reset"
-        }
-      });
+          operation: 'reset',
+        },
+      })
 
       // Add clicked tag
       this.newSearchData({
         tag: {
           name: tag,
-          operation: "add"
-        }
-      });
+          operation: 'add',
+        },
+      })
 
       // Search for the tag
-      this.getPosts();
+      this.getPosts()
 
       // And fire analytics
-      this.analytics("tags");
-    }
-  }
-};
+      this.analytics('tags')
+    },
+  },
+}
 </script>
