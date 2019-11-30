@@ -6,7 +6,7 @@ export default {
     // Reset errors cause we're trying again
     commit({
       type: dataObj.mutationToReturn,
-      errors: null
+      errors: null,
     })
 
     // Debugging what url does it get
@@ -22,7 +22,7 @@ export default {
       commit({
         type: dataObj.mutationToReturn,
         data: response,
-        mode: dataObj.mode
+        mode: dataObj.mode,
         // Sometimes its response sometimes its response.data
       })
 
@@ -31,7 +31,7 @@ export default {
         if (!response.posts.length) {
           commit({
             type: dataObj.mutationToReturn,
-            errors: 'There are no more posts to load!'
+            errors: 'There are no more posts to load!',
           })
         }
       } catch {
@@ -42,12 +42,12 @@ export default {
       // console.error(error);
       commit({
         type: dataObj.mutationToReturn,
-        errors: error
+        errors: error,
       })
 
       // Change to another Api
       dispatch('apiManager', {
-        errors: error
+        errors: error,
       })
     }
   },
@@ -55,14 +55,14 @@ export default {
   async getPosts({ dispatch }, mode) {
     // console.log(mode);
     await dispatch('axiosGet', {
-      url: `posts?pid=${this.state.dashBoardData.pid}&limit=${
+      url: `xxx/posts?pid=${this.state.dashBoardData.pid}&limit=${
         this.state.generalData.postLimit
-      }&tags=${this.state.searchData.tags.join('+')}+score:>=${
+      }&tags=${this.state.searchData.tags.join('+')}&score=${
         this.state.userSettings.score.value
       }`,
       mutationToReturn: 'newDashBoardData',
       // Add with the mode passed or with add so its retrocompatible
-      mode: mode || 'add'
+      mode: mode || 'add',
     })
   },
 
@@ -73,7 +73,7 @@ export default {
 
       await commit({
         type: 'apiManager',
-        newUrl: 'https://r34-api-clone.herokuapp.com/'
+        newUrl: 'https://r34-api-clone.herokuapp.com/',
       })
     } else {
       console.warn('The backup API is already being used')
@@ -85,19 +85,19 @@ export default {
     switch (dataObj.operation) {
       case 'add':
         await commit('newDashBoardData', {
-          pid: parseInt(this.state.dashBoardData.pid) + 1
+          pid: parseInt(this.state.dashBoardData.pid) + 1,
         })
         break
 
       case 'subtract':
         await commit('newDashBoardData', {
-          pid: parseInt(this.state.dashBoardData.pid) - 1
+          pid: parseInt(this.state.dashBoardData.pid) - 1,
         })
         break
 
       case 'reset':
         await commit('newDashBoardData', {
-          pid: 0
+          pid: 0,
         })
         break
     }
@@ -111,20 +111,20 @@ export default {
         type: 'newSearchData',
         // We reset this way since its a tag function
         tag: {
-          operation: 'reset'
-        }
+          operation: 'reset',
+        },
       })
       // And show search
       if (!this.state.searchData.isActive) {
         await commit({
           type: 'newSearchData',
-          isActive: !this.state.searchData.isActive
+          isActive: !this.state.searchData.isActive,
         })
       }
     }
   },
   // eslint-disable-next-line no-unused-vars
-  async analytics({ commit }, execution) {
+  analytics({ commit }, execution) {
     // console.log(execution);
     switch (execution) {
       case 'tags':
@@ -135,5 +135,5 @@ export default {
         fireAnalytics('settings', this.state.userSettings) // .then(console.log);
         break
     }
-  }
+  },
 }

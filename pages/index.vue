@@ -2,7 +2,7 @@
   <div
     v-touch="{
       left: () => touchHandler('left'),
-      right: () => touchHandler('right')
+      right: () => touchHandler('right'),
     }"
   >
     <div class="cool-bar" />
@@ -37,13 +37,13 @@ export default {
     DashBoard,
     Search,
     SideNav,
-    NavToggler
+    NavToggler,
   },
 
   directives: { Touch },
 
   computed: {
-    ...mapState(['searchData', 'sideNavData'])
+    ...mapState(['searchData', 'sideNavData']),
   },
 
   // Load the store with posts
@@ -79,7 +79,7 @@ export default {
           }
           break
       }
-    }
-  }
+    },
+  },
 }
 </script>
