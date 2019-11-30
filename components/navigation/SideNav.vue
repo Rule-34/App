@@ -39,7 +39,7 @@
     </nav>
 
     <!-- Space for clicking out of the menu -->
-    <div @click="$emit('toggle-sidenav')" class="sidebar-close-area" />
+    <div @click="sideNavManager" class="sidebar-close-area" />
   </div>
 </template>
 
@@ -50,10 +50,10 @@ export default {
   name: 'SideNav',
 
   computed: {
-    ...mapState(['searchData'])
+    ...mapState(['searchData']),
   },
   methods: {
-    ...mapMutations(['newSearchData'])
-  }
+    ...mapMutations(['newSearchData', 'sideNavManager']),
+  },
 }
 </script>

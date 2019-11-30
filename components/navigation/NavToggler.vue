@@ -2,7 +2,7 @@
   <!-- Side Nav Toggler -->
   <div class="navigation-toggler">
     <button
-      @click="sideNavManager"
+      @click="sideNavManager()"
       class="navigation-toggler-button"
       title="Menu"
     >
@@ -30,11 +30,11 @@ export default {
   props: { showSearch: { type: Boolean, default: false, required: false } },
 
   computed: {
-    ...mapState(['searchData'])
+    ...mapState(['searchData']),
   },
 
   methods: {
-    ...mapMutations(['newSearchData', 'sideNavManager'])
-  }
+    ...mapMutations(['newSearchData', 'sideNavManager']),
+  },
 }
 </script>
