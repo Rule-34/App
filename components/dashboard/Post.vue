@@ -49,7 +49,7 @@
             muted
             loop
           >
-            <source :src="post.file_url" />
+            <source :src="post.high_res_file" />
             Your browser doesnt support HTML5 video.
           </video>
         </lazy-component>
@@ -64,7 +64,7 @@
           muted
           loop
         >
-          <source :src="post.file_url" />
+          <source :src="post.high_res_file" />
           Your browser doesnt support HTML5 video.
         </video>
       </template>
