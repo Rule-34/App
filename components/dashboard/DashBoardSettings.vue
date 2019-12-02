@@ -2,13 +2,10 @@
   <div class="m-5">
     <!-- Domain selector -->
     <div
-      class="inline-block relative w-fit-content border rounded-full px-2 shadow"
+      class="inline-flex w-fit-content relative border rounded-full shadow bg-white mx-5 overflow-hidden"
     >
       <!-- Cloud icon -->
-      <div
-        for="domain-selector"
-        class="absolute inset-y-0 left-0 flex items-center px-2"
-      >
+      <div for="domain-selector" class="inline-flex items-center pl-2">
         <CloudIcon class="icon text-blue-500 w-4 h-4" />
       </div>
 
@@ -19,7 +16,7 @@
           apiManager(selected)
           getPosts()
         "
-        class="inline-block appearance-none font-light leading-tight px-4 text-gray-700"
+        class="inline-flex items-center appearance-none outline-none font-light text-gray-700"
       >
         <option
           v-for="option in options"
@@ -29,7 +26,7 @@
       </select>
 
       <!-- Drop icon -->
-      <div class="absolute inset-y-0 right-0 px-2 items-center flex">
+      <div class="inline-flex items-center pr-2">
         <ChevronDownIcon class="icon text-gray-700 w-4 h-4" />
       </div>
     </div>
