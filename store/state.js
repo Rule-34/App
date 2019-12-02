@@ -16,7 +16,8 @@ export default () => ({
   },
 
   generalData: {
-    apiUrl: 'https://r34-app-original-api.herokuapp.com/xxx/',
+    apiUrl: 'https://r34-app-original-api.herokuapp.com/',
+    contentDomain: 'xxx/',
     postLimit: 20,
     errors: null,
   },

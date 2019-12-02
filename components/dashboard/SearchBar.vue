@@ -64,12 +64,12 @@ export default {
   },
   methods: {
     ...mapMutations(['newSearchData']),
-    ...mapActions(['tagManager', 'axiosGet']),
+    ...mapActions(['tagManager', 'axiosGet', 'getApi']),
 
     async toggleContentMode() {
       // Populate filterData data and reuse later
       if (!this.filterData.length) {
-        const filterData = await this.$axios.$get(
+        const filterData = await this.getApi(
           'https://gist.githubusercontent.com/VoidlessSeven7/c0b379d617b1d26c54158e90a1f096cd/raw/filter_anti_furry_r34.app.txt'
         )
         this.filterData = filterData

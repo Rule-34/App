@@ -16,7 +16,9 @@ export default {
     // Actual axios get
     try {
       const response = await this.$axios.$get(
-        this.state.generalData.apiUrl + dataObj.url
+        this.state.generalData.apiUrl +
+          this.state.generalData.contentDomain +
+          dataObj.url
       )
 
       commit({
@@ -66,15 +68,24 @@ export default {
     })
   },
 
+  // Get specific url through API's cors proxy
+  async getApi({ dispatch }, url) {
+    // console.log(url);
+    const result = await this.$axios.$get(
+      `${this.state.generalData.apiUrl}images?url=${url}`
+    )
+    return result
+  },
+
   // Change api to an alternative one
   async apiManager({ commit }) {
     if (this.state.generalData.apiUrl !== this.state.generalData.backupApiUrl) {
-      console.log('changing to alternative api') // TODO: Do something with this
+      await console.log('changing to alternative api') // TODO: Do something with this
 
-      await commit({
-        type: 'apiManager',
-        newUrl: 'https://r34-api-clone.herokuapp.com/',
-      })
+      // await commit({
+      //   type: 'apiManager',
+      //   newUrl: 'https://r34-api-clone.herokuapp.com/',
+      // })
     } else {
       console.warn('The backup API is already being used')
     }
