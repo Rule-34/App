@@ -1,94 +1,112 @@
-import { track } from "insights-js";
+import { track } from 'insights-js'
 
-let defaultSettings = {
+const defaultSettings = {
   darkTheme: {
-    value: false
+    value: false,
   },
   lazyLoading: {
-    value: true
+    value: true,
   },
   infiniteLoad: {
-    value: false
+    value: false,
   },
   score: {
-    value: 0
+    value: 0,
   },
   fullSizeImages: {
-    value: false
+    value: false,
   },
   videoControls: {
-    value: true
+    value: true,
   },
   hoverControls: {
-    value: false
+    value: false,
   },
   zoom: {
-    value: false
+    value: false,
   },
   keyboardControls: {
-    value: true
+    value: true,
   },
   nsfw: {
-    value: true
-  }
-};
+    value: true,
+  },
+}
+
+function tagsTracking(data) {
+  return new Promise(function(resolve, reject) {
+    // Test to see if theres any data passed
+    if (!data.length) {
+      reject(new Error('No tags passed'))
+    }
+
+    // Execute successfully the code
+    Object.keys(data).forEach(function(key, index) {
+      console.log(key, data[key])
+
+      // Send tags in an interval of .5 seconds to not flood the analytics server
+      setTimeout(function() {
+        // console.log("Sent tag: ", data[key]);
+        track({
+          id: 'user-usage',
+          parameters: {
+            searchedTags: data[key],
+          },
+        })
+      }, 500 * index)
+    })
+
+    resolve('Tags executed succesfully')
+  })
+}
+
+function settingsTracking(data) {
+  return new Promise(function(resolve, reject) {
+    // Compare default settings to user settings to see if theres a difference
+    const difference = Object.keys(data).filter(
+      key => data[key].value !== defaultSettings[key].value
+    )
+
+    // If theres no difference then reject
+    if (difference.length === 0) {
+      reject(new Error('No setting difference'))
+    }
+
+    // When we know theres a difference, track each difference
+    Object.keys(difference).forEach(function(key, index) {
+      // console.log(key, difference[key]);
+
+      // Send settings in an interval of .5 seconds to not flood the analytics server
+      setTimeout(function() {
+        // console.log("Sent setting: ", difference[key]);
+        track({
+          id: 'user-usage',
+          parameters: {
+            userSettings: difference[key],
+          },
+        })
+      }, 500 * index)
+    })
+
+    resolve('Settings executed succesfully')
+  })
+}
 
 /* -------- Analytics -------- */
 export default async function fireAnalytics(type, data) {
-  // console.log("Analytics fired with something:", type, data);
+  // console.log('Analytics fired with something:', type, data)
+  let result
+  switch (type) {
+    // Track searched tags
+    case 'tags':
+      result = await tagsTracking(data)
 
-  // Track searched tags
-  if (type === "tags") {
-    // console.log("Tag analytics fired:", data);
+      return result
 
-    if (data.length > 0) {
-      Object.keys(data).forEach(function(key, index) {
-        // console.log(key, data[key]);
+    // Track different settings
+    case 'settings':
+      result = await settingsTracking(data)
 
-        setTimeout(function() {
-          // console.log("Sent tag: ", data[key]);
-          track({
-            id: "user-usage",
-            parameters: {
-              searchedTags: data[key]
-            }
-          });
-        }, 500 * index);
-      });
-
-      return Promise.resolve("Tags executed succesfully");
-    }
-
-    return Promise.resolve("Tags didnt execute");
-
-    // Track different than default settings
-  } else if (type === "settings") {
-    // console.log("Settings analytics fired:", data);
-
-    // Extract differences
-    let difference = Object.keys(data).filter(
-      key => data[key].value !== defaultSettings[key].value
-    );
-
-    if (difference.length > 0) {
-      // console.log("There are changed settings", difference);
-
-      Object.keys(difference).forEach(function(key, index) {
-        // console.log(key, difference[key]);
-
-        setTimeout(function() {
-          // console.log("Sent setting: ", difference[key]);
-          track({
-            id: "user-usage",
-            parameters: {
-              userSettings: difference[key]
-            }
-          });
-        }, 500 * index);
-      });
-      return Promise.resolve("Settings executed succesfully");
-    }
-    return Promise.resolve("Settings didnt execute");
+      return result
   }
-  return Promise.resolve("Nothing executed");
 }

@@ -2,7 +2,7 @@
   <div
     v-touch="{
       left: () => sideNavManager('close'),
-      right: () => sideNavManager('open')
+      right: () => sideNavManager('open'),
     }"
   >
     <div class="cool-bar" />
@@ -66,19 +66,17 @@ export default {
 
   data() {
     return {
-      sideNav: { isActive: false }
+      sideNav: { isActive: false },
     }
   },
 
   computed: mapState(['userSettings', 'sideNavData']),
 
-  // Fire analytics when exiting settings
-  destroyed() {
-    this.analytics('settings')
-  },
-
   beforeDestroy() {
     this.sideNavManager('close')
+
+    // Fire analytics when exiting settings
+    this.analytics('settings')
   },
 
   methods: {
@@ -86,15 +84,18 @@ export default {
     ...mapMutations(['sideNavManager']),
     // Remove the localStorage object and reload the window
     removeLocalStorage() {
+      // Remove localstorage by key
       localStorage.removeItem('vuex')
+
+      // And reload page to see changes
       location.reload()
-    }
+    },
   },
 
   head() {
     return {
-      title: 'Settings | Rule 34 App'
+      title: 'Settings | Rule 34 App',
     }
-  }
+  },
 }
 </script>

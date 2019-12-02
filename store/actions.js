@@ -124,15 +124,19 @@ export default {
     }
   },
   // eslint-disable-next-line no-unused-vars
-  async analytics(execution) {
-    // console.log(execution);
+  async analytics({ commit }, execution) {
+    // console.log(execution)
     switch (execution) {
       case 'tags':
-        await fireAnalytics('tags', this.state.searchData.tags) // .then(console.log);
+        await fireAnalytics('tags', this.state.searchData.tags).then(
+          console.log
+        )
         break
 
       case 'settings':
-        await fireAnalytics('settings', this.state.userSettings) // .then(console.log);
+        await fireAnalytics('settings', this.state.userSettings).then(
+          console.log
+        )
         break
     }
   },
