@@ -34,10 +34,11 @@ export default {
   },
 
   // Handler for api changes
-  apiManager(state, payload) {
+  apiManager(state, domain) {
+    console.log(domain)
     // New url
-    if (payload !== undefined) {
-      state.generalData.apiUrl = payload.newUrl
+    if (domain !== undefined) {
+      state.generalData.contentDomain = domain
     }
   },
 
@@ -133,5 +134,5 @@ export default {
       // console.log(payload);
       state.userSettings[payload.index].value = payload.value
     }
-  }
+  },
 }

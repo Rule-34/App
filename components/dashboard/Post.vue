@@ -172,12 +172,17 @@ export default {
 
     // Image source
     imageSource() {
-      if (this.userSettings.fullSizeImages.value) {
-        // console.log('returned full size', this.post.high_res_file)
-        return this.post.high_res_file
-      } else {
-        // console.log('returned low size', this.post.low_res_file)
-        return this.post.low_res_file || this.post.high_res_file // TODO: test to see if this works
+      switch (this.userSettings.fullSizeImages.value) {
+        case true:
+          return this.post.high_res_file
+
+        case false:
+          // If we are on a domain where we dont have low res files, then load high res files as a fallback
+          if (this.post.low_res_file) {
+            return this.post.low_res_file
+          } else {
+            return this.post.high_res_file
+          }
       }
     },
 

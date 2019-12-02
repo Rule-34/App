@@ -2,6 +2,8 @@
   <div>
     <!-- If theres request got errors -->
     <Errors />
+
+    <DashBoardSettings />
     <!-- every post in their own component -->
     <Post
       v-for="post in dashBoardData.data.posts"
@@ -33,6 +35,7 @@
 import { mapState, mapActions } from 'vuex'
 import { Intersect } from 'vuetify/es5/directives/intersect'
 import Errors from './Errors.vue'
+import DashBoardSettings from './DashBoardSettings.vue'
 import Post from './Post.vue'
 import Controls from './Controls.vue'
 
@@ -40,6 +43,7 @@ export default {
   name: 'DashBoard',
   components: {
     Errors,
+    DashBoardSettings,
     Post,
     Controls,
   },
