@@ -1,6 +1,6 @@
 # Rule 34 Progressive Web App (PWA)
 
-Rule 34 redesigned in a beautiful and stunning style
+App to enjoy all Rule 34 sites combined in a mobile-friendly experience
 
 ![Dashboard Preview](.github/images/dashboard.png)
 ![Settings Preview](.github/images/settings.png)

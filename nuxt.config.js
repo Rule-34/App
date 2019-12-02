@@ -13,7 +13,8 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: 'Rule 34 redesigned in a beautiful and stunning style',
+        content:
+          'App to enjoy all Rule 34 sites combined in a mobile-friendly experience',
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],

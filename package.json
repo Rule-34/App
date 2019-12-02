@@ -1,7 +1,7 @@
 {
   "name": "rule-34-progressive-web-app",
   "version": "1.0.0",
-  "description": "Rule 34 redesigned in a beautiful and stunning style",
+  "description": "App to enjoy all Rule 34 sites combined in a mobile-friendly experience",
   "author": "VoidlessSeven7",
   "private": true,
   "scripts": {
