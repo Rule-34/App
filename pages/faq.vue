@@ -2,7 +2,7 @@
   <div
     v-touch="{
       left: () => sideNavManager('close'),
-      right: () => sideNavManager('open')
+      right: () => sideNavManager('open'),
     }"
   >
     <div class="cool-bar" />
@@ -17,7 +17,7 @@
       <ContentContainer
         :separator="true"
         title="General"
-        text="Questions related to the PWA/website and its content"
+        text="Questions related to the App/PWA/website and its content"
       />
       <!-- What is this -->
       <ContentContainer
@@ -28,8 +28,8 @@ This means that it gets the images from a official Api wrapper and displays them
       >
         <!-- Slot -->
         <small class="text-gray-500"
-          >If you're the owner of rule34.xxx and want to cease this PWA please
-          go to GitHub and leave an issue.</small
+          >If you're the owner of rule34.xxx/rule34.paheal.net and want to cease
+          this website please go to GitHub and leave an issue.</small
         >
       </ContentContainer>
 
@@ -87,7 +87,7 @@ All information is anonymized and respects the 'Do not track' directive, so if y
       <!-- Donations -->
       <ContentContainer
         title="Can I donate for your efforts?"
-        text="Yes! I've been working really hard on this PWA, I really appreciate every donation."
+        text="Of course you can, I've been working really hard on this project, if you feel like contributing to the development please visit the next link."
         icon="donation"
         link="https://www.paypal.me/Alejandrorr7"
         link-text="Paypal"
@@ -96,7 +96,7 @@ All information is anonymized and respects the 'Do not track' directive, so if y
       <!-- Credits -->
       <ContentContainer
         title="Credits"
-        text="Thanks to Jessica for drawing the logo, and me for programming the PWA."
+        text="Thanks to Jessica for drawing the logo, and me for developing the PWA."
         icon="star"
       >
         <!-- Slot -->
@@ -119,12 +119,12 @@ export default {
 
   data() {
     return {
-      sideNav: { isActive: false }
+      sideNav: { isActive: false },
     }
   },
 
   computed: {
-    ...mapState(['sideNavData'])
+    ...mapState(['sideNavData']),
   },
 
   beforeDestroy() {
@@ -132,13 +132,13 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['sideNavManager'])
+    ...mapMutations(['sideNavManager']),
   },
 
   head() {
     return {
-      title: 'Faq | Rule 34 App'
+      title: 'Faq | Rule 34 App',
     }
-  }
+  },
 }
 </script>
