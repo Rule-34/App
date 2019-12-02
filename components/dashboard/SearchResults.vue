@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     ...mapMutations(['newSearchData']),
-    ...mapActions(['pidManager', 'getPosts', 'analytics']),
+    ...mapActions(['pidManager', 'getPosts', 'analyticManager']),
     dispatchGetAddedTags() {
       // Set PID to 0 since we're searching for new tags
       this.pidManager({
@@ -105,7 +105,7 @@ export default {
       })
 
       // And fire analytics
-      this.analytics('tags')
+      this.analyticManager('tags')
     },
   },
 }
