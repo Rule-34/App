@@ -41,7 +41,6 @@ export default {
       }
       // console.log(response)
     } catch (error) {
-      // console.error(error);
       commit({
         type: dataObj.mutationToReturn,
         errors: error,
@@ -69,12 +68,23 @@ export default {
   },
 
   // Get specific url through API's cors proxy
-  async getApi({ dispatch }, url) {
+  async getApi({ commit }, url) {
     // console.log(url);
-    const result = await this.$axios.$get(
-      `${this.state.generalData.apiUrl}images?url=${url}`
-    )
-    return result
+    try {
+      // Get url through proxy
+      const result = await this.$axios.$get(
+        `${this.state.generalData.apiUrl}images?url=${url}`
+      )
+
+      // And return value to calling function
+      return result
+
+      // If theres errors
+    } catch (error) {
+      commit({
+        errors: error,
+      })
+    }
   },
 
   // Change api to an alternative one
