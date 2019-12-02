@@ -126,7 +126,7 @@ export default {
 
   head() {
     return {
-      title: 'Usage | Rule 34 PWA'
+      title: 'Usage | Rule 34 App'
     }
   }
 }
