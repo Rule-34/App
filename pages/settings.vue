@@ -76,11 +76,11 @@ export default {
     this.sideNavManager('close')
 
     // Fire analytics when exiting settings
-    this.analytics('settings')
+    this.analyticManager('settings')
   },
 
   methods: {
-    ...mapActions(['analytics']),
+    ...mapActions(['analyticManager']),
     ...mapMutations(['sideNavManager']),
     // Remove the localStorage object and reload the window
     removeLocalStorage() {

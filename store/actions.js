@@ -124,7 +124,7 @@ export default {
     }
   },
   // eslint-disable-next-line no-unused-vars
-  async analytics({ commit }, execution) {
+  async analyticManager({ commit }, execution) {
     // console.log(execution)
     switch (execution) {
       case 'tags':

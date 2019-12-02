@@ -74,7 +74,7 @@ function settingsTracking(data) {
 
     // When we know theres a difference, track each difference
     Object.keys(difference).forEach(function(key, index) {
-      // console.log(key, difference[key]);
+      console.log(key, difference[key])
 
       // Send settings in an interval of .5 seconds to not flood the analytics server
       setTimeout(function() {

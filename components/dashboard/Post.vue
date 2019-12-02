@@ -158,7 +158,7 @@ export default {
   },
   methods: {
     ...mapMutations(['newSearchData']),
-    ...mapActions(['pidManager', 'tagManager', 'getPosts', 'analytics']),
+    ...mapActions(['pidManager', 'tagManager', 'getPosts', 'analyticManager']),
     // Check if its an url
     isUrl() {
       if (this.post.source.startsWith('http', 'www')) {
@@ -210,7 +210,7 @@ export default {
       this.getPosts()
 
       // And fire analytics
-      this.analytics('tags')
+      this.analyticManager('tags')
     },
   },
 }
