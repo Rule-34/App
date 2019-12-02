@@ -137,7 +137,7 @@ export default {
 
   head() {
     return {
-      title: 'Faq | Rule 34 PWA'
+      title: 'Faq | Rule 34 App'
     }
   }
 }

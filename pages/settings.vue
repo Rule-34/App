@@ -93,7 +93,7 @@ export default {
 
   head() {
     return {
-      title: 'Settings | Rule 34 PWA'
+      title: 'Settings | Rule 34 App'
     }
   }
 }

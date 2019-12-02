@@ -7,8 +7,8 @@
         <img
           class="sidebar-img"
           src="/icon.png"
-          alt="Rule 34 PWA Logo"
-          title="Rule 34 PWA"
+          alt="Rule 34 App Logo"
+          title="Rule 34 App"
         />
       </div>
 
