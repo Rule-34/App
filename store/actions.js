@@ -124,24 +124,17 @@ export default {
     }
   },
 
-  async tagManager({ commit }, dataObj) {
-    // Reset tags
-    if (dataObj.operation === 'reset') {
-      // Reset tags
-      await commit({
-        type: 'newSearchData',
-        // We reset this way since its a tag function
-        tag: {
-          operation: 'reset',
-        },
-      })
-      // And show search
-      if (!this.state.searchData.isActive) {
+  async tagManager({ commit }, operation) {
+    switch (operation) {
+      case 'reset':
         await commit({
           type: 'newSearchData',
-          isActive: !this.state.searchData.isActive,
+          // We reset this way since its a tag function
+          tag: {
+            operation: 'reset',
+          },
         })
-      }
+        break
     }
   },
   // eslint-disable-next-line no-unused-vars
