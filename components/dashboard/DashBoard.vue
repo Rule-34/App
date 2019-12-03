@@ -21,7 +21,7 @@
     </template>
     <template v-else>
       <!-- If theres more posts -->
-      <div v-intersect.quiet="concatPost" class="mx-auto">
+      <div v-intersect.quiet="throttleInfiniteLoading" class="mx-auto">
         <p @click="concatPost()" class="text-center text-gray-500 pb-2">
           Loading more posts...
         </p>
@@ -34,6 +34,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { Intersect } from 'vuetify/es5/directives/intersect'
+import throttle from 'lodash/throttle'
 import Errors from './Errors.vue'
 import DashBoardSettings from './DashBoardSettings.vue'
 import Post from './Post.vue'
@@ -75,6 +76,10 @@ export default {
     scrollToTop() {
       window.scrollTo(0, 0)
     },
+
+    throttleInfiniteLoading: throttle(function() {
+      this.concatPost()
+    }, 5000),
 
     // Infinite loading
     concatPost() {
