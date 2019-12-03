@@ -11,9 +11,9 @@
 
       <!-- Selector -->
       <select
-        v-model="selected"
+        :value="selected"
         @change="
-          apiManager(selected)
+          apiManager($event.target.value)
           getPosts()
         "
         class="inline-flex items-center appearance-none outline-none font-light text-gray-700 bg-white"
@@ -46,7 +46,6 @@ export default {
 
   data() {
     return {
-      selected: 'xxx/',
       options: [
         { name: 'rule34.paheal.net', value: 'paheal/' },
         { name: 'rule34.xxx', value: 'xxx/' },
@@ -57,10 +56,9 @@ export default {
   // Get data() from vuex stores
   computed: {
     ...mapState(['dashBoardSettings']),
-  },
-
-  mounted() {
-    this.selected = this.dashBoardSettings.contentDomain
+    selected() {
+      return this.dashBoardSettings.contentDomain
+    },
   },
 
   methods: {
