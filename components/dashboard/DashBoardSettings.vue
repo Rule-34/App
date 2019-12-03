@@ -14,6 +14,7 @@
         :value="selected"
         @change="
           apiManager($event.target.value)
+          tagManager('reset')
           getPosts()
         "
         class="inline-flex items-center appearance-none outline-none font-light text-gray-700 bg-white"
@@ -63,7 +64,7 @@ export default {
 
   methods: {
     ...mapMutations(['apiManager']),
-    ...mapActions(['getPosts']),
+    ...mapActions(['getPosts', 'tagManager']),
   },
 }
 </script>
