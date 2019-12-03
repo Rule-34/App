@@ -56,11 +56,11 @@ export default {
 
   // Get data() from vuex stores
   computed: {
-    ...mapState(['generalData']),
+    ...mapState(['dashBoardSettings']),
   },
 
   mounted() {
-    this.selected = this.generalData.contentDomain
+    this.selected = this.dashBoardSettings.contentDomain
   },
 
   methods: {

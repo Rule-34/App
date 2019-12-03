@@ -17,7 +17,7 @@ export default {
     try {
       const response = await this.$axios.$get(
         this.state.generalData.apiUrl +
-          this.state.generalData.contentDomain +
+          this.state.dashBoardSettings.contentDomain +
           dataObj.url
       )
 
