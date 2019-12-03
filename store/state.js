@@ -6,7 +6,7 @@ export default () => ({
 
   searchData: {
     data: [], // Data received while searching for tags
-    tags: [],
+    tags: [], // Tags that are added for searching posts with that tags
     isActive: false, // Is search bar active
     isFilterActive: false,
   },
@@ -17,10 +17,15 @@ export default () => ({
 
   generalData: {
     apiUrl: 'https://r34-app-original-api.herokuapp.com/',
-    contentDomain: 'xxx/',
     postLimit: 20,
     errors: null,
   },
+
+  // These settings are saved to localStorage
+  dashBoardSettings: {
+    contentDomain: 'xxx/',
+  },
+
   // These settings are saved to localStorage
   userSettings: {
     darkTheme: {

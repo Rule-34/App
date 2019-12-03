@@ -38,7 +38,7 @@ export default {
     console.log(domain)
     // New url
     if (domain !== undefined) {
-      state.generalData.contentDomain = domain
+      state.dashBoardSettings.contentDomain = domain
     }
   },
 

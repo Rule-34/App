@@ -1,14 +1,15 @@
-import VuexPersistence from "vuex-persist";
+import VuexPersistence from 'vuex-persist'
 
 export default ({ store }) => {
   window.onNuxtReady(() => {
     new VuexPersistence({
       /* your options */
-      key: "vuex",
+      key: 'vuex',
       storage: window.localStorage,
       reducer: state => ({
-        userSettings: state.userSettings
-      })
-    }).plugin(store);
-  });
-};
+        userSettings: state.userSettings,
+        dashBoardSettings: state.dashBoardSettings,
+      }),
+    }).plugin(store)
+  })
+}
