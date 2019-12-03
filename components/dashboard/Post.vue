@@ -158,7 +158,7 @@ export default {
   },
   methods: {
     ...mapMutations(['newSearchData']),
-    ...mapActions(['pidManager', 'tagManager', 'getPosts', 'analyticManager']),
+    ...mapActions(['pidManager', 'getPosts', 'analyticManager']),
     // Check if its an url
     isUrl() {
       if (this.post.source.startsWith('http', 'www')) {

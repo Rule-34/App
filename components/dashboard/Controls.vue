@@ -10,24 +10,24 @@
     >
       <a
         href="#"
+        @click="getPrevPage"
         class="w-1/3 button"
         title="Load last page"
-        @click="getPrevPage"
       >
         <ArrowLeftIcon class="icon w-4 h-4 inline" /> Prev page
       </a>
       <a
         href="#"
-        class="w-1/3"
-        title="Load specific page"
         @click="getSpecificPage"
+        class="w-1/3"
         v-text="dashBoardData.pid"
+        title="Load specific page"
       />
       <a
         href="#"
+        @click="getNextPage"
         class="w-1/3 button"
         title="Load next page"
-        @click="getNextPage"
       >
         Next page
         <ArrowRightIcon class="icon w-4 h-4 inline" />
@@ -37,64 +37,64 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations } from 'vuex'
 
 // Import icons from package
-import { ArrowLeftIcon, ArrowRightIcon } from "vue-feather-icons";
+import { ArrowLeftIcon, ArrowRightIcon } from 'vue-feather-icons'
 
 export default {
-  name: "Controls",
+  name: 'Controls',
   components: {
     ArrowRightIcon,
-    ArrowLeftIcon
+    ArrowLeftIcon,
   },
   // Map data to the store following's
   computed: {
-    ...mapState(["dashBoardData", "searchData", "generalData", "userSettings"])
+    ...mapState(['dashBoardData', 'searchData', 'generalData', 'userSettings']),
   },
 
   methods: {
     // Map actions and mutations from store following's
-    ...mapMutations(["newDashBoardData"]),
-    ...mapActions(["getPosts", "pidManager", "tagManager"]),
+    ...mapMutations(['newDashBoardData']),
+    ...mapActions(['getPosts', 'pidManager']),
     // Get next page from api
     getNextPage() {
       // Get next PID
       this.pidManager({
-        operation: "add"
-      });
+        operation: 'add',
+      })
 
       // If we have tags added then load next page of tags, else load normal latest posts
-      this.getPosts();
+      this.getPosts()
     },
     // Get last page from api
     getPrevPage() {
       // Get last PID
       this.pidManager({
-        operation: "subtract"
-      });
+        operation: 'subtract',
+      })
 
       // Load last page
-      this.getPosts();
+      this.getPosts()
     },
     getSpecificPage() {
       // Ask for page to go to
-      let specificPage = prompt("What page do you want to go to?", "69");
+      const specificPage = prompt('What page do you want to go to?', '69')
 
       // Test if something was input
       if (!isNaN(specificPage)) {
         // Set PID to indicated
         // console.log(specificPage);
         this.newDashBoardData({
-          pid: specificPage
-        });
+          pid: specificPage,
+        })
 
         // And load specific page
-        this.getPosts();
+        this.getPosts()
       } else {
-        alert("Wrong input, only numbers please");
+        alert('Wrong input, only numbers please')
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>

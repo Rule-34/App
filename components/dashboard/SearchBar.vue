@@ -77,7 +77,7 @@ export default {
 
       switch (this.ContentMode.mode) {
         case 'reset':
-          this.tagManager({ operation: 'reset' })
+          this.tagManager('reset')
           this.ContentMode = { mode: 'furry', icon: 'GitlabIcon' }
 
           return true
