@@ -102,8 +102,8 @@ export default {
   },
 
   // Change api to an alternative one
-  async pidManager({ commit }, dataObj) {
-    switch (dataObj.operation) {
+  async pidManager({ commit }, operation) {
+    switch (operation) {
       case 'add':
         await commit('newDashBoardData', {
           pid: parseInt(this.state.dashBoardData.pid) + 1,
