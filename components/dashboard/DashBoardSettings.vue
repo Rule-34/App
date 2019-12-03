@@ -2,7 +2,7 @@
   <div class="m-5">
     <!-- Domain selector -->
     <div
-      class="inline-flex w-fit-content relative border rounded-full shadow bg-white mx-5 overflow-hidden"
+      class="inline-flex w-fit-content relative border rounded-full shadow bg-white overflow-hidden"
     >
       <!-- Cloud icon -->
       <div for="domain-selector" class="inline-flex items-center pl-2">
@@ -16,7 +16,7 @@
           apiManager(selected)
           getPosts()
         "
-        class="inline-flex items-center appearance-none outline-none font-light text-gray-700"
+        class="inline-flex items-center appearance-none outline-none font-light text-gray-700 bg-white"
       >
         <option
           v-for="option in options"
