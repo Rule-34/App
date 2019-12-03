@@ -192,9 +192,7 @@ export default {
     },
     getSpecificTag(tag) {
       // Set PID to 0 since we're searching for new tags
-      this.pidManager({
-        operation: 'reset',
-      })
+      this.pidManager('reset')
 
       // Reset all tags
       this.newSearchData({

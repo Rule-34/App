@@ -85,9 +85,7 @@ export default {
     concatPost() {
       console.log('Loaded more posts')
       // Get next PID
-      this.pidManager({
-        operation: 'add',
-      })
+      this.pidManager('add')
 
       // And load next posts
       this.getPosts('concat')

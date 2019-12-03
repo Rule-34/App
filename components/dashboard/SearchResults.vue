@@ -92,9 +92,7 @@ export default {
     ...mapActions(['pidManager', 'getPosts', 'analyticManager']),
     dispatchGetAddedTags() {
       // Set PID to 0 since we're searching for new tags
-      this.pidManager({
-        operation: 'reset',
-      })
+      this.pidManager('reset')
 
       // Search for the tags
       this.getPosts()
