@@ -1,15 +1,10 @@
-import VuexPersistence from 'vuex-persist'
+import createPersistedState from 'vuex-persistedstate'
 
 export default ({ store }) => {
   window.onNuxtReady(() => {
-    new VuexPersistence({
-      /* your options */
+    createPersistedState({
       key: 'vuex',
-      storage: window.localStorage,
-      reducer: state => ({
-        userSettings: state.userSettings,
-        dashBoardSettings: state.dashBoardSettings,
-      }),
-    }).plugin(store)
+      paths: ['dashBoardSettings', 'userSettings'],
+    })(store)
   })
 }
