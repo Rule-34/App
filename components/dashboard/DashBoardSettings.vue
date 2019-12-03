@@ -15,6 +15,7 @@
         @change="
           apiManager($event.target.value)
           tagManager('reset')
+          pidManager('reset')
           getPosts()
         "
         class="inline-flex items-center appearance-none outline-none font-light text-gray-700 bg-white"
@@ -64,7 +65,7 @@ export default {
 
   methods: {
     ...mapMutations(['apiManager']),
-    ...mapActions(['getPosts', 'tagManager']),
+    ...mapActions(['getPosts', 'tagManager', 'pidManager']),
   },
 }
 </script>
