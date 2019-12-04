@@ -3,22 +3,30 @@ import fireAnalytics from '~/assets/js/insights.custom' // Import analytics
 export default {
   // This a customisable Get request
   async axiosGet({ commit, dispatch }, dataObj) {
+    // Debugging what url does it get
+    // console.log(dataObj.url)
+    // console.log(dataObj.mutationToReturn)
+
     // Reset errors cause we're trying again
     commit({
       type: dataObj.mutationToReturn,
       errors: null,
     })
 
-    // Debugging what url does it get
-    // console.log(dataObj.url)
-    // console.log(dataObj.mutationToReturn)
+    // Get the domain from localStorage if it exists otherwise use vuex store
+    let domainUrl
+    try {
+      domainUrl = JSON.parse(localStorage.getItem('vuex')).dashBoardSettings
+        .contentDomain
+    } catch {
+      console.log('No localStorage key found, using vuex store default')
+      domainUrl = this.state.dashBoardSettings.contentDomain
+    }
 
     // Actual axios get
     try {
       const response = await this.$axios.$get(
-        this.state.generalData.apiUrl +
-          this.state.dashBoardSettings.contentDomain +
-          dataObj.url
+        this.state.generalData.apiUrl + domainUrl + dataObj.url
       )
 
       commit({
