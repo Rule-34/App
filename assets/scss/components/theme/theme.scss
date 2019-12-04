@@ -1,0 +1,13 @@
+@function v($var) {
+  @return var(--#{$var});
+}
+
+:root {
+  --primary: #000;
+  --bg: #fff;
+}
+
+// html {
+//   background: v(bg);
+//   color: v(primary);
+// }
