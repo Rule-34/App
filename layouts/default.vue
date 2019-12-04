@@ -61,7 +61,7 @@ export default {
   },
 
   mounted() {
-    // Set different layout if we're on index
+    // Set different layout if we're on index, necessary on mounted for first page load
     this.TestForDashboard()
   },
 

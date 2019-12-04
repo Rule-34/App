@@ -5,7 +5,7 @@
       class="inline-flex w-fit-content relative border rounded-full shadow bg-white overflow-hidden"
     >
       <!-- Cloud icon -->
-      <div for="domain-selector" class="inline-flex items-center pl-2">
+      <div for="domain-selector" class="inline-flex items-center pl-2 pr-1">
         <CloudIcon class="icon text-blue-500 w-4 h-4" />
       </div>
 
@@ -14,9 +14,7 @@
         :value="selected"
         @change="
           apiManager($event.target.value)
-          tagManager('reset')
-          pidManager('reset')
-          getPosts()
+          changeDomain()
         "
         class="inline-flex items-center appearance-none outline-none font-light text-gray-700 bg-white"
       >
@@ -28,7 +26,7 @@
       </select>
 
       <!-- Drop icon -->
-      <div class="inline-flex items-center pr-2">
+      <div class="inline-flex items-center pl-1 pr-2">
         <ChevronDownIcon class="icon text-gray-700 w-4 h-4" />
       </div>
     </div>
@@ -66,6 +64,16 @@ export default {
   methods: {
     ...mapMutations(['apiManager']),
     ...mapActions(['getPosts', 'tagManager', 'pidManager']),
+
+    // Changes that we have to do when changing domain so request is not malformed
+    changeDomain() {
+      // Reset tags so we dont search those tags on new domain
+      this.tagManager('reset')
+      // Reset PID so we dont start with specific PID on new domain
+      this.pidManager('reset')
+      // And finally load the posts with everything to default
+      this.getPosts()
+    },
   },
 }
 </script>
