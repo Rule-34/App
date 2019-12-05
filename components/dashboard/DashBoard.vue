@@ -5,7 +5,11 @@
 
     <DashBoardSettings />
     <!-- every post in their own component -->
-    <Post v-for="post in dashBoardData.data.posts" :key="post.id" :post-data="post" />
+    <Post
+      v-for="post in dashBoardData.data.posts"
+      :key="post.id"
+      :post-data="post"
+    />
 
     <!-- If infinite load is NOT enabled -->
     <template v-if="!userSettings.infiniteLoad.value">
@@ -18,7 +22,9 @@
     <template v-else>
       <!-- If theres more posts -->
       <div v-intersect.quiet="throttleInfiniteLoading" class="mx-auto">
-        <p @click="concatPost()" class="text-center text-default pb-2">Loading more posts...</p>
+        <p @click="concatPost()" class="text-center text-default pb-2">
+          Loading more posts...
+        </p>
         <Errors />
       </div>
     </template>
@@ -29,7 +35,7 @@
 import { mapState, mapActions } from 'vuex'
 import { Intersect } from 'vuetify/es5/directives/intersect'
 import throttle from 'lodash/throttle'
-import Errors from './Errors.vue'
+import Errors from '~/components/general/Errors'
 import DashBoardSettings from './DashBoardSettings.vue'
 import Post from './Post.vue'
 import Controls from './Controls.vue'
