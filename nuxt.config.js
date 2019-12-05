@@ -80,7 +80,7 @@ export default {
       name: 'Rule 34 App',
       short_name: 'Rule 34 App',
       lang: 'en',
-      theme_color: 'white',
+      theme_color: '#181a1b',
     },
     meta: {
       /* meta options */
