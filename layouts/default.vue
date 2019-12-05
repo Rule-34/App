@@ -32,7 +32,7 @@ import { Touch } from 'vuetify/es5/directives/touch'
 import { mapMutations, mapState } from 'vuex'
 import NavToggler from '~/components/navigation/NavToggler.vue'
 import SideNav from '~/components/navigation/SideNav.vue'
-import Search from '~/components/dashboard/Search.vue'
+import Search from '~/components/search/Search'
 
 export default {
   // Components

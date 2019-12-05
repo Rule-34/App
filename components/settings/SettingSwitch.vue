@@ -13,11 +13,14 @@
           @change="
             changeUserSetting({
               index: switchId,
-              value: !value
+              value: !value,
             })
           "
         />
-        <label class="form-switch-label theme-responsive-container" :for="switchId" />
+        <label
+          class="form-switch-label theme-responsive-container"
+          :for="switchId"
+        />
       </div>
       <label class="text-xs text-default" :for="switchId" v-text="text" />
     </div>
@@ -34,7 +37,7 @@
           @change="
             changeUserSetting({
               index: switchId,
-              value: innerValue
+              value: innerValue,
             })
           "
         />
@@ -101,9 +104,6 @@ export default {
   right: 50%;
   content: '';
   transition: all 0.2s ease-in;
-}
-.form-switch-checkbox:checked + .form-switch-label,
-.form-switch-checkbox:checked + .form-switch-label:before {
 }
 .form-switch-checkbox:checked + .form-switch-label {
   @apply bg-primary-hover shadow-none;

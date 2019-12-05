@@ -10,10 +10,15 @@
     <h1
       v-if="!searchData.data && !generalData.errors"
       class="text-center font-hairline m-auto text-xl"
-    >Search something!</h1>
+    >
+      Search something!
+    </h1>
 
     <!-- Added tags, click them to remove them -->
-    <div v-if="searchData.tags" class="tag-container border-tertiary border-b rounded-b pb-1">
+    <div
+      v-if="searchData.tags"
+      class="tag-container border-tertiary border-b rounded-b pb-1"
+    >
       <a
         v-for="tag in searchData.tags"
         :key="tag"
@@ -68,13 +73,14 @@
       @click="dispatchGetAddedTags"
       href="#"
       class="btn theme-responsive-text text-center bg-gradient-lilac-blue mt-auto shadow-md"
-    >Apply tags</a>
+      >Apply tags</a
+    >
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
-import Errors from './Errors.vue'
+import Errors from '~/components/general/Errors'
 
 export default {
   name: 'SearchResults',
