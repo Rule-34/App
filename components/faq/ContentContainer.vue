@@ -31,11 +31,11 @@
             class="mr-2 text-green-500"
           />
           <!-- Title -->
-          <h1 v-text="title" class="text-primary text-lg font-bold" />
+          <h1 v-text="title" class="text-default text-lg font-bold" />
         </div>
 
         <!-- Body -->
-        <div class="text-sm text-primary">
+        <div class="text-sm text-default">
           <p v-if="text" v-text="text" class=" mb-1 whitespace-pre-line" />
 
           <slot name="textRich" class="mb-1" />
