@@ -9,14 +9,16 @@
             isActive: !searchData.isActive,
           })
         "
-        class="hidden md:block w-1/6"
+        class="hidden md:block md:w-2/12"
       />
 
       <!-- Search  -->
-      <SearchBar class="w-full md:w-2/6 m-auto" />
+      <SearchBar class="w-full md:w-4/12 m-auto" />
 
       <!-- Search results -->
-      <SearchResults class="flex flex-col p-2 my-auto w-full md:w-2/6 min-h-1/2 overflow-y-auto" />
+      <SearchResults
+        class="flex flex-col p-2 my-auto w-full md:w-6/12 min-h-1/2 overflow-y-auto"
+      />
 
       <div
         @click.self="
@@ -24,7 +26,7 @@
             isActive: !searchData.isActive,
           })
         "
-        class="hidden md:block w-1/6"
+        class="hidden md:block md:w-2/12"
       />
       <!--  -->
     </div>

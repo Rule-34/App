@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Search bar -->
-    <div class="material-container p-2 w-3/4 flex justify-between">
+    <div class="material-container p-2 flex justify-between">
       <!-- Search Icon -->
       <div class="w-full inline-flex">
         <SearchIcon class="icon text-default w-6 h-6 mr-2" />
