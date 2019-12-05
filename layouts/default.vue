@@ -13,7 +13,7 @@
 
     <!-- Transition for sidenav -->
     <transition name="sidenav">
-      <SideNav v-if="sideNavData.isActive" class="sidebar-container" />
+      <SideNav v-if="sideNavData.isActive" />
     </transition>
 
     <!-- Transition for Searchbar -->

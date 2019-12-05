@@ -19,18 +19,10 @@
 }
 
 /* ----- Sidebar related ----- */
-.sidebar-container {
-  @apply fixed flex z-10 min-h-screen w-full;
-}
-
-// Make full width when on small devices
-.sidebar {
-  @apply w-full bg-secondary border-t border-r border-tertiary shadow;
-}
 
 // Hide clickable close area when on small devices
 .sidebar-close-area {
-  @apply hidden bg-transparent;
+  @apply hidden;
 }
 
 // Changes for medium screens
@@ -65,7 +57,6 @@
 .sidebar-img {
   transition: transform 0.5s ease;
   transition-delay: 0.35s;
-  @apply w-full h-full object-cover;
 }
 .sidebar-img:hover {
   transform: scale(1.5);
