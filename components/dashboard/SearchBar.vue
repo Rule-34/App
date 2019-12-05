@@ -4,12 +4,12 @@
     <div class="material-container p-2 w-3/4 flex justify-between">
       <!-- Search Icon -->
       <div class="w-full inline-flex">
-        <SearchIcon class="icon text-black w-6 h-6 mr-2" />
+        <SearchIcon class="icon text-default w-6 h-6 mr-2" />
         <!-- Input -->
         <input
           v-model="searchQuery"
           @input="debounceInput"
-          class="w-full ml-1 outline-none font-light"
+          class="w-full text-default font-light bg-secondary outline-none ml-1"
           type="search"
           placeholder="Search: e.g. dragon"
         />

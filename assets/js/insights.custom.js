@@ -2,7 +2,7 @@ import { track } from 'insights-js'
 
 const defaultSettings = {
   darkTheme: {
-    value: false,
+    value: true,
   },
   lazyLoading: {
     value: true,

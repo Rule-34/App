@@ -9,45 +9,9 @@ button:focus {
   outline: 0;
 }
 
-a {
-  @apply .no-underline .text-blue-400;
-}
-
-a:hover {
-  @apply .text-blue-600;
-}
-
 /** 
 **          BUILDING CLASSES
 **/
-.material-container {
-  @apply .border .rounded-lg .bg-white .m-5 .overflow-hidden .shadow;
-}
-
-.container {
-  @apply .mx-auto .w-full;
-}
-
-.bg-gradient-lilac-blue {
-  background: linear-gradient(
-    152deg,
-    rgba(155, 155, 224, 1) 38%,
-    rgba(0, 212, 255, 1) 100%
-  );
-}
-
-.bg-gradient-blue-lilac {
-  background: linear-gradient(
-    160deg,
-    rgba(0, 212, 255, 1) 38%,
-    rgba(155, 155, 224, 1) 100%
-  );
-}
-
-.cool-bar {
-  height: 10px;
-  @apply .w-full .block .bg-gradient-lilac-blue;
-}
 
 .h-perfect {
   height: 100vh;
@@ -65,10 +29,6 @@ a:hover {
 /** 
 **          ICON RELATED
 **/
-
-.icon {
-  @apply .stroke-width-1 .pointer-events-none .align-middle;
-}
 
 .stroke-width-1 {
   stroke-width: 1.5;

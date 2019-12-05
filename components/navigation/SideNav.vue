@@ -4,35 +4,30 @@
     <nav class="sidebar">
       <!-- Hero Image -->
       <div class="w-full h-48 overflow-hidden">
-        <img
-          class="sidebar-img"
-          src="/icon.png"
-          alt="Rule 34 App Logo"
-          title="Rule 34 App"
-        />
+        <img class="sidebar-img" src="/icon.png" alt="Rule 34 App Logo" title="Rule 34 App" />
       </div>
 
       <!-- Navbar Links -->
       <div class="p-3">
         <ul class="nav-links text-center md:text-left leading-loose">
-          <li>
-            <nuxt-link to="/">Dashboard</nuxt-link>
+          <li class="group">
+            <nuxt-link to="/" class="group-hover:text-primary">Dashboard</nuxt-link>
           </li>
 
-          <li>
-            <nuxt-link to="/faq">Faq</nuxt-link>
+          <li class="group">
+            <nuxt-link to="/faq" class="group-hover:text-primary">Faq</nuxt-link>
           </li>
 
-          <li>
-            <nuxt-link to="/usage">Usage</nuxt-link>
+          <li class="group">
+            <nuxt-link to="/usage" class="group-hover:text-primary">Usage</nuxt-link>
           </li>
 
-          <li>
-            <nuxt-link to="/about">About</nuxt-link>
+          <li class="group">
+            <nuxt-link to="/about" class="group-hover:text-primary">About</nuxt-link>
           </li>
 
-          <li>
-            <nuxt-link to="/settings">Settings</nuxt-link>
+          <li class="group">
+            <nuxt-link to="/settings" class="group-hover:text-primary">Settings</nuxt-link>
           </li>
         </ul>
       </div>

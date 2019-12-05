@@ -31,7 +31,7 @@ export default () => ({
     darkTheme: {
       name: 'Dark Theme WIP',
       description: 'Enable dark theme app-wide',
-      value: false,
+      value: true,
     },
     lazyLoading: {
       name: 'Lazy Load Media',
