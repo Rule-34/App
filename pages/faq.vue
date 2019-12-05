@@ -12,7 +12,7 @@
       icon="info"
     >
       <!-- Slot -->
-      <small class="text-default">
+      <small class="text-default-text-muted">
         If you're the owner of a domain that this app gets content from, and
         want to cease content being used, please go to GitHub and leave an
         issue.
@@ -86,7 +86,7 @@ All information is anonymized and respects the 'Do not track' directive, so if y
       icon="star"
     >
       <!-- Slot -->
-      <small class="text-default">And you, the user!</small>
+      <small class="text-default-text-muted">And you, the user!</small>
     </ContentContainer>
   </div>
 </template>

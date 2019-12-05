@@ -8,7 +8,7 @@
 **/
 
 html {
-  @apply bg-secondary;
+  @apply bg-background;
 }
 
 a {
@@ -26,7 +26,7 @@ a:hover {
 // General
 
 .material-container {
-  @apply bg-secondary border-tertiary border rounded-lg overflow-hidden m-5 shadow;
+  @apply bg-background border-border border rounded-lg overflow-hidden m-5 shadow;
 }
 
 .material-container:hover {
@@ -42,7 +42,7 @@ a:hover {
 }
 
 .theme-responsive-container {
-  @apply text-primary-hover border border-tertiary;
+  @apply text-primary-hover border border-border;
 }
 
 .theme-responsive-container:hover {

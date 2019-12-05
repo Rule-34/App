@@ -2,7 +2,7 @@
   <div class="fixed min-h-screen w-full z-10 flex">
     <!-- Actual Navigation Bar -->
     <nav
-      class="theme-responsive-container bg-secondary border-l-0 border-b-0 shadow"
+      class="theme-responsive-container bg-background border-l-0 border-b-0 shadow"
     >
       <!-- Hero Image -->
       <div class="w-full overflow-hidden relative">
@@ -22,7 +22,7 @@
       </div>
 
       <!-- Navbar Links -->
-      <div class="p-3 border-t border-tertiary">
+      <div class="p-3 border-t border-border">
         <ul class="nav-links text-center md:text-left leading-loose">
           <li class="group">
             <nuxt-link to="/" class="group-hover:text-primary"

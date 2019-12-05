@@ -22,7 +22,7 @@
           :for="switchId"
         />
       </div>
-      <label class="text-xs text-default" :for="switchId" v-text="text" />
+      <label class="text-xs text-default-text" :for="switchId" v-text="text" />
     </div>
 
     <!-- If its a number -->
@@ -42,7 +42,7 @@
           "
         />
       </div>
-      <label class="text-xs text-default" :for="switchId" v-text="text" />
+      <label class="text-xs text-default-text" :for="switchId" v-text="text" />
     </div>
   </div>
 </template>
@@ -79,7 +79,7 @@ export default {
 <style lang="postcss">
 /* Numeric */
 .form-switch-numeric {
-  @apply w-full rounded-full shadow-inner text-center leading-normal bg-secondary select-none outline-none;
+  @apply w-full rounded-full shadow-inner text-center leading-normal bg-background select-none outline-none;
 }
 
 /* The container */
@@ -92,7 +92,7 @@ export default {
 
 /* Label that acts as the checkbox */
 .form-switch-label {
-  @apply block overflow-hidden cursor-pointer bg-secondary rounded-full h-6 shadow-inner;
+  @apply block overflow-hidden cursor-pointer bg-background rounded-full h-6 shadow-inner;
 
   transition: background-color 0.2s ease-in;
 }

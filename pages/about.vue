@@ -15,9 +15,11 @@
             <img class="mx-auto mb-5" src="/img/ALogo.webp" alt="Akbal logo" />
           </picture>
           <h1
-            class="theme-responsive-container rounded-full bg-secondary w-fit-content mx-auto shadow-md mb-1 py-1 px-3"
-          >Alejandro Akbal</h1>
-          <small class="text-default">
+            class="theme-responsive-container rounded-full bg-background w-fit-content mx-auto shadow-md mb-1 py-1 px-3"
+          >
+            Alejandro Akbal
+          </h1>
+          <small class="text-default-text">
             I'm a web developer and this PWA is a project that I do in my free
             time
           </small>

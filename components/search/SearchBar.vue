@@ -9,7 +9,7 @@
         <input
           v-model="searchQuery"
           @input="debounceInput"
-          class="w-full text-default font-light bg-secondary outline-none ml-1"
+          class="w-full text-default-text font-light bg-background outline-none ml-1"
           type="search"
           placeholder="Search: e.g. dragon"
         />

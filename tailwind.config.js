@@ -4,9 +4,13 @@ module.exports = {
       colors: {
         primary: 'var(--color-primary)',
         'primary-hover': 'var(--color-primary-hover)',
+
         default: 'var(--color-default)',
-        secondary: 'var(--color-secondary)',
-        tertiary: 'var(--color-tertiary)',
+        'default-text': 'var(--color-default-text)',
+        'default-text-muted': 'var(--color-default-text-muted)',
+
+        background: 'var(--color-background)',
+        border: 'var(--color-border)',
 
         'gradient-one': '--color-gradient-one',
         'gradient-two': '--color-gradient-two',

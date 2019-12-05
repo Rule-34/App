@@ -22,7 +22,7 @@
     <template v-else>
       <!-- If theres more posts -->
       <div v-intersect.quiet="throttleInfiniteLoading" class="mx-auto">
-        <p @click="concatPost()" class="text-center text-default pb-2">
+        <p @click="concatPost()" class="text-center text-default-text pb-2">
           Loading more posts...
         </p>
         <Errors />

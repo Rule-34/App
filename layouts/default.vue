@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-secondary"
+    class="bg-background"
     :class="userSettings.darkTheme.value ? 'dark' : 'light'"
     v-touch="{
       left: () =>
