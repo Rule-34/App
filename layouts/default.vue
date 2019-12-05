@@ -1,5 +1,7 @@
 <template>
   <div
+    class="bg-secondary"
+    :class="userSettings.darkTheme.value ? 'dark' : 'light'"
     v-touch="{
       left: () =>
         isDashboard === true ? touchHandler('left') : sideNavManager('close'),
@@ -43,7 +45,7 @@ export default {
     return { isDashboard: false }
   },
 
-  computed: mapState(['searchData', 'sideNavData']),
+  computed: mapState(['searchData', 'sideNavData', 'userSettings']),
 
   // Watch for route changes
   watch: {
