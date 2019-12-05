@@ -4,12 +4,12 @@
     <button
       @click="sideNavManager()"
       class="navigation-toggler-button"
+      type="button"
       title="Menu"
-    >
-      &nbsp;
-    </button>
+    >&nbsp;</button>
     <button
       v-if="showSearch"
+      type="button"
       @click="newSearchData({ isActive: !searchData.isActive })"
       class="navigation-search-button"
       title="Search"
