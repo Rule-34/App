@@ -22,6 +22,7 @@
           v-for="option in options"
           :value="option.value"
           v-text="option.name"
+          :key="option.name"
         />
       </select>
 
