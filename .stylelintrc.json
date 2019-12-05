@@ -3,7 +3,7 @@
   "extends": ["stylelint-config-recommended", "stylelint-prettier/recommended"],
   "rules": {
     "at-rule-no-unknown": [
-      true,
+      null,
       {
         "ignoreAtRules": [
           "tailwind",
