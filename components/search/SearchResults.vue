@@ -1,5 +1,5 @@
 <template>
-  <div class="theme-responsive-container rounded-lg bg-secondary">
+  <div class="material-container">
     <!-- Results -->
     <!-- ERROR HANDLING AND SEARCH RESULTS -->
 
@@ -9,7 +9,7 @@
     <!-- If nothing searched -->
     <h1
       v-if="!searchData.data && !generalData.errors"
-      class="text-center font-hairline m-auto text-xl"
+      class="text-center text-default font-hairline m-auto text-xl"
     >
       Search something!
     </h1>
