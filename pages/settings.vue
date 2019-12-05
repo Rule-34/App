@@ -1,16 +1,20 @@
 <template>
   <div>
     <div class="flex flex-col h-perfect p-3">
-      <div class="material-container w-full md:w-2/3 xl:w-1/2 m-auto p-5 shadow-xl">
+      <div
+        class="material-container w-full md:w-2/3 xl:w-1/2 m-auto p-5 shadow-xl"
+      >
         <div class="flex flex-wrap">
-          <div class="w-2/5 m-auto text-center text-default">
+          <div class="w-2/5 m-auto text-center text-default-text">
             <h1 class="text-lg">Settings</h1>
 
             <button
               @click="removeLocalStorage"
               title="Use me when something is not working!"
               class="text-xs theme-responsive-container rounded-full px-2 align-middle shadow"
-            >Reset</button>
+            >
+              Reset
+            </button>
           </div>
           <div class="w-3/5 m-auto flex">
             <div class="mx-auto">

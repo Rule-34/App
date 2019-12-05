@@ -9,7 +9,7 @@
     <!-- If nothing searched -->
     <h1
       v-if="!searchData.data && !generalData.errors"
-      class="text-center text-default font-hairline m-auto text-xl"
+      class="text-center text-default-text font-hairline m-auto text-xl"
     >
       Search something!
     </h1>
@@ -17,7 +17,7 @@
     <!-- Added tags, click them to remove them -->
     <div
       v-if="searchData.tags"
-      class="tag-container border-tertiary border-b rounded-b pb-1"
+      class="tag-container border-border border-b rounded-b pb-1"
     >
       <a
         v-for="tag in searchData.tags"

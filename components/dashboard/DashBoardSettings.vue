@@ -2,7 +2,7 @@
   <div class="m-5">
     <!-- Domain selector -->
     <div
-      class="inline-flex w-fit-content relative border border-tertiary hover:border-primary-hover rounded-full shadow bg-secondary overflow-hidden"
+      class="inline-flex w-fit-content relative border border-border hover:border-primary-hover rounded-full shadow bg-background overflow-hidden"
     >
       <!-- Cloud icon -->
       <div for="domain-selector" class="inline-flex items-center pl-2 pr-1">
@@ -16,7 +16,7 @@
           apiManager($event.target.value)
           changeDomain()
         "
-        class="inline-flex items-center appearance-none outline-none font-light text-primary bg-secondary"
+        class="inline-flex items-center appearance-none outline-none font-light text-primary bg-background"
       >
         <option
           v-for="option in options"
