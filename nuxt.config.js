@@ -78,6 +78,7 @@ export default {
   pwa: {
     manifest: {
       name: 'Rule 34 App',
+      short_name: 'Rule 34 App',
       lang: 'en',
       theme_color: 'white',
     },
