@@ -30,7 +30,7 @@ a:hover {
 }
 
 .material-container:hover {
-  @apply border-primary-hover;
+  @apply border-border-hover;
 }
 
 .theme-responsive-text {
@@ -46,7 +46,7 @@ a:hover {
 }
 
 .theme-responsive-container:hover {
-  @apply text-primary border-primary-hover;
+  @apply text-primary border-border-hover;
 }
 
 .container {

@@ -2,7 +2,7 @@
   <div class="m-5">
     <!-- Domain selector -->
     <div
-      class="inline-flex w-fit-content relative border border-border hover:border-primary-hover rounded-full shadow bg-background overflow-hidden"
+      class="inline-flex w-fit-content relative theme-responsive-container rounded-full shadow bg-background overflow-hidden"
     >
       <!-- Cloud icon -->
       <div for="domain-selector" class="inline-flex items-center pl-2 pr-1">

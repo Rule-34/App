@@ -2,7 +2,7 @@
 **          VARIABLES
 **/
 
-:root {
+.dark {
   // For text and such
   --color-primary: #63b3ed;
   --color-primary-hover: #3182ce;
@@ -16,6 +16,28 @@
 
   // For borders and such
   --color-border: rgb(43, 61, 84);
+  --color-border-hover: #3182ce;
+
+  // For gradients
+  --color-gradient-one: rgb(155, 155, 224);
+  --color-gradient-two: rgb(0, 212, 255);
+}
+
+.light {
+  // For text and such
+  --color-primary: #63b3ed;
+  --color-primary-hover: #3182ce;
+
+  --color-default: white; // This is for icons mainly
+  --color-default-text: black;
+  --color-default-text-muted: gray;
+
+  // For background
+  --color-background: white;
+
+  // For borders and such
+  --color-border: transparent;
+  --color-border-hover: transparent;
 
   // For gradients
   --color-gradient-one: rgb(155, 155, 224);

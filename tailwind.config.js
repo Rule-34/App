@@ -10,7 +10,9 @@ module.exports = {
         'default-text-muted': 'var(--color-default-text-muted)',
 
         background: 'var(--color-background)',
+
         border: 'var(--color-border)',
+        'border-hover': 'var(--color-border-hover)',
 
         'gradient-one': '--color-gradient-one',
         'gradient-two': '--color-gradient-two',
