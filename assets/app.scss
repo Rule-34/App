@@ -1,9 +1,14 @@
+// Theme
+@import 'scss/components/theme/theme.scss';
+
+// Tailwind's
 @import 'tailwindcss/base';
 
 @import 'tailwindcss/components';
 
 // Custom
 @import 'scss/components/CommonUsage.scss';
-@import 'scss/tailwind-custom-components.scss';
+@import 'scss/custom-components.scss';
 
+// Tailwind's
 @import 'tailwindcss/utilities';

@@ -2,11 +2,11 @@
   <div class="m-5">
     <!-- Domain selector -->
     <div
-      class="inline-flex w-fit-content relative border rounded-full shadow bg-white overflow-hidden"
+      class="inline-flex w-fit-content relative border border-tertiary hover:border-primary-hover rounded-full shadow bg-secondary overflow-hidden"
     >
       <!-- Cloud icon -->
       <div for="domain-selector" class="inline-flex items-center pl-2 pr-1">
-        <CloudIcon class="icon text-blue-500 w-4 h-4" />
+        <CloudIcon class="icon text-primary w-4 h-4" />
       </div>
 
       <!-- Selector -->
@@ -16,7 +16,7 @@
           apiManager($event.target.value)
           changeDomain()
         "
-        class="inline-flex items-center appearance-none outline-none font-light text-gray-700 bg-white"
+        class="inline-flex items-center appearance-none outline-none font-light text-primary bg-secondary"
       >
         <option
           v-for="option in options"
@@ -28,7 +28,7 @@
 
       <!-- Drop icon -->
       <div class="inline-flex items-center pl-1 pr-2">
-        <ChevronDownIcon class="icon text-gray-700 w-4 h-4" />
+        <ChevronDownIcon class="icon text-default w-4 h-4" />
       </div>
     </div>
 

@@ -28,10 +28,3 @@
 /** 
 **          TAG RELATED
 **/
-.tag-container {
-  @apply .inline-flex .flex-wrap;
-}
-
-.tag {
-  @apply .px-1 .m-1 .rounded .border .overflow-hidden select-none;
-}

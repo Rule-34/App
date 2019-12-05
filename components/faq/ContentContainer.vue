@@ -30,14 +30,15 @@
             v-else-if="icon === 'donation'"
             class="mr-2 text-green-500"
           />
-          <h1 v-text="title" class="text-lg font-bold" />
+          <!-- Title -->
+          <h1 v-text="title" class="text-primary text-lg font-bold" />
         </div>
 
         <!-- Body -->
-        <div class="text-sm">
-          <p v-if="text" v-text="text" class="mb-1 whitespace-pre-line" />
+        <div class="text-sm text-primary">
+          <p v-if="text" v-text="text" class=" mb-1 whitespace-pre-line" />
 
-          <slot name="textRich" />
+          <slot name="textRich" class="mb-1" />
           <!-- We can insert extra info here -->
 
           <!-- Image -->
@@ -86,8 +87,8 @@ export default {
     // For icons
     icon: { type: String, required: false, default: undefined },
     // For images
-    img: { type: String, required: false, default: undefined }
+    img: { type: String, required: false, default: undefined },
   },
-  computed: mapState(['userSettings'])
+  computed: mapState(['userSettings']),
 }
 </script>

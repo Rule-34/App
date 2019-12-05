@@ -2,11 +2,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // "black-10": "rgba(0, 0, 0, 0.1)",
+        primary: 'var(--color-primary)',
+        'primary-hover': 'var(--color-primary-hover)',
+        default: 'var(--color-default)',
+        secondary: 'var(--color-secondary)',
+        tertiary: 'var(--color-tertiary)',
+
+        'gradient-one': '--color-gradient-one',
+        'gradient-two': '--color-gradient-two',
+
         'black-25': 'rgba(0, 0, 0, 0.25)',
-        // "black-80": "rgba(0, 0, 0, 0.8)"
-        // "black-90": "rgba(0, 0, 0, 0.9)",
-        // "white-10": "rgba(255, 255, 255, 0.1)"
       },
 
       inset: {},
@@ -38,6 +43,4 @@ module.exports = {
   variants: {
     textColor: ['responsive', 'group-hover', 'hover', 'focus'],
   },
-
-  // plugins: [require('tailwindcss-gradients')()]
 }

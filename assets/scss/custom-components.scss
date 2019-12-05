@@ -1,0 +1,104 @@
+@import 'components/settings/Settings.scss';
+@import 'components/dashboard/DashBoard.scss';
+@import 'components/navigation/SearchBar.scss';
+@import 'components/navigation/SideNav.scss';
+
+/** 
+**          ELEMENTS
+**/
+
+html {
+  @apply bg-secondary;
+}
+
+a {
+  @apply text-primary-hover no-underline;
+}
+
+a:hover {
+  @apply text-primary;
+}
+
+/** 
+  **          CLASSES
+  **/
+
+// General
+
+.material-container {
+  @apply bg-secondary border-tertiary border rounded-lg overflow-hidden m-5 shadow;
+}
+
+.material-container:hover {
+  @apply border-primary-hover;
+}
+
+.theme-responsive-text {
+  @apply text-primary-hover;
+}
+
+.theme-responsive-text:hover {
+  @apply text-primary;
+}
+
+.theme-responsive-container {
+  @apply text-primary-hover border border-tertiary;
+}
+
+.theme-responsive-container:hover {
+  @apply text-primary border-primary-hover;
+}
+
+.container {
+  @apply .mx-auto .w-full;
+}
+
+// Utils
+.icon {
+  @apply text-default .stroke-width-1 .pointer-events-none;
+}
+
+.bg-gradient-lilac-blue {
+  background: linear-gradient(
+    152deg,
+    var(--color-gradient-one) 38%,
+    var(--color-gradient-two) 100%
+  );
+}
+
+.bg-gradient-blue-lilac {
+  background: linear-gradient(
+    160deg,
+    var(--color-gradient-two) 38%,
+    var(--color-gradient-one) 100%
+  );
+}
+
+.cool-bar {
+  height: 10px;
+  @apply .w-full .block .bg-gradient-lilac-blue;
+}
+
+// Tags
+
+.tag-container {
+  @apply inline-flex flex-wrap;
+}
+
+.tag {
+  @apply text-primary-hover select-none rounded border border-primary-hover overflow-hidden px-1 m-1;
+}
+
+.tag:hover {
+  @apply border-primary;
+}
+
+// Sidebar
+
+.nav-links li {
+  transition: transform 0.2s ease;
+  @apply text-primary-hover relative;
+}
+.nav-links li:hover {
+  transform: translateX(5px);
+}

@@ -6,7 +6,7 @@
         dashBoardData.data.count === '0' ||
         $nuxt.isOffline
     "
-    class="material-container text-center p-2"
+    class="material-container text-default text-center p-2"
   >
     <template v-if="generalData.errors">
       <h1 v-text="generalData.errors" class="bold" />
@@ -18,10 +18,7 @@
       <a @click="resetTags()" href="javascript:void(0)">Reset tags?</a>
     </template>
     <template v-else-if="$nuxt.isOffline">
-      <h1
-        v-text="'You are offline, please connect to the internet'"
-        class="bold"
-      />
+      <h1 v-text="'You are offline, please connect to the internet'" class="bold" />
     </template>
 
     <!-- Not useful -->
@@ -30,7 +27,7 @@
       <a href="javascript:void(0)" @click="tagManager('reset')"
         >Reset tags?</a
       >
-    </template> -->
+    </template>-->
   </div>
 </template>
 

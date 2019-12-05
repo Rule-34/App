@@ -16,9 +16,7 @@
       <SearchBar class="w-full md:w-2/6 m-auto" />
 
       <!-- Search results -->
-      <SearchResults
-        class="search-bar-results w-full md:w-2/6 min-h-1/2 overflow-y-auto"
-      />
+      <SearchResults class="flex flex-col p-2 my-auto w-full md:w-2/6 min-h-1/2 overflow-y-auto" />
 
       <div
         @click.self="

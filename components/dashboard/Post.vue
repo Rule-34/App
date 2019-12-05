@@ -49,8 +49,7 @@
             muted
             loop
           >
-            <source :src="post.high_res_file" />
-            Your browser doesnt support HTML5 video.
+            <source :src="post.high_res_file" />Your browser doesnt support HTML5 video.
           </video>
         </lazy-component>
       </template>
@@ -64,14 +63,13 @@
           muted
           loop
         >
-          <source :src="post.high_res_file" />
-          Your browser doesnt support HTML5 video.
+          <source :src="post.high_res_file" />Your browser doesnt support HTML5 video.
         </video>
       </template>
     </template>
 
     <!-- if Anything else -->
-    <template v-else> Unknown type of media: {{ post.type }} </template>
+    <template v-else>Unknown type of media: {{ post.type }}</template>
 
     <!--  @@@@@@@@@@@@@@@@@@@@@@@@ 
           @@@@@@@@@@@@@@@@@@@@@@@@ Tags and source 
@@ -80,17 +78,9 @@
     <!-- Double transition since i cant figure out how to make it in one for both when theres source and when there isnt -->
     <transition name="fade">
       <div v-if="post.source || (post.tags && isActive)">
-        <transition-group
-          name="fade"
-          tag="div"
-          class="flex flex-wrap overflow-hidden text-sm p-1"
-        >
+        <transition-group name="fade" tag="div" class="flex flex-wrap overflow-hidden text-sm p-1">
           <!-- Tags -->
-          <div
-            key="tags"
-            v-if="post.tags && isActive"
-            class="w-full tag-container"
-          >
+          <div key="tags" v-if="post.tags && isActive" class="w-full tag-container">
             <a
               v-for="tag in post.tags"
               :key="post[tag]"
@@ -102,25 +92,21 @@
           </div>
 
           <!-- Source -->
-          <div
-            key="source"
-            v-if="post.source"
-            class="w-full m-auto text-center"
-          >
+          <div key="source" v-if="post.source" class="w-full m-auto text-center">
             <template v-if="isUrl()">
               <a
                 :href="post.source"
-                class="inline-flex items-baseline"
+                class="inline-flex"
                 rel="noreferrer noopener nofollow"
                 target="_blank"
               >
-                <p>Source</p>
-                <ExternalLinkIcon class="icon ml-2 text-black w-4 h-4" />
+                <p class="text-primary-hover hover:text-primary">Source</p>
+                <ExternalLinkIcon class="icon text-default w-5 h-5 ml-2" />
               </a>
             </template>
 
             <template v-else>
-              <p v-text="post.source" title="Source" />
+              <p v-text="post.source" title="Source" class="text-default" />
             </template>
           </div>
         </transition-group>

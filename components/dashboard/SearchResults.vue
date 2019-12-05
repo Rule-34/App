@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="theme-responsive-container rounded-lg bg-secondary">
     <!-- Results -->
     <!-- ERROR HANDLING AND SEARCH RESULTS -->
 
@@ -10,12 +10,10 @@
     <h1
       v-if="!searchData.data && !generalData.errors"
       class="text-center font-hairline m-auto text-xl"
-    >
-      Search something!
-    </h1>
+    >Search something!</h1>
 
     <!-- Added tags, click them to remove them -->
-    <div v-if="searchData.tags" class="tag-container border-b rounded-b pb-1">
+    <div v-if="searchData.tags" class="tag-container border-tertiary border-b rounded-b pb-1">
       <a
         v-for="tag in searchData.tags"
         :key="tag"
@@ -60,7 +58,7 @@
         {{ tag.name }}
         <span
           v-text="'(' + tag.posts + ')'"
-          class="text-gray-400 group-hover:text-gray-600"
+          class="text-primary-hover group-hover:text-default"
         />
       </a>
     </div>
@@ -69,10 +67,8 @@
     <a
       @click="dispatchGetAddedTags"
       href="#"
-      class="btn text-white text-center bg-gradient-lilac-blue mt-auto shadow-md"
-    >
-      Apply tags
-    </a>
+      class="btn theme-responsive-text text-center bg-gradient-lilac-blue mt-auto shadow-md"
+    >Apply tags</a>
   </div>
 </template>
 

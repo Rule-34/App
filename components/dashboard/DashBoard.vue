@@ -5,11 +5,7 @@
 
     <DashBoardSettings />
     <!-- every post in their own component -->
-    <Post
-      v-for="post in dashBoardData.data.posts"
-      :key="post.id"
-      :post-data="post"
-    />
+    <Post v-for="post in dashBoardData.data.posts" :key="post.id" :post-data="post" />
 
     <!-- If infinite load is NOT enabled -->
     <template v-if="!userSettings.infiniteLoad.value">
@@ -22,9 +18,7 @@
     <template v-else>
       <!-- If theres more posts -->
       <div v-intersect.quiet="throttleInfiniteLoading" class="mx-auto">
-        <p @click="concatPost()" class="text-center text-gray-500 pb-2">
-          Loading more posts...
-        </p>
+        <p @click="concatPost()" class="text-center text-default pb-2">Loading more posts...</p>
         <Errors />
       </div>
     </template>

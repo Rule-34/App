@@ -1,17 +1,17 @@
 /* ----- Navigation toggler related ----- */
 .navigation-toggler-button {
-  @apply .w-12 .h-12 .m-4 .bg-gradient-lilac-blue .rounded-full .shadow-lg .select-none .block;
+  @apply w-12 h-12 m-4 bg-gradient-lilac-blue rounded-full shadow-lg select-none block;
 }
 
 .navigation-search-button {
-  @apply .w-10 .h-10 .m-5 .bg-gradient-blue-lilac .rounded-full .shadow-lg .select-none .block;
+  @apply w-10 h-10 m-5 bg-gradient-blue-lilac rounded-full shadow-lg select-none block;
 }
 
 .navigation-toggler {
   top: 25px;
   transform: translateX(-35px);
   transition: transform 0.3s ease-in-out;
-  @apply .fixed .z-50;
+  @apply fixed z-50;
 }
 
 .navigation-toggler:hover {
@@ -20,17 +20,17 @@
 
 /* ----- Sidebar related ----- */
 .sidebar-container {
-  @apply .fixed .flex .z-10 .min-h-screen .w-full;
+  @apply fixed flex z-10 min-h-screen w-full;
 }
 
 // Make full width when on small devices
 .sidebar {
-  @apply .w-full .bg-white .border .shadow;
+  @apply w-full bg-secondary border-t border-r border-tertiary shadow;
 }
 
 // Hide clickable close area when on small devices
 .sidebar-close-area {
-  @apply .hidden .bg-transparent;
+  @apply hidden bg-transparent;
 }
 
 // Changes for medium screens
@@ -41,23 +41,23 @@
   }
 
   .navigation-toggler-button {
-    @apply .w-16 .h-16 .m-2;
+    @apply w-16 h-16 m-2;
   }
 
   .navigation-search-button {
-    @apply .w-12 .h-12 .m-4;
+    @apply w-12 h-12 m-4;
   }
 
   // Sidebar related
 
   // Make the sidebar one fourth of the screen on medium devices
   .sidebar {
-    @apply .w-1/4;
+    @apply w-1/4;
   }
 
   // Make the close area occupy the rest of the screen on medium devices
   .sidebar-close-area {
-    @apply .w-3/4 .block;
+    @apply w-3/4 block;
   }
 }
 
@@ -65,18 +65,10 @@
 .sidebar-img {
   transition: transform 0.5s ease;
   transition-delay: 0.35s;
-  @apply .w-full .h-full .object-cover;
+  @apply w-full h-full object-cover;
 }
 .sidebar-img:hover {
   transform: scale(1.5);
-}
-
-.nav-links li {
-  transition: transform 0.2s ease;
-  @apply .relative;
-}
-.nav-links li:hover {
-  transform: translateX(5px);
 }
 
 // Transition

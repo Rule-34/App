@@ -1,13 +1,43 @@
-@function v($var) {
-  @return var(--#{$var});
-}
+/** 
+**          VARIABLES
+**/
 
 :root {
-  --primary: #000;
-  --bg: #fff;
+  // For text and such
+  --color-primary: #63b3ed;
+  --color-primary-hover: #3182ce;
+
+  --color-default: rgb(255, 255, 255);
+
+  // For background and such
+  --color-secondary: #181a1b;
+
+  // For borders and such
+  --color-tertiary: rgb(43, 61, 84);
+
+  // For gradients
+  --color-gradient-one: rgb(155, 155, 224);
+  --color-gradient-two: rgb(0, 212, 255);
 }
 
-// html {
-//   background: v(bg);
-//   color: v(primary);
-// }
+/* @media (prefers-color-scheme: dark) {
+  .day.dark-scheme {
+    background: #333;
+    color: white;
+  }
+  .night.dark-scheme {
+    background: black;
+    color: #ddd;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .day.light-scheme {
+    background: white;
+    color: #555;
+  }
+  .night.light-scheme {
+    background: #eee;
+    color: black;
+  }
+} */

@@ -8,21 +8,21 @@
     <!-- What is this -->
     <ContentContainer
       title="What is this?"
-      text="This is a Progressive Web App, essentially a installable web page, that acts as a client for rule34.xxx,
-This means that it gets the images from a official Api wrapper and displays them, nothing is stored in any server."
+      text="This is a Progressive Web App, essentially a installable web page, that acts as a client for various Rule 34 domains, it gets the images from the domain's public API and serves them, nothing is stored in any server."
       icon="info"
     >
       <!-- Slot -->
-      <small class="text-gray-500"
-        >If you're the owner of rule34.xxx/rule34.paheal.net and want to cease
-        this website please go to GitHub and leave an issue.</small
-      >
+      <small class="text-default">
+        If you're the owner of a domain that this app gets content from, and
+        want to cease content being used, please go to GitHub and leave an
+        issue.
+      </small>
     </ContentContainer>
 
     <!-- Copyright -->
     <ContentContainer
       title="Do you own the media content?"
-      text="No, the images/videos/media are directly served from rule34.xxx so I do not own anything."
+      text="No, the images/videos/media are directly served from the domain's API, so I do not own any media."
       icon="info"
     />
 
@@ -86,7 +86,7 @@ All information is anonymized and respects the 'Do not track' directive, so if y
       icon="star"
     >
       <!-- Slot -->
-      <small class="text-gray-500">And you, the user!</small>
+      <small class="text-default">And you, the user!</small>
     </ContentContainer>
   </div>
 </template>
