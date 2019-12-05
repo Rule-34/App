@@ -7,8 +7,9 @@
 **          ELEMENTS
 **/
 
+// TODO: Hardcode until I get to know how can I inject into :root
 html {
-  @apply bg-background;
+  background: #181a1b;
 }
 
 a {
