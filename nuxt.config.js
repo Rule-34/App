@@ -81,6 +81,7 @@ export default {
       short_name: 'Rule 34 App',
       lang: 'en',
       theme_color: '#181a1b',
+      background_color: '#181a1b',
     },
     meta: {
       /* meta options */
