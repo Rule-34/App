@@ -17,10 +17,7 @@
             })
           "
         />
-        <label
-          class="form-switch-label theme-responsive-container"
-          :for="switchId"
-        />
+        <label class="form-switch-label theme-responsive-container" :for="switchId" />
       </div>
       <label class="text-xs text-default-text" :for="switchId" v-text="text" />
     </div>
@@ -93,13 +90,12 @@ export default {
 /* Label that acts as the checkbox */
 .form-switch-label {
   @apply block overflow-hidden cursor-pointer bg-background rounded-full h-6 shadow-inner;
-
   transition: background-color 0.2s ease-in;
 }
 
 /* The ball */
 .form-switch-label:before {
-  @apply absolute block bg-default inset-y-0 w-6 border border-transparent rounded-full -ml-1;
+  @apply absolute block bg-background inset-y-0 w-6 border border-border rounded-full -ml-1;
 
   right: 50%;
   content: '';
