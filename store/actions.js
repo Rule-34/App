@@ -2,7 +2,7 @@ import fireAnalytics from '~/assets/js/insights.custom' // Import analytics
 
 export default {
   // This a customisable Get request
-  async axiosGet({ commit, dispatch }, dataObj) {
+  async httpsGet({ commit, dispatch }, dataObj) {
     // Debugging what url does it get
     // console.log(dataObj.url)
     // console.log(dataObj.mutationToReturn)
@@ -23,11 +23,11 @@ export default {
       domainUrl = this.state.dashBoardSettings.contentDomain
     }
 
-    // Actual axios get
+    // Actual http get
     try {
-      const response = await this.$axios.$get(
+      const response = await fetch(
         this.state.generalData.apiUrl + domainUrl + dataObj.url
-      )
+      ).then(response => response.json())
 
       commit({
         type: dataObj.mutationToReturn,
@@ -63,7 +63,7 @@ export default {
   // Get posts from api
   async getPosts({ dispatch }, mode) {
     // console.log(mode);
-    await dispatch('axiosGet', {
+    await dispatch('httpsGet', {
       url: `posts?pid=${this.state.dashBoardData.pid}&limit=${
         this.state.generalData.postLimit
       }&tags=${this.state.searchData.tags.join('+')}&score=${
@@ -80,9 +80,9 @@ export default {
     // console.log(url);
     try {
       // Get url through proxy
-      const result = await this.$axios.$get(
+      const result = await fetch(
         `${this.state.generalData.apiUrl}images?url=${url}`
-      )
+      ).then(response => response.json())
 
       // And return value to calling function
       return result

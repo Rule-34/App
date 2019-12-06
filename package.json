@@ -13,7 +13,6 @@
     "webp": "for i in static/img/examples/*.png; do cwebp -q 80 ${i%%.*}.png -o ${i%%.*}.webp; done"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/pwa": "^3.0.0-0",
     "@nuxtjs/sitemap": "^2.0.1",
     "insights-js": "^1.2.8",
