@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     ...mapMutations(['newSearchData']),
-    ...mapActions(['tagManager', 'axiosGet', 'getApi']),
+    ...mapActions(['tagManager', 'httpsGet', 'getApi']),
 
     async toggleContentMode() {
       // Populate filterData data and reuse later
@@ -96,7 +96,7 @@ export default {
     },
     getTags() {
       if (this.searchQuery.length > 2) {
-        this.axiosGet({
+        this.httpsGet({
           url: `tags?tag=${this.searchQuery.trim().toLowerCase()}&limit=${
             this.generalData.postLimit
           }`,
