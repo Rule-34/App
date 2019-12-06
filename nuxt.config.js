@@ -26,7 +26,7 @@ export default {
    */
   loadingIndicator: {
     name: 'cube-grid',
-    color: 'white',
+    color: '#181a1b',
     background: 'linear-gradient(152deg, #9b9be0 38%, #00d4ff 100%)',
   },
   /*
