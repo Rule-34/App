@@ -1,7 +1,6 @@
 <template>
+  <!-- Apply touch for showing menu and search -->
   <div
-    class="bg-background"
-    :class="userSettings.darkTheme.value ? 'dark' : 'light'"
     v-touch="{
       left: () =>
         isDashboard === true ? touchHandler('left') : sideNavManager('close'),
@@ -45,7 +44,22 @@ export default {
     return { isDashboard: false }
   },
 
-  computed: mapState(['searchData', 'sideNavData', 'userSettings']),
+  // Set theme and background color in the body dynamically thanks to the vuex store computed property
+  head() {
+    return {
+      bodyAttrs: {
+        class: this.themeAplied ? 'dark bg-background' : 'light bg-background',
+      },
+    }
+  },
+  computed: {
+    ...mapState(['searchData', 'sideNavData', 'userSettings']),
+
+    // When vuex store changes preference then apply specific theme
+    themeAplied() {
+      return this.userSettings.darkTheme.value
+    },
+  },
 
   // Watch for route changes
   watch: {

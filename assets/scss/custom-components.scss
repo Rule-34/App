@@ -7,11 +7,6 @@
 **          ELEMENTS
 **/
 
-// TODO: Hardcode until I get to know how can I inject into :root
-html {
-  background: #181a1b;
-}
-
 a {
   @apply text-primary-hover no-underline;
 }
