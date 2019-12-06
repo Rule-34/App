@@ -1,6 +1,7 @@
 <template>
   <!-- Apply touch for showing menu and search -->
   <div
+    class="layout"
     v-touch="{
       left: () =>
         isDashboard === true ? touchHandler('left') : sideNavManager('close'),
