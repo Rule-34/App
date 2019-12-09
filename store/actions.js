@@ -81,7 +81,7 @@ export default {
     try {
       // Get url through proxy
       const result = await fetch(
-        `${this.state.generalData.apiUrl}images?url=${url}`
+        `${this.state.generalData.apiUrl}proxy?url=${url}`
       ).then(response => response.json())
 
       // And return value to calling function
