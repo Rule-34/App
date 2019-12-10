@@ -48,8 +48,10 @@ export default {
   data() {
     return {
       options: [
-        { name: 'rule34.paheal.net', value: 'paheal/' },
         { name: 'rule34.xxx', value: 'xxx/' },
+        { name: 'rule34.paheal.net', value: 'paheal/' },
+        // { name: 'rule34hentai.net', value: 'hentai/' },
+        // { name: 'lolibooru.moe', value: 'loli/' },
       ],
     }
   },
