@@ -16,7 +16,7 @@ export default () => ({
   },
 
   generalData: {
-    apiUrl: 'https://r34-app-original-api.herokuapp.com/',
+    apiUrl: 'https://r34-app-load-balancer.herokuapp.com/',
     postLimit: 20,
     errors: null,
   },
