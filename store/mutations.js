@@ -19,11 +19,6 @@ export default {
           break
       }
     }
-
-    // Page ID
-    if (payload.pid !== undefined) {
-      state.dashBoardData.pid = payload.pid
-    }
   },
 
   /**
