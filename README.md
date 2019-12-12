@@ -33,9 +33,12 @@ Since the API is being hosted on heroku's free tier, It wont hold lots of connec
 
 If I duplicate the API and use a Load Balancer, a lot of stress would be removed and it would continue to work fine, but I have the following problems: 
 
-**Monetary problem**, I don't have the funds (7€ month) to pay for the duplicated API, since this is a Free service with no Ads to generate revenue, I ask of you, if you really like my work, please donate whatever amount you can to the future of this app.
-[patreon](https://patreon.com/VoidlessSeven7)
-[paypal](https://www.paypal.me/Alejandrorr7)
+**Monetary problem**, I don't have the funds (7€/month) to pay for the duplicated API, or the Load Balancer (7€/month).
+Since this is a **free** service that I'm offering, with **no ads** to generate revenue, I ask of you, **if you really like my work**, please donate whatever amount you can to the future of this app.
+
+[Patreon](https://patreon.com/VoidlessSeven7)
+
+[Paypal](https://www.paypal.me/Alejandrorr7)
 
 
 ## Technologies used
