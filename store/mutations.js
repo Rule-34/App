@@ -1,11 +1,9 @@
 export default {
   /**
-   *
-   * DASHBOARD related
-   *
-   **/
-
-  // Handler for post's data changes
+   * Handler for post's data changes
+   * @param {*} state Default
+   * @param {Object} payload Settings in an object
+   */
   newDashBoardData(state, payload) {
     // Data related
     if (payload.data !== undefined) {
@@ -33,7 +31,11 @@ export default {
     }
   },
 
-  // Handler for api changes
+  /**
+   * Handler for api changes
+   * @param {*} state Default store
+   * @param {String} domain New domain
+   */
   apiManager(state, domain) {
     console.log(domain)
     // New url
@@ -43,13 +45,12 @@ export default {
   },
 
   /**
-   *
-   * Side Nav related
-   *
-   **/
-
-  sideNavManager(state, payload) {
-    switch (payload) {
+   * Handler for Side Nav
+   * @param {*} state Default store
+   * @param {Object} payload Operation to do (close, open, or nothing to toggle)
+   */
+  sideNavManager(state, operation) {
+    switch (operation) {
       case 'close':
         state.sideNavData.isActive = false
         break
@@ -73,12 +74,10 @@ export default {
   },
 
   /**
-   *
-   * SEARCH BAR related
-   *
-   **/
-
-  // Handler for Search changes
+   * Handler for search data
+   * @param {*} state Default
+   * @param {Object} payload Object with settings
+   */
   newSearchData(state, payload) {
     // Toggle Search
     if (payload.isActive !== undefined) {
@@ -134,11 +133,10 @@ export default {
   },
 
   /**
-   *
-   * SETTINGS related
-   *
-   **/
-
+   * Changes user settings
+   * @param {*} state Default
+   * @param {Object} payload Object with settings (.index = name, .value = Boolean)
+   */
   changeUserSetting(state, payload) {
     // Change value
     if (payload !== undefined) {
