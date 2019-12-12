@@ -1,23 +1,15 @@
 <template>
   <div class="fixed min-h-screen w-full z-10 flex">
     <!-- Actual Navigation Bar -->
-    <nav
-      class="theme-responsive-container bg-background border-l-0 border-b-0 shadow"
-    >
+    <nav class="theme-responsive-container bg-background border-l-0 border-b-0 shadow">
       <!-- Hero Image -->
       <div class="w-full overflow-hidden relative">
-        <img
-          class="sidebar-img w-full h-auto object-cover"
-          src="/icon.png"
-          alt="Rule 34 App Logo"
-        />
+        <img class="sidebar-img w-full h-auto object-cover" src="/icon.png" alt="Rule 34 App Logo" />
 
         <!-- Text on image -->
         <div class="absolute bottom-0 left-0 p-3">
           <h1 class="font-black">Rule 34 App</h1>
-          <h3 class="font-normal">
-            Enjoy all Rule 34 sites
-          </h3>
+          <h3 class="font-normal">Enjoy all Rule 34 sites</h3>
         </div>
       </div>
 
@@ -25,33 +17,23 @@
       <div class="p-3 border-t border-border">
         <ul class="nav-links text-center md:text-left leading-loose">
           <li class="group">
-            <nuxt-link to="/" class="group-hover:text-primary"
-              >Dashboard</nuxt-link
-            >
+            <nuxt-link to="/" class="group-hover:text-primary">Dashboard</nuxt-link>
           </li>
 
           <li class="group">
-            <nuxt-link to="/faq" class="group-hover:text-primary"
-              >Faq</nuxt-link
-            >
+            <nuxt-link to="/faq" class="group-hover:text-primary">Faq</nuxt-link>
           </li>
 
           <li class="group">
-            <nuxt-link to="/usage" class="group-hover:text-primary"
-              >Usage</nuxt-link
-            >
+            <nuxt-link to="/usage" class="group-hover:text-primary">Usage</nuxt-link>
           </li>
 
           <li class="group">
-            <nuxt-link to="/about" class="group-hover:text-primary"
-              >About</nuxt-link
-            >
+            <nuxt-link to="/about" class="group-hover:text-primary">About</nuxt-link>
           </li>
 
           <li class="group">
-            <nuxt-link to="/settings" class="group-hover:text-primary"
-              >Settings</nuxt-link
-            >
+            <nuxt-link to="/settings" class="group-hover:text-primary">Settings</nuxt-link>
           </li>
         </ul>
       </div>
@@ -72,7 +54,7 @@ export default {
     ...mapState(['searchData']),
   },
   methods: {
-    ...mapMutations(['searchManager', 'sideNavManager']),
+    ...mapMutations(['sideNavManager']),
   },
 }
 </script>

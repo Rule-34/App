@@ -94,37 +94,13 @@ export default {
   },
 
   /**
-   * Handler for search data
+   *
    * @param {*} state Default
-   * @param {Object} payload Object with settings
+   * @param {Object} payload .operation, .tag, .tag.name
    */
-  searchManager(state, payload) {
-    // Toggle Search
-    if (payload.isActive !== undefined) {
-      state.searchData.isActive = payload.isActive
-    }
-
-    // Toggle Filter
-    if (payload.isFilterActive !== undefined) {
-      state.searchData.isFilterActive = payload.isFilterActive
-    }
-
-    // Change data
-    if (payload.data !== undefined) {
-      // console.log(payload.data);
-      state.searchData.data = payload.data
-    }
-
-    if (payload.premadeFilterData !== undefined) {
-      // console.log(payload.premadeFilterData);
-      state.searchData.premadeFilterData = payload.premadeFilterData
-    }
-
-    // Added tags
-    if (payload.tag !== undefined) {
-      // console.log(payload.tag.operation);
-
-      switch (payload.tag.operation) {
+  tagManager(state, payload) {
+    if (payload.operation !== undefined) {
+      switch (payload.operation) {
         // Add if it doesnt already exist
         case 'add':
           if (!state.searchData.tags.includes(payload.tag.name)) {
@@ -149,6 +125,34 @@ export default {
           state.searchData.tags = []
           break
       }
+    }
+  },
+
+  /**
+   * Handler for search data
+   * @param {*} state Default
+   * @param {Object} payload Object with settings
+   */
+  searchManager(state, payload) {
+    // Toggle Search
+    if (payload.isActive !== undefined) {
+      state.searchData.isActive = payload.isActive
+    }
+
+    // Toggle Filter
+    if (payload.isFilterActive !== undefined) {
+      state.searchData.isFilterActive = payload.isFilterActive
+    }
+
+    // Change data
+    if (payload.data !== undefined) {
+      // console.log(payload.data);
+      state.searchData.data = payload.data
+    }
+
+    if (payload.premadeFilterData !== undefined) {
+      // console.log(payload.premadeFilterData);
+      state.searchData.premadeFilterData = payload.premadeFilterData
     }
   },
 
