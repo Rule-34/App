@@ -64,15 +64,15 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['apiManager', 'pidManager']),
-    ...mapActions(['getPosts', 'tagManager', 'analyticManager']),
+    ...mapMutations(['apiManager', 'pidManager', 'tagManager']),
+    ...mapActions(['getPosts', 'analyticManager']),
 
     // Changes that we have to do when changing domain so request is not malformed
     changeDomain(newApi) {
       // Send new API to change
       this.apiManager(newApi)
       // Reset tags so we dont search those tags on new domain
-      this.tagManager('reset')
+      this.tagManager({ operation: 'reset' })
       // Reset PID so we dont start with specific PID on new domain
       this.pidManager({ operation: 'reset' })
       // And finally load the posts with everything to default

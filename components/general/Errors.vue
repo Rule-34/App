@@ -32,12 +32,12 @@ export default {
     ...mapState(['generalData', 'dashBoardData', 'searchData']),
   },
   methods: {
-    ...mapActions(['getPosts', 'tagManager']),
-    ...mapMutations(['searchManager']),
+    ...mapMutations(['searchManager', 'tagManager']),
+    ...mapActions(['getPosts']),
 
     resetTags() {
       // First reset tags
-      this.tagManager('reset')
+      this.tagManager({ operation: 'reset' })
 
       // Then show page if not active
       if (!this.searchData.isActive) {

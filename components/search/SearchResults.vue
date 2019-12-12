@@ -18,10 +18,10 @@
         v-for="tag in searchData.tags"
         :key="tag"
         @click="
-          searchManager({
+          tagManager({
+            operation: 'remove',
             tag: {
-              name: tag,
-              operation: 'remove',
+              name: tag,              
             },
           })
         "
@@ -38,17 +38,17 @@
         :key="tag.name"
         @click="
           if (searchData.isFilterActive) {
-            searchManager({
+            tagManager({
+              operation: 'add',
               tag: {
-                name: '-' + tag.name,
-                operation: 'add',
+                name: '-' + tag.name                
               },
             })
           } else {
-            searchManager({
+            tagManager({
+              operation: 'add',
               tag: {
-                name: tag.name,
-                operation: 'add',
+                name: tag.name,                
               },
             })
           }
@@ -84,7 +84,7 @@ export default {
     ...mapState(['searchData', 'generalData']),
   },
   methods: {
-    ...mapMutations(['searchManager', 'pidManager']),
+    ...mapMutations(['searchManager', 'pidManager', 'tagManager']),
     ...mapActions(['getPosts', 'analyticManager']),
     dispatchGetAddedTags() {
       // Set PID to 0 since we're searching for new tags

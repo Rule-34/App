@@ -100,20 +100,6 @@ export default {
       })
     }
   },
-
-  async tagManager({ commit }, operation) {
-    switch (operation) {
-      case 'reset':
-        await commit({
-          type: 'searchManager',
-          // We reset this way since its a tag function
-          tag: {
-            operation: 'reset',
-          },
-        })
-        break
-    }
-  },
   // eslint-disable-next-line no-unused-vars
   async analyticManager({ commit }, execution) {
     // console.log(execution)

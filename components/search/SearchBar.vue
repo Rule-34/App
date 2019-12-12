@@ -63,8 +63,8 @@ export default {
     ...mapState(['searchData', 'generalData']),
   },
   methods: {
-    ...mapMutations(['searchManager']),
-    ...mapActions(['tagManager', 'httpsGet', 'getApi']),
+    ...mapMutations(['searchManager', 'tagManager']),
+    ...mapActions(['httpsGet', 'getApi']),
 
     async toggleContentMode() {
       // Populate filterData data and reuse later
@@ -79,17 +79,15 @@ export default {
       // Then switch between modes
       switch (this.ContentMode.mode) {
         case 'reset':
-          this.tagManager('reset')
+          this.tagManager({ operation: 'reset' })
           // Load next mode
           this.ContentMode = { mode: 'furry', icon: 'GitlabIcon' }
 
           return true
 
         case 'furry':
-          this.searchManager({
-            tag: {
-              operation: 'concat',
-            },
+          this.tagManager({
+            operation: 'concat',
           })
           // Load next mode
           this.ContentMode = { mode: 'reset', icon: 'TrashIcon' }
