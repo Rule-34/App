@@ -1,7 +1,7 @@
 <template>
   <div class="fixed min-h-screen w-full z-10 flex">
     <!-- Actual Navigation Bar -->
-    <nav class="theme-responsive-container bg-background border-l-0 border-b-0 shadow">
+    <nav class="theme-responsive-container bg-background md:border-l-0 md:border-b-0 shadow">
       <!-- Hero Image -->
       <div class="w-full overflow-hidden relative">
         <img class="sidebar-img w-full h-auto object-cover" src="/icon.png" alt="Rule 34 App Logo" />
