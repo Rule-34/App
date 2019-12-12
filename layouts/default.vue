@@ -82,7 +82,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['sideNavManager', 'newSearchData']),
+    ...mapMutations(['sideNavManager', 'searchManager']),
 
     TestForDashboard() {
       if (this.$nuxt.$route.name === 'index') {
@@ -97,7 +97,7 @@ export default {
         // If swipìng left and menu is not open then open search
         case 'left':
           if (!this.sideNavData.isActive) {
-            this.newSearchData({ isActive: true })
+            this.searchManager({ isActive: true })
           } else {
             this.sideNavManager('close')
           }
@@ -107,7 +107,7 @@ export default {
         // If swiping right and search is open then close search
         case 'right':
           if (!this.sideNavData.isActive && this.searchData.isActive) {
-            this.newSearchData({ isActive: false })
+            this.searchManager({ isActive: false })
           } else {
             this.sideNavManager('open')
           }

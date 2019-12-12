@@ -72,7 +72,7 @@ export default {
     ...mapState(['searchData']),
   },
   methods: {
-    ...mapMutations(['newSearchData', 'sideNavManager']),
+    ...mapMutations(['searchManager', 'sideNavManager']),
   },
 }
 </script>

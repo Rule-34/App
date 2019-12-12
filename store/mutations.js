@@ -93,7 +93,7 @@ export default {
    * @param {*} state Default
    * @param {Object} payload Object with settings
    */
-  newSearchData(state, payload) {
+  searchManager(state, payload) {
     // Toggle Search
     if (payload.isActive !== undefined) {
       state.searchData.isActive = payload.isActive

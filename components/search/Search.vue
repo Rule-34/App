@@ -5,7 +5,7 @@
       <!-- Separator -->
       <div
         @click.self="
-          newSearchData({
+          searchManager({
             isActive: !searchData.isActive,
           })
         "
@@ -22,7 +22,7 @@
 
       <div
         @click.self="
-          newSearchData({
+          searchManager({
             isActive: !searchData.isActive,
           })
         "
@@ -49,7 +49,7 @@ export default {
     ...mapState(['searchData']),
   },
   methods: {
-    ...mapMutations(['newSearchData']),
+    ...mapMutations(['searchManager']),
   },
 }
 </script>

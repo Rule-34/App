@@ -143,7 +143,7 @@ export default {
     ...mapState(['searchData', 'userSettings']),
   },
   methods: {
-    ...mapMutations(['newSearchData', 'pidManager']),
+    ...mapMutations(['searchManager', 'pidManager']),
     ...mapActions(['getPosts', 'analyticManager']),
     // Check if its an url
     isUrl() {
@@ -181,14 +181,14 @@ export default {
       this.pidManager({ operation: 'reset' })
 
       // Reset all tags
-      this.newSearchData({
+      this.searchManager({
         tag: {
           operation: 'reset',
         },
       })
 
       // Add clicked tag
-      this.newSearchData({
+      this.searchManager({
         tag: {
           name: tag,
           operation: 'add',

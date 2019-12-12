@@ -82,7 +82,7 @@ export default {
       if (dataObj.mode === 'filter') {
         // console.log(result)
         commit({
-          type: 'newSearchData',
+          type: 'searchManager',
           premadeFilterData: result,
         })
 
@@ -105,7 +105,7 @@ export default {
     switch (operation) {
       case 'reset':
         await commit({
-          type: 'newSearchData',
+          type: 'searchManager',
           // We reset this way since its a tag function
           tag: {
             operation: 'reset',
