@@ -18,7 +18,7 @@
         v-for="tag in searchData.tags"
         :key="tag"
         @click="
-          newSearchData({
+          searchManager({
             tag: {
               name: tag,
               operation: 'remove',
@@ -38,14 +38,14 @@
         :key="tag.name"
         @click="
           if (searchData.isFilterActive) {
-            newSearchData({
+            searchManager({
               tag: {
                 name: '-' + tag.name,
                 operation: 'add',
               },
             })
           } else {
-            newSearchData({
+            searchManager({
               tag: {
                 name: tag.name,
                 operation: 'add',
@@ -84,7 +84,7 @@ export default {
     ...mapState(['searchData', 'generalData']),
   },
   methods: {
-    ...mapMutations(['newSearchData', 'pidManager']),
+    ...mapMutations(['searchManager', 'pidManager']),
     ...mapActions(['getPosts', 'analyticManager']),
     dispatchGetAddedTags() {
       // Set PID to 0 since we're searching for new tags
@@ -94,7 +94,7 @@ export default {
       this.getPosts()
 
       // Hide the search bar
-      this.newSearchData({
+      this.searchManager({
         isActive: !this.searchData.isActive,
       })
 

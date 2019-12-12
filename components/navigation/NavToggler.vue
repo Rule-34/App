@@ -10,7 +10,7 @@
     <button
       v-if="showSearch"
       type="button"
-      @click="newSearchData({ isActive: !searchData.isActive })"
+      @click="searchManager({ isActive: !searchData.isActive })"
       class="navigation-search-button"
       title="Search"
     >
@@ -34,7 +34,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['newSearchData', 'sideNavManager']),
+    ...mapMutations(['searchManager', 'sideNavManager']),
   },
 }
 </script>

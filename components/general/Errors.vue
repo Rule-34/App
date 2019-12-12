@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     ...mapActions(['getPosts', 'tagManager']),
-    ...mapMutations(['newSearchData']),
+    ...mapMutations(['searchManager']),
 
     resetTags() {
       // First reset tags
@@ -41,7 +41,7 @@ export default {
 
       // Then show page if not active
       if (!this.searchData.isActive) {
-        this.newSearchData({ isActive: this.searchData.isActive })
+        this.searchManager({ isActive: this.searchData.isActive })
       }
     },
   },

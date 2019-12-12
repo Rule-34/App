@@ -63,7 +63,7 @@ export default {
     ...mapState(['searchData', 'generalData']),
   },
   methods: {
-    ...mapMutations(['newSearchData']),
+    ...mapMutations(['searchManager']),
     ...mapActions(['tagManager', 'httpsGet', 'getApi']),
 
     async toggleContentMode() {
@@ -86,7 +86,7 @@ export default {
           return true
 
         case 'furry':
-          this.newSearchData({
+          this.searchManager({
             tag: {
               operation: 'concat',
             },
@@ -103,11 +103,11 @@ export default {
           url: `tags?tag=${this.searchQuery.trim().toLowerCase()}&limit=${
             this.generalData.postLimit
           }`,
-          mutationToReturn: 'newSearchData',
+          mutationToReturn: 'searchManager',
         })
       } else {
         // Remove search data cause search limit is 3 characters
-        this.newSearchData({
+        this.searchManager({
           data: '',
         })
       }
@@ -119,7 +119,7 @@ export default {
     }, 300),
 
     toggleFilter() {
-      this.newSearchData({
+      this.searchManager({
         isFilterActive: !this.searchData.isFilterActive,
       })
     },
