@@ -81,7 +81,7 @@ export default {
     }
   },
 
-  newGeneralData(state, payload) {
+  generalManager(state, payload) {
     // Errors
     if (payload.errors !== undefined) {
       state.generalData.errors = payload.errors
