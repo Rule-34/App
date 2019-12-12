@@ -50,7 +50,7 @@ export default {
       // console.log(response)
     } catch (error) {
       commit({
-        type: 'newGeneralData',
+        type: 'generalManager',
         errors: error,
       })
     }
@@ -95,7 +95,7 @@ export default {
       // If theres errors
     } catch (error) {
       commit({
-        type: 'newGeneralData',
+        type: 'generalManager',
         errors: error,
       })
     }
