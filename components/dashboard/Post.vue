@@ -49,8 +49,7 @@
             muted
             loop
           >
-            <source :src="post.high_res_file" />
-            Your browser doesnt support HTML5 video.
+            <source :src="post.high_res_file" />Your browser doesnt support HTML5 video.
           </video>
         </lazy-component>
       </template>
@@ -64,8 +63,7 @@
           muted
           loop
         >
-          <source :src="post.high_res_file" />
-          Your browser doesnt support HTML5 video.
+          <source :src="post.high_res_file" />Your browser doesnt support HTML5 video.
         </video>
       </template>
     </template>
@@ -80,17 +78,9 @@
     <!-- Double transition since i cant figure out how to make it in one for both when theres source and when there isnt -->
     <transition name="fade">
       <div v-if="post.source || (post.tags && isActive)">
-        <transition-group
-          name="fade"
-          tag="div"
-          class="flex flex-wrap overflow-hidden text-sm p-1"
-        >
+        <transition-group name="fade" tag="div" class="flex flex-wrap overflow-hidden text-sm p-1">
           <!-- Tags -->
-          <div
-            key="tags"
-            v-if="post.tags && isActive"
-            class="w-full tag-container"
-          >
+          <div key="tags" v-if="post.tags && isActive" class="w-full tag-container">
             <a
               v-for="tag in post.tags"
               :key="post[tag]"
@@ -102,11 +92,7 @@
           </div>
 
           <!-- Source -->
-          <div
-            key="source"
-            v-if="post.source"
-            class="w-full m-auto text-center"
-          >
+          <div key="source" v-if="post.source" class="w-full m-auto text-center">
             <template v-if="isUrl()">
               <a
                 :href="post.source"
@@ -120,11 +106,7 @@
             </template>
 
             <template v-else>
-              <p
-                v-text="post.source"
-                title="Source"
-                class="text-default-text"
-              />
+              <p v-text="post.source" title="Source" class="text-default-text" />
             </template>
           </div>
         </transition-group>
@@ -161,8 +143,8 @@ export default {
     ...mapState(['searchData', 'userSettings']),
   },
   methods: {
-    ...mapMutations(['newSearchData']),
-    ...mapActions(['pidManager', 'getPosts', 'analyticManager']),
+    ...mapMutations(['newSearchData', 'pidManager']),
+    ...mapActions(['getPosts', 'analyticManager']),
     // Check if its an url
     isUrl() {
       if (this.post.source.startsWith('http', 'www')) {
@@ -196,7 +178,7 @@ export default {
     },
     getSpecificTag(tag) {
       // Set PID to 0 since we're searching for new tags
-      this.pidManager('reset')
+      this.pidManager({ operation: 'reset' })
 
       // Reset all tags
       this.newSearchData({
