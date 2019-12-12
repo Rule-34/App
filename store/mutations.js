@@ -65,6 +65,13 @@ export default {
     }
   },
 
+  newGeneralData(state, payload) {
+    // Errors
+    if (payload.errors !== undefined) {
+      state.generalData.errors = payload.errors
+    }
+  },
+
   /**
    *
    * SEARCH BAR related
@@ -73,23 +80,25 @@ export default {
 
   // Handler for Search changes
   newSearchData(state, payload) {
-    // Apply "active" css class
+    // Toggle Search
     if (payload.isActive !== undefined) {
       state.searchData.isActive = payload.isActive
     }
 
+    // Toggle Filter
     if (payload.isFilterActive !== undefined) {
       state.searchData.isFilterActive = payload.isFilterActive
     }
 
-    // Errors
-    if (payload.errors !== undefined) {
-      state.generalData.errors = payload.errors
-    }
-    // Data
+    // Change data
     if (payload.data !== undefined) {
       // console.log(payload.data);
       state.searchData.data = payload.data
+    }
+
+    if (payload.premadeFilterData !== undefined) {
+      // console.log(payload.premadeFilterData);
+      state.searchData.premadeFilterData = payload.premadeFilterData
     }
 
     // Added tags
@@ -106,7 +115,9 @@ export default {
 
         // Instead of adding one, add multiple with concat
         case 'concat':
-          state.searchData.tags = state.searchData.tags.concat(payload.tag.name)
+          state.searchData.tags = state.searchData.tags.concat(
+            state.searchData.premadeFilterData
+          )
           break
 
         case 'remove':

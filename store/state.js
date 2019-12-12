@@ -7,6 +7,7 @@ export default () => ({
   searchData: {
     data: [], // Data received while searching for tags
     tags: [], // Tags that are added for searching posts with that tags
+    premadeFilterData: [],
     isActive: false, // Is search bar active
     isFilterActive: false,
   },

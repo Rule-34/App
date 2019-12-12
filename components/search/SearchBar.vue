@@ -68,16 +68,19 @@ export default {
 
     async toggleContentMode() {
       // Populate filterData data and reuse later
-      if (!this.filterData.length) {
-        const filterData = await this.getApi(
-          'https://gist.githubusercontent.com/VoidlessSeven7/c0b379d617b1d26c54158e90a1f096cd/raw/filter_anti_furry_r34.app.txt'
-        )
-        this.filterData = filterData
+      if (!this.searchData.premadeFilterData.length) {
+        const filterData = await this.getApi({
+          url:
+            'https://gist.githubusercontent.com/VoidlessSeven7/c0b379d617b1d26c54158e90a1f096cd/raw/filter_anti_furry_r34.app.txt',
+          mode: 'filter',
+        })
       }
 
+      // Then switch between modes
       switch (this.ContentMode.mode) {
         case 'reset':
           this.tagManager('reset')
+          // Load next mode
           this.ContentMode = { mode: 'furry', icon: 'GitlabIcon' }
 
           return true
@@ -85,10 +88,10 @@ export default {
         case 'furry':
           this.newSearchData({
             tag: {
-              name: this.filterData,
               operation: 'concat',
             },
           })
+          // Load next mode
           this.ContentMode = { mode: 'reset', icon: 'TrashIcon' }
 
           return true
@@ -109,10 +112,12 @@ export default {
         })
       }
     },
+
+    // Debounce input and then execute function
     debounceInput: debounce(function() {
       this.getTags()
-      // console.log("hola");
     }, 300),
+
     toggleFilter() {
       this.newSearchData({
         isFilterActive: !this.searchData.isFilterActive,

@@ -50,12 +50,7 @@ export default {
       // console.log(response)
     } catch (error) {
       commit({
-        type: dataObj.mutationToReturn,
-        errors: error,
-      })
-
-      // Change to another Api
-      dispatch('apiManager', {
+        type: 'newGeneralData',
         errors: error,
       })
     }
@@ -76,36 +71,33 @@ export default {
   },
 
   // Get specific url through API's cors proxy
-  async getApi({ commit }, url) {
+  async getApi({ commit }, dataObj) {
     // console.log(url);
     try {
       // Get url through proxy
       const result = await fetch(
-        `${this.state.generalData.apiUrl}proxy?url=${url}`
+        `${this.state.generalData.apiUrl}proxy?url=${dataObj.url}`
       ).then(response => response.json())
 
+      if (dataObj.mode === 'filter') {
+        // console.log(result)
+        commit({
+          type: 'newSearchData',
+          premadeFilterData: result,
+        })
+
+        // Since we're sending to vuex store, return nothing
+        return
+      }
       // And return value to calling function
       return result
 
       // If theres errors
     } catch (error) {
       commit({
+        type: 'newGeneralData',
         errors: error,
       })
-    }
-  },
-
-  // Change api to an alternative one
-  async apiManager({ commit }) {
-    if (this.state.generalData.apiUrl !== this.state.generalData.backupApiUrl) {
-      await console.log('changing to alternative api') // TODO: Do something with this
-
-      // await commit({
-      //   type: 'apiManager',
-      //   newUrl: 'https://r34-api-clone.herokuapp.com/',
-      // })
-    } else {
-      console.warn('The backup API is already being used')
     }
   },
 
@@ -148,13 +140,18 @@ export default {
   // eslint-disable-next-line no-unused-vars
   async analyticManager({ commit }, execution) {
     // console.log(execution)
+
     switch (execution) {
+      // Send tags and filter data
       case 'tags':
-        await fireAnalytics('tags', this.state.searchData.tags).then(
-          console.log
-        )
+        await fireAnalytics(
+          'tags',
+          this.state.searchData.tags,
+          this.state.searchData.premadeFilterData
+        ).then(console.log)
         break
 
+      // Send new domain
       case 'domain':
         await fireAnalytics(
           'domain',
@@ -162,6 +159,7 @@ export default {
         ).then(console.log)
         break
 
+      // Send user settings
       case 'settings':
         await fireAnalytics('settings', this.state.userSettings).then(
           console.log
