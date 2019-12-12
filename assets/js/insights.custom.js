@@ -60,6 +60,25 @@ function tagsTracking(data) {
   })
 }
 
+function domainTracking(data) {
+  return new Promise(function(resolve, reject) {
+    // Test to see if theres any data passed
+    if (!data) {
+      reject(new Error('No tags passed'))
+    }
+
+    // Execute successfully the code
+    track({
+      id: 'user-usage',
+      parameters: {
+        domainUsed: data,
+      },
+    })
+
+    resolve('Domain executed succesfully')
+  })
+}
+
 function settingsTracking(data) {
   return new Promise(function(resolve, reject) {
     // Compare default settings to user settings to see if theres a difference
@@ -100,6 +119,12 @@ export default async function fireAnalytics(type, data) {
     // Track searched tags
     case 'tags':
       result = await tagsTracking(data)
+
+      return result
+
+    // Track searched tags
+    case 'domain':
+      result = await domainTracking(data)
 
       return result
 

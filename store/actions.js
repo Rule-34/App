@@ -155,6 +155,13 @@ export default {
         )
         break
 
+      case 'domain':
+        await fireAnalytics(
+          'domain',
+          this.state.dashBoardSettings.contentDomain
+        ).then(console.log)
+        break
+
       case 'settings':
         await fireAnalytics('settings', this.state.userSettings).then(
           console.log
