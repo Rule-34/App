@@ -1,20 +1,13 @@
 <template>
   <!-- Controls for navigating pages -->
-  <div
-    :class="{ 'hover-controls-container': userSettings.hoverControls.value }"
-  >
+  <div :class="{ 'hover-controls-container': userSettings.hoverControls.value }">
     <div
       v-if="!generalData.errors && dashBoardData"
       :class="{ 'hover-controls': userSettings.hoverControls.value }"
       class="material-container text-center p-2 flex"
     >
-      <a
-        @click="getPrevPage"
-        href="#"
-        class="w-1/3 button"
-        title="Load last page"
-      >
-        <ArrowLeftIcon class="icon w-4 h-4 inline" /> Prev page
+      <a @click="getPrevPage" href="#" class="w-1/3 button" title="Load last page">
+        <ArrowLeftIcon class="icon w-4 h-4 inline" />Prev page
       </a>
       <a
         @click="getSpecificPage"
@@ -23,12 +16,7 @@
         class="w-1/3"
         title="Load specific page"
       />
-      <a
-        @click="getNextPage"
-        href="#"
-        class="w-1/3 button"
-        title="Load next page"
-      >
+      <a @click="getNextPage" href="#" class="w-1/3 button" title="Load next page">
         Next page
         <ArrowRightIcon class="icon w-4 h-4 inline" />
       </a>
@@ -55,12 +43,12 @@ export default {
 
   methods: {
     // Map actions and mutations from store following's
-    ...mapMutations(['newDashBoardData']),
-    ...mapActions(['getPosts', 'pidManager']),
+    ...mapMutations(['dashBoardManager', 'pidManager']),
+    ...mapActions(['getPosts']),
     // Get next page from api
     getNextPage() {
       // Get next PID
-      this.pidManager('add')
+      this.pidManager({ operation: 'add' })
 
       // If we have tags added then load next page of tags, else load normal latest posts
       this.getPosts()
@@ -68,7 +56,7 @@ export default {
     // Get last page from api
     getPrevPage() {
       // Get last PID
-      this.pidManager('subtract')
+      this.pidManager({ operation: 'subtract' })
 
       // Load last page
       this.getPosts()
@@ -81,9 +69,7 @@ export default {
       if (!isNaN(specificPage)) {
         // Set PID to indicated
         // console.log(specificPage);
-        this.newDashBoardData({
-          pid: specificPage,
-        })
+        this.pidManager({ operation: 'specific', value: specificPage })
 
         // And load specific page
         this.getPosts()

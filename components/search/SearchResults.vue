@@ -10,15 +10,10 @@
     <h1
       v-if="!searchData.data && !generalData.errors"
       class="text-center text-default-text font-hairline m-auto text-xl"
-    >
-      Search something!
-    </h1>
+    >Search something!</h1>
 
     <!-- Added tags, click them to remove them -->
-    <div
-      v-if="searchData.tags"
-      class="tag-container border-border border-b rounded-b pb-1"
-    >
+    <div v-if="searchData.tags" class="tag-container border-border border-b rounded-b pb-1">
       <a
         v-for="tag in searchData.tags"
         :key="tag"
@@ -73,8 +68,7 @@
       @click="dispatchGetAddedTags"
       href="#"
       class="btn theme-responsive-text text-center bg-gradient-lilac-blue mt-auto shadow-md"
-      >Apply tags</a
-    >
+    >Apply tags</a>
   </div>
 </template>
 
@@ -90,11 +84,11 @@ export default {
     ...mapState(['searchData', 'generalData']),
   },
   methods: {
-    ...mapMutations(['newSearchData']),
-    ...mapActions(['pidManager', 'getPosts', 'analyticManager']),
+    ...mapMutations(['newSearchData', 'pidManager']),
+    ...mapActions(['getPosts', 'analyticManager']),
     dispatchGetAddedTags() {
       // Set PID to 0 since we're searching for new tags
-      this.pidManager('reset')
+      this.pidManager({ operation: 'reset' })
 
       // Search for the tags
       this.getPosts()

@@ -5,11 +5,7 @@
 
     <DashBoardSettings />
     <!-- every post in their own component -->
-    <Post
-      v-for="post in dashBoardData.data.posts"
-      :key="post.id"
-      :post-data="post"
-    />
+    <Post v-for="post in dashBoardData.data.posts" :key="post.id" :post-data="post" />
 
     <!-- If infinite load is NOT enabled -->
     <template v-if="!userSettings.infiniteLoad.value">
@@ -22,9 +18,7 @@
     <template v-else>
       <!-- If theres more posts -->
       <div v-intersect.quiet="throttleInfiniteLoading" class="mx-auto">
-        <p @click="concatPost()" class="text-center text-default-text pb-2">
-          Loading more posts...
-        </p>
+        <p @click="concatPost()" class="text-center text-default-text pb-2">Loading more posts...</p>
         <Errors />
       </div>
     </template>
@@ -32,7 +26,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import { Intersect } from 'vuetify/es5/directives/intersect'
 import throttle from 'lodash/throttle'
 import Errors from '~/components/general/Errors'
@@ -71,7 +65,8 @@ export default {
   },
 
   methods: {
-    ...mapActions(['pidManager', 'getPosts']),
+    ...mapMutations(['pidManager']),
+    ...mapActions(['getPosts']),
 
     scrollToTop() {
       window.scrollTo(0, 0)
@@ -85,7 +80,7 @@ export default {
     concatPost() {
       console.log('Loaded more posts')
       // Get next PID
-      this.pidManager('add')
+      this.pidManager({ operation: 'add' })
 
       // And load next posts
       this.getPosts('concat')

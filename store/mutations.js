@@ -4,8 +4,8 @@ export default {
    * @param {*} state Default
    * @param {Object} payload Settings in an object
    */
-  newDashBoardData(state, payload) {
-    // Data related
+  dashBoardManager(state, payload) {
+    // Post data related
     if (payload.data !== undefined) {
       switch (payload.mode) {
         case 'add':
@@ -20,14 +20,34 @@ export default {
       }
     }
 
-    // Errors
-    if (payload.errors !== undefined) {
-      state.generalData.errors = payload.errors
-    }
-
     // Page ID
     if (payload.pid !== undefined) {
       state.dashBoardData.pid = payload.pid
+    }
+  },
+
+  /**
+   * Modifies Page ID
+   * @param {*} state Default
+   * @param {Object} payload .operation (specific, add, subtract, reset) and .value
+   */
+  pidManager(state, payload) {
+    switch (payload.operation) {
+      case 'specific':
+        state.dashBoardData.pid = payload.value
+        break
+
+      case 'add':
+        state.dashBoardData.pid++
+        break
+
+      case 'subtract':
+        state.dashBoardData.pid--
+        break
+
+      case 'reset':
+        state.dashBoardData.pid = 0
+        break
     }
   },
 

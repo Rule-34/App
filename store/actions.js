@@ -64,7 +64,7 @@ export default {
       }&tags=${this.state.searchData.tags.join('+')}&score=${
         this.state.userSettings.score.value
       }`,
-      mutationToReturn: 'newDashBoardData',
+      mutationToReturn: 'dashBoardManager',
       // Add with the mode passed or with add so its retrocompatible
       mode: mode || 'add',
     })
@@ -98,29 +98,6 @@ export default {
         type: 'newGeneralData',
         errors: error,
       })
-    }
-  },
-
-  // Change api to an alternative one
-  async pidManager({ commit }, operation) {
-    switch (operation) {
-      case 'add':
-        await commit('newDashBoardData', {
-          pid: parseInt(this.state.dashBoardData.pid) + 1,
-        })
-        break
-
-      case 'subtract':
-        await commit('newDashBoardData', {
-          pid: parseInt(this.state.dashBoardData.pid) - 1,
-        })
-        break
-
-      case 'reset':
-        await commit('newDashBoardData', {
-          pid: 0,
-        })
-        break
     }
   },
 
