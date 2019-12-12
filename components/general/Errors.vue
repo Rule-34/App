@@ -8,29 +8,16 @@
     "
     class="material-container text-default-text text-center p-2"
   >
+    <!-- If ANY error -->
     <template v-if="generalData.errors">
       <h1 v-text="generalData.errors" class="bold" />
       <a @click="getPosts()" href="javascript:void(0)">Try again?</a>
     </template>
 
-    <template v-else-if="dashBoardData.data.count === '0'">
-      <h1 v-text="'Nothing found'" class="bold" />
-      <a @click="resetTags()" href="javascript:void(0)">Reset tags?</a>
-    </template>
+    <!-- If browser is offline -->
     <template v-else-if="$nuxt.isOffline">
-      <h1
-        v-text="'You are offline, please connect to the internet'"
-        class="bold"
-      />
+      <h1 v-text="'You are offline, please connect to the internet'" class="bold" />
     </template>
-
-    <!-- Not useful -->
-    <!-- <template v-else-if="!searchData.data.length">
-      <h1 class="bold" v-text="'No tags found'" />
-      <a href="javascript:void(0)" @click="tagManager('reset')"
-        >Reset tags?</a
-      >
-    </template>-->
   </div>
 </template>
 
