@@ -7,7 +7,7 @@ App to enjoy all Rule 34 sites combined in a mobile-friendly experience
 
 ## Visit it
 
-**You can try it online on the next links, both run the same code from this repository**
+**You can use it online on the next links, both run the same code from this repository**
 
 [https://r34.app/](https://r34.app/)
 > Powered by Github Pages
@@ -23,7 +23,7 @@ Or backup
 
 # API
 
-This PWA uses a Json wrapper for various rule34 XML APIs, it is developed and mantained by me, and can be found [here](https://github.com/VoidlessSeven7/Rule-34-App-Original-API).
+This PWA uses a JSON wrapper for various Rule 34 XML APIs, it is developed and mantained by me, and can be found [here](https://github.com/VoidlessSeven7/Rule-34-App-Original-API).
 
 ## Future
 
@@ -49,7 +49,7 @@ HTML, SCSS, Javascript
 #### Technologies
 NodeJS, NPM, NuxtJS, VueJS, Webpack, etc.
 
-You should read [package.json](package.json) for the full list
+You should read the [package.json](package.json) file for the full list
 
 ## VSCode dependencies
 ESLint, Prettier, Vetur
@@ -61,14 +61,10 @@ ESLint, Prettier, Vetur
 
 ``` bash
 # install dependencies
-$ npm run install
+$ npm install
 
 # serve with hot reload at localhost:3000
 $ npm run dev
-
-# build for production and launch server
-$ npm run build
-$ npm run start
 
 # generate static project
 $ npm run generate
