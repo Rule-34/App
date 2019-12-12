@@ -81,6 +81,11 @@ export default {
     }
   },
 
+  /**
+   *
+   * @param {*} state Default
+   * @param {String} payload Error string
+   */
   generalManager(state, payload) {
     // Errors
     if (payload.errors !== undefined) {
