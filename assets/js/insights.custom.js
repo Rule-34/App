@@ -33,29 +33,64 @@ const defaultSettings = {
   },
 }
 
-function tagsTracking(data) {
+// Send tags in an interval of .5 seconds to not flood the analytics server
+function SendTimed(data, index, parameter) {
+  setTimeout(function() {
+    console.log('Sent tag: ', data, index, parameter)
+
+    // Then track tags
+    track({
+      id: 'user-usage',
+      parameters: {
+        [parameter]: data,
+      },
+    })
+  }, 500 * index)
+}
+
+function tagsTracking(data, premadeFilterData) {
   return new Promise(function(resolve, reject) {
+    let isFromFilter = false // In case tags are from filter
+    let index = 0 // Workaround, if not done then tags are sent with a lot of delay
+
     // Test to see if theres any data passed
     if (!data.length) {
       reject(new Error('No tags passed'))
     }
 
     // Execute successfully the code
-    Object.keys(data).forEach(function(key, index) {
-      console.log(key, data[key])
+    Object.keys(data).forEach(function(key) {
+      // console.log(key, data[key])
 
-      // Send tags in an interval of .5 seconds to not flood the analytics server
-      setTimeout(function() {
-        // console.log("Sent tag: ", data[key]);
-        track({
-          id: 'user-usage',
-          parameters: {
-            searchedTags: data[key],
-          },
-        })
-      }, 500 * index)
+      // If the key is from the preFab then dont send anything and skip to next
+      if (premadeFilterData.includes(data[key])) {
+        // console.log('Not sent tag', data[key])
+        isFromFilter = true
+
+        // Skip to next
+        return
+      }
+
+      // If not skipped, send tags in an interval of .5 seconds to not flood the analytics server
+      SendTimed(data[key], index, 'searchedTags')
+
+      // Add one to index
+      index++
     })
 
+    // If variables are from filter then send a unique event that identifies that it has been used
+    if (isFromFilter) {
+      console.log('Tracked Premade Filter')
+
+      track({
+        id: 'user-usage',
+        parameters: {
+          searchedTags: 'Premade Filter',
+        },
+      })
+    }
+
+    // End execution
     resolve('Tags executed succesfully')
   })
 }
@@ -93,18 +128,10 @@ function settingsTracking(data) {
 
     // When we know theres a difference, track each difference
     Object.keys(difference).forEach(function(key, index) {
-      console.log(key, difference[key])
+      // console.log(key, difference[key])
 
       // Send settings in an interval of .5 seconds to not flood the analytics server
-      setTimeout(function() {
-        // console.log("Sent setting: ", difference[key]);
-        track({
-          id: 'user-usage',
-          parameters: {
-            userSettings: difference[key],
-          },
-        })
-      }, 500 * index)
+      SendTimed(difference[key], index, 'userSettings')
     })
 
     resolve('Settings executed succesfully')
@@ -112,13 +139,13 @@ function settingsTracking(data) {
 }
 
 /* -------- Analytics -------- */
-export default async function fireAnalytics(type, data) {
+export default async function fireAnalytics(type, data, premadeFilterData) {
   // console.log('Analytics fired with something:', type, data)
   let result
   switch (type) {
     // Track searched tags
     case 'tags':
-      result = await tagsTracking(data)
+      result = await tagsTracking(data, premadeFilterData)
 
       return result
 
