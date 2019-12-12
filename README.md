@@ -23,9 +23,20 @@ Or backup
 
 # API
 
-This PWA uses a json wrapper for the rule34.xxx XML API, it is developed and mantained by Kurozenzen and can be found [here](https://github.com/kurozenzen/r34-json-api).
+This PWA uses a Json wrapper for various rule34 XML APIs, it is developed and mantained by me, and can be found [here](https://github.com/VoidlessSeven7/Rule-34-App-Original-API).
 
-The wrapper used in the PWA is a custom [forked version](https://github.com/VoidlessSeven7/Rule-34-PWA-API) from Kurozenzen that I have developed that has **removed analytics and has less usage since its only used by this PWA.**
+## Future
+
+Since the API is being hosted on heroku's free tier, It wont hold lots of connections at the same time, specially when serving videos from Rule 34 APIs, So I've planned and developed a solution:
+
+![Network Map](.github/images/map.png)
+
+If I duplicate the API and use a Load Balancer, a lot of stress would be removed and it would continue to work fine, but I have the following problems: 
+
+**Monetary problem**, I don't have the funds (7€ month) to pay for the duplicated API, since this is a Free service with no Ads to generate revenue, I ask of you, if you really like my work, please donate whatever amount you can to the future of this app.
+[patreon](https://patreon.com/VoidlessSeven7)
+[paypal](https://www.paypal.me/Alejandrorr7)
+
 
 ## Technologies used
 
