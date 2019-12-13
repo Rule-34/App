@@ -18,25 +18,40 @@
 
       <!-- Navbar Links -->
       <div class="p-3 border-t border-border">
-        <ul class="nav-links text-center md:text-left leading-loose">
-          <li class="group">
-            <nuxt-link to="/" class="group-hover:text-primary">Dashboard</nuxt-link>
+        <ul class="text-center md:text-left leading-loose">
+          <li>
+            <nuxt-link class="nav-hover-links" to="/">
+              <span class="nav-spacer"></span>
+              <span class="relative">Dashboard</span>
+            </nuxt-link>
           </li>
 
-          <li class="group">
-            <nuxt-link to="/faq" class="group-hover:text-primary">Faq</nuxt-link>
+          <li>
+            <nuxt-link class="nav-hover-links" to="/faq">
+              <span class="nav-spacer"></span>
+              <span class="relative">Faq</span>
+            </nuxt-link>
           </li>
 
-          <li class="group">
-            <nuxt-link to="/usage" class="group-hover:text-primary">Usage</nuxt-link>
+          <li>
+            <nuxt-link class="nav-hover-links" to="/usage">
+              <span class="nav-spacer"></span>
+              <span class="relative">Usage</span>
+            </nuxt-link>
           </li>
 
-          <li class="group">
-            <nuxt-link to="/about" class="group-hover:text-primary">About</nuxt-link>
+          <li>
+            <nuxt-link class="nav-hover-links" to="/about">
+              <span class="nav-spacer"></span>
+              <span class="relative">About</span>
+            </nuxt-link>
           </li>
 
-          <li class="group">
-            <nuxt-link to="/settings" class="group-hover:text-primary">Settings</nuxt-link>
+          <li>
+            <nuxt-link class="nav-hover-links" to="/settings">
+              <span class="nav-spacer"></span>
+              <span class="relative">Settings</span>
+            </nuxt-link>
           </li>
         </ul>
       </div>
