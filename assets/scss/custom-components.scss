@@ -97,10 +97,22 @@ a:hover {
 
 // Sidebar
 
-.nav-links li {
-  transition: transform 0.2s ease;
-  @apply text-primary-hover relative;
-}
-.nav-links li:hover {
+.translate-r-5px {
   transform: translateX(5px);
+}
+
+.transition-fast-transform {
+  transition: transform 0.2s ease;
+}
+
+.nav-hover-links {
+  @apply transition-fast-transform relative block;
+}
+
+.nav-hover-links:hover {
+  @apply translate-r-5px;
+}
+
+.nav-spacer {
+  @apply absolute inset-0 opacity-0;
 }
