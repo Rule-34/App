@@ -15,6 +15,12 @@ export default {
           'App to enjoy all Rule 34 sites combined in a mobile-friendly experience',
       },
     ],
+    noscript: [
+      {
+        innerHTML:
+          'This website requires JavaScript, please enable it to continue',
+      },
+    ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
   /*
