@@ -32,12 +32,19 @@ There is also detailed information in the next link."
     <!-- Github -->
     <ContentContainer
       title="Can I report an error?"
-      text="Yes, you can report any error that you may find or suggest something you want to be added in the next link."
+      text="Yes, you can report any error or suggest something you want to be added in the next link, or contact me directly through email."
       icon="info"
-      link="https://github.com/VoidlessSeven7/Rule-34-PWA-Public"
-      link-text="GitHub"
-    />
-
+      link="mailto:contact@r34.app"
+      link-text="contact@r34.app"
+    >
+      <!-- Workaround for having two links -->
+      <template slot="textRich">
+        <a href="https://github.com/VoidlessSeven7/Rule-34-PWA-Public"
+          >Github</a
+        >
+        |
+      </template>
+    </ContentContainer>
     <!-- Roadmap -->
     <ContentContainer
       title="Is there any new feature planned?"
@@ -71,12 +78,12 @@ All information is anonymized and respects the 'Do not track' directive, so if y
       link="https://www.paypal.me/Alejandrorr7"
       link-text="Paypal"
     >
-      <!-- Slot -->
-      <!-- Workaround for having to links -->
+      <!-- Workaround for having two links -->
       <template slot="textRich">
         <a href="https://patreon.com/VoidlessSeven7">Patreon</a> |
       </template>
     </ContentContainer>
+
     <!-- Credits -->
     <ContentContainer
       title="Credits"
