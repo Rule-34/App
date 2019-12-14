@@ -53,6 +53,13 @@
               <span class="relative">Settings</span>
             </nuxt-link>
           </li>
+
+          <li>
+            <nuxt-link class="nav-hover-links" to="/legal">
+              <span class="nav-spacer"></span>
+              <span class="relative">Legal</span>
+            </nuxt-link>
+          </li>
         </ul>
       </div>
     </nav>
