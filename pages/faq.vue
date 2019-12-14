@@ -10,14 +10,7 @@
       title="What is this?"
       text="This is a Progressive Web App, essentially a installable web page, that acts as a client for various Rule 34 domains, it gets the images from the domain's public API and serves them, nothing is stored in any server."
       icon="info"
-    >
-      <!-- Slot -->
-      <small class="text-default-text-muted">
-        If you're the owner of a domain that this app gets content from, and
-        want to cease content being used, please go to GitHub and leave an
-        issue.
-      </small>
-    </ContentContainer>
+    />
 
     <!-- Copyright -->
     <ContentContainer
