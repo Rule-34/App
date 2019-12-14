@@ -6,8 +6,8 @@
       <div class="material-container p-3 bg-gradient-blue-lilac">
         <div class="text-center text-white">
           <!-- Head -->
-          <div class="mb-2">
-            <h1 v-text="title" class="text-lg underline" />
+          <div :class="{'mb-2': text}">
+            <h1 v-text="title" class="text-lg" :class="{underline: titleUnderline}" />
           </div>
 
           <!-- Body -->
@@ -26,17 +26,14 @@
         <div class="flex inline-flex align-middle">
           <InfoIcon v-if="icon === 'info'" class="mr-2 text-blue-500" />
           <StarIcon v-else-if="icon === 'star'" class="mr-2 text-yellow-500" />
-          <DollarSignIcon
-            v-else-if="icon === 'donation'"
-            class="mr-2 text-green-500"
-          />
+          <DollarSignIcon v-else-if="icon === 'donation'" class="mr-2 text-green-500" />
           <!-- Title -->
           <h1 v-text="title" class="text-default-text text-lg font-bold" />
         </div>
 
         <!-- Body -->
         <div class="text-sm text-default-text">
-          <p v-if="text" v-text="text" class=" mb-1 whitespace-pre-line" />
+          <p v-if="text" v-text="text" class="mb-1 whitespace-pre-line" />
 
           <slot name="textRich" class="mb-1" />
           <!-- We can insert extra info here -->
@@ -45,11 +42,7 @@
           <picture v-if="img">
             <source :srcset="img + '.webp'" type="image/webp" />
             <source :srcset="img + '.png'" type="image/png" />
-            <img
-              :src="img + '.png'"
-              :alt="title + ' Example'"
-              class="mx-auto mt-2"
-            />
+            <img :src="img + '.png'" :alt="title + ' Example'" class="mx-auto mt-2" />
           </picture>
 
           <!-- Links -->
@@ -78,6 +71,7 @@ export default {
   props: {
     // For separating text
     separator: { type: Boolean, required: false, default: false },
+    titleUnderline: { type: Boolean, required: false, default: false },
     // For normal usage
     title: { type: String, required: true },
     text: { type: String, required: false, default: undefined },
