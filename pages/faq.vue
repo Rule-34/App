@@ -77,8 +77,13 @@ All information is anonymized and respects the 'Do not track' directive, so if y
       icon="donation"
       link="https://www.paypal.me/Alejandrorr7"
       link-text="Paypal"
-    />
-
+    >
+      <!-- Slot -->
+      <!-- Workaround for having to links -->
+      <template slot="textRich">
+        <a href="https://patreon.com/VoidlessSeven7">Patreon</a> |
+      </template>
+    </ContentContainer>
     <!-- Credits -->
     <ContentContainer
       title="Credits"
