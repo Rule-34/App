@@ -14,7 +14,10 @@
             >leave an issue</a
           >
           with proof that you're the owner of x site and a message regarding the
-          cease to actions. <br />Keep in mind that all
+          cease to actions.
+          <!-- Space -->
+          <br />
+          Keep in mind that all
           <u>the content we get is from public released APIs</u> from the site
           itself.
         </p>
@@ -45,6 +48,7 @@
           how we use it.
         </p>
 
+        <!-- Space -->
         <br />
 
         <p>
@@ -52,6 +56,7 @@
           Privacy Policy, do not hesitate to contact us.
         </p>
 
+        <!-- Space -->
         <br />
 
         <h2 class="text-lg">General Data Protection Regulation (GDPR)</h2>
@@ -74,6 +79,7 @@
           <li>Rule 34 App needs to comply with the law</li>
         </ul>
 
+        <!-- Space -->
         <br />
 
         <p>
@@ -91,6 +97,7 @@
           >.
         </p>
 
+        <!-- Space -->
         <br />
 
         <p>
@@ -99,6 +106,10 @@
           Personal Information we hold about you and if you want it to be
           removed from our systems, please contact us.
         </p>
+
+        <!-- Space -->
+        <br />
+
         <p>
           In certain circumstances, you have the following data protection
           rights:
@@ -115,6 +126,7 @@
           <li>The right to withdraw consent</li>
         </ul>
 
+        <!-- Space -->
         <br />
 
         <h2 class="text-lg">Log Files</h2>
@@ -132,7 +144,9 @@
           information.
         </p>
 
+        <!-- Space -->
         <br />
+
         <h2 class="text-lg">Cookies and Web Beacons</h2>
 
         <p>
@@ -144,13 +158,18 @@
           information.
         </p>
 
+        <!-- Space -->
         <br />
+
         <h2 class="text-lg">Privacy Policies</h2>
 
         <P
           >You may consult this list to find the Privacy Policy for each of the
           advertising partners of Rule 34 App.</P
         >
+
+        <!-- Space -->
+        <br />
 
         <p>
           Third-party ad servers or ad networks uses technologies like cookies,
@@ -162,11 +181,15 @@
           advertising content that you see on websites that you visit.
         </p>
 
+        <!-- Space -->
+        <br />
+
         <p>
           Note that Rule 34 App has no access to or control over these cookies
           that are used by third-party advertisers.
         </p>
 
+        <!-- Space -->
         <br />
         <h2 class="text-lg">Third Party Privacy Policies</h2>
 
@@ -179,6 +202,9 @@
           Privacy Policies and their links here: Privacy Policy Links.
         </p>
 
+        <!-- Space -->
+        <br />
+
         <p>
           You can choose to disable cookies through your individual browser
           options. To know more detailed information about cookie management
@@ -186,7 +212,9 @@
           respective websites. What Are Cookies?
         </p>
 
+        <!-- Space -->
         <br />
+
         <h2 class="text-lg">Children's Information</h2>
 
         <p>
@@ -194,6 +222,9 @@
           using the internet. We encourage parents and guardians to observe,
           participate in, and/or monitor and guide their online activity.
         </p>
+
+        <!-- Space -->
+        <br />
 
         <p>
           Rule 34 App does not knowingly collect any Personal Identifiable
@@ -203,7 +234,9 @@
           efforts to promptly remove such information from our records.
         </p>
 
+        <!-- Space -->
         <br />
+
         <h2 class="text-lg">Online Privacy Policy Only</h2>
 
         <p>
@@ -214,7 +247,9 @@
           website.
         </p>
 
+        <!-- Space -->
         <br />
+
         <h2 class="text-lg">Consent</h2>
 
         <p>
@@ -225,6 +260,14 @@
     </ContentContainer>
 
     <!-- Thank you -->
+    <ContentContainer
+      title="Contact"
+      text="Please reach me in the following email for suggestions, requests, questions, comments, or any concerns."
+      icon="info"
+      link="mailto:contact@r34.app"
+      link-text="contact@r34.app"
+    />
+
     <ContentContainer
       title="Thank you for your interest"
       text="It's a pleasure having someone read this wall of text :')"
