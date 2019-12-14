@@ -3,11 +3,15 @@
     <!-- Actual Navigation Bar -->
     <!-- Only show borders on medium screens -->
     <nav
-      class="text-primary-hover hover:text-primary md:border-t md:border-r border-border md:hover:border-border-hover bg-background shadow"
+      class="text-primary-hover hover:text-primary md:border-t md:border-r border-border md:hover:border-border-hover bg-background shadow relative"
     >
       <!-- Hero Image -->
       <div class="w-full overflow-hidden relative">
-        <img class="sidebar-img w-full h-auto object-cover" src="/icon.png" alt="Rule 34 App Logo" />
+        <img
+          class="sidebar-img w-full h-auto object-cover"
+          src="/icon.png"
+          alt="Rule 34 App Logo"
+        />
 
         <!-- Text on image -->
         <div class="absolute bottom-0 left-0 p-3">
@@ -53,11 +57,14 @@
               <span class="relative">Settings</span>
             </nuxt-link>
           </li>
+        </ul>
 
+        <ul
+          class="absolute bottom-0 left-0 w-full pb-3 flex flex-row justify-around"
+        >
           <li>
             <nuxt-link class="nav-hover-links" to="/legal">
-              <span class="nav-spacer"></span>
-              <span class="relative">Legal</span>
+              <span class="relative">Legal </span>
             </nuxt-link>
           </li>
         </ul>
