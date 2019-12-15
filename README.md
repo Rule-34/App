@@ -23,7 +23,7 @@ Or backup
 
 # API
 
-This PWA uses a JSON wrapper for various Rule 34 XML APIs, it is developed and mantained by me, and can be found [here](https://github.com/VoidlessSeven7/Rule-34-App-Original-API).
+This App uses a JSON wrapper for various Rule 34 XML APIs, it is developed and mantained by me, and can be found [here](https://github.com/VoidlessSeven7/Rule-34-App-Original-API).
 
 ## Future
 
@@ -36,26 +36,24 @@ If I duplicate the API and use a Load Balancer, a lot of stress would be removed
 **Monetary problem**, I don't have the funds (7€/month) to pay for the duplicated API, or the Load Balancer (7€/month).
 Since this is a **free** service that I'm offering, with **no ads** to generate revenue, I ask of you, **if you really like my work**, please donate whatever amount you can to the future of this app.
 
-[Patreon](https://patreon.com/VoidlessSeven7)
-
-[Paypal](https://www.paypal.me/Alejandrorr7)
+[Patreon](https://patreon.com/VoidlessSeven7) | [Paypal](https://www.paypal.me/Alejandrorr7)
 
 
 ## Technologies used
 
 #### Languages 
-HTML, SCSS, Javascript
+HTML, CSS/SCSS, Javascript
 
 #### Technologies
-NodeJS, NPM, NuxtJS, VueJS, Webpack, etc.
+NodeJS, NPM, NuxtJS, VueJS, TailwindCSS, Webpack, etc.
 
 You should read the [package.json](package.json) file for the full list
 
-## VSCode dependencies
+## VSCode extensions used
 ESLint, Prettier, Vetur
 
-###### Recommended for developing
-> File utils, Calamity theme
+###### Recommended extensions for developing
+> File utils
 
 ## Build Setup
 
