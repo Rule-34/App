@@ -12,9 +12,7 @@
       <!-- Selector -->
       <select
         :value="selected"
-        @change="
-          changeDomain($event.target.value)
-        "
+        @change="changeDomain($event.target.value)"
         class="inline-flex items-center appearance-none outline-none font-light text-primary bg-background"
       >
         <option
@@ -49,8 +47,6 @@ export default {
       options: [
         { name: 'rule34.xxx', value: 'xxx/' },
         { name: 'rule34.paheal.net', value: 'paheal/' },
-        // { name: 'rule34hentai.net', value: 'hentai/' },
-        // { name: 'lolibooru.moe', value: 'loli/' },
       ],
     }
   },
@@ -63,14 +59,24 @@ export default {
     },
   },
 
+  // Experimental features, dont say anything!
+  mounted() {
+    if (this.dashBoardSettings.experimentalSettings) {
+      this.options.push(
+        { name: 'lolibooru.moe', value: 'loli/' },
+        { name: 'rule34hentai.net', value: 'hentai/' }
+      )
+    }
+  },
+
   methods: {
-    ...mapMutations(['apiManager', 'pidManager', 'tagManager']),
+    ...mapMutations(['domainManager', 'pidManager', 'tagManager']),
     ...mapActions(['getPosts', 'analyticManager']),
 
     // Changes that we have to do when changing domain so request is not malformed
     changeDomain(newApi) {
       // Send new API to change
-      this.apiManager(newApi)
+      this.domainManager(newApi)
       // Reset tags so we dont search those tags on new domain
       this.tagManager({ operation: 'reset' })
       // Reset PID so we dont start with specific PID on new domain

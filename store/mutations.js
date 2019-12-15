@@ -51,7 +51,7 @@ export default {
    * @param {*} state Default store
    * @param {String} domain New domain
    */
-  apiManager(state, domain) {
+  domainManager(state, domain) {
     console.log(domain)
     // New url
     if (domain !== undefined) {
@@ -166,6 +166,24 @@ export default {
     if (payload !== undefined) {
       // console.log(payload);
       state.userSettings[payload.index].value = payload.value
+    }
+  },
+
+  experimentalManager(state, payload) {
+    switch (payload) {
+      case 'enable':
+        state.dashBoardSettings.experimentalSettings = true
+        break
+
+      case 'disable':
+        state.dashBoardSettings.experimentalSettings = false
+        break
+
+      // Toggle
+      default:
+        state.dashBoardSettings.experimentalSettings = !state.dashBoardSettings
+          .experimentalSettings
+        break
     }
   },
 }
