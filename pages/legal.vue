@@ -269,6 +269,7 @@
     />
 
     <ContentContainer
+      @click.native="unlockExperimental()"
       title="Thank you for your interest"
       text="It's a pleasure having someone read this wall of text :')"
       icon="star"
@@ -277,9 +278,42 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import ContentContainer from '~/components/faq/ContentContainer.vue'
 
 export default {
   components: { ContentContainer },
+
+  data() {
+    return {
+      clicks: 0,
+    }
+  },
+
+  head() {
+    return {
+      title: 'Legal | Rule 34 App',
+    }
+  },
+
+  methods: {
+    ...mapMutations(['experimentalManager', 'domainManager']),
+
+    // Shh it's a secret!
+    unlockExperimental() {
+      if (this.clicks >= 7) {
+        this.clicks = 0
+        console.log('Experimental features enabled!')
+        this.experimentalManager('enable')
+      } else {
+        this.clicks++
+        console.log(this.clicks)
+        // Reset to default domain
+        this.domainManager('xxx/')
+        // Disable features
+        this.experimentalManager('disable')
+      }
+    },
+  },
 }
 </script>
