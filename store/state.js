@@ -31,7 +31,7 @@ export default () => ({
   // These settings are saved to localStorage
   userSettings: {
     darkTheme: {
-      name: 'Dark Theme WIP',
+      name: 'Dark Theme',
       description: 'Enable dark theme app-wide',
       value: true,
     },
