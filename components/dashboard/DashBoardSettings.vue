@@ -47,6 +47,7 @@ export default {
       options: [
         { name: 'rule34.xxx', value: 'xxx/' },
         { name: 'rule34.paheal.net', value: 'paheal/' },
+        { name: 'danbooru.donmai.us', value: 'danbooru/' },
       ],
     }
   },
