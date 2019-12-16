@@ -13,7 +13,7 @@ export default {
           break
 
         case 'concat':
-          state.dashBoardData.data.posts = state.dashBoardData.data.posts.concat(
+          state.dashBoardData.data = state.dashBoardData.data.concat(
             payload.data
           )
           break
