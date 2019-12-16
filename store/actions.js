@@ -28,6 +28,7 @@ export default {
       const response = await fetch(
         this.state.generalData.apiUrl + domainUrl + dataObj.url
       ).then(response => response.json())
+      // console.log(response)
 
       commit({
         type: dataObj.mutationToReturn,
@@ -35,20 +36,6 @@ export default {
         mode: dataObj.mode,
         // Sometimes its response sometimes its response.data
       })
-
-      // Check when loading more posts if theres no more posts
-      // TODO: Did real bad, do again but better in the future
-      try {
-        if (!response.length) {
-          commit({
-            type: dataObj.mutationToReturn,
-            errors: 'There are no more posts to load!',
-          })
-        }
-      } catch {
-        // console.log("Error");
-      }
-      // console.log(response)
     } catch (error) {
       commit({
         type: 'generalManager',
