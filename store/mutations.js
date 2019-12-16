@@ -14,7 +14,7 @@ export default {
 
         case 'concat':
           state.dashBoardData.data.posts = state.dashBoardData.data.posts.concat(
-            payload.data.posts
+            payload.data
           )
           break
       }

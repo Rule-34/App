@@ -36,9 +36,10 @@ export default {
         // Sometimes its response sometimes its response.data
       })
 
-      // Check when loading more posts if theres no more posts TODO: Did real bad, do again but better in the future
+      // Check when loading more posts if theres no more posts
+      // TODO: Did real bad, do again but better in the future
       try {
-        if (!response.posts.length) {
+        if (!response.length) {
           commit({
             type: dataObj.mutationToReturn,
             errors: 'There are no more posts to load!',
