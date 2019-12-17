@@ -3,7 +3,7 @@ import { track } from 'insights-js'
 // Send tags in an interval of .5 seconds to not flood the analytics server
 function SendTimed(data, index, parameter) {
   setTimeout(function() {
-    console.log('Sent tag: ', data, index, parameter)
+    console.log('Tracked item: ', data, index, parameter)
 
     // Then track tags
     track({
@@ -22,7 +22,7 @@ function tagsTracking(data, premadeFilterData) {
 
     // Test to see if theres any data passed
     if (!data.length) {
-      reject(new Error('No tags passed'))
+      resolve('No tags passed')
     }
 
     // Execute successfully the code
@@ -66,7 +66,7 @@ function domainTracking(data) {
   return new Promise(function(resolve, reject) {
     // Test to see if theres any data passed
     if (!data) {
-      reject(new Error('No tags passed'))
+      resolve('No domain passed')
     }
 
     // Execute successfully the code
@@ -90,7 +90,7 @@ function settingsTracking(data) {
 
     // If theres no difference then reject
     if (difference.length === 0) {
-      reject(new Error('No setting difference'))
+      resolve('No setting difference')
     }
 
     // When we know theres a difference, track each difference
