@@ -23,6 +23,14 @@ Or backup
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/703629e2-193f-4bb0-9349-f02a22d50ed1/deploy-status)](https://app.netlify.com/sites/rule34-pwa/deploys)
 
+
+### Discord
+
+Join the **[community discord](https://discordapp.com/invite/w7mWvMt/)!**
+
+![Discord](https://img.shields.io/discord/656241666553806861?style=for-the-badge)
+
+
 # API
 
 This App uses a JSON wrapper for various Rule 34 XML APIs, it is developed and mantained by me, and can be found [here](https://github.com/VoidlessSeven7/Rule-34-App-Original-API).
