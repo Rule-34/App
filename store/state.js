@@ -23,8 +23,8 @@ export default () => ({
   },
 
   generalData: {
-    apiUrl: 'http://localhost:8000/',
-    // apiUrl: 'https://r34-app-original-api.herokuapp.com/',
+    // apiUrl: 'http://localhost:8000/',
+    apiUrl: 'https://r34-app-original-api.herokuapp.com/',
     postLimit: 20,
     errors: null,
   },
