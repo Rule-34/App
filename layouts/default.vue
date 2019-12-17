@@ -1,13 +1,13 @@
 <template>
   <!-- Apply touch for showing menu and search -->
   <div
-    class="layout"
     v-touch="{
       left: () =>
         isDashboard === true ? touchHandler('left') : sideNavManager('close'),
       right: () =>
         isDashboard === true ? touchHandler('right') : sideNavManager('open'),
     }"
+    class="layout"
   >
     <div class="cool-bar" />
 
