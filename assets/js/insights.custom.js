@@ -1,38 +1,5 @@
 import { track } from 'insights-js'
 
-const defaultSettings = {
-  darkTheme: {
-    value: true,
-  },
-  lazyLoading: {
-    value: true,
-  },
-  infiniteLoad: {
-    value: false,
-  },
-  score: {
-    value: 0,
-  },
-  fullSizeImages: {
-    value: false,
-  },
-  videoControls: {
-    value: true,
-  },
-  hoverControls: {
-    value: false,
-  },
-  zoom: {
-    value: false,
-  },
-  keyboardControls: {
-    value: true,
-  },
-  nsfw: {
-    value: true,
-  },
-}
-
 // Send tags in an interval of .5 seconds to not flood the analytics server
 function SendTimed(data, index, parameter) {
   setTimeout(function() {
@@ -118,7 +85,7 @@ function settingsTracking(data) {
   return new Promise(function(resolve, reject) {
     // Compare default settings to user settings to see if theres a difference
     const difference = Object.keys(data).filter(
-      key => data[key].value !== defaultSettings[key].value
+      key => data[key].value !== data[key].defaultValue
     )
 
     // If theres no difference then reject
