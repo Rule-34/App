@@ -17,6 +17,10 @@ App to enjoy all Rule 34 sites combined in a mobile-friendly experience
 
 Or backup
 
+[https://backup.r34.app/](https://backup.r34.app/)
+
+Which really is just a CNAME of
+
 [https://rule34-pwa.netlify.com/](https://rule34-pwa.netlify.com/)
 
 > Powered by Netlify
