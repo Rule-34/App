@@ -77,11 +77,7 @@
           @@@@@@@@@@@@@@@@@@@@@@@@ Tags and source 
           @@@@@@@@@@@@@@@@@@@@@@@@
     -->
-    <!-- Double transition since i cant figure out how to make it in one for both when theres source and when there isnt -->
-    <div
-      v-if="post.source || (post.tags && isActive)"
-      class="flex flex-wrap overflow-hidden text-sm p-1"
-    >
+    <div class="flex flex-wrap overflow-hidden text-sm p-1">
       <TransitionCollapse>
         <!-- Tags -->
         <div
