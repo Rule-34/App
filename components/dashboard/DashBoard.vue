@@ -94,13 +94,15 @@ export default {
           case 39:
             this.$refs.controls.getNextPage()
             this.scrollToTop()
-            // console.log("Loading next page");
+
+            console.log('Loading next page')
             break
 
           case 37:
             this.$refs.controls.getPrevPage()
             this.scrollToTop()
-            // console.log("Loading Prev page");
+
+            console.log('Loading Prev page')
             break
         }
       } catch (error) {
