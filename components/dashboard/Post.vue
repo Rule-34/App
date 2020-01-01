@@ -49,7 +49,8 @@
             muted
             loop
           >
-            <source :src="post.high_res_file" />Your browser doesnt support HTML5 video.
+            <source :src="post.high_res_file" />
+            Your browser doesnt support HTML5 video.
           </video>
         </lazy-component>
       </template>
@@ -63,7 +64,8 @@
           muted
           loop
         >
-          <source :src="post.high_res_file" />Your browser doesnt support HTML5 video.
+          <source :src="post.high_res_file" />
+          Your browser doesnt support HTML5 video.
         </video>
       </template>
     </template>
@@ -76,55 +78,60 @@
           @@@@@@@@@@@@@@@@@@@@@@@@
     -->
     <!-- Double transition since i cant figure out how to make it in one for both when theres source and when there isnt -->
-    <transition name="fade">
-      <div v-if="post.source || (post.tags && isActive)">
-        <transition-group name="fade" tag="div" class="flex flex-wrap overflow-hidden text-sm p-1">
-          <!-- Tags -->
-          <div key="tags" v-if="post.tags && isActive" class="w-full tag-container">
-            <a
-              v-for="tag in post.tags"
-              :key="post[tag]"
-              @click="getSpecificTag(tag)"
-              v-text="tag"
-              class="tag"
-              href="#"
-            />
-          </div>
+    <div
+      v-if="post.source || (post.tags && isActive)"
+      class="flex flex-wrap overflow-hidden text-sm p-1"
+    >
+      <TransitionCollapse>
+        <!-- Tags -->
+        <div
+          key="tags"
+          v-if="post.tags && isActive"
+          class="w-full tag-container"
+        >
+          <a
+            v-for="tag in post.tags"
+            :key="post[tag]"
+            @click="getSpecificTag(tag)"
+            v-text="tag"
+            class="tag"
+            href="#"
+          />
+        </div>
+      </TransitionCollapse>
 
-          <!-- Source -->
-          <div key="source" v-if="post.source" class="w-full m-auto text-center">
-            <template v-if="isUrl()">
-              <a
-                :href="post.source"
-                class="inline-flex"
-                rel="noreferrer noopener nofollow"
-                target="_blank"
-              >
-                <p class="text-primary-hover hover:text-primary">Source</p>
-                <ExternalLinkIcon class="icon text-default w-5 h-5 ml-2" />
-              </a>
-            </template>
+      <!-- Source -->
+      <div key="source" v-if="post.source" class="w-full m-auto text-center">
+        <template v-if="isUrl()">
+          <a
+            :href="post.source"
+            class="inline-flex"
+            rel="noreferrer noopener nofollow"
+            target="_blank"
+          >
+            <p class="text-primary-hover hover:text-primary">Source</p>
+            <ExternalLinkIcon class="icon text-default w-5 h-5 ml-2" />
+          </a>
+        </template>
 
-            <template v-else>
-              <p v-text="post.source" title="Source" class="text-default-text" />
-            </template>
-          </div>
-        </transition-group>
+        <template v-else>
+          <p v-text="post.source" title="Source" class="text-default-text" />
+        </template>
       </div>
-      <!-- </div> -->
-    </transition>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { ExternalLinkIcon } from 'vue-feather-icons'
+import TransitionCollapse from '~/components/general/TransitionCollapse'
 
 export default {
   name: 'Post',
-  components: { ExternalLinkIcon },
+  components: { ExternalLinkIcon, TransitionCollapse },
   props: {
-    postData: {
+    post: {
       type: Object,
       default() {
         return {}
@@ -133,8 +140,6 @@ export default {
   },
   data() {
     return {
-      // Save data so we can use
-      post: this.postData,
       // Internal toggle for showing tags
       isActive: false,
     }

@@ -5,7 +5,7 @@
 
     <DashBoardSettings />
     <!-- every post in their own component -->
-    <Post v-for="post in dashBoardData.data" :key="post.id" :post-data="post" />
+    <Post v-for="post in dashBoardData.data" :key="post.id" :post="post" />
 
     <!-- If infinite load is NOT enabled -->
     <template v-if="!userSettings.infiniteLoad.value">
