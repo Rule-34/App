@@ -9,6 +9,7 @@
 
     <!-- Selector -->
     <select
+      id="domainSelector"
       :value="selected"
       class="inline-flex items-center appearance-none outline-none font-light text-primary bg-background"
       @change="changeDomain($event.target.value)"
@@ -31,6 +32,11 @@
         />
       </template>
     </select>
+
+    <!-- Label so google doesnt cry harder -->
+    <label for="domainSelector" class="hidden">
+      Selector that changes the domain where the content is pulled from
+    </label>
 
     <!-- Drop icon -->
     <div class="inline-flex items-center pl-1 pr-2">
