@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main>
     <!-- Examples -->
     <ContentContainer
       :separator="true"
@@ -79,7 +79,7 @@
         While <u>not active</u>, posts will be blurred.
       </template>
     </ContentContainer>
-  </div>
+  </main>
 </template>
 
 <script>

@@ -1,8 +1,8 @@
 <template>
-  <div class="fixed min-h-screen w-full z-10 flex">
+  <aside class="fixed min-h-screen w-full z-10 flex">
     <!-- Actual Navigation Bar -->
     <!-- Only show borders on medium screens -->
-    <nav
+    <div
       class="text-primary-hover hover:text-primary md:border-t md:border-r border-border md:hover:border-border-hover bg-background shadow relative"
     >
       <!-- Hero Image -->
@@ -21,7 +21,7 @@
       </div>
 
       <!-- Navbar Links -->
-      <div class="p-3 border-t border-border">
+      <nav class="p-3 border-t border-border">
         <ul class="text-center md:text-left leading-loose">
           <li>
             <nuxt-link class="nav-hover-links" to="/">
@@ -109,12 +109,12 @@
             </a>
           </li>
         </ul>
-      </div>
-    </nav>
+      </nav>
+    </div>
 
     <!-- Space for clicking out of the menu -->
-    <div @click="sideNavManager" class="sidebar-close-area bg-black-25" />
-  </div>
+    <div class="sidebar-close-area bg-black-25" @click="sideNavManager" />
+  </aside>
 </template>
 
 <script>

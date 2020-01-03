@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main>
     <!-- Separator -->
     <ContentContainer :separator="true" title="Disclaimer" />
 
@@ -269,12 +269,12 @@
     />
 
     <ContentContainer
-      @click.native="unlockExperimental()"
       title="Thank you for your interest"
       text="It's a pleasure having someone read this wall of text :')"
       icon="star"
+      @click.native="unlockExperimental()"
     />
-  </div>
+  </main>
 </template>
 
 <script>

@@ -1,18 +1,22 @@
 <template>
   <!-- Loop for every info container -->
-  <div :class="{ zoom: userSettings.zoom.value }" class="container">
+  <article :class="{ zoom: userSettings.zoom.value }" class="container">
     <!-- If separator -->
     <template v-if="separator">
       <div class="material-container p-3 bg-gradient-blue-lilac">
         <div class="text-center text-white">
           <!-- Head -->
-          <div :class="{'mb-2': text}">
-            <h1 v-text="title" class="text-lg" :class="{underline: titleUnderline}" />
+          <div :class="{ 'mb-2': text }">
+            <h1
+              class="text-lg"
+              :class="{ underline: titleUnderline }"
+              v-text="title"
+            />
           </div>
 
           <!-- Body -->
           <div v-if="text" class="text-sm">
-            <p v-text="text" class="mb-1"></p>
+            <p class="mb-1" v-text="text"></p>
             <!-- Slot for extra info -->
           </div>
         </div>
@@ -26,14 +30,17 @@
         <div class="flex inline-flex align-middle">
           <InfoIcon v-if="icon === 'info'" class="mr-2 text-blue-500" />
           <StarIcon v-else-if="icon === 'star'" class="mr-2 text-yellow-500" />
-          <DollarSignIcon v-else-if="icon === 'donation'" class="mr-2 text-green-500" />
+          <DollarSignIcon
+            v-else-if="icon === 'donation'"
+            class="mr-2 text-green-500"
+          />
           <!-- Title -->
-          <h1 v-text="title" class="text-default-text text-lg font-bold" />
+          <h1 class="text-default-text text-lg font-bold" v-text="title" />
         </div>
 
         <!-- Body -->
         <div class="text-sm text-default-text">
-          <p v-if="text" v-text="text" class="mb-1 whitespace-pre-line" />
+          <p v-if="text" class="mb-1 whitespace-pre-line" v-text="text" />
 
           <slot name="textRich" class="mb-1" />
           <!-- We can insert extra info here -->
@@ -42,23 +49,27 @@
           <picture v-if="img">
             <source :srcset="img + '.webp'" type="image/webp" />
             <source :srcset="img + '.png'" type="image/png" />
-            <img :src="img + '.png'" :alt="title + ' Example'" class="mx-auto mt-2" />
+            <img
+              :src="img + '.png'"
+              :alt="title + ' Example'"
+              class="mx-auto mt-2"
+            />
           </picture>
 
           <!-- Links -->
           <a
             v-if="link && linkText"
             :href="link"
-            v-text="linkText"
             target="_blank"
             rel="noopener noreferrer"
+            v-text="linkText"
           />
           <!-- Slot for extra info -->
           <slot />
         </div>
       </div>
     </template>
-  </div>
+  </article>
 </template>
 
 <script>
