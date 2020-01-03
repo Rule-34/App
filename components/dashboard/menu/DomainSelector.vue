@@ -1,17 +1,16 @@
 <template>
-  <!-- Domain selector -->
   <div
-    class="inline-flex w-fit-content theme-responsive-container rounded-full shadow bg-background overflow-hidden cursor-pointer"
+    class="inline-flex w-fit-content relative theme-responsive-container rounded-full shadow bg-background overflow-hidden"
   >
     <!-- Cloud icon -->
-    <div class="inline-flex items-center pl-2 pr-1">
+    <div for="domain-selector" class="inline-flex items-center pl-2 pr-1">
       <CloudIcon class="icon text-primary w-4 h-4" />
     </div>
 
     <!-- Selector -->
     <select
       :value="selected"
-      class="inline-flex items-center appearance-none outline-none font-light text-primary bg-background cursor-pointer"
+      class="inline-flex items-center appearance-none outline-none font-light text-primary bg-background"
       @change="changeDomain($event.target.value)"
     >
       <option
