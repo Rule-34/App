@@ -6,7 +6,7 @@ export default () => ({
 
   // These settings are saved to localStorage
   dashBoardSettings: {
-    contentDomain: 'xxx/',
+    contentDomain: 'xxx',
     experimentalSettings: false,
   },
 

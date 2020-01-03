@@ -303,7 +303,7 @@ export default {
         this.clicks++
         console.log(this.clicks)
         // Reset to default domain
-        this.domainManager('xxx/')
+        this.domainManager('xxx')
         // Disable features
         this.experimentalManager('disable')
       }

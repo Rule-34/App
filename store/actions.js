@@ -26,7 +26,7 @@ export default {
     // Actual http get
     try {
       const response = await fetch(
-        this.state.generalData.apiUrl + domainUrl + dataObj.url
+        this.state.generalData.apiUrl + domainUrl + '/' + dataObj.url
       ).then(response => response.json())
       // console.log(response)
 
