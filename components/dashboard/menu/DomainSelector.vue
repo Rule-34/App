@@ -9,22 +9,28 @@
 
     <!-- Selector -->
     <select
-      id="domainSelector"
       :value="selected"
       class="inline-flex items-center appearance-none outline-none font-light text-primary bg-background"
       @change="changeDomain($event.target.value)"
     >
-      <option
-        v-for="option in options"
-        :key="option.name"
-        :value="option.value"
-        v-text="option.name"
-      />
-    </select>
+      <!-- Loop for every option -->
+      <template v-for="option in options">
+        <option
+          :id="option.value"
+          :key="option.name"
+          :value="option.value"
+          v-text="option.name"
+        />
 
-    <label for="domainSelector" class="hidden"
-      >Selector for changing the domain</label
-    >
+        <!-- Label so google doesnt cry and indexes the site higher -->
+        <label
+          :key="option.name + '_label'"
+          :for="option.value"
+          class="hidden"
+          v-text="'Changes the domain to ' + option.name"
+        />
+      </template>
+    </select>
 
     <!-- Drop icon -->
     <div class="inline-flex items-center pl-1 pr-2">
@@ -45,9 +51,9 @@ export default {
   data() {
     return {
       options: [
-        { name: 'rule34.xxx', value: 'xxx/' },
-        { name: 'rule34.paheal.net', value: 'paheal/' },
-        { name: 'danbooru.donmai.us', value: 'danbooru/' },
+        { name: 'rule34.xxx', value: 'xxx' },
+        { name: 'rule34.paheal.net', value: 'paheal' },
+        { name: 'danbooru.donmai.us', value: 'danbooru' },
       ],
     }
   },
@@ -62,7 +68,7 @@ export default {
   // Experimental features, dont say anything!
   mounted() {
     if (this.dashBoardSettings.experimentalSettings) {
-      this.options.push({ name: 'lolibooru.moe', value: 'loli/' })
+      this.options.push({ name: 'lolibooru.moe', value: 'loli' })
     }
   },
 
@@ -80,8 +86,8 @@ export default {
 
       // Reset PID so we dont start with specific PID on new domain, depending of the domain it starts at 0 or at 1
       switch (newApi) {
-        case 'loli/':
-        case 'danbooru/':
+        case 'loli':
+        case 'danbooru':
           this.pidManager({ operation: 'specific', value: 1 })
           break
 
