@@ -1,14 +1,11 @@
 <template>
-  <!-- Loop for every post -->
-  <div :class="{ zoom: userSettings.zoom.value }" class="material-container">
+  <!-- Makes element zoomable if setting is enabled -->
+  <figure :class="{ zoom: userSettings.zoom.value }" class="material-container">
     <!-- TODO: style="max-height: 80vh;" TODO: good for image previews -->
 
-    <!--  @@@@@@@@@@@@@@@@@@@@@@@@ 
-          @@@@@@@@@@@@@@@@@@@@@@@@ Images and videos
-          @@@@@@@@@@@@@@@@@@@@@@@@
-    -->
+    <!-- Images and videos -->
 
-    <!-- if Image -->
+    <!-- if media is a Image -->
     <template v-if="post.type === 'image'">
       <!-- If lazy loading enabled -->
       <template v-if="userSettings.lazyLoading.value">
@@ -33,9 +30,8 @@
         />
       </template>
     </template>
-    <!-- :style="{ height: post.height + 'px', width: post.width + 'px' }" -->
 
-    <!-- if Video -->
+    <!-- if its a Video -->
     <template v-else-if="post.type === 'video'">
       <!-- If lazy loading enabled -->
       <template v-if="userSettings.lazyLoading.value">
@@ -70,16 +66,15 @@
       </template>
     </template>
 
-    <!-- if Anything else -->
+    <!-- if its not an image or a video -->
     <template v-else>Unknown type of media: {{ post.type }}</template>
 
-    <!--  @@@@@@@@@@@@@@@@@@@@@@@@ 
-          @@@@@@@@@@@@@@@@@@@@@@@@ Tags and source 
-          @@@@@@@@@@@@@@@@@@@@@@@@
-    -->
-    <div class="flex flex-wrap overflow-hidden text-sm p-1">
+    <!-- Tags and source -->
+    <figcaption class="flex flex-wrap overflow-hidden text-sm p-1">
+      <!-- Component to apply the collapse transition -->
       <TransitionCollapse>
         <!-- Tags -->
+        <!-- Only show them if they exist -->
         <div
           v-if="post.tags && isActive"
           key="tags"
@@ -98,6 +93,7 @@
 
       <!-- Source -->
       <div v-if="post.source" key="source" class="w-full m-auto text-center">
+        <!-- If text is an Url then make it linkable -->
         <template v-if="isUrl()">
           <a
             :href="post.source"
@@ -105,17 +101,21 @@
             rel="noreferrer noopener nofollow"
             target="_blank"
           >
-            <p class="text-primary-hover hover:text-primary">Source</p>
+            <p
+              class="text-primary-hover hover:text-primary"
+              v-text="'Source'"
+            />
             <ExternalLinkIcon class="icon text-default w-5 h-5 ml-2" />
           </a>
         </template>
 
+        <!-- If the text is not a url then just show the text -->
         <template v-else>
           <p title="Source" class="text-default-text" v-text="post.source" />
         </template>
       </div>
-    </div>
-  </div>
+    </figcaption>
+  </figure>
 </template>
 
 <script>

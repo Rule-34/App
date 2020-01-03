@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main>
     <ContentContainer
       :separator="true"
       title="General"
@@ -93,7 +93,7 @@ All information is anonymized and respects the 'Do not track' directive, so if y
       <!-- Slot -->
       <small class="text-default-text-muted">And you, the user!</small>
     </ContentContainer>
-  </div>
+  </main>
 </template>
 
 <script>

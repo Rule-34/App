@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <main>
     <!-- Different width depending on screen -->
     <DashBoard />
-  </div>
+  </main>
 </template>
 
 <script>

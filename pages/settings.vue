@@ -1,41 +1,39 @@
 <template>
-  <div>
-    <div class="flex flex-col h-perfect p-3">
-      <div
-        class="material-container w-full md:w-2/3 xl:w-1/2 m-auto p-5 shadow-xl"
-      >
-        <div class="flex flex-wrap">
-          <div class="w-2/5 m-auto text-center text-default-text">
-            <h1 class="text-lg">Settings</h1>
+  <main class="flex flex-col h-perfect p-3">
+    <div
+      class="material-container w-full md:w-2/3 xl:w-1/2 m-auto p-5 shadow-xl"
+    >
+      <div class="flex flex-wrap">
+        <div class="w-2/5 m-auto text-center text-default-text">
+          <h1 class="text-lg">Settings</h1>
 
-            <button
-              @click="removeLocalStorage"
-              title="Use me when something is not working!"
-              class="text-xs theme-responsive-container rounded-full px-2 align-middle shadow"
-            >
-              Reset
-            </button>
-          </div>
-          <div class="w-3/5 m-auto flex">
-            <div class="mx-auto">
-              <SettingSwitch
-                v-for="(setting, index) in userSettings"
-                :key="setting.name"
-                :value="setting.value"
-                :text="setting.name"
-                :switch-id="index"
-                :description="setting.description"
-                class="my-1"
-              />
-            </div>
+          <button
+            title="Use me when something is not working!"
+            class="text-xs theme-responsive-container rounded-full px-2 align-middle shadow"
+            @click="removeLocalStorage"
+          >
+            Reset
+          </button>
+        </div>
+        <div class="w-3/5 m-auto flex">
+          <div class="mx-auto">
+            <SettingSwitch
+              v-for="(setting, index) in userSettings"
+              :key="setting.name"
+              :value="setting.value"
+              :text="setting.name"
+              :switch-id="index"
+              :description="setting.description"
+              class="my-1"
+            />
           </div>
         </div>
       </div>
-      <div class="mx-auto">
-        <nuxt-link to="/usage" class="text-xs">What does X do?</nuxt-link>
-      </div>
     </div>
-  </div>
+    <nav class="mx-auto">
+      <nuxt-link to="/usage" class="text-xs">What does X do?</nuxt-link>
+    </nav>
+  </main>
 </template>
 
 <script>
