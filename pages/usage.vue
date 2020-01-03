@@ -91,6 +91,13 @@ export default {
   head() {
     return {
       title: 'Usage | Rule 34 App',
+      meta: [
+        {
+          hid: 'usage',
+          name: 'description',
+          content: 'Learn what the Rule 34 App offers',
+        },
+      ],
     }
   },
 }

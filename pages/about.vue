@@ -36,6 +36,13 @@ export default {
   head() {
     return {
       title: 'About | Rule 34 App',
+      meta: [
+        {
+          hid: 'about',
+          name: 'description',
+          content: 'About the Rule 34 App and Its creator',
+        },
+      ],
     }
   },
 }

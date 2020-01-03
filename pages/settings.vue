@@ -65,6 +65,13 @@ export default {
   head() {
     return {
       title: 'Settings | Rule 34 App',
+      meta: [
+        {
+          hid: 'settings',
+          name: 'description',
+          content: 'Tweak your experience on the Rule 34 App',
+        },
+      ],
     }
   },
 }
