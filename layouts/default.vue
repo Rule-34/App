@@ -44,14 +44,6 @@ export default {
     return { isDashboard: false }
   },
 
-  // Set theme and background color in the body dynamically thanks to the vuex store computed property
-  head() {
-    return {
-      bodyAttrs: {
-        class: this.themeAplied ? 'dark bg-background' : 'light bg-background',
-      },
-    }
-  },
   computed: {
     ...mapState(['searchData', 'sideNavData', 'userSettings']),
 
@@ -114,6 +106,15 @@ export default {
           break
       }
     },
+  },
+
+  // Set theme and background color in the body dynamically thanks to the vuex store computed property
+  head() {
+    return {
+      bodyAttrs: {
+        class: this.themeAplied ? 'dark bg-background' : 'light bg-background',
+      },
+    }
   },
 }
 
