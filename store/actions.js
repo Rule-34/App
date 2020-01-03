@@ -9,7 +9,7 @@ export default {
 
     // Reset errors cause we're trying again
     commit({
-      type: dataObj.mutationToReturn,
+      type: 'generalManager',
       errors: null,
     })
 
