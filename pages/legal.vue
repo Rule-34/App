@@ -290,12 +290,6 @@ export default {
     }
   },
 
-  head() {
-    return {
-      title: 'Legal | Rule 34 App',
-    }
-  },
-
   methods: {
     ...mapMutations(['experimentalManager', 'domainManager']),
 
@@ -314,6 +308,19 @@ export default {
         this.experimentalManager('disable')
       }
     },
+  },
+
+  head() {
+    return {
+      title: 'Legal | Rule 34 App',
+      meta: [
+        {
+          hid: 'legal',
+          name: 'description',
+          content: 'Legal information about the Rule 34 App',
+        },
+      ],
+    }
   },
 }
 </script>

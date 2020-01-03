@@ -105,6 +105,13 @@ export default {
   head() {
     return {
       title: 'Faq | Rule 34 App',
+      meta: [
+        {
+          hid: 'faq',
+          name: 'description',
+          content: 'Frequently asked questions about the Rule 34 App',
+        },
+      ],
     }
   },
 }
