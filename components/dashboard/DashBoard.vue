@@ -3,7 +3,7 @@
     <!-- If theres request got errors -->
     <Errors />
 
-    <DashBoardSettings />
+    <DashBoardMenu />
     <!-- every post in their own component -->
     <Post v-for="post in dashBoardData.data" :key="post.id" :post="post" />
 
@@ -18,7 +18,7 @@
     <template v-else>
       <!-- If theres more posts -->
       <div v-intersect.quiet="throttleInfiniteLoading" class="mx-auto">
-        <p @click="concatPost()" class="text-center text-default-text pb-2">
+        <p class="text-center text-default-text pb-2" @click="concatPost()">
           Loading more posts...
         </p>
         <Errors />
@@ -29,28 +29,31 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
+// Third party
 import { Intersect } from 'vuetify/es5/directives/intersect'
 import throttle from 'lodash/throttle'
-import DashBoardSettings from './DashBoardSettings.vue'
-import Post from './Post.vue'
-import Controls from './Controls.vue'
+// Components
+import DashBoardMenu from '~/components/dashboard/menu/DashBoardMenu.vue'
+import Post from '~/components/dashboard/Post.vue'
+import Controls from '~/components/dashboard/navigation/Controls.vue'
 import Errors from '~/components/general/Errors'
 
 export default {
   name: 'DashBoard',
   components: {
     Errors,
-    DashBoardSettings,
+    DashBoardMenu,
     Post,
     Controls,
   },
   directives: {
     Intersect,
   },
-  // Get data() from vuex stores
+
   computed: {
     ...mapState(['dashBoardData', 'userSettings']),
   },
+
   created() {
     // Navigation with keyboard
     if (this.userSettings.keyboardControls.value) {
