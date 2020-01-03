@@ -1,36 +1,31 @@
 <template>
-  <div>
-    <!-- Domain selector -->
-    <div
-      class="inline-flex w-fit-content relative theme-responsive-container rounded-full shadow bg-background overflow-hidden"
-    >
-      <!-- Cloud icon -->
-      <div for="domain-selector" class="inline-flex items-center pl-2 pr-1">
-        <CloudIcon class="icon text-primary w-4 h-4" />
-      </div>
-
-      <!-- Selector -->
-      <select
-        :value="selected"
-        class="inline-flex items-center appearance-none outline-none font-light text-primary bg-background"
-        @change="changeDomain($event.target.value)"
-      >
-        <option
-          v-for="option in options"
-          :key="option.name"
-          :value="option.value"
-          v-text="option.name"
-        />
-      </select>
-
-      <!-- Drop icon -->
-      <div class="inline-flex items-center pl-1 pr-2">
-        <ChevronDownIcon class="icon text-default w-4 h-4" />
-      </div>
+  <!-- Domain selector -->
+  <div
+    class="inline-flex w-fit-content theme-responsive-container rounded-full shadow bg-background overflow-hidden cursor-pointer"
+  >
+    <!-- Cloud icon -->
+    <div class="inline-flex items-center pl-2 pr-1">
+      <CloudIcon class="icon text-primary w-4 h-4" />
     </div>
 
-    <!-- Anything else -->
-    <!--  -->
+    <!-- Selector -->
+    <select
+      :value="selected"
+      class="inline-flex items-center appearance-none outline-none font-light text-primary bg-background cursor-pointer"
+      @change="changeDomain($event.target.value)"
+    >
+      <option
+        v-for="option in options"
+        :key="option.name"
+        :value="option.value"
+        v-text="option.name"
+      />
+    </select>
+
+    <!-- Drop icon -->
+    <div class="inline-flex items-center pl-1 pr-2">
+      <ChevronDownIcon class="icon text-default w-4 h-4" />
+    </div>
   </div>
 </template>
 

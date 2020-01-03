@@ -1,6 +1,9 @@
 <template>
   <!-- Loop for every post -->
-  <div :class="{ zoom: userSettings.zoom.value }" class="material-container">
+  <div
+    :class="{ zoom: userSettings.zoom.value }"
+    class="material-container cursor-pointer"
+  >
     <!-- TODO: style="max-height: 80vh;" TODO: good for image previews -->
 
     <!--  @@@@@@@@@@@@@@@@@@@@@@@@ 
@@ -16,8 +19,8 @@
           v-lazy="imageSource()"
           :alt="post.type"
           :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-          @click="toggleTags"
           class="post-img"
+          @click="toggleTags"
         />
       </template>
 
@@ -28,8 +31,8 @@
           :src="imageSource()"
           :alt="post.type"
           :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-          @click="toggleTags"
           class="post-img"
+          @click="toggleTags"
         />
       </template>
     </template>
@@ -44,10 +47,10 @@
             :alt="post.type"
             :controls="userSettings.videoControls.value"
             :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-            @click="toggleTags"
             class="post-img"
             muted
             loop
+            @click="toggleTags"
           >
             <source :src="post.high_res_file" />
             Your browser doesnt support HTML5 video.
@@ -59,10 +62,10 @@
           :alt="post.type"
           :controls="userSettings.videoControls.value"
           :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-          @click="toggleTags"
           class="post-img"
           muted
           loop
+          @click="toggleTags"
         >
           <source :src="post.high_res_file" />
           Your browser doesnt support HTML5 video.
@@ -81,23 +84,23 @@
       <TransitionCollapse>
         <!-- Tags -->
         <div
-          key="tags"
           v-if="post.tags && isActive"
+          key="tags"
           class="w-full tag-container"
         >
           <a
             v-for="tag in post.tags"
             :key="post[tag]"
-            @click="getSpecificTag(tag)"
-            v-text="tag"
             class="tag"
             href="#"
+            @click="getSpecificTag(tag)"
+            v-text="tag"
           />
         </div>
       </TransitionCollapse>
 
       <!-- Source -->
-      <div key="source" v-if="post.source" class="w-full m-auto text-center">
+      <div v-if="post.source" key="source" class="w-full m-auto text-center">
         <template v-if="isUrl()">
           <a
             :href="post.source"
@@ -111,7 +114,7 @@
         </template>
 
         <template v-else>
-          <p v-text="post.source" title="Source" class="text-default-text" />
+          <p title="Source" class="text-default-text" v-text="post.source" />
         </template>
       </div>
     </div>
