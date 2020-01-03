@@ -1,5 +1,5 @@
 <template>
-  <div class="m-5">
+  <div>
     <!-- Domain selector -->
     <div
       class="inline-flex w-fit-content relative theme-responsive-container rounded-full shadow bg-background overflow-hidden"
@@ -12,14 +12,14 @@
       <!-- Selector -->
       <select
         :value="selected"
-        @change="changeDomain($event.target.value)"
         class="inline-flex items-center appearance-none outline-none font-light text-primary bg-background"
+        @change="changeDomain($event.target.value)"
       >
         <option
           v-for="option in options"
+          :key="option.name"
           :value="option.value"
           v-text="option.name"
-          :key="option.name"
         />
       </select>
 
@@ -36,10 +36,11 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
+// Third party
 import { ChevronDownIcon, CloudIcon } from 'vue-feather-icons'
 
 export default {
-  name: 'DashBoardSettings',
+  name: 'DomainSelector',
   components: { ChevronDownIcon, CloudIcon },
 
   data() {
@@ -52,7 +53,6 @@ export default {
     }
   },
 
-  // Get data() from vuex stores
   computed: {
     ...mapState(['dashBoardSettings']),
     selected() {
@@ -63,10 +63,7 @@ export default {
   // Experimental features, dont say anything!
   mounted() {
     if (this.dashBoardSettings.experimentalSettings) {
-      this.options.push(
-        { name: 'lolibooru.moe', value: 'loli/' },
-        { name: 'rule34hentai.net', value: 'hentai/' }
-      )
+      this.options.push({ name: 'lolibooru.moe', value: 'loli/' })
     }
   },
 
