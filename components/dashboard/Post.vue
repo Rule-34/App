@@ -1,9 +1,6 @@
 <template>
   <!-- Loop for every post -->
-  <div
-    :class="{ zoom: userSettings.zoom.value }"
-    class="material-container cursor-pointer"
-  >
+  <div :class="{ zoom: userSettings.zoom.value }" class="material-container">
     <!-- TODO: style="max-height: 80vh;" TODO: good for image previews -->
 
     <!--  @@@@@@@@@@@@@@@@@@@@@@@@ 
