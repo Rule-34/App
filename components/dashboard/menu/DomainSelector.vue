@@ -9,6 +9,7 @@
 
     <!-- Selector -->
     <select
+      id="domainSelector"
       :value="selected"
       class="inline-flex items-center appearance-none outline-none font-light text-primary bg-background"
       @change="changeDomain($event.target.value)"
@@ -20,6 +21,10 @@
         v-text="option.name"
       />
     </select>
+
+    <label for="domainSelector" class="hidden"
+      >Selector for changing the domain</label
+    >
 
     <!-- Drop icon -->
     <div class="inline-flex items-center pl-1 pr-2">
