@@ -30,7 +30,7 @@
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
 // Third party
-import { Intersect } from 'vuetify/es5/directives/intersect'
+import { Intersect } from 'vuetify/lib/directives/intersect'
 import throttle from 'lodash/throttle'
 // Components
 import DashBoardMenu from '~/components/dashboard/menu/DashBoardMenu.vue'
