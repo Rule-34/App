@@ -1,10 +1,10 @@
 <template>
   <transition
+    enter-active-class="collapse-enter-active"
+    leave-active-class="collapse-leave-active"
     @before-enter="beforeEnter"
     @enter="enter"
     @leave="leave"
-    enter-active-class="collapse-enter-active"
-    leave-active-class="collapse-leave-active"
   >
     <!-- 
 
@@ -15,6 +15,8 @@
     @after-enter="afterEnter"
     
       -->
+
+    <!-- Content -->
     <slot />
   </transition>
 </template>
@@ -25,14 +27,14 @@ export default {
   methods: {
     beforeEnter(element) {
       requestAnimationFrame(() => {
-        element.style.height = '0px'
+        element.style.maxHeight = '0px'
         element.style.opacity = 0
       })
     },
 
     enter(element) {
       requestAnimationFrame(() => {
-        element.style.height = `${element.scrollHeight}px`
+        element.style.maxHeight = `${element.scrollHeight}px`
         // console.log('Scroll', element.scrollHeight)
 
         element.style.opacity = 1
@@ -40,7 +42,7 @@ export default {
     },
 
     // afterEnter(element) {
-    //   element.style.height = null
+    //   element.style.maxHeight = null
     //   element.style.opacity = null
     // },
 
@@ -48,7 +50,7 @@ export default {
 
     // beforeLeave(element) {
     //   requestAnimationFrame(() => {
-    //     element.style.height = `${element.offsetHeight}px`
+    //     element.style.maxHeight = `${element.offsetHeight}px`
     //     // console.log('Offset', element.offsetHeight)
 
     //     element.style.opacity = 1
@@ -57,13 +59,13 @@ export default {
 
     leave(element) {
       requestAnimationFrame(() => {
-        element.style.height = '0px'
+        element.style.maxHeight = '0px'
         element.style.opacity = 0
       })
     },
 
     // afterLeave(element) {
-    //   element.style.height = null
+    //   element.style.maxHeight = null
     //   element.style.opacity = null
     // },
   },
@@ -78,6 +80,6 @@ export default {
 
   transition-duration: 0.35s;
   transition-timing-function: ease;
-  transition-property: opacity, height;
+  transition-property: opacity, max-height;
 }
 </style>
