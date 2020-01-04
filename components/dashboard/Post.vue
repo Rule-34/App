@@ -50,6 +50,8 @@
           </video>
         </lazy-component>
       </template>
+
+      <!-- If lazy loading disabled -->
       <template v-else>
         <video
           :alt="post.type"
@@ -123,12 +125,16 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
+// Third party
 import { ExternalLinkIcon } from 'vue-feather-icons'
+// Components
 import TransitionCollapse from '~/components/general/TransitionCollapse'
 
 export default {
   name: 'Post',
+
   components: { ExternalLinkIcon, TransitionCollapse },
+
   props: {
     post: {
       type: Object,
@@ -137,15 +143,18 @@ export default {
       },
     },
   },
+
   data() {
     return {
       // Internal toggle for showing tags
       isActive: false,
     }
   },
+
   computed: {
     ...mapState(['searchData', 'userSettings']),
   },
+
   methods: {
     ...mapMutations(['pidManager', 'tagManager']),
     ...mapActions(['getPosts', 'analyticManager']),
