@@ -70,29 +70,32 @@
     <template v-else>Unknown type of media: {{ post.type }}</template>
 
     <!-- Tags and source -->
-    <figcaption class="flex flex-wrap overflow-hidden text-sm p-1">
+    <figcaption class="flex flex-wrap overflow-hidden text-sm">
+      <!-- Tags -->
       <!-- Component to apply the collapse transition -->
       <TransitionCollapse>
-        <!-- Tags -->
-        <!-- Only show them if they exist -->
-        <div
-          v-if="post.tags && isActive"
-          key="tags"
-          class="w-full tag-container"
-        >
-          <a
-            v-for="tag in post.tags"
-            :key="post[tag]"
-            class="tag"
-            href="#"
-            @click="getSpecificTag(tag)"
-            v-text="tag"
-          />
+        <!-- Only show them if they exist and the component is toggled -->
+        <!-- Workaround for this not jumping is applying collapse to the div before div with padding/margin -->
+        <div v-if="post.tags && isActive">
+          <div class="w-full tag-container p-1">
+            <a
+              v-for="tag in post.tags"
+              :key="post[tag]"
+              class="tag"
+              href="#"
+              @click="getSpecificTag(tag)"
+              v-text="tag"
+            />
+          </div>
         </div>
       </TransitionCollapse>
 
       <!-- Source -->
-      <div v-if="post.source" key="source" class="w-full m-auto text-center">
+      <div
+        v-if="post.source"
+        key="source"
+        class="w-full m-auto text-center p-1"
+      >
         <!-- If text is an Url then make it linkable -->
         <template v-if="isUrl()">
           <a
