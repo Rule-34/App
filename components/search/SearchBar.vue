@@ -71,7 +71,7 @@ export default {
         await this.getCorsProxy({
           url:
             'https://gist.githubusercontent.com/VoidlessSeven7/c0b379d617b1d26c54158e90a1f096cd/raw/filter_anti_furry_r34.app.txt',
-          mode: 'filter',
+          mode: 'filterData',
         })
       }
 
