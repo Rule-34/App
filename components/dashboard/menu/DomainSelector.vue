@@ -7,6 +7,15 @@
       <CloudIcon class="icon text-primary w-4 h-4" />
     </div>
 
+    <!-- Label so google doesnt cry harder -->
+    <label
+      for="domainSelector"
+      class="hidden"
+      v-text="
+        'Selector that changes the domain where the content is pulled from'
+      "
+    />
+
     <!-- Selector -->
     <select
       id="domainSelector"
@@ -16,13 +25,6 @@
     >
       <!-- Loop for every option -->
       <template v-for="option in options">
-        <option
-          :id="option.value"
-          :key="option.name"
-          :value="option.value"
-          v-text="option.name"
-        />
-
         <!-- Label so google doesnt cry and indexes the site higher -->
         <label
           :key="option.name + '_label'"
@@ -30,13 +32,16 @@
           class="hidden"
           v-text="'Changes the domain to ' + option.name"
         />
+
+        <!-- Actual clickable option -->
+        <option
+          :id="option.value"
+          :key="option.name"
+          :value="option.value"
+          v-text="option.name"
+        />
       </template>
     </select>
-
-    <!-- Label so google doesnt cry harder -->
-    <label for="domainSelector" class="hidden">
-      Selector that changes the domain where the content is pulled from
-    </label>
 
     <!-- Drop icon -->
     <div class="inline-flex items-center pl-1 pr-2">
