@@ -16,14 +16,14 @@
       </div>
 
       <!-- Filter content -->
-      <div
-        :class="{
-          'text-orange-400': ContentMode.mode === 'furry',
-        }"
-        title="Automatic filters"
-        @click="toggleContentMode()"
-      >
-        <component :is="ContentMode.icon" class="icon w-6 h-6 mr-1" />
+      <div title="Automatic filters" @click="toggleContentMode()">
+        <component
+          :is="ContentMode.icon"
+          class="icon w-6 h-6 mr-1"
+          :class="{
+            'text-orange-400': ContentMode.mode === 'furry',
+          }"
+        />
       </div>
 
       <!-- Filter content -->
