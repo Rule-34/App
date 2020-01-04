@@ -91,7 +91,7 @@ export default {
       this.pidManager({ operation: 'reset' })
 
       // Search for the tags
-      this.getPosts()
+      this.getPosts('add')
 
       // Hide the search bar
       this.searchManager({
