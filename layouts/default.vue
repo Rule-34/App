@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { Touch } from 'vuetify/es5/directives/touch'
+import { Touch } from 'vuetify/lib/directives/touch'
 import { mapMutations, mapState } from 'vuex'
 import NavToggler from '~/components/navigation/NavToggler.vue'
 import SideNav from '~/components/navigation/SideNav.vue'
