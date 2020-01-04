@@ -8,13 +8,9 @@
     </div>
 
     <!-- Label so google doesnt cry harder -->
-    <label
-      for="domainSelector"
-      class="hidden"
-      v-text="
-        'Selector that changes the domain where the content is pulled from'
-      "
-    />
+    <label for="domainSelector" class="hidden"
+      >Selector that changes the domain where the content is pulled from</label
+    >
 
     <!-- Selector -->
     <select
@@ -25,21 +21,7 @@
     >
       <!-- Loop for every option -->
       <template v-for="option in options">
-        <!-- Label so google doesnt cry and indexes the site higher -->
-        <label
-          :key="option.name + '_label'"
-          :for="option.value"
-          class="hidden"
-          v-text="'Changes the domain to ' + option.name"
-        />
-
-        <!-- Actual clickable option -->
-        <option
-          :id="option.value"
-          :key="option.name"
-          :value="option.value"
-          v-text="option.name"
-        />
+        <option :key="option.name" :value="option.value" v-text="option.name" />
       </template>
     </select>
 
