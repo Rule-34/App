@@ -7,21 +7,21 @@
       <CloudIcon class="icon text-primary w-4 h-4" />
     </div>
 
-    <!-- Label so google doesnt cry harder -->
-    <label for="domainSelector" class="hidden"
-      >Selector that changes the domain where the content is pulled from</label
-    >
-
     <!-- Selector -->
     <select
-      id="domainSelector"
+      aria-label="Selector that changes the domain where the content is pulled from"
       :value="selected"
       class="inline-flex items-center appearance-none outline-none font-light text-primary bg-background"
       @change="changeDomain($event.target.value)"
     >
       <!-- Loop for every option -->
       <template v-for="option in options">
-        <option :key="option.name" :value="option.value" v-text="option.name" />
+        <option
+          :key="option.name"
+          :aria-label="'Changes the domain to ' + option.name"
+          :value="option.value"
+          v-text="option.name"
+        />
       </template>
     </select>
 
