@@ -51,7 +51,7 @@ export default {
       this.pidManager({ operation: 'add' })
 
       // If we have tags added then load next page of tags, else load normal latest posts
-      this.getPosts()
+      this.getPosts('add')
     },
     // Get last page from api
     getPrevPage() {
@@ -59,7 +59,7 @@ export default {
       this.pidManager({ operation: 'subtract' })
 
       // Load last page
-      this.getPosts()
+      this.getPosts('add')
     },
     getSpecificPage() {
       // Ask for page to go to
@@ -72,7 +72,7 @@ export default {
         this.pidManager({ operation: 'specific', value: specificPage })
 
         // And load specific page
-        this.getPosts()
+        this.getPosts('add')
       } else {
         alert('Wrong input, only numbers please')
       }

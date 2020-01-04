@@ -8,10 +8,10 @@
         <!-- Input -->
         <input
           v-model="searchQuery"
-          @input="debounceInput"
           class="w-full text-default-text font-light bg-background outline-none ml-1"
           type="search"
           placeholder="Search: e.g. dragon"
+          @input="debounceInput"
         />
       </div>
 
@@ -20,14 +20,14 @@
         :class="{
           'text-orange-400': ContentMode.mode === 'furry',
         }"
-        @click="toggleContentMode()"
         title="Automatic filters"
+        @click="toggleContentMode()"
       >
         <component :is="ContentMode.icon" class="icon w-6 h-6 mr-1" />
       </div>
 
       <!-- Filter content -->
-      <div @click="toggleFilter()" title="Filter content">
+      <div title="Filter content" @click="toggleFilter()">
         <FilterIcon
           :class="{ 'text-red-400': searchData.isFilterActive }"
           class="icon w-6 h-6 mr-1"
@@ -54,7 +54,6 @@ export default {
     return {
       // Content from the search input
       searchQuery: '',
-      filterData: [],
       ContentMode: { mode: 'reset', icon: 'TrashIcon' },
     }
   },
@@ -64,12 +63,12 @@ export default {
   },
   methods: {
     ...mapMutations(['searchManager', 'tagManager']),
-    ...mapActions(['httpsGet', 'getApi']),
+    ...mapActions(['searchTag', 'getCorsProxy']),
 
     async toggleContentMode() {
       // Populate filterData data and reuse later
       if (!this.searchData.premadeFilterData.length) {
-        const filterData = await this.getApi({
+        await this.getCorsProxy({
           url:
             'https://gist.githubusercontent.com/VoidlessSeven7/c0b379d617b1d26c54158e90a1f096cd/raw/filter_anti_furry_r34.app.txt',
           mode: 'filter',
@@ -97,12 +96,7 @@ export default {
     },
     getTags() {
       if (this.searchQuery.length > 2) {
-        this.httpsGet({
-          url: `tags?tag=${this.searchQuery.trim().toLowerCase()}&limit=${
-            this.generalData.postLimit
-          }`,
-          mutationToReturn: 'searchManager',
-        })
+        this.searchTag(this.searchQuery.trim().toLowerCase())
       } else {
         // Remove search data cause search limit is 3 characters
         this.searchManager({

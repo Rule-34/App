@@ -18,7 +18,7 @@ export default {
   // NOTE: This is now replicated in ~/plugins/vuex-persist so the subsequentials loads can be from the localStorage domain
 
   async fetch({ store }) {
-    await store.dispatch('getPosts')
+    await store.dispatch('getPosts', 'add')
   },
 }
 </script>

@@ -29,8 +29,10 @@
 </template>
 
 <script>
-import { Touch } from 'vuetify/lib/directives/touch'
 import { mapMutations, mapState } from 'vuex'
+// Third party
+import { Touch } from 'vuetify/lib/directives/touch'
+// Components, I decided not to lazy load them as they break the experience
 import NavToggler from '~/components/navigation/NavToggler.vue'
 import SideNav from '~/components/navigation/SideNav.vue'
 import Search from '~/components/search/Search'

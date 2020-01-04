@@ -90,7 +90,7 @@ export default {
       }
 
       // And finally load the posts with everything to default
-      this.getPosts()
+      this.getPosts('add')
 
       // Send analytics
       this.analyticManager('domain')

@@ -207,7 +207,7 @@ export default {
       })
 
       // Search for the tag
-      this.getPosts()
+      this.getPosts('add')
 
       // And fire analytics
       this.analyticManager('tags')
