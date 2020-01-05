@@ -93,7 +93,8 @@ export default {
     // Craft url and GET it through fetch action
     const response = await dispatch('getApi', {
       url,
-      mutationToReturn: 'return',
+      mutationToReturn: 'dashBoardManager',
+      mode: 'add',
     })
 
     // Return it
