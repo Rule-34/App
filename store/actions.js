@@ -7,6 +7,14 @@ export default {
    * @param {Object} parameters
    */
   async getApi({ commit, state }, parameters) {
+    // Reset errors cause we're trying again
+    if (state.generalData.errors) {
+      commit({
+        type: 'generalManager',
+        errors: null,
+      })
+    }
+
     // Get domain from localStorage or from state if it fails
     let domain
     try {
@@ -36,6 +44,11 @@ export default {
 
     // console.log(response)
     // console.log(parameters.mode)
+
+    // In case it wants the response itself
+    if (parameters.mutationToReturn === 'return') {
+      return response
+    }
 
     // Add the successful response to the state
     commit({
@@ -67,6 +80,24 @@ export default {
       mutationToReturn: 'dashBoardManager',
       mode,
     })
+  },
+
+  /**
+   * Gets Posts from API and adds them to the state
+   * @param {*} param0
+   * @param {String} mode Add or Concat
+   */
+  async getSinglePost({ dispatch }, id) {
+    const url = 'posts?id=' + id
+
+    // Craft url and GET it through fetch action
+    const response = await dispatch('getApi', {
+      url,
+      mutationToReturn: 'return',
+    })
+
+    // Return it
+    return response
   },
 
   /**
