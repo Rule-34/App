@@ -1,9 +1,10 @@
 <template>
   <div>
+    <DashBoardMenu />
+
     <!-- If theres request got errors -->
     <Errors />
 
-    <DashBoardMenu />
     <!-- every post in their own component -->
     <Post v-for="post in dashBoardData.data" :key="post.id" :post="post" />
 
