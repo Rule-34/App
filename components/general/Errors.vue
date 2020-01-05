@@ -1,7 +1,11 @@
 <template>
   <!-- If theres request got errors -->
   <div
-    v-if="generalData.errors || $nuxt.isOffline || !dashBoardData.data.length"
+    v-if="
+      generalData.errors ||
+        $nuxt.isOffline ||
+        (!dashBoardData.data.length && !isSinglePost)
+    "
     class="material-container text-default-text text-center p-2"
   >
     <!-- If ANY error -->
@@ -11,8 +15,8 @@
     </template>
 
     <!-- If no posts loaded -->
-    <template v-else-if="!dashBoardData.data.length">
-      <h1 class="bold" v-text="'There is no more posts to load!'" />
+    <template v-else-if="!dashBoardData.data.length && !isSinglePost">
+      <h1 class="bold" v-text="'There are no more posts to load!'" />
       <a href="javascript:void(0)" @click="resetTags()">Remove tags?</a>
     </template>
 
@@ -30,12 +34,17 @@
 import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
-  name: 'DashBoard',
-  components: {},
-  // Get data() from vuex stores
+  name: 'Errors',
+
+  props: {
+    // For separating text
+    isSinglePost: { type: Boolean, required: false, default: false },
+  },
+
   computed: {
     ...mapState(['generalData', 'dashBoardData', 'searchData']),
   },
+
   methods: {
     ...mapMutations(['searchManager', 'tagManager']),
     ...mapActions(['getPosts']),
