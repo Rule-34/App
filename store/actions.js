@@ -153,16 +153,15 @@ export default {
     return response
   },
 
-  async analyticManager(execution) {
+  async analyticManager({ state }, execution) {
     // console.log(execution)
-
     switch (execution) {
       // Send tags and filter data
       case 'tags':
         await fireAnalytics(
           'tags',
-          this.state.searchData.tags,
-          this.state.searchData.premadeFilterData
+          state.searchData.tags,
+          state.searchData.premadeFilterData
         ).then(console.log)
         break
 
@@ -170,15 +169,13 @@ export default {
       case 'domain':
         await fireAnalytics(
           'domain',
-          this.state.dashBoardSettings.contentDomain
+          state.dashBoardSettings.contentDomain
         ).then(console.log)
         break
 
       // Send user settings
       case 'settings':
-        await fireAnalytics('settings', this.state.userSettings).then(
-          console.log
-        )
+        await fireAnalytics('settings', state.userSettings).then(console.log)
         break
     }
   },
