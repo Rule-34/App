@@ -113,7 +113,7 @@
     </div>
 
     <!-- Space for clicking out of the menu -->
-    <div class="sidebar-close-area bg-black-25" @click="sideNavManager" />
+    <div @click="sideNavManager" class="sidebar-close-area bg-black-25" />
   </aside>
 </template>
 
@@ -124,10 +124,10 @@ export default {
   name: 'SideNav',
 
   computed: {
-    ...mapState(['searchData']),
+    ...mapState(['searchData'])
   },
   methods: {
-    ...mapMutations(['sideNavManager']),
-  },
+    ...mapMutations(['sideNavManager'])
+  }
 }
 </script>

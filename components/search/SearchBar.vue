@@ -8,26 +8,27 @@
         <!-- Input -->
         <input
           v-model="searchQuery"
+          @input="debounceInput"
           class="w-full text-default-text font-light bg-background outline-none ml-1"
           type="search"
           placeholder="Search: e.g. dragon"
-          @input="debounceInput"
         />
       </div>
 
       <!-- Filter content -->
-      <div title="Automatic filters" @click="toggleContentMode()">
+      <div @click="toggleContentMode()" title="Automatic filters">
         <component
           :is="ContentMode.icon"
-          class="icon w-6 h-6 mr-1"
           :class="{
-            'text-orange-400': ContentMode.mode === 'furry',
+            'text-orange-400': ContentMode.mode === 'furry'
           }"
-        />
+          class="icon w-6 h-6 mr-1"
+        >
+        </component>
       </div>
 
       <!-- Filter content -->
-      <div title="Filter content" @click="toggleFilter()">
+      <div @click="toggleFilter()" title="Filter content">
         <FilterIcon
           :class="{ 'text-red-400': searchData.isFilterActive }"
           class="icon w-6 h-6 mr-1"
@@ -43,23 +44,24 @@ import {
   FilterIcon,
   SearchIcon,
   TrashIcon,
-  GitlabIcon,
+  GitlabIcon
 } from 'vue-feather-icons'
 import debounce from 'lodash/debounce'
 
 export default {
   name: 'SearchBar',
+  // eslint-disable-next-line vue/no-unused-components
   components: { SearchIcon, FilterIcon, TrashIcon, GitlabIcon },
   data() {
     return {
       // Content from the search input
       searchQuery: '',
-      ContentMode: { mode: 'reset', icon: 'TrashIcon' },
+      ContentMode: { mode: 'reset', icon: 'TrashIcon' }
     }
   },
   // Get data() from vuex store "searchData"
   computed: {
-    ...mapState(['searchData', 'generalData']),
+    ...mapState(['searchData', 'generalData'])
   },
   methods: {
     ...mapMutations(['searchManager', 'tagManager']),
@@ -71,7 +73,7 @@ export default {
         await this.getCorsProxy({
           url:
             'https://gist.githubusercontent.com/VoidlessSeven7/c0b379d617b1d26c54158e90a1f096cd/raw/filter_anti_furry_r34.app.txt',
-          mode: 'filterData',
+          mode: 'filterData'
         })
       }
 
@@ -86,7 +88,7 @@ export default {
 
         case 'furry':
           this.tagManager({
-            operation: 'concat',
+            operation: 'concat'
           })
           // Load next mode
           this.ContentMode = { mode: 'reset', icon: 'TrashIcon' }
@@ -100,7 +102,7 @@ export default {
       } else {
         // Remove search data cause search limit is 3 characters
         this.searchManager({
-          data: '',
+          data: ''
         })
       }
     },
@@ -112,9 +114,9 @@ export default {
 
     toggleFilter() {
       this.searchManager({
-        isFilterActive: !this.searchData.isFilterActive,
+        isFilterActive: !this.searchData.isFilterActive
       })
-    },
-  },
+    }
+  }
 }
 </script>

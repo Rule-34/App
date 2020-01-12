@@ -6,7 +6,7 @@
       <div
         @click.self="
           searchManager({
-            isActive: !searchData.isActive,
+            isActive: !searchData.isActive
           })
         "
         class="hidden md:block md:w-2/12"
@@ -23,7 +23,7 @@
       <div
         @click.self="
           searchManager({
-            isActive: !searchData.isActive,
+            isActive: !searchData.isActive
           })
         "
         class="hidden md:block md:w-2/12"
@@ -42,14 +42,14 @@ export default {
   name: 'Search',
   components: {
     SearchBar,
-    SearchResults,
+    SearchResults
   },
   // Get data() from vuex store "searchData"
   computed: {
-    ...mapState(['searchData']),
+    ...mapState(['searchData'])
   },
   methods: {
-    ...mapMutations(['searchManager']),
-  },
+    ...mapMutations(['searchManager'])
+  }
 }
 </script>

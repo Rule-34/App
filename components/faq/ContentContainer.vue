@@ -8,15 +8,15 @@
           <!-- Head -->
           <div :class="{ 'mb-2': text }">
             <h1
-              class="text-lg"
               :class="{ underline: titleUnderline }"
               v-text="title"
+              class="text-lg"
             />
           </div>
 
           <!-- Body -->
           <div v-if="text" class="text-sm">
-            <p class="mb-1" v-text="text"></p>
+            <p v-text="text" class="mb-1"></p>
             <!-- Slot for extra info -->
           </div>
         </div>
@@ -35,12 +35,12 @@
             class="mr-2 text-green-500"
           />
           <!-- Title -->
-          <h1 class="text-default-text text-lg font-bold" v-text="title" />
+          <h1 v-text="title" class="text-default-text text-lg font-bold" />
         </div>
 
         <!-- Body -->
         <div class="text-sm text-default-text">
-          <p v-if="text" class="mb-1 whitespace-pre-line" v-text="text" />
+          <p v-if="text" v-text="text" class="mb-1 whitespace-pre-line" />
 
           <slot name="textRich" class="mb-1" />
           <!-- We can insert extra info here -->
@@ -60,9 +60,9 @@
           <a
             v-if="link && linkText"
             :href="link"
+            v-text="linkText"
             target="_blank"
             rel="noopener noreferrer"
-            v-text="linkText"
           />
           <!-- Slot for extra info -->
           <slot />
@@ -92,8 +92,8 @@ export default {
     // For icons
     icon: { type: String, required: false, default: undefined },
     // For images
-    img: { type: String, required: false, default: undefined },
+    img: { type: String, required: false, default: undefined }
   },
-  computed: mapState(['userSettings']),
+  computed: mapState(['userSettings'])
 }
 </script>

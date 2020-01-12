@@ -13,8 +13,8 @@
           v-lazy="imageSource()"
           :alt="post.type"
           :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-          class="post-img"
           @click="toggleTags"
+          class="post-img"
         />
       </template>
 
@@ -25,8 +25,8 @@
           :src="imageSource()"
           :alt="post.type"
           :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-          class="post-img"
           @click="toggleTags"
+          class="post-img"
         />
       </template>
     </template>
@@ -40,10 +40,10 @@
             :alt="post.type"
             :controls="userSettings.videoControls.value"
             :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
+            @click="toggleTags"
             class="post-img"
             muted
             loop
-            @click="toggleTags"
           >
             <source :src="post.high_res_file" />
             Your browser doesnt support HTML5 video.
@@ -57,10 +57,10 @@
           :alt="post.type"
           :controls="userSettings.videoControls.value"
           :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
+          @click="toggleTags"
           class="post-img"
           muted
           loop
-          @click="toggleTags"
         >
           <source :src="post.high_res_file" />
           Your browser doesnt support HTML5 video.
@@ -83,10 +83,10 @@
             <a
               v-for="tag in post.tags"
               :key="post[tag]"
-              class="tag"
-              href="#"
               @click="getSpecificTag(tag)"
               v-text="tag"
+              class="tag"
+              href="#"
             />
           </div>
         </div>
@@ -94,8 +94,8 @@
 
       <!-- Source -->
       <div
-        v-if="post.source"
         key="source"
+        v-if="post.source"
         class="w-full m-auto text-center p-1"
       >
         <!-- If text is an Url then make it linkable -->
@@ -107,8 +107,8 @@
             target="_blank"
           >
             <p
-              class="text-primary-hover hover:text-primary"
               v-text="'Source'"
+              class="text-primary-hover hover:text-primary"
             />
             <ExternalLinkIcon class="icon text-default w-5 h-5 ml-2" />
           </a>
@@ -116,7 +116,7 @@
 
         <!-- If the text is not a url then just show the text -->
         <template v-else>
-          <p title="Source" class="text-default-text" v-text="post.source" />
+          <p v-text="post.source" title="Source" class="text-default-text" />
         </template>
       </div>
     </figcaption>
@@ -140,19 +140,19 @@ export default {
       type: Object,
       default() {
         return {}
-      },
-    },
+      }
+    }
   },
 
   data() {
     return {
       // Internal toggle for showing tags
-      isActive: false,
+      isActive: false
     }
   },
 
   computed: {
-    ...mapState(['searchData', 'userSettings']),
+    ...mapState(['searchData', 'userSettings'])
   },
 
   methods: {
@@ -195,15 +195,15 @@ export default {
 
       // Reset all tags
       this.tagManager({
-        operation: 'reset',
+        operation: 'reset'
       })
 
       // Add clicked tag
       this.tagManager({
         operation: 'add',
         tag: {
-          name: tag,
-        },
+          name: tag
+        }
       })
 
       // Search for the tag
@@ -211,7 +211,7 @@ export default {
 
       // And fire analytics
       this.analyticManager('tags')
-    },
-  },
+    }
+  }
 }
 </script>

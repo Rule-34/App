@@ -39,13 +39,13 @@ export default {
 
   components: {
     Post,
-    Errors,
+    Errors
   },
 
   data() {
     return {
       id: this.$route.query.id || undefined,
-      domain: this.$route.query.domain || undefined,
+      domain: this.$route.query.domain || undefined
     }
   },
 
@@ -57,7 +57,7 @@ export default {
     },
     applyPost() {
       return this.getSinglePost(this.id)
-    },
+    }
   },
 
   // async beforeMount() {
@@ -78,7 +78,7 @@ export default {
 
   methods: {
     ...mapActions(['getSinglePost']),
-    ...mapMutations(['generalManager', 'domainManager']),
-  },
+    ...mapMutations(['generalManager', 'domainManager'])
+  }
 }
 </script>

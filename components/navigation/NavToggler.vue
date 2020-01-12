@@ -6,11 +6,13 @@
       class="navigation-toggler-button"
       type="button"
       title="Menu"
-    >&nbsp;</button>
+    >
+      &nbsp;
+    </button>
     <button
       v-if="showSearch"
-      type="button"
       @click="searchManager({ isActive: !searchData.isActive })"
+      type="button"
       class="navigation-search-button"
       title="Search"
     >
@@ -30,11 +32,11 @@ export default {
   props: { showSearch: { type: Boolean, default: false, required: false } },
 
   computed: {
-    ...mapState(['searchData']),
+    ...mapState(['searchData'])
   },
 
   methods: {
-    ...mapMutations(['searchManager', 'sideNavManager']),
-  },
+    ...mapMutations(['searchManager', 'sideNavManager'])
+  }
 }
 </script>

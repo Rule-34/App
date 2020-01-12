@@ -10,7 +10,7 @@ import DashBoard from '~/components/dashboard/DashBoard.vue'
 
 export default {
   components: {
-    DashBoard,
+    DashBoard
   },
 
   // Load the store with posts
@@ -24,8 +24,8 @@ export default {
   head() {
     return {
       title: 'Rule 34 App',
-      titleTemplate: null,
+      titleTemplate: null
     }
-  },
+  }
 }
 </script>

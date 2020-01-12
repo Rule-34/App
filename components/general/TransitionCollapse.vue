@@ -1,10 +1,10 @@
 <template>
   <transition
-    enter-active-class="collapse-enter-active"
-    leave-active-class="collapse-leave-active"
     @before-enter="beforeEnter"
     @enter="enter"
     @leave="leave"
+    enter-active-class="collapse-enter-active"
+    leave-active-class="collapse-leave-active"
   >
     <!-- 
 
@@ -62,13 +62,13 @@ export default {
         element.style.maxHeight = '0px'
         element.style.opacity = 0
       })
-    },
+    }
 
     // afterLeave(element) {
     //   element.style.maxHeight = null
     //   element.style.opacity = null
     // },
-  },
+  }
 }
 </script>
 

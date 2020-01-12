@@ -40,10 +40,10 @@ export default {
         {
           hid: 'about',
           name: 'description',
-          content: 'About the Rule 34 App and Its creator',
-        },
-      ],
+          content: 'About the Rule 34 App and Its creator'
+        }
+      ]
     }
-  },
+  }
 }
 </script>

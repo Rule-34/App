@@ -9,8 +9,8 @@ function SendTimed(data, index, parameter) {
     track({
       id: 'user-usage',
       parameters: {
-        [parameter]: data,
-      },
+        [parameter]: data
+      }
     })
   }, 500 * index)
 }
@@ -52,8 +52,8 @@ function tagsTracking(data, premadeFilterData) {
       track({
         id: 'user-usage',
         parameters: {
-          searchedTags: 'Premade Filter',
-        },
+          searchedTags: 'Premade Filter'
+        }
       })
     }
 
@@ -73,8 +73,8 @@ function domainTracking(data) {
     track({
       id: 'user-usage',
       parameters: {
-        domainUsed: data,
-      },
+        domainUsed: data
+      }
     })
 
     resolve('Domain executed succesfully')
@@ -85,7 +85,7 @@ function settingsTracking(data) {
   return new Promise(function(resolve, reject) {
     // Compare default settings to user settings to see if theres a difference
     const difference = Object.keys(data).filter(
-      key => data[key].value !== data[key].defaultValue
+      (key) => data[key].value !== data[key].defaultValue
     )
 
     // If theres no difference then reject
