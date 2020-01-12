@@ -90,7 +90,7 @@ export default {
 
   head() {
     return {
-      title: 'Usage | Rule 34 App',
+      title: 'Usage',
       meta: [
         {
           hid: 'usage',

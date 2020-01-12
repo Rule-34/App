@@ -20,5 +20,12 @@ export default {
   async fetch({ store }) {
     await store.dispatch('getPosts', 'add')
   },
+
+  head() {
+    return {
+      title: 'Rule 34 App',
+      titleTemplate: null,
+    }
+  },
 }
 </script>

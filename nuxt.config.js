@@ -72,6 +72,12 @@ export default {
     }
   },
   /*
+   ** TailwindCSS config
+   */
+  tailwindcss: {
+    cssPath: '~/assets/css/main.css'
+  },
+  /*
    ** PurgeCSS config
    */
   purgeCSS: {

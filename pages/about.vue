@@ -35,7 +35,7 @@ export default {
 
   head() {
     return {
-      title: 'About | Rule 34 App',
+      title: 'About',
       meta: [
         {
           hid: 'about',
