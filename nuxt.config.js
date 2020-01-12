@@ -12,55 +12,44 @@ export default {
         hid: 'description',
         name: 'description',
         content:
-          'App to enjoy all Rule 34 sites combined in a mobile-friendly experience',
-      },
+          'App to enjoy all Rule 34 sites combined in a mobile-friendly experience'
+      }
     ],
-    noscript: [
-      {
-        innerHTML:
-          'This website requires JavaScript, please enable it to continue',
-      },
-    ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   /*
    ** Customize the progress-bar color
    */
-  loading: false,
+  // loading: { color: '#fff' },
   /*
    ** Customize the splash loading indicator
    */
   loadingIndicator: {
     name: 'cube-grid',
     color: '#181a1b',
-    background: 'linear-gradient(152deg, #9b9be0 38%, #00d4ff 100%)',
+    background: 'linear-gradient(152deg, #9b9be0 38%, #00d4ff 100%)'
   },
   /*
    ** Global CSS
    */
-  css: [],
+  css: ['~/assets/css/main.css'],
   /*
    ** Plugins to load before mounting the App
    */
   plugins: [
     { src: '~/plugins/vuex-persist.js', mode: 'client', ssr: false },
     { src: '~/plugins/v-lazy.js', mode: 'client', ssr: false },
-    { src: '~/plugins/insights.js', mode: 'client', ssr: false },
+    { src: '~/plugins/insights.js', mode: 'client', ssr: false }
   ],
   /*
    ** Nuxt.js dev-modules
    */
   buildModules: [
+    // Doc: https://github.com/nuxt-community/eslint-module
+    // '@nuxtjs/eslint-module',
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
-    '@nuxtjs/tailwindcss',
+    '@nuxtjs/tailwindcss'
   ],
-  /*
-   ** TailwindCSS settings
-   */
-  tailwindcss: {
-    configPath: '~/tailwind.config.js',
-    cssPath: '~/assets/app.scss',
-  },
   /*
    ** Nuxt.js modules
    */
@@ -74,20 +63,20 @@ export default {
       short_name: 'Rule 34 App',
       lang: 'en',
       theme_color: '#181a1b',
-      background_color: '#181a1b',
+      background_color: '#181a1b'
     },
     meta: {
       /* meta options */
       ogHost: 'https://r34.app',
-      mobileAppIOS: true,
-    },
+      mobileAppIOS: true
+    }
   },
   /*
    ** PurgeCSS config
    */
   purgeCSS: {
     // whitelist: ['defaults-and-this-class']
-    whitelistPatterns: [/active/, /nsfw-disabled/, /fade/, /enter/, /leave/],
+    whitelistPatterns: [/active/, /nsfw-disabled/, /fade/, /enter/, /leave/]
   },
   /*
    ** Sitemap configuration
@@ -99,16 +88,13 @@ export default {
       changefreq: 'daily',
       priority: 1,
       lastmod: new Date(),
-      lastmodrealtime: true,
-    },
+      lastmodrealtime: true
+    }
   },
   /*
    ** Build configuration
    */
   build: {
-    /*
-     ** You can extend webpack config here
-     */
     // Necessary for CSS Purge
     extractCSS: true,
 
@@ -116,15 +102,13 @@ export default {
     terser: {
       terserOptions: {
         compress: {
-          drop_console: true,
-        },
-      },
+          drop_console: true
+        }
+      }
     },
-    // eslint-disable-next-line no-unused-vars
-    extend(config, { isClient }) {
-      // if (isClient) {
-      //   config.devtool = "source-map";
-      // }
-    },
-  },
+    /*
+     ** You can extend webpack config here
+     */
+    extend(config, ctx) {}
+  }
 }
