@@ -10,23 +10,28 @@
     <h1
       v-if="!searchData.data && !generalData.errors"
       class="text-center text-default-text font-hairline m-auto text-xl"
-    >Search something!</h1>
+    >
+      Search something!
+    </h1>
 
     <!-- Added tags, click them to remove them -->
-    <div v-if="searchData.tags" class="tag-container border-border border-b rounded-b pb-1">
+    <div
+      v-if="searchData.tags"
+      class="tag-container border-border border-b rounded-b pb-1"
+    >
       <a
         v-for="tag in searchData.tags"
         :key="tag"
+        class="tag group"
         @click="
           tagManager({
             operation: 'remove',
             tag: {
-              name: tag,              
+              name: tag,
             },
           })
         "
         v-text="tag"
-        class="tag group"
       />
     </div>
 
@@ -36,39 +41,40 @@
       <a
         v-for="tag in searchData.data"
         :key="tag.name"
+        class="tag group"
         @click="
           if (searchData.isFilterActive) {
             tagManager({
               operation: 'add',
               tag: {
-                name: '-' + tag.name                
+                name: '-' + tag.name,
               },
             })
           } else {
             tagManager({
               operation: 'add',
               tag: {
-                name: tag.name,                
+                name: tag.name,
               },
             })
           }
         "
-        class="tag group"
       >
         {{ tag.name }}
         <span
-          v-text="'(' + tag.posts + ')'"
           class="text-primary-hover group-hover:text-default"
+          v-text="'(' + tag.posts + ')'"
         />
       </a>
     </div>
 
     <!-- Apply tags -->
     <a
-      @click="dispatchGetAddedTags"
       href="#"
-      class="btn theme-responsive-text text-center bg-gradient-lilac-blue mt-auto shadow-md"
-    >Apply tags</a>
+      class="font-bold rounded theme-responsive-text text-center bg-gradient-lilac-blue mt-auto py-2 px-4 shadow-md"
+      @click="dispatchGetAddedTags"
+      >Apply tags</a
+    >
   </div>
 </template>
 

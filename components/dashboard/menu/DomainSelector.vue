@@ -9,10 +9,10 @@
 
     <!-- Selector -->
     <select
-      aria-label="Selector that changes the domain where the content is pulled from"
       :value="selected"
-      class="inline-flex items-center appearance-none outline-none font-light text-primary bg-background"
       @change="changeDomain($event.target.value)"
+      aria-label="Selector that changes the domain where the content is pulled from"
+      class="inline-flex items-center appearance-none outline-none font-light text-primary bg-background"
     >
       <!-- Loop for every option -->
       <template v-for="option in options">
@@ -46,8 +46,8 @@ export default {
       options: [
         { name: 'rule34.xxx', value: 'xxx' },
         { name: 'rule34.paheal.net', value: 'paheal' },
-        { name: 'danbooru.donmai.us', value: 'danbooru' },
-      ],
+        { name: 'danbooru.donmai.us', value: 'danbooru' }
+      ]
     }
   },
 
@@ -55,7 +55,7 @@ export default {
     ...mapState(['dashBoardSettings']),
     selected() {
       return this.dashBoardSettings.contentDomain
-    },
+    }
   },
 
   // Experimental features, dont say anything!
@@ -94,7 +94,7 @@ export default {
 
       // Send analytics
       this.analyticManager('domain')
-    },
-  },
+    }
+  }
 }
 </script>

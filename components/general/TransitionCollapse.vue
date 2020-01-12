@@ -72,8 +72,8 @@ export default {
 }
 </script>
 
-<style lang="scss">
-// Transition that is gonna be applied
+<style>
+/* Transition that is gonna be applied */
 .collapse-enter-active,
 .collapse-leave-active {
   overflow: hidden;

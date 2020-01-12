@@ -1,25 +1,19 @@
-@import 'components/settings/Settings.scss';
-@import 'components/dashboard/DashBoard.scss';
-@import 'components/navigation/SearchBar.scss';
-@import 'components/navigation/SideNav.scss';
+/** 
+**          DOCUMENT DEFAULTS
+**/
+html {
+  scroll-behavior: smooth;
+}
 
 /** 
-**          ELEMENTS
+**          CLASSES
 **/
 
-a {
-  @apply text-primary-hover no-underline;
+/* General */
+.cool-bar {
+  height: 10px;
+  @apply .w-full .block .bg-gradient-lilac-blue;
 }
-
-a:hover {
-  @apply text-primary;
-}
-
-/** 
-  **          CLASSES
-  **/
-
-// General
 
 .material-container {
   @apply bg-background border-border border rounded-lg overflow-hidden m-5 shadow;
@@ -49,13 +43,22 @@ a:hover {
   @apply .mx-auto .w-full;
 }
 
-// Utils
+/* Utils */
 
-// TODO: fix this
-// Hardcoded margin-top for the entire layout cause some CSS makes it not take over the cool bar (maybe the cool bar itself)
+button:focus {
+  outline: 0;
+}
+
+/* TODO: fix this */
+/* Hardcoded margin-top for the entire layout cause some CSS makes it not take over the cool bar (maybe the cool bar itself) */
 .layout {
   margin-top: -10px;
 }
+
+.stroke-width-1 {
+  stroke-width: 1.5;
+}
+
 .icon {
   @apply text-default .stroke-width-1 .pointer-events-none align-middle;
 }
@@ -76,12 +79,28 @@ a:hover {
   );
 }
 
-.cool-bar {
-  height: 10px;
-  @apply .w-full .block .bg-gradient-lilac-blue;
+/** 
+**          ELEMENTS
+**/
+
+/** 
+**          BUILDING CLASSES
+**/
+
+.h-perfect {
+  height: 100vh;
+  height: calc(100vh - 10px);
 }
 
-// Tags
+a {
+  @apply text-primary-hover no-underline;
+}
+
+a:hover {
+  @apply text-primary;
+}
+
+/* Tags */
 
 .tag-container {
   @apply inline-flex flex-wrap;
@@ -95,24 +114,29 @@ a:hover {
   @apply border-primary;
 }
 
-// Sidebar
-
-.translate-r-5px {
-  transform: translateX(5px);
-}
-
-.transition-fast-transform {
-  transition: transform 0.2s ease;
-}
+/* Sidebar */
 
 .nav-hover-links {
-  @apply transition-fast-transform relative block;
+  transition: transform 0.2s ease;
+  @apply relative block;
 }
 
 .nav-hover-links:hover {
-  @apply translate-r-5px;
+  transform: translateX(5px);
 }
 
 .nav-spacer {
   @apply absolute inset-0 opacity-0;
+}
+
+/* Page Transition */
+.page-enter-active,
+.page-leave-active {
+  transition-property: opacity;
+  transition-duration: 0.35s;
+}
+.page-enter,
+.page-leave-to {
+  opacity: 0;
+  /* filter: invert(100%); */
 }
