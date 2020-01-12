@@ -312,7 +312,7 @@ export default {
 
   head() {
     return {
-      title: 'Legal | Rule 34 App',
+      title: 'Legal',
       meta: [
         {
           hid: 'legal',

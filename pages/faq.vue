@@ -104,7 +104,7 @@ export default {
 
   head() {
     return {
-      title: 'Faq | Rule 34 App',
+      title: 'Faq',
       meta: [
         {
           hid: 'faq',

@@ -113,6 +113,8 @@ export default {
   // Set theme and background color in the body dynamically thanks to the vuex store computed property
   head() {
     return {
+      // Define template for every page
+      titleTemplate: '%s | Rule 34 App',
       bodyAttrs: {
         class: this.themeAplied ? 'dark bg-background' : 'light bg-background',
       },

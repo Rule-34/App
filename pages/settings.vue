@@ -64,7 +64,7 @@ export default {
 
   head() {
     return {
-      title: 'Settings | Rule 34 App',
+      title: 'Settings',
       meta: [
         {
           hid: 'settings',
