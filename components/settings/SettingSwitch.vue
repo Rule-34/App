@@ -7,19 +7,22 @@
         <input
           :id="switchId"
           v-model="isToggled"
-          type="checkbox"
           :name="switchId"
-          class="form-switch-checkbox"
           @change="
             changeUserSetting({
               index: switchId,
-              value: !value,
+              value: !value
             })
           "
+          type="checkbox"
+          class="form-switch-checkbox"
         />
-        <label class="form-switch-label theme-responsive-container" :for="switchId" />
+        <label
+          :for="switchId"
+          class="form-switch-label theme-responsive-container"
+        />
       </div>
-      <label class="text-xs text-default-text" :for="switchId" v-text="text" />
+      <label :for="switchId" v-text="text" class="text-xs text-default-text" />
     </div>
 
     <!-- If its a number -->
@@ -28,18 +31,18 @@
         <input
           :id="switchId"
           v-model.number="innerValue"
-          type="number"
           :name="switchId"
-          class="form-switch-numeric theme-responsive-container"
           @change="
             changeUserSetting({
               index: switchId,
-              value: innerValue,
+              value: innerValue
             })
           "
+          type="number"
+          class="form-switch-numeric theme-responsive-container"
         />
       </div>
-      <label class="text-xs text-default-text" :for="switchId" v-text="text" />
+      <label :for="switchId" v-text="text" class="text-xs text-default-text" />
     </div>
   </div>
 </template>
@@ -54,13 +57,13 @@ export default {
     switchId: { type: String, default: undefined, required: true },
     value: { type: [Boolean, Number], default: undefined, required: false },
     text: { type: String, default: undefined, required: true },
-    description: { type: String, default: undefined, required: false },
+    description: { type: String, default: undefined, required: false }
   },
   // Basic data function to keep track of local values
   data() {
     return {
       isToggled: undefined,
-      innerValue: undefined,
+      innerValue: undefined
     }
   },
   mounted() {
@@ -68,8 +71,8 @@ export default {
   },
   // Map mutation for easier use
   methods: {
-    ...mapMutations(['changeUserSetting']),
-  },
+    ...mapMutations(['changeUserSetting'])
+  }
 }
 </script>
 

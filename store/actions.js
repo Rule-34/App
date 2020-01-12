@@ -11,7 +11,7 @@ export default {
     if (state.generalData.errors) {
       commit({
         type: 'generalManager',
-        errors: null,
+        errors: null
       })
     }
 
@@ -32,13 +32,13 @@ export default {
       state.generalData.apiUrl + domain + '/' + parameters.url
     )
       // Save the data
-      .then(response => response.json())
+      .then((response) => response.json())
       // Catch an error
-      .catch(error => {
+      .catch((error) => {
         console.error(error)
         commit({
           type: 'generalManager',
-          errors: error,
+          errors: error
         })
       })
 
@@ -54,7 +54,7 @@ export default {
     commit({
       type: parameters.mutationToReturn,
       data: response,
-      mode: parameters.mode,
+      mode: parameters.mode
     })
   },
 
@@ -78,7 +78,7 @@ export default {
     await dispatch('getApi', {
       url,
       mutationToReturn: 'dashBoardManager',
-      mode,
+      mode
     })
   },
 
@@ -94,7 +94,7 @@ export default {
     const response = await dispatch('getApi', {
       url,
       mutationToReturn: 'dashBoardManager',
-      mode: 'add',
+      mode: 'add'
     })
 
     // Return it
@@ -112,7 +112,7 @@ export default {
     // Craft url and GET it through fetch action
     await dispatch('getApi', {
       url,
-      mutationToReturn: 'searchManager',
+      mutationToReturn: 'searchManager'
     })
   },
 
@@ -127,13 +127,13 @@ export default {
       state.generalData.apiUrl + 'proxy?url=' + parameters.url
     )
       // Save the data
-      .then(response => response.json())
+      .then((response) => response.json())
       // Catch an error
-      .catch(error => {
+      .catch((error) => {
         console.error(error)
         commit({
           type: 'generalManager',
-          errors: error,
+          errors: error
         })
       })
 
@@ -142,7 +142,7 @@ export default {
     if (parameters.mode === 'filterData') {
       commit({
         type: 'searchManager',
-        premadeFilterData: response,
+        premadeFilterData: response
       })
 
       // Since we're sending to vuex store, return nothing
@@ -178,5 +178,5 @@ export default {
         await fireAnalytics('settings', state.userSettings).then(console.log)
         break
     }
-  },
+  }
 }

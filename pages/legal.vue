@@ -269,10 +269,10 @@
     />
 
     <ContentContainer
+      @click.native="unlockExperimental()"
       title="Thank you for your interest"
       text="It's a pleasure having someone read this wall of text :')"
       icon="star"
-      @click.native="unlockExperimental()"
     />
   </main>
 </template>
@@ -286,7 +286,7 @@ export default {
 
   data() {
     return {
-      clicks: 0,
+      clicks: 0
     }
   },
 
@@ -307,7 +307,7 @@ export default {
         // Disable features
         this.experimentalManager('disable')
       }
-    },
+    }
   },
 
   head() {
@@ -317,10 +317,10 @@ export default {
         {
           hid: 'legal',
           name: 'description',
-          content: 'Legal information about the Rule 34 App',
-        },
-      ],
+          content: 'Legal information about the Rule 34 App'
+        }
+      ]
     }
-  },
+  }
 }
 </script>

@@ -10,21 +10,21 @@
   >
     <!-- If ANY error -->
     <template v-if="generalData.errors">
-      <h1 class="bold" v-text="generalData.errors" />
-      <a href="javascript:void(0)" @click="getPosts('add')">Try again?</a>
+      <h1 v-text="generalData.errors" class="bold" />
+      <a @click="getPosts('add')" href="javascript:void(0)">Try again?</a>
     </template>
 
     <!-- If no posts loaded -->
     <template v-else-if="!dashBoardData.data.length && !isSinglePost">
-      <h1 class="bold" v-text="'There are no more posts to load!'" />
-      <a href="javascript:void(0)" @click="resetTags()">Remove tags?</a>
+      <h1 v-text="'There are no more posts to load!'" class="bold" />
+      <a @click="resetTags()" href="javascript:void(0)">Remove tags?</a>
     </template>
 
     <!-- If browser is offline -->
     <template v-else-if="$nuxt.isOffline">
       <h1
-        class="bold"
         v-text="'You are offline, please connect to the internet'"
+        class="bold"
       />
     </template>
   </div>
@@ -38,11 +38,11 @@ export default {
 
   props: {
     // For separating text
-    isSinglePost: { type: Boolean, required: false, default: false },
+    isSinglePost: { type: Boolean, required: false, default: false }
   },
 
   computed: {
-    ...mapState(['generalData', 'dashBoardData', 'searchData']),
+    ...mapState(['generalData', 'dashBoardData', 'searchData'])
   },
 
   methods: {
@@ -59,7 +59,7 @@ export default {
       if (!this.searchData.isActive) {
         this.searchManager({ isActive: !this.searchData.isActive })
       }
-    },
-  },
+    }
+  }
 }
 </script>

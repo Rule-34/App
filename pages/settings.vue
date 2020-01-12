@@ -8,9 +8,9 @@
           <h1 class="text-lg">Settings</h1>
 
           <button
+            @click="removeLocalStorage"
             title="Use me when something is not working!"
             class="text-xs theme-responsive-container rounded-full px-2 align-middle shadow"
-            @click="removeLocalStorage"
           >
             Reset
           </button>
@@ -59,7 +59,7 @@ export default {
 
       // And reload page to see changes
       location.reload()
-    },
+    }
   },
 
   head() {
@@ -69,10 +69,10 @@ export default {
         {
           hid: 'settings',
           name: 'description',
-          content: 'Tweak your experience on the Rule 34 App',
-        },
-      ],
+          content: 'Tweak your experience on the Rule 34 App'
+        }
+      ]
     }
-  },
+  }
 }
 </script>

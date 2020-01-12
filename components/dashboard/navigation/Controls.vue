@@ -1,12 +1,19 @@
 <template>
   <!-- Controls for navigating pages -->
-  <div :class="{ 'hover-controls-container': userSettings.hoverControls.value }">
+  <div
+    :class="{ 'hover-controls-container': userSettings.hoverControls.value }"
+  >
     <div
       v-if="!generalData.errors && dashBoardData"
       :class="{ 'hover-controls': userSettings.hoverControls.value }"
       class="material-container text-center p-2 flex"
     >
-      <a @click="getPrevPage" href="#" class="w-1/3 button" title="Load last page">
+      <a
+        @click="getPrevPage"
+        href="#"
+        class="w-1/3 button"
+        title="Load last page"
+      >
         <ArrowLeftIcon class="icon w-4 h-4 inline" />Prev page
       </a>
       <a
@@ -16,7 +23,12 @@
         class="w-1/3"
         title="Load specific page"
       />
-      <a @click="getNextPage" href="#" class="w-1/3 button" title="Load next page">
+      <a
+        @click="getNextPage"
+        href="#"
+        class="w-1/3 button"
+        title="Load next page"
+      >
         Next page
         <ArrowRightIcon class="icon w-4 h-4 inline" />
       </a>
@@ -34,11 +46,11 @@ export default {
   name: 'Controls',
   components: {
     ArrowRightIcon,
-    ArrowLeftIcon,
+    ArrowLeftIcon
   },
   // Map data to the store following's
   computed: {
-    ...mapState(['dashBoardData', 'searchData', 'generalData', 'userSettings']),
+    ...mapState(['dashBoardData', 'searchData', 'generalData', 'userSettings'])
   },
 
   methods: {
@@ -76,7 +88,7 @@ export default {
       } else {
         alert('Wrong input, only numbers please')
       }
-    },
-  },
+    }
+  }
 }
 </script>

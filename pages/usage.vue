@@ -95,10 +95,10 @@ export default {
         {
           hid: 'usage',
           name: 'description',
-          content: 'Learn what the Rule 34 App offers',
-        },
-      ],
+          content: 'Learn what the Rule 34 App offers'
+        }
+      ]
     }
-  },
+  }
 }
 </script>
