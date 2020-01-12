@@ -19,7 +19,7 @@
     <template v-else>
       <!-- If theres more posts -->
       <div v-intersect.quiet="throttleInfiniteLoading" class="mx-auto">
-        <p class="text-center text-default-text pb-2" @click="concatPost()">
+        <p @click="concatPost()" class="text-center text-default-text pb-2">
           Loading more posts...
         </p>
         <Errors />
@@ -45,14 +45,14 @@ export default {
     Errors,
     DashBoardMenu,
     Post,
-    Controls,
+    Controls
   },
   directives: {
-    Intersect,
+    Intersect
   },
 
   computed: {
-    ...mapState(['dashBoardData', 'userSettings']),
+    ...mapState(['dashBoardData', 'userSettings'])
   },
 
   created() {
@@ -115,7 +115,7 @@ export default {
           error
         )
       }
-    },
-  },
+    }
+  }
 }
 </script>

@@ -20,14 +20,14 @@
 
 /* ----- Sidebar related ----- */
 
-// Hide clickable close area when on small devices
+/* Hide clickable close area when on small devices */
 .sidebar-close-area {
   @apply hidden;
 }
 
-// Changes for medium screens
+/* Changes for medium screens */
 @screen md {
-  // Navigation toggler related
+  /* Navigation toggler related */
   .navigation-toggler {
     transform: translateX(1vw);
   }
@@ -40,14 +40,14 @@
     @apply w-12 h-12 m-4;
   }
 
-  // Sidebar related
+  /* Sidebar related */
 
-  // Make the sidebar one fourth of the screen on medium devices
+  /* Make the sidebar one fourth of the screen on medium devices */
   .sidebar {
     @apply w-1/4;
   }
 
-  // Make the close area occupy the rest of the screen on medium devices
+  /* Make the close area occupy the rest of the screen on medium devices */
   .sidebar-close-area {
     @apply w-3/4 block;
   }
@@ -62,20 +62,20 @@
   transform: scale(1.5);
 }
 
-// Transition
+/* Transition */
 
-// Initial state
+/* Initial state */
 .sidenav-enter,
 .sidenav-leave-to {
   transform: translateX(-100vw);
 }
 
-// Toggled stated
+/* Toggled stated */
 .sidenav-enter-to {
   transform: translateX(0px);
 }
 
-// Transition that is gonna be applied
+/* Transition that is gonna be applied */
 .sidenav-enter-active,
 .sidenav-leave-active {
   transition-property: transform, background;

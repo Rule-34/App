@@ -4,16 +4,17 @@
     <DomainSelector class="my-auto" />
 
     <!-- Notifications -->
-    <Notifications />
+    <!-- <Notifications /> -->
   </div>
 </template>
 
 <script>
-import DomainSelector from '~/components/dashboard/menu/DomainSelector'
-import Notifications from '~/components/dashboard/menu/Notifications'
+import DomainSelector from '~/components/dashboard/menu/DomainSelector.vue'
+// import Notifications from '~/components/dashboard/menu/Notifications'
 
 export default {
   name: 'DashBoardMenu',
-  components: { DomainSelector, Notifications },
+  // components: { DomainSelector, Notifications }
+  components: { DomainSelector }
 }
 </script>
