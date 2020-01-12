@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Crawl-delay: 20
+
+Sitemap: https://r34.app/sitemap.xml
