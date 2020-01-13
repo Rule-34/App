@@ -1,36 +1,46 @@
 <template>
   <!-- Controls for navigating pages -->
   <div
+    v-if="!generalData.errors && dashBoardData"
     :class="{ 'hover-controls-container': userSettings.hoverControls.value }"
   >
     <div
-      v-if="!generalData.errors && dashBoardData"
       :class="{ 'hover-controls': userSettings.hoverControls.value }"
-      class="material-container text-center p-2 flex"
+      class="material-container flex text-center p-2"
     >
+      <!-- Get previous page -->
       <a
         @click="getPrevPage"
         href="#"
         class="w-1/3 button"
         title="Load last page"
       >
-        <ArrowLeftIcon class="icon w-4 h-4 inline" />Prev page
+        <button type="button">
+          <ArrowLeftIcon class="icon w-4 h-4 inline" />Prev page
+        </button>
       </a>
+
+      <!-- Get specific page -->
       <a
         @click="getSpecificPage"
-        v-text="dashBoardData.pid"
         href="#"
         class="w-1/3"
         title="Load specific page"
-      />
+      >
+        <button v-text="dashBoardData.pid" type="button" />
+      </a>
+
+      <!-- Get next page -->
       <a
         @click="getNextPage"
         href="#"
         class="w-1/3 button"
         title="Load next page"
       >
-        Next page
-        <ArrowRightIcon class="icon w-4 h-4 inline" />
+        <button type="button">
+          Next page
+          <ArrowRightIcon class="icon w-4 h-4 inline" />
+        </button>
       </a>
     </div>
   </div>
@@ -50,13 +60,14 @@ export default {
   },
   // Map data to the store following's
   computed: {
-    ...mapState(['dashBoardData', 'searchData', 'generalData', 'userSettings'])
+    ...mapState(['dashBoardData', 'generalData', 'userSettings'])
   },
 
   methods: {
     // Map actions and mutations from store following's
-    ...mapMutations(['dashBoardManager', 'pidManager']),
+    ...mapMutations(['pidManager']),
     ...mapActions(['getPosts']),
+
     // Get next page from api
     getNextPage() {
       // Get next PID
@@ -65,6 +76,7 @@ export default {
       // If we have tags added then load next page of tags, else load normal latest posts
       this.getPosts('add')
     },
+
     // Get last page from api
     getPrevPage() {
       // Get last PID
@@ -73,6 +85,7 @@ export default {
       // Load last page
       this.getPosts('add')
     },
+
     getSpecificPage() {
       // Ask for page to go to
       const specificPage = prompt('What page do you want to go to?', '69')
