@@ -24,7 +24,7 @@
     "vuex-persistedstate": "^2.7.0"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config": "^1.0.1",
+    "@nuxtjs/eslint-config": "^2.0.0",
     "@nuxtjs/tailwindcss": "^1.0.0",
     "@nuxtjs/vuetify": "^1.9.1",
     "babel-eslint": "^10.0.1",
