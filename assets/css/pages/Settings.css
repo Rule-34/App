@@ -10,12 +10,12 @@
 
 /* HOVER CONTROLS SETTING */
 
-.hover-controls {
-  @apply shadow-md w-full my-2 mx-auto;
+.hover-controls-container {
+  @apply fixed bottom-0 inset-x-0 z-10 w-full mx-auto p-2;
 }
 
-.hover-controls-container {
-  @apply fixed bottom-0 z-10 w-full p-2;
+.hover-controls {
+  @apply shadow-md mx-auto mb-2;
 }
 
 @screen md {
