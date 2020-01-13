@@ -7,14 +7,15 @@
 /* Tailwind */
 @import 'tailwindcss/components';
 
+/* General */
+@import './general/general.css';
+
 /* Components */
 @import './components/navigation/SearchBar.css';
 @import './components/navigation/SideNav.css';
 /* Pages */
 @import './pages/DashBoard.css';
 @import './pages/Settings.css';
-/* General */
-@import './general/general.css';
 
 /* Tailwind */
 @import 'tailwindcss/utilities';
