@@ -50,31 +50,29 @@ export default {
   },
 
   computed: {
-    ...mapState(['dashBoardSettings', 'dashBoardData']),
-
-    applyDomain() {
-      return this.domainManager(this.domain)
-    },
-    applyPost() {
-      return this.getSinglePost(this.id)
-    }
+    ...mapState(['dashBoardData'])
   },
 
-  // async beforeMount() {
-  //   // If the domain is not supported then throw error
-  //   if (
-  //     this.dashBoardSettings.contentDomain === 'xxx' ||
-  //     this.dashBoardSettings.contentDomain === 'paheal'
-  //   ) {
-  //     this.postData = await this.getSinglePost(this.id)
+  created() {
+    // Check if domain is supported
+    switch (this.domain) {
+      case 'paheal':
+      case 'xxx':
+        // Use query domain
+        this.domainManager(this.domain)
 
-  //     // If not then load the domain
-  //   } else {
-  //     this.generalManager({
-  //       errors: `The current domain "${this.dashBoardSettings.contentDomain}" doesnt support getting posts from ID`,
-  //     })
-  //   }
-  // },
+        // And then get the post
+        this.getSinglePost(this.id)
+        break
+
+      // If not supported then throw error
+      default:
+        this.generalManager({
+          errors: `The current domain "${this.domain}" doesnt support getting posts from ID`
+        })
+        break
+    }
+  },
 
   methods: {
     ...mapActions(['getSinglePost']),
