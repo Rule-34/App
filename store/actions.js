@@ -4,7 +4,7 @@ export default {
   /**
    * Gets any route from the API after the domain, commonly used for tags and posts
    * @param {*} param0
-   * @param {Object} parameters
+   * @param {Object} parameters (.url) Url to get data from | (.mutationToReturn) Mutation to return data to | (.domain) Domain to get the data from
    */
   async getApi({ commit, state }, parameters) {
     // Reset errors cause we're trying again
@@ -15,17 +15,27 @@ export default {
       })
     }
 
-    // Get domain from localStorage or from state if it fails
+    // Initialize variable
     let domain
-    try {
-      domain = JSON.parse(localStorage.getItem('vuex')).dashBoardSettings
-        .contentDomain
 
-      // If its impossible to get it from localStorage then set it to the default store domain
-    } catch {
-      console.log('No localStorage key found, using vuex store default')
-      domain = state.dashBoardSettings.contentDomain
+    // Skip vuex and localStorage if domain is specified
+    if (parameters.domain) {
+      domain = parameters.domain
+
+      // If no domain is specified then try to retrieve from localStorage or get it from the default Vuex state
+    } else {
+      // Get domain from localStorage or from state if it fails
+      try {
+        domain = JSON.parse(localStorage.getItem('vuex')).dashBoardSettings
+          .contentDomain
+
+        // If its impossible to get it from localStorage then set it to the default store domain
+      } catch {
+        console.log('No localStorage key found, using vuex store default')
+        domain = state.dashBoardSettings.contentDomain
+      }
     }
+    // console.log('getApi domain: ', domain)
 
     // Craft url and GET it through fetch
     const response = await fetch(
@@ -44,11 +54,6 @@ export default {
 
     // console.log(response)
     // console.log(parameters.mode)
-
-    // In case it wants the response itself
-    if (parameters.mutationToReturn === 'return') {
-      return response
-    }
 
     // Add the successful response to the state
     commit({
@@ -87,18 +92,16 @@ export default {
    * @param {*} param0
    * @param {String} mode Add or Concat
    */
-  async getSinglePost({ dispatch }, id) {
-    const url = 'posts?id=' + id
+  async getSinglePost({ dispatch }, parameters) {
+    const url = 'posts?id=' + parameters.id
 
     // Craft url and GET it through fetch action
-    const response = await dispatch('getApi', {
+    await dispatch('getApi', {
       url,
       mutationToReturn: 'dashBoardManager',
-      mode: 'add'
+      mode: 'add',
+      domain: parameters.domain
     })
-
-    // Return it
-    return response
   },
 
   /**

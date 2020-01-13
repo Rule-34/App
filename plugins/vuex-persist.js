@@ -5,7 +5,7 @@ export default ({ store }) => {
   window.onNuxtReady(() => {
     createPersistedState({
       key: 'vuex',
-      paths: ['dashBoardSettings', 'userSettings'],
+      paths: ['dashBoardSettings', 'userSettings']
     })(store)
   })
 }

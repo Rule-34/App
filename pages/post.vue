@@ -53,16 +53,16 @@ export default {
     ...mapState(['dashBoardData'])
   },
 
-  created() {
+  async mounted() {
     // Check if domain is supported
     switch (this.domain) {
       case 'paheal':
       case 'xxx':
         // Use query domain
-        this.domainManager(this.domain)
+        await this.domainManager(this.domain)
 
         // And then get the post
-        this.getSinglePost(this.id)
+        await this.getSinglePost({ id: this.id, domain: this.domain })
         break
 
       // If not supported then throw error
@@ -77,6 +77,19 @@ export default {
   methods: {
     ...mapActions(['getSinglePost']),
     ...mapMutations(['generalManager', 'domainManager'])
+  },
+
+  head() {
+    return {
+      title: 'Single post view',
+      meta: [
+        {
+          hid: 'singlepost',
+          name: 'description',
+          content: 'Share your favorite images with the Rule 34 App'
+        }
+      ]
+    }
   }
 }
 </script>
