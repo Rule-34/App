@@ -39,6 +39,8 @@
             })
           "
           type="number"
+          pattern="[0-9]*"
+          min="0"
           class="form-switch-numeric theme-responsive-container"
         />
       </div>
