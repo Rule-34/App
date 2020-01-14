@@ -41,7 +41,7 @@
           type="number"
           min="0"
           inputmode="numeric"
-          pattern="[0-9]*"
+          pattern="\d*"
           class="form-switch-numeric theme-responsive-container"
         />
       </div>
