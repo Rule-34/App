@@ -1,4 +1,4 @@
-# Rule 34 Progressive Web App (PWA)
+# Rule 34 App (PWA)
 
 App to enjoy all Rule 34 sites combined in a mobile-friendly experience
 
