@@ -80,7 +80,7 @@ export default {
 <style lang="postcss">
 /* Numeric */
 .form-switch-numeric {
-  @apply w-full rounded-full shadow-inner text-center leading-normal bg-background outline-none;
+  @apply w-full rounded-full shadow-inner text-center leading-normal bg-background select-text outline-none;
 }
 
 /* The container */
