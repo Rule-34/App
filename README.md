@@ -21,19 +21,23 @@ Or backup
 
 Which really is just a CNAME of
 
-[https://rule34-pwa.netlify.com/](https://rule34-pwa.netlify.com/)
+[https://rule34-app.netlify.com/](https://rule34-pwa.netlify.com/)
 
 > Powered by Netlify
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/703629e2-193f-4bb0-9349-f02a22d50ed1/deploy-status)](https://app.netlify.com/sites/rule34-pwa/deploys)
 
+## Social
 
 ### Discord
 
-Join the **[community discord](https://discordapp.com/invite/w7mWvMt/)!**
+Join the **[community discord](https://discordapp.com/invite/w7mWvMt/)** for updates on the project!
 
 ![Discord](https://img.shields.io/discord/656241666553806861?style=for-the-badge)
 
+### Twitter
+
+You can also follow the **[Rule 34 App Twitter](https://twitter.com/Rule34App)** for day to day tips on how to use the App!
 
 # API
 
@@ -56,13 +60,13 @@ Since this is a **free** service that I'm offering, with **no ads** to generate 
 
 #### Languages
 
-HTML, CSS/SCSS, Javascript
+HTML, CSS, Javascript, NodeJS, NPM
 
 #### Technologies
 
-NodeJS, NPM, NuxtJS, VueJS, TailwindCSS, Webpack, etc.
+NuxtJS, VueJS, TailwindCSS, Webpack, etc.
 
-You should read the [package.json](package.json) file for the full list
+You should read the [package.json](package.json) file for the full list.
 
 ## VSCode extensions used
 
