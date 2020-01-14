@@ -38,10 +38,10 @@
               value: innerValue
             })
           "
-          type="number"
+          type="text"
           min="0"
           inputmode="numeric"
-          pattern="\d*"
+          pattern="[0-9]*"
           class="form-switch-numeric theme-responsive-container"
         />
       </div>
