@@ -1,6 +1,0 @@
-/** 
-**          POST RELATED
-**/
-.post-img {
-  @apply .object-cover .w-full;
-}

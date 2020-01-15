@@ -14,7 +14,6 @@
 @import './components/navigation/SearchBar.css';
 @import './components/navigation/SideNav.css';
 /* Pages */
-@import './pages/DashBoard.css';
 @import './pages/Settings.css';
 
 /* Tailwind */
