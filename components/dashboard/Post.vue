@@ -13,9 +13,10 @@
         :src="imageSource()"
         :loading="userSettings.lazyLoading.value ? 'lazy' : 'auto'"
         :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-        @click="toggleTags"
         alt="image"
         class="w-full object-cover"
+        @click="toggleTags"
+        @error="retryLoad($event)"
       />
     </template>
 
@@ -25,11 +26,12 @@
       <video
         :controls="userSettings.videoControls.value"
         :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-        @click="toggleTags"
         alt="video"
         class="w-full object-cover"
         muted
         loop
+        @click="toggleTags"
+        @error="retryLoad($event)"
       >
         <source :src="post.high_res_file" />
         Your browser doesnt support HTML5 video.
@@ -51,10 +53,10 @@
             <a
               v-for="tag in post.tags"
               :key="post[tag]"
-              @click="getSpecificTag(tag)"
-              v-text="tag"
               class="tag"
               href="#"
+              @click="getSpecificTag(tag)"
+              v-text="tag"
             />
           </div>
         </div>
@@ -62,8 +64,8 @@
 
       <!-- Source -->
       <div
-        key="source"
         v-if="post.source"
+        key="source"
         class="w-full m-auto text-center p-1"
       >
         <!-- If text is an Url then make it linkable -->
@@ -75,8 +77,8 @@
             target="_blank"
           >
             <p
-              v-text="'Source'"
               class="text-primary-hover hover:text-primary"
+              v-text="'Source'"
             />
             <ExternalLinkIcon class="icon text-default w-5 h-5 ml-2" />
           </a>
@@ -84,7 +86,7 @@
 
         <!-- If the text is not a url then just show the text -->
         <template v-else>
-          <p v-text="post.source" title="Source" class="text-default-text" />
+          <p title="Source" class="text-default-text" v-text="post.source" />
         </template>
       </div>
     </figcaption>
@@ -115,7 +117,8 @@ export default {
   data() {
     return {
       // Internal toggle for showing tags
-      isActive: false
+      isActive: false,
+      retryCount: 0
     }
   },
 
@@ -134,6 +137,33 @@ export default {
       } else {
         // console.log("Not a url", this.post.source);
         return false
+      }
+    },
+
+    // Retries to load the image
+    retryLoad(event) {
+      console.log(event.target, this.retryCount)
+
+      if (this.retryCount <= this.userSettings.imgRetry.value) {
+        // Save current source
+        const imgSrc = event.target.src
+
+        // Delete source
+        event.target.src = ''
+
+        // Set source again to force reload
+        event.target.src = imgSrc
+
+        // Add one
+        this.retryCount++
+      } else {
+        console.log('Cant load the image')
+
+        // Set error image
+        event.target.src = '/img/error.webp'
+
+        // Stop retrying
+        event.target.onerror = null
       }
     },
 
@@ -157,6 +187,7 @@ export default {
     toggleTags() {
       this.isActive = !this.isActive
     },
+
     getSpecificTag(tag) {
       // Set PID to 0 since we're searching for new tags
       this.pidManager({ operation: 'reset' })

@@ -37,44 +37,28 @@ export default () => ({
       value: true,
       defaultValue: true
     },
-    lazyLoading: {
-      name: 'Lazy Load Media',
-      description:
-        'Load media when it enters view, so you only use data when you see it',
+
+    keyboardControls: {
+      name: 'Keyboard Controls',
+      description: "Control next and last page with keyboard's arrows",
       value: true,
       defaultValue: true
     },
-    infiniteLoad: {
-      name: 'Infinite Loading',
-      description: 'Load posts as you scroll down',
-      value: false,
-      defaultValue: false
-    },
-    score: {
-      name: 'Minimum Score',
-      description: 'Only show posts that have the indicated score or more',
-      value: 0,
-      defaultValue: 0
-    },
-    fullSizeImages: {
-      name: 'Full Size Images',
-      description:
-        'Load full images instead of downscaled size images, data intensive',
-      value: false,
-      defaultValue: false
-    },
-    videoControls: {
-      name: 'Video Controls',
-      description: 'Enable usage of video controls',
-      value: true,
-      defaultValue: true
-    },
+
     hoverControls: {
       name: 'Hover Controls',
       description: 'Next and last posts will be floating on the bottom',
       value: false,
       defaultValue: false
     },
+
+    videoControls: {
+      name: 'Video Controls',
+      description: 'Enable usage of video controls',
+      value: true,
+      defaultValue: true
+    },
+
     // TODO: slider for how much zoom
     zoom: {
       name: 'Hover Zoom',
@@ -82,12 +66,45 @@ export default () => ({
       value: false,
       defaultValue: false
     },
-    keyboardControls: {
-      name: 'Keyboard Controls',
-      description: "Control next and last page with keyboard's arrows",
+
+    lazyLoading: {
+      name: 'Lazy Load Media',
+      description:
+        'Load media when it enters view, so you only use data when you see it',
       value: true,
       defaultValue: true
     },
+
+    fullSizeImages: {
+      name: 'Full Size Images',
+      description:
+        'Load full images instead of downscaled size images, data intensive',
+      value: false,
+      defaultValue: false
+    },
+
+    infiniteLoad: {
+      name: 'Infinite Loading',
+      description: 'Load posts as you scroll down',
+      value: false,
+      defaultValue: false
+    },
+
+    imgRetry: {
+      name: 'Image retry',
+      description:
+        'Number of times that an image will be attempted to be loaded',
+      value: 3,
+      defaultValue: 3
+    },
+
+    score: {
+      name: 'Minimum Score',
+      description: 'Only show posts that have the indicated score or more',
+      value: 0,
+      defaultValue: 0
+    },
+
     nsfw: {
       name: 'NSFW',
       description: 'If deactivated all media will be blurred',
