@@ -1,4 +1,4 @@
-import fireAnalytics from '~/assets/js/insights.custom' // Import analytics
+import fireAnalytics from '~/assets/js/analytics' // Import analytics
 
 export default {
   /**
