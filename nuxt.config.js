@@ -1,3 +1,7 @@
+const config = {
+  isProduction: process.env.NODE_ENV === 'production'
+}
+
 export default {
   mode: 'spa',
   /*
@@ -93,7 +97,8 @@ export default {
    ** TailwindCSS config
    */
   tailwindcss: {
-    cssPath: '~/assets/css/main.css'
+    cssPath: '~/assets/css/main.css',
+    purgeCSSInDev: config.isProduction // Enable in production
   },
   /*
    ** PurgeCSS config
@@ -133,6 +138,8 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {}
+    extend(config, ctx) {
+      console.log(process.env.NODE_ENV)
+    }
   }
 }
