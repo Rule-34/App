@@ -1,17 +1,23 @@
-import { track } from 'insights-js'
+import { event } from 'vue-analytics'
 
 // Send tags in an interval of .5 seconds to not flood the analytics server
-function SendTimed(data, index, parameter) {
+function SendTimed(index, category, action, value) {
   setTimeout(function() {
-    console.log('Tracked item: ', data, index, parameter)
+    console.log(`
+    ---- Analytic tracking ----
+    Category: ${category}
+    Action: ${action}
+    Value: ${value}
+    `)
 
     // Then track tags
-    track({
-      id: 'user-usage',
-      parameters: {
-        [parameter]: data
-      }
-    })
+    event(category, action, value)
+    // track({
+    //   id: 'user-usage',
+    //   parameters: {
+    //     [parameter]: data
+    //   }
+    // })
   }, 500 * index)
 }
 
@@ -39,7 +45,7 @@ function tagsTracking(data, premadeFilterData) {
       }
 
       // If not skipped, send tags in an interval of .5 seconds to not flood the analytics server
-      SendTimed(data[key], index, 'searchedTags')
+      SendTimed(index, 'Tags', 'searched', data[key])
 
       // Add one to index
       index++
@@ -49,12 +55,13 @@ function tagsTracking(data, premadeFilterData) {
     if (isFromFilter) {
       console.log('Tracked Premade Filter')
 
-      track({
-        id: 'user-usage',
-        parameters: {
-          searchedTags: 'Premade Filter'
-        }
-      })
+      SendTimed(0, 'Tags', 'searched', 'Premade Filter')
+      // track({
+      //   id: 'user-usage',
+      //   parameters: {
+      //     searchedTags: 'Premade Filter'
+      //   }
+      // })
     }
 
     // End execution
@@ -70,12 +77,13 @@ function domainTracking(data) {
     }
 
     // Execute successfully the code
-    track({
-      id: 'user-usage',
-      parameters: {
-        domainUsed: data
-      }
-    })
+    SendTimed(0, 'Domains', 'changed', data)
+    // track({
+    //   id: 'user-usage',
+    //   parameters: {
+    //     domainUsed: data
+    //   }
+    // })
 
     resolve('Domain executed succesfully')
   })
@@ -98,7 +106,7 @@ function settingsTracking(data) {
       // console.log(key, difference[key])
 
       // Send settings in an interval of .5 seconds to not flood the analytics server
-      SendTimed(difference[key], index, 'userSettings')
+      SendTimed(index, 'Settings', 'toggled', difference[key])
     })
 
     resolve('Settings executed succesfully')

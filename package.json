@@ -16,7 +16,6 @@
   "dependencies": {
     "@nuxtjs/pwa": "^3.0.0-0",
     "@nuxtjs/sitemap": "^2.0.1",
-    "insights-js": "^1.2.9",
     "lodash": "^4.17.15",
     "nuxt": "^2.0.0",
     "vue-feather-icons": "^5.0.0",
@@ -25,6 +24,7 @@
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^2.0.0",
+    "@nuxtjs/google-analytics": "^2.2.3",
     "@nuxtjs/tailwindcss": "^1.0.0",
     "@nuxtjs/vuetify": "^1.10.0",
     "babel-eslint": "^10.0.1",

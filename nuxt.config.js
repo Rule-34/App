@@ -38,8 +38,7 @@ export default {
    */
   plugins: [
     { src: '~/plugins/vuex-persist.js', mode: 'client', ssr: false },
-    { src: '~/plugins/v-lazy.js', mode: 'client', ssr: false },
-    { src: '~/plugins/insights.js', mode: 'client', ssr: false }
+    { src: '~/plugins/v-lazy.js', mode: 'client', ssr: false }
   ],
   /*
    ** Nuxt.js dev-modules
@@ -48,12 +47,34 @@ export default {
     // Doc: https://github.com/nuxt-community/eslint-module
     // '@nuxtjs/eslint-module',
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/google-analytics'
   ],
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/pwa', 'nuxt-purgecss', '@nuxtjs/sitemap'],
+  modules: ['@nuxtjs/pwa', '@nuxtjs/sitemap'],
+  /*
+   ** Google Analytics
+   */
+  googleAnalytics: {
+    // Initialize
+    id: 'UA-156285339-1',
+
+    // Anonymize
+    set: [{ field: 'anonymizeIp', value: true }],
+
+    // Disable on production
+    debug: {
+      enabled: process.env.NODE_ENV !== 'production',
+      trace: process.env.NODE_ENV !== 'production',
+      sendHitTask: process.env.NODE_ENV !== 'production'
+    }
+  },
+  /*
+   ** Debugging for Google Analytics
+   */
+
   /*
    ** Progressive web app
    */
