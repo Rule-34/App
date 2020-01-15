@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 const config = {
   isProduction: process.env.NODE_ENV === 'production'
 }
@@ -48,33 +50,33 @@ export default {
     // Doc: https://github.com/nuxt-community/eslint-module
     // '@nuxtjs/eslint-module',
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+
+    [
+      '@nuxtjs/google-analytics',
+      {
+        // Initialize
+        id: 'UA-156285339-1',
+
+        // Anonymize
+        beforeFirstHit() {
+          // This is necessary to ensure we don't need cookie consent - see /privacy.
+          Vue.$ga.set('anonymizeIp', true)
+        },
+
+        // Disable on production
+        debug: {
+          enabled: process.env.NODE_ENV !== 'production',
+          // trace: process.env.NODE_ENV !== 'production',
+          sendHitTask: process.env.NODE_ENV !== 'production'
+        }
+      }
+    ]
   ],
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/pwa', '@nuxtjs/sitemap', '@nuxtjs/google-analytics'],
-  /*
-   ** Google Analytics
-   */
-  googleAnalytics: {
-    // Initialize
-    id: 'UA-156285339-1',
-
-    // Anonymize
-    set: [{ field: 'anonymizeIp', value: true }],
-
-    // Disable on production
-    debug: {
-      enabled: process.env.NODE_ENV !== 'production',
-      // trace: process.env.NODE_ENV !== 'production',
-      sendHitTask: process.env.NODE_ENV !== 'production'
-    }
-  },
-  /*
-   ** Debugging for Google Analytics
-   */
-
+  modules: ['@nuxtjs/pwa', '@nuxtjs/sitemap'],
   /*
    ** Progressive web app
    */
