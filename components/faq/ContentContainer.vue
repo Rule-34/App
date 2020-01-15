@@ -50,6 +50,7 @@
             <source :srcset="img + '.webp'" type="image/webp" />
             <source :srcset="img + '.png'" type="image/png" />
             <img
+              :loading="userSettings.lazyLoading.value ? 'lazy' : 'auto'"
               :src="img + '.png'"
               :alt="title + ' Example'"
               class="mx-auto mt-2"
@@ -78,7 +79,9 @@ import { InfoIcon, StarIcon, DollarSignIcon } from 'vue-feather-icons'
 
 export default {
   name: 'ContentContainer',
+
   components: { InfoIcon, StarIcon, DollarSignIcon },
+
   props: {
     // For separating text
     separator: { type: Boolean, required: false, default: false },
@@ -94,6 +97,7 @@ export default {
     // For images
     img: { type: String, required: false, default: undefined }
   },
+
   computed: mapState(['userSettings'])
 }
 </script>

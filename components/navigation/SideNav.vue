@@ -8,6 +8,7 @@
       <!-- Hero Image -->
       <div class="w-full overflow-hidden relative">
         <img
+          loading="eager"
           class="sidebar-img w-full h-auto object-cover"
           src="/icon.png"
           alt="Rule 34 App Logo"

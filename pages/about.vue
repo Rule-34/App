@@ -11,7 +11,12 @@
         <picture>
           <source srcset="/img/ALogo.webp" type="image/webp" />
           <source srcset="/img/ALogo.png" type="image/png" />
-          <img class="mx-auto mb-5" src="/img/ALogo.webp" alt="Akbal logo" />
+          <img
+            class="mx-auto mb-5"
+            src="/img/ALogo.webp"
+            alt="Akbal logo"
+            loading="eager"
+          />
         </picture>
         <h1
           class="theme-responsive-container rounded-full bg-background w-fit-content mx-auto shadow-md mb-1 py-1 px-3"
