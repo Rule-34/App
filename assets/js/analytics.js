@@ -1,4 +1,4 @@
-import { event } from 'vue-analytics'
+import { event } from '@nuxtjs/google-analytics'
 
 // Send tags in an interval of .5 seconds to not flood the analytics server
 function SendTimed(index, category, action, value) {
