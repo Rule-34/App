@@ -5,67 +5,35 @@
 
     <!-- Images and videos -->
 
-    <!-- if media is a Image -->
+    <!-- if media is an Image -->
     <template v-if="post.type === 'image'">
-      <!-- If lazy loading enabled -->
-      <template v-if="userSettings.lazyLoading.value">
-        <img
-          v-lazy="imageSource()"
-          :alt="post.type"
-          :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-          @click="toggleTags"
-          class="post-img"
-        />
-      </template>
-
-      <!-- If lazy loading disabled -->
-      <template v-else>
-        <!-- Source is a computed poperty for better code -->
-        <img
-          :src="imageSource()"
-          :alt="post.type"
-          :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-          @click="toggleTags"
-          class="post-img"
-        />
-      </template>
+      <!-- Source is determined from user Settings -->
+      <!-- Loading is determined if settings are lazy -->
+      <img
+        :src="imageSource()"
+        :loading="userSettings.lazyLoading.value ? 'lazy' : 'auto'"
+        :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
+        @click="toggleTags"
+        alt="image"
+        class="w-full object-cover"
+      />
     </template>
 
     <!-- if its a Video -->
     <template v-else-if="post.type === 'video'">
       <!-- If lazy loading enabled -->
-      <template v-if="userSettings.lazyLoading.value">
-        <lazy-component>
-          <video
-            :alt="post.type"
-            :controls="userSettings.videoControls.value"
-            :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-            @click="toggleTags"
-            class="post-img"
-            muted
-            loop
-          >
-            <source :src="post.high_res_file" />
-            Your browser doesnt support HTML5 video.
-          </video>
-        </lazy-component>
-      </template>
-
-      <!-- If lazy loading disabled -->
-      <template v-else>
-        <video
-          :alt="post.type"
-          :controls="userSettings.videoControls.value"
-          :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-          @click="toggleTags"
-          class="post-img"
-          muted
-          loop
-        >
-          <source :src="post.high_res_file" />
-          Your browser doesnt support HTML5 video.
-        </video>
-      </template>
+      <video
+        :controls="userSettings.videoControls.value"
+        :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
+        @click="toggleTags"
+        alt="video"
+        class="w-full object-cover"
+        muted
+        loop
+      >
+        <source :src="post.high_res_file" />
+        Your browser doesnt support HTML5 video.
+      </video>
     </template>
 
     <!-- if its not an image or a video -->

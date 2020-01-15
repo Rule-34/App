@@ -36,10 +36,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [
-    { src: '~/plugins/vuex-persist.js', mode: 'client', ssr: false },
-    { src: '~/plugins/v-lazy.js', mode: 'client', ssr: false }
-  ],
+  plugins: [{ src: '~/plugins/vuex-persist.js', mode: 'client', ssr: false }],
   /*
    ** Nuxt.js dev-modules
    */
