@@ -67,7 +67,7 @@ export default {
     // Disable on production
     debug: {
       enabled: process.env.NODE_ENV !== 'production',
-      trace: process.env.NODE_ENV !== 'production',
+      // trace: process.env.NODE_ENV !== 'production',
       sendHitTask: process.env.NODE_ENV !== 'production'
     }
   },
