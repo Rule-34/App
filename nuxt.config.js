@@ -1,5 +1,3 @@
-import Vue from 'vue'
-
 const config = {
   isProduction: process.env.NODE_ENV === 'production'
 }
@@ -59,17 +57,14 @@ export default {
         id: 'UA-156285339-1',
 
         // Anonymize
-        beforeFirstHit() {
-          // This is necessary to ensure we don't need cookie consent - see /privacy.
-          Vue.$ga.set('anonymizeIp', true)
-        },
+        set: [{ field: 'anonymizeIp', value: true }]
 
         // Disable on production
-        debug: {
-          enabled: true,
-          // trace: process.env.NODE_ENV !== 'production',
-          sendHitTask: true
-        }
+        // debug: {
+        //   enabled: true,
+        //   // trace: true,
+        //   sendHitTask: true
+        // }
       }
     ]
   ],
