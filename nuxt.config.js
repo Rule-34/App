@@ -1,7 +1,3 @@
-const config = {
-  isProduction: process.env.NODE_ENV === 'production'
-}
-
 export default {
   mode: 'spa',
   /*
@@ -93,8 +89,7 @@ export default {
    ** TailwindCSS config
    */
   tailwindcss: {
-    cssPath: '~/assets/css/main.css',
-    purgeCSSInDev: config.isProduction // Enable in production
+    cssPath: '~/assets/css/main.css'
   },
   /*
    ** PurgeCSS config
