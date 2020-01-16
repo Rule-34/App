@@ -127,7 +127,7 @@ export default {
   async getCorsProxy({ commit, state }, parameters) {
     // Craft url and GET it through fetch
     const response = await fetch(
-      state.generalData.apiUrl + 'proxy?url=' + parameters.url
+      'https://cors-proxy.rule34app.workers.dev/?q=' + parameters.url
     )
       // Save the data
       .then((response) => response.json())
