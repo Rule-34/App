@@ -10,7 +10,7 @@
           <button
             @click="removeLocalStorage"
             title="Use me when something is not working!"
-            class="text-xs theme-responsive-container rounded-full px-2 align-middle shadow"
+            class="text-xs color-util border-util rounded-full px-2 align-middle shadow"
           >
             Reset
           </button>

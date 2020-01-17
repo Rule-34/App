@@ -22,6 +22,7 @@
       <a
         v-for="tag in searchData.tags"
         :key="tag"
+        class="tag group"
         @click="
           tagManager({
             operation: 'remove',
@@ -31,7 +32,6 @@
           })
         "
         v-text="tag"
-        class="tag group"
       />
     </div>
 
@@ -41,6 +41,7 @@
       <a
         v-for="tag in searchData.data"
         :key="tag.name"
+        class="tag group"
         @click="
           if (searchData.isFilterActive) {
             tagManager({
@@ -58,23 +59,24 @@
             })
           }
         "
-        class="tag group"
       >
         {{ tag.name }}
         <span
-          v-text="'(' + tag.posts + ')'"
           class="text-primary-hover group-hover:text-default"
+          v-text="'(' + tag.posts + ')'"
         />
       </a>
     </div>
 
     <!-- Apply tags -->
-    <a
-      @click="dispatchGetAddedTags"
+    <button
       href="#"
-      class="font-bold rounded theme-responsive-text text-center bg-gradient-lilac-blue mt-auto py-2 px-4 shadow-md"
-      >Apply tags</a
+      type="button"
+      class="font-bold rounded text-default-text text-center bg-gradient-lilac-blue mt-auto py-2 px-4 shadow-md"
+      @click="dispatchGetAddedTags"
     >
+      Apply tags
+    </button>
   </div>
 </template>
 

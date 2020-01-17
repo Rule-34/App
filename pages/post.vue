@@ -15,14 +15,21 @@
 
     <!-- If query loads successfully -->
     <template v-if="id && domain">
+      <!-- Post -->
       <Post :post="dashBoardData.data[0]" />
 
-      <div class="material-container text-center p-2 text-default-text">
+      <!-- Call to action -->
+      <div class="text-center text-default-text m-5">
         <h1>
-          If this is your first time here, please enjoy the rest of the App
+          If this is your first time here, please enjoy the rest of the Rule 34
+          App
         </h1>
 
-        <a href="/">Go to Dashboard</a>
+        <nuxt-link to="/">
+          <button class="color-util border-util rounded-full py-2 px-4 mt-3">
+            Go to Dashboard
+          </button>
+        </nuxt-link>
       </div>
     </template>
   </div>

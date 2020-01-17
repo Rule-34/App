@@ -15,38 +15,26 @@ html {
   @apply .w-full .block .bg-gradient-lilac-blue;
 }
 
-.material-container {
-  @apply bg-background border-border border rounded-lg overflow-hidden m-5 shadow;
+.border-util {
+  @apply border border-border;
 }
 
-.material-container:hover {
+.border-util:hover,
+.border-util:focus,
+/* Extra */
+.material-container:hover,
+.material-container:focus {
   @apply border-border-hover;
 }
 
-.theme-responsive-text {
-  @apply text-primary-hover;
-}
-
-.theme-responsive-text:hover {
-  @apply text-primary;
-}
-
-.theme-responsive-container {
-  @apply text-primary-hover border border-border;
-}
-
-.theme-responsive-container:hover {
-  @apply text-primary border-border-hover;
-}
-
-.container {
-  @apply .mx-auto .w-full;
+.material-container {
+  @apply bg-background border-util rounded-lg overflow-hidden m-5 shadow;
 }
 
 /* Utils */
 
 button:focus {
-  outline: 0;
+  @apply outline-none;
 }
 
 /* TODO: fix this */
@@ -60,7 +48,7 @@ button:focus {
 }
 
 .icon {
-  @apply text-default .stroke-width-1 .pointer-events-none align-middle;
+  @apply text-default stroke-width-1 pointer-events-none align-middle;
 }
 
 .bg-gradient-lilac-blue {
@@ -92,11 +80,16 @@ button:focus {
   height: calc(100vh - 10px);
 }
 
-a {
-  @apply text-primary-hover no-underline;
+a,
+/* Utility for color */
+.color-util {
+  @apply text-primary-hover;
 }
 
-a:hover {
+a:hover,
+a:focus,
+.color-util:hover,
+.color-util:focus {
   @apply text-primary;
 }
 
@@ -107,10 +100,11 @@ a:hover {
 }
 
 .tag {
-  @apply text-primary-hover select-none rounded border border-primary-hover overflow-hidden px-1 m-1;
+  @apply select-none rounded border border-primary-hover overflow-hidden px-1 m-1;
 }
 
-.tag:hover {
+.tag:hover,
+.tag:focus {
   @apply border-primary;
 }
 

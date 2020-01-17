@@ -19,7 +19,7 @@
         />
         <label
           :for="switchId"
-          class="form-switch-label theme-responsive-container"
+          class="form-switch-label color-util border-util"
         />
       </div>
       <label :for="switchId" v-text="text" class="text-xs text-default-text" />
@@ -40,7 +40,7 @@
           "
           type="number"
           min="0"
-          class="form-switch-numeric theme-responsive-container"
+          class="form-switch-numeric color-util border-util"
         />
       </div>
       <label :for="switchId" v-text="text" class="text-xs text-default-text" />

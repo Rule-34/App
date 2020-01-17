@@ -25,7 +25,7 @@
 
     <!-- Layout content -->
     <!-- Should use VW margin but this is okay -->
-    <nuxt class="container md:w-2/3 xl:w-1/2" />
+    <nuxt class="mx-auto w-full md:w-2/3 xl:w-1/2" />
   </div>
 </template>
 

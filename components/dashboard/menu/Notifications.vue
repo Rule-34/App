@@ -5,7 +5,7 @@
     class="inline-flex items-center relative overflow-hidden cursor-pointer"
   >
     <!-- Icon -->
-    <div class="theme-responsive-container rounded-full shadow bg-background">
+    <div class="color-util border-util rounded-full shadow bg-background">
       <!-- <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
