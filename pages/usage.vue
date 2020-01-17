@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import ContentContainer from '~/components/faq/ContentContainer.vue'
+import ContentContainer from '~/components/content/ContentContainer.vue'
 
 export default {
   components: { ContentContainer },

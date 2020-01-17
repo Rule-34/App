@@ -98,7 +98,7 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 // Third party
 import { ExternalLinkIcon } from 'vue-feather-icons'
 // Components
-import TransitionCollapse from '~/components/general/TransitionCollapse'
+import TransitionCollapse from '~/components/utils/TransitionCollapse.vue'
 
 export default {
   name: 'Post',
