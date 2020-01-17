@@ -1,5 +1,5 @@
 <template>
-  <main class="flex h-perfect p-3 overflow-hidden">
+  <main class="flex h-perfect p-3">
     <a
       :class="{ zoom: userSettings.zoom.value }"
       href="https://akbal.dev/"
@@ -19,7 +19,7 @@
           />
         </picture>
         <h1
-          class="theme-responsive-container rounded-full bg-background w-fit-content mx-auto shadow-md mb-1 py-1 px-3"
+          class="color-util border-util rounded-full bg-background w-fit-content mx-auto shadow-md mb-1 py-1 px-3"
         >
           Alejandro Akbal
         </h1>
