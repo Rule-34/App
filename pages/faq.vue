@@ -32,19 +32,11 @@ There is also detailed information in the next link."
     <!-- Github -->
     <ContentContainer
       title="Can I report an error?"
-      text="Yes, you can report any error or suggest something you want to be added in the next link, or contact me directly through email."
+      text="Yes, you can report any error or suggest something you want to be added in the next link."
       icon="info"
-      link="mailto:contact@r34.app"
-      link-text="contact@r34.app"
-    >
-      <!-- Workaround for having two links -->
-      <template slot="textRich">
-        <a href="https://github.com/VoidlessSeven7/Rule-34-PWA-Public"
-          >Github</a
-        >
-        |
-      </template>
-    </ContentContainer>
+      link="https://github.com/VoidlessSeven7/Rule-34-App"
+      link-text="Github"
+    />
     <!-- Roadmap -->
     <ContentContainer
       title="Is there any new feature planned?"
@@ -57,11 +49,11 @@ There is also detailed information in the next link."
     <!-- Analytics -->
     <ContentContainer
       title="Analytics"
-      text="Analytics are used and they respect your privacy:
-All information is anonymized and respects the 'Do not track' directive, so if you dont want to be tracked, you wont."
+      text="Google analytics are used with the settings tweaked to be completeley anonymous, no personal info is gathered.
+      Check their terms on the following link."
       icon="info"
-      link="https://getinsights.io/"
-      link-text="Check the analytics platform"
+      link="https://marketingplatform.google.com/about/analytics/terms/us/"
+      link-text="Google Analytics TOS"
     />
 
     <ContentContainer
@@ -73,7 +65,7 @@ All information is anonymized and respects the 'Do not track' directive, so if y
     <!-- Donations -->
     <ContentContainer
       title="Can I donate for your efforts?"
-      text="Of course you can, I've been working really hard on this project, if you feel like contributing to the development please visit the next link."
+      text="Of course you can, I've been working really hard on this project, if you feel like contributing to the development please visit the next links."
       icon="donation"
       link="https://www.paypal.me/Alejandrorr7"
       link-text="Paypal"
@@ -97,7 +89,7 @@ All information is anonymized and respects the 'Do not track' directive, so if y
 </template>
 
 <script>
-import ContentContainer from '~/components/faq/ContentContainer.vue'
+import ContentContainer from '~/components/content/ContentContainer.vue'
 
 export default {
   components: { ContentContainer },

@@ -30,10 +30,20 @@
     <!-- Generated online copy -->
     <ContentContainer
       title="Online copy"
-      text="You can find an online copy in the next link."
+      text="You can find an online copy of the Terms Of Service (TOS) in the next link."
       icon="info"
       link="https://www.gdprprivacynotice.com/live.php?token=1IeoZbFW8o9HQKfaZhVjqQOKFHYwhyDT"
-      link-text="GDPR Privacy Notice"
+      link-text="Terms of service"
+    />
+
+    <!-- Analytics -->
+    <ContentContainer
+      title="Analytics"
+      text="Google analytics are used with the settings tweaked to be completeley anonymous, no personal info is gathered.
+      Check their terms on the following link."
+      icon="info"
+      link="https://marketingplatform.google.com/about/analytics/terms/us/"
+      link-text="Google Analytics TOS"
     />
 
     <!-- Thank you -->
