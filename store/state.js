@@ -25,6 +25,7 @@ export default () => ({
   generalData: {
     // apiUrl: 'http://localhost:8000/',
     apiUrl: 'https://r34-app-original-api.herokuapp.com/',
+    corsProxyUrl: 'https://cors-proxy.rule34app.workers.dev/',
     postLimit: 20,
     errors: null
   },
