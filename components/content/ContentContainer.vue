@@ -6,16 +6,16 @@
       <div class="material-container p-3 bg-gradient-blue-lilac">
         <div class="text-center text-white">
           <!-- Head -->
-          <div :class="{ 'mb-2': text }">
+          <div :class="{ 'mb-1': text }">
             <h1
               :class="{ underline: titleUnderline }"
-              class="text-lg"
+              class="text-lg font-bold tracking-wide"
               v-text="title"
             />
           </div>
 
           <!-- Body -->
-          <div v-if="text" class="text-sm">
+          <div v-if="text">
             <p class="mb-1" v-text="text"></p>
             <!-- Slot for extra info -->
           </div>
@@ -35,7 +35,10 @@
             class="mr-2 text-green-500"
           />
           <!-- Title -->
-          <h1 class="text-default-text text-lg font-bold" v-text="title" />
+          <h1
+            class="text-default-text text-lg font-bold tracking-wide"
+            v-text="title"
+          />
         </div>
 
         <!-- Body -->
