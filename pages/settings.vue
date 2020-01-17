@@ -8,9 +8,9 @@
           <h1 class="text-lg">Settings</h1>
 
           <button
-            @click="removeLocalStorage"
             title="Use me when something is not working!"
             class="text-xs color-util border-util rounded-full px-2 align-middle shadow"
+            @click="removeLocalStorage"
           >
             Reset
           </button>
@@ -38,7 +38,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import SettingSwitch from '~/components/settings/SettingSwitch.vue'
+import SettingSwitch from '~/components/content/SettingSwitch.vue'
 
 export default {
   components: { SettingSwitch },

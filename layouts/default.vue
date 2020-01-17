@@ -36,7 +36,7 @@ import { Touch } from 'vuetify/lib/directives/touch'
 // Components, I decided not to lazy load them as they break the experience
 import NavToggler from '~/components/navigation/NavToggler.vue'
 import SideNav from '~/components/navigation/SideNav.vue'
-import Search from '~/components/search/Search'
+import Search from '~/components/components/search/Search.vue'
 
 export default {
   // Components
