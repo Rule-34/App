@@ -41,7 +41,7 @@ You can also follow the **[Rule 34 App Twitter](https://twitter.com/Rule34App)**
 
 # API
 
-This App uses a JSON wrapper for various Rule 34 XML APIs, it is developed and mantained by me, and can be found [here](https://github.com/VoidlessSeven7/Rule-34-App-Original-API).
+This App uses a JSON wrapper for various Rule 34 XML APIs, it is developed and mantained by me, and can be found [here](https://github.com/VoidlessSeven7/Rule-34-API).
 
 ## Future
 
