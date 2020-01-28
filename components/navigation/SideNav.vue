@@ -3,7 +3,7 @@
     <!-- Actual Navigation Bar -->
     <!-- Only show borders on medium screens -->
     <div
-      class="text-primary-hover hover:text-primary md:border-t md:border-r border-border md:hover:border-border-hover bg-background shadow relative"
+      class="material-container color-util border-l-0 border-b-0 m-0 relative flex flex-col min-h-full"
     >
       <!-- Hero Image -->
       <div class="w-full overflow-hidden relative">
@@ -21,8 +21,11 @@
         </div>
       </div>
 
+      <!-- Separator -->
+      <div class="w-full bg-border" style="height: 1px;"></div>
+
       <!-- Navbar Links -->
-      <nav class="p-3 border-t border-border">
+      <nav class="p-3 bg-background flex-1 flex flex-col justify-between">
         <ul class="text-center md:text-left leading-loose">
           <li>
             <nuxt-link class="nav-hover-links" to="/">
@@ -60,9 +63,7 @@
           </li>
         </ul>
 
-        <ul
-          class="absolute bottom-0 left-0 w-full pb-3 flex flex-row justify-around"
-        >
+        <ul class="flex flex-row justify-around">
           <!-- Discord -->
           <li>
             <a
@@ -114,7 +115,7 @@
     </div>
 
     <!-- Space for clicking out of the menu -->
-    <div @click="sideNavManager" class="sidebar-close-area bg-black-25" />
+    <div class="sidebar-close-area bg-black-25" @click="sideNavManager" />
   </aside>
 </template>
 

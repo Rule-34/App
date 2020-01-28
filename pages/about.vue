@@ -5,7 +5,7 @@
       href="https://akbal.dev/"
       target="_blank"
       rel="noopener noreferrer"
-      class="material-container m-auto p-5 shadow-xl"
+      class="material-container bg-elevation m-auto p-5 shadow-md"
     >
       <div>
         <picture>
@@ -19,7 +19,7 @@
           />
         </picture>
         <h1
-          class="color-util border-util rounded-full bg-background w-fit-content mx-auto shadow-md mb-1 py-1 px-3"
+          class="material-container rounded-full bg-background w-fit-content mx-auto shadow-md mb-1 py-1 px-3"
         >
           Alejandro Akbal
         </h1>

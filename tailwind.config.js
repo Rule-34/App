@@ -8,8 +8,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Colors
         primary: 'var(--color-primary)',
         'primary-hover': 'var(--color-primary-hover)',
+
+        accent: 'var(--color-accent)',
+        'accent-hover': 'var(--color-accent-hover)',
 
         default: 'var(--color-default)',
         'default-text': 'var(--color-default-text)',
@@ -17,20 +21,27 @@ module.exports = {
 
         background: 'var(--color-background)',
 
+        elevation: 'var(--color-elevation)',
+
+        depth: 'var(--color-depth)',
+
         border: 'var(--color-border)',
         'border-hover': 'var(--color-border-hover)',
 
-        'gradient-one': '--color-gradient-one',
-        'gradient-two': '--color-gradient-two',
+        'gradient-one': 'var(--color-gradient-one)',
+        'gradient-two': 'var(--color-gradient-two)',
 
-        'black-25': 'rgba(0, 0, 0, 0.25)'
+        // Extra
+        'black-25': 'hsla(0, 0%, 0%, 0.25)'
       },
 
       inset: {},
       // Width and height
       spacing: {
-        'percent-25': '25%',
         'fit-content': 'fit-content'
+        // Margins for content
+        // '7vw': '7vw',
+        // '14vw': '14vw'
       },
 
       maxHeight: {

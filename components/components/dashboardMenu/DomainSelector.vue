@@ -1,6 +1,6 @@
 <template>
   <div
-    class="inline-flex w-fit-content relative color-util border-util rounded-full shadow bg-background overflow-hidden"
+    class="inline-flex w-fit-content relative material-container m-0 rounded-full"
   >
     <!-- Cloud icon -->
     <div for="domain-selector" class="inline-flex items-center pl-2 pr-1">
@@ -11,7 +11,7 @@
     <select
       :value="selected"
       aria-label="Selector that changes the domain where the content is pulled from"
-      class="inline-flex items-center appearance-none outline-none font-light text-primary bg-background"
+      class="inline-flex items-center appearance-none outline-none font-light text-primary bg-elevation"
       @change="changeDomain($event.target.value)"
     >
       <!-- Loop for every option -->

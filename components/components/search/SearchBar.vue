@@ -8,15 +8,15 @@
         <!-- Input -->
         <input
           v-model="searchQuery"
-          @input="debounceInput"
-          class="w-full text-default-text font-light bg-background outline-none ml-1"
+          class="w-full text-default-text font-light bg-elevation outline-none ml-1"
           type="search"
           placeholder="Search: e.g. dragon"
+          @input="debounceInput"
         />
       </div>
 
       <!-- Filter content -->
-      <div @click="toggleContentMode()" title="Automatic filters">
+      <div title="Automatic filters" @click="toggleContentMode()">
         <component
           :is="ContentMode.icon"
           :class="{
@@ -28,7 +28,7 @@
       </div>
 
       <!-- Filter content -->
-      <div @click="toggleFilter()" title="Filter content">
+      <div title="Filter content" @click="toggleFilter()">
         <FilterIcon
           :class="{ 'text-red-400': searchData.isFilterActive }"
           class="icon w-6 h-6 mr-1"

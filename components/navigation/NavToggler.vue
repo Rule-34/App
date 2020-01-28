@@ -2,22 +2,22 @@
   <!-- Side Nav Toggler -->
   <div class="navigation-toggler">
     <button
-      @click="sideNavManager()"
       class="navigation-toggler-button"
       type="button"
       title="Menu"
+      @click="sideNavManager()"
     >
       &nbsp;
     </button>
     <button
       v-if="showSearch"
-      @click="searchManager({ isActive: !searchData.isActive })"
       type="button"
       class="navigation-search-button"
       title="Search"
+      @click="searchManager({ isActive: !searchData.isActive })"
     >
       <!-- Search Icon -->
-      <SearchIcon class="icon text-white w-6 h-6 inline-flex" />
+      <SearchIcon class="icon text-default w-6 h-6 inline-flex" />
     </button>
   </div>
 </template>
