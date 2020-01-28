@@ -32,7 +32,7 @@
       title="Online copy"
       text="You can find an online copy of the Terms Of Service (TOS) in the next link."
       icon="info"
-      link="https://www.gdprprivacynotice.com/live.php?token=1IeoZbFW8o9HQKfaZhVjqQOKFHYwhyDT"
+      link="https://www.gdprprivacynotice.com/live.php?token=EKbuSBbWgcHAwQ6QyCTgpv01fU8HGE5l"
       link-text="Terms of service"
     />
 
