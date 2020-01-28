@@ -3,7 +3,7 @@
     <!-- Actual Navigation Bar -->
     <!-- Only show borders on medium screens -->
     <div
-      class="material-container color-util border-l-0 border-b-0 m-0 relative flex flex-col min-h-full"
+      class="material-container border-0 rounded-none color-util md:border-r m-0 relative flex flex-col min-h-full"
     >
       <!-- Hero Image -->
       <div class="w-full overflow-hidden relative">
