@@ -26,7 +26,9 @@
         </h1>
 
         <nuxt-link to="/">
-          <button class="color-util border-util rounded-full py-2 px-4 mt-3">
+          <button
+            class="color-util border-util bg-elevation rounded-full py-2 px-4 mt-3"
+          >
             Go to Dashboard
           </button>
         </nuxt-link>
