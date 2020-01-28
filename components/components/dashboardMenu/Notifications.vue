@@ -1,11 +1,11 @@
 <template>
   <!-- Container -->
   <div
-    @click="notification++"
     class="inline-flex items-center relative overflow-hidden cursor-pointer"
+    @click="notification++"
   >
     <!-- Icon -->
-    <div class="color-util border-util rounded-full shadow bg-background">
+    <div class="color-util border-util rounded-full shadow bg-elevation">
       <!-- <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -32,8 +32,8 @@
 
     <!-- Number of notifications -->
     <div
-      v-text="notification"
       class="absolute top-0 right-0 mr-2 -mt-1 text-sm text-primary select-none"
+      v-text="notification"
     />
   </div>
 </template>

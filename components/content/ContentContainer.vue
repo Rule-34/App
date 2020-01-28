@@ -4,7 +4,7 @@
     <!-- If separator -->
     <template v-if="separator">
       <div class="material-container p-3 bg-gradient-blue-lilac">
-        <div class="text-center text-white">
+        <div class="text-center text-default-text">
           <!-- Head -->
           <div :class="{ 'mb-1': text }">
             <h1

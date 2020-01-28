@@ -15,6 +15,11 @@ html {
   @apply .w-full .block .bg-gradient-lilac-blue;
 }
 
+.post-shadow {
+  box-shadow: inset 0px 11px 5px -12px #000000,
+    inset 0px -11px 5px -12px #000000;
+}
+
 .border-util {
   @apply border border-border;
 }
@@ -28,7 +33,7 @@ html {
 }
 
 .material-container {
-  @apply bg-background border-util rounded-lg overflow-hidden m-5 shadow;
+  @apply bg-elevation border-util rounded-lg overflow-hidden m-5 shadow;
 }
 
 /* Utils */
@@ -96,7 +101,7 @@ a:focus,
 /* Tags */
 
 .tag-container {
-  @apply inline-flex flex-wrap;
+  @apply inline-flex flex-wrap p-1 bg-depth post-shadow;
 }
 
 .tag {

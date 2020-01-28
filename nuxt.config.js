@@ -26,7 +26,7 @@ export default {
    */
   loadingIndicator: {
     name: 'cube-grid',
-    color: '#181a1b',
+    color: '#121212',
     background: 'linear-gradient(152deg, #9b9be0 38%, #00d4ff 100%)'
   },
   /*
@@ -76,8 +76,8 @@ export default {
       name: 'Rule 34 App',
       short_name: 'Rule 34 App',
       lang: 'en',
-      theme_color: '#181a1b',
-      background_color: '#181a1b'
+      theme_color: '#121212',
+      background_color: '#121212'
     },
     meta: {
       /* meta options */
