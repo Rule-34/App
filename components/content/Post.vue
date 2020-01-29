@@ -1,6 +1,9 @@
 <template>
   <!-- Makes element zoomable if setting is enabled -->
-  <figure :class="{ zoom: userSettings.zoom.value }" class="material-container">
+  <figure
+    :class="{ zoom: userSettings.zoom.value }"
+    class="material-container text-default-text text-center"
+  >
     <!-- TODO: style="max-height: 80vh;" TODO: good for image previews -->
 
     <!-- Images and videos -->
@@ -14,7 +17,7 @@
         :loading="userSettings.lazyLoading.value ? 'lazy' : 'auto'"
         :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
         alt="image"
-        class="w-full object-cover"
+        class="w-full"
         @click="toggleTags"
         @error="retryLoad($event)"
       />
@@ -27,7 +30,7 @@
         :controls="userSettings.videoControls.value"
         :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
         alt="video"
-        class="w-full object-cover"
+        class="w-full"
         muted
         loop
         @click="toggleTags"
@@ -39,7 +42,9 @@
     </template>
 
     <!-- if its not an image or a video -->
-    <template v-else>Unknown type of media: {{ post.type }}</template>
+    <template v-else>
+      <p v-text="'Unknown type of media: ' + post.type" />
+    </template>
 
     <!-- Tags and source -->
     <figcaption class="flex flex-wrap overflow-hidden text-sm">
@@ -63,11 +68,7 @@
       </TransitionCollapse>
 
       <!-- Source -->
-      <div
-        v-if="post.source"
-        key="source"
-        class="w-full m-auto text-center p-1"
-      >
+      <div v-if="post.source" class="w-full m-auto p-1">
         <!-- If text is an Url then make it linkable -->
         <template v-if="isUrl()">
           <a
@@ -76,17 +77,14 @@
             rel="noreferrer noopener nofollow"
             target="_blank"
           >
-            <p
-              class="text-primary-hover hover:text-primary"
-              v-text="'Source'"
-            />
+            <p class="color-util m-auto" v-text="'Source'" />
             <ExternalLinkIcon class="icon text-default w-5 h-5 ml-2" />
           </a>
         </template>
 
         <!-- If the text is not a url then just show the text -->
         <template v-else>
-          <p title="Source" class="text-default-text" v-text="post.source" />
+          <p title="Source" v-text="post.source" />
         </template>
       </div>
     </figcaption>
@@ -123,7 +121,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['searchData', 'userSettings'])
+    ...mapState(['userSettings'])
   },
 
   methods: {
@@ -142,7 +140,7 @@ export default {
 
     // Retries to load the image
     retryLoad(event) {
-      console.log(event.target, this.retryCount)
+      // console.log(event.target, this.retryCount)
 
       if (this.retryCount <= this.userSettings.imgRetry.value) {
         // Save current source
@@ -157,7 +155,7 @@ export default {
         // Add one
         this.retryCount++
       } else {
-        console.log('Cant load the image')
+        // console.log('Cant load the image')
 
         // Set error image
         event.target.src = '/img/error.webp'
