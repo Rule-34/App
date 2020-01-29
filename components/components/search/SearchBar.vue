@@ -1,14 +1,14 @@
 <template>
   <div>
     <!-- Search bar -->
-    <div class="material-container p-2 flex justify-between">
+    <div class="material-container bg-background p-2 flex justify-between">
       <!-- Search Icon -->
       <div class="w-full inline-flex">
         <SearchIcon class="icon text-default w-6 h-6 mr-2" />
         <!-- Input -->
         <input
           v-model="searchQuery"
-          class="w-full text-default-text font-light bg-elevation outline-none ml-1"
+          class="w-full text-default-text font-light bg-background outline-none ml-1"
           type="search"
           placeholder="Search: e.g. dragon"
           @input="debounceInput"
