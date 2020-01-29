@@ -2,7 +2,9 @@
   <div>
     <!-- Advertising test -->
     <div class="text-center text-default-text-muted mt-3">
-      <small>Testing advertising to maintain the site, sorry for the inconvenience :/</small>
+      <small>
+        Testing advertising to maintain the site, sorry for the inconvenience :/
+      </small>
       <div class="material-container">
         <iframe
           src="//a.exosrv.com/iframe.php?idzone=3689087&size=728x90"
@@ -60,7 +62,7 @@ import Post from '~/components/content/Post.vue'
 import Errors from '~/components/general/Errors.vue'
 
 export default {
-  name: 'PostId',
+  name: 'SinglePostView',
 
   components: {
     Post,
@@ -69,8 +71,8 @@ export default {
 
   data() {
     return {
-      id: this.$route.query.id || undefined,
-      domain: this.$route.query.domain || undefined
+      id: this.$route.query.id ?? undefined,
+      domain: this.$route.query.domain ?? undefined
     }
   },
 
