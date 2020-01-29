@@ -38,7 +38,9 @@ module.exports = {
       inset: {},
       // Width and height
       spacing: {
-        'fit-content': 'fit-content'
+        'fit-content': 'fit-content',
+        'max-content': 'max-content',
+        'min-content': 'min-content'
         // Margins for content
         // '7vw': '7vw',
         // '14vw': '14vw'
