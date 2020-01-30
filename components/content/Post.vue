@@ -17,7 +17,7 @@
         :loading="userSettings.lazyLoading.value ? 'lazy' : 'auto'"
         :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
         alt="image"
-        class="w-full"
+        class="post"
         @click="toggleTags"
         @load="addAnimation($event)"
         @error="retryToLoadMedia($event)"
@@ -35,7 +35,6 @@
         muted
         loop
         @click="toggleTags"
-        @load="addAnimation($event)"
       >
         <source :src="post.high_res_file" @error="retryToLoadMedia($event)" />
         Your browser doesnt support HTML5 video.
@@ -138,7 +137,7 @@ export default {
       if (this.userSettings.performance.value) {
         console.log('No animation for you', event)
       } else {
-        event.target.classList.toggle('animation-fade-in--post')
+        event.target.classList.toggle('post--active')
       }
     },
 
@@ -224,17 +223,12 @@ export default {
 </script>
 
 <style>
-/* Animations for when post are loaded */
-.animation-fade-in--post {
-  animation: animation-fade-in--post 0.75s ease-in;
+.post {
+  transition: opacity 0.75s;
+  @apply w-full opacity-0;
 }
 
-@keyframes animation-fade-in--post {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+.post--active {
+  @apply opacity-100;
 }
 </style>
