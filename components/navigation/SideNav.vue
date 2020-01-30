@@ -68,7 +68,7 @@
           <li>
             <a
               class="nav-hover-links  inline-flex"
-              href="https://discord.gg/w7mWvMt"
+              href="https://discord.gg/fUhYHSZ"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
