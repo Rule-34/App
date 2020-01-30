@@ -1,10 +1,10 @@
 <template>
   <transition
+    enter-active-class="collapse-enter-active"
+    leave-active-class="collapse-leave-active"
     @before-enter="beforeEnter"
     @enter="enter"
     @leave="leave"
-    enter-active-class="collapse-enter-active"
-    leave-active-class="collapse-leave-active"
   >
     <!-- 
 
@@ -76,8 +76,6 @@ export default {
 /* Transition that is gonna be applied */
 .collapse-enter-active,
 .collapse-leave-active {
-  overflow: hidden;
-
   transition-duration: 0.35s;
   transition-timing-function: ease;
   transition-property: opacity, max-height;
