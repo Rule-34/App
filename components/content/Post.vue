@@ -19,7 +19,8 @@
         alt="image"
         class="w-full"
         @click="toggleTags"
-        @error="retryLoad($event)"
+        @load="addAnimation($event)"
+        @error="retryToLoadMedia($event)"
       />
     </template>
 
@@ -34,9 +35,9 @@
         muted
         loop
         @click="toggleTags"
-        @error="retryLoad($event)"
+        @load="addAnimation($event)"
       >
-        <source :src="post.high_res_file" />
+        <source :src="post.high_res_file" @error="retryToLoadMedia($event)" />
         Your browser doesnt support HTML5 video.
       </video>
     </template>
@@ -127,19 +128,22 @@ export default {
   methods: {
     ...mapMutations(['pidManager', 'tagManager']),
     ...mapActions(['getPosts', 'analyticManager']),
-    // Check if its an url
-    isUrl() {
-      if (this.post.source.startsWith('http', 'www')) {
-        // console.log("its a url", this.post.source);
-        return true
+
+    // Toggle showing tags on click
+    toggleTags() {
+      this.isActive = !this.isActive
+    },
+
+    addAnimation(event) {
+      if (this.userSettings.performance.value) {
+        console.log('No animation for you', event)
       } else {
-        // console.log("Not a url", this.post.source);
-        return false
+        event.target.classList.toggle('animation-fade-in--post')
       }
     },
 
     // Retries to load the image
-    retryLoad(event) {
+    retryToLoadMedia(event) {
       // console.log(event.target, this.retryCount)
 
       if (this.retryCount <= this.userSettings.imgRetry.value) {
@@ -165,6 +169,17 @@ export default {
       }
     },
 
+    // Check if its an url
+    isUrl() {
+      if (this.post.source.startsWith('http', 'www')) {
+        // console.log("its a url", this.post.source);
+        return true
+      } else {
+        // console.log("Not a url", this.post.source);
+        return false
+      }
+    },
+
     // Image source
     imageSource() {
       switch (this.userSettings.fullSizeImages.value) {
@@ -179,11 +194,6 @@ export default {
             return this.post.high_res_file
           }
       }
-    },
-
-    // Toggle showing tags on click
-    toggleTags() {
-      this.isActive = !this.isActive
     },
 
     getSpecificTag(tag) {
@@ -212,3 +222,19 @@ export default {
   }
 }
 </script>
+
+<style>
+/* Animations for when post are loaded */
+.animation-fade-in--post {
+  animation: animation-fade-in--post 0.75s ease-in;
+}
+
+@keyframes animation-fade-in--post {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+</style>
