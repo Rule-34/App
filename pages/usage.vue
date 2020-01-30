@@ -39,38 +39,58 @@
     />
 
     <ContentContainer
-      title="Full size images"
-      text="While active, images will be higher resolution, consuming more data."
-      img="/img/examples/fullsize"
-    />
-
-    <ContentContainer
-      title="Minimum score"
-      text="Sets the required score for a post to show. Set to 0 to deactivate"
-    />
-
-    <ContentContainer
-      title="Video controls"
-      text="While active, videos will have controls, but clicking it won't show tags."
-      img="/img/examples/video_controls"
-    />
-
-    <ContentContainer
-      title="Hover Controls"
-      text="While active, controls will hover over content."
-      img="/img/examples/controls"
-    />
-
-    <ContentContainer
-      title="Keyboard navigation"
-      text="While active, keyboard's right and left arrows will navigate like clicking the control's buttons."
+      :title="userSettings.keyboardControls.name"
+      :text="userSettings.keyboardControls.description"
       img="/img/examples/navigation"
     />
 
     <ContentContainer
-      title="Hover Zoom"
-      text="While active, posts hovered will enlarge."
+      :title="userSettings.hoverControls.name"
+      :text="userSettings.hoverControls.description"
+      img="/img/examples/controls"
+    />
+
+    <ContentContainer
+      :title="userSettings.videoControls.name"
+      :text="userSettings.videoControls.description"
+      img="/img/examples/video_controls"
+    />
+
+    <ContentContainer
+      :title="userSettings.zoom.name"
+      :text="userSettings.zoom.description"
       img="/img/examples/zoom"
+    />
+
+    <ContentContainer
+      :title="userSettings.lazyLoading.name"
+      :text="userSettings.lazyLoading.description"
+    />
+
+    <ContentContainer
+      :title="userSettings.fullSizeImages.name"
+      :text="userSettings.fullSizeImages.description"
+      img="/img/examples/fullsize"
+    />
+
+    <ContentContainer
+      :title="userSettings.infiniteLoad.name"
+      :text="userSettings.infiniteLoad.description"
+    />
+
+    <ContentContainer
+      :title="userSettings.imgRetry.name"
+      :text="userSettings.imgRetry.description"
+    />
+
+    <ContentContainer
+      :title="userSettings.score.name"
+      :text="userSettings.score.description"
+    />
+
+    <ContentContainer
+      :title="userSettings.performance.name"
+      :text="userSettings.performance.description"
     />
 
     <ContentContainer title="NSFW" img="/img/examples/nsfw">
@@ -83,10 +103,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+// Components
 import ContentContainer from '~/components/content/ContentContainer.vue'
 
 export default {
   components: { ContentContainer },
+
+  computed: {
+    ...mapState(['userSettings'])
+  },
 
   head() {
     return {
