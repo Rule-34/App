@@ -3,54 +3,83 @@
     <ContentContainer
       :separator="true"
       title="General"
-      text="Questions related to the App/PWA/website and its content"
+      text="Questions related to the App and its content"
     />
     <!-- What is this -->
     <ContentContainer
       title="What is this?"
-      text="This is a Progressive Web App, essentially a installable web page, that acts as a client for various Rule 34 domains, it gets the images from the domain's public API and serves them, nothing is stored in any server."
+      text="This is an App to enjoy all Rule 34 sites combined in a mobile-friendly experience."
       icon="info"
     />
 
-    <!-- Copyright -->
+    <!-- Not an app -->
     <ContentContainer
-      title="Do you own the media content?"
-      text="No, the images/videos/media are directly served from the domain's API, so I do not own any media."
+      title="This is not an app!"
+      text="This is a Progressive Web App, essentially a web page that can be installed on your device."
+      icon="info"
+    />
+
+    <!-- Image removal -->
+    <ContentContainer
+      title="Can you remove an Image?"
+      text="Nope, all content is directly served from the corresponding Rule 34 site, you should contact that site."
       icon="info"
     />
 
     <!-- Settings -->
     <ContentContainer
-      title="What does 'X' setting do?"
-      text="All settings have a hover description, just hover your mouse on top of the setting.
-There is also detailed information in the next link."
+      title='What does "X" setting do?'
+      text='Settings have a hover description, if your device doesnt support hovering, please refer to the "Usage" page.'
       icon="info"
     >
       <nuxt-link to="/usage">Usage information</nuxt-link>
     </ContentContainer>
 
-    <!-- Github -->
+    <!-- Technical separator -->
     <ContentContainer
-      title="Can I report an error?"
-      text="Yes, you can report any error or suggest something you want to be added in the next link."
-      icon="info"
-      link="https://github.com/VoidlessSeven7/Rule-34-App"
-      link-text="Github"
+      :separator="true"
+      title="Technical"
+      text="Errors, suggestions and more"
     />
+
     <!-- Roadmap -->
     <ContentContainer
       title="Is there any new feature planned?"
-      text="Im glad you asked, the development is going quite nicely, you can see everything that is planned in the next link."
+      text="Im glad you asked, the development is going quite steady, check our Roadmap."
       icon="info"
       link="https://github.com/users/VoidlessSeven7/projects/1"
-      link-text="GitHub Project"
+      link-text="Roadmap"
     />
+
+    <!-- Helping -->
+    <ContentContainer
+      title="Can I help in any way?"
+      text="Of course, we're always in need of support, specially (artists and programmers), contact me on Discord if you want to help."
+      icon="info"
+    >
+      <!-- Slot -->
+      <small class="text-default-text-muted">Voidless#0521</small>
+    </ContentContainer>
+
+    <!-- Github -->
+    <ContentContainer
+      title="I found a bug/error!"
+      text="You can report it on the GitHub repository, or directly to me on our Discord."
+      icon="info"
+      link="https://github.com/VoidlessSeven7/Rule-34-App"
+      link-text="Github"
+    >
+      <!-- Workaround for having two links -->
+      <template slot="textRich">
+        <a href="https://discord.gg/fUhYHSZ">Discord</a> |
+      </template>
+    </ContentContainer>
 
     <!-- Analytics -->
     <ContentContainer
       title="Analytics"
       text="Google analytics are used with the settings tweaked to be completeley anonymous, no personal info is gathered.
-      Check their terms on the following link."
+      Check their terms of use on the following link."
       icon="info"
       link="https://marketingplatform.google.com/about/analytics/terms/us/"
       link-text="Google Analytics TOS"
@@ -65,7 +94,7 @@ There is also detailed information in the next link."
     <!-- Donations -->
     <ContentContainer
       title="Can I donate for your efforts?"
-      text="Of course you can, I've been working really hard on this project, if you feel like contributing to the development please visit the next links."
+      text="Of course you can, I've been working really hard on this project, if you feel like contributing to the development please do."
       icon="donation"
       link="https://www.paypal.me/Alejandrorr7"
       link-text="Paypal"
