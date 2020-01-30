@@ -50,7 +50,7 @@
     <figcaption class="flex flex-wrap overflow-hidden text-sm">
       <!-- Tags -->
       <!-- Component to apply the collapse transition -->
-      <TransitionCollapse class="min-w-full">
+      <TransitionCollapse class="min-w-full overflow-hidden">
         <!-- Only show them if they exist and the component is toggled -->
         <!-- Workaround for this not jumping is applying collapse to the div before div with padding/margin -->
         <div v-if="post.tags && isActive">
