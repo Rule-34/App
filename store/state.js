@@ -33,29 +33,32 @@ export default () => ({
   // These settings are saved to localStorage
   userSettings: {
     darkTheme: {
-      name: 'Dark Theme',
-      description: 'Enable dark theme app-wide',
+      name: 'Dark theme',
+      description: 'Enable dark theme app-wide.',
       value: true,
       defaultValue: true
     },
 
     keyboardControls: {
-      name: 'Keyboard Controls',
-      description: "Control next and last page with keyboard's arrows",
-      value: true,
-      defaultValue: true
+      name: 'Keyboard controls',
+      description:
+        "Keyboard's right and left arrows will navigate pages like clicking the control's buttons.",
+      value: false,
+      defaultValue: false
     },
 
     hoverControls: {
-      name: 'Hover Controls',
-      description: 'Next and last posts will be floating on the bottom',
+      name: 'Hover controls',
+      description:
+        'Controls will hover over content and be fixed on the screen.',
       value: false,
       defaultValue: false
     },
 
     videoControls: {
-      name: 'Video Controls',
-      description: 'Enable usage of video controls',
+      name: 'Video controls',
+      description:
+        "Videos will have controls, but clicking it won't show tags.",
       value: true,
       defaultValue: true
     },
@@ -63,30 +66,32 @@ export default () => ({
     // TODO: slider for how much zoom
     zoom: {
       name: 'Hover Zoom',
-      description: 'Zoom when you hover posts, useful for videos',
+      description:
+        'Zoom posts when you hover over them, not really useful, but quite amusing.',
       value: false,
       defaultValue: false
     },
 
     lazyLoading: {
-      name: 'Lazy Load Media',
+      name: 'Lazy load',
       description:
-        'Load media when it enters view, so you only use data when you see it',
+        'Load media when it enters view, so you only use data when you see it.',
       value: true,
       defaultValue: true
     },
 
     fullSizeImages: {
-      name: 'Full Size Images',
+      name: 'Full-size images',
       description:
-        'Load full images instead of downscaled size images, data intensive',
+        'Load full images instead of downscaled size images, data intensive.',
       value: false,
       defaultValue: false
     },
 
     infiniteLoad: {
-      name: 'Infinite Loading',
-      description: 'Load posts as you scroll down',
+      name: 'Infinite loading',
+      description:
+        'Load posts infinitely instead of using Controls, VERY resource heavy.',
       value: false,
       defaultValue: false
     },
@@ -94,21 +99,29 @@ export default () => ({
     imgRetry: {
       name: 'Image retry',
       description:
-        'Number of times that an image will be attempted to be loaded',
+        'Number of times that an image will be attempted to be loaded if it fails.',
       value: 3,
       defaultValue: 3
     },
 
     score: {
-      name: 'Minimum Score',
-      description: 'Only show posts that have the indicated score or more',
+      name: 'Minimum score',
+      description: 'Sets the required score for a post to show.',
       value: 0,
       defaultValue: 0
     },
 
+    performance: {
+      name: 'Performance mode',
+      description:
+        'If active, animations and other resource-heavy resources will be removed.',
+      value: false,
+      defaultValue: false
+    },
+
     nsfw: {
       name: 'NSFW',
-      description: 'If deactivated all media will be blurred',
+      description: 'If deactivated all media will be blurred.',
       value: true,
       defaultValue: true
     }
