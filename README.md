@@ -31,7 +31,7 @@ Which really is just a CNAME of
 
 ### Discord
 
-Join the **[community discord](https://discordapp.com/invite/w7mWvMt/)** for updates on the project!
+Join the **[community discord](https://discord.gg/fUhYHSZ)** for updates on the project!
 
 ![Discord](https://img.shields.io/discord/656241666553806861?style=for-the-badge)
 
