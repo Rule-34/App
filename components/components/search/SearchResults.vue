@@ -53,15 +53,17 @@
     </div>
 
     <!-- Apply tags -->
-    <a href="#" class="text-center flex min-h-full flex-1">
-      <button
-        class="mt-auto w-full text-default-text font-bold border-0 rounded bg-gradient-lilac-blue py-2 px-4 shadow-md"
-        type="button"
-        @click="dispatchGetAddedTags()"
-      >
-        Apply tags
-      </button>
-    </a>
+    <div class="flex min-h-full flex-1">
+      <a href="#" class="mt-auto w-full">
+        <button
+          class="text-center w-full text-default-text font-bold border-0 rounded bg-gradient-lilac-blue py-2 px-4 shadow-md"
+          type="button"
+          @click="dispatchGetAddedTags()"
+        >
+          Apply tags
+        </button>
+      </a>
+    </div>
   </div>
 </template>
 
