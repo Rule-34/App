@@ -3,7 +3,7 @@
     <!-- Actual Navigation Bar -->
     <!-- Only show borders on medium screens -->
     <div
-      class="material-container border-0 rounded-none color-util md:border-r m-0 relative flex flex-col min-h-full"
+      class="material-container border-0 rounded-none md:border-r m-0 relative flex flex-col min-h-full color-util"
     >
       <!-- Hero Image -->
       <div class="w-full overflow-hidden relative">
@@ -15,7 +15,7 @@
         />
 
         <!-- Text on image -->
-        <div class="absolute bottom-0 left-0 p-3">
+        <div class="absolute bottom-0 left-0 p-3 transition--color">
           <h1 class="font-black">Rule 34 App</h1>
           <h3 class="font-normal">Enjoy all Rule 34 sites</h3>
         </div>
@@ -28,35 +28,35 @@
       <nav class="p-3 bg-background flex-1 flex flex-col justify-between">
         <ul class="text-center md:text-left leading-loose">
           <li>
-            <nuxt-link class="nav-hover-links" to="/">
+            <nuxt-link class="nav-links" to="/">
               <span class="nav-spacer"></span>
               <span class="relative">Dashboard</span>
             </nuxt-link>
           </li>
 
           <li>
-            <nuxt-link class="nav-hover-links" to="/faq">
+            <nuxt-link class="nav-links" to="/faq">
               <span class="nav-spacer"></span>
               <span class="relative">Faq</span>
             </nuxt-link>
           </li>
 
           <li>
-            <nuxt-link class="nav-hover-links" to="/usage">
+            <nuxt-link class="nav-links" to="/usage">
               <span class="nav-spacer"></span>
               <span class="relative">Usage</span>
             </nuxt-link>
           </li>
 
           <li>
-            <nuxt-link class="nav-hover-links" to="/about">
+            <nuxt-link class="nav-links" to="/about">
               <span class="nav-spacer"></span>
               <span class="relative">About</span>
             </nuxt-link>
           </li>
 
           <li>
-            <nuxt-link class="nav-hover-links" to="/settings">
+            <nuxt-link class="nav-links" to="/settings">
               <span class="nav-spacer"></span>
               <span class="relative">Settings</span>
             </nuxt-link>
@@ -66,10 +66,7 @@
         <ul class="flex flex-row justify-around">
           <!-- Discord -->
           <li>
-            <a
-              class="nav-hover-links  inline-flex"
-              href="https://discord.gg/fUhYHSZ"
-            >
+            <a class="nav-links--bottom flex" href="https://discord.gg/fUhYHSZ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -80,21 +77,21 @@
                 />
               </svg>
 
-              <span class="relative">Discord</span>
+              <span>Discord</span>
             </a>
           </li>
 
           <!-- Legal -->
           <li>
-            <nuxt-link class="nav-hover-links" to="/legal">
-              <span class="relative">Legal</span>
+            <nuxt-link class="nav-links--bottom flex" to="/legal">
+              <span>Legal</span>
             </nuxt-link>
           </li>
 
           <!-- Patreon -->
           <li>
             <a
-              class="nav-hover-links inline-flex"
+              class="nav-links--bottom flex"
               href="https://www.patreon.com/VoidlessSeven7"
             >
               <svg
@@ -107,7 +104,7 @@
                 />
               </svg>
 
-              <span class="relative">Patreon</span>
+              <span>Patreon</span>
             </a>
           </li>
         </ul>
@@ -133,3 +130,29 @@ export default {
   }
 }
 </script>
+
+<style>
+/* Sidebar */
+.nav-links {
+  transition: transform 0.35s, var(--transition--color);
+  @apply relative block;
+}
+
+.nav-links--bottom {
+  transition: transform 0.35s, var(--transition--color);
+}
+
+.nav-links:hover {
+  transform: translateX(5px);
+}
+
+.nav-links--bottom:hover {
+  transform: scale(1.1);
+}
+
+.nav-spacer {
+  @apply absolute inset-0 opacity-0;
+}
+
+/* ----------------- Rest of styles ----------------- */
+</style>

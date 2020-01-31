@@ -1,20 +1,20 @@
-/* Tailwind */
+/* Tailwind base */
 @import 'tailwindcss/base';
 
 /* Theme */
 @import './general/theme.css';
 
-/* Tailwind */
+/* Components */
+@import './components/navigation/SideNav.css';
+
+/* Pages */
+@import './pages/Settings.css';
+
+/* Tailwind components */
 @import 'tailwindcss/components';
 
 /* General */
 @import './general/general.css';
 
-/* Components */
-@import './components/navigation/SearchBar.css';
-@import './components/navigation/SideNav.css';
-/* Pages */
-@import './pages/Settings.css';
-
-/* Tailwind */
+/* Tailwind utilities */
 @import 'tailwindcss/utilities';

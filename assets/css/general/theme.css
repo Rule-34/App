@@ -53,24 +53,18 @@
   --color-gradient-two: rgb(0, 212, 255);
 }
 
-/* @media (prefers-color-scheme: dark) {
-  .day.dark-scheme {
-    background: #333;
-    color: white;
-  }
-  .night.dark-scheme {
-    background: black;
-    color: #ddd;
-  }
+.bg-gradient-lilac-blue {
+  background: linear-gradient(
+    152deg,
+    var(--color-gradient-one) 38%,
+    var(--color-gradient-two) 100%
+  );
 }
 
-@media (prefers-color-scheme: light) {
-  .day.light-scheme {
-    background: white;
-    color: #555;
-  }
-  .night.light-scheme {
-    background: #eee;
-    color: black;
-  }
-} */
+.bg-gradient-blue-lilac {
+  background: linear-gradient(
+    160deg,
+    var(--color-gradient-two) 38%,
+    var(--color-gradient-one) 100%
+  );
+}

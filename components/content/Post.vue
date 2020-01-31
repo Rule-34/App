@@ -231,4 +231,9 @@ export default {
 .post--active {
   @apply opacity-100;
 }
+
+/* .post-shadow {
+  box-shadow: inset 0px 11px 5px -12px #000000,
+    inset 0px -11px 5px -12px #000000;
+} */
 </style>
