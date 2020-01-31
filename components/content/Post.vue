@@ -18,7 +18,7 @@
         :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
         alt="image"
         class="post"
-        @click="toggleTags"
+        @click="toggleTags()"
         @load="addAnimation($event)"
         @error="retryToLoadMedia($event)"
       />
@@ -49,23 +49,29 @@
     <!-- Tags and source -->
     <figcaption class="flex flex-wrap overflow-hidden text-sm">
       <!-- Tags -->
-      <!-- Component to apply the collapse transition -->
-      <TransitionCollapse class="min-w-full overflow-hidden">
-        <!-- Only show them if they exist and the component is toggled -->
+      <!-- Only show them if they exist -->
+      <div
+        v-if="post.tags"
+        ref="postTags"
+        class="min-w-full post--transition overflow-hidden"
+        :style="
+          isActive
+            ? `max-height: ${$refs.postTags.scrollHeight}px; opacity: 1;`
+            : 'max-height: 0px; opacity: 0;'
+        "
+      >
         <!-- Workaround for this not jumping is applying collapse to the div before div with padding/margin -->
-        <div v-if="post.tags && isActive">
-          <div class="min-w-full tag-container">
-            <a
-              v-for="tag in post.tags"
-              :key="post[tag]"
-              class="tag"
-              href="#"
-              @click="getSpecificTag(tag)"
-              v-text="tag"
-            />
-          </div>
+        <div class="tag-container min-w-full">
+          <a
+            v-for="tag in post.tags"
+            :key="post[tag]"
+            class="tag"
+            href="#"
+            @click="getSpecificTag(tag)"
+            v-text="tag"
+          />
         </div>
-      </TransitionCollapse>
+      </div>
 
       <!-- Source -->
       <div v-if="post.source" class="w-full m-auto p-1">
@@ -95,13 +101,11 @@
 import { mapState, mapMutations, mapActions } from 'vuex'
 // Third party
 import { ExternalLinkIcon } from 'vue-feather-icons'
-// Components
-import TransitionCollapse from '~/components/utils/TransitionCollapse.vue'
 
 export default {
   name: 'Post',
 
-  components: { ExternalLinkIcon, TransitionCollapse },
+  components: { ExternalLinkIcon },
 
   props: {
     post: {
@@ -236,4 +240,10 @@ export default {
   box-shadow: inset 0px 11px 5px -12px #000000,
     inset 0px -11px 5px -12px #000000;
 } */
+
+.post--transition {
+  transition-duration: 0.35s;
+  transition-timing-function: ease;
+  transition-property: opacity, max-height;
+}
 </style>
