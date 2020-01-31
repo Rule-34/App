@@ -1,26 +1,25 @@
-/** 
-**          DOCUMENT DEFAULTS
-**/
+/* ---------------- Document defaults ---------------- */
+:root {
+  --transition--border-color: border-color 0.35s;
+  --transition--color: color 0.35s;
+  --transition--transform: transform 0.35s;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
-/** 
-**          CLASSES
-**/
-
-/* General */
-.cool-bar {
-  height: 10px;
-  @apply .w-full .block .bg-gradient-lilac-blue;
+button:focus {
+  @apply outline-none;
 }
 
-.post-shadow {
-  box-shadow: inset 0px 11px 5px -12px #000000,
-    inset 0px -11px 5px -12px #000000;
+/* ---------------- Tools and utils ---------------- */
+.transition--color {
+  transition: var(--transition--color);
 }
 
 .border-util {
+  transition: var(--transition--border-color);
   @apply border border-border;
 }
 
@@ -32,62 +31,9 @@ html {
   @apply border-border-hover;
 }
 
-.material-container {
-  @apply bg-elevation border-util rounded-lg overflow-hidden m-5 shadow;
-}
-
-/* Utils */
-
-button:focus {
-  @apply outline-none;
-}
-
-/* TODO: fix this */
-/* Hardcoded margin-top for the entire layout cause some CSS makes it not take over the cool bar (maybe the cool bar itself) */
-.layout {
-  margin-top: -10px;
-}
-
-.stroke-width-1 {
-  stroke-width: 1.5;
-}
-
-.icon {
-  @apply text-default stroke-width-1 pointer-events-none align-middle;
-}
-
-.bg-gradient-lilac-blue {
-  background: linear-gradient(
-    152deg,
-    var(--color-gradient-one) 38%,
-    var(--color-gradient-two) 100%
-  );
-}
-
-.bg-gradient-blue-lilac {
-  background: linear-gradient(
-    160deg,
-    var(--color-gradient-two) 38%,
-    var(--color-gradient-one) 100%
-  );
-}
-
-/** 
-**          ELEMENTS
-**/
-
-/** 
-**          BUILDING CLASSES
-**/
-
-.h-perfect {
-  height: 100vh;
-  height: calc(100vh - 10px);
-}
-
 a,
-/* Utility for color */
 .color-util {
+  transition: var(--transition--color);
   @apply text-primary-hover;
 }
 
@@ -98,13 +44,40 @@ a:focus,
   @apply text-primary;
 }
 
-/* Tags */
+.material-container {
+  @apply bg-elevation border-util rounded-lg overflow-hidden m-5 shadow;
+}
+
+/* ---------------- Component specific ---------------- */
+/* TODO: fix this */
+/* Hardcoded margin-top for the entire layout cause some CSS makes it not take over the cool bar (maybe the cool bar itself) */
+.layout {
+  margin-top: -10px;
+}
+
+.cool-bar {
+  height: 10px;
+  @apply .w-full .block .bg-gradient-lilac-blue;
+}
+
+.stroke-width-1 {
+  stroke-width: 1.5;
+}
+
+.icon {
+  @apply text-default stroke-width-1 pointer-events-none align-middle;
+}
+
+.h-perfect {
+  height: calc(100vh - 10px);
+}
 
 .tag-container {
   @apply flex flex-wrap p-1 bg-depth overflow-hidden;
 }
 
 .tag {
+  transition: var(--transition--border-color), var(--transition--color);
   @apply select-none border border-primary-hover rounded overflow-hidden px-1 m-1;
 }
 
@@ -113,20 +86,7 @@ a:focus,
   @apply border-primary;
 }
 
-/* Sidebar */
-
-.nav-hover-links {
-  transition: transform 0.2s ease;
-  @apply relative block;
-}
-
-.nav-hover-links:hover {
-  transform: translateX(5px);
-}
-
-.nav-spacer {
-  @apply absolute inset-0 opacity-0;
-}
+/* ---------------- Transitions and animations ---------------- */
 
 /* Page Transition */
 .page-enter-active,
@@ -137,5 +97,4 @@ a:focus,
 .page-enter,
 .page-leave-to {
   opacity: 0;
-  /* filter: invert(100%); */
 }
