@@ -5,9 +5,9 @@
   --transition--transform: transform 0.35s;
 }
 
-html {
+/* html {
   scroll-behavior: smooth;
-}
+} */
 
 button:focus {
   @apply outline-none;

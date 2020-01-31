@@ -1,15 +1,15 @@
 <template>
-  <div class="fixed min-h-screen w-full z-20 bg-black-25">
+  <div class="layout fixed min-h-screen w-full z-20 bg-black-25">
     <!-- Centered container -->
     <div class="flex flex-wrap md:flex-no-wrap h-screen">
       <!-- Separator -->
       <div
+        class="hidden md:block md:w-2/12"
         @click.self="
           searchManager({
             isActive: !searchData.isActive
           })
         "
-        class="hidden md:block md:w-2/12"
       />
 
       <!-- Search  -->
@@ -21,12 +21,12 @@
       />
 
       <div
+        class="hidden md:block md:w-2/12"
         @click.self="
           searchManager({
             isActive: !searchData.isActive
           })
         "
-        class="hidden md:block md:w-2/12"
       />
       <!--  -->
     </div>
