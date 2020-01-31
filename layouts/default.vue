@@ -7,7 +7,6 @@
       right: () =>
         isDashboard === true ? touchHandler('right') : sideNavManager('open')
     }"
-    class="layout"
   >
     <div class="cool-bar" />
 
