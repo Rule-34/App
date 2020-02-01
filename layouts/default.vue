@@ -125,4 +125,14 @@ export default {
 // Preload logo
 const logo = new Image()
 logo.src = '/icon.png'
+
+// Message to people that open the Devtools
+console.log(
+  '%cWe ❤︎ open source!',
+  'font-size:32px;font-weight:bold;letter-spacing:0.02em;color:hsl(205, 78%, 62%);background-color:white;padding:8px 16px;'
+)
+console.log(
+  '%cContribute: https://github.com/VoidlessSeven7/Rule-34-App\nJoin our discord: https://discord.gg/fUhYHSZ',
+  'background-color:hsl(0, 0%, 7%);padding:4px 8px;font-size:16px;color:white;'
+)
 </script>
