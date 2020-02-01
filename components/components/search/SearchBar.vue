@@ -7,10 +7,10 @@
         <SearchIcon class="icon text-default w-6 h-6 mr-2" />
         <!-- Input -->
         <input
-          v-model="searchQuery"
           class="w-full text-default-text font-light bg-background outline-none ml-1"
           type="search"
           placeholder="Search: e.g. dragon"
+          @input="searchQuery = $event.target.value"
         />
       </div>
 
