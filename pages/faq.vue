@@ -14,7 +14,7 @@
 
     <!-- Not an app -->
     <ContentContainer
-      title="This is not an app!"
+      title="Hey, this is not an app, you lied!"
       text="This is a Progressive Web App, essentially a web page that can be installed on your device."
       icon="info"
     />
