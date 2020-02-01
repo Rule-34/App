@@ -11,7 +11,6 @@
           class="w-full text-default-text font-light bg-background outline-none ml-1"
           type="search"
           placeholder="Search: e.g. dragon"
-          @input="debounceInput"
         />
       </div>
 
@@ -50,8 +49,10 @@ import debounce from 'lodash/debounce'
 
 export default {
   name: 'SearchBar',
+
   // eslint-disable-next-line vue/no-unused-components
   components: { SearchIcon, FilterIcon, TrashIcon, GitlabIcon },
+
   data() {
     return {
       // Content from the search input
@@ -59,10 +60,18 @@ export default {
       ContentMode: { mode: 'reset', icon: 'TrashIcon' }
     }
   },
+
   // Get data() from vuex store "searchData"
   computed: {
-    ...mapState(['searchData', 'generalData'])
+    ...mapState(['searchData'])
   },
+
+  watch: {
+    searchQuery: debounce(function() {
+      this.getTags()
+    }, 300)
+  },
+
   methods: {
     ...mapMutations(['searchManager', 'tagManager']),
     ...mapActions(['searchTag', 'getCorsProxy']),
@@ -96,6 +105,7 @@ export default {
           return true
       }
     },
+
     getTags() {
       if (this.searchQuery.length > 2) {
         this.searchTag(this.searchQuery.trim().toLowerCase())
@@ -106,11 +116,6 @@ export default {
         })
       }
     },
-
-    // Debounce input and then execute function
-    debounceInput: debounce(function() {
-      this.getTags()
-    }, 300),
 
     toggleFilter() {
       this.searchManager({
@@ -136,7 +141,7 @@ export default {
 /* Transition that is gonna be applied */
 .search-enter-active,
 .search-leave-active {
-  transition-property: transform, background;
+  transition-property: transform;
   transition-duration: 0.35s;
   transition-timing-function: ease-in-out;
 }
