@@ -32,7 +32,7 @@
 /* ZOOM SETTING */
 
 .zoom {
-  transition: transform 0.2s;
+  transition: var(--transition--transform);
 }
 
 .zoom:hover {

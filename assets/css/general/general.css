@@ -46,6 +46,8 @@ a:focus,
 
 .material-container {
   @apply bg-elevation border-util rounded-lg overflow-hidden m-5 shadow;
+  /* Override transition with these */
+  transition: var(--transition--transform), var(--transition--border-color);
 }
 
 /* ---------------- Component specific ---------------- */
