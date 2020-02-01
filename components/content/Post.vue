@@ -147,20 +147,22 @@ export default {
 
     // Retries to load the image
     retryToLoadMedia(event) {
-      // console.log(event.target, this.retryCount)
+      console.log(event.target, this.retryCount)
 
       if (this.retryCount <= this.userSettings.imgRetry.value) {
-        // Save current source
-        const imgSrc = event.target.src
+        setTimeout(() => {
+          // Save current source
+          const imgSrc = event.target.src
 
-        // Delete source
-        event.target.src = ''
+          // Delete source
+          event.target.src = ''
 
-        // Set source again to force reload
-        event.target.src = imgSrc
+          // Set source again to force reload
+          event.target.src = imgSrc
 
-        // Add one
-        this.retryCount++
+          // Add one
+          this.retryCount++
+        }, 500 * this.retryCount)
       } else {
         // console.log('Cant load the image')
 
