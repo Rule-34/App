@@ -29,7 +29,7 @@
     <!-- Settings -->
     <ContentContainer
       title='What does "X" setting do?'
-      text='Settings have a hover description, if your device doesnt support hovering, please refer to the "Usage" page.'
+      text="Settings have a hover description, if your device doesn't support hovering, please refer to the Usage page."
       icon="info"
     >
       <nuxt-link to="/usage">Usage information</nuxt-link>
@@ -78,7 +78,7 @@
     <!-- Analytics -->
     <ContentContainer
       title="Analytics"
-      text="Google analytics are used with the settings tweaked to be completeley anonymous, no personal info is gathered.
+      text="Google analytics are used with the settings tweaked to be completely anonymous, no personal info is gathered.
       Check their terms of use on the following link."
       icon="info"
       link="https://marketingplatform.google.com/about/analytics/terms/us/"
