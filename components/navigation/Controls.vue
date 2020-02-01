@@ -10,10 +10,10 @@
     >
       <!-- Get previous page -->
       <a
-        @click="getPrevPage"
         href="#"
         class="w-1/3 button"
         title="Load last page"
+        @click="getPrevPage"
       >
         <button type="button">
           <ArrowLeftIcon class="icon w-4 h-4 inline" />Prev page
@@ -22,20 +22,20 @@
 
       <!-- Get specific page -->
       <a
-        @click="getSpecificPage"
         href="#"
         class="w-1/3"
         title="Load specific page"
+        @click="getSpecificPage"
       >
-        <button v-text="dashBoardData.pid" type="button" />
+        <button type="button" v-text="dashBoardData.pid" />
       </a>
 
       <!-- Get next page -->
       <a
-        @click="getNextPage"
         href="#"
         class="w-1/3 button"
         title="Load next page"
+        @click="getNextPage"
       >
         <button type="button">
           Next page

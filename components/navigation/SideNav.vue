@@ -1,5 +1,5 @@
 <template>
-  <aside class="layout fixed min-h-screen w-full z-10 flex">
+  <aside class="layout fixed min-h-screen w-full z-30 flex">
     <!-- Actual Navigation Bar -->
     <!-- Only show borders on medium screens -->
     <div
