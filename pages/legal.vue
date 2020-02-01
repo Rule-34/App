@@ -84,7 +84,7 @@ export default {
     unlockExperimental() {
       if (this.clicks >= 7) {
         this.clicks = 0
-        console.log('Experimental features enabled!')
+        console.info('Experimental features enabled!')
         this.experimentalManager('enable')
       } else {
         this.clicks++

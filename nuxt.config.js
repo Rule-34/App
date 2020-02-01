@@ -122,7 +122,8 @@ export default {
     terser: {
       terserOptions: {
         compress: {
-          drop_console: true
+          // drop_console: true,
+          pure_funcs: ['console.log']
         }
       }
     },
