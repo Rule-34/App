@@ -1,48 +1,56 @@
 <template>
   <!-- Loop for every info container -->
-  <article :class="{ zoom: userSettings.zoom.value }">
+  <article
+    class="material-container"
+    :class="{ zoom: userSettings.zoom.value }"
+  >
     <!-- If separator -->
     <template v-if="separator">
-      <div class="material-container p-3 bg-gradient-blue-lilac">
+      <div class="p-3 bg-gradient-blue-lilac">
         <div class="text-center text-default-text">
           <!-- Head -->
-          <div :class="{ 'mb-1': text }">
-            <h1
-              :class="{ underline: titleUnderline }"
-              class="text-lg font-bold tracking-wide"
-              v-text="title"
-            />
-          </div>
-
+          <h1
+            :class="{ underline: titleUnderline }"
+            class="text-lg font-bold tracking-wide"
+            v-text="title"
+          />
           <!-- Body -->
-          <div v-if="text">
-            <p class="mb-1" v-text="text"></p>
-            <!-- Slot for extra info -->
-          </div>
+          <p v-if="text" class="mb-1" v-text="text" />
         </div>
       </div>
     </template>
 
     <!-- If normal post -->
     <template v-else>
-      <div :class="{ 'text-center': separator }" class="material-container p-3">
+      <div class="p-3 flex">
         <!-- Head -->
-        <div class="flex inline-flex align-middle">
-          <InfoIcon v-if="icon === 'info'" class="mr-2 text-blue-500" />
-          <StarIcon v-else-if="icon === 'star'" class="mr-2 text-yellow-500" />
-          <DollarSignIcon
-            v-else-if="icon === 'donation'"
-            class="mr-2 text-green-500"
-          />
+        <div class="my-auto mr-3">
+          <!-- Icons -->
+          <div>
+            <InfoIcon
+              v-if="icon === 'info'"
+              class="icon text-blue-500 w-8 h-8"
+            />
+            <StarIcon
+              v-else-if="icon === 'star'"
+              class="icon text-yellow-500 w-8 h-8"
+            />
+            <DollarSignIcon
+              v-else-if="icon === 'donation'"
+              class="icon text-green-500 w-8 h-8"
+            />
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="text-sm text-default-text">
           <!-- Title -->
           <h1
             class="text-default-text text-lg font-bold tracking-wide"
             v-text="title"
           />
-        </div>
 
-        <!-- Body -->
-        <div class="text-sm text-default-text">
+          <!-- Text -->
           <p v-if="text" class="mb-1 whitespace-pre-line" v-text="text" />
 
           <slot name="textRich" class="mb-1" />
