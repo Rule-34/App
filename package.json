@@ -14,7 +14,7 @@
     "webp": "for i in static/img/examples/*.png; do cwebp -q 80 ${i%%.*}.png -o ${i%%.*}.webp; done"
   },
   "dependencies": {
-    "@nuxtjs/pwa": "^3.0.0-beta.19",
+    "@nuxtjs/pwa": "^3.0.0-beta.20",
     "@nuxtjs/sitemap": "^2.0.1",
     "lodash": "^4.17.15",
     "nuxt": "^2.11.0",
