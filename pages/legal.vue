@@ -13,13 +13,13 @@
           <a href="https://github.com/VoidlessSeven7/Rule-34-App"
             >leave an issue</a
           >
-          with proof that you're the owner of x site and a message regarding the
-          cease to actions.
+          with proof that you're the owner of that site and a message regarding
+          the cease to actions.
           <!-- Space -->
           <br />
-          Keep in mind that all
-          <u>the content we get is from public released APIs</u> from the site
-          itself.
+          <br />
+          Keep in mind that all the content we get is from public released APIs
+          from the site itself.
         </p>
       </template>
     </ContentContainer>
