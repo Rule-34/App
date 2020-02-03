@@ -4,7 +4,7 @@
     <ContentContainer :separator="true" title="Disclaimer" />
 
     <!-- Remove media -->
-    <ContentContainer title="Media content" icon="info">
+    <ContentContainer title="Media content" icon="bg-svg-info">
       <!-- Slot -->
       <template slot="textRich">
         <p>
@@ -31,7 +31,7 @@
     <ContentContainer
       title="Online copy"
       text="You can find an online copy of the Terms Of Service (TOS) in the next link."
-      icon="info"
+      icon="bg-svg-info"
       link="https://www.gdprprivacynotice.com/live.php?token=EKbuSBbWgcHAwQ6QyCTgpv01fU8HGE5l"
       link-text="Terms of service"
     />
@@ -41,7 +41,7 @@
       title="Analytics"
       text="Google analytics are used with the settings tweaked to be completely anonymous, no personal info is gathered.
       Check their terms on the following link."
-      icon="info"
+      icon="bg-svg-info"
       link="https://marketingplatform.google.com/about/analytics/terms/us/"
       link-text="Google Analytics TOS"
     />
@@ -50,7 +50,7 @@
     <ContentContainer
       title="Contact"
       text="Please reach me in the following email for suggestions, requests, questions, comments, or any concerns."
-      icon="info"
+      icon="bg-svg-info"
       link="mailto:contact@r34.app"
       link-text="contact@r34.app"
     />
@@ -58,9 +58,12 @@
     <ContentContainer
       title="Thank you for your interest"
       text="It's a pleasure having someone read this wall of text :')"
-      icon="star"
+      icon="bg-svg-star"
       @click.native="unlockExperimental()"
     />
+
+    <!-- Temporal div TODO: remove -->
+    <div style="height:50vh;" />
   </main>
 </template>
 
