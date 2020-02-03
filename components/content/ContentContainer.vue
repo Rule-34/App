@@ -34,7 +34,7 @@
         <p v-if="text" class="text-sm mb-1 whitespace-pre-line" v-text="text" />
 
         <!-- We can insert extra info here -->
-        <slot name="textRich" class="mb-1" />
+        <slot class="mb-1" />
 
         <!-- Image -->
         <picture v-if="img">
@@ -54,10 +54,11 @@
           :href="link"
           target="_blank"
           rel="noopener noreferrer"
+          class="text-sm"
           v-text="linkText"
         />
         <!-- Slot for extra info -->
-        <slot />
+        <slot name="extra" />
       </div>
     </template>
   </article>

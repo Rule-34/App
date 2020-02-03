@@ -4,25 +4,15 @@
     <ContentContainer :separator="true" title="Disclaimer" />
 
     <!-- Remove media -->
-    <ContentContainer title="Media content" icon="bg-svg-info">
-      <!-- Slot -->
-      <template slot="textRich">
-        <p>
-          If you're the owner of a site where we get the media content and would
-          like to cease this actions, please
-          <a href="https://github.com/VoidlessSeven7/Rule-34-App"
-            >leave an issue</a
-          >
-          with proof that you're the owner of that site and a message regarding
-          the cease to actions.
-          <!-- Space -->
-          <br />
-          <br />
-          Keep in mind that all the content we get is from public released APIs
-          from the site itself.
-        </p>
-      </template>
-    </ContentContainer>
+    <ContentContainer
+      title="Media content disclaimer"
+      text="If you're the owner of a site where we get the media content and would like to cease this actions, please contact us or leave a GitHub issue with proof that you're the owner of that site and a message regarding the cease to actions.
+          
+      Keep in mind that all the content we get is from public released APIs from the site itself."
+      icon="bg-svg-info"
+      link="https://github.com/VoidlessSeven7/Rule-34-App"
+      link-text="Github repository"
+    />
 
     <!-- Separator -->
     <ContentContainer :separator="true" title="Privacy policy" />

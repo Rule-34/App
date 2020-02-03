@@ -8,7 +8,7 @@
     />
 
     <ContentContainer title="Touch navigation">
-      <template slot="textRich">
+      <template slot="extra">
         On devices with touch support, swiping <u>right</u> will open the menu,
         and swiping <u>left</u> will open the search.
       </template>
@@ -93,12 +93,11 @@
       :text="userSettings.performance.description"
     />
 
-    <ContentContainer title="NSFW" img="/img/examples/nsfw">
-      <!-- Slot -->
-      <template slot="textRich">
-        While <u>not active</u>, posts will be blurred.
-      </template>
-    </ContentContainer>
+    <ContentContainer
+      title="NSFW"
+      text="While not active, posts will be blurred."
+      img="/img/examples/nsfw"
+    />
   </main>
 </template>
 

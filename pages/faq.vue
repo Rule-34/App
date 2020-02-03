@@ -32,7 +32,7 @@
       text="Settings have a hover description, if your device doesn't support hovering, please refer to the Usage page."
       icon="bg-svg-info"
     >
-      <nuxt-link to="/usage">Usage information</nuxt-link>
+      <nuxt-link to="/usage" class="text-sm">Usage information</nuxt-link>
     </ContentContainer>
 
     <!-- Technical separator -->
@@ -58,10 +58,10 @@
       icon="bg-svg-info"
     >
       <!-- Slot -->
-      <small class="text-default-text-muted">Voidless#0521</small>
+      <p class="text-default-text-muted text-xs">Voidless#0521</p>
     </ContentContainer>
 
-    <!-- Github -->
+    <!-- text-sm Github -->
     <ContentContainer
       title="I found a bug/error!"
       text="You can report it on the GitHub repository, or directly to me on our Discord."
@@ -70,8 +70,9 @@
       link-text="Github"
     >
       <!-- Workaround for having two links -->
-      <template slot="textRich">
-        <a href="https://discord.gg/fUhYHSZ">Discord</a> |
+      <template slot="extra">
+        |
+        <a class="text-sm" href="https://discord.gg/fUhYHSZ">Discord</a>
       </template>
     </ContentContainer>
 
@@ -96,12 +97,13 @@
       title="Can I donate for your efforts?"
       text="Of course you can, I've been working really hard on this project, if you feel like contributing to the development please do."
       icon="bg-svg-dollar"
-      link="https://www.paypal.me/Alejandrorr7"
-      link-text="Paypal"
+      link="https://patreon.com/VoidlessSeven7"
+      link-text="Patreon"
     >
       <!-- Workaround for having two links -->
-      <template slot="textRich">
-        <a href="https://patreon.com/VoidlessSeven7">Patreon</a> |
+      <template>
+        <a class="text-sm" href="https://www.paypal.me/Alejandrorr7">Paypal</a>
+        |
       </template>
     </ContentContainer>
 
@@ -112,10 +114,10 @@
       icon="bg-svg-star"
     >
       <!-- Slot -->
-      <small class="text-default-text-muted">And you, the user!</small>
+      <p class="text-default-text-muted text-xs">And you, the user!</p>
     </ContentContainer>
 
-    <!-- Temporal div TODO: remove -->
+    <!-- text-sm Temporal div TODO: remove -->
     <div style="height:50vh;" />
   </main>
 </template>
