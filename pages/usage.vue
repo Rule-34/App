@@ -94,8 +94,8 @@
     />
 
     <ContentContainer
-      :title="userSettings.performance.name"
-      :text="userSettings.performance.description"
+      :title="userSettings.disableAnimations.name"
+      :text="userSettings.disableAnimations.description"
     />
 
     <ContentContainer

@@ -138,7 +138,7 @@ export default {
     },
 
     addAnimation(event) {
-      if (this.userSettings.performance.value) {
+      if (this.userSettings.disableAnimations.value) {
         // console.log('No animation for you', event)
       } else {
         event.target.classList.toggle('post--active')

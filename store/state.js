@@ -117,8 +117,8 @@ export default () => ({
       defaultValue: 3
     },
 
-    performance: {
-      name: 'Performance mode',
+    disableAnimations: {
+      name: 'Disable animations',
       description:
         'If active, animations and other resource-heavy resources will be removed.',
       value: false,
