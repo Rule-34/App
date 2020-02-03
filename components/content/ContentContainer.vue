@@ -26,20 +26,50 @@
         <!-- Head -->
         <div class="my-auto mr-3">
           <!-- Icons -->
-          <div>
-            <InfoIcon
-              v-if="icon === 'info'"
-              class="icon text-blue-500 w-8 h-8"
+          <svg
+            v-if="icon === 'info'"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="icon text-blue-500 w-8 h-8"
+            viewBox="0 0 24 24"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 16v-4M12 8h0" />
+          </svg>
+
+          <svg
+            v-else-if="icon === 'star'"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="icon text-yellow-500 w-8 h-8"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
             />
-            <StarIcon
-              v-else-if="icon === 'star'"
-              class="icon text-yellow-500 w-8 h-8"
-            />
-            <DollarSignIcon
-              v-else-if="icon === 'donation'"
-              class="icon text-green-500 w-8 h-8"
-            />
-          </div>
+          </svg>
+
+          <svg
+            v-else-if="icon === 'donation'"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="icon text-green-500 w-8 h-8 feather feather-dollar-sign"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+          </svg>
         </div>
 
         <!-- Body -->
@@ -86,12 +116,9 @@
 
 <script>
 import { mapState } from 'vuex'
-import { InfoIcon, StarIcon, DollarSignIcon } from 'vue-feather-icons'
 
 export default {
   name: 'ContentContainer',
-
-  components: { InfoIcon, StarIcon, DollarSignIcon },
 
   props: {
     // For separating text
