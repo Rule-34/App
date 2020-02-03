@@ -2,9 +2,6 @@
 
 App to enjoy all Rule 34 sites combined in a mobile-friendly experience
 
-![Dashboard Preview](.github/images/dashboard.png)
-![Settings Preview](.github/images/settings.png)
-
 ## Visit it
 
 **You can use it online on the next links, both run the same code from this repository**
@@ -19,13 +16,14 @@ Or backup
 
 [https://backup.r34.app/](https://backup.r34.app/)
 
-Which really is just a CNAME of
-
-[https://rule34-app.netlify.com/](https://rule34-pwa.netlify.com/)
-
 > Powered by Netlify
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/703629e2-193f-4bb0-9349-f02a22d50ed1/deploy-status)](https://app.netlify.com/sites/rule34-pwa/deploys)
+
+## Preview
+
+![Dashboard Preview](.github/images/dashboard.png)
+![Settings Preview](.github/images/settings.png)
 
 ## Social
 
