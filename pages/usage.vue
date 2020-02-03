@@ -79,13 +79,18 @@
     />
 
     <ContentContainer
-      :title="userSettings.imgRetry.name"
-      :text="userSettings.imgRetry.description"
+      :title="userSettings.postsPerPage.name"
+      :text="userSettings.postsPerPage.description"
     />
 
     <ContentContainer
       :title="userSettings.score.name"
       :text="userSettings.score.description"
+    />
+
+    <ContentContainer
+      :title="userSettings.imgRetry.name"
+      :text="userSettings.imgRetry.description"
     />
 
     <ContentContainer
