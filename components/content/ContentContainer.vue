@@ -22,15 +22,16 @@
 
     <!-- If normal post -->
     <template v-else>
-      <div class="p-3 text-sm text-default-text relative">
+      <!-- Sets icon bg if icon is defined -->
+      <div
+        class="p-3 text-default-text"
+        :class="{ [icon]: icon, 'bg-svg': icon }"
+      >
         <!-- Title -->
-        <h1
-          class="text-default-text text-lg font-bold tracking-wide"
-          v-text="title"
-        />
+        <h1 class="text-lg font-bold tracking-wide" v-text="title" />
 
         <!-- Text -->
-        <p v-if="text" class="mb-1 whitespace-pre-line" v-text="text" />
+        <p v-if="text" class="text-sm mb-1 whitespace-pre-line" v-text="text" />
 
         <!-- We can insert extra info here -->
         <slot name="textRich" class="mb-1" />
