@@ -26,7 +26,6 @@ export default () => ({
     // apiUrl: 'http://localhost:8000/',
     apiUrl: 'https://r34-app-original-api.herokuapp.com/',
     corsProxyUrl: 'https://cors-proxy.rule34app.workers.dev/',
-    postLimit: 20,
     errors: null
   },
 
@@ -96,12 +95,11 @@ export default () => ({
       defaultValue: false
     },
 
-    imgRetry: {
-      name: 'Image retry',
-      description:
-        'Number of times that an image will be attempted to be loaded if it fails.',
-      value: 3,
-      defaultValue: 3
+    postsPerPage: {
+      name: 'Posts per page',
+      description: 'Number of posts to load per page.',
+      value: 20,
+      defaultValue: 20
     },
 
     score: {
@@ -109,6 +107,14 @@ export default () => ({
       description: 'Sets the required score for a post to show.',
       value: 0,
       defaultValue: 0
+    },
+
+    imgRetry: {
+      name: 'Image retry',
+      description:
+        'Number of times that an image will be attempted to be loaded if it fails.',
+      value: 3,
+      defaultValue: 3
     },
 
     performance: {

@@ -73,7 +73,7 @@ export default {
       'posts?pid=' +
       state.dashBoardData.pid +
       '&limit=' +
-      state.generalData.postLimit +
+      state.userSettings.postsPerPage.value +
       '&tags=' +
       state.searchData.tags.join('+') +
       '&score=' +
@@ -110,7 +110,8 @@ export default {
    * @param {String} tag Tag to search for in the API
    */
   async searchTag({ dispatch, state }, tag) {
-    const url = 'tags?tag=' + tag + '&limit=' + state.generalData.postLimit
+    const url =
+      'tags?tag=' + tag + '&limit=' + state.userSettings.postsPerPage.value
 
     // Craft url and GET it through fetch action
     await dispatch('getApi', {
