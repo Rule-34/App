@@ -44,6 +44,7 @@ export default {
   data() {
     return {
       options: [
+        { name: 'e621.net', value: 'e621' },
         { name: 'rule34.xxx', value: 'xxx' },
         { name: 'rule34.paheal.net', value: 'paheal' },
         { name: 'danbooru.donmai.us', value: 'danbooru' }
@@ -79,6 +80,7 @@ export default {
 
       // Reset PID so we dont start with specific PID on new domain, depending of the domain it starts at 0 or at 1
       switch (newApi) {
+        case 'e621':
         case 'loli':
         case 'danbooru':
           this.pidManager({ operation: 'specific', value: 1 })
