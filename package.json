@@ -19,7 +19,7 @@
     "lodash": "^4.17.15",
     "nuxt": "^2.11.0",
     "vue-feather-icons": "^5.0.0",
-    "vuex-persistedstate": "^2.7.0"
+    "vuex-persistedstate": "^2.7.1"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^2.0.0",
