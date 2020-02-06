@@ -93,7 +93,7 @@ export default {
    * @param {String} mode Add or Concat
    */
   async getSinglePost({ dispatch }, parameters) {
-    const url = 'posts?id=' + parameters.id
+    const url = 'single-post?id=' + parameters.id
 
     // Craft url and GET it through fetch action
     await dispatch('getApi', {
