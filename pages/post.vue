@@ -1,6 +1,5 @@
 <template>
   <div>
-    
     <!-- If theres errors -->
     <Errors :is-single-post="true" />
 
@@ -66,8 +65,10 @@ export default {
   async mounted() {
     // Check if domain is supported
     switch (this.domain) {
+      case 'danbooru':
       case 'paheal':
       case 'xxx':
+      case 'e621':
         // Use query domain
         await this.domainManager(this.domain)
 
