@@ -6,11 +6,8 @@
   "private": true,
   "scripts": {
     "dev": "nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
     "generate": "nuxt generate --modern",
     "analyze": "nuxt build --analyze",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "webp": "for i in static/img/examples/*.png; do cwebp -q 80 ${i%%.*}.png -o ${i%%.*}.webp; done"
   },
   "dependencies": {
