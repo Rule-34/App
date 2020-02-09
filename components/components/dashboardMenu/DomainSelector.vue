@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="inline-flex w-fit-content relative material-container m-0 rounded-full"
-  >
+  <div class="flex relative material-container m-0 rounded-full">
     <!-- Cloud icon -->
     <div for="domain-selector" class="inline-flex items-center pl-2 pr-1">
       <CloudIcon class="icon text-primary w-4 h-4" />
