@@ -89,3 +89,54 @@ export default {
   computed: mapState(['userSettings'])
 }
 </script>
+
+<style>
+/* Center positioned */
+.bg-svg {
+  background-repeat: no-repeat;
+  background-size: 35%;
+  background-attachment: fixed;
+  background-position: center center;
+}
+
+/* Right positioned */
+.bg-svg-right {
+  background-position: top 20vh right 5vw;
+}
+
+@screen md {
+  .bg-svg {
+    background-size: 25%;
+    /* The percentage is made based on the md screen padding of the layout (md:w-1/3) which is 66.6% plus the percentage of the base background position */
+
+    /* Now its a completely arbitrary digit since I dont understand how background-position wants to work  */
+  }
+
+  .bg-svg-right {
+    background-position: top 20vh right 20vw;
+  }
+}
+
+@screen xl {
+  .bg-svg {
+    background-size: 15%;
+  }
+
+  .bg-svg-right {
+    background-position: top 20vh right 28vw;
+  }
+}
+
+/* Types of icons */
+.bg-svg-info {
+  background-image: url('~assets/img/info.svg');
+}
+
+.bg-svg-star {
+  background-image: url('~assets/img/star.svg');
+}
+
+.bg-svg-dollar {
+  background-image: url('~assets/img/dollar.svg');
+}
+</style>

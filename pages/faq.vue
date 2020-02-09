@@ -10,6 +10,7 @@
       title="What is this?"
       text="This is an App to enjoy all Rule 34 sites combined in a mobile-friendly experience."
       icon="bg-svg-info"
+      icon-position="bg-svg-right"
     />
 
     <!-- Not an app -->
@@ -17,6 +18,7 @@
       title="Hey, this is not an app, you lied!"
       text="This is a Progressive Web App, essentially a web page that can be installed on your device."
       icon="bg-svg-info"
+      icon-position="bg-svg-right"
     />
 
     <!-- Image removal -->
@@ -24,6 +26,7 @@
       title="Can you remove an Image?"
       text="Nope, all content is directly served from the corresponding Rule 34 site, you should contact that site."
       icon="bg-svg-info"
+      icon-position="bg-svg-right"
     />
 
     <!-- Settings -->
@@ -31,6 +34,7 @@
       title='What does "X" setting do?'
       text="Settings have a hover description, if your device doesn't support hovering, please refer to the Usage page."
       icon="bg-svg-info"
+      icon-position="bg-svg-right"
     >
       <nuxt-link to="/usage" class="text-sm">Usage information</nuxt-link>
     </ContentContainer>
@@ -47,6 +51,7 @@
       title="Is there any new feature planned?"
       text="Im glad you asked, the development is going quite steady, check our Roadmap."
       icon="bg-svg-info"
+      icon-position="bg-svg-right"
       link="https://github.com/users/VoidlessSeven7/projects/1"
       link-text="Roadmap"
     />
@@ -56,6 +61,7 @@
       title="Can I help in any way?"
       text="Of course, we're always in need of support, specially (artists and programmers), contact me on Discord if you want to help."
       icon="bg-svg-info"
+      icon-position="bg-svg-right"
     >
       <!-- Slot -->
       <p class="text-default-text-muted text-xs">Voidless#0521</p>
@@ -66,6 +72,7 @@
       title="I found a bug/error!"
       text="You can report it on the GitHub repository, or directly to me on our Discord."
       icon="bg-svg-info"
+      icon-position="bg-svg-right"
       link="https://github.com/VoidlessSeven7/Rule-34-App"
       link-text="Github"
     >
@@ -82,6 +89,7 @@
       text="Google analytics are used with the settings tweaked to be completely anonymous, no personal info is gathered.
       Check their terms of use on the following link."
       icon="bg-svg-info"
+      icon-position="bg-svg-right"
       link="https://marketingplatform.google.com/about/analytics/terms/us/"
       link-text="Google Analytics TOS"
     />
@@ -97,6 +105,7 @@
       title="Can I donate for your efforts?"
       text="Of course you can, I've been working really hard on this project, if you feel like contributing to the development please do."
       icon="bg-svg-dollar"
+      icon-position="bg-svg-right"
       link="https://patreon.com/VoidlessSeven7"
       link-text="Patreon"
     >
@@ -112,6 +121,7 @@
       title="Credits"
       text="Thanks to Jessica for drawing the logo, and me for developing the PWA."
       icon="bg-svg-star"
+      icon-position="bg-svg-right"
     >
       <!-- Slot -->
       <p class="text-default-text-muted text-xs">And you, the user!</p>
@@ -142,41 +152,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.bg-svg {
-  background-repeat: no-repeat;
-  background-size: 35%;
-  background-attachment: fixed;
-  background-position: center right 5vw;
-}
-
-@screen md {
-  .bg-svg {
-    background-size: 25%;
-    background-position: center right 20vw;
-    /* The percentage is made based on the md screen padding of the layout (md:w-1/3) which is 66.6% plus the percentage of the base background position */
-
-    /* Now its a completely arbitrary digit since I dont understand how background-position wants to work  */
-  }
-}
-
-@screen xl {
-  .bg-svg {
-    background-size: 15%;
-    background-position: center right 28vw;
-  }
-}
-
-.bg-svg-info {
-  background-image: url('~assets/img/info.svg');
-}
-
-.bg-svg-star {
-  background-image: url('~assets/img/star.svg');
-}
-
-.bg-svg-dollar {
-  background-image: url('~assets/img/dollar.svg');
-}
-</style>
