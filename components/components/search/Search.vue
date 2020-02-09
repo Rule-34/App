@@ -1,5 +1,5 @@
 <template>
-  <div class="layout fixed min-h-screen w-full z-40 bg-black-25">
+  <div class="fixed min-h-screen w-full z-40 bg-black-25">
     <!-- Centered container -->
     <div class="flex flex-wrap md:flex-no-wrap h-screen">
       <!-- Separator -->

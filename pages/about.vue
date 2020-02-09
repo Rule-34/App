@@ -1,5 +1,5 @@
 <template>
-  <main class="flex h-perfect p-3">
+  <main class="flex h-screen p-3">
     <a
       :class="{ zoom: userSettings.zoom.value }"
       href="https://akbal.dev/"

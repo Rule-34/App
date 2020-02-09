@@ -8,8 +8,6 @@
         isDashboard === true ? touchHandler('right') : sideNavManager('open')
     }"
   >
-    <div class="cool-bar" />
-
     <NavToggler :show-search="isDashboard ? true : false" />
 
     <!-- Transition for sidenav -->

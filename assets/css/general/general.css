@@ -52,16 +52,6 @@ a:focus,
 }
 
 /* ---------------- Component specific ---------------- */
-/* TODO: fix this */
-/* Hardcoded margin-top for the entire layout cause some CSS makes it not take over the cool bar (maybe the cool bar itself) */
-.layout {
-  margin-top: -10px;
-}
-
-.cool-bar {
-  height: 10px;
-  @apply .w-full .block .bg-gradient-lilac-blue;
-}
 
 .stroke-width-1 {
   stroke-width: 1.5;
@@ -70,10 +60,6 @@ a:focus,
 .icon {
   /* Align middle is necessary for some reason for mobile devices */
   @apply text-default stroke-width-1 align-middle;
-}
-
-.h-perfect {
-  height: calc(100vh - 10px);
 }
 
 .tag-container {
