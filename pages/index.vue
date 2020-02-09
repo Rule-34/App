@@ -6,7 +6,7 @@
       <DomainSelector class="my-auto" />
 
       <!-- Notifications -->
-      <!-- <Notifications /> -->
+      <Notifications />
     </div>
 
     <!-- If theres request got errors -->
@@ -41,7 +41,8 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 import { Intersect } from 'vuetify/lib/directives/intersect'
 import throttle from 'lodash/throttle'
 // Components
-import DomainSelector from '~/components/components/dashboardMenu/DomainSelector.vue' // import Notifications from '~/components/components/dashboardMenu/DomainSelector'
+import DomainSelector from '~/components/components/dashboardMenu/DomainSelector.vue'
+import Notifications from '~/components/components/dashboardMenu/Notifications.vue'
 import Post from '~/components/content/Post.vue'
 import Controls from '~/components/navigation/Controls.vue'
 import Errors from '~/components/general/Errors.vue'
@@ -50,6 +51,7 @@ export default {
   components: {
     Errors,
     DomainSelector,
+    Notifications,
     Post,
     Controls
   },
