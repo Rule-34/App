@@ -16,7 +16,7 @@
         :src="imageSource()"
         :loading="userSettings.lazyLoading.value ? 'lazy' : 'auto'"
         :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-        alt="image"
+        :alt="'Image ' + post.id"
         class="post"
         @click="toggleTags()"
         @load="addAnimation($event)"
@@ -30,11 +30,11 @@
       <video
         :controls="userSettings.videoControls.value"
         :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
-        alt="video"
+        :alt="'Video ' + post.id"
         class="w-full"
         muted
         loop
-        @click="toggleTags"
+        @click="toggleTags()"
       >
         <source :src="post.high_res_file" @error="retryToLoadMedia($event)" />
         Your browser doesnt support HTML5 video.
