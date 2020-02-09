@@ -74,24 +74,21 @@
       </div>
 
       <!-- Source -->
-      <div v-if="post.source" class="w-full m-auto p-1">
+      <div v-if="post.source" class="w-full text-center p-1">
         <!-- If text is an Url then make it linkable -->
-        <template v-if="isUrl()">
-          <a
-            :href="post.source"
-            class="inline-flex"
-            rel="noreferrer noopener nofollow"
-            target="_blank"
-          >
-            <p class="color-util m-auto" v-text="'Source'" />
-            <ExternalLinkIcon class="icon text-default w-5 h-5 ml-2" />
-          </a>
-        </template>
+        <a
+          v-if="isUrl()"
+          :href="post.source"
+          class="inline-flex"
+          rel="noreferrer noopener nofollow"
+          target="_blank"
+        >
+          <p class="color-util" v-text="'Source'" />
+          <ExternalLinkIcon class="icon text-default w-5 h-5 ml-2" />
+        </a>
 
         <!-- If the text is not a url then just show the text -->
-        <template v-else>
-          <p title="Source" v-text="post.source" />
-        </template>
+        <p v-else title="Source" v-text="post.source" />
       </div>
     </figcaption>
   </figure>
