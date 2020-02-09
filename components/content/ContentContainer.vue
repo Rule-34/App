@@ -24,8 +24,8 @@
     <template v-else>
       <!-- Sets icon bg if icon is defined -->
       <div
-        class="p-3 text-default-text bg-svg"
-        :class="{ [icon]: icon, [iconPosition]: iconPosition }"
+        class="p-3 text-default-text"
+        :class="{ 'bg-svg': icon, [icon]: icon, [iconPosition]: icon }"
       >
         <!-- Title -->
         <h1 class="text-lg font-bold tracking-wide" v-text="title" />
@@ -82,7 +82,7 @@ export default {
     linkText: { type: String, required: false, default: undefined },
     // For icons
     icon: { type: String, required: false, default: undefined },
-    iconPosition: { type: String, required: false, default: undefined },
+    iconPosition: { type: String, required: false, default: 'bg-svg-right' },
     // For images
     img: { type: String, required: false, default: undefined }
   },
@@ -97,7 +97,11 @@ export default {
   background-repeat: no-repeat;
   background-size: 35%;
   background-attachment: fixed;
-  background-position: center center;
+}
+
+/* Right positioned */
+.bg-svg-center {
+  background-position: center;
 }
 
 /* Right positioned */
