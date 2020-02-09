@@ -39,6 +39,7 @@
       <div v-if="isActive" class="notifications--details">
         <!-- Donations needed -->
         <ContentContainer
+          class="m-1"
           title="Donations needed"
           text="We have been reaching our daily image limit for some days now, when that happens all images stop loading and so does the App.
 
@@ -47,14 +48,23 @@
           More information on Discord."
           icon="bg-svg-dollar"
           icon-position="bg-svg-right"
-          link="https://discord.gg/fUhYHSZ"
-          link-text="Discord"
+          link="https://www.patreon.com/VoidlessSeven7"
+          link-text="Patreon"
+        />
+
+        <!-- Social  -->
+        <ContentContainer
+          class="m-1"
+          title="Social"
+          text="Did you know that we have both Discord and Twitter?"
+          icon="bg-svg-dollar"
+          icon-position="bg-svg-right"
+          link="https://twitter.com/Rule34App"
+          link-text="Twitter"
         >
           <!-- Workaround for having two links -->
           <template>
-            <a class="text-sm" href="https://www.patreon.com/VoidlessSeven7"
-              >Patreon</a
-            >
+            <a class="text-sm" href="https://discord.gg/fUhYHSZ">Discord</a>
             |
           </template>
         </ContentContainer>
@@ -89,7 +99,7 @@ export default {
   /* Width */
   min-width: 80vw;
 
-  @apply absolute z-10 border-0 rounded-lg bg-depth;
+  @apply absolute z-10 overflow-hidden;
 }
 
 @screen md {
