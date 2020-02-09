@@ -10,7 +10,6 @@
       title="What is this?"
       text="This is an App to enjoy all Rule 34 sites combined in a mobile-friendly experience."
       icon="bg-svg-info"
-      icon-position="bg-svg-right"
     />
 
     <!-- Not an app -->
@@ -18,7 +17,6 @@
       title="Hey, this is not an App, you lied!"
       text="This is a Progressive Web App, essentially a web page that can be installed on your device."
       icon="bg-svg-info"
-      icon-position="bg-svg-right"
     />
 
     <!-- Not an app -->
@@ -26,7 +24,6 @@
       title="How can I install this App?"
       text="Follow the instructions from the link below."
       icon="bg-svg-info"
-      icon-position="bg-svg-right"
       link="https://medium.com/progressivewebapps/how-to-install-a-pwa-to-your-device-68a8d37fadc1"
       link-text="Instructions"
     />
@@ -36,7 +33,6 @@
       title="Can you remove an Image?"
       text="Nope, all content is directly served from the corresponding Rule 34 site, you should contact that site."
       icon="bg-svg-info"
-      icon-position="bg-svg-right"
     />
 
     <!-- Settings -->
@@ -44,7 +40,6 @@
       title='What does "X" setting do?'
       text="Settings have a hover description, if your device doesn't support hovering, please refer to the Usage page."
       icon="bg-svg-info"
-      icon-position="bg-svg-right"
     >
       <nuxt-link to="/usage" class="text-sm">Usage information</nuxt-link>
     </ContentContainer>
@@ -61,7 +56,6 @@
       title="Is there any new feature planned?"
       text="Im glad you asked, the development is going quite steady, check our Roadmap."
       icon="bg-svg-info"
-      icon-position="bg-svg-right"
       link="https://github.com/users/VoidlessSeven7/projects/1"
       link-text="Roadmap"
     />
@@ -71,7 +65,6 @@
       title="Can I help in any way?"
       text="Of course, we're always in need of support, specially (artists and programmers), contact me on Discord if you want to help."
       icon="bg-svg-info"
-      icon-position="bg-svg-right"
     >
       <!-- Slot -->
       <p class="text-default-text-muted text-xs">Voidless#0521</p>
@@ -82,7 +75,6 @@
       title="I found a bug/error!"
       text="You can report it on the GitHub repository, or directly to me on our Discord."
       icon="bg-svg-info"
-      icon-position="bg-svg-right"
       link="https://github.com/VoidlessSeven7/Rule-34-App"
       link-text="Github"
     >
@@ -99,7 +91,6 @@
       text="Google analytics are used with the settings tweaked to be completely anonymous, no personal info is gathered.
       Check their terms of use on the following link."
       icon="bg-svg-info"
-      icon-position="bg-svg-right"
       link="https://marketingplatform.google.com/about/analytics/terms/us/"
       link-text="Google Analytics TOS"
     />
@@ -115,7 +106,6 @@
       title="Can I donate for your efforts?"
       text="Of course you can, I've been working really hard on this project, if you feel like contributing to the development please do."
       icon="bg-svg-dollar"
-      icon-position="bg-svg-right"
       link="https://patreon.com/VoidlessSeven7"
       link-text="Patreon"
     >
@@ -131,7 +121,6 @@
       title="Credits"
       text="Thanks to Jessica for drawing the logo, and me for developing the PWA."
       icon="bg-svg-star"
-      icon-position="bg-svg-right"
     >
       <!-- Slot -->
       <p class="text-default-text-muted text-xs">And you, the user!</p>

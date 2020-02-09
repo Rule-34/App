@@ -47,7 +47,6 @@
           
           More information on Discord."
           icon="bg-svg-dollar"
-          icon-position="bg-svg-right"
           link="https://www.patreon.com/VoidlessSeven7"
           link-text="Patreon"
         />
@@ -58,7 +57,6 @@
           title="Social"
           text="Did you know that we have both Discord and Twitter?"
           icon="bg-svg-dollar"
-          icon-position="bg-svg-right"
           link="https://twitter.com/Rule34App"
           link-text="Twitter"
         >
