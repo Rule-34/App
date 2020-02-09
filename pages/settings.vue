@@ -1,5 +1,5 @@
 <template>
-  <main class="flex flex-col h-perfect p-3">
+  <main class="flex flex-col h-screen p-3">
     <div
       class="material-container w-full md:w-2/3 xl:w-1/2 m-auto p-5 shadow-xl"
     >
