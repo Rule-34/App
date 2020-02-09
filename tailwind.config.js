@@ -12,8 +12,8 @@ module.exports = {
         primary: 'var(--color-primary)',
         'primary-hover': 'var(--color-primary-hover)',
 
-        accent: 'var(--color-accent)',
-        'accent-hover': 'var(--color-accent-hover)',
+        // accent: 'var(--color-accent)',
+        // 'accent-hover': 'var(--color-accent-hover)',
 
         default: 'var(--color-default)',
         'default-text': 'var(--color-default-text)',
