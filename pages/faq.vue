@@ -15,10 +15,20 @@
 
     <!-- Not an app -->
     <ContentContainer
-      title="Hey, this is not an app, you lied!"
+      title="Hey, this is not an App, you lied!"
       text="This is a Progressive Web App, essentially a web page that can be installed on your device."
       icon="bg-svg-info"
       icon-position="bg-svg-right"
+    />
+
+    <!-- Not an app -->
+    <ContentContainer
+      title="How can I install this App?"
+      text="Follow the instructions from the link below."
+      icon="bg-svg-info"
+      icon-position="bg-svg-right"
+      link="https://medium.com/progressivewebapps/how-to-install-a-pwa-to-your-device-68a8d37fadc1"
+      link-text="Instructions"
     />
 
     <!-- Image removal -->
