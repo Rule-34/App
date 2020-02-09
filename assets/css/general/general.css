@@ -3,6 +3,7 @@
   --transition--border-color: border-color 0.35s;
   --transition--color: color 0.35s;
   --transition--transform: transform 0.35s;
+  --transition--opacity: opacity 0.35s;
 }
 
 /* html {
@@ -94,8 +95,7 @@ a:focus,
 /* Page Transition */
 .page-enter-active,
 .page-leave-active {
-  transition-property: opacity;
-  transition-duration: 0.35s;
+  transition: var(--transition--opacity);
 }
 .page-enter,
 .page-leave-to {
