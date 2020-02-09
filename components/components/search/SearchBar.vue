@@ -3,7 +3,7 @@
     <!-- Search bar -->
     <div class="material-container bg-background p-2 flex justify-between">
       <!-- Search Icon -->
-      <div class="w-full inline-flex">
+      <div class="w-full flex">
         <SearchIcon class="icon text-default w-6 h-6 mr-2" />
         <!-- Input -->
         <input
