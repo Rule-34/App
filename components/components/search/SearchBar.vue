@@ -81,7 +81,7 @@ export default {
       if (!this.searchData.premadeFilterData.length) {
         await this.getCorsProxy({
           url:
-            'https://gist.githubusercontent.com/VoidlessSeven7/6aed2aa3efad99b86760d05feab8c1e6/raw/furry-filter.json',
+            'https://gist.githubusercontent.com/VoidlessSeven7/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-furry-filter.json',
           mode: 'filterData'
         })
       }
