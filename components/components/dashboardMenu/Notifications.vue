@@ -40,11 +40,11 @@
         <!-- Donations needed -->
         <ContentContainer
           title="Donations needed"
-          text="We have been reaching our daily image limit for some days now, when that happens all images stop loading and so does the App
+          text="We have been reaching our daily image limit for some days now, when that happens all images stop loading and so does the App.
 
-          If you could donate, even one dollar, we would be able to raise the limit
+          If you could support the app donating, even one dollar, we would be able to raise the limit!
           
-          More information on Discord"
+          More information on Discord."
           icon="bg-svg-dollar"
           icon-position="bg-svg-right"
           link="https://discord.gg/fUhYHSZ"
