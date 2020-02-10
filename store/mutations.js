@@ -161,7 +161,7 @@ export default {
    * @param {*} state Default
    * @param {Object} payload Object with settings (.index = name, .value = Boolean)
    */
-  changeUserSetting(state, payload) {
+  userSettingsManager(state, payload) {
     // Change value
     if (payload !== undefined) {
       // console.log(payload);
