@@ -2,19 +2,19 @@ export default {
   /**
    * Handler for post's data changes
    * @param {*} state Default
-   * @param {Object} payload Settings in an object
+   * @param {Object} parameters Settings in an object
    */
-  dashBoardManager(state, payload) {
+  dashBoardManager(state, parameters) {
     // Post data related
-    if (payload.data !== undefined) {
-      switch (payload.mode) {
+    if (parameters.data !== undefined) {
+      switch (parameters.mode) {
         case 'add':
-          state.dashBoardData.data = payload.data
+          state.dashBoardData.data = parameters.data
           break
 
         case 'concat':
           state.dashBoardData.data = state.dashBoardData.data.concat(
-            payload.data
+            parameters.data
           )
           break
       }
@@ -24,12 +24,12 @@ export default {
   /**
    * Modifies Page ID
    * @param {*} state Default
-   * @param {Object} payload .operation (specific, add, subtract, reset) and .value
+   * @param {Object} parameters .operation (specific, add, subtract, reset) and .value
    */
-  pidManager(state, payload) {
-    switch (payload.operation) {
+  pidManager(state, parameters) {
+    switch (parameters.operation) {
       case 'specific':
-        state.dashBoardData.pid = payload.value
+        state.dashBoardData.pid = parameters.value
         break
 
       case 'add':
@@ -62,7 +62,7 @@ export default {
   /**
    * Handler for Side Nav
    * @param {*} state Default store
-   * @param {Object} payload Operation to do (close, open, or nothing to toggle)
+   * @param {Object} parameters Operation to do (close, open, or nothing to toggle)
    */
   sideNavManager(state, operation) {
     switch (operation) {
@@ -84,27 +84,27 @@ export default {
   /**
    *
    * @param {*} state Default
-   * @param {String} payload Error string
+   * @param {String} parameters Error string
    */
-  generalManager(state, payload) {
+  generalManager(state, parameters) {
     // Errors
-    if (payload.errors !== undefined) {
-      state.generalData.errors = payload.errors
+    if (parameters.errors !== undefined) {
+      state.generalData.errors = parameters.errors
     }
   },
 
   /**
    *
    * @param {*} state Default
-   * @param {Object} payload .operation, .tag, .tag.name
+   * @param {Object} parameters .operation, .tag, .tag.name
    */
-  tagManager(state, payload) {
-    if (payload.operation !== undefined) {
-      switch (payload.operation) {
+  tagManager(state, parameters) {
+    if (parameters.operation !== undefined) {
+      switch (parameters.operation) {
         // Add if it doesnt already exist
         case 'add':
-          if (!state.searchData.tags.includes(payload.tag.name)) {
-            state.searchData.tags.push(payload.tag.name)
+          if (!state.searchData.tags.includes(parameters.tag.name)) {
+            state.searchData.tags.push(parameters.tag.name)
           }
           break
 
@@ -117,7 +117,7 @@ export default {
 
         case 'remove':
           state.searchData.tags = state.searchData.tags.filter(function(ele) {
-            return ele !== payload.tag.name
+            return ele !== parameters.tag.name
           })
           break
 
@@ -131,28 +131,31 @@ export default {
   /**
    * Handler for search data
    * @param {*} state Default
-   * @param {Object} payload Object with settings
+   * @param {Object} parameters Object with settings
    */
-  searchManager(state, payload) {
+  searchManager(state, parameters) {
     // Toggle Search
-    if (payload.isActive !== undefined) {
-      state.searchData.isActive = payload.isActive
+    if (parameters.isActive !== undefined) {
+      state.searchData.isActive = parameters.isActive
     }
 
     // Toggle Filter
-    if (payload.isFilterActive !== undefined) {
-      state.searchData.isFilterActive = payload.isFilterActive
+    if (parameters.isFilterActive !== undefined) {
+      state.searchData.isFilterActive = parameters.isFilterActive
     }
 
     // Change data
-    if (payload.data !== undefined) {
-      // console.log(payload.data);
-      state.searchData.data = payload.data
+    if (parameters.data !== undefined) {
+      // console.log(parameters.data);
+      state.searchData.data = parameters.data
     }
 
-    if (payload.premadeFilterData !== undefined) {
-      // console.log(payload.premadeFilterData);
-      state.searchData.premadeFilterData = payload.premadeFilterData
+    if (parameters.premadeFilterData !== undefined) {
+      // console.log(parameters.premadeFilterData);
+      state.searchData.premadeFilterData = parameters.premadeFilterData
+    }
+  },
+
   /**
    *
    * @param {*} state Default
@@ -174,18 +177,18 @@ export default {
   /**
    * Changes user settings
    * @param {*} state Default
-   * @param {Object} payload Object with settings (.index = name, .value = Boolean)
+   * @param {Object} parameters Object with settings (.index = name, .value = Boolean)
    */
-  userSettingsManager(state, payload) {
+  userSettingsManager(state, parameters) {
     // Change value
-    if (payload !== undefined) {
-      // console.log(payload);
-      state.userSettings[payload.index].value = payload.value
+    if (parameters !== undefined) {
+      // console.log(parameters);
+      state.userSettings[parameters.index].value = parameters.value
     }
   },
 
-  experimentalManager(state, payload) {
-    switch (payload) {
+  experimentalManager(state, parameters) {
+    switch (parameters) {
       case 'enable':
         state.dashBoardSettings.experimentalSettings = true
         break
