@@ -9,7 +9,7 @@
           v-model="isToggled"
           :name="switchId"
           @change="
-            changeUserSetting({
+            userSettingsManager({
               index: switchId,
               value: !value
             })
@@ -33,7 +33,7 @@
           v-model.number="innerValue"
           :name="switchId"
           @change="
-            changeUserSetting({
+            userSettingsManager({
               index: switchId,
               value: innerValue
             })
@@ -72,7 +72,7 @@ export default {
   },
   // Map mutation for easier use
   methods: {
-    ...mapMutations(['changeUserSetting'])
+    ...mapMutations(['userSettingsManager'])
   }
 }
 </script>
