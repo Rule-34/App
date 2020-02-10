@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 // Components
 import ContentContainer from '~/components/content/ContentContainer.vue'
 
@@ -90,19 +90,7 @@ export default {
     }
   },
 
-  mounted() {
-    // When mounted fetch data from gist and save it to State
-    this.getCorsProxy({
-      url:
-        'https://gist.githubusercontent.com/VoidlessSeven7/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-notifications.json',
-      returnTo: 'notificationManager',
-      operation: 'setData',
-      returnData: 'data'
-    })
-  },
-
   methods: {
-    ...mapActions(['getCorsProxy']),
     ...mapMutations(['notificationManager']),
 
     toggleNotifications() {

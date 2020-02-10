@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 // Third party
 import { Touch } from 'vuetify/lib/directives/touch'
 // Components, I decided not to lazy load them as they break the experience
@@ -69,13 +69,24 @@ export default {
   },
 
   mounted() {
-    // Set different layout if we're on index, necessary on mounted for first page load
+    // Necessary on mounted for first page load
     this.TestForDashboard()
+
+    // Fetch notifications, once as its in mounted (Could potentially waste data if visitors arent on Dashboard)
+    this.getCorsProxy({
+      url:
+        'https://gist.githubusercontent.com/VoidlessSeven7/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-notifications.json',
+      returnTo: 'notificationManager',
+      operation: 'setData',
+      returnData: 'data'
+    })
   },
 
   methods: {
+    ...mapActions(['getCorsProxy']),
     ...mapMutations(['sideNavManager', 'searchManager']),
 
+    // Set different layout if we're on index
     TestForDashboard() {
       if (this.$nuxt.$route.name === 'index') {
         this.isDashboard = true
