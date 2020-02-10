@@ -143,10 +143,12 @@ export default {
 
     // console.log(response)
 
-    if (parameters.mode === 'filterData') {
+    // If return is assigned
+    if (parameters.returnTo) {
       commit({
-        type: 'searchManager',
-        premadeFilterData: response
+        type: parameters.returnTo,
+        operation: parameters.operation,
+        [parameters.returnData]: response
       })
 
       // Since we're sending to vuex store, return nothing

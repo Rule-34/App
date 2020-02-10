@@ -153,6 +153,21 @@ export default {
     if (payload.premadeFilterData !== undefined) {
       // console.log(payload.premadeFilterData);
       state.searchData.premadeFilterData = payload.premadeFilterData
+  /**
+   *
+   * @param {*} state Default
+   * @param {Object} parameters .operation, .data
+   */
+  notificationManager(state, parameters) {
+    switch (parameters.operation) {
+      // Set count to notification length
+      case 'setCount':
+        state.notificationData.count = state.notificationData.data.length
+        break
+
+      case 'setData':
+        state.notificationData.data = parameters.data
+        break
     }
   },
 
