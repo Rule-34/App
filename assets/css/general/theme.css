@@ -34,23 +34,32 @@
 
 .light {
   /* For text and such */
-  --color-primary: #3182ce;
-  --color-primary-hover: #63b3ed;
+  --color-primary: hsl(209, 62%, 50%);
+  --color-primary-hover: hsl(205, 79%, 66%);
 
-  --color-default: black;
-  --color-default-text: black;
-  --color-default-text-muted: gray;
+  /* For text and such */
+  /* --color-accent: hsl(158, 72%, 39%);
+  --color-accent-hover: hsl(162, 48%, 27%); */
+
+  /*  This is for icons mainly */
+  --color-default: hsl(0, 0%, 0%);
+  --color-default-text: hsl(0, 0%, 0%);
+  --color-default-text-muted: hsl(0, 0%, 50%);
 
   /* For background */
-  --color-background: white;
+  --color-background: hsl(0, 0%, 100%);
+
+  --color-depth: hsl(0, 0%, 100%);
+
+  --color-elevation: hsl(0, 0%, 100%);
 
   /* For borders and such */
-  --color-border: #e2e8f0;
-  --color-border-hover: #e2e8f0;
+  --color-border: hsl(214, 32%, 91%);
+  --color-border-hover: hsl(214, 32%, 91%);
 
   /* For gradients */
-  --color-gradient-one: rgb(155, 155, 224);
-  --color-gradient-two: rgb(0, 212, 255);
+  --color-gradient-one: hsl(240, 53%, 74%);
+  --color-gradient-two: hsl(190, 100%, 50%);
 }
 
 .bg-gradient-lilac-blue {
