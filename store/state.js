@@ -17,7 +17,7 @@ export default () => ({
   searchData: {
     data: [], // Data received while searching for tags
     tags: [], // Tags that are added for searching posts with that tags
-    premadeFilterData: [],
+    premadeFilterData: [], // Data received from Gist
     isActive: false, // Is search bar active
     isFilterActive: false
   },
@@ -27,6 +27,11 @@ export default () => ({
     apiUrl: 'https://r34-app-original-api.herokuapp.com/',
     corsProxyUrl: 'https://cors-proxy.rule34app.workers.dev/',
     errors: null
+  },
+
+  notificationData: {
+    count: 0,
+    data: []
   },
 
   // These settings are saved to localStorage

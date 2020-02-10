@@ -2,7 +2,7 @@
   <!-- Icon -->
   <div class="border-util rounded-full shadow bg-elevation relative">
     <!-- Button -->
-    <button type="button" class="flex p-1" @click="isActive = !isActive">
+    <button type="button" class="flex p-1" @click="toggleNotifications()">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
@@ -15,7 +15,9 @@
             class="icon fill-current text-default-text-muted"
             d="M15 19a3 3 0 11-6 0h6zm3.13-2H5.87C4.838 17 4 16.105 4 15c0-.348.085-.69.246-.992L6.388 10V8C6.388 4.686 8.9 2 12 2s5.611 2.686 5.611 6v2l2.142 4.008c.513.959.201 2.18-.696 2.728a1.778 1.778 0 01-.928.264z"
           />
-          <g v-if="notifications">
+
+          <!-- Only show if theres a new notification -->
+          <g v-if="newNotification">
             <!-- Bell with a little cut -->
             <path
               class="icon fill-current text-default-text-muted"
@@ -37,32 +39,24 @@
     <!-- Content -->
     <transition name="page">
       <div v-if="isActive" class="notifications--details">
-        <!-- Donations needed -->
+        <!-- Repeat for every notification -->
         <ContentContainer
+          v-for="notification in notificationData.data"
+          :key="notification.title"
           class="m-1"
-          title="Donations needed"
-          text="We have been reaching our daily image limit for some days now, when that happens all images stop loading and so does the App.
-
-          If you could support the app donating, even one dollar, we would be able to raise the limit!
-          
-          More information on Discord."
-          icon="bg-svg-dollar"
-          link="https://www.patreon.com/VoidlessSeven7"
-          link-text="Patreon"
-        />
-
-        <!-- Social  -->
-        <ContentContainer
-          class="m-1"
-          title="Social"
-          text="Did you know that we have both Discord and Twitter?"
-          icon="bg-svg-dollar"
-          link="https://twitter.com/Rule34App"
-          link-text="Twitter"
+          :title="notification.title"
+          :text="notification.description"
+          :icon="notification.icon"
+          :link="notification.link"
+          :link-text="notification.linkText"
         >
           <!-- Workaround for having two links -->
-          <template>
-            <a class="text-sm" href="https://discord.gg/fUhYHSZ">Discord</a>
+          <template v-if="notification.secondaryText">
+            <a
+              class="text-sm"
+              :href="notification.secondaryLink"
+              v-text="notification.secondaryText"
+            />
             |
           </template>
         </ContentContainer>
@@ -72,6 +66,8 @@
 </template>
 
 <script>
+import { mapActions, mapMutations, mapState } from 'vuex'
+// Components
 import ContentContainer from '~/components/content/ContentContainer.vue'
 
 export default {
@@ -81,8 +77,38 @@ export default {
 
   data() {
     return {
-      notifications: true,
       isActive: false
+    }
+  },
+
+  computed: {
+    ...mapState(['notificationData']),
+
+    // Returns true if fetched notifications are higher than local notification count
+    newNotification() {
+      return this.notificationData.data.length > this.notificationData.count
+    }
+  },
+
+  mounted() {
+    // When mounted fetch data from gist and save it to State
+    this.getCorsProxy({
+      url:
+        'https://gist.githubusercontent.com/VoidlessSeven7/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-notifications.json',
+      returnTo: 'notificationManager',
+      operation: 'setData',
+      returnData: 'data'
+    })
+  },
+
+  methods: {
+    ...mapActions(['getCorsProxy']),
+    ...mapMutations(['notificationManager']),
+
+    toggleNotifications() {
+      this.isActive = !this.isActive
+
+      this.notificationManager({ operation: 'setCount' })
     }
   }
 }
