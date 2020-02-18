@@ -47,7 +47,7 @@
         <!-- Number of posts with that tag -->
         <span
           class="text-primary-hover group-hover:text-default transition--color"
-          v-text="`(${tag.posts})`"
+          v-text="`(${tag.count})`"
         />
       </a>
     </div>
