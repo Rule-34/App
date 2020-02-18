@@ -65,9 +65,10 @@ export default {
   async mounted() {
     // Check if domain is supported
     switch (this.domain) {
-      case 'danbooru':
-      case 'paheal':
       case 'xxx':
+      case 'paheal':
+      case 'danbooru':
+      case 'gelbooru':
       case 'e621':
         // Use query domain
         await this.domainManager(this.domain)
