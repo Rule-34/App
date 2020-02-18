@@ -42,10 +42,11 @@ export default {
   data() {
     return {
       options: [
-        { name: 'e621.net', value: 'e621' },
         { name: 'rule34.xxx', value: 'xxx' },
         { name: 'rule34.paheal.net', value: 'paheal' },
-        { name: 'danbooru.donmai.us', value: 'danbooru' }
+        { name: 'danbooru.donmai.us', value: 'danbooru' },
+        { name: 'gelbooru.com', value: 'gelbooru' },
+        { name: 'e621.net', value: 'e621' }
       ]
     }
   },
