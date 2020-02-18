@@ -29,9 +29,10 @@ export default () => ({
     errors: null
   },
 
+  // These settings are saved to localStorage
   notificationData: {
-    count: 0,
-    data: []
+    count: 0, // Default count
+    data: [] // Data fetched from Gist
   },
 
   // These settings are saved to localStorage
