@@ -15,9 +15,12 @@
       <img
         :src="imageSource()"
         :loading="userSettings.lazyLoading.value ? 'lazy' : 'auto'"
-        :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
+        :class="{
+          'nsfw-disabled': !userSettings.nsfw.value,
+          'post-animation': !userSettings.disableAnimations.value
+        }"
         :alt="'Image ' + post.id"
-        class="post"
+        class="w-full h-auto"
         @click="toggleTags()"
         @load="addAnimation($event)"
         @error="retryToLoadMedia($event)"
@@ -29,9 +32,12 @@
       <!-- If lazy loading enabled -->
       <video
         :controls="userSettings.videoControls.value"
-        :class="{ 'nsfw-disabled': !userSettings.nsfw.value }"
+        :class="{
+          'nsfw-disabled': !userSettings.nsfw.value,
+          'post-animation': !userSettings.disableAnimations.value
+        }"
         :alt="'Video ' + post.id"
-        class="w-full"
+        class="w-full h-auto"
         muted
         loop
         @click="toggleTags()"
@@ -138,13 +144,13 @@ export default {
       if (this.userSettings.disableAnimations.value) {
         // console.log('No animation for you', event)
       } else {
-        event.target.classList.toggle('post--active')
+        event.target.classList.toggle('post-animation--active')
       }
     },
 
     // Retries to load the image
     retryToLoadMedia(event) {
-      console.log(event.target, this.retryCount)
+      // console.log(event.target, this.retryCount)
 
       if (this.retryCount <= this.userSettings.imgRetry.value) {
         setTimeout(() => {
@@ -226,12 +232,12 @@ export default {
 </script>
 
 <style>
-.post {
+.post-animation {
   transition: opacity 0.75s;
-  @apply w-full opacity-0;
+  @apply opacity-0;
 }
 
-.post--active {
+.post-animation--active {
   @apply opacity-100;
 }
 
