@@ -48,6 +48,7 @@ export default () => ({
       name: 'Keyboard controls',
       description:
         "Keyboard's right and left arrows will navigate pages like clicking the control's buttons.",
+      image: '/img/examples/keyboard-controls',
       value: false,
       defaultValue: false
     },
@@ -56,6 +57,7 @@ export default () => ({
       name: 'Hover controls',
       description:
         'Controls will hover over content and be fixed on the screen.',
+      image: '/img/examples/hover-controls',
       value: false,
       defaultValue: false
     },
@@ -64,6 +66,7 @@ export default () => ({
       name: 'Video controls',
       description:
         "Videos will have controls, but clicking it won't show tags.",
+      image: '/img/examples/video-controls',
       value: true,
       defaultValue: true
     },
@@ -73,6 +76,7 @@ export default () => ({
       name: 'Hover Zoom',
       description:
         'Zoom posts when you hover over them, not really useful, but quite amusing.',
+      image: '/img/examples/hover-zoom',
       value: false,
       defaultValue: false
     },
@@ -86,9 +90,10 @@ export default () => ({
     },
 
     fullSizeImages: {
-      name: 'Full-size images',
+      name: 'Full size images',
       description:
         'Load full images instead of downscaled size images, data intensive.',
+      image: '/img/examples/full-size-images',
       value: false,
       defaultValue: false
     },
@@ -134,6 +139,7 @@ export default () => ({
     nsfw: {
       name: 'NSFW',
       description: 'If deactivated all media will be blurred.',
+      image: '/img/examples/nsfw',
       value: true,
       defaultValue: true
     }
