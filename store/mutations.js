@@ -41,7 +41,7 @@ export default {
         break
 
       case 'reset':
-        state.dashBoardData.pid = 0
+        state.dashBoardData.pid = 1
         break
     }
   },
