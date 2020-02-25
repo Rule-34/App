@@ -1,6 +1,7 @@
 <template>
   <main>
-    <!-- Examples -->
+    <!-- General Usage -->
+
     <ContentContainer
       :separator="true"
       title="General usage"
@@ -17,20 +18,22 @@
     <ContentContainer
       title="Search: remove tags"
       text="This button toggles between states, first state will delete all added tags."
-      img="/img/examples/search_delete"
+      img="/img/examples/search-delete"
     />
 
     <ContentContainer
       title="Search: premade filter"
       text="Second state will fetch a dynamic filter that applies tags that will ban unpleasant posts from showing."
-      img="/img/examples/search_premade_filter"
+      img="/img/examples/search-premade-filter"
     />
 
     <ContentContainer
       title="Search: filter content"
       text="Toggling the filter will ban from appearing the next clicked tags."
-      img="/img/examples/search_filter"
+      img="/img/examples/search-filter"
     />
+
+    <!-- User Settings -->
 
     <ContentContainer
       :separator="true"
@@ -38,70 +41,14 @@
       text="Customizable settings are explained below"
     />
 
-    <ContentContainer
-      :title="userSettings.keyboardControls.name"
-      :text="userSettings.keyboardControls.description"
-      img="/img/examples/navigation"
-    />
+    <!-- Recursion for every setting -->
 
     <ContentContainer
-      :title="userSettings.hoverControls.name"
-      :text="userSettings.hoverControls.description"
-      img="/img/examples/controls"
-    />
-
-    <ContentContainer
-      :title="userSettings.videoControls.name"
-      :text="userSettings.videoControls.description"
-      img="/img/examples/video_controls"
-    />
-
-    <ContentContainer
-      :title="userSettings.zoom.name"
-      :text="userSettings.zoom.description"
-      img="/img/examples/zoom"
-    />
-
-    <ContentContainer
-      :title="userSettings.lazyLoading.name"
-      :text="userSettings.lazyLoading.description"
-    />
-
-    <ContentContainer
-      :title="userSettings.fullSizeImages.name"
-      :text="userSettings.fullSizeImages.description"
-      img="/img/examples/fullsize"
-    />
-
-    <ContentContainer
-      :title="userSettings.infiniteLoad.name"
-      :text="userSettings.infiniteLoad.description"
-    />
-
-    <ContentContainer
-      :title="userSettings.postsPerPage.name"
-      :text="userSettings.postsPerPage.description"
-    />
-
-    <ContentContainer
-      :title="userSettings.score.name"
-      :text="userSettings.score.description"
-    />
-
-    <ContentContainer
-      :title="userSettings.imgRetry.name"
-      :text="userSettings.imgRetry.description"
-    />
-
-    <ContentContainer
-      :title="userSettings.disableAnimations.name"
-      :text="userSettings.disableAnimations.description"
-    />
-
-    <ContentContainer
-      title="NSFW"
-      text="While not active, posts will be blurred."
-      img="/img/examples/nsfw"
+      v-for="setting in userSettings"
+      :key="setting.name"
+      :title="setting.name"
+      :text="setting.description"
+      :img="setting.image"
     />
   </main>
 </template>
