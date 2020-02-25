@@ -88,12 +88,16 @@ export default {
 
     getSpecificPage() {
       // Ask for page to go to
-      const specificPage = prompt('What page do you want to go to?', '69')
+      const specificPage = Number.parseInt(
+        prompt('What page do you want to go to?', '69')
+      )
+
+      // console.log(specificPage)
+      // console.log(Number.isInteger(specificPage))
 
       // Test if something was input
-      if (!isNaN(specificPage)) {
+      if (specificPage) {
         // Set PID to indicated
-        // console.log(specificPage);
         this.pidManager({ operation: 'specific', value: specificPage })
 
         // And load specific page
