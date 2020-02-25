@@ -77,18 +77,8 @@ export default {
       // Reset tags so we dont search those tags on new domain
       this.tagManager({ operation: 'reset' })
 
-      // Reset PID so we dont start with specific PID on new domain, depending of the domain it starts at 0 or at 1
-      switch (newApi) {
-        case 'e621':
-        case 'loli':
-        case 'danbooru':
-          this.pidManager({ operation: 'specific', value: 1 })
-          break
-
-        default:
-          this.pidManager({ operation: 'reset' })
-          break
-      }
+      // Reset PID so we dont start with specific PID on new domain
+      this.pidManager({ operation: 'reset' })
 
       // And finally load the posts with everything to default
       this.getPosts('add')
