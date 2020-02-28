@@ -17,7 +17,7 @@
         <option
           :key="option.name"
           :aria-label="'Changes the domain to ' + option.name"
-          :value="option.value"
+          :value="option.short"
           v-text="option.name"
         />
       </template>
@@ -34,6 +34,8 @@
 import { mapState, mapActions, mapMutations } from 'vuex'
 // Third party
 import { ChevronDownIcon, CloudIcon } from 'vue-feather-icons'
+// Components
+import { domains } from '~/assets/js/domains'
 
 export default {
   name: 'DomainSelector',
@@ -41,13 +43,7 @@ export default {
 
   data() {
     return {
-      options: [
-        { name: 'rule34.xxx', value: 'xxx' },
-        { name: 'rule34.paheal.net', value: 'paheal' },
-        { name: 'danbooru.donmai.us', value: 'danbooru' },
-        { name: 'gelbooru.com', value: 'gelbooru' },
-        { name: 'e621.net', value: 'e621' }
-      ]
+      options: domains
     }
   },
 
@@ -60,8 +56,8 @@ export default {
 
   // Experimental features, dont say anything!
   mounted() {
-    if (this.dashBoardSettings.experimentalSettings) {
-      this.options.push({ name: 'lolibooru.moe', value: 'loli' })
+    if (!this.dashBoardSettings.experimentalSettings) {
+      this.options = this.options.filter((item) => item.short !== 'loli')
     }
   },
 
@@ -70,14 +66,14 @@ export default {
     ...mapActions(['getPosts', 'analyticManager']),
 
     // Changes that we have to do when changing domain so request is not malformed
-    changeDomain(newApi) {
+    changeDomain(domain) {
       // Send new API to change
-      this.domainManager(newApi)
+      this.domainManager(domain)
 
       // Reset tags so we dont search those tags on new domain
       this.tagManager({ operation: 'reset' })
 
-      // Reset PID so we dont start with specific PID on new domain
+      // Reset PID so we dont start with specific PID on new domain, depending of the domain it starts at 0 or at 1
       this.pidManager({ operation: 'reset' })
 
       // And finally load the posts with everything to default

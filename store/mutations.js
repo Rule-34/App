@@ -1,3 +1,5 @@
+import { findDomainByShort } from '~/assets/js/domains'
+
 export default {
   /**
    * Handler for post's data changes
@@ -41,7 +43,10 @@ export default {
         break
 
       case 'reset':
-        state.dashBoardData.pid = 1
+        // Find domain in list and use its PID
+        state.dashBoardData.pid = findDomainByShort(
+          state.dashBoardSettings.contentDomain
+        ).pid
         break
     }
   },
@@ -52,7 +57,7 @@ export default {
    * @param {String} domain New domain
    */
   domainManager(state, domain) {
-    console.log(domain)
+    // console.log(domain)
     // New url
     if (domain !== undefined) {
       state.dashBoardSettings.contentDomain = domain

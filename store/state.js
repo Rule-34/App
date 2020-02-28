@@ -1,7 +1,7 @@
 export default () => ({
   dashBoardData: {
     data: [], // Data that is rendered to the web app
-    pid: 1 // Page id
+    pid: 0 // Page id
   },
 
   // These settings are saved to localStorage
