@@ -53,7 +53,7 @@
     />
 
     <!-- Temporal div TODO: remove -->
-    <div style="height:50vh;" />
+    <div style="height:75vh;" />
   </main>
 </template>
 
