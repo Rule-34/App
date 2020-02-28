@@ -126,8 +126,8 @@
       <p class="text-default-text-muted text-xs">And you, the user!</p>
     </ContentContainer>
 
-    <!-- text-sm Temporal div TODO: remove -->
-    <div style="height:50vh;" />
+    <!-- Temporal div TODO: remove -->
+    <div style="height:75vh;" />
   </main>
 </template>
 
