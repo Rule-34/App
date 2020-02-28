@@ -13,9 +13,9 @@
   "dependencies": {
     "@nuxtjs/pwa": "^3.0.0-beta.20",
     "@nuxtjs/sitemap": "^2.0.1",
+    "@tailwindcss/ui": "^0.1.2",
     "lodash": "^4.17.15",
     "nuxt": "^2.11.0",
-    "v-click-outside": "^3.0.1",
     "vue-feather-icons": "^5.0.0",
     "vuex-persistedstate": "^2.7.1"
   },

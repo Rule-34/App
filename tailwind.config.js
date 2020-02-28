@@ -1,9 +1,6 @@
-/*
- ** TailwindCSS Configuration File
- **
- ** Docs: https://tailwindcss.com/docs/configuration
- ** Default: https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js
- */
+// tailwind.config.js
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
   theme: {
     extend: {
@@ -58,6 +55,9 @@ module.exports = {
         '1/2': '50%',
         '3/4': '75%'
       }
+    },
+    fontFamily: {
+      sans: ['Inter var', ...defaultTheme.fontFamily.sans]
     }
   },
   // Recommended variant order
@@ -67,5 +67,11 @@ module.exports = {
   // variants: ['responsive', 'group-hover', 'focus-within', 'first', 'last', 'odd', 'even', 'hover', 'focus', 'active', 'visited', 'disabled'],
   variants: {
     textColor: ['responsive', 'group-hover', 'hover', 'focus']
-  }
+  },
+
+  plugins: [
+    require('@tailwindcss/ui')({
+      layout: 'sidebar'
+    })
+  ]
 }

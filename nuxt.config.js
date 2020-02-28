@@ -15,7 +15,11 @@ export default {
           'App to enjoy all Rule 34 sites combined in a mobile-friendly experience'
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      // Font
+      { rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' }
+    ]
   },
   /*
    ** Customize the progress-bar color
@@ -84,6 +88,19 @@ export default {
       ogHost: 'https://r34.app',
       mobileAppIOS: true
     }
+  },
+
+  workbox: {
+    runtimeCaching: [
+      {
+        // Should be a regex string. Compiles into new RegExp('https://my-cdn.com/.*')
+        urlPattern: ['https://rsms.me/.*', 'https://r34.app/img/.*']
+        // Defaults to `networkFirst` if omitted
+        // handler: 'networkFirst',
+        // Defaults to `GET` if omitted
+        // method: 'GET'
+      }
+    ]
   },
   /*
    ** TailwindCSS config
