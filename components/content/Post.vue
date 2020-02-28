@@ -33,8 +33,7 @@
       <video
         :controls="userSettings.videoControls.value"
         :class="{
-          'nsfw-disabled': !userSettings.nsfw.value,
-          'post-animation': !userSettings.disableAnimations.value
+          'nsfw-disabled': !userSettings.nsfw.value
         }"
         :alt="'Video ' + post.id"
         class="w-full h-auto"
