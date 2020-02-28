@@ -8,7 +8,7 @@
     "dev": "nuxt",
     "generate": "nuxt generate --modern",
     "analyze": "nuxt build --analyze",
-    "webp": "for i in static/img/examples/*.png; do cwebp -q 80 ${i%%.*}.png -o ${i%%.*}.webp; done"
+    "webp": "for i in static/img/*.png; do cwebp -q 80 ${i%%.*}.png -o ${i%%.*}.webp; done"
   },
   "dependencies": {
     "@nuxtjs/pwa": "^3.0.0-beta.20",
