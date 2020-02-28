@@ -39,7 +39,6 @@
         <!-- Image -->
         <picture v-if="img">
           <source :srcset="img + '.webp'" type="image/webp" />
-          <source :srcset="img + '.png'" type="image/png" />
           <img
             :loading="userSettings.lazyLoading.value ? 'lazy' : 'auto'"
             :src="img + '.png'"
