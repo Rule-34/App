@@ -170,7 +170,7 @@ export default {
         // console.log('Cant load the image')
 
         // Set error image
-        event.target.src = '/img/error.webp'
+        event.target.src = '/img/error.png'
 
         // Stop retrying
         event.target.onerror = null
