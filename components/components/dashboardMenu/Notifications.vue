@@ -2,12 +2,7 @@
   <!-- Icon -->
   <div class="border-util rounded-full shadow bg-elevation relative">
     <!-- Button -->
-    <button
-      v-click-outside="closeNotifications"
-      type="button"
-      class="flex p-1"
-      @click="toggleNotifications()"
-    >
+    <button type="button" class="flex p-1" @click="toggleNotifications()">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
@@ -72,17 +67,11 @@
 
 <script>
 import { mapMutations, mapState } from 'vuex'
-// Third party
-import vClickOutside from 'v-click-outside'
 // Components
 import ContentContainer from '~/components/content/ContentContainer.vue'
 
 export default {
   name: 'Notifications',
-
-  directives: {
-    clickOutside: vClickOutside.directive
-  },
 
   components: { ContentContainer },
 
@@ -108,14 +97,6 @@ export default {
       this.isActive = !this.isActive
 
       this.notificationManager({ operation: 'setCount' })
-    },
-
-    closeNotifications() {
-      if (this.isActive) {
-        this.isActive = false
-
-        this.notificationManager({ operation: 'setCount' })
-      }
     }
   }
 }
