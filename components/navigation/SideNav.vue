@@ -7,12 +7,15 @@
     >
       <!-- Hero Image -->
       <div class="w-full overflow-hidden relative">
-        <img
-          loading="eager"
-          class="sidebar-img w-full h-auto object-cover"
-          src="/icon.png"
-          alt="Rule 34 App Logo"
-        />
+        <picture>
+          <source srcset="/img/icon.webp" type="image/webp" />
+          <img
+            loading="eager"
+            class="sidebar-img w-full h-auto object-cover"
+            src="/img/icon.png"
+            alt="Rule 34 App Logo"
+          />
+        </picture>
 
         <!-- Text on image -->
         <div class="absolute bottom-0 left-0 p-3 transition--color">

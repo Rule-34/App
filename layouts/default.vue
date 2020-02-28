@@ -132,8 +132,8 @@ export default {
 }
 
 // Preload logo
-const logo = new Image()
-logo.src = '/icon.png'
+// const logo = new Image()
+// logo.src = '/icon.png'
 
 // Message to people that open the Devtools
 console.info(
