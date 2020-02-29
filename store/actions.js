@@ -7,6 +7,9 @@ export default {
    * @param {Object} parameters (.url) Url to get data from | (.mutationToReturn) Mutation to return data to | (.domain) Domain to get the data from
    */
   async getApi({ commit, state }, parameters) {
+    // Initialize variable
+    let domain
+
     // Reset errors cause we're trying again
     if (state.generalData.errors) {
       commit({
@@ -15,45 +18,40 @@ export default {
       })
     }
 
-    // Initialize variable
-    let domain
-
     // Skip vuex and localStorage if domain is specified
     if (parameters.domain) {
       domain = parameters.domain
 
-      // If no domain is specified then try to retrieve from localStorage or get it from the default Vuex state
+      // If no domain is specified then try to retrieve from localStorage or from state if it fails
     } else {
-      // Get domain from localStorage or from state if it fails
-      try {
-        domain = JSON.parse(localStorage.getItem('vuex')).dashBoardSettings
-          .contentDomain
+      let localData
 
-        // If its impossible to get it from localStorage then set it to the default store domain
+      try {
+        localData = JSON.parse(localStorage.getItem('vuex'))
+
+        domain = localData.dashBoardSettings.contentDomain
       } catch {
-        console.log('No localStorage key found, using vuex store default')
+        console.log('getApi: No localStorage key found, using vuex store')
+
         domain = state.dashBoardSettings.contentDomain
       }
     }
-    // console.log('getApi domain: ', domain)
 
-    // Craft url and GET it through fetch
+    // Craft url and fetch it
     const response = await fetch(
       state.generalData.apiUrl + domain + '/' + parameters.url
     )
       // Save the data
       .then((response) => response.json())
-      // Catch an error
+
+      // Catch errors
       .catch((error) => {
-        console.error(error)
+        // console.error(error)
         commit({
           type: 'generalManager',
           errors: error
         })
       })
-
-    // console.log(response)
-    // console.log(parameters.mode)
 
     // Add the successful response to the state
     commit({
@@ -69,17 +67,33 @@ export default {
    * @param {String} mode Add or Concat
    */
   async getPosts({ dispatch, state }, mode) {
+    const pid = state.dashBoardData.pid
+    const tags = state.searchData.tags.join('+')
+    let limit, score, localData
+
+    // Retrieve data from localStorage or Vuex state as fallback
+    try {
+      localData = JSON.parse(localStorage.getItem('vuex'))
+
+      limit = localData.userSettings.postsPerPage.value
+      score = localData.userSettings.score.value
+    } catch {
+      console.log('getPosts: No localStorage key found, using vuex store')
+      limit = state.userSettings.postsPerPage.value
+      score = state.userSettings.score.value
+    }
+
     const url =
       'posts?pid=' +
-      state.dashBoardData.pid +
+      pid +
       '&limit=' +
-      state.userSettings.postsPerPage.value +
+      limit +
       '&tags=' +
-      state.searchData.tags.join('+') +
+      tags +
       '&score=' +
-      state.userSettings.score.value
+      score
 
-    // Craft url and GET it through fetch action
+    // dispatch fetch function with crafted url
     await dispatch('getApi', {
       url,
       mutationToReturn: 'dashBoardManager',
@@ -132,7 +146,8 @@ export default {
     )
       // Save the data
       .then((response) => response.json())
-      // Catch an error
+
+      // Catch errors
       .catch((error) => {
         console.error(error)
         commit({
@@ -160,9 +175,8 @@ export default {
   },
 
   async analyticManager({ state }, execution) {
-    // console.log(execution)
     switch (execution) {
-      // Send tags and filter data
+      // Send tags
       case 'tags':
         await fireAnalytics(
           'tags',
@@ -171,7 +185,7 @@ export default {
         ).then(console.log)
         break
 
-      // Send new domain
+      // Send domain
       case 'domain':
         await fireAnalytics(
           'domain',
