@@ -31,37 +31,14 @@
       <nav class="p-3 bg-background flex-1 flex flex-col justify-between">
         <ul class="text-center md:text-left leading-loose">
           <li>
-            <nuxt-link class="nav-links" to="/">
-              <span class="nav-spacer"></span>
-              <span class="relative">Dashboard</span>
-            </nuxt-link>
-          </li>
-
-          <li>
-            <nuxt-link class="nav-links" to="/faq">
-              <span class="nav-spacer"></span>
-              <span class="relative">Faq</span>
-            </nuxt-link>
-          </li>
-
-          <li>
-            <nuxt-link class="nav-links" to="/usage">
-              <span class="nav-spacer"></span>
-              <span class="relative">Usage</span>
-            </nuxt-link>
-          </li>
-
-          <li>
-            <nuxt-link class="nav-links" to="/about">
-              <span class="nav-spacer"></span>
-              <span class="relative">About</span>
-            </nuxt-link>
-          </li>
-
-          <li>
-            <nuxt-link class="nav-links" to="/settings">
-              <span class="nav-spacer"></span>
-              <span class="relative">Settings</span>
+            <nuxt-link
+              v-for="link in sideNavLinks"
+              :key="link.url"
+              class="nav-links"
+              :to="link.url"
+            >
+              <span class="nav-spacer" />
+              <span class="relative" v-text="link.title" />
             </nuxt-link>
           </li>
         </ul>
@@ -124,6 +101,18 @@ import { mapMutations, mapState } from 'vuex'
 
 export default {
   name: 'SideNav',
+
+  data() {
+    return {
+      sideNavLinks: [
+        { title: 'Dashboard', url: '/' },
+        { title: 'Faq', url: '/faq' },
+        { title: 'Usage', url: '/usage' },
+        { title: 'About', url: '/about' },
+        { title: 'Settings', url: '/settings' }
+      ]
+    }
+  },
 
   computed: {
     ...mapState(['searchData'])
