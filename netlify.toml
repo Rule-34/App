@@ -26,8 +26,8 @@
 # ------------ Redirects ------------
 
 [[redirects]]
-  from = "/single-post"
-  to = "/post?domain=:domain&id=:id" 
+  from = "/post"
+  to = "/single-post?domain=:domain&id=:id" 
   # status = 301
   force = true
   query = {domain = ":domain", id = ":id"}
