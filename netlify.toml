@@ -1,0 +1,32 @@
+# ------------ Build processing ------------
+
+[build]
+  publish = "dist/"
+  command = "npm run generate"
+
+# ------------ Asset processing ------------
+
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = false
+  minify = true
+
+[build.processing.js]
+  bundle = false
+  minify = true
+
+[build.processing.html]
+  pretty_urls = false
+
+[build.processing.images]
+  compress = true
+
+# ------------ Redirects ------------
+
+[[redirects]]
+  from = "/single-post"
+  to = "/post"
+  # status = 301
+  force = true
