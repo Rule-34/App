@@ -27,6 +27,9 @@
 
 [[redirects]]
   from = "/single-post"
-  to = "/post"
+  to = "/post?=:domain&id=:id" 
   # status = 301
   force = true
+  query = {domain = ":domain", id = ":id"}
+
+# https://r34.app/single-post?id=100&domain=xxx
