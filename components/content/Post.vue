@@ -37,7 +37,6 @@
         }"
         :alt="'Video ' + post.id"
         class="w-full h-auto"
-        muted
         loop
         @click="toggleTags()"
       >
