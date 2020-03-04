@@ -80,6 +80,7 @@ export default {
       name: 'Rule 34 App',
       short_name: 'Rule 34 App',
       lang: 'en',
+      start_url: '/?origin=PWA',
       theme_color: '#121212',
       background_color: '#121212'
     },
