@@ -8,18 +8,19 @@ export default {
    */
   dashBoardManager(state, parameters) {
     // Post data related
-    if (parameters.data !== undefined) {
-      switch (parameters.mode) {
-        case 'add':
-          state.dashBoardData.data = parameters.data
-          break
+    switch (parameters.mode) {
+      case 'add':
+        state.dashBoardData.data = parameters.data
+        break
 
-        case 'concat':
-          state.dashBoardData.data = state.dashBoardData.data.concat(
-            parameters.data
-          )
-          break
-      }
+      case 'concat':
+        state.dashBoardData.data = state.dashBoardData.data.concat(
+          parameters.data
+        )
+        break
+
+      default:
+        throw new Error('No mode specified')
     }
   },
 
@@ -48,6 +49,9 @@ export default {
           state.dashBoardSettings.contentDomain
         ).pid
         break
+
+      default:
+        throw new Error('No mode specified')
     }
   },
 
@@ -104,32 +108,33 @@ export default {
    * @param {Object} parameters .operation, .tag, .tag.name
    */
   tagManager(state, parameters) {
-    if (parameters.operation !== undefined) {
-      switch (parameters.operation) {
-        // Add if it doesnt already exist
-        case 'add':
-          if (!state.searchData.tags.includes(parameters.tag.name)) {
-            state.searchData.tags.push(parameters.tag.name)
-          }
-          break
+    switch (parameters.operation) {
+      // Add if it doesnt already exist
+      case 'add':
+        if (!state.searchData.tags.includes(parameters.tag.name)) {
+          state.searchData.tags.push(parameters.tag.name)
+        }
+        break
 
-        // Instead of adding one, add multiple with concat
-        case 'concat':
-          state.searchData.tags = state.searchData.tags.concat(
-            state.searchData.premadeFilterData
-          )
-          break
+      // Instead of adding one, add multiple with concat
+      case 'concat':
+        state.searchData.tags = state.searchData.tags.concat(
+          state.searchData.premadeFilterData
+        )
+        break
 
-        case 'remove':
-          state.searchData.tags = state.searchData.tags.filter(function(ele) {
-            return ele !== parameters.tag.name
-          })
-          break
+      case 'remove':
+        state.searchData.tags = state.searchData.tags.filter(function(ele) {
+          return ele !== parameters.tag.name
+        })
+        break
 
-        case 'reset':
-          state.searchData.tags = []
-          break
-      }
+      case 'reset':
+        state.searchData.tags = []
+        break
+
+      default:
+        throw new Error('No mode specified')
     }
   },
 
@@ -172,7 +177,7 @@ export default {
    * @param {Object} parameters .operation, .data
    */
   notificationManager(state, parameters) {
-    switch (parameters.operation) {
+    switch (parameters.mode) {
       // Set count to notification length
       case 'setCount':
         state.notificationData.count = state.notificationData.data.length
@@ -181,6 +186,9 @@ export default {
       case 'setData':
         state.notificationData.data = parameters.data
         break
+
+      default:
+        throw new Error('No mode specified')
     }
   },
 
