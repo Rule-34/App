@@ -62,7 +62,7 @@ export default {
 
   // Load the store with posts
   async fetch({ store }) {
-    await store.dispatch('getPosts', 'add')
+    await store.dispatch('fetchWithMode', { mode: 'posts', returnMode: 'add' })
   },
 
   computed: {
@@ -86,7 +86,7 @@ export default {
 
   methods: {
     ...mapMutations(['pidManager']),
-    ...mapActions(['getPosts']),
+    ...mapActions(['fetchWithMode']),
 
     scrollToTop() {
       window.scrollTo(0, 0)
@@ -103,7 +103,7 @@ export default {
       this.pidManager({ operation: 'add' })
 
       // And load next posts
-      this.getPosts('concat')
+      this.fetchWithMode({ mode: 'posts', returnMode: 'concat' })
     },
     // Navigation with keyboard
     navigation() {

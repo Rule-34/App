@@ -66,7 +66,7 @@ export default {
   methods: {
     // Map actions and mutations from store following's
     ...mapMutations(['pidManager']),
-    ...mapActions(['getPosts']),
+    ...mapActions(['fetchWithMode']),
 
     // Get next page from api
     getNextPage() {
@@ -74,7 +74,8 @@ export default {
       this.pidManager({ operation: 'add' })
 
       // If we have tags added then load next page of tags, else load normal latest posts
-      this.getPosts('add')
+
+      this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
     },
 
     // Get last page from api
@@ -83,7 +84,8 @@ export default {
       this.pidManager({ operation: 'subtract' })
 
       // Load last page
-      this.getPosts('add')
+
+      this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
     },
 
     getSpecificPage() {
@@ -101,7 +103,8 @@ export default {
         this.pidManager({ operation: 'specific', value: specificPage })
 
         // And load specific page
-        this.getPosts('add')
+
+        this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
       } else {
         alert('Wrong input, only numbers please')
       }

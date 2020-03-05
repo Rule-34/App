@@ -74,16 +74,15 @@ export default {
 
   methods: {
     ...mapMutations(['searchManager', 'tagManager']),
-    ...mapActions(['searchTag', 'getCorsProxy']),
+    ...mapActions(['fetchWithMode']),
 
     async toggleContentMode() {
       // Populate filterData data and reuse later
       if (!this.searchData.premadeFilterData.length) {
-        await this.getCorsProxy({
+        await this.fetchWithMode({
+          mode: 'filter',
           url:
-            'https://gistcdn.githack.com/VoidlessSeven7/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-furry-filter.json',
-          returnTo: 'searchManager',
-          returnData: 'premadeFilterData'
+            'https://gistcdn.githack.com/VoidlessSeven7/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-furry-filter.json'
         })
       }
 
@@ -109,10 +108,14 @@ export default {
 
     getTags() {
       if (this.searchQuery.length > 2) {
-        this.searchTag(this.searchQuery.trim().toLowerCase())
+        this.fetchWithMode({
+          mode: 'tags',
+          tag: this.searchQuery.trim().toLowerCase()
+        })
       } else {
         // Remove search data cause search limit is 3 characters
         this.searchManager({
+          mode: 'changeData',
           data: ''
         })
       }

@@ -63,7 +63,7 @@ export default {
 
   methods: {
     ...mapMutations(['domainManager', 'pidManager', 'tagManager']),
-    ...mapActions(['getPosts', 'analyticManager']),
+    ...mapActions(['fetchWithMode', 'analyticManager']),
 
     // Changes that we have to do when changing domain so request is not malformed
     changeDomain(domain) {
@@ -77,7 +77,7 @@ export default {
       this.pidManager({ operation: 'reset' })
 
       // And finally load the posts with everything to default
-      this.getPosts('add')
+      this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
 
       // Send analytics
       this.analyticManager('domain')

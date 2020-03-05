@@ -11,7 +11,7 @@
     <!-- If ANY error -->
     <template v-if="generalData.errors">
       <h1 class="bold" v-text="generalData.errors" />
-      <a href="javascript:void(0)" @click="getPosts('add')">Try again?</a>
+      <a href="javascript:void(0)" @click="fetchWithMode('add')">Try again?</a>
     </template>
 
     <!-- If no posts loaded -->
@@ -47,7 +47,7 @@ export default {
 
   methods: {
     ...mapMutations(['searchManager', 'tagManager']),
-    ...mapActions(['getPosts']),
+    ...mapActions(['fetchWithMode']),
 
     resetTags() {
       // console.log('Resetted tags')
