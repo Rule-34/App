@@ -96,7 +96,7 @@ export default {
     toggleNotifications() {
       this.isActive = !this.isActive
 
-      this.notificationManager({ operation: 'setCount' })
+      this.notificationManager({ mode: 'setCount' })
     }
   }
 }
