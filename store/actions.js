@@ -2,15 +2,23 @@ import fireAnalytics from '~/assets/js/analytics' // Import analytics
 
 export default {
   /**
-   * Gets any route from the API after the domain, commonly used for tags and posts
+   * Fetches data by mode, using localStorage when possible for additional data
    * @param {*} param0
    * @param {Object} parameters (.url) Url to get data from | (.mutationToReturn) Mutation to return data to | (.domain) Domain to get the data from
    */
-  async getApi({ commit, state }, parameters) {
-    // Initialize variable
-    let domain
+  async fetchWithMode({ dispatch, commit, state }, parameters) {
+    /* --- Initialize variables --- */
 
-    // Reset errors cause we're trying again
+    // For every execution
+    let localStorageParsedData, response
+    // For execution api
+    let domain
+    // For execution "posts"
+    const pid = state.dashBoardData.pid
+    const tags = state.searchData.tags.join('+')
+    let limit, score
+
+    // Reset errors
     if (state.generalData.errors) {
       commit({
         type: 'generalManager',
@@ -18,160 +26,140 @@ export default {
       })
     }
 
-    // Skip vuex and localStorage if domain is specified
-    if (parameters.domain) {
-      domain = parameters.domain
+    // Try to use localStorage
+    try {
+      localStorageParsedData = JSON.parse(localStorage.getItem('vuex'))
 
-      // If no domain is specified then try to retrieve from localStorage or from state if it fails
-    } else {
-      let localData
+      // Populate from localStorage
 
-      try {
-        localData = JSON.parse(localStorage.getItem('vuex'))
+      // For execution api
+      domain = localStorageParsedData.dashBoardSettings.contentDomain
 
-        domain = localData.dashBoardSettings.contentDomain
-      } catch {
-        console.log('getApi: No localStorage key found, using vuex store')
+      // For execution "posts"
+      limit = localStorageParsedData.userSettings.postsPerPage.value
+      score = localStorageParsedData.userSettings.score.value
+    } catch {
+      console.info('fetchWithMode: No localStorage key found, using vuex store')
+      localStorageParsedData = null
 
-        domain = state.dashBoardSettings.contentDomain
-      }
+      // Populate from vuex store
+
+      // For execution api
+      domain = state.dashBoardSettings.contentDomain
+
+      // For execution "posts"
+      limit = state.userSettings.postsPerPage.value
+      score = state.userSettings.score.value
     }
 
-    // Craft url and fetch it
-    const response = await fetch(
-      state.generalData.apiUrl + domain + '/' + parameters.url
-    )
-      // Save the data
-      .then((response) => response.json())
+    // Populate domain
+    // if (parameters.domain) {
+    //   domain = parameters.domain
+    // }
 
-      // Catch errors
-      .catch((error) => {
-        // console.error(error)
-        commit({
-          type: 'generalManager',
-          errors: error
-        })
-      })
+    // Choose mode
+    switch (parameters.mode) {
+      case 'basic':
+        // Fetch data
+        response = await dispatch('simpleFetch', parameters.url)
+        break
+
+      case 'posts':
+        // Craft URL
+        parameters.url =
+          'posts?pid=' +
+          pid +
+          '&limit=' +
+          limit +
+          '&tags=' +
+          tags +
+          '&score=' +
+          score
+
+        // Fetch data
+        response = await dispatch(
+          'simpleFetch',
+          state.generalData.apiUrl + domain + '/' + parameters.url
+        )
+
+        // Set mutation to return
+        parameters.mutationToReturn = 'dashBoardManager'
+        break
+
+      case 'single-post':
+        // Craft URL
+        parameters.url = 'single-post?id=' + parameters.postId
+
+        // Fetch data
+        response = await dispatch(
+          'simpleFetch',
+          state.generalData.apiUrl + domain + '/' + parameters.url
+        )
+
+        // Set mutation to return
+        parameters.mutationToReturn = 'dashBoardManager'
+        parameters.returnMode = 'add'
+        break
+
+      case 'tags':
+        // Craft URL
+        parameters.url = '?tag=' + parameters.tag + '&limit=' + limit
+
+        // Fetch data
+        response = await dispatch(
+          'simpleFetch',
+          state.generalData.apiUrl + domain + '/tags' + parameters.url
+        )
+
+        // Set mutation to return
+        parameters.mutationToReturn = 'searchManager'
+        parameters.returnMode = 'changeData'
+
+        break
+
+      case 'filter':
+        // Fetch data
+        response = await dispatch('simpleFetch', parameters.url)
+
+        // Set mutation to return
+        parameters.mutationToReturn = 'searchManager'
+        parameters.returnMode = 'changeFilterData'
+
+        break
+    }
+
+    // If we want to pass back data we return
+    if (parameters.mutationToReturn === 'return') {
+      return response
+    }
 
     // Add the successful response to the state
     commit({
       type: parameters.mutationToReturn,
       data: response,
-      mode: parameters.mode
+      mode: parameters.returnMode
     })
   },
 
   /**
-   * Gets Posts from API and adds them to the state
+   * Simple fetch that returns error to vue store
    * @param {*} param0
-   * @param {String} mode Add or Concat
+   * @param {String} url URL to fetch
    */
-  async getPosts({ dispatch, state }, mode) {
-    const pid = state.dashBoardData.pid
-    const tags = state.searchData.tags.join('+')
-    let limit, score, localData
-
-    // Retrieve data from localStorage or Vuex state as fallback
-    try {
-      localData = JSON.parse(localStorage.getItem('vuex'))
-
-      limit = localData.userSettings.postsPerPage.value
-      score = localData.userSettings.score.value
-    } catch {
-      console.log('getPosts: No localStorage key found, using vuex store')
-      limit = state.userSettings.postsPerPage.value
-      score = state.userSettings.score.value
-    }
-
-    const url =
-      'posts?pid=' +
-      pid +
-      '&limit=' +
-      limit +
-      '&tags=' +
-      tags +
-      '&score=' +
-      score
-
-    // dispatch fetch function with crafted url
-    await dispatch('getApi', {
-      url,
-      mutationToReturn: 'dashBoardManager',
-      mode
-    })
-  },
-
-  /**
-   * Gets Posts from API and adds them to the state
-   * @param {*} param0
-   * @param {String} mode Add or Concat
-   */
-  async getSinglePost({ dispatch }, parameters) {
-    const url = 'single-post?id=' + parameters.id
-
-    // Craft url and GET it through fetch action
-    await dispatch('getApi', {
-      url,
-      mutationToReturn: 'dashBoardManager',
-      mode: 'add',
-      domain: parameters.domain
-    })
-  },
-
-  /**
-   * Searches tags related to the tag parameter from the API and adds them to the state
-   * @param {*} param0
-   * @param {String} tag Tag to search for in the API
-   */
-  async searchTag({ dispatch, state }, tag) {
-    const url =
-      'tags?tag=' + tag + '&limit=' + state.userSettings.postsPerPage.value
-
-    // Craft url and GET it through fetch action
-    await dispatch('getApi', {
-      url,
-      mutationToReturn: 'searchManager'
-    })
-  },
-
-  /**
-   * Get specific url through API's cors proxy
-   * @param {*} param0
-   * @param {Object} parameters .url to download and .mode (Add to filter or none)
-   */
-  async getCorsProxy({ commit, state }, parameters) {
-    // Craft url and GET it through fetch
-    const response = await fetch(
-      state.generalData.corsProxyUrl + '?q=' + parameters.url
-    )
+  async simpleFetch({ commit }, url) {
+    const data = await fetch(url)
       // Save the data
       .then((response) => response.json())
 
-      // Catch errors
+      // Catch errors and commit to generalManager
       .catch((error) => {
-        console.error(error)
         commit({
           type: 'generalManager',
           errors: error
         })
       })
 
-    // console.log(response)
-
-    // If return is assigned
-    if (parameters.returnTo) {
-      commit({
-        type: parameters.returnTo,
-        operation: parameters.operation,
-        [parameters.returnData]: response
-      })
-
-      // Since we're sending to vuex store, return nothing
-      return
-    }
-
-    // If called directly with no mode then just return it
-    return response
+    return data
   },
 
   async analyticManager({ state }, execution) {
