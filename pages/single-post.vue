@@ -74,7 +74,11 @@ export default {
         await this.domainManager(this.domain)
 
         // And then get the post
-        await this.getSinglePost({ id: this.id, domain: this.domain })
+        await this.fetchWithMode({
+          mode: 'single-post',
+          returnMode: 'add',
+          postId: this.id
+        })
         break
 
       // If not supported then throw error
@@ -87,7 +91,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getSinglePost']),
+    ...mapActions(['fetchWithMode']),
     ...mapMutations(['generalManager', 'domainManager'])
   },
 

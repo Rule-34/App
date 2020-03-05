@@ -83,7 +83,7 @@ export default {
 
   methods: {
     ...mapMutations(['searchManager', 'pidManager', 'tagManager']),
-    ...mapActions(['getPosts', 'analyticManager']),
+    ...mapActions(['fetchWithMode', 'analyticManager']),
 
     removeTagFromActive(tagName) {
       this.tagManager({
@@ -119,7 +119,7 @@ export default {
       this.pidManager({ operation: 'reset' })
 
       // Search for the tags
-      this.getPosts('add')
+      this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
 
       // Hide the search bar
       this.searchManager({

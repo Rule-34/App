@@ -131,7 +131,7 @@ export default {
 
   methods: {
     ...mapMutations(['pidManager', 'tagManager']),
-    ...mapActions(['getPosts', 'analyticManager']),
+    ...mapActions(['fetchWithMode', 'analyticManager']),
 
     // Toggle showing tags on click
     toggleTags() {
@@ -220,7 +220,8 @@ export default {
       })
 
       // Search for the tag
-      this.getPosts('add')
+
+      this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
 
       // And fire analytics
       this.analyticManager('tags')

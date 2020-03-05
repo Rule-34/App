@@ -83,7 +83,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getCorsProxy']),
+    ...mapActions(['fetchWithMode']),
     ...mapMutations(['sideNavManager', 'searchManager']),
 
     // Set different layout if we're on index
