@@ -139,25 +139,30 @@ export default {
    * @param {Object} parameters Object with settings
    */
   searchManager(state, parameters) {
-    // Toggle Search
-    if (parameters.isActive !== undefined) {
-      state.searchData.isActive = parameters.isActive
-    }
+    switch (parameters.mode) {
+      case 'toggleSearch':
+        state.searchData.isActive = !state.searchData.isActive
+        break
 
-    // Toggle Filter
-    if (parameters.isFilterActive !== undefined) {
-      state.searchData.isFilterActive = parameters.isFilterActive
-    }
+      // Set active state
+      case 'setSearch':
+        state.searchData.isActive = parameters.data
+        break
 
-    // Change data
-    if (parameters.data !== undefined) {
-      // console.log(parameters.data);
-      state.searchData.data = parameters.data
-    }
+      case 'toggleFilter':
+        state.searchData.isFilterActive = !state.searchData.isFilterActive
+        break
 
-    if (parameters.premadeFilterData !== undefined) {
-      // console.log(parameters.premadeFilterData);
-      state.searchData.premadeFilterData = parameters.premadeFilterData
+      case 'changeData':
+        state.searchData.data = parameters.data
+        break
+
+      case 'changeFilterData':
+        state.searchData.premadeFilterData = parameters.data
+        break
+
+      default:
+        throw new Error('No mode specified')
     }
   },
 
