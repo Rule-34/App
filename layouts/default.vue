@@ -73,12 +73,8 @@ export default {
     this.TestForDashboard()
 
     // Fetch notifications, once as its in mounted (Could potentially waste data if visitors arent on Dashboard)
-    this.getCorsProxy({
-      url:
-        'https://gistcdn.githack.com/VoidlessSeven7/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-notifications.json',
-      returnTo: 'notificationManager',
-      operation: 'setData',
-      returnData: 'data'
+    this.fetchWithMode({
+      mode: 'notifications'
     })
   },
 

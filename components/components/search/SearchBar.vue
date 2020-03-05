@@ -80,9 +80,7 @@ export default {
       // Populate filterData data and reuse later
       if (!this.searchData.premadeFilterData.length) {
         await this.fetchWithMode({
-          mode: 'filter',
-          url:
-            'https://gistcdn.githack.com/VoidlessSeven7/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-furry-filter.json'
+          mode: 'filter'
         })
       }
 
