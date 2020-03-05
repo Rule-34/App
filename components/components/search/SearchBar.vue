@@ -120,7 +120,7 @@ export default {
 
     toggleFilter() {
       this.searchManager({
-        isFilterActive: !this.searchData.isFilterActive
+        mode: 'toggleFilter'
       })
     }
   }

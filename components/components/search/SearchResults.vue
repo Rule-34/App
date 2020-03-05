@@ -123,7 +123,7 @@ export default {
 
       // Hide the search bar
       this.searchManager({
-        isActive: !this.searchData.isActive
+        mode: 'toggleSearch'
       })
 
       // And fire analytics

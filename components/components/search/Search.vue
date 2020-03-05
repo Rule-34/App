@@ -7,7 +7,7 @@
         class="hidden md:block md:w-2/12"
         @click.self="
           searchManager({
-            isActive: !searchData.isActive
+            mode: 'toggleSearch'
           })
         "
       />
@@ -24,7 +24,7 @@
         class="hidden md:block md:w-2/12"
         @click.self="
           searchManager({
-            isActive: !searchData.isActive
+            mode: 'toggleSearch'
           })
         "
       />
