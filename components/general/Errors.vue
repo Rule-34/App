@@ -11,13 +11,13 @@
     <!-- If ANY error -->
     <template v-if="generalData.errors">
       <h1 class="bold" v-text="generalData.errors" />
-      <a href="javascript:void(0)" @click="fetchWithMode('add')">Try again?</a>
+      <a href="#" @click="fetchWithMode('add')">Try again?</a>
     </template>
 
     <!-- If no posts loaded -->
     <template v-else-if="!dashBoardData.data.length && !isSinglePost">
       <h1 class="bold" v-text="'There are no more posts to load!'" />
-      <a href="javascript:void(0)" @click="resetTags()">Remove tags?</a>
+      <a href="#" @click="resetTags()">Remove tags?</a>
     </template>
 
     <!-- If browser is offline -->
