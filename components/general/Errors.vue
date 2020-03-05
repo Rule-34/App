@@ -57,7 +57,7 @@ export default {
 
       // Then show page if not active
       if (!this.searchData.isActive) {
-        this.searchManager({ isActive: !this.searchData.isActive })
+        this.searchManager({ mode: 'toggleSearch' })
       }
     }
   }

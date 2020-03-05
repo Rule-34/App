@@ -14,7 +14,7 @@
       type="button"
       class="navigation-search-button"
       title="Search"
-      @click="searchManager({ isActive: !searchData.isActive })"
+      @click="searchManager({ mode: 'toggleSearch' })"
     >
       <!-- Search Icon -->
       <SearchIcon class="icon text-default w-6 h-6 inline-flex" />
