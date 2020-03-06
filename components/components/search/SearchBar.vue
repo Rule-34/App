@@ -9,7 +9,7 @@
         <input
           class="w-full text-default-text font-light bg-background outline-none ml-1"
           type="search"
-          placeholder="Search: dragon"
+          placeholder="Search: e.g. dragon"
           @input="searchQuery = $event.target.value"
         />
       </div>
