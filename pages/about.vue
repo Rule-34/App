@@ -24,7 +24,7 @@
           Alejandro Akbal
         </h1>
         <small class="text-default-text">
-          I'm a web developer and this PWA is a project that I do in my free
+          I'm a web developer and this App is a project that I do in my free
           time
         </small>
       </div>

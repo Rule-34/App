@@ -47,7 +47,7 @@
 
     <ContentContainer
       title="Thank you for your interest"
-      text="It's a pleasure having someone read this wall of text :')"
+      text="It's a pleasure having someone read this wall of text. :')"
       icon="bg-svg-star"
       @click.native="unlockExperimental()"
     />
