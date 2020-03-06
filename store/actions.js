@@ -74,7 +74,8 @@ export default {
           '&tags=' +
           tags +
           '&score=' +
-          score
+          score +
+          '&corsProxy=true'
 
         // Fetch data
         response = await dispatch(
@@ -88,7 +89,8 @@ export default {
 
       case 'single-post':
         // Craft URL
-        parameters.url = 'single-post?id=' + parameters.postId
+        parameters.url =
+          'single-post?id=' + parameters.postId + '&corsProxy=true'
 
         // Fetch data
         response = await dispatch(
@@ -103,7 +105,8 @@ export default {
 
       case 'tags':
         // Craft URL
-        parameters.url = '?tag=' + parameters.tag + '&limit=' + limit
+        parameters.url =
+          '?tag=' + parameters.tag + '&limit=' + limit + '&corsProxy=true'
 
         // Fetch data
         response = await dispatch(
