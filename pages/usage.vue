@@ -8,12 +8,10 @@
       text="Normal usage of the PWA is explained below"
     />
 
-    <ContentContainer title="Touch navigation">
-      <template slot="extra">
-        On devices with touch support, swiping <u>right</u> will open the menu,
-        and swiping <u>left</u> will open the search.
-      </template>
-    </ContentContainer>
+    <ContentContainer
+      title="Touch navigation"
+      text="On devices with touch support, swiping right will open the menu, and swiping left will open the search."
+    />
 
     <ContentContainer
       title="Search: remove tags"
