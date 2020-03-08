@@ -65,13 +65,13 @@ export default {
     ...mapMutations(['domainManager', 'pidManager', 'tagManager']),
     ...mapActions(['fetchWithMode', 'analyticManager']),
 
-    evaluateBooruList(nsfw, experimental) {
+    evaluateBooruList(nsfwSetting, experimentalSetting) {
       // If NSFW is enabled load safe boorus
-      if (!nsfw) {
+      if (!nsfwSetting) {
         return returnSafeBoorus()
 
         // If experimental settings are enabled return unfiltered boorus
-      } else if (experimental) {
+      } else if (experimentalSetting) {
         return booruList
 
         // Else return filtered boorus
