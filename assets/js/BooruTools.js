@@ -1,4 +1,4 @@
-import booruList from '~/assets/lib/rule-34-shared-resources/domains.json'
+import booruList from '~/assets/lib/rule-34-shared-resources/booru-list.json'
 
 function findBooruByShort(short) {
   return booruList.find((booru) => booru.short === short)
