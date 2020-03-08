@@ -35,7 +35,7 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 // Third party
 import { ChevronDownIcon, CloudIcon } from 'vue-feather-icons'
 // Components
-import { domains } from '~/assets/js/domains'
+import { booruList, removeBooruByShort } from '~/assets/js/BooruTools.js'
 
 export default {
   name: 'BooruSelector',

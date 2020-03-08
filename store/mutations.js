@@ -1,4 +1,4 @@
-import { findDomainByShort } from '~/assets/js/domains'
+import { findBooruByShort } from '~/assets/js/BooruTools.js'
 
 export default {
   /**
@@ -45,7 +45,7 @@ export default {
 
       case 'reset':
         // Find domain in list and use its PID
-        state.dashBoardData.pid = findDomainByShort(
+        state.dashBoardData.pid = findBooruByShort(
           state.dashBoardSettings.contentDomain
         ).pid
         break
