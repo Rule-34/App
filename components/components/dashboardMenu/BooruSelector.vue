@@ -38,7 +38,7 @@ import { ChevronDownIcon, CloudIcon } from 'vue-feather-icons'
 import { domains } from '~/assets/js/domains'
 
 export default {
-  name: 'DomainSelector',
+  name: 'BooruSelector',
   components: { ChevronDownIcon, CloudIcon },
 
   data() {
