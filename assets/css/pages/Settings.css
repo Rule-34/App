@@ -2,12 +2,6 @@
 **          SETTINGS RELATED
 **/
 
-/* NSFW SETTING */
-
-.nsfw-disabled {
-  filter: blur(20px);
-}
-
 /* HOVER CONTROLS SETTING */
 
 .hover-controls-container {
