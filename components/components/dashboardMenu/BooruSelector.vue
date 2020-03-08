@@ -13,12 +13,12 @@
       @change="changeDomain($event.target.value)"
     >
       <!-- Loop for every option -->
-      <template v-for="option in options">
+      <template v-for="booru in boorus">
         <option
-          :key="option.name"
-          :aria-label="'Changes the domain to ' + option.name"
-          :value="option.short"
-          v-text="option.name"
+          :key="booru.name"
+          :aria-label="'Changes the domain to ' + booru.name"
+          :value="booru.short"
+          v-text="booru.name"
         />
       </template>
     </select>
@@ -41,23 +41,17 @@ export default {
   name: 'BooruSelector',
   components: { ChevronDownIcon, CloudIcon },
 
-  data() {
-    return {
-      options: domains
-    }
-  },
-
   computed: {
     ...mapState(['dashBoardSettings']),
+
+    boorus() {
+      return this.dashBoardSettings.experimentalSettings
+        ? booruList
+        : removeBooruByShort(['loli'])
+    },
+
     selected() {
       return this.dashBoardSettings.contentDomain
-    }
-  },
-
-  // Experimental features, dont say anything!
-  mounted() {
-    if (!this.dashBoardSettings.experimentalSettings) {
-      this.options = this.options.filter((item) => item.short !== 'loli')
     }
   },
 
