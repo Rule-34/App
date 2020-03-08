@@ -16,7 +16,8 @@ export default {
     // For execution "posts"
     const pid = state.dashBoardData.pid
     const tags = state.searchData.tags.join('+')
-    let limit, score
+    // For NSFW checking
+    let limit, score, nsfw
 
     // Reset errors
     if (state.generalData.errors) {
@@ -38,6 +39,9 @@ export default {
       // For execution "posts"
       limit = localStorageParsedData.userSettings.postsPerPage.value
       score = localStorageParsedData.userSettings.score.value
+
+      // For NSFW checking
+      nsfw = localStorageParsedData.userSettings.nsfw.value
     } catch {
       console.info('fetchWithMode: No localStorage key found, using vuex store')
       localStorageParsedData = null
@@ -50,6 +54,20 @@ export default {
       // For execution "posts"
       limit = state.userSettings.postsPerPage.value
       score = state.userSettings.score.value
+
+      // For NSFW checking
+      nsfw = state.userSettings.nsfw.value
+    }
+
+    // Load safebooru if NSFW is disabled
+    if (!nsfw) {
+      if (domain !== 'safebooru') {
+        console.log('Loading safebooru')
+
+        commit('domainManager', 'safebooru')
+
+        domain = 'safebooru'
+      }
     }
 
     // Populate domain
@@ -161,6 +179,18 @@ export default {
       data: response,
       mode: parameters.returnMode
     })
+
+    // Fire analytics
+    // switch (parameters.mode) {
+    //   case 'posts':
+    //   case 'single-post':
+    //     await dispatch('analyticManager', 'domain')
+    //     break
+
+    //   case 'tags':
+    //     await dispatch('analyticManager', 'tags')
+    //     break
+    // }
   },
 
   /**
