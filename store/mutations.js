@@ -61,11 +61,7 @@ export default {
    * @param {String} domain New domain
    */
   domainManager(state, domain) {
-    // console.log(domain)
-    // New url
-    if (domain !== undefined) {
-      state.dashBoardSettings.contentDomain = domain
-    }
+    state.dashBoardSettings.contentDomain = domain
   },
 
   /**
