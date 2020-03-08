@@ -8,7 +8,7 @@
     <!-- What is this -->
     <ContentContainer
       title="What is this?"
-      text="This is an App to enjoy all Rule 34 sites combined in a mobile-friendly experience."
+      text="This is an app to browse the most popular boorus."
       icon="bg-svg-info"
     />
 

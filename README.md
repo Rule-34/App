@@ -1,6 +1,6 @@
 # Rule 34 App (PWA)
 
-App to enjoy all Rule 34 sites combined in a mobile-friendly experience
+Browse the most popular boorus in the Rule 34 App
 
 ## Visit it
 
