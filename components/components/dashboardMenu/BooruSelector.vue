@@ -35,7 +35,11 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 // Third party
 import { ChevronDownIcon, CloudIcon } from 'vue-feather-icons'
 // Components
-import { booruList, removeBooruByShort } from '~/assets/js/BooruTools.js'
+import {
+  booruList,
+  removeBooruByShort,
+  returnSafeBoorus
+} from '~/assets/js/BooruTools.js'
 
 export default {
   name: 'BooruSelector',
@@ -44,10 +48,12 @@ export default {
   computed: {
     ...mapState(['dashBoardSettings']),
 
+    // Evaluate NSFW and Experimental settings and return boorus depending of the values
     boorus() {
-      return this.dashBoardSettings.experimentalSettings
-        ? booruList
-        : removeBooruByShort(['loli'])
+      return this.evaluateBooruList(
+        this.$store.state.userSettings.nsfw.value,
+        this.dashBoardSettings.experimentalSettings
+      )
     },
 
     selected() {
@@ -58,6 +64,18 @@ export default {
   methods: {
     ...mapMutations(['domainManager', 'pidManager', 'tagManager']),
     ...mapActions(['fetchWithMode', 'analyticManager']),
+
+    evaluateBooruList(nsfw, experimental) {
+      // If NSFW is enabled load safe boorus
+      if (!nsfw) {
+        return returnSafeBoorus()
+
+
+        // Else return filtered boorus
+      } else {
+        return removeBooruByShort(['lolibooru'])
+      }
+    },
 
     // Changes that we have to do when changing domain so request is not malformed
     changeDomain(domain) {
