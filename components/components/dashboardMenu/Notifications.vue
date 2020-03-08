@@ -84,9 +84,13 @@ export default {
   computed: {
     ...mapState(['notificationData']),
 
-    // Returns true if fetched notifications are higher than local notification count
+    // Returns true if fetched notifications are different than the local notifications by comparing the last title (Or first)
     newNotification() {
-      return this.notificationData.data.length > this.notificationData.count
+      return this.notificationData.data.length
+        ? this.notificationData.latestTitle.localeCompare(
+            this.notificationData.data[0].title
+          )
+        : false
     }
   },
 
@@ -96,7 +100,7 @@ export default {
     toggleNotifications() {
       this.isActive = !this.isActive
 
-      this.notificationManager({ mode: 'setCount' })
+      this.notificationManager({ mode: 'setLatestTitle' })
     }
   }
 }
