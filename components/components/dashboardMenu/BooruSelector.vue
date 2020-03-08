@@ -70,6 +70,9 @@ export default {
       if (!nsfw) {
         return returnSafeBoorus()
 
+        // If experimental settings are enabled return unfiltered boorus
+      } else if (experimental) {
+        return booruList
 
         // Else return filtered boorus
       } else {
