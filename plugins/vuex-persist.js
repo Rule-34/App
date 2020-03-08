@@ -7,11 +7,12 @@ export default ({ store }) => {
     // 'userSettings'
   ]
 
+  // Push every setting's value path to save them to localStorage
   Object.keys(store.state.userSettings).forEach((key) => {
     SETTINGS_ARRAY.push(`userSettings.${key}.value`)
   })
 
-  console.log(SETTINGS_ARRAY)
+  // console.log(SETTINGS_ARRAY)
 
   // Hydrate data
   window.onNuxtReady(() => {
