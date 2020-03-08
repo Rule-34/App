@@ -11,8 +11,7 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content:
-          'App to enjoy all Rule 34 sites combined in a mobile-friendly experience'
+        content: 'Browse the most popular boorus in the Rule 34 App'
       }
     ],
     link: [
