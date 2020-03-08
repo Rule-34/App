@@ -179,8 +179,9 @@ export default {
   notificationManager(state, parameters) {
     switch (parameters.mode) {
       // Set count to notification length
-      case 'setCount':
-        state.notificationData.count = state.notificationData.data.length
+      case 'setLatestTitle':
+        state.notificationData.latestTitle =
+          state.notificationData.data[0].title
         break
 
       case 'setData':
