@@ -32,7 +32,7 @@ export default () => ({
 
   // These settings are saved to localStorage
   notificationData: {
-    count: 0, // Default count
+    latestTitle: '',
     data: [] // Data fetched from Gist
   },
 
