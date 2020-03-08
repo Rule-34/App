@@ -64,13 +64,13 @@ export default {
       // console.log(this.$nuxt.$route.name)
 
       // Set different layout if we're on index
-      this.TestForDashboard()
+      this.routeHandler()
     }
   },
 
   mounted() {
     // Necessary on mounted for first page load
-    this.TestForDashboard()
+    this.routeHandler()
 
     // Fetch notifications, once as its in mounted (Could potentially waste data if visitors arent on Dashboard)
     this.fetchWithMode({
@@ -82,12 +82,16 @@ export default {
     ...mapActions(['fetchWithMode']),
     ...mapMutations(['sideNavManager', 'searchManager']),
 
-    // Set different layout if we're on index
-    TestForDashboard() {
-      if (this.$nuxt.$route.name === 'index') {
-        this.isDashboard = true
-      } else {
-        this.isDashboard = false
+    // Set different layout depending of the route
+    routeHandler() {
+      switch (this.$nuxt.$route.name) {
+        case 'index':
+          this.isDashboard = true
+          break
+
+        default:
+          this.isDashboard = false
+          break
       }
     },
 
