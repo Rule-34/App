@@ -3,7 +3,7 @@
     <!-- Menu -->
     <div class="m-5 flex flex-row justify-between">
       <!-- Domain selector -->
-      <DomainSelector class="my-auto" />
+      <BooruSelector class="my-auto" />
 
       <!-- Notifications -->
       <Notifications />
@@ -41,7 +41,7 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 import { Intersect } from 'vuetify/lib/directives/intersect'
 import throttle from 'lodash/throttle'
 // Components
-import DomainSelector from '~/components/components/dashboardMenu/DomainSelector.vue'
+import BooruSelector from '~/components/components/dashboardMenu/BooruSelector.vue'
 import Notifications from '~/components/components/dashboardMenu/Notifications.vue'
 import Post from '~/components/content/Post.vue'
 import Controls from '~/components/navigation/Controls.vue'
@@ -50,7 +50,7 @@ import Errors from '~/components/general/Errors.vue'
 export default {
   components: {
     Errors,
-    DomainSelector,
+    BooruSelector,
     Notifications,
     Post,
     Controls
