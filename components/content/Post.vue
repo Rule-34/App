@@ -16,7 +16,6 @@
         :src="imageSource()"
         :loading="userSettings.lazyLoading.value ? 'lazy' : 'auto'"
         :class="{
-          'nsfw-disabled': !userSettings.nsfw.value,
           'post-animation': !userSettings.disableAnimations.value
         }"
         :alt="'Image ' + post.id"
@@ -32,9 +31,6 @@
       <!-- If lazy loading enabled -->
       <video
         :controls="userSettings.videoControls.value"
-        :class="{
-          'nsfw-disabled': !userSettings.nsfw.value
-        }"
         :alt="'Video ' + post.id"
         class="w-full h-auto"
         loop
