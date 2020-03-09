@@ -18,6 +18,8 @@ export default {
     const tags = state.searchData.tags.join('+')
     // For NSFW checking
     let limit, score, nsfw
+    // Cors Proxy usage?
+    const corsProxy = '&corsProxy=true'
 
     // Reset errors
     if (state.generalData.errors) {
@@ -95,7 +97,7 @@ export default {
           tags +
           '&score=' +
           score +
-          '&corsProxy=true'
+          corsProxy
 
         // Fetch data
         response = await dispatch(
@@ -109,8 +111,7 @@ export default {
 
       case 'single-post':
         // Craft URL
-        parameters.url =
-          'single-post?id=' + parameters.postId + '&corsProxy=true'
+        parameters.url = 'single-post?id=' + parameters.postId + corsProxy
 
         // Fetch data
         response = await dispatch(
