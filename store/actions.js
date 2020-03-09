@@ -126,8 +126,7 @@ export default {
 
       case 'tags':
         // Craft URL
-        parameters.url =
-          '?tag=' + parameters.tag + '&limit=' + limit + '&corsProxy=true'
+        parameters.url = '?tag=' + parameters.tag + '&limit=' + limit
 
         // Fetch data
         response = await dispatch(
