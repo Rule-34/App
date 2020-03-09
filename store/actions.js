@@ -62,9 +62,11 @@ export default {
     // Load safebooru if NSFW is disabled
     if (!nsfw) {
       if (domain !== 'safebooru') {
-        console.log('Loading safebooru')
+        // console.log('Loading safebooru')
 
         commit('domainManager', 'safebooru')
+        commit('tagManager', { operation: 'reset' })
+        commit('pidManager', { operation: 'reset' })
 
         domain = 'safebooru'
       }
