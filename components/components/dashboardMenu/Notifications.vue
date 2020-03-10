@@ -46,7 +46,6 @@
           class="m-1"
           :title="notification.title"
           :text="notification.description"
-          :icon="notification.icon"
           :link="notification.link"
           :link-text="notification.linkText"
         >
