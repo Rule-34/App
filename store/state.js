@@ -1,25 +1,27 @@
 export default () => ({
   dashBoardData: {
     data: [], // Data that is rendered to the web app
-    pid: 0 // Page id
+    pid: 0, // Page id
   },
 
   // These settings are saved to localStorage
   dashBoardSettings: {
     contentDomain: 'xxx',
-    experimentalSettings: false
+
+    experimentalSettings: false,
   },
 
   sideNavData: {
-    isActive: false
+    isActive: false,
   },
 
   searchData: {
+    isActive: false, // Is search bar active
     data: [], // Data received while searching for tags
     tags: [], // Tags that are added for searching posts with that tags
+
+    isFilterActive: false,
     premadeFilterData: [], // Data received from Gist
-    isActive: false, // Is search bar active
-    isFilterActive: false
   },
 
   generalData: {
@@ -33,7 +35,7 @@ export default () => ({
   // These settings are saved to localStorage
   notificationData: {
     latestTitle: '',
-    data: [] // Data fetched from Gist
+    data: [], // Data fetched from Gist
   },
 
   // These settings are saved to localStorage
@@ -42,7 +44,7 @@ export default () => ({
       name: 'Dark theme',
       description: 'Enable dark theme app-wide.',
       value: true,
-      defaultValue: true
+      defaultValue: true,
     },
 
     keyboardControls: {
@@ -51,7 +53,7 @@ export default () => ({
         "Keyboard's right and left arrows will navigate pages like clicking the control's buttons.",
       image: '/img/examples/keyboard-controls',
       value: false,
-      defaultValue: false
+      defaultValue: false,
     },
 
     hoverControls: {
@@ -60,7 +62,7 @@ export default () => ({
         'Controls will hover over content and be fixed on the screen.',
       image: '/img/examples/hover-controls',
       value: false,
-      defaultValue: false
+      defaultValue: false,
     },
 
     videoControls: {
@@ -69,7 +71,7 @@ export default () => ({
         "Videos will have controls, but clicking it won't show tags.",
       image: '/img/examples/video-controls',
       value: true,
-      defaultValue: true
+      defaultValue: true,
     },
 
     // TODO: slider for how much zoom
@@ -79,7 +81,7 @@ export default () => ({
         'Zoom posts when you hover over them, not really useful, but quite amusing.',
       image: '/img/examples/hover-zoom',
       value: false,
-      defaultValue: false
+      defaultValue: false,
     },
 
     lazyLoading: {
@@ -87,7 +89,7 @@ export default () => ({
       description:
         'Load media when it enters view, so you only use data when you see it.',
       value: true,
-      defaultValue: true
+      defaultValue: true,
     },
 
     fullSizeImages: {
@@ -96,7 +98,7 @@ export default () => ({
         'Load full images instead of downscaled size images, data intensive.',
       image: '/img/examples/full-size-images',
       value: false,
-      defaultValue: false
+      defaultValue: false,
     },
 
     infiniteLoad: {
@@ -104,21 +106,21 @@ export default () => ({
       description:
         'Load posts infinitely instead of using Controls, VERY resource heavy.',
       value: false,
-      defaultValue: false
+      defaultValue: false,
     },
 
     postsPerPage: {
       name: 'Posts per page',
       description: 'Number of posts to load per page, hard limit is 100.',
       value: 20,
-      defaultValue: 20
+      defaultValue: 20,
     },
 
     score: {
       name: 'Minimum score',
       description: 'Sets the required score for a post to show.',
       value: 0,
-      defaultValue: 0
+      defaultValue: 0,
     },
 
     imgRetry: {
@@ -126,7 +128,7 @@ export default () => ({
       description:
         'Number of times that an image will be attempted to be loaded if it fails.',
       value: 3,
-      defaultValue: 3
+      defaultValue: 3,
     },
 
     disableAnimations: {
@@ -134,7 +136,7 @@ export default () => ({
       description:
         'If active, animations and other resource-heavy resources will be removed.',
       value: false,
-      defaultValue: false
+      defaultValue: false,
     },
 
     nsfw: {
@@ -142,7 +144,7 @@ export default () => ({
       description: 'If deactivated all media will be blurred.',
       image: '/img/examples/nsfw',
       value: true,
-      defaultValue: true
-    }
-  }
+      defaultValue: true,
+    },
+  },
 })
