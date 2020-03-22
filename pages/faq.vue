@@ -63,7 +63,7 @@
     <!-- Helping -->
     <ContentContainer
       title="Can I help in any way?"
-      text="Of course, we're always in need of support, specially (artists and programmers), contact me on Discord if you want to help."
+      text="Of course, we're always in need of support (specially artists/designers), contact me on Discord if you want to help."
       icon="bg-svg-info"
     >
       <!-- Slot -->
@@ -127,7 +127,7 @@
     </ContentContainer>
 
     <!-- Temporal div TODO: remove -->
-    <div style="height:75vh;" />
+    <div style="height: 75vh;" />
   </main>
 </template>
 
@@ -144,10 +144,10 @@ export default {
         {
           hid: 'faq',
           name: 'description',
-          content: 'Frequently asked questions about the Rule 34 App'
-        }
-      ]
+          content: 'Frequently asked questions about the Rule 34 App',
+        },
+      ],
     }
-  }
+  },
 }
 </script>
