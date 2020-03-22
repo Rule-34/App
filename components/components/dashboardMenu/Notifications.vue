@@ -90,6 +90,14 @@ export default {
             this.notificationData.data[0].title
           )
         : false
+    },
+  },
+
+  mounted() {
+    // Test if we have already fetched data
+    if (this.notificationData.alreadyFetched) {
+      console.debug('Already fetched notification data, skipping')
+      return
     }
 
     // Fetch notifications, once as its in mounted (Could potentially waste data if visitors arent on Dashboard)

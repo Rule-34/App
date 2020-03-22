@@ -34,8 +34,9 @@ export default () => ({
 
   // These settings are saved to localStorage
   notificationData: {
-    latestTitle: '',
     data: [], // Data fetched from Gist
+    latestTitle: '',
+    alreadyFetched: false,
   },
 
   // These settings are saved to localStorage

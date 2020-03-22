@@ -120,7 +120,7 @@ export default {
         break
 
       case 'remove':
-        state.searchData.tags = state.searchData.tags.filter(function(ele) {
+        state.searchData.tags = state.searchData.tags.filter(function (ele) {
           return ele !== parameters.tag.name
         })
         break
@@ -181,7 +181,11 @@ export default {
         break
 
       case 'setData':
+        // Set data
         state.notificationData.data = parameters.data
+
+        // Set flag so we dont fetch anymore
+        state.notificationData.alreadyFetched = true
         break
 
       default:
@@ -218,5 +222,5 @@ export default {
           .experimentalSettings
         break
     }
-  }
+  },
 }
