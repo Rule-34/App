@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 // Components
 import ContentContainer from '~/components/content/ContentContainer.vue'
 
@@ -76,7 +76,7 @@ export default {
 
   data() {
     return {
-      isActive: false
+      isActive: false,
     }
   },
 
@@ -91,17 +91,23 @@ export default {
           )
         : false
     }
+
+    // Fetch notifications, once as its in mounted (Could potentially waste data if visitors arent on Dashboard)
+    this.fetchWithMode({
+      mode: 'notifications',
+    })
   },
 
   methods: {
+    ...mapActions(['fetchWithMode']),
     ...mapMutations(['notificationManager']),
 
     toggleNotifications() {
       this.isActive = !this.isActive
 
       this.notificationManager({ mode: 'setLatestTitle' })
-    }
-  }
+    },
+  },
 }
 </script>
 
