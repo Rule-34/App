@@ -5,7 +5,7 @@
       left: () =>
         isDashboard === true ? touchHandler('left') : sideNavManager('close'),
       right: () =>
-        isDashboard === true ? touchHandler('right') : sideNavManager('open')
+        isDashboard === true ? touchHandler('right') : sideNavManager('open'),
     }"
   >
     <NavToggler :show-search="isDashboard ? true : false" />
@@ -50,7 +50,7 @@ export default {
     // When vuex store changes preference then apply specific theme
     themeApplied() {
       return this.userSettings.darkTheme.value
-    }
+    },
   },
 
   // Watch for route changes
@@ -65,7 +65,7 @@ export default {
 
       // Set different layout if we're on index
       this.routeHandler()
-    }
+    },
   },
 
   mounted() {
@@ -79,7 +79,6 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchWithMode']),
     ...mapMutations(['sideNavManager', 'searchManager']),
 
     // Set different layout depending of the route
@@ -116,7 +115,7 @@ export default {
           }
           break
       }
-    }
+    },
   },
 
   // Set theme and background color in the body dynamically thanks to the vuex store computed property
@@ -125,10 +124,10 @@ export default {
       // Define template for every page
       titleTemplate: '%s | Rule 34 App',
       bodyAttrs: {
-        class: this.themeApplied ? 'dark bg-background' : 'light bg-background'
-      }
+        class: this.themeApplied ? 'dark bg-background' : 'light bg-background',
+      },
     }
-  }
+  },
 }
 
 // Preload logo

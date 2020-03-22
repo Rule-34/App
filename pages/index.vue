@@ -53,11 +53,11 @@ export default {
     BooruSelector,
     Notifications,
     Post,
-    Controls
+    Controls,
   },
 
   directives: {
-    Intersect
+    Intersect,
   },
 
   // Load the store with posts
@@ -66,7 +66,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['dashBoardData', 'userSettings'])
+    ...mapState(['dashBoardData', 'userSettings']),
   },
 
   created() {
@@ -92,13 +92,13 @@ export default {
       window.scrollTo(0, 0)
     },
 
-    throttleInfiniteLoading: throttle(function() {
+    throttleInfiniteLoading: throttle(function () {
       this.concatPost()
     }, 5000),
 
     // Infinite loading
     concatPost() {
-      console.log('Loaded more posts')
+      console.debug('Loaded more posts')
       // Get next PID
       this.pidManager({ operation: 'add' })
 
@@ -113,14 +113,14 @@ export default {
             this.$refs.controls.getNextPage()
             this.scrollToTop()
 
-            console.log('Loading next page')
+            console.debug('Loading next page')
             break
 
           case 37:
             this.$refs.controls.getPrevPage()
             this.scrollToTop()
 
-            console.log('Loading Prev page')
+            console.debug('Loading Prev page')
             break
         }
       } catch (error) {
@@ -129,14 +129,14 @@ export default {
           error
         )
       }
-    }
+    },
   },
 
   head() {
     return {
       title: 'Rule 34 App',
-      titleTemplate: null
+      titleTemplate: null,
     }
-  }
+  },
 }
 </script>

@@ -2,8 +2,8 @@ import { event } from 'vue-analytics'
 
 // Send tags in an interval of .5 seconds to not flood the analytics server
 function SendTimed(index, category, action, value) {
-  setTimeout(function() {
-    console.log(`
+  setTimeout(function () {
+    console.debug(`
     ---- Analytic tracking ----
     Category: ${category}
     Action: ${action}
@@ -22,7 +22,7 @@ function SendTimed(index, category, action, value) {
 }
 
 function tagsTracking(data, premadeFilterData) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     let isFromFilter = false // In case tags are from filter
     let index = 0 // Workaround, if not done then tags are sent with a lot of delay
 
@@ -32,7 +32,7 @@ function tagsTracking(data, premadeFilterData) {
     }
 
     // Execute successfully the code
-    Object.keys(data).forEach(function(key) {
+    Object.keys(data).forEach(function (key) {
       // console.log(key, data[key])
 
       // If the key is from the preFab then dont send anything and skip to next
@@ -53,7 +53,7 @@ function tagsTracking(data, premadeFilterData) {
 
     // If variables are from filter then send a unique event that identifies that it has been used
     if (isFromFilter) {
-      console.log('Tracked Premade Filter')
+      console.debug('Tracked Premade Filter')
 
       SendTimed(0, 'Tags', 'searched', 'Premade Filter')
       // track({
@@ -70,7 +70,7 @@ function tagsTracking(data, premadeFilterData) {
 }
 
 function domainTracking(data) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     // Test to see if theres any data passed
     if (!data) {
       resolve('No domain passed')
@@ -90,7 +90,7 @@ function domainTracking(data) {
 }
 
 function settingsTracking(data) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     // Compare default settings to user settings to see if theres a difference
     const difference = Object.keys(data).filter(
       (key) => data[key].value !== data[key].defaultValue
@@ -102,7 +102,7 @@ function settingsTracking(data) {
     }
 
     // When we know theres a difference, track each difference
-    Object.keys(difference).forEach(function(key, index) {
+    Object.keys(difference).forEach(function (key, index) {
       // console.log(key, difference[key])
 
       // Send settings in an interval of .5 seconds to not flood the analytics server
