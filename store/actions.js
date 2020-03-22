@@ -224,7 +224,7 @@ export default {
           'tags',
           state.searchData.tags,
           state.searchData.premadeFilterData
-        ).then(console.log)
+        ).then(console.debug)
         break
 
       // Send domain
@@ -232,12 +232,12 @@ export default {
         await fireAnalytics(
           'domain',
           state.dashBoardSettings.contentDomain
-        ).then(console.log)
+        ).then(console.debug)
         break
 
       // Send user settings
       case 'settings':
-        await fireAnalytics('settings', state.userSettings).then(console.log)
+        await fireAnalytics('settings', state.userSettings).then(console.debug)
         break
     }
   }

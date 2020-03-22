@@ -53,7 +53,7 @@
     />
 
     <!-- Temporal div TODO: remove -->
-    <div style="height:75vh;" />
+    <div style="height: 75vh;" />
   </main>
 </template>
 
@@ -66,7 +66,7 @@ export default {
 
   data() {
     return {
-      clicks: 0
+      clicks: 0,
     }
   },
 
@@ -77,17 +77,17 @@ export default {
     unlockExperimental() {
       if (this.clicks >= 7) {
         this.clicks = 0
-        console.info('Experimental features enabled!')
+        console.debug('Experimental features enabled!')
         this.experimentalManager('enable')
       } else {
         this.clicks++
-        console.log(this.clicks)
+        console.debug(this.clicks)
         // Reset to default domain
         this.domainManager('xxx')
         // Disable features
         this.experimentalManager('disable')
       }
-    }
+    },
   },
 
   head() {
@@ -97,10 +97,10 @@ export default {
         {
           hid: 'legal',
           name: 'description',
-          content: 'Legal information about the Rule 34 App'
-        }
-      ]
+          content: 'Legal information about the Rule 34 App',
+        },
+      ],
     }
-  }
+  },
 }
 </script>
