@@ -2,12 +2,15 @@ import createPersistedState from 'vuex-persistedstate'
 
 export default ({ store }) => {
   const SETTINGS_ARRAY = [
+    // Dashboard
     'dashBoardSettings',
-    'notificationData'
+    // Notifications
+    'notificationData.data',
+    'notificationData.latestTitle',
     // 'userSettings'
   ]
 
-  // Push every setting's value path to save them to localStorage
+  // Push every setting's value path to save them to localStorage (this way we dont save other data like titles, defaultValue, etc.)
   Object.keys(store.state.userSettings).forEach((key) => {
     SETTINGS_ARRAY.push(`userSettings.${key}.value`)
   })
@@ -18,7 +21,7 @@ export default ({ store }) => {
   window.onNuxtReady(() => {
     createPersistedState({
       key: 'vuex',
-      paths: SETTINGS_ARRAY
+      paths: SETTINGS_ARRAY,
     })(store)
   })
 }
