@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 // Third party
 import { Touch } from 'vuetify/lib/directives/touch'
 // Components, I decided not to lazy load them as they break the experience
@@ -71,11 +71,6 @@ export default {
   mounted() {
     // Necessary on mounted for first page load
     this.routeHandler()
-
-    // Fetch notifications, once as its in mounted (Could potentially waste data if visitors arent on Dashboard)
-    this.fetchWithMode({
-      mode: 'notifications'
-    })
   },
 
   methods: {

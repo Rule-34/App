@@ -25,7 +25,7 @@ export default {
     if (state.generalData.errors) {
       commit({
         type: 'generalManager',
-        errors: null
+        errors: null,
       })
     }
 
@@ -45,7 +45,9 @@ export default {
       // For NSFW checking
       nsfw = localStorageParsedData.userSettings.nsfw.value
     } catch {
-      console.info('fetchWithMode: No localStorage key found, using vuex store')
+      console.debug(
+        'fetchWithMode: No localStorage key found, using vuex store'
+      )
       localStorageParsedData = null
 
       // Populate from vuex store
@@ -179,7 +181,7 @@ export default {
     commit({
       type: parameters.mutationToReturn,
       data: response,
-      mode: parameters.returnMode
+      mode: parameters.returnMode,
     })
 
     // Fire analytics
@@ -209,7 +211,7 @@ export default {
       .catch((error) => {
         commit({
           type: 'generalManager',
-          errors: error
+          errors: error,
         })
       })
 
@@ -240,5 +242,5 @@ export default {
         await fireAnalytics('settings', state.userSettings).then(console.debug)
         break
     }
-  }
+  },
 }
