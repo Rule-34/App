@@ -97,7 +97,7 @@ export default {
         {
           hid: 'legal',
           name: 'description',
-          content: 'Legal information about the Rule 34 App',
+          content: 'Legal information about the Rule 34 App.',
         },
       ],
     }

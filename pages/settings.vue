@@ -59,7 +59,7 @@ export default {
 
       // And reload page to see changes
       location.reload()
-    }
+    },
   },
 
   head() {
@@ -69,10 +69,10 @@ export default {
         {
           hid: 'settings',
           name: 'description',
-          content: 'Tweak your experience on the Rule 34 App'
-        }
-      ]
+          content: 'Tweak your experience on the Rule 34 App.',
+        },
+      ],
     }
-  }
+  },
 }
 </script>

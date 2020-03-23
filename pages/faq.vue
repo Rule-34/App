@@ -144,7 +144,7 @@ export default {
         {
           hid: 'faq',
           name: 'description',
-          content: 'Frequently asked questions about the Rule 34 App',
+          content: 'Frequently asked questions about the Rule 34 App.',
         },
       ],
     }
