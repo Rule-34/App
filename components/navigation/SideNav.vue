@@ -14,6 +14,8 @@
             class="sidebar-img w-full h-auto object-cover"
             src="/img/icon.png"
             alt="Rule 34 App Logo"
+            height="512"
+            width="512"
           />
         </picture>
 
@@ -109,17 +111,17 @@ export default {
         { title: 'Faq', url: '/faq' },
         { title: 'Usage', url: '/usage' },
         { title: 'About', url: '/about' },
-        { title: 'Settings', url: '/settings' }
-      ]
+        { title: 'Settings', url: '/settings' },
+      ],
     }
   },
 
   computed: {
-    ...mapState(['searchData'])
+    ...mapState(['searchData']),
   },
   methods: {
-    ...mapMutations(['sideNavManager'])
-  }
+    ...mapMutations(['sideNavManager']),
+  },
 }
 </script>
 
