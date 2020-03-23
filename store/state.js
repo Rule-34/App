@@ -142,8 +142,7 @@ export default () => ({
 
     nsfw: {
       name: 'NSFW',
-      description: 'If deactivated all media will be blurred.',
-      image: '/img/usage_examples/nsfw',
+      description: 'Allows NSFW content to be shown.',
       value: true,
       defaultValue: true,
     },
