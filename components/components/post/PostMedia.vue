@@ -102,7 +102,7 @@ export default {
 
     addAnimation(event) {
       if (this.userSettings.animations.value) {
-        event.target.classList.toggle('post-animation--active')
+        event.target.classList.add('post-animation--active')
       }
     },
   },
