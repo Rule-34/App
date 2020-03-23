@@ -9,10 +9,10 @@
     >
       <div>
         <picture>
-          <source srcset="/img/ALogo.webp" type="image/webp" />
+          <source srcset="~/assets/img/brand/akbal.webp" type="image/webp" />
           <img
             class="mx-auto mb-5"
-            src="/img/ALogo.png"
+            src="~/assets/img/brand/akbal.png"
             alt="Akbal logo"
             loading="eager"
             height="206"
