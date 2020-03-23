@@ -22,6 +22,7 @@
       :controls="userSettings.videoControls.value"
       :alt="'Video ' + post.id"
       class="w-full h-auto"
+      preload="metadata"
       loop
     >
       <source :src="post.high_res_file" @error="retryToLoadMedia($event)" />
