@@ -27,7 +27,7 @@ export default {
         {
           hid: 'usage',
           name: 'description',
-          content: 'Authenticate to the Rule 34 App with Patreon',
+          content: 'Authenticate to the Rule 34 App with Patreon.',
         },
       ],
     }

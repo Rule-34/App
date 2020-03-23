@@ -48,18 +48,18 @@ export default {
 
   components: {
     Post,
-    Errors
+    Errors,
   },
 
   data() {
     return {
       id: this.$route.query.id ?? undefined,
-      domain: this.$route.query.domain ?? undefined
+      domain: this.$route.query.domain ?? undefined,
     }
   },
 
   computed: {
-    ...mapState(['dashBoardData'])
+    ...mapState(['dashBoardData']),
   },
 
   async mounted() {
@@ -77,14 +77,14 @@ export default {
         await this.fetchWithMode({
           mode: 'single-post',
           returnMode: 'add',
-          postId: this.id
+          postId: this.id,
         })
         break
 
       // If not supported then throw error
       default:
         this.generalManager({
-          errors: `The current domain "${this.domain}" doesnt support getting posts from ID`
+          errors: `The current domain "${this.domain}" doesnt support getting posts from ID`,
         })
         break
     }
@@ -92,7 +92,7 @@ export default {
 
   methods: {
     ...mapActions(['fetchWithMode']),
-    ...mapMutations(['generalManager', 'domainManager'])
+    ...mapMutations(['generalManager', 'domainManager']),
   },
 
   head() {
@@ -102,10 +102,10 @@ export default {
         {
           hid: 'singlepost',
           name: 'description',
-          content: 'Share your favorite images with the Rule 34 App'
-        }
-      ]
+          content: 'Share your favorite images with the Rule 34 App.',
+        },
+      ],
     }
-  }
+  },
 }
 </script>
