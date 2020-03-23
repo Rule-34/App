@@ -93,13 +93,10 @@ export default {
     imageSource() {
       // Return full image if its setting is enabled OR if low resolution file doesnt exist
       if (this.userSettings.fullSizeImages.value || !this.post.low_res_file) {
-        // console.log('High res')
-
         return this.post.high_res_file
 
         // Else return low res file
       } else {
-        // console.log('Low res')
         return this.post.low_res_file
       }
     },
