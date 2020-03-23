@@ -10,12 +10,13 @@
       <div>
         <picture>
           <source srcset="/img/ALogo.webp" type="image/webp" />
-          <source srcset="/img/ALogo.png" type="image/png" />
           <img
             class="mx-auto mb-5"
-            src="/img/ALogo.webp"
+            src="/img/ALogo.png"
             alt="Akbal logo"
             loading="eager"
+            height="206"
+            width="231"
           />
         </picture>
         <h1
@@ -45,10 +46,10 @@ export default {
         {
           hid: 'about',
           name: 'description',
-          content: 'About the Rule 34 App and Its creator'
-        }
-      ]
+          content: 'About the Rule 34 App and Its creator',
+        },
+      ],
     }
-  }
+  },
 }
 </script>
