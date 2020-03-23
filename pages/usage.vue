@@ -16,19 +16,19 @@
     <ContentContainer
       title="Search: remove tags"
       text="This button toggles between states, first state will delete all added tags."
-      img="/img/examples/search-delete"
+      img="/img/usage_examples/search-delete"
     />
 
     <ContentContainer
       title="Search: premade filter"
       text="Second state will fetch a dynamic filter that applies tags that will ban unpleasant posts from showing."
-      img="/img/examples/search-premade-filter"
+      img="/img/usage_examples/search-premade-filter"
     />
 
     <ContentContainer
       title="Search: filter content"
       text="Toggling the filter will ban from appearing the next clicked tags."
-      img="/img/examples/search-filter"
+      img="/img/usage_examples/search-filter"
     />
 
     <!-- User Settings -->
@@ -60,7 +60,7 @@ export default {
   components: { ContentContainer },
 
   computed: {
-    ...mapState(['userSettings'])
+    ...mapState(['userSettings']),
   },
 
   head() {
