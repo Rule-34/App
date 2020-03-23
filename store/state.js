@@ -132,12 +132,11 @@ export default () => ({
       defaultValue: 3,
     },
 
-    disableAnimations: {
-      name: 'Disable animations',
-      description:
-        'If active, animations and other resource-heavy resources will be removed.',
-      value: false,
-      defaultValue: false,
+    animations: {
+      name: 'Animations',
+      description: 'Use animations and other resource-heavy resources.',
+      value: true,
+      defaultValue: true,
     },
 
     nsfw: {
