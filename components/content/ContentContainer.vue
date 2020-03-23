@@ -83,10 +83,10 @@ export default {
     icon: { type: String, required: false, default: undefined },
     iconPosition: { type: String, required: false, default: 'bg-svg-right' },
     // For images
-    img: { type: String, required: false, default: undefined }
+    img: { type: String, required: false, default: undefined },
   },
 
-  computed: mapState(['userSettings'])
+  computed: mapState(['userSettings']),
 }
 </script>
 
@@ -133,14 +133,14 @@ export default {
 
 /* Types of icons */
 .bg-svg-info {
-  background-image: url('~assets/img/info.svg');
+  background-image: url('~assets/img/svg/info.svg');
 }
 
 .bg-svg-star {
-  background-image: url('~assets/img/star.svg');
+  background-image: url('~assets/img/svg/star.svg');
 }
 
 .bg-svg-dollar {
-  background-image: url('~assets/img/dollar.svg');
+  background-image: url('~assets/img/svg/dollar.svg');
 }
 </style>

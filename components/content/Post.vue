@@ -16,7 +16,7 @@
         :src="imageSource()"
         :loading="userSettings.lazyLoading.value ? 'lazy' : 'auto'"
         :class="{
-          'post-animation': !userSettings.disableAnimations.value
+          'post-animation': !userSettings.disableAnimations.value,
         }"
         :alt="'Image ' + post.id"
         class="w-full h-auto"
@@ -109,20 +109,20 @@ export default {
       type: Object,
       default() {
         return {}
-      }
-    }
+      },
+    },
   },
 
   data() {
     return {
       // Internal toggle for showing tags
       isActive: false,
-      retryCount: 0
+      retryCount: 0,
     }
   },
 
   computed: {
-    ...mapState(['userSettings'])
+    ...mapState(['userSettings']),
   },
 
   methods: {
@@ -164,7 +164,7 @@ export default {
         // console.log('Cant load the image')
 
         // Set error image
-        event.target.src = '/img/error.png'
+        event.target.src = '~/assets/img/utils/error.png'
 
         // Stop retrying
         event.target.onerror = null
@@ -204,15 +204,15 @@ export default {
 
       // Reset all tags
       this.tagManager({
-        operation: 'reset'
+        operation: 'reset',
       })
 
       // Add clicked tag
       this.tagManager({
         operation: 'add',
         tag: {
-          name: tag
-        }
+          name: tag,
+        },
       })
 
       // Search for the tag
@@ -221,8 +221,8 @@ export default {
 
       // And fire analytics
       this.analyticManager('tags')
-    }
-  }
+    },
+  },
 }
 </script>
 

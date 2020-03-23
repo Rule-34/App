@@ -8,11 +8,11 @@
       <!-- Hero Image -->
       <div class="w-full overflow-hidden relative">
         <picture>
-          <source srcset="/img/icon.webp" type="image/webp" />
+          <source srcset="~/assets/img/brand/icon.webp" type="image/webp" />
           <img
             loading="eager"
             class="sidebar-img w-full h-auto object-cover"
-            src="/img/icon.png"
+            src="~/assets/img/brand/icon.png"
             alt="Rule 34 App Logo"
             height="512"
             width="512"
