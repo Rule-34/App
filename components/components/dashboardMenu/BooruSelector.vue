@@ -38,7 +38,7 @@ import { ChevronDownIcon, CloudIcon } from 'vue-feather-icons'
 import {
   booruList,
   removeBooruByShort,
-  returnSafeBoorus
+  returnSafeBoorus,
 } from '~/assets/js/BooruTools.js'
 
 export default {
@@ -46,32 +46,32 @@ export default {
   components: { ChevronDownIcon, CloudIcon },
 
   computed: {
-    ...mapState(['dashBoardSettings']),
+    ...mapState(['dashBoardSettings', 'patreonCredentials']),
 
     // Evaluate NSFW and Experimental settings and return boorus depending of the values
     boorus() {
       return this.evaluateBooruList(
         this.$store.state.userSettings.nsfw.value,
-        this.dashBoardSettings.experimentalSettings
+        this.patreonCredentials.isPatron
       )
     },
 
     selected() {
       return this.dashBoardSettings.contentDomain
-    }
+    },
   },
 
   methods: {
     ...mapMutations(['domainManager', 'pidManager', 'tagManager']),
     ...mapActions(['fetchWithMode', 'analyticManager']),
 
-    evaluateBooruList(nsfwSetting, experimentalSetting) {
+    evaluateBooruList(nsfwSetting, isPatron) {
       // If NSFW is enabled load safe boorus
       if (!nsfwSetting) {
         return returnSafeBoorus()
 
         // If experimental settings are enabled return unfiltered boorus
-      } else if (experimentalSetting) {
+      } else if (isPatron) {
         return booruList
 
         // Else return filtered boorus
@@ -96,7 +96,7 @@ export default {
 
       // Send analytics
       this.analyticManager('domain')
-    }
-  }
+    },
+  },
 }
 </script>
