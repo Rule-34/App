@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main>
     <!-- If theres errors -->
     <Errors :is-single-post="true" />
 
@@ -34,7 +34,7 @@
         </nuxt-link>
       </div>
     </template>
-  </div>
+  </main>
 </template>
 
 <script>
