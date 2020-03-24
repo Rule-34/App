@@ -144,4 +144,19 @@ export default () => ({
       defaultValue: true,
     },
   },
+
+  // These settings are saved to localStorage
+  patreonCredentials: {
+    // API credentials
+    access_token: undefined,
+    refresh_token: undefined,
+    expires_on: undefined,
+
+    // User data
+    full_name: undefined,
+    image_url: undefined,
+
+    // Is the user a Patron?
+    isPatron: false,
+  },
 })

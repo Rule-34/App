@@ -168,6 +168,24 @@ export default {
 
         break
 
+      case 'patreon':
+        // Craft URL
+        parameters.url =
+          'https://www.patreon.com/api/oauth2/api/current_user?access_token=' +
+          state.patreonCredentials.access_token
+
+        // Fetch data
+        response = await dispatch(
+          'simpleFetch',
+          state.generalData.corsProxyUrl + '?q=' + parameters.url
+        )
+
+        // Set mutation to return
+        parameters.mutationToReturn = 'patreonManager'
+        parameters.returnMode = 'setUserData'
+
+        break
+
       default:
         throw new Error('No mode specified')
     }
