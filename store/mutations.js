@@ -206,20 +206,10 @@ export default {
     }
   },
 
-  experimentalManager(state, parameters) {
-    switch (parameters) {
-      case 'enable':
-        state.dashBoardSettings.experimentalSettings = true
         break
 
-      case 'disable':
-        state.dashBoardSettings.experimentalSettings = false
         break
 
-      // Toggle
-      default:
-        state.dashBoardSettings.experimentalSettings = !state.dashBoardSettings
-          .experimentalSettings
         break
     }
   },

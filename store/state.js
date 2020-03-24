@@ -7,8 +7,6 @@ export default () => ({
   // These settings are saved to localStorage
   dashBoardSettings: {
     contentDomain: 'xxx',
-
-    experimentalSettings: false,
   },
 
   sideNavData: {
