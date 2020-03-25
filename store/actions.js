@@ -55,7 +55,7 @@ export default {
     switch (parameters.mode) {
       case 'basic':
         // Fetch data
-        response = await dispatch('simpleFetch', parameters.url)
+        response = await dispatch('simpleFetch', { url: parameters.url })
         break
 
       case 'posts':
@@ -72,10 +72,9 @@ export default {
           corsProxy
 
         // Fetch data
-        response = await dispatch(
-          'simpleFetch',
-          state.generalData.apiUrl + domain + '/' + parameters.url
-        )
+        response = await dispatch('simpleFetch', {
+          url: state.generalData.apiUrl + domain + '/' + parameters.url,
+        })
 
         // Set mutation to return
         parameters.mutationToReturn = 'dashBoardManager'
@@ -86,10 +85,9 @@ export default {
         parameters.url = 'single-post?id=' + parameters.postId + corsProxy
 
         // Fetch data
-        response = await dispatch(
-          'simpleFetch',
-          state.generalData.apiUrl + domain + '/' + parameters.url
-        )
+        response = await dispatch('simpleFetch', {
+          url: state.generalData.apiUrl + domain + '/' + parameters.url,
+        })
 
         // Set mutation to return
         parameters.mutationToReturn = 'dashBoardManager'
@@ -101,10 +99,9 @@ export default {
         parameters.url = '?tag=' + parameters.tag + '&limit=' + limit
 
         // Fetch data
-        response = await dispatch(
-          'simpleFetch',
-          state.generalData.apiUrl + domain + '/tags' + parameters.url
-        )
+        response = await dispatch('simpleFetch', {
+          url: state.generalData.apiUrl + domain + '/tags' + parameters.url,
+        })
 
         // Set mutation to return
         parameters.mutationToReturn = 'searchManager'
@@ -114,10 +111,10 @@ export default {
 
       case 'notifications':
         // Fetch data
-        response = await dispatch(
-          'simpleFetch',
-          'https://cdn.statically.io/gist/VoidlessSeven7/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-notifications.min.json'
-        )
+        response = await dispatch('simpleFetch', {
+          url:
+            'https://cdn.statically.io/gist/VoidlessSeven7/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-notifications.min.json',
+        })
 
         // Set mutation to return
         parameters.mutationToReturn = 'notificationManager'
@@ -127,10 +124,10 @@ export default {
 
       case 'filter':
         // Fetch data
-        response = await dispatch(
-          'simpleFetch',
-          'https://cdn.statically.io/gist/VoidlessSeven7/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-furry-filter.min.json'
-        )
+        response = await dispatch('simpleFetch', {
+          url:
+            'https://cdn.statically.io/gist/VoidlessSeven7/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-furry-filter.min.json',
+        })
 
         // Set mutation to return
         parameters.mutationToReturn = 'searchManager'
@@ -190,8 +187,8 @@ export default {
    * @param {*} param0
    * @param {String} url URL to fetch
    */
-  async simpleFetch({ commit }, url) {
-    const data = await fetch(url)
+  async simpleFetch({ commit }, { url, options }) {
+    const data = await fetch(url, options)
       // Save the data
       .then((response) => response.json())
 
