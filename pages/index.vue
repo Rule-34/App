@@ -69,7 +69,12 @@ export default {
     ...mapState(['dashBoardData', 'userSettings']),
   },
 
-  created() {
+  mounted() {
+    // Load the store with posts
+    // window.onNuxtReady(() => {
+    //   this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+    // })
+
     // Navigation with keyboard
     if (this.userSettings.keyboardControls.value) {
       // eslint-disable-next-line nuxt/no-globals-in-created
