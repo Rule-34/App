@@ -138,14 +138,17 @@ export default {
       case 'patreon':
         // Craft URL
         parameters.url =
-          'https://www.patreon.com/api/oauth2/api/current_user?access_token=' +
-          state.patreonCredentials.access_token
+          process.env.NODE_ENV === 'development'
+            ? 'http://localhost:8000/oauth/user'
+            : 'https://rule-34-api.herokuapp.com/oauth/user'
 
         // Fetch data
-        response = await dispatch(
-          'simpleFetch',
-          state.generalData.corsProxyUrl + '?q=' + parameters.url
-        )
+        response = await dispatch('simpleFetch', {
+          url:
+            parameters.url +
+            '?access_token=' +
+            state.patreonCredentials.access_token,
+        })
 
         // Set mutation to return
         parameters.mutationToReturn = 'patreonManager'
