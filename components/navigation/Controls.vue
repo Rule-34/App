@@ -9,12 +9,7 @@
       class="material-container flex text-center p-2"
     >
       <!-- Get previous page -->
-      <a
-        href="#"
-        class="w-1/3 button"
-        title="Load last page"
-        @click="getPrevPage"
-      >
+      <a href="#" class="w-1/3" title="Load last page" @click="getPrevPage">
         <button type="button">
           <ArrowLeftIcon class="icon w-4 h-4 inline" />Prev page
         </button>
@@ -31,12 +26,7 @@
       </a>
 
       <!-- Get next page -->
-      <a
-        href="#"
-        class="w-1/3 button"
-        title="Load next page"
-        @click="getNextPage"
-      >
+      <a href="#" class="w-1/3" title="Load next page" @click="getNextPage">
         <button type="button">
           Next page
           <ArrowRightIcon class="icon w-4 h-4 inline" />
@@ -56,11 +46,11 @@ export default {
   name: 'Controls',
   components: {
     ArrowRightIcon,
-    ArrowLeftIcon
+    ArrowLeftIcon,
   },
   // Map data to the store following's
   computed: {
-    ...mapState(['dashBoardData', 'generalData', 'userSettings'])
+    ...mapState(['dashBoardData', 'generalData', 'userSettings']),
   },
 
   methods: {
@@ -108,7 +98,7 @@ export default {
       } else {
         alert('Wrong input, only numbers please')
       }
-    }
-  }
+    },
+  },
 }
 </script>
