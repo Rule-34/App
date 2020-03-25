@@ -29,15 +29,20 @@ module.exports = {
         'gradient-two': 'var(--color-gradient-two)',
 
         // Extra
-        'black-25': 'hsla(0, 0%, 0%, 0.25)'
+        'black-25': 'hsla(0, 0%, 0%, 0.25)',
       },
 
-      inset: {},
+      // Top, left, etc.
+      inset: {
+        '-14': '-3.5rem',
+        '-16': '-4rem',
+      },
+
       // Width and height
       spacing: {
         'fit-content': 'fit-content',
         'max-content': 'max-content',
-        'min-content': 'min-content'
+        'min-content': 'min-content',
         // Margins for content
         // '7vw': '7vw',
         // '14vw': '14vw'
@@ -47,18 +52,18 @@ module.exports = {
         '0': '0px',
         '1/4': '25%',
         '1/2': '50%',
-        '3/4': '75%'
+        '3/4': '75%',
       },
 
       minHeight: {
         '1/4': '25%',
         '1/2': '50%',
-        '3/4': '75%'
-      }
+        '3/4': '75%',
+      },
     },
     fontFamily: {
-      sans: ['Inter var', ...defaultTheme.fontFamily.sans]
-    }
+      sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+    },
   },
   // Recommended variant order
   // ['responsive', 'group-hover', 'focus-within', 'first', 'last', 'odd', 'even', 'hover', 'focus', 'active', 'visited', 'disabled']
@@ -66,12 +71,12 @@ module.exports = {
   // Every variant possible
   // variants: ['responsive', 'group-hover', 'focus-within', 'first', 'last', 'odd', 'even', 'hover', 'focus', 'active', 'visited', 'disabled'],
   variants: {
-    textColor: ['responsive', 'group-hover', 'hover', 'focus']
+    textColor: ['responsive', 'group-hover', 'hover', 'focus'],
   },
 
   plugins: [
     require('@tailwindcss/ui')({
-      layout: 'sidebar'
-    })
-  ]
+      layout: 'sidebar',
+    }),
+  ],
 }
