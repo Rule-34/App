@@ -2,7 +2,7 @@ import fireAnalytics from '~/assets/js/analytics' // Import analytics
 
 export default {
   /**
-   * Fetches data by mode, using localStorage when possible for additional data
+   * Fetches data by mode
    * @param {*} param0
    * @param {Object} parameters (.url) Url to get data from | (.mutationToReturn) Mutation to return data to | (.domain) Domain to get the data from
    */
@@ -10,14 +10,16 @@ export default {
     /* --- Initialize variables --- */
 
     // For every execution
-    let localStorageParsedData, response
+    let response
     // For execution api
-    let domain
-    // For execution "posts"
+    let domain = state.dashBoardSettings.contentDomain
+    // For post data
     const pid = state.dashBoardData.pid
+    const limit = state.userSettings.postsPerPage.value
     const tags = state.searchData.tags.join('+')
+    const score = state.userSettings.score.value
     // For NSFW checking
-    let limit, score, nsfw
+    const nsfw = state.userSettings.nsfw.value
     // Cors Proxy usage?
     const corsProxy = '&corsProxy=true'
 
@@ -27,40 +29,6 @@ export default {
         type: 'generalManager',
         errors: null,
       })
-    }
-
-    // Try to use localStorage
-    try {
-      localStorageParsedData = JSON.parse(localStorage.getItem('vuex'))
-
-      // Populate from localStorage
-
-      // For execution api
-      domain = localStorageParsedData.dashBoardSettings.contentDomain
-
-      // For execution "posts"
-      limit = localStorageParsedData.userSettings.postsPerPage.value
-      score = localStorageParsedData.userSettings.score.value
-
-      // For NSFW checking
-      nsfw = localStorageParsedData.userSettings.nsfw.value
-    } catch {
-      console.debug(
-        'fetchWithMode: No localStorage key found, using vuex store'
-      )
-      localStorageParsedData = null
-
-      // Populate from vuex store
-
-      // For execution api
-      domain = state.dashBoardSettings.contentDomain
-
-      // For execution "posts"
-      limit = state.userSettings.postsPerPage.value
-      score = state.userSettings.score.value
-
-      // For NSFW checking
-      nsfw = state.userSettings.nsfw.value
     }
 
     // Load safebooru if NSFW is disabled
@@ -80,6 +48,8 @@ export default {
     // if (parameters.domain) {
     //   domain = parameters.domain
     // }
+
+    console.debug(domain)
 
     // Choose mode
     switch (parameters.mode) {
