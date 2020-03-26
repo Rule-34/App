@@ -41,7 +41,7 @@
       <div class="ml-auto mr-5">
         <button
           class="color-util border-util bg-elevation rounded-full py-2 px-4 mt-3"
-          @click="patreonManager({ mode: 'reset' })"
+          @click="patronManager({ mode: 'reset' })"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -109,7 +109,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['patreonManager']),
+    ...mapMutations(['patronManager']),
     ...mapActions(['fetchWithMode']),
   },
 
