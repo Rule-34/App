@@ -85,27 +85,6 @@ export default {
 
   mounted() {
     // Save credentials to state
-
-    // If there are query parameters
-    if (
-      this.$route.query.token &&
-      this.$route.query.refresh_token &&
-      this.$route.query.expires_in
-    ) {
-      // Send credentials to state
-      this.patreonManager({
-        mode: 'setCredentials',
-        token: this.$route.query.token,
-        refresh_token: this.$route.query.refresh_token,
-        expires_in: this.$route.query.expires_in,
-      })
-
-      // Remove query parameters from url
-      this.$router.push({ path: this.$route.path })
-
-      // Get data about the user and save it to state
-      this.fetchWithMode({ mode: 'patreon' })
-    }
   },
 
   methods: {
