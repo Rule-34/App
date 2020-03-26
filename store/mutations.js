@@ -1,5 +1,3 @@
-// Third party
-import { addSeconds } from 'date-fns'
 // Own
 import { findBooruByShort } from '~/assets/js/BooruTools.js'
 
@@ -212,39 +210,33 @@ export default {
   patreonManager(state, parameters) {
     switch (parameters.mode) {
       case 'setCredentials':
-        state.patreonCredentials.access_token = parameters.access_token
-        state.patreonCredentials.refresh_token = parameters.refresh_token
-        state.patreonCredentials.expires_on = addSeconds(
-          new Date(),
-          parameters.expires_in
-        )
+        state.patronCredentials.token = parameters.token
         break
 
-      case 'setUserData':
-        // console.log(parameters.data)
+      // case 'setUserData':
+      //   // console.log(parameters.data)
 
-        state.patreonCredentials.full_name =
-          parameters.data.data.attributes.full_name
+      //   state.patronCredentials.full_name =
+      //     parameters.data.data.attributes.full_name
 
-        state.patreonCredentials.image_url =
-          parameters.data.data.attributes.image_url
-        break
+      //   state.patronCredentials.image_url =
+      //     parameters.data.data.attributes.image_url
+      //   break
 
       case 'reset':
-        state.patreonCredentials.access_token = undefined
-        state.patreonCredentials.refresh_token = undefined
-        state.patreonCredentials.expires_on = undefined
+        state.patronCredentials.token = undefined
 
-        state.patreonCredentials.full_name = undefined
-        state.patreonCredentials.image_url = undefined
+        state.patronCredentials.full_name = undefined
+        state.patronCredentials.image_url = undefined
         break
 
+      // Patronage
       case 'enableExperimental':
-        state.patreonCredentials.isPatron = true
+        state.patronCredentials.isPatron = true
         break
 
       case 'disableExperimental':
-        state.patreonCredentials.isPatron = false
+        state.patronCredentials.isPatron = false
         break
     }
   },

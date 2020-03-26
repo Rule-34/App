@@ -146,11 +146,10 @@ export default () => ({
   },
 
   // These settings are saved to localStorage
-  patreonCredentials: {
+  patronCredentials: {
     // API credentials
-    access_token: undefined,
-    refresh_token: undefined,
-    expires_on: undefined,
+    token: undefined,
+    identifier: undefined,
 
     // User data
     full_name: undefined,
