@@ -1,20 +1,10 @@
 <template>
   <main class="flex flex-col h-screen p-3">
-    <template v-if="!patreonCredentials.full_name">
-      <!-- URI to Patreon's OAuth2 -->
-      <a
-        class="m-auto"
-        :href="`https://www.patreon.com/oauth2/authorize\
-?response_type=code\
-&client_id=BR4HkEO0iVPQuQuVdqMzSY_XaTNS0PA_u8BWCLUswjy9dRJ0ZRlasuEf3puxrhTP\
-&redirect_uri=${REDIRECT_URL}\
-&scope=identity%20identity.memberships`"
-      >
-        <button
-          class="color-util border-util bg-elevation rounded-full py-2 px-4 mt-3"
-          v-text="'Login with Patreon'"
-        />
-      </a>
+    <template v-if="!patronCredentials.full_name">
+      <button
+        class="color-util border-util bg-elevation rounded-full py-2 px-4 mt-3"
+        v-text="'Login with Patreon'"
+      />
     </template>
 
     <!-- If user is authenticated -->
@@ -28,7 +18,7 @@
           class="absolute -top-14 h-28 w-28 md:-top-16 md:h-32 md:w-32 inset-x-0 mx-auto bg-background border-util rounded-full overflow-hidden"
         >
           <img
-            :src="patreonCredentials.image_url"
+            :src="patronCredentials.image_url"
             alt="User image"
             class="w-full h-auto"
           />
@@ -37,7 +27,7 @@
         <div class="text-center mt-14 md:mt-16">
           <h3
             class="text-lg md:text-2xl"
-            v-text="patreonCredentials.full_name"
+            v-text="patronCredentials.full_name"
           />
         </div>
 
@@ -90,7 +80,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['patreonCredentials']),
+    ...mapState(['patronCredentials']),
   },
 
   mounted() {
@@ -98,14 +88,14 @@ export default {
 
     // If there are query parameters
     if (
-      this.$route.query.access_token &&
+      this.$route.query.token &&
       this.$route.query.refresh_token &&
       this.$route.query.expires_in
     ) {
       // Send credentials to state
       this.patreonManager({
         mode: 'setCredentials',
-        access_token: this.$route.query.access_token,
+        token: this.$route.query.token,
         refresh_token: this.$route.query.refresh_token,
         expires_in: this.$route.query.expires_in,
       })

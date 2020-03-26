@@ -46,13 +46,13 @@ export default {
   components: { ChevronDownIcon, CloudIcon },
 
   computed: {
-    ...mapState(['dashBoardSettings', 'patreonCredentials']),
+    ...mapState(['dashBoardSettings', 'patronCredentials']),
 
     // Evaluate NSFW and Experimental settings and return boorus depending of the values
     boorus() {
       return this.evaluateBooruList(
         this.$store.state.userSettings.nsfw.value,
-        this.patreonCredentials.isPatron
+        this.patronCredentials.isPatron
       )
     },
 

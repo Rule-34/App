@@ -30,7 +30,7 @@ export default ({ store }) => {
         ...SETTINGS_OBJ,
 
         // Patreon data
-        patreonCredentials: state.patreonCredentials,
+        patronCredentials: state.patronCredentials,
       }
     },
   }).plugin(store)
