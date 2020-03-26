@@ -71,21 +71,21 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['patreonManager', 'domainManager']),
+    ...mapMutations(['patronManager', 'domainManager']),
 
     // Shh it's a secret!
     unlockExperimental() {
       if (this.clicks >= 7) {
         this.clicks = 0
         console.debug('Experimental features enabled!')
-        this.patreonManager({ mode: 'enableExperimental' })
+        this.patronManager({ mode: 'enableExperimental' })
       } else {
         this.clicks++
         console.debug(this.clicks)
         // Reset to default domain
         this.domainManager('xxx')
         // Disable features
-        this.patreonManager({ mode: 'disableExperimental' })
+        this.patronManager({ mode: 'disableExperimental' })
       }
     },
   },
