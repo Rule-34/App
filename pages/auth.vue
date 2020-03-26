@@ -7,7 +7,8 @@
         :href="`https://www.patreon.com/oauth2/authorize\
 ?response_type=code\
 &client_id=BR4HkEO0iVPQuQuVdqMzSY_XaTNS0PA_u8BWCLUswjy9dRJ0ZRlasuEf3puxrhTP\
-&redirect_uri=${REDIRECT_URL}`"
+&redirect_uri=${REDIRECT_URL}\
+&scope=identity%20identity.memberships`"
       >
         <button
           class="color-util border-util bg-elevation rounded-full py-2 px-4 mt-3"
