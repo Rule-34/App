@@ -1,3 +1,5 @@
+// Third party
+import { v4 as uuidv4 } from 'uuid'
 // Own
 import { findBooruByShort } from '~/assets/js/BooruTools.js'
 
@@ -207,10 +209,16 @@ export default {
     }
   },
 
-  patreonManager(state, parameters) {
+  patronManager(state, parameters) {
     switch (parameters.mode) {
       case 'setCredentials':
         state.patronCredentials.token = parameters.token
+
+        // Create identifier for the device
+        if (!state.patronCredentials.identifier) {
+          state.patronCredentials.identifier = uuidv4()
+        }
+
         break
 
       // case 'setUserData':
