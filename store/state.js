@@ -24,10 +24,10 @@ export default () => ({
 
   generalData: {
     // apiUrl: 'http://localhost:8000/',
-    apiUrl: 'https://rule-34-api.herokuapp.com/',
+    apiUrl: 'https://rule-34-auth.herokuapp.com/',
     // corsProxyUrl: 'https://test-proxy.rule34app.workers.dev/',
     corsProxyUrl: 'https://cors-proxy.rule34app.workers.dev/',
-    errors: null
+    errors: null,
   },
 
   // These settings are saved to localStorage
