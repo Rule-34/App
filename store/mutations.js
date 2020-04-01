@@ -1,5 +1,3 @@
-// Third party
-import { v4 as uuidv4 } from 'uuid'
 // Own
 import { findBooruByShort } from '~/assets/js/BooruTools.js'
 
@@ -209,15 +207,15 @@ export default {
     }
   },
 
-  patronManager(state, parameters) {
+  credentialsManager(state, parameters) {
     switch (parameters.mode) {
       // Patronage
       case 'enableExperimental':
-        state.patronCredentials.isPatron = true
+        state.credentials.isPatron = true
         break
 
       case 'disableExperimental':
-        state.patronCredentials.isPatron = false
+        state.credentials.isPatron = false
         break
     }
   },
