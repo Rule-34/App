@@ -65,27 +65,30 @@ export default {
     retryToLoadMedia(event) {
       // console.log(event.target, this.retryCount)
 
-      if (this.retryCount <= this.userSettings.imgRetry.value) {
-        setTimeout(() => {
-          // Save current source
-          const imgSrc = event.target.src
+      // If browser is offline return execution
+      if (this.$nuxt.isOffline) {
+        // If we have not reached the limit
+      } else if (this.retryCount < this.userSettings.imgRetry.value) {
+        // Save current source
+        const imgSrc = event.target.src
 
-          // Delete source
-          event.target.src = ''
+        // Delete source
+        event.target.src = ''
 
-          // Set source again to force reload
-          event.target.src = imgSrc
+        // Set source again to force reload
+        event.target.src = imgSrc
 
-          // Add one
-          this.retryCount++
-        }, 500 * this.retryCount)
+        console.log(this.retryCount)
+
+        // Add one
+        this.retryCount++
       } else {
         // console.log('Cant load the image')
 
         // Set error image
-        event.target.src = '~/assets/img/utils/error.png'
+        event.target.src = require('~/assets/img/utils/error.png')
 
-        // Stop retrying
+        // Stop retrying // This doesnt do anything
         event.target.onerror = null
       }
     },
