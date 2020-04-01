@@ -27,7 +27,7 @@ export default () => ({
     apiUrl: 'https://rule-34-api.herokuapp.com/',
     // corsProxyUrl: 'https://test-proxy.rule34app.workers.dev/',
     corsProxyUrl: 'https://cors-proxy.rule34app.workers.dev/',
-    errors: null
+    errors: null,
   },
 
   // These settings are saved to localStorage
@@ -147,14 +147,6 @@ export default () => ({
 
   // These settings are saved to localStorage
   patronCredentials: {
-    // API credentials
-    token: undefined,
-    identifier: undefined,
-
-    // User data
-    full_name: undefined,
-    image_url: undefined,
-
     // Is the user a Patron?
     isPatron: false,
   },
