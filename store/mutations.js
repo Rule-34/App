@@ -211,33 +211,6 @@ export default {
 
   patronManager(state, parameters) {
     switch (parameters.mode) {
-      case 'setCredentials':
-        state.patronCredentials.token = parameters.token
-
-        // Create identifier for the device
-        if (!state.patronCredentials.identifier) {
-          state.patronCredentials.identifier = uuidv4()
-        }
-
-        break
-
-      // case 'setUserData':
-      //   // console.log(parameters.data)
-
-      //   state.patronCredentials.full_name =
-      //     parameters.data.data.attributes.full_name
-
-      //   state.patronCredentials.image_url =
-      //     parameters.data.data.attributes.image_url
-      //   break
-
-      case 'reset':
-        state.patronCredentials.token = undefined
-
-        state.patronCredentials.full_name = undefined
-        state.patronCredentials.image_url = undefined
-        break
-
       // Patronage
       case 'enableExperimental':
         state.patronCredentials.isPatron = true

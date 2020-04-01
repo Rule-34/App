@@ -135,29 +135,6 @@ export default {
 
         break
 
-      case 'auth':
-        // Craft URL
-        parameters.url =
-          process.env.NODE_ENV === 'development'
-            ? 'http://localhost:8100/token'
-            : 'https://rule-34-auth.herokuapp.com/token'
-
-        // Fetch data
-        response = await dispatch('simpleFetch', {
-          url:
-            parameters.url +
-            '?token=' +
-            state.patronCredentials.token +
-            '?identifier=' +
-            state.patronCredentials.identifier,
-        })
-
-        // Set mutation to return
-        parameters.mutationToReturn = 'patronManager'
-        parameters.returnMode = 'setUserData'
-
-        break
-
       default:
         throw new Error('No mode specified')
     }
