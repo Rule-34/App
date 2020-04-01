@@ -146,7 +146,7 @@ export default () => ({
   },
 
   // These settings are saved to localStorage
-  patronCredentials: {
+  credentials: {
     // Is the user a Patron?
     isPatron: false,
   },
