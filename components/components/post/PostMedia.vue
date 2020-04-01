@@ -78,7 +78,7 @@ export default {
         // Set source again to force reload
         event.target.src = imgSrc
 
-        console.log(this.retryCount)
+        // console.log(this.retryCount)
 
         // Add one
         this.retryCount++
