@@ -11,7 +11,7 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: 'Browse the most popular boorus in the Rule 34 App'
+        content: 'Browse rule34.xxx, rule34.paheal.net, danbooru.donmai.us, gelbooru.com, e621.net, and other popular boorus in the Rule 34 App'
       }
     ],
     link: [
