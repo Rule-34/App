@@ -56,7 +56,7 @@
               :href="notification.secondaryLink"
               v-text="notification.secondaryText"
             />
-            |
+            -
           </template>
         </ContentContainer>
       </div>

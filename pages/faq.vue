@@ -80,7 +80,7 @@
     >
       <!-- Workaround for having two links -->
       <template slot="extra">
-        |
+        -
         <a class="text-sm" href="https://discord.gg/fUhYHSZ">Discord</a>
       </template>
     </ContentContainer>
