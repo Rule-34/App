@@ -74,7 +74,7 @@
           <li>
             <a
               class="nav-links--bottom flex"
-              href="https://www.patreon.com/VoidlessSeven7"
+              href="https://liberapay.com/VoidlessSeven7/"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +86,7 @@
                 />
               </svg>
 
-              <span>Patreon</span>
+              <span>Donate</span>
             </a>
           </li>
         </ul>
