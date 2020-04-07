@@ -50,13 +50,13 @@
           :link-text="notification.linkText"
         >
           <!-- Workaround for having two links -->
-          <template v-if="notification.secondaryText">
+          <template v-if="notification.secondaryText" slot="extra">
+            -
             <a
               class="text-sm"
               :href="notification.secondaryLink"
               v-text="notification.secondaryText"
             />
-            -
           </template>
         </ContentContainer>
       </div>
