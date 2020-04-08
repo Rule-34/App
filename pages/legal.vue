@@ -17,13 +17,22 @@
     <!-- Separator -->
     <ContentContainer :separator="true" title="Privacy policy" />
 
-    <!-- Generated online copy -->
+    <!-- Generated terms of service -->
     <ContentContainer
-      title="Online copy"
+      title="Terms of service"
       text="You can find an online copy of the Terms Of Service (TOS) in the next link."
       icon="bg-svg-info"
-      link="https://www.gdprprivacynotice.com/live.php?token=EKbuSBbWgcHAwQ6QyCTgpv01fU8HGE5l"
+      link="tos.html"
       link-text="Terms of service"
+    />
+
+    <!-- Generated terms of service -->
+    <ContentContainer
+      title="Privacy policy"
+      text="You can find an online copy of the Privacy policy in the next link."
+      icon="bg-svg-info"
+      link="privacy.html"
+      link-text="Privacy policy"
     />
 
     <!-- Analytics -->
@@ -36,7 +45,7 @@
       link-text="Google Analytics TOS"
     />
 
-    <!-- Thank you -->
+    <!-- Contact -->
     <ContentContainer
       title="Contact"
       text="Please reach me in the following email for suggestions, requests, questions, comments, or any concerns."
@@ -45,6 +54,7 @@
       link-text="contact@r34.app"
     />
 
+    <!-- Thank you -->
     <ContentContainer
       title="Thank you for your interest"
       text="It's a pleasure having someone read this wall of text. :')"
