@@ -22,7 +22,7 @@
       title="Terms of service"
       text="You can find an online copy of the Terms Of Service (TOS) in the next link."
       icon="bg-svg-info"
-      link="tos.html"
+      link="/terms-of-service"
       link-text="Terms of service"
     />
 
@@ -31,7 +31,7 @@
       title="Privacy policy"
       text="You can find an online copy of the Privacy policy in the next link."
       icon="bg-svg-info"
-      link="privacy.html"
+      link="/privacy-policy"
       link-text="Privacy policy"
     />
 
