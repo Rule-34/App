@@ -2,10 +2,8 @@
   <!-- Apply touch for showing menu and search -->
   <div
     v-touch="{
-      left: () =>
-        isDashboard === true ? touchHandler('left') : sideNavManager('close'),
-      right: () =>
-        isDashboard === true ? touchHandler('right') : sideNavManager('open'),
+      left: (e) => touchHandler('left', e),
+      right: (e) => touchHandler('right', e),
     }"
   >
     <NavToggler :show-search="isDashboard ? true : false" />
@@ -89,11 +87,11 @@ export default {
       }
     },
 
-    touchHandler(direction) {
+    touchHandler(direction, event) {
       switch (direction) {
         // If swipìng left and menu is not open then open search
         case 'left':
-          if (!this.sideNavData.isActive) {
+          if (!this.sideNavData.isActive && this.isDashboard) {
             this.searchManager({ mode: 'setSearch', data: true })
           } else {
             this.sideNavManager('close')
@@ -103,7 +101,7 @@ export default {
 
         // If swiping right and search is open then close search
         case 'right':
-          if (!this.sideNavData.isActive && this.searchData.isActive) {
+          if (this.searchData.isActive && this.isDashboard) {
             this.searchManager({ mode: 'setSearch', data: false })
           } else {
             this.sideNavManager('open')
