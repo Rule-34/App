@@ -88,24 +88,34 @@ export default {
     },
 
     touchHandler(direction, event) {
+      // console.log(event)
+
       switch (direction) {
-        // If swipìng left and menu is not open then open search
+        case 'right':
+          // Threshold
+          if (event.touchstartX > 50) {
+            return
+          }
+
+          if (this.searchData.isActive && this.isDashboard) {
+            this.searchManager({ mode: 'setSearch', data: false })
+          } else {
+            this.sideNavManager('open')
+          }
+          break
+
         case 'left':
+          // Threshold
+          if (event.touchstartX < screen.availWidth - 50) {
+            return
+          }
+
           if (!this.sideNavData.isActive && this.isDashboard) {
             this.searchManager({ mode: 'setSearch', data: true })
           } else {
             this.sideNavManager('close')
           }
 
-          break
-
-        // If swiping right and search is open then close search
-        case 'right':
-          if (this.searchData.isActive && this.isDashboard) {
-            this.searchManager({ mode: 'setSearch', data: false })
-          } else {
-            this.sideNavManager('open')
-          }
           break
       }
     },
