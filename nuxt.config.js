@@ -11,14 +11,15 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: 'Browse rule34.xxx, rule34.paheal.net, danbooru.donmai.us, gelbooru.com, e621.net, and other popular boorus in the Rule 34 App'
-      }
+        content:
+          'Browse rule34.xxx, rule34.paheal.net, danbooru.donmai.us, gelbooru.com, e621.net, and other popular boorus in the Rule 34 App',
+      },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       // Font
-      { rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' }
-    ]
+      { rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' },
+    ],
   },
   /*
    ** Customize the progress-bar color
@@ -30,7 +31,7 @@ export default {
   loadingIndicator: {
     name: 'cube-grid',
     color: '#121212',
-    background: 'linear-gradient(152deg, #9b9be0 38%, #00d4ff 100%)'
+    background: 'linear-gradient(152deg, #9b9be0 38%, #00d4ff 100%)',
   },
   /*
    ** Global CSS
@@ -56,7 +57,7 @@ export default {
         id: 'UA-156285339-1',
 
         // Anonymize
-        set: [{ field: 'anonymizeIp', value: true }]
+        set: [{ field: 'anonymizeIp', value: true }],
 
         // Disable on production
         // debug: {
@@ -64,8 +65,8 @@ export default {
         //   // trace: true,
         //   sendHitTask: true
         // }
-      }
-    ]
+      },
+    ],
   ],
   /*
    ** Nuxt.js modules
@@ -81,39 +82,39 @@ export default {
       lang: 'en',
       start_url: '/?origin=PWA',
       theme_color: '#121212',
-      background_color: '#121212'
+      background_color: '#121212',
     },
     meta: {
       /* meta options */
       ogHost: 'https://r34.app',
-      mobileAppIOS: true
-    }
+      mobileAppIOS: true,
+    },
   },
 
   workbox: {
     runtimeCaching: [
       {
         // Should be a regex string. Compiles into new RegExp('https://my-cdn.com/.*')
-        urlPattern: ['https://rsms.me/.*', 'https://r34.app/img/.*']
+        urlPattern: ['https://rsms.me/.*', 'https://r34.app/img/.*'],
         // Defaults to `networkFirst` if omitted
         // handler: 'networkFirst',
         // Defaults to `GET` if omitted
         // method: 'GET'
-      }
-    ]
+      },
+    ],
   },
   /*
    ** TailwindCSS config
    */
   tailwindcss: {
-    cssPath: '~/assets/css/main.css'
+    cssPath: '~/assets/css/main.css',
   },
   /*
    ** PurgeCSS config
    */
   purgeCSS: {
     // whitelist: ['defaults-and-this-class']
-    whitelistPatterns: [/active/, /nsfw-disabled/, /fade/, /enter/, /leave/]
+    whitelistPatterns: [/active/, /nsfw-disabled/, /fade/, /enter/, /leave/],
   },
   /*
    ** Sitemap configuration
@@ -125,8 +126,8 @@ export default {
       changefreq: 'daily',
       priority: 1,
       lastmod: new Date(),
-      lastmodrealtime: true
-    }
+      lastmodrealtime: true,
+    },
   },
   /*
    ** Build configuration
@@ -140,15 +141,15 @@ export default {
       terserOptions: {
         compress: {
           // drop_console: true,
-          pure_funcs: ['console.log']
-        }
-      }
+          pure_funcs: ['console.log'],
+        },
+      },
     },
     /*
      ** You can extend webpack config here
      */
     extend(config, ctx) {
       console.log(process.env.NODE_ENV)
-    }
-  }
+    },
+  },
 }
