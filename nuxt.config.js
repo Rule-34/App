@@ -16,7 +16,6 @@ export default {
       },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       // Font
       { rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' },
     ],
@@ -89,6 +88,7 @@ export default {
       ogHost: 'https://r34.app',
       mobileAppIOS: true,
     },
+    // Icon is automatically proccessed from static/icon.png
   },
 
   workbox: {
