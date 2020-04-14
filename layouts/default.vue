@@ -88,12 +88,15 @@ export default {
     },
 
     touchHandler(direction, event) {
-      // console.log(event)
+      // Calculate percentage of the screen to use as touch zone
+      const touchThreshold = screen.availWidth * 0.25
+
+      // console.log(touchThreshold, event)
 
       switch (direction) {
         case 'right':
           // Threshold
-          if (event.touchstartX > 50) {
+          if (event.touchstartX > touchThreshold) {
             return
           }
 
@@ -106,7 +109,7 @@ export default {
 
         case 'left':
           // Threshold
-          if (event.touchstartX < screen.availWidth - 50) {
+          if (event.touchstartX < screen.availWidth - touchThreshold) {
             return
           }
 
