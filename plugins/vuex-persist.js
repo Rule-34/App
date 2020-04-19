@@ -29,7 +29,7 @@ export default ({ store }) => {
         // userSettings
         ...SETTINGS_OBJ,
 
-        // Patreon data
+        // Credentials data
         credentials: state.credentials,
       }
     },
