@@ -70,7 +70,7 @@
             </nuxt-link>
           </li>
 
-          <!-- Patreon -->
+          <!-- Donate -->
           <li>
             <a
               class="nav-links--bottom flex"
