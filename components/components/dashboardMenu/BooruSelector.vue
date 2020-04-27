@@ -37,9 +37,9 @@ import { ChevronDownIcon, CloudIcon } from 'vue-feather-icons'
 // Components
 import {
   booruList,
-  removeBooruByShort,
-  returnSafeBoorus,
-} from '~/assets/js/BooruTools.js'
+  removeBoorusWithValuesByKey,
+  findBoorusWithValueByKey,
+} from '~/assets/lib/rule-34-shared-resources/util/BooruUtils.js'
 
 export default {
   name: 'BooruSelector',
@@ -68,7 +68,7 @@ export default {
     evaluateBooruList(nsfwSetting, isPatron) {
       // If NSFW is enabled load safe boorus
       if (!nsfwSetting) {
-        return returnSafeBoorus()
+        return findBoorusWithValueByKey(false, 'nsfw')
 
         // If experimental settings are enabled return unfiltered boorus
       } else if (isPatron) {
@@ -76,7 +76,7 @@ export default {
 
         // Else return filtered boorus
       } else {
-        return removeBooruByShort(['lolibooru'])
+        return removeBoorusWithValuesByKey(['lolibooru'])
       }
     },
 

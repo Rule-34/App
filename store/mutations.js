@@ -1,5 +1,5 @@
 // Own
-import { findBooruByShort } from '~/assets/js/BooruTools.js'
+import { findBoorusWithValueByKey } from '~/assets/lib/rule-34-shared-resources/util/BooruUtils.js'
 
 export default {
   /**
@@ -46,9 +46,10 @@ export default {
 
       case 'reset':
         // Find domain in list and use its PID
-        state.dashBoardData.pid = findBooruByShort(
-          state.dashBoardSettings.contentDomain
-        ).pid
+        state.dashBoardData.pid = findBoorusWithValueByKey(
+          state.dashBoardSettings.contentDomain,
+          'short'
+        )[0].pid
         break
 
       default:
