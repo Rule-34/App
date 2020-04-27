@@ -11,6 +11,15 @@
           type="search"
           placeholder="Search: e.g. dragon"
           @input="searchQuery = $event.target.value"
+          @keyup.enter="
+            // Add tag directly to the store
+            tagManager({
+              operation: 'add',
+              tag: {
+                name: $event.target.value,
+              },
+            })
+          "
         />
       </div>
 
