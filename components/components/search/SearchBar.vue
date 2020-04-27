@@ -52,7 +52,6 @@ import debounce from 'lodash/debounce'
 export default {
   name: 'SearchBar',
 
-  // eslint-disable-next-line vue/no-unused-components
   components: { SearchIcon, FilterIcon, TrashIcon, GitlabIcon },
 
   data() {
@@ -63,7 +62,6 @@ export default {
     }
   },
 
-  // Get data() from vuex store "searchData"
   computed: {
     ...mapState(['searchData']),
   },
