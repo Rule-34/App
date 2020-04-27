@@ -5,7 +5,7 @@
       <!-- Search Icon -->
       <div class="w-full flex">
         <SearchIcon class="icon text-default w-6 h-6 mr-2" />
-        <!-- Input -->
+        <!-- Input form -->
         <input
           class="w-full text-default-text font-light bg-background outline-none ml-1"
           type="search"
@@ -80,19 +80,6 @@ export default {
       this.tagManager({ operation: 'reset' })
     },
 
-    async addPremadeTags() {
-      // Populate filterData data and reuse later
-      if (!this.searchData.premadeFilterData.length) {
-        await this.fetchWithMode({
-          mode: 'filter',
-        })
-      }
-
-      this.tagManager({
-        operation: 'concat',
-      })
-    },
-
     getTags() {
       if (this.searchQuery.length > 2) {
         this.fetchWithMode({
@@ -111,6 +98,19 @@ export default {
     toggleFilter() {
       this.searchManager({
         mode: 'toggleFilter',
+      })
+    },
+
+    async addPremadeTags() {
+      // Populate filterData data and reuse later
+      if (!this.searchData.premadeFilterData.length) {
+        await this.fetchWithMode({
+          mode: 'filter',
+        })
+      }
+
+      this.tagManager({
+        operation: 'concat',
       })
     },
   },
