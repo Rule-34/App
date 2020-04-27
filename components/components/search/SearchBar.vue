@@ -43,7 +43,7 @@ import {
   FilterIcon,
   SearchIcon,
   TrashIcon,
-  GitlabIcon
+  GitlabIcon,
 } from 'vue-feather-icons'
 import debounce from 'lodash/debounce'
 
@@ -57,19 +57,19 @@ export default {
     return {
       // Content from the search input
       searchQuery: '',
-      ContentMode: { mode: 'reset', icon: 'TrashIcon' }
+      ContentMode: { mode: 'reset', icon: 'TrashIcon' },
     }
   },
 
   // Get data() from vuex store "searchData"
   computed: {
-    ...mapState(['searchData'])
+    ...mapState(['searchData']),
   },
 
   watch: {
-    searchQuery: debounce(function() {
+    searchQuery: debounce(function () {
       this.getTags()
-    }, 300)
+    }, 300),
   },
 
   methods: {
@@ -108,23 +108,23 @@ export default {
       if (this.searchQuery.length > 2) {
         this.fetchWithMode({
           mode: 'tags',
-          tag: this.searchQuery.trim().toLowerCase()
+          tag: this.searchQuery.trim().toLowerCase(),
         })
       } else {
         // Remove search data cause search limit is 3 characters
         this.searchManager({
           mode: 'changeData',
-          data: ''
+          data: '',
         })
       }
     },
 
     toggleFilter() {
       this.searchManager({
-        mode: 'toggleFilter'
+        mode: 'toggleFilter',
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
