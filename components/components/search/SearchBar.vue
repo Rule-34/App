@@ -14,23 +14,25 @@
         />
       </div>
 
-      <!-- Filter content -->
-      <div title="Automatic filters" @click="toggleContentMode()">
-        <component
-          :is="ContentMode.icon"
-          :class="{
-            'text-orange-400': ContentMode.mode === 'furry'
-          }"
-          class="icon w-6 h-6 mr-1"
-        >
-        </component>
+      <!-- Premade filter -->
+      <div title="Premade filter" @click="addPremadeTags()">
+        <GitlabIcon
+          class="icon w-6 h-6 mr-1 hover:text-orange-400 transition--color"
+        />
+      </div>
+
+      <!-- Reset tags -->
+      <div title="Reset tags" @click="resetTags()">
+        <TrashIcon
+          class="icon w-6 h-6 mr-1 hover:text-default-text-muted transition--color"
+        />
       </div>
 
       <!-- Filter content -->
-      <div title="Filter content" @click="toggleFilter()">
+      <div title="Filter out content" @click="toggleFilter()">
         <FilterIcon
           :class="{ 'text-red-400': searchData.isFilterActive }"
-          class="icon w-6 h-6 mr-1"
+          class="icon w-6 h-6 mr-1 hover:text-red-400 transition--color"
         />
       </div>
     </div>
@@ -76,32 +78,21 @@ export default {
     ...mapMutations(['searchManager', 'tagManager']),
     ...mapActions(['fetchWithMode']),
 
-    async toggleContentMode() {
+    resetTags() {
+      this.tagManager({ operation: 'reset' })
+    },
+
+    async addPremadeTags() {
       // Populate filterData data and reuse later
       if (!this.searchData.premadeFilterData.length) {
         await this.fetchWithMode({
-          mode: 'filter'
+          mode: 'filter',
         })
       }
 
-      // Then switch between modes
-      switch (this.ContentMode.mode) {
-        case 'reset':
-          this.tagManager({ operation: 'reset' })
-          // Load next mode
-          this.ContentMode = { mode: 'furry', icon: 'GitlabIcon' }
-
-          return true
-
-        case 'furry':
-          this.tagManager({
-            operation: 'concat'
-          })
-          // Load next mode
-          this.ContentMode = { mode: 'reset', icon: 'TrashIcon' }
-
-          return true
-      }
+      this.tagManager({
+        operation: 'concat',
+      })
     },
 
     getTags() {
