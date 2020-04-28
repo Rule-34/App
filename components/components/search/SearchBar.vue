@@ -1,51 +1,56 @@
 <template>
-  <div>
-    <!-- Search bar -->
-    <div class="material-container bg-background p-2 flex justify-between">
-      <!-- Search Icon -->
-      <div class="w-full flex">
-        <SearchIcon class="icon text-default w-6 h-6 mr-2" />
-        <!-- Input form -->
-        <input
-          class="w-full text-default-text font-light bg-background outline-none ml-1"
-          type="search"
-          placeholder="Search: e.g. dragon"
-          @input="searchQuery = $event.target.value"
-          @keyup.enter="
-            // Add tag directly to the store
-            tagManager({
-              operation: 'add',
-              tag: {
-                name: $event.target.value,
-              },
-            })
-          "
-        />
-      </div>
+  <!-- Search bar -->
+  <form class="flex material-container bg-background p-2 my-auto">
+    <!-- Search Icon -->
+    <SearchIcon class="icon text-default w-6 h-6" />
 
-      <!-- Premade filter -->
-      <div title="Premade filter" @click="addPremadeTags()">
+    <!-- Input form -->
+    <!-- Overflow Hidden is very important -->
+    <input
+      class="flex-1 text-default-text font-light bg-background mx-2 overflow-hidden"
+      type="search"
+      name="q"
+      placeholder="Search: e.g. dragon"
+      @input="searchQuery = $event.target.value"
+      @keyup.enter="
+        // Add tag directly to the store
+        tagManager({
+          operation: 'add',
+          tag: {
+            name: $event.target.value,
+          },
+        })
+      "
+    />
+    <div class="flex">
+      <button type="button" title="Premade filter" @click="addPremadeTags()">
+        <!-- Premade filter -->
         <GitlabIcon
-          class="icon w-6 h-6 mr-1 hover:text-orange-400 transition--color"
+          class="icon w-6 h-6 hover:text-orange-400 transition--color"
         />
-      </div>
+      </button>
 
       <!-- Reset tags -->
-      <div title="Reset tags" @click="resetTags()">
+      <button
+        class="mx-2"
+        type="button"
+        title="Reset tags"
+        @click="resetTags()"
+      >
         <TrashIcon
-          class="icon w-6 h-6 mr-1 hover:text-default-text-muted transition--color"
+          class="icon w-6 h-6 hover:text-default-text-muted transition--color"
         />
-      </div>
+      </button>
 
       <!-- Filter content -->
-      <div title="Filter out content" @click="toggleFilter()">
+      <button type="button" title="Filter out content" @click="toggleFilter()">
         <FilterIcon
           :class="{ 'text-red-400': searchData.isFilterActive }"
-          class="icon w-6 h-6 mr-1 hover:text-red-400 transition--color"
+          class="icon w-6 h-6 hover:text-red-400 transition--color"
         />
-      </div>
+      </button>
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
