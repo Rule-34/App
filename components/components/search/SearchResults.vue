@@ -61,7 +61,7 @@
     <button
       class="text-center w-full text-default-text font-bold bg-gradient-lilac-blue py-2 px-4 shadow-md"
       type="submit"
-      @click="dispatchGetAddedTags()"
+      @click.prevent="dispatchGetAddedTags()"
     >
       Apply tags
     </button>
@@ -129,6 +129,9 @@ export default {
 
       // And fire analytics
       this.analyticManager('tags')
+
+      // And scroll to top
+      window.scrollTo(0, 0)
     },
   },
 }
