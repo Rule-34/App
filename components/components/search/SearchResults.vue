@@ -58,15 +58,13 @@
     </div>
 
     <!-- Apply tags button -->
-    <a href="#">
-      <button
-        class="text-center w-full text-default-text font-bold bg-gradient-lilac-blue py-2 px-4 shadow-md"
-        type="button"
-        @click="dispatchGetAddedTags()"
-      >
-        Apply tags
-      </button>
-    </a>
+    <button
+      class="text-center w-full text-default-text font-bold bg-gradient-lilac-blue py-2 px-4 shadow-md"
+      type="submit"
+      @click="dispatchGetAddedTags()"
+    >
+      Apply tags
+    </button>
   </div>
 </template>
 

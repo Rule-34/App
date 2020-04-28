@@ -1,6 +1,6 @@
 <template>
   <!-- Search bar -->
-  <form class="flex material-container bg-background p-2 my-auto">
+  <div class="flex material-container bg-background p-2 my-auto">
     <!-- Search Icon -->
     <SearchIcon class="icon text-default w-6 h-6" />
 
@@ -50,7 +50,7 @@
         />
       </button>
     </div>
-  </form>
+  </div>
 </template>
 
 <script>
