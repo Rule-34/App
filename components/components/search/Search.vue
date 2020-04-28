@@ -1,34 +1,29 @@
 <template>
   <div class="fixed min-h-screen w-full z-40 bg-black-25">
     <!-- Centered container -->
-    <div class="flex flex-wrap md:flex-no-wrap h-screen">
+    <div class="h-screen w-full search-grid">
       <!-- Separator -->
       <div
-        class="hidden md:block md:w-2/12"
         @click.self="
           searchManager({
-            mode: 'toggleSearch'
+            mode: 'toggleSearch',
           })
         "
       />
 
       <!-- Search  -->
-      <SearchBar class="w-full md:w-4/12 m-auto" />
+      <SearchBar />
 
       <!-- Search results -->
-      <SearchResults
-        class="flex flex-col p-2 my-auto w-full md:w-6/12 min-h-1/2 overflow-y-auto"
-      />
+      <SearchResults />
 
       <div
-        class="hidden md:block md:w-2/12"
         @click.self="
           searchManager({
-            mode: 'toggleSearch'
+            mode: 'toggleSearch',
           })
         "
       />
-      <!--  -->
     </div>
   </div>
 </template>
@@ -42,14 +37,29 @@ export default {
   name: 'Search',
   components: {
     SearchBar,
-    SearchResults
+    SearchResults,
   },
   // Get data() from vuex store "searchData"
   computed: {
-    ...mapState(['searchData'])
+    ...mapState(['searchData']),
   },
   methods: {
-    ...mapMutations(['searchManager'])
-  }
+    ...mapMutations(['searchManager']),
+  },
 }
 </script>
+
+<style lang="postcss">
+.search-grid {
+  display: grid;
+
+  grid-template-rows: 0.5fr 1fr 3fr 0.5fr;
+}
+
+@screen md {
+  .search-grid {
+    grid-template-columns: 1fr 2fr 3fr 1fr;
+    grid-template-rows: 1fr;
+  }
+}
+</style>
