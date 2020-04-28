@@ -1,69 +1,72 @@
 <template>
-  <div class="material-container search-results--grid flex">
-    <!-- If theres errors -->
-    <Errors />
+  <div class="material-container flex flex-col my-auto min-h-full md:min-h-1/4">
+    <!-- Content -->
+    <div class="flex-1 flex flex-col p-2">
+      <!-- If theres errors -->
+      <Errors />
 
-    <!-- If nothing searched -->
-    <div
-      v-if="!searchData.tags.length && !generalData.errors"
-      class="flex-1 flex min-h-full"
-    >
+      <!-- If nothing searched -->
       <h1
-        class="text-center text-default-text text-xl font-hairline tracking-wide m-auto"
+        v-if="
+          !searchData.data.length &&
+          !searchData.tags.length &&
+          !generalData.errors
+        "
+        class="flex-1 flex items-center justify-center text-default-text text-xl font-hairline tracking-wide"
       >
         Search something!
       </h1>
-    </div>
 
-    <!-- Added tags, click them to remove them -->
-    <div
-      v-if="searchData.tags.length"
-      class="tag-container border-border border-b rounded pb-1"
-    >
-      <a
-        v-for="tag in searchData.tags"
-        :key="tag"
-        class="tag"
-        @click="removeTagFromActive(tag)"
-        v-text="tag"
-      />
-    </div>
-
-    <!-- Searched tags, click them to add them -->
-    <div
-      v-if="searchData.data.length"
-      class="tag-container my-1 border-border border-b rounded"
-    >
-      <!-- Add tag to array of added tags, if filter is active then append '-' -->
-      <a
-        v-for="tag in searchData.data"
-        :key="tag.name"
-        class="tag group"
-        @click="addTagToActiveTags(tag.name)"
+      <!-- Added tags, click them to remove them -->
+      <div
+        v-if="searchData.tags.length"
+        class="tag-container border-b border-border rounded mb-1"
       >
-        <!-- Name of the tag -->
-        <span v-text="tag.name" />
-
-        <!-- Number of posts with that tag -->
-        <span
-          class="text-primary-hover group-hover:text-default transition--color"
-          v-text="`(${tag.count})`"
-        />
-      </a>
-    </div>
-
-    <!-- Apply tags -->
-    <div class="flex min-h-full flex-1">
-      <a href="#" class="mt-auto w-full">
-        <button
-          class="text-center w-full text-default-text font-bold border-0 rounded bg-gradient-lilac-blue py-2 px-4 shadow-md"
-          type="button"
-          @click="dispatchGetAddedTags()"
+        <a
+          v-for="tag in searchData.tags"
+          :key="tag"
+          class="tag"
+          @click="removeTagFromActive(tag)"
+          >{{ tag }}</a
         >
-          Apply tags
-        </button>
-      </a>
+      </div>
+
+      <!-- Searched tags, click them to add them -->
+      <div
+        v-if="searchData.data.length"
+        class="tag-container border-b border-border rounded"
+      >
+        <!-- Add tag to array of added tags, if filter is active then append '-' -->
+        <a
+          v-for="tag in searchData.data"
+          :key="tag.name"
+          class="tag group"
+          @click="addTagToActiveTags(tag.name)"
+        >
+          <!-- Name of the tag -->
+          <span>
+            {{ tag.name }}
+          </span>
+
+          <!-- Number of posts with that tag -->
+          <span
+            class="text-primary-hover group-hover:text-default transition--color"
+            >{{ `(${tag.count})` }}
+          </span>
+        </a>
+      </div>
     </div>
+
+    <!-- Apply tags button -->
+    <a href="#">
+      <button
+        class="text-center w-full text-default-text font-bold bg-gradient-lilac-blue py-2 px-4 shadow-md"
+        type="button"
+        @click="dispatchGetAddedTags()"
+      >
+        Apply tags
+      </button>
+    </a>
   </div>
 </template>
 
@@ -78,7 +81,7 @@ export default {
 
   // Get data() from vuex store "searchData"
   computed: {
-    ...mapState(['searchData', 'generalData'])
+    ...mapState(['searchData', 'generalData']),
   },
 
   methods: {
@@ -89,8 +92,8 @@ export default {
       this.tagManager({
         operation: 'remove',
         tag: {
-          name: tagName
-        }
+          name: tagName,
+        },
       })
     },
 
@@ -101,15 +104,15 @@ export default {
         this.tagManager({
           operation: 'add',
           tag: {
-            name: '-' + tagName
-          }
+            name: '-' + tagName,
+          },
         })
       } else {
         this.tagManager({
           operation: 'add',
           tag: {
-            name: tagName
-          }
+            name: tagName,
+          },
         })
       }
     },
@@ -123,19 +126,12 @@ export default {
 
       // Hide the search bar
       this.searchManager({
-        mode: 'toggleSearch'
+        mode: 'toggleSearch',
       })
 
       // And fire analytics
       this.analyticManager('tags')
-    }
-  }
+    },
+  },
 }
 </script>
-
-<style>
-/* .search-results--grid {
-  display: grid;
-  grid-template-rows: auto auto auto 1fr;
-} */
-</style>
