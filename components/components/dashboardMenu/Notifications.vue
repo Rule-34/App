@@ -2,7 +2,12 @@
   <!-- Icon -->
   <div class="border-util rounded-full shadow bg-elevation relative">
     <!-- Button -->
-    <button type="button" class="flex p-1" @click="toggleNotifications()">
+    <button
+      type="button"
+      class="flex p-1"
+      aria-label="Notifications"
+      @click="toggleNotifications()"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
@@ -38,7 +43,7 @@
 
     <!-- Content -->
     <transition name="page">
-      <div v-if="isActive" class="notifications--details">
+      <aside v-if="isActive" class="notifications--details">
         <!-- Repeat for every notification -->
         <ContentContainer
           v-for="notification in notificationData.data"
@@ -59,7 +64,7 @@
             />
           </template>
         </ContentContainer>
-      </div>
+      </aside>
     </transition>
   </div>
 </template>
