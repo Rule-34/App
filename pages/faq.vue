@@ -54,10 +54,8 @@
     <!-- Roadmap -->
     <ContentContainer
       title="Is there any new feature planned?"
-      text="Im glad you asked, the development is going quite steady, check our Roadmap."
+      text="Im glad you asked, the development is going quite steady, to check the roadmap and what I am currently working on, you have to be a donator."
       icon="bg-svg-info"
-      link="https://github.com/users/VoidlessSeven7/projects/1"
-      link-text="Roadmap"
     />
 
     <!-- Helping -->
