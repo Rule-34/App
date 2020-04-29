@@ -9,7 +9,7 @@
     <input
       class="flex-1 text-default-text font-light bg-background mx-2 overflow-hidden"
       type="search"
-      name="q"
+      name="tags"
       placeholder="Search: e.g. dragon"
       @input="searchQuery = $event.target.value"
       @keyup.enter="
