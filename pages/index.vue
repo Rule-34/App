@@ -47,7 +47,9 @@ import Controls from '~/components/navigation/Controls.vue'
 import Errors from '~/components/general/Errors.vue'
 // Lazy loaded components
 const Notifications = () =>
-  import('~/components/components/dashboardMenu/Notifications.vue')
+  import(
+    /* webpackPrefetch: true */ '~/components/components/dashboardMenu/Notifications.vue'
+  )
 
 export default {
   components: {
