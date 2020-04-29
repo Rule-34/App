@@ -125,7 +125,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="postcss">
 /* Sidebar */
 .nav-links {
   transition: transform 0.35s, var(--transition--color);
