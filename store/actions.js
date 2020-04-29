@@ -96,7 +96,7 @@ export default {
 
       case 'tags':
         // Craft URL
-        parameters.url = '?tag=' + parameters.tag + '&limit=' + limit
+        parameters.url = '?tag=' + parameters.tag + '&limit=20'
 
         // Fetch data
         response = await dispatch('simpleFetch', {
