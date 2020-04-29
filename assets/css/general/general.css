@@ -60,7 +60,7 @@ a:focus,
 }
 
 .tag-container {
-  @apply flex flex-wrap p-1 bg-depth overflow-hidden;
+  @apply flex flex-wrap items-start content-start p-1 bg-depth overflow-hidden;
 }
 
 .tag {
