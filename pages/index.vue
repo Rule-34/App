@@ -42,10 +42,12 @@ import { Intersect } from 'vuetify/lib/directives/intersect'
 import throttle from 'lodash/throttle'
 // Components
 import BooruSelector from '~/components/components/dashboardMenu/BooruSelector.vue'
-import Notifications from '~/components/components/dashboardMenu/Notifications.vue'
 import Post from '~/components/components/post/Post.vue'
 import Controls from '~/components/navigation/Controls.vue'
 import Errors from '~/components/general/Errors.vue'
+// Lazy loaded components
+const Notifications = () =>
+  import('~/components/components/dashboardMenu/Notifications.vue')
 
 export default {
   components: {
