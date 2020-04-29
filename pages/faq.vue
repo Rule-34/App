@@ -31,7 +31,7 @@
     <!-- Image removal -->
     <ContentContainer
       title="Can you remove an Image?"
-      text="Nope, all content is directly served from the corresponding Rule 34 site, you should contact that site."
+      text="Nope, all content is directly served from the corresponding booru, you should contact that site."
       icon="bg-svg-info"
     />
 
