@@ -80,6 +80,7 @@ export default {
 
   watch: {
     searchQuery() {
+      this.searchQuery = this.searchQuery.replace(/\s+/g, '_').toLowerCase()
       this.getTags()
     },
   },
