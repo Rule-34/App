@@ -12,7 +12,7 @@
       name="tags"
       placeholder="Search: e.g. dragon"
       @input="searchQuery = $event.target.value"
-      @keyup.enter="
+      @keypress.enter.prevent="
         // Add tag directly to the store
         tagManager({
           operation: 'add',
