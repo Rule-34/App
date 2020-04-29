@@ -85,16 +85,6 @@
       </template>
     </ContentContainer>
 
-    <!-- Analytics -->
-    <ContentContainer
-      title="Analytics"
-      text="Google analytics are used with the settings tweaked to be completely anonymous, no personal info is gathered.
-      Check their terms of use on the following link."
-      icon="bg-svg-info"
-      link="https://marketingplatform.google.com/about/analytics/terms/us/"
-      link-text="Google Analytics TOS"
-    />
-
     <ContentContainer
       :separator="true"
       title="Miscellaneous"
