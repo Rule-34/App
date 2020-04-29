@@ -22,10 +22,10 @@
     <!-- Not an app -->
     <ContentContainer
       title="How can I install this App?"
-      text="Follow the instructions from the link below."
+      text="Follow the instructions on the Rule 34 App Discord."
       icon="bg-svg-info"
-      link="https://medium.com/progressivewebapps/how-to-install-a-pwa-to-your-device-68a8d37fadc1"
-      link-text="Instructions"
+      link="https://discord.gg/fUhYHSZ"
+      link-text="Discord"
     />
 
     <!-- Image removal -->
