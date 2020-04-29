@@ -10,24 +10,24 @@
 
     <ContentContainer
       title="Touch navigation"
-      text="On devices with touch support, swiping right will open the menu, and swiping left will open the search."
+      text="Devices with touch support can swipe right to open the navigation menu, and left to open the search menu."
     />
 
     <ContentContainer
-      title="Search: remove tags"
-      text="This button toggles between states, first state will delete all added tags."
-      img="/img/usage_examples/search-delete"
-    />
-
-    <ContentContainer
-      title="Search: premade filter"
-      text="Second state will fetch a dynamic filter that applies tags that will ban unpleasant posts from showing."
+      title="Search: Furry button"
+      text="Fetch a dynamic filter that applies tags that will ban unpleasant posts from showing (Only for rule34.xxx)."
       img="/img/usage_examples/search-premade-filter"
     />
 
     <ContentContainer
-      title="Search: filter content"
-      text="Toggling the filter will ban from appearing the next clicked tags."
+      title="Search: Trash button"
+      text="Deletes all added tags."
+      img="/img/usage_examples/search-delete"
+    />
+
+    <ContentContainer
+      title="Search: Filter button"
+      text="Toggling the filter will ban from appearing the next added tags."
       img="/img/usage_examples/search-filter"
     />
 
