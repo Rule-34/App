@@ -6,12 +6,13 @@
 
     <!-- Input form -->
     <!-- Overflow Hidden is very important -->
+    <!-- Input because v-model/:value doesnt work on mobile -->
     <input
-      v-model="searchQuery"
       class="flex-1 text-default-text font-light bg-background mx-2 overflow-hidden"
       type="search"
       name="tags"
       placeholder="Search: e.g. dragon"
+      @input="replaceInput($event)"
       @keypress.enter.prevent="
         // Add tag directly to the store
         tagManager({
@@ -78,16 +79,16 @@ export default {
     ...mapState(['searchData']),
   },
 
-  watch: {
-    searchQuery() {
-      this.searchQuery = this.searchQuery.replace(/\s+/g, '_').toLowerCase()
-      this.getTags()
-    },
-  },
-
   methods: {
     ...mapMutations(['searchManager', 'tagManager']),
     ...mapActions(['fetchWithMode']),
+
+    replaceInput(event) {
+      this.searchQuery = event.target.value.replace(/\s+/g, '_').toLowerCase()
+      event.target.value = this.searchQuery
+
+      this.getTags()
+    },
 
     resetTags() {
       this.tagManager({ operation: 'reset' })
