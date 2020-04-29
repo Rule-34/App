@@ -40,7 +40,7 @@ module.exports = {
 
       // Width and height
       spacing: {
-        'fit-content': 'fit-content',
+        // 'fit-content': 'fit-content',
         'max-content': 'max-content',
         'min-content': 'min-content',
         // Margins for content
