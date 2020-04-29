@@ -1,7 +1,11 @@
 <template>
-  <div class="material-container flex flex-col my-auto min-h-full md:min-h-1/4">
+  <div
+    class="material-container flex flex-col my-auto min-h-full max-h-full md:min-h-2/5 md:max-h-2/5"
+  >
     <!-- Content -->
-    <div class="flex-1 flex flex-col p-2">
+    <div
+      class="flex-1 flex flex-col p-2 pb-0 max-h-full min-h-full overflow-y-hidden"
+    >
       <!-- If theres errors -->
       <Errors />
 
@@ -20,7 +24,7 @@
       <!-- Added tags, click them to remove them -->
       <div
         v-if="searchData.tags.length"
-        class="tag-container border-b border-border rounded mb-1"
+        class="tag-container border-b border-border rounded mb-1 overflow-y-scroll max-h-1/2"
       >
         <a
           v-for="tag in searchData.tags"
@@ -34,7 +38,7 @@
       <!-- Searched tags, click them to add them -->
       <div
         v-if="searchData.data.length"
-        class="tag-container border-b border-border rounded"
+        class="flex-1 tag-container border-b border-border rounded overflow-y-scroll"
       >
         <!-- Add tag to array of added tags, if filter is active then append '-' -->
         <a
