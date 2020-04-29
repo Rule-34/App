@@ -26,7 +26,7 @@
       <button type="button" title="Premade filter" @click="addPremadeTags()">
         <!-- Premade filter -->
         <GitlabIcon
-          class="icon w-6 h-6 hover:text-orange-400 transition--color"
+          class="icon w-6 h-6 hover:text-default-text-muted transition--color"
         />
       </button>
 
@@ -46,7 +46,7 @@
       <button type="button" title="Filter out content" @click="toggleFilter()">
         <FilterIcon
           :class="{ 'text-red-400': searchData.isFilterActive }"
-          class="icon w-6 h-6 hover:text-red-400 transition--color"
+          class="icon w-6 h-6 transition--color"
         />
       </button>
     </div>
