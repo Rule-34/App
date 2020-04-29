@@ -66,18 +66,28 @@ export default {
     ...mapActions(['fetchWithMode', 'analyticManager']),
 
     evaluateBooruList(nsfwSetting, isPatron) {
-      // If NSFW is enabled load safe boorus
+      // If NSFW content is disabled
       if (!nsfwSetting) {
+        // if (isPatron) {
+        //   return findBoorusWithValueByKey(false, 'nsfw')
+        // }
+
         return findBoorusWithValueByKey(false, 'nsfw')
 
         // If experimental settings are enabled return unfiltered boorus
-      } else if (isPatron) {
-        return booruList
-
-        // Else return filtered boorus
-      } else {
-        return removeBoorusWithValuesByKey(['lolibooru'])
       }
+
+      // If NSFW content is enabled
+      if (isPatron) {
+        return findBoorusWithValueByKey(true, 'nsfw')
+      }
+
+      // Else return filtered boorus
+      return removeBoorusWithValuesByKey(
+        ['lolibooru'],
+        'short',
+        findBoorusWithValueByKey(true, 'nsfw')
+      )
     },
 
     // Changes that we have to do when changing domain so request is not malformed
