@@ -7,11 +7,11 @@
     <!-- Input form -->
     <!-- Overflow Hidden is very important -->
     <input
+      v-model="searchQuery"
       class="flex-1 text-default-text font-light bg-background mx-2 overflow-hidden"
       type="search"
       name="tags"
       placeholder="Search: e.g. dragon"
-      @input="searchQuery = $event.target.value"
       @keypress.enter.prevent="
         // Add tag directly to the store
         tagManager({
@@ -70,9 +70,7 @@ export default {
 
   data() {
     return {
-      // Content from the search input
       searchQuery: '',
-      ContentMode: { mode: 'reset', icon: 'TrashIcon' },
     }
   },
 
@@ -81,9 +79,9 @@ export default {
   },
 
   watch: {
-    searchQuery: debounce(function () {
+    searchQuery() {
       this.getTags()
-    }, 300),
+    },
   },
 
   methods: {
@@ -94,20 +92,20 @@ export default {
       this.tagManager({ operation: 'reset' })
     },
 
-    getTags() {
+    getTags: debounce(function () {
       if (this.searchQuery.length > 2) {
         this.fetchWithMode({
           mode: 'tags',
-          tag: this.searchQuery.trim().toLowerCase(),
+          tag: this.searchQuery,
         })
       } else {
         // Remove search data cause search limit is 3 characters
         this.searchManager({
           mode: 'changeData',
-          data: '',
+          data: [],
         })
       }
-    },
+    }, 350),
 
     toggleFilter() {
       this.searchManager({
