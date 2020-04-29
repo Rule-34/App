@@ -28,10 +28,12 @@
 import { mapMutations, mapState } from 'vuex'
 // Third party
 import { Touch } from 'vuetify/lib/directives/touch'
-// Components, I decided not to lazy load them as they break the experience
+// Components
 import NavToggler from '~/components/navigation/NavToggler.vue'
 import SideNav from '~/components/navigation/SideNav.vue'
-import Search from '~/components/components/search/Search.vue'
+// Lazy loaded components
+// const SideNav = () => import('~/components/navigation/SideNav.vue')
+const Search = () => import('~/components/components/search/Search.vue')
 
 export default {
   // Components
