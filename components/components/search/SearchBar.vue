@@ -8,7 +8,7 @@
     <!-- Overflow Hidden is very important -->
     <!-- Input because v-model/:value doesnt work on mobile -->
     <input
-      class="flex-1 text-default-text font-light bg-background mx-2 overflow-hidden"
+      class="flex-1 text-default-text font-light bg-background mx-2 overflow-hidden outline-none"
       type="search"
       name="tags"
       placeholder="Search: e.g. dragon"
