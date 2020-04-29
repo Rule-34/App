@@ -124,7 +124,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="postcss">
 .notifications--details {
   /* Offset a little so its more natural */
   top: 120%;

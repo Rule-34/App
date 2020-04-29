@@ -114,7 +114,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="postcss">
 /* Invisible until it loads */
 .post-animation {
   transition: opacity 0.75s;

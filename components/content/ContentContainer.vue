@@ -90,7 +90,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="postcss">
 /* Center positioned */
 .bg-svg {
   background-repeat: no-repeat;
