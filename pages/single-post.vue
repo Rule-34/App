@@ -83,8 +83,11 @@ export default {
 
       // If not supported then throw error
       default:
-        this.generalManager({
-          errors: `The current domain "${this.domain}" doesnt support getting posts from ID`,
+        this.errorManager({
+          operation: 'set',
+          data: new Error(
+            `The current domain "${this.domain}" doesnt support getting posts from ID`
+          ),
         })
         break
     }
@@ -92,7 +95,7 @@ export default {
 
   methods: {
     ...mapActions(['fetchWithMode']),
-    ...mapMutations(['generalManager', 'domainManager']),
+    ...mapMutations(['errorManager', 'domainManager']),
   },
 
   head() {

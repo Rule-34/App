@@ -93,10 +93,19 @@ export default {
    * @param {*} state Default
    * @param {String} parameters Error string
    */
-  generalManager(state, parameters) {
+  errorManager(state, parameters) {
     // Errors
-    if (parameters.errors !== undefined) {
-      state.generalData.errors = parameters.errors
+    switch (parameters.operation) {
+      case 'reset':
+        state.generalData.error = null
+        break
+
+      case 'set':
+        state.generalData.error = parameters.data
+        break
+
+      default:
+        throw new Error('No operation specified')
     }
   },
 
@@ -157,7 +166,13 @@ export default {
         break
 
       case 'changeData':
+        if (parameters.data === undefined) return
+
         state.searchData.data = parameters.data
+        break
+
+      case 'reset':
+        state.searchData.data = []
         break
 
       case 'changeFilterData':

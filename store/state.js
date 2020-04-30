@@ -27,7 +27,7 @@ export default () => ({
     apiUrl: 'https://api.r34.app/',
     // corsProxyUrl: 'https://test-proxy.rule34app.workers.dev/',
     corsProxyUrl: 'https://cors-proxy.rule34app.workers.dev/',
-    errors: null,
+    error: undefined,
   },
 
   // These settings are saved to localStorage

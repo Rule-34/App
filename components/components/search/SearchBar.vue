@@ -103,8 +103,7 @@ export default {
       } else {
         // Remove search data cause search limit is 3 characters
         this.searchManager({
-          mode: 'changeData',
-          data: [],
+          mode: 'reset',
         })
       }
     }, 350),

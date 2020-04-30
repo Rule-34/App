@@ -24,10 +24,10 @@ export default {
     const corsProxy = '&corsProxy=true'
 
     // Reset errors
-    if (state.generalData.errors) {
+    if (state.generalData.error) {
       commit({
-        type: 'generalManager',
-        errors: null,
+        type: 'errorManager',
+        operation: 'reset',
       })
     }
 
@@ -177,8 +177,9 @@ export default {
       // Catch errors and commit to generalManager
       .catch((error) => {
         commit({
-          type: 'generalManager',
-          errors: error,
+          type: 'errorManager',
+          operation: 'set',
+          data: error,
         })
       })
 
