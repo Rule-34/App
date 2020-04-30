@@ -1,6 +1,7 @@
 <template>
   <!-- Makes element zoomable if setting is enabled -->
   <figure
+    v-if="post"
     :class="{ zoom: userSettings.zoom.value }"
     class="material-container text-default-text text-center"
   >
@@ -33,7 +34,7 @@ export default {
     post: {
       type: Object,
       default() {
-        return {}
+        return undefined
       },
     },
   },
