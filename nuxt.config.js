@@ -149,7 +149,9 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {
-      console.log(process.env.NODE_ENV)
+      if (ctx.isDev) {
+        config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
+      }
     },
   },
 }
