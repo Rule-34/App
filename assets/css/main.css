@@ -4,9 +4,6 @@
 /* Theme */
 @import './general/theme.css';
 
-/* Components */
-@import './components/navigation/SideNav.css';
-
 /* Pages */
 @import './pages/Settings.css';
 

@@ -62,6 +62,7 @@
   --color-gradient-two: hsl(190, 100%, 50%);
 }
 
+/* Not specific to a theme */
 .bg-gradient-lilac-blue {
   background: linear-gradient(
     152deg,
