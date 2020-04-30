@@ -2,30 +2,37 @@
   <!-- If theres request got errors -->
   <div
     v-if="
-      generalData.errors ||
-        $nuxt.isOffline ||
-        (!dashBoardData.data.length && !isSinglePost)
+      generalData.error ||
+      (!dashBoardData.data.length && !isSinglePost) ||
+      $nuxt.isOffline
     "
-    class="material-container text-default-text text-center p-2"
+    class="material-container text-center text-default-text m-6 p-2"
   >
+    <h1
+      class="text-2xl font-bold tracking-wide border w-max-content mx-auto mb-1 px-2"
+    >
+      Error
+    </h1>
+
     <!-- If ANY error -->
-    <template v-if="generalData.errors">
-      <h1 class="bold" v-text="generalData.errors" />
-      <a href="#" @click="fetchWithMode('add')">Try again?</a>
+    <template v-if="generalData.error">
+      <p>
+        {{ generalData.error.message }}
+      </p>
+      <a href="#" @click="resetTags()">Remove tags?</a>
     </template>
 
     <!-- If no posts loaded -->
     <template v-else-if="!dashBoardData.data.length && !isSinglePost">
-      <h1 class="bold" v-text="'There are no more posts to load!'" />
+      <h1 class="font-bold" v-text="'There are no more posts to load!'" />
       <a href="#" @click="resetTags()">Remove tags?</a>
     </template>
 
     <!-- If browser is offline -->
     <template v-else-if="$nuxt.isOffline">
-      <h1
-        class="bold"
-        v-text="'You are offline, please connect to the internet'"
-      />
+      <p>
+        You are offline, please connect to the internet
+      </p>
     </template>
   </div>
 </template>
@@ -38,11 +45,11 @@ export default {
 
   props: {
     // For separating text
-    isSinglePost: { type: Boolean, required: false, default: false }
+    isSinglePost: { type: Boolean, required: false, default: false },
   },
 
   computed: {
-    ...mapState(['generalData', 'dashBoardData', 'searchData'])
+    ...mapState(['generalData', 'dashBoardData', 'searchData']),
   },
 
   methods: {
@@ -59,7 +66,7 @@ export default {
       if (!this.searchData.isActive) {
         this.searchManager({ mode: 'toggleSearch' })
       }
-    }
-  }
+    },
+  },
 }
 </script>
