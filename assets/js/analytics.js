@@ -23,7 +23,6 @@ function SendTimed(index, category, action, value) {
 
 function tagsTracking(data, premadeFilterData) {
   return new Promise(function (resolve, reject) {
-    let isFromFilter = false // In case tags are from filter
     let index = 0 // Workaround, if not done then tags are sent with a lot of delay
 
     // Test to see if theres any data passed
@@ -35,34 +34,12 @@ function tagsTracking(data, premadeFilterData) {
     Object.keys(data).forEach(function (key) {
       // console.log(key, data[key])
 
-      // If the key is from the preFab then dont send anything and skip to next
-      if (premadeFilterData.includes(data[key])) {
-        // console.log('Not sent tag', data[key])
-        isFromFilter = true
-
-        // Skip to next
-        return
-      }
-
       // If not skipped, send tags in an interval of .5 seconds to not flood the analytics server
       SendTimed(index, 'Tags', 'searched', data[key])
 
       // Add one to index
       index++
     })
-
-    // If variables are from filter then send a unique event that identifies that it has been used
-    if (isFromFilter) {
-      console.debug('Tracked Premade Filter')
-
-      SendTimed(0, 'Tags', 'searched', 'Premade Filter')
-      // track({
-      //   id: 'user-usage',
-      //   parameters: {
-      //     searchedTags: 'Premade Filter'
-      //   }
-      // })
-    }
 
     // End execution
     resolve('Tags executed succesfully')
