@@ -16,7 +16,7 @@
           !searchData.tags.length &&
           !generalData.errors
         "
-        class="flex-1 flex items-center justify-center text-default-text text-xl font-hairline tracking-wide"
+        class="flex-1 flex items-center justify-center text-default-text text-xl font-light tracking-wide"
       >
         Search something!
       </h1>
@@ -63,7 +63,7 @@
 
     <!-- Apply tags button -->
     <button
-      class="text-center w-full text-default-text font-bold bg-gradient-lilac-blue py-2 px-4 shadow-md"
+      class="w-full text-center text-lg font-bold tracking-wide text-default-text bg-gradient-lilac-blue py-2 px-4 shadow-md"
       type="submit"
       @click.prevent="dispatchGetAddedTags()"
     >
