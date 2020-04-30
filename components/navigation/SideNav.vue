@@ -21,7 +21,7 @@
 
         <!-- Text on image -->
         <div class="absolute bottom-0 left-0 p-3 transition--color">
-          <h1 class="font-black">Rule 34 App</h1>
+          <h1 class="font-bold">Rule 34 App</h1>
           <h3 class="font-normal">Browse the most popular boorus</h3>
         </div>
       </div>
