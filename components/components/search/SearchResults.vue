@@ -14,7 +14,7 @@
         v-if="
           !searchData.data.length &&
           !searchData.tags.length &&
-          !generalData.errors
+          !generalData.error
         "
         class="flex-1 flex items-center justify-center text-default-text text-xl font-light tracking-wide"
       >
