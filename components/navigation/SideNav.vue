@@ -39,7 +39,7 @@
               class="nav-links"
               :to="link.url"
             >
-              <span class="nav-spacer" />
+              <span class="absolute inset-0 opacity-0" />
               <span class="relative" v-text="link.title" />
             </nuxt-link>
           </li>
@@ -94,7 +94,7 @@
     </div>
 
     <!-- Space for clicking out of the menu -->
-    <div class="sidebar-close-area bg-black-25" @click="sideNavManager" />
+    <div class="hidden md:block md:w-3/4 bg-black" @click="sideNavManager" />
   </aside>
 </template>
 
@@ -126,6 +126,23 @@ export default {
 </script>
 
 <style lang="postcss">
+/* ----- Sidebar related ----- */
+
+@screen md {
+  /* Make the sidebar one fourth of the screen on medium devices */
+  .sidebar {
+    @apply w-1/4;
+  }
+}
+
+.sidebar-img {
+  transition: transform 0.5s ease;
+  transition-delay: 0.35s;
+}
+.sidebar-img:hover {
+  transform: scale(1.5);
+}
+
 /* Sidebar */
 .nav-links {
   transition: transform 0.35s, var(--transition--color);
@@ -144,9 +161,22 @@ export default {
   transform: scale(1.1);
 }
 
-.nav-spacer {
-  @apply absolute inset-0 opacity-0;
+/* Transition */
+
+/* Initial state */
+.sidenav-enter,
+.sidenav-leave-to {
+  transform: translateX(-100vw);
 }
 
-/* ----------------- Rest of styles ----------------- */
+/* Toggled stated */
+.sidenav-enter-to {
+  transform: translateX(0px);
+}
+
+/* Transition that is gonna be applied */
+.sidenav-enter-active,
+.sidenav-leave-active {
+  transition: var(--transition--transform) ease-in-out;
+}
 </style>
