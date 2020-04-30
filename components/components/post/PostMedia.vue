@@ -7,11 +7,12 @@
       :src="imageSource()"
       :loading="userSettings.lazyLoading.value ? 'lazy' : 'auto'"
       :class="{
-        'post-animation': userSettings.animations.value,
+        'opacity-0': userSettings.animations.value,
+        'post-animation': userSettings.animations.value && mediaLoaded,
       }"
       :alt="'Image ' + post.id"
       class="w-full h-auto"
-      @load="addAnimation($event)"
+      @load="mediaLoaded = true"
       @error="retryToLoadMedia($event)"
     />
 
@@ -52,6 +53,7 @@ export default {
 
   data() {
     return {
+      mediaLoaded: false,
       retryCount: 0,
     }
   },
@@ -104,24 +106,24 @@ export default {
         return this.post.low_res_file
       }
     },
-
-    addAnimation(event) {
-      if (this.userSettings.animations.value) {
-        event.target.classList.add('post-animation--active')
-      }
-    },
   },
 }
 </script>
 
 <style lang="postcss">
-/* Invisible until it loads */
 .post-animation {
-  transition: opacity 0.75s;
-  @apply opacity-0;
+  animation: fade 0.75s ease-in-out forwards;
 }
 
-.post-animation--active {
-  @apply opacity-100;
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>
