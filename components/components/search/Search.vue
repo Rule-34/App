@@ -1,5 +1,5 @@
 <template>
-  <form class="fixed min-h-screen w-full z-40 bg-black-25">
+  <form class="fixed w-full min-h-screen bg-black bg-opacity-25 z-40">
     <!-- Centered container -->
     <div class="h-screen w-full search-grid">
       <!-- Separator -->
