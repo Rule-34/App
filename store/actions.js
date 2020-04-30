@@ -172,9 +172,15 @@ export default {
   async simpleFetch({ commit }, { url, options }) {
     const data = await fetch(url, options)
       // Save the data
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Request rejected with status ${response.status}`)
+        }
 
-      // Catch errors and commit to generalManager
+        return response.json()
+      })
+
+      // Catch errors and commit to errorManager
       .catch((error) => {
         commit({
           type: 'errorManager',
