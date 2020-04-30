@@ -30,10 +30,8 @@ import { mapMutations, mapState } from 'vuex'
 import { Touch } from 'vuetify/lib/directives/touch'
 // Components
 import NavToggler from '~/components/navigation/NavToggler.vue'
-// import SideNav from '~/components/navigation/SideNav.vue'
+import SideNav from '~/components/navigation/SideNav.vue'
 // Lazy loaded components
-const SideNav = () =>
-  import(/* webpackPrefetch: true */ '~/components/navigation/SideNav.vue')
 const Search = () =>
   import(
     /* webpackPrefetch: true */ '~/components/components/search/Search.vue'
