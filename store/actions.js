@@ -139,6 +139,11 @@ export default {
         throw new Error('No mode specified')
     }
 
+    if (!response) {
+      console.debug('Returned nothing')
+      return
+    }
+
     // If we want to pass back data we return
     if (parameters.mutationToReturn === 'return') {
       return response
@@ -187,6 +192,8 @@ export default {
           operation: 'set',
           data: error,
         })
+
+        return false
       })
 
     return data
