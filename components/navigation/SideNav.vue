@@ -94,7 +94,10 @@
     </div>
 
     <!-- Space for clicking out of the menu -->
-    <div class="hidden md:block md:w-3/4 bg-black" @click="sideNavManager" />
+    <div
+      class="hidden md:block md:w-3/4 bg-black bg-opacity-25"
+      @click="sideNavManager"
+    />
   </aside>
 </template>
 

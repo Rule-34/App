@@ -2,6 +2,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
+  target: 'modern',
   theme: {
     extend: {
       colors: {
@@ -29,7 +30,7 @@ module.exports = {
         'gradient-two': 'var(--color-gradient-two)',
 
         // Extra
-        'black-25': 'hsla(0, 0%, 0%, 0.25)',
+        // 'black-25': 'hsla(0, 0%, 0%, 0.25)',
       },
 
       // Top, left, etc.
