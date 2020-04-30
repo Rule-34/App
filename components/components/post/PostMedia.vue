@@ -7,7 +7,6 @@
       :src="imageSource()"
       :loading="userSettings.lazyLoading.value ? 'lazy' : 'auto'"
       :class="{
-        'opacity-0': userSettings.animations.value,
         'post-animation': userSettings.animations.value && mediaLoaded,
       }"
       :alt="'Image ' + post.id"
@@ -116,13 +115,10 @@ export default {
 }
 
 @keyframes fade {
-  0% {
+  from {
     opacity: 0;
   }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
+  to {
     opacity: 1;
   }
 }
