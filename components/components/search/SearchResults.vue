@@ -38,7 +38,7 @@
       <!-- Searched tags, click them to add them -->
       <div
         v-if="searchData.data.length"
-        class="flex-1 tag-container border-b border-border rounded overflow-y-scroll"
+        class="flex-1 tag-container rounded rounded-b-none overflow-y-scroll"
       >
         <!-- Add tag to array of added tags, if filter is active then append '-' -->
         <a
