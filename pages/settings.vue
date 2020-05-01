@@ -45,9 +45,9 @@ export default {
 
   computed: mapState(['userSettings']),
 
-  beforeDestroy() {
+  async beforeDestroy() {
     // Fire analytics when exiting settings
-    this.analyticManager('settings')
+    await this.analyticManager('settings')
   },
 
   methods: {
