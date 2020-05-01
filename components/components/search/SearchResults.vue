@@ -123,15 +123,16 @@ export default {
       // Set PID to 0 since we're searching for new tags
       this.pidManager({ operation: 'reset' })
 
-      // Search for the tags
-      await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
-
       // Hide the search bar
       this.searchManager({
         mode: 'toggleSearch',
       })
 
       window.scrollTo(0, 0)
+
+      // Search for the tags
+      await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+
       // And fire analytics
       await this.analyticManager('tags')
     },
