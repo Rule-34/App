@@ -95,7 +95,7 @@ export default {
     runtimeCaching: [
       {
         // Should be a regex string. Compiles into new RegExp('https://my-cdn.com/.*')
-        urlPattern: ['https://rsms.me/.*', 'https://r34.app/img/.*'],
+        urlPattern: ['https://rsms.me/.*', 'https://r34.app/.*'],
         // Defaults to `networkFirst` if omitted
         // handler: 'networkFirst',
         // Defaults to `GET` if omitted
