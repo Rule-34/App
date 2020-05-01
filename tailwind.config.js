@@ -5,6 +5,7 @@ module.exports = {
   target: 'modern',
 
   purge: {
+    // Fix: not purging anything. This shouldnt be necessary, but it is for now
     content: [
       // 'assets/**/*.css',
       // 'assets/**/*.js',
