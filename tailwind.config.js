@@ -37,25 +37,23 @@ module.exports = {
 
         'gradient-one': 'var(--color-gradient-one)',
         'gradient-two': 'var(--color-gradient-two)',
-
-        // Extra
-        // 'black-25': 'hsla(0, 0%, 0%, 0.25)',
       },
 
       // Top, left, etc.
       inset: {
-        '-14': '-3.5rem',
-        '-16': '-4rem',
+        // '-14': '-3.5rem',
+        // '-16': '-4rem',
       },
 
-      // Width and height
+      // padding, margin, width, and height
       spacing: {
-        // 'fit-content': 'fit-content',
-        'max-content': 'max-content',
-        'min-content': 'min-content',
-        // Margins for content
         // '7vw': '7vw',
         // '14vw': '14vw'
+      },
+
+      width: {
+        'max-content': 'max-content',
+        'min-content': 'min-content',
       },
 
       maxHeight: {
