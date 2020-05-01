@@ -7,6 +7,13 @@ export default {
    * @param {Object} parameters (.url) Url to get data from | (.mutationToReturn) Mutation to return data to | (.domain) Domain to get the data from
    */
   async fetchWithMode({ dispatch, commit, state }, parameters) {
+    // Animation for every request
+    if (!state.generalData.firstRequest) {
+      console.debug('Starting loading animation')
+
+      window.$nuxt.$root.$loading.start()
+    }
+
     /* --- Initialize variables --- */
 
     // For every execution
@@ -167,6 +174,19 @@ export default {
     //     await dispatch('analyticManager', 'tags')
     //     break
     // }
+
+    // Animation for every request
+    if (state.generalData.firstRequest) {
+      commit({
+        type: 'firstRequestManager',
+        operation: 'set',
+        data: false,
+      })
+    } else {
+      console.debug('Stopping loading animation')
+
+      window.$nuxt.$root.$loading.finish()
+    }
   },
 
   /**
