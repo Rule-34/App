@@ -1,21 +1,14 @@
 import fireAnalytics from '~/assets/js/analytics' // Import analytics
 
-function loadingAnimationHandler(state, commit, mode) {
-  // Don't do anything first start call
-  if (state.generalData.firstRequest && mode === 'start') {
-    return
-  }
+const vuexActionsGlobalVariable = { animationCount: 0 }
 
-  // Set firstRequest to false on first request's end
-  if (state.generalData.firstRequest) {
-    console.debug('Setting first request to false')
+function loadingAnimationHandler(mode) {
+  if (vuexActionsGlobalVariable.animationCount < 2) {
+    console.debug(
+      `Skipping first 2 requests, this is ${vuexActionsGlobalVariable.animationCount}`
+    )
 
-    commit({
-      type: 'firstRequestManager',
-      operation: 'set',
-      data: false,
-    })
-
+    vuexActionsGlobalVariable.animationCount++
     return
   }
 
@@ -45,7 +38,7 @@ export default {
    */
   async fetchWithMode({ dispatch, commit, state }, parameters) {
     // Animation for every request
-    loadingAnimationHandler(state, commit, 'start')
+    loadingAnimationHandler('start')
 
     /* --- Initialize variables --- */
 
@@ -89,7 +82,11 @@ export default {
     //   domain = parameters.domain
     // }
 
-    console.debug(domain)
+    console.debug(`
+    ---- fetchWithMode ----
+    Booru "${domain}"
+    Mode ${parameters.mode}
+    `)
 
     // Choose mode
     switch (parameters.mode) {
@@ -182,7 +179,7 @@ export default {
     if (!response) {
       console.debug('Returned nothing')
 
-      loadingAnimationHandler(state, commit, 'finish')
+      loadingAnimationHandler('finish')
 
       return
     }
@@ -211,7 +208,7 @@ export default {
     //     break
     // }
 
-    loadingAnimationHandler(state, commit, 'finish')
+    loadingAnimationHandler('finish')
   },
 
   /**
