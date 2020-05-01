@@ -7,7 +7,8 @@
       :src="imageSource()"
       :loading="userSettings.lazyLoading.value ? 'lazy' : 'auto'"
       :class="{
-        'post-animation': userSettings.animations.value && mediaLoaded,
+        'post-animation opacity-0': userSettings.animations.value,
+        'opacity-100': userSettings.animations.value && mediaLoaded,
       }"
       :alt="'Image ' + post.id"
       class="w-full h-auto"
@@ -111,15 +112,6 @@ export default {
 
 <style lang="postcss">
 .post-animation {
-  animation: fade 0.75s ease-in-out forwards;
-}
-
-@keyframes fade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  transition: opacity 0.75s;
 }
 </style>
