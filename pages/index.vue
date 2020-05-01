@@ -64,8 +64,8 @@ export default {
     Intersect,
   },
 
-  // Load the store with posts
-  async fetch({ store }) {
+  async middleware({ store, dispatch }) {
+    // Load the store with posts
     await store.dispatch('fetchWithMode', { mode: 'posts', returnMode: 'add' })
   },
 
