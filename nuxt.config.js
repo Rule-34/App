@@ -28,7 +28,7 @@ export default {
     // height: '5px',
     throttle: 300,
     // duration: 5000,
-    // continuous: false,
+    continuous: true,
   },
   /*
    ** Customize the splash loading indicator
