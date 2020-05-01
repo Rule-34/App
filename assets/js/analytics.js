@@ -46,7 +46,7 @@ function tagsTracking(data, premadeFilterData) {
   })
 }
 
-function domainTracking(data) {
+function booruTracking(data) {
   return new Promise(function (resolve, reject) {
     // Test to see if theres any data passed
     if (!data) {
@@ -101,9 +101,8 @@ export default async function fireAnalytics(type, data, premadeFilterData) {
 
       return result
 
-    // Track searched tags
-    case 'domain':
-      result = await domainTracking(data)
+    case 'booru':
+      result = await booruTracking(data)
 
       return result
 

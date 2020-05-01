@@ -248,9 +248,9 @@ export default {
         break
 
       // Send domain
-      case 'domain':
+      case 'booru':
         await fireAnalytics(
-          'domain',
+          'booru',
           state.dashBoardSettings.contentDomain
         ).then(console.debug)
         break
