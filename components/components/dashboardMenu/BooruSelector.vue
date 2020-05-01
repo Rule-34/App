@@ -105,7 +105,7 @@ export default {
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
 
       // Send analytics
-      await this.analyticManager('domain')
+      await this.analyticManager('booru')
     },
   },
 }
