@@ -94,9 +94,9 @@ export default {
       this.tagManager({ operation: 'reset' })
     },
 
-    getTags: debounce(function () {
+    getTags: debounce(async function () {
       if (this.searchQuery.length > 2) {
-        this.fetchWithMode({
+        await this.fetchWithMode({
           mode: 'tags',
           tag: this.searchQuery,
         })

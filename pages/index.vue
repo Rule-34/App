@@ -106,13 +106,13 @@ export default {
     }, 5000),
 
     // Infinite loading
-    concatPost() {
+    async concatPost() {
       console.debug('Loaded more posts')
       // Get next PID
       this.pidManager({ operation: 'add' })
 
       // And load next posts
-      this.fetchWithMode({ mode: 'posts', returnMode: 'concat' })
+      await this.fetchWithMode({ mode: 'posts', returnMode: 'concat' })
     },
     // Navigation with keyboard
     navigation() {

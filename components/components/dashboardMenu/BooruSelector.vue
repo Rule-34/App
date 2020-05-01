@@ -91,7 +91,7 @@ export default {
     },
 
     // Changes that we have to do when changing domain so request is not malformed
-    changeDomain(domain) {
+    async changeDomain(domain) {
       // Send new API to change
       this.domainManager(domain)
 
@@ -102,10 +102,10 @@ export default {
       this.pidManager({ operation: 'reset' })
 
       // And finally load the posts with everything to default
-      this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+      await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
 
       // Send analytics
-      this.analyticManager('domain')
+      await this.analyticManager('domain')
     },
   },
 }

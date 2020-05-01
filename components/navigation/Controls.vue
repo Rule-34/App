@@ -59,26 +59,26 @@ export default {
     ...mapActions(['fetchWithMode']),
 
     // Get next page from api
-    getNextPage() {
+    async getNextPage() {
       // Get next PID
       this.pidManager({ operation: 'add' })
 
       // If we have tags added then load next page of tags, else load normal latest posts
 
-      this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+      await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
     },
 
     // Get last page from api
-    getPrevPage() {
+    async getPrevPage() {
       // Get last PID
       this.pidManager({ operation: 'subtract' })
 
       // Load last page
 
-      this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+      await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
     },
 
-    getSpecificPage() {
+    async getSpecificPage() {
       // Ask for page to go to
       const specificPage = Number.parseInt(
         prompt('What page do you want to go to?', '69')
@@ -94,7 +94,7 @@ export default {
 
         // And load specific page
 
-        this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+        await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
       } else {
         alert('Wrong input, only numbers please')
       }
