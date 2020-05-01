@@ -15,6 +15,7 @@ export default () => ({
 
   searchData: {
     isActive: false, // Is search bar active
+
     data: [], // Data received while searching for tags
     tags: [], // Tags that are added for searching posts with that tags
 
@@ -23,17 +24,21 @@ export default () => ({
   },
 
   generalData: {
-    // apiUrl: 'http://localhost:8100/',
-    apiUrl: 'https://api.r34.app/',
-    // corsProxyUrl: 'https://test-proxy.rule34app.workers.dev/',
-    corsProxyUrl: 'https://cors-proxy.rule34app.workers.dev/',
     everythingIsLoaded: false,
+
+    apiUrl: 'https://api.r34.app/',
+    // apiUrl: 'http://localhost:8100/',
+
+    corsProxyUrl: 'https://cors-proxy.rule34app.workers.dev/',
+    // corsProxyUrl: 'https://test-proxy.rule34app.workers.dev/',
+
     error: undefined,
   },
 
   // These settings are saved to localStorage
   notificationData: {
     data: [], // Data fetched from Gist
+
     latestTitle: '',
     alreadyFetched: false,
   },
