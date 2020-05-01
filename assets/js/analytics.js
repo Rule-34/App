@@ -83,8 +83,15 @@ export default async function fireAnalytics(type, data) {
 
     case 'settings':
       result = await settingsTracking(data)
+      break
 
-      return result
+    case 'notifications':
+      result = await SendTimed(0, 'Notifications', 'opened', 'true')
+      break
+
+    case 'filter':
+      result = await SendTimed(0, 'Filter', 'used', 'true')
+      break
   }
 
   return result
