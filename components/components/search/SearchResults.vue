@@ -119,23 +119,21 @@ export default {
       }
     },
 
-    dispatchGetAddedTags() {
+    async dispatchGetAddedTags() {
       // Set PID to 0 since we're searching for new tags
       this.pidManager({ operation: 'reset' })
 
       // Search for the tags
-      this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+      await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
 
       // Hide the search bar
       this.searchManager({
         mode: 'toggleSearch',
       })
 
-      // And fire analytics
-      this.analyticManager('tags')
-
-      // And scroll to top
       window.scrollTo(0, 0)
+      // And fire analytics
+      await this.analyticManager('tags')
     },
   },
 }

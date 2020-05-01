@@ -48,7 +48,7 @@ export default {
     ...mapMutations(['pidManager', 'tagManager']),
     ...mapActions(['fetchWithMode', 'analyticManager']),
 
-    getSpecificTag(tag) {
+    async getSpecificTag(tag) {
       // Set PID to 0 since we're searching for new tags
       this.pidManager({ operation: 'reset' })
 
@@ -67,10 +67,10 @@ export default {
 
       // Search for the tag
 
-      this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+      await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
 
       // And fire analytics
-      this.analyticManager('tags')
+      await this.analyticManager('tags')
     },
   },
 }

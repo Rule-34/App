@@ -54,7 +54,6 @@ export default {
 
   methods: {
     ...mapMutations(['searchManager', 'tagManager']),
-    ...mapActions(['fetchWithMode']),
 
     resetTags() {
       // console.log('Resetted tags')
