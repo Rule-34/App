@@ -112,13 +112,17 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchWithMode']),
     ...mapMutations(['notificationManager']),
+    ...mapActions(['fetchWithMode', 'analyticManager']),
 
-    toggleNotifications() {
+    async toggleNotifications() {
       this.isActive = !this.isActive
 
       this.notificationManager({ mode: 'setLatestTitle' })
+
+      if (this.isActive) {
+        await this.analyticManager('notifications')
+      }
     },
   },
 }

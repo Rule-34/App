@@ -81,7 +81,7 @@ export default {
 
   methods: {
     ...mapMutations(['searchManager', 'tagManager']),
-    ...mapActions(['fetchWithMode']),
+    ...mapActions(['fetchWithMode', 'analyticManager']),
 
     replaceInput(event) {
       this.searchQuery = event.target.value.replace(/\s+/g, '_').toLowerCase()
@@ -125,6 +125,8 @@ export default {
       this.tagManager({
         operation: 'concat',
       })
+
+      this.analyticManager('filter')
     },
   },
 }

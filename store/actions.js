@@ -191,18 +191,6 @@ export default {
       mode: parameters.returnMode,
     })
 
-    // Fire analytics
-    // switch (parameters.mode) {
-    //   case 'posts':
-    //   case 'single-post':
-    //     await dispatch('analyticManager', 'domain')
-    //     break
-
-    //   case 'tags':
-    //     await dispatch('analyticManager', 'tags')
-    //     break
-    // }
-
     loadingAnimationHandler('finish', state)
   },
 
@@ -238,7 +226,6 @@ export default {
 
   async analyticManager({ state }, execution) {
     switch (execution) {
-      // Send tags
       case 'tags':
         await fireAnalytics(
           'tags',
@@ -247,7 +234,6 @@ export default {
         ).then(console.debug)
         break
 
-      // Send domain
       case 'booru':
         await fireAnalytics(
           'booru',
@@ -255,9 +241,16 @@ export default {
         ).then(console.debug)
         break
 
-      // Send user settings
       case 'settings':
         await fireAnalytics('settings', state.userSettings).then(console.debug)
+        break
+
+      case 'notifications':
+        await fireAnalytics('notifications')
+        break
+
+      case 'filter':
+        await fireAnalytics('filter')
         break
     }
   },
