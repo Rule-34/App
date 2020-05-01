@@ -1,5 +1,42 @@
 import fireAnalytics from '~/assets/js/analytics' // Import analytics
 
+function loadingAnimationHandler(state, commit, mode) {
+  // Don't do anything first start call
+  if (state.generalData.firstRequest && mode === 'start') {
+    return
+  }
+
+  // Set firstRequest to false on first request's end
+  if (state.generalData.firstRequest) {
+    console.debug('Setting first request to false')
+
+    commit({
+      type: 'firstRequestManager',
+      operation: 'set',
+      data: false,
+    })
+
+    return
+  }
+
+  switch (mode) {
+    case 'start':
+      console.debug('Starting loading animation')
+
+      window.$nuxt.$root.$loading.start()
+      break
+
+    case 'finish':
+      console.debug('Stopping loading animation')
+
+      window.$nuxt.$root.$loading.finish()
+      break
+
+    default:
+      throw new Error('No mode specified')
+  }
+}
+
 export default {
   /**
    * Fetches data by mode
@@ -8,11 +45,7 @@ export default {
    */
   async fetchWithMode({ dispatch, commit, state }, parameters) {
     // Animation for every request
-    if (!state.generalData.firstRequest) {
-      console.debug('Starting loading animation')
-
-      window.$nuxt.$root.$loading.start()
-    }
+    loadingAnimationHandler(state, commit, 'start')
 
     /* --- Initialize variables --- */
 
@@ -148,6 +181,9 @@ export default {
 
     if (!response) {
       console.debug('Returned nothing')
+
+      loadingAnimationHandler(state, commit, 'finish')
+
       return
     }
 
@@ -175,18 +211,7 @@ export default {
     //     break
     // }
 
-    // Animation for every request
-    if (state.generalData.firstRequest) {
-      commit({
-        type: 'firstRequestManager',
-        operation: 'set',
-        data: false,
-      })
-    } else {
-      console.debug('Stopping loading animation')
-
-      window.$nuxt.$root.$loading.finish()
-    }
+    loadingAnimationHandler(state, commit, 'finish')
   },
 
   /**
