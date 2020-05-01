@@ -98,7 +98,7 @@ export default {
     },
   },
 
-  mounted() {
+  async mounted() {
     // Test if we have already fetched data
     if (this.notificationData.alreadyFetched) {
       console.debug('Already fetched notification data, skipping')
@@ -106,7 +106,7 @@ export default {
     }
 
     // Fetch notifications, once as its in mounted (Could potentially waste data if visitors arent on Dashboard)
-    this.fetchWithMode({
+    await this.fetchWithMode({
       mode: 'notifications',
     })
   },
