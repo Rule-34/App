@@ -60,22 +60,28 @@ export default {
 
     // Get next page from api
     async getNextPage() {
+      this.$nuxt.$loading.start()
+
       // Get next PID
       this.pidManager({ operation: 'add' })
 
       // If we have tags added then load next page of tags, else load normal latest posts
-
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+
+      this.$nuxt.$loading.finish()
     },
 
     // Get last page from api
     async getPrevPage() {
+      this.$nuxt.$loading.start()
+
       // Get last PID
       this.pidManager({ operation: 'subtract' })
 
       // Load last page
-
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+
+      this.$nuxt.$loading.finish()
     },
 
     async getSpecificPage() {
@@ -89,12 +95,14 @@ export default {
 
       // Test if something was input
       if (specificPage) {
+        this.$nuxt.$loading.start()
         // Set PID to indicated
         this.pidManager({ operation: 'specific', value: specificPage })
 
         // And load specific page
-
         await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+
+        this.$nuxt.$loading.finish()
       } else {
         alert('Wrong input, only numbers please')
       }
