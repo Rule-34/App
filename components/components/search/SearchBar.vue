@@ -96,14 +96,10 @@ export default {
 
     getTags: debounce(async function () {
       if (this.searchQuery.length > 2) {
-        this.$nuxt.$loading.start()
-
         await this.fetchWithMode({
           mode: 'tags',
           tag: this.searchQuery,
         })
-
-        this.$nuxt.$loading.finish()
       } else {
         // Remove search data cause search limit is 3 characters
         this.searchManager({

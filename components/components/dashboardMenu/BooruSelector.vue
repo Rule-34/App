@@ -92,8 +92,6 @@ export default {
 
     // Changes that we have to do when changing domain so request is not malformed
     async changeDomain(domain) {
-      this.$nuxt.$loading.start()
-
       // Send new API to change
       this.domainManager(domain)
 
@@ -105,8 +103,6 @@ export default {
 
       // And finally load the posts with everything to default
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
-
-      this.$nuxt.$loading.finish()
 
       // Send analytics
       await this.analyticManager('domain')
