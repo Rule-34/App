@@ -20,7 +20,7 @@
           />
         </picture>
         <h1
-          class="material-container rounded-full bg-background mx-auto shadow-md mb-1 py-1 px-3"
+          class="material-container rounded-full w-max-content bg-background mx-auto shadow-md mb-1 py-1 px-3"
         >
           Alejandro Akbal
         </h1>
