@@ -1,14 +1,9 @@
 import fireAnalytics from '~/assets/js/analytics' // Import analytics
 
-const vuexActionsGlobalVariable = { animationCount: 0 }
+function loadingAnimationHandler(mode, state) {
+  if (!state.generalData.everythingIsLoaded) {
+    console.debug('Skipping animation until everything is loaded')
 
-function loadingAnimationHandler(mode) {
-  if (vuexActionsGlobalVariable.animationCount < 2) {
-    console.debug(
-      `Skipping first 2 requests, this is ${vuexActionsGlobalVariable.animationCount}`
-    )
-
-    vuexActionsGlobalVariable.animationCount++
     return
   }
 
@@ -38,7 +33,7 @@ export default {
    */
   async fetchWithMode({ dispatch, commit, state }, parameters) {
     // Animation for every request
-    loadingAnimationHandler('start')
+    loadingAnimationHandler('start', state)
 
     /* --- Initialize variables --- */
 
@@ -179,7 +174,7 @@ export default {
     if (!response) {
       console.debug('Returned nothing')
 
-      loadingAnimationHandler('finish')
+      loadingAnimationHandler('finish', state)
 
       return
     }
@@ -208,7 +203,7 @@ export default {
     //     break
     // }
 
-    loadingAnimationHandler('finish')
+    loadingAnimationHandler('finish', state)
   },
 
   /**
