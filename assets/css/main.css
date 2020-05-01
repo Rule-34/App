@@ -5,12 +5,12 @@
 @import './general/theme.css';
 
 /* Pages */
-@import './pages/Settings.css';
 
 /* Tailwind components */
 @import 'tailwindcss/components';
 
 /* General */
+@import './general/settingsRelated.css';
 @import './general/general.css';
 
 /* Tailwind utilities */
