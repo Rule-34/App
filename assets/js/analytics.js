@@ -1,7 +1,7 @@
 import { event } from 'vue-analytics'
 
 // Send tags in an interval of .5 seconds to not flood the analytics server
-function SendTimed(index, category, action, value) {
+export function SendTimed(index, category, action, value) {
   setTimeout(function () {
     console.debug(`
     ---- Analytic tracking ----
@@ -10,35 +10,21 @@ function SendTimed(index, category, action, value) {
     Value: ${value}
     `)
 
-    // Then track tags
     event(category, action, value)
-    // track({
-    //   id: 'user-usage',
-    //   parameters: {
-    //     [parameter]: data
-    //   }
-    // })
   }, 500 * index)
 }
 
-function tagsTracking(data, premadeFilterData) {
+function tagsTracking(data) {
   return new Promise(function (resolve, reject) {
-    let index = 0 // Workaround, if not done then tags are sent with a lot of delay
-
     // Test to see if theres any data passed
     if (!data.length) {
       resolve('No tags passed')
     }
 
-    // Execute successfully the code
-    Object.keys(data).forEach(function (key) {
+    Object.keys(data).forEach(function (key, index) {
       // console.log(key, data[key])
 
-      // If not skipped, send tags in an interval of .5 seconds to not flood the analytics server
       SendTimed(index, 'Tags', 'searched', data[key])
-
-      // Add one to index
-      index++
     })
 
     // End execution
@@ -53,14 +39,7 @@ function booruTracking(data) {
       resolve('No domain passed')
     }
 
-    // Execute successfully the code
     SendTimed(0, 'Domains', 'changed', data)
-    // track({
-    //   id: 'user-usage',
-    //   parameters: {
-    //     domainUsed: data
-    //   }
-    // })
 
     resolve('Domain executed succesfully')
   })
@@ -74,7 +53,7 @@ function settingsTracking(data) {
     )
 
     // If theres no difference then reject
-    if (difference.length === 0) {
+    if (!difference.length) {
       resolve('No setting difference')
     }
 
@@ -82,7 +61,6 @@ function settingsTracking(data) {
     Object.keys(difference).forEach(function (key, index) {
       // console.log(key, difference[key])
 
-      // Send settings in an interval of .5 seconds to not flood the analytics server
       SendTimed(index, 'Settings', 'toggled', difference[key])
     })
 
@@ -91,25 +69,23 @@ function settingsTracking(data) {
 }
 
 /* -------- Analytics -------- */
-export default async function fireAnalytics(type, data, premadeFilterData) {
+export default async function fireAnalytics(type, data) {
   // console.log('Analytics fired with something:', type, data)
   let result
   switch (type) {
-    // Track searched tags
     case 'tags':
-      result = await tagsTracking(data, premadeFilterData)
-
-      return result
+      result = await tagsTracking(data)
+      break
 
     case 'booru':
       result = await booruTracking(data)
+      break
 
-      return result
-
-    // Track different settings
     case 'settings':
       result = await settingsTracking(data)
 
       return result
   }
+
+  return result
 }
