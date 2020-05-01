@@ -3,6 +3,15 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
   target: 'modern',
+
+  purge: {
+    content: ['./src/**/*.html', './src/**/*.vue', './src/**/*.jsx'],
+
+    options: {
+      whitelistPatterns: [/active/, /fade/, /enter/, /leave/],
+    },
+  },
+
   theme: {
     extend: {
       colors: {
