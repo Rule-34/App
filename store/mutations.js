@@ -88,22 +88,6 @@ export default {
     }
   },
 
-  firstRequestManager(state, parameters) {
-    // Errors
-    switch (parameters.operation) {
-      case 'reset':
-        state.generalData.firstRequest = null
-        break
-
-      case 'set':
-        state.generalData.firstRequest = parameters.data
-        break
-
-      default:
-        throw new Error('No operation specified')
-    }
-  },
-
   /**
    *
    * @param {*} state Default
