@@ -88,6 +88,22 @@ export default {
     }
   },
 
+  everythingIsLoadedManager(state, parameters) {
+    // Errors
+    switch (parameters.operation) {
+      case 'reset':
+        state.generalData.everythingIsLoaded = false
+        break
+
+      case 'set':
+        state.generalData.everythingIsLoaded = parameters.data
+        break
+
+      default:
+        throw new Error('No operation specified')
+    }
+  },
+
   /**
    *
    * @param {*} state Default

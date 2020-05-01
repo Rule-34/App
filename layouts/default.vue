@@ -71,12 +71,19 @@ export default {
   },
 
   mounted() {
+    // Set state variable to true
+    this.everythingIsLoadedManager({ operation: 'set', data: true })
+
     // Necessary on mounted for first page load
     this.routeHandler()
   },
 
   methods: {
-    ...mapMutations(['sideNavManager', 'searchManager']),
+    ...mapMutations([
+      'sideNavManager',
+      'searchManager',
+      'everythingIsLoadedManager',
+    ]),
 
     // Set different layout depending of the route
     routeHandler() {
