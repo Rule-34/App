@@ -5,7 +5,15 @@ module.exports = {
   target: 'modern',
 
   purge: {
-    content: ['./src/**/*.html', './src/**/*.vue', './src/**/*.jsx'],
+    content: [
+      // 'assets/**/*.css',
+      // 'assets/**/*.js',
+      'components/**/*.vue',
+      'layouts/**/*.vue',
+      'pages/**/*.vue',
+      'plugins/**/*.js',
+      'nuxt.config.js',
+    ],
 
     options: {
       whitelistPatterns: [/active/, /fade/, /enter/, /leave/],
