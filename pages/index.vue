@@ -107,13 +107,18 @@ export default {
 
     // Infinite loading
     async concatPost() {
+      this.$nuxt.$loading.start()
+
       console.debug('Loaded more posts')
       // Get next PID
       this.pidManager({ operation: 'add' })
 
       // And load next posts
       await this.fetchWithMode({ mode: 'posts', returnMode: 'concat' })
+
+      this.$nuxt.$loading.finish()
     },
+
     // Navigation with keyboard
     navigation() {
       try {

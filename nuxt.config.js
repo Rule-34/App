@@ -23,7 +23,13 @@ export default {
   /*
    ** Customize the progress-bar color
    */
-  // loading: { color: '#fff' },
+  loading: {
+    color: 'hsl(190, 100%, 50%)',
+    // height: '5px',
+    throttle: 300,
+    // duration: 5000,
+    // continuous: false,
+  },
   /*
    ** Customize the splash loading indicator
    */

@@ -120,6 +120,8 @@ export default {
     },
 
     async dispatchGetAddedTags() {
+      this.$nuxt.$loading.start()
+
       // Set PID to 0 since we're searching for new tags
       this.pidManager({ operation: 'reset' })
 
@@ -132,6 +134,9 @@ export default {
       })
 
       window.scrollTo(0, 0)
+
+      this.$nuxt.$loading.finish()
+
       // And fire analytics
       await this.analyticManager('tags')
     },

@@ -49,6 +49,8 @@ export default {
     ...mapActions(['fetchWithMode', 'analyticManager']),
 
     async getSpecificTag(tag) {
+      this.$nuxt.$loading.start()
+
       // Set PID to 0 since we're searching for new tags
       this.pidManager({ operation: 'reset' })
 
@@ -68,6 +70,8 @@ export default {
       // Search for the tag
 
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+
+      this.$nuxt.$loading.finish()
 
       // And fire analytics
       await this.analyticManager('tags')
