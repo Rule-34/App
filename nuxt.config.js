@@ -140,7 +140,7 @@ export default {
       terserOptions: {
         compress: {
           // drop_console: true,
-          pure_funcs: ['console.log'],
+          pure_funcs: ['console.log', 'console.debug'],
         },
       },
     },
