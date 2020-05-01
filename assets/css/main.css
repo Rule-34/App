@@ -1,17 +1,28 @@
-/* Tailwind base */
+/* 
+ * Tailwind
+ * base
+ */
 @import 'tailwindcss/base';
 
-/* Theme */
+/* Styling to elements like h1, p, button, etc. should be here */
+
 @import './general/theme.css';
 
-/* Pages */
-
-/* Tailwind components */
+/* 
+ * Tailwind
+ * components
+ */
 @import 'tailwindcss/components';
 
-/* General */
+/* Styling to classes like .btn, .card etc. should be here */
+
 @import './general/settingsRelated.css';
 @import './general/general.css';
 
-/* Tailwind utilities */
+/* 
+ * Tailwind
+ * utilities
+ */
 @import 'tailwindcss/utilities';
+
+/* Styling to utilities like .text-shadow-sm should be here */
