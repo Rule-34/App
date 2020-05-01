@@ -35,7 +35,7 @@ export default {
     tags: {
       type: Array,
       default() {
-        return []
+        return undefined
       },
     },
     isActive: {
