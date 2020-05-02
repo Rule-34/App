@@ -39,19 +39,20 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import SettingSwitch from '~/components/content/SettingSwitch.vue'
+// JS
+import fireAnalytics from '~/assets/js/analytics'
 
 export default {
   components: { SettingSwitch },
 
   computed: mapState(['userSettings']),
 
-  async beforeDestroy() {
+  beforeDestroy() {
     // Fire analytics when exiting settings
-    await this.analyticManager('settings')
+    fireAnalytics('settings', this.$store.state)
   },
 
   methods: {
-    ...mapActions(['analyticManager']),
     // Remove the localStorage object and reload the window
     removeLocalStorage() {
       // Remove localstorage by key

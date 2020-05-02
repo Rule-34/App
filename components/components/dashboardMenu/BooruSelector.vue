@@ -36,10 +36,11 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 import { ChevronDownIcon, CloudIcon } from 'vue-feather-icons'
 // Components
 import {
-  booruList,
   removeBoorusWithValuesByKey,
   findBoorusWithValueByKey,
 } from '~/assets/lib/rule-34-shared-resources/util/BooruUtils.js'
+// JS
+import fireAnalytics from '~/assets/js/analytics'
 
 export default {
   name: 'BooruSelector',
@@ -63,7 +64,7 @@ export default {
 
   methods: {
     ...mapMutations(['domainManager', 'pidManager', 'tagManager']),
-    ...mapActions(['fetchWithMode', 'analyticManager']),
+    ...mapActions(['fetchWithMode']),
 
     evaluateBooruList(nsfwSetting, isPatron) {
       // If NSFW content is disabled
@@ -105,7 +106,7 @@ export default {
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
 
       // Send analytics
-      await this.analyticManager('booru')
+      fireAnalytics('booru', this.$store.state)
     },
   },
 }
