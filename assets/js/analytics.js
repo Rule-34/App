@@ -1,5 +1,5 @@
 // Send tags in an interval of .5 seconds to not flood the analytics server
-export function SendTimed(index, category, action, name, value) {
+function SendTimed(index, category, action, name, value) {
   setTimeout(function () {
     console.debug(`
     ---- Analytic tracking ----
@@ -40,19 +40,18 @@ function tagsTracking(state) {
   })
 
   if (isFromFilter) {
-    console.debug('Tracked Premade Filter')
+    // console.debug('Tracked Premade Filter')
 
     SendTimed(0, 'Tags', 'searched', 'Premade Filter')
   }
 
-  // End execution
-  console.debug('Tags executed succesfully')
+  // console.debug('Tags executed succesfully')
 }
 
 function booruTracking(state) {
   SendTimed(0, 'Domains', 'changed', state.dashBoardSettings.contentDomain)
 
-  console.debug('Domain executed succesfully')
+  // console.debug('Domain executed succesfully')
 }
 
 function settingsTracking(state) {
@@ -75,7 +74,7 @@ function settingsTracking(state) {
     SendTimed(index, 'Settings', 'toggled', difference[key])
   })
 
-  console.debug('Settings executed succesfully')
+  // console.debug('Settings executed succesfully')
 }
 
 /* -------- Analytics -------- */
