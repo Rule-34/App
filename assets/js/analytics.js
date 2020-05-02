@@ -98,6 +98,9 @@ export default function fireAnalytics(mode, state) {
     case 'notifications':
       result = SendTimed(0, 'Notifications', 'opened')
       break
+
+    default:
+      throw new Error('No mode specified')
   }
 
   return result
