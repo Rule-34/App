@@ -227,30 +227,19 @@ export default {
   async analyticManager({ state }, execution) {
     switch (execution) {
       case 'tags':
-        await fireAnalytics(
-          'tags',
-          state.searchData.tags,
-          state.searchData.premadeFilterData
-        ).then(console.debug)
+        await fireAnalytics('tags', state)
         break
 
       case 'booru':
-        await fireAnalytics(
-          'booru',
-          state.dashBoardSettings.contentDomain
-        ).then(console.debug)
+        await fireAnalytics('booru', state)
         break
 
       case 'settings':
-        await fireAnalytics('settings', state.userSettings).then(console.debug)
+        await fireAnalytics('settings', state)
         break
 
       case 'notifications':
         await fireAnalytics('notifications')
-        break
-
-      case 'filter':
-        await fireAnalytics('filter')
         break
     }
   },
