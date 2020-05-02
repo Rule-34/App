@@ -1,5 +1,3 @@
-import { event } from 'vue-analytics'
-
 // Send tags in an interval of .5 seconds to not flood the analytics server
 export function SendTimed(index, category, action, value) {
   setTimeout(function () {
@@ -10,7 +8,8 @@ export function SendTimed(index, category, action, value) {
     Value: ${value}
     `)
 
-    event(category, action, value)
+    // In reality its name, value but here we skip it
+    window._paq.push(['trackEvent', category, action, value])
   }, 500 * index)
 }
 
@@ -86,11 +85,11 @@ export default async function fireAnalytics(type, data) {
       break
 
     case 'notifications':
-      result = await SendTimed(0, 'Notifications', 'opened', 'true')
+      result = await SendTimed(0, 'Notifications', 'opened')
       break
 
     case 'filter':
-      result = await SendTimed(0, 'Filter', 'used', 'true')
+      result = await SendTimed(0, 'Filter', 'used')
       break
   }
 

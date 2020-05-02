@@ -45,7 +45,11 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [{ src: '~/plugins/vuex-persist.js', mode: 'client', ssr: false }],
+  plugins: [
+    { src: '~/plugins/vuex-persist.js', mode: 'client', ssr: false },
+    { src: '~/plugins/vue-matomo.js', mode: 'client', ssr: false },
+  ],
+
   /*
    ** Nuxt.js dev-modules
    */
@@ -54,24 +58,6 @@ export default {
     // '@nuxtjs/eslint-module',
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
     '@nuxtjs/tailwindcss',
-
-    [
-      '@nuxtjs/google-analytics',
-      {
-        // Initialize
-        id: 'UA-156285339-1',
-
-        // Anonymize
-        set: [{ field: 'anonymizeIp', value: true }],
-
-        // Disable on production
-        // debug: {
-        //   enabled: true,
-        //   // trace: true,
-        //   sendHitTask: true
-        // }
-      },
-    ],
   ],
   /*
    ** Nuxt.js modules
