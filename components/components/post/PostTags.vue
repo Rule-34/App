@@ -7,7 +7,7 @@
     class="tags--transition min-w-full overflow-hidden"
     :style="
       isActive
-        ? `max-height: ${$refs.postTags.scrollHeight}px; opacity: 1;`
+        ? `max-height: ${$refs.postTags.scrollHeight || 0}px; opacity: 1;`
         : 'max-height: 0px; opacity: 0;'
     "
   >
