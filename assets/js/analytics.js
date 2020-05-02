@@ -1,95 +1,101 @@
 // Send tags in an interval of .5 seconds to not flood the analytics server
-export function SendTimed(index, category, action, value) {
+export function SendTimed(index, category, action, name, value) {
   setTimeout(function () {
     console.debug(`
     ---- Analytic tracking ----
     Category: ${category}
     Action: ${action}
+    Value: ${name}
     Value: ${value}
     `)
 
-    // In reality its name, value but here we skip it
-    window._paq.push(['trackEvent', category, action, value])
+    // In reality its ['trackEvent', category, [name], [value]] but here we skip it
+    if (name) {
+      window._paq.push(['trackEvent', category, action, name])
+    } else {
+      window._paq.push(['trackEvent', category, action])
+    }
   }, 500 * index)
 }
 
-function tagsTracking(data) {
-  return new Promise(function (resolve, reject) {
-    // Test to see if theres any data passed
-    if (!data.length) {
-      resolve('No tags passed')
+function tagsTracking(state) {
+  let isFromFilter = false
+
+  if (!state.searchData.tags.length) {
+    console.debug('No tags to track')
+    return
+  }
+
+  state.searchData.tags.forEach((tag, index) => {
+    // console.log(tag, index)
+
+    if (state.searchData.premadeFilterData.includes(tag)) {
+      // console.log('Not sent tag', tag)
+      isFromFilter = true
+
+      return
     }
 
-    Object.keys(data).forEach(function (key, index) {
-      // console.log(key, data[key])
-
-      SendTimed(index, 'Tags', 'searched', data[key])
-    })
-
-    // End execution
-    resolve('Tags executed succesfully')
+    SendTimed(index, 'Tags', 'searched', tag)
   })
+
+  if (isFromFilter) {
+    console.debug('Tracked Premade Filter')
+
+    SendTimed(0, 'Tags', 'searched', 'Premade Filter')
+  }
+
+  // End execution
+  console.debug('Tags executed succesfully')
 }
 
-function booruTracking(data) {
-  return new Promise(function (resolve, reject) {
-    // Test to see if theres any data passed
-    if (!data) {
-      resolve('No domain passed')
-    }
+function booruTracking(state) {
+  SendTimed(0, 'Domains', 'changed', state.dashBoardSettings.contentDomain)
 
-    SendTimed(0, 'Domains', 'changed', data)
-
-    resolve('Domain executed succesfully')
-  })
+  console.debug('Domain executed succesfully')
 }
 
-function settingsTracking(data) {
-  return new Promise(function (resolve, reject) {
-    // Compare default settings to user settings to see if theres a difference
-    const difference = Object.keys(data).filter(
-      (key) => data[key].value !== data[key].defaultValue
-    )
+function settingsTracking(state) {
+  // Compare default settings to user settings to see if theres a difference
+  const difference = Object.keys(state.userSettings).filter(
+    (setting) => setting.value !== setting.defaultValue
+  )
 
-    // If theres no difference then reject
-    if (!difference.length) {
-      resolve('No setting difference')
-    }
+  // If theres no difference then reject
+  if (!difference.length) {
+    console.debug('No setting difference')
+    return
+  }
 
-    // When we know theres a difference, track each difference
-    Object.keys(difference).forEach(function (key, index) {
-      // console.log(key, difference[key])
+  // When we know theres a difference, track each difference
+  Object.keys(difference).forEach(function (key, index) {
+    // console.log(key, difference[key])
 
-      SendTimed(index, 'Settings', 'toggled', difference[key])
-    })
-
-    resolve('Settings executed succesfully')
+    SendTimed(index, 'Settings', 'toggled', difference[key])
   })
+
+  console.debug('Settings executed succesfully')
 }
 
 /* -------- Analytics -------- */
-export default async function fireAnalytics(type, data) {
-  // console.log('Analytics fired with something:', type, data)
+export default function fireAnalytics(mode, state) {
+  // console.log('Analytics fired with something:', mode, state)
   let result
-  switch (type) {
+  switch (mode) {
     case 'tags':
-      result = await tagsTracking(data)
+      result = tagsTracking(state)
       break
 
     case 'booru':
-      result = await booruTracking(data)
+      result = booruTracking(state)
       break
 
     case 'settings':
-      result = await settingsTracking(data)
+      result = settingsTracking(state)
       break
 
     case 'notifications':
-      result = await SendTimed(0, 'Notifications', 'opened')
-      break
-
-    case 'filter':
-      result = await SendTimed(0, 'Filter', 'used')
+      result = SendTimed(0, 'Notifications', 'opened')
       break
   }
 
