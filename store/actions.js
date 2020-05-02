@@ -1,19 +1,19 @@
 function loadingAnimationHandler(mode, state) {
   if (!state.generalData.everythingIsLoaded) {
-    console.debug('Skipping animation until everything is loaded')
+    // console.debug('Skipping animation until everything is loaded')
 
     return
   }
 
   switch (mode) {
     case 'start':
-      console.debug('Starting loading animation')
+      // console.debug('Starting loading animation')
 
       window.$nuxt.$root.$loading.start()
       break
 
     case 'finish':
-      console.debug('Stopping loading animation')
+      // console.debug('Stopping loading animation')
 
       window.$nuxt.$root.$loading.finish()
       break
@@ -75,11 +75,9 @@ export default {
     //   domain = parameters.domain
     // }
 
-    console.debug(`
-    ---- fetchWithMode ----
-    Booru "${domain}"
-    Mode ${parameters.mode}
-    `)
+    console.debug(
+      `Fetching data from Booru "${domain}" in ${parameters.mode} mode`
+    )
 
     // Choose mode
     switch (parameters.mode) {
