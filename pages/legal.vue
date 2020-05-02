@@ -38,11 +38,10 @@
     <!-- Analytics -->
     <ContentContainer
       title="Analytics"
-      text="Google analytics are used with the settings tweaked to be completely anonymous, no personal info is gathered.
-      Check their terms on the following link."
+      text="Self hosted Matomo analytics are used with the settings tweaked to be completely anonymous, no personal info is gathered."
       icon="bg-svg-info"
-      link="https://marketingplatform.google.com/about/analytics/terms/us/"
-      link-text="Google Analytics TOS"
+      link="https://matomo.akbal.dev/"
+      link-text="Self hosted Matomo"
     />
 
     <!-- Contact -->
