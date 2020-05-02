@@ -58,7 +58,8 @@ function booruTracking(state) {
 function settingsTracking(state) {
   // Compare default settings to user settings to see if theres a difference
   const difference = Object.keys(state.userSettings).filter(
-    (setting) => setting.value !== setting.defaultValue
+    (key) =>
+      state.userSettings[key].value !== state.userSettings[key].defaultValue
   )
 
   // If theres no difference then reject
