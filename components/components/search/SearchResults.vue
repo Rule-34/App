@@ -75,6 +75,8 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 import Errors from '~/components/general/Errors'
+// JS
+import fireAnalytics from '~/assets/js/analytics'
 
 export default {
   name: 'SearchResults',
@@ -88,7 +90,7 @@ export default {
 
   methods: {
     ...mapMutations(['searchManager', 'pidManager', 'tagManager']),
-    ...mapActions(['fetchWithMode', 'analyticManager']),
+    ...mapActions(['fetchWithMode']),
 
     removeTagFromActive(tagName) {
       this.tagManager({
@@ -134,7 +136,7 @@ export default {
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
 
       // And fire analytics
-      await this.analyticManager('tags')
+      fireAnalytics('tags', this.$store.state)
     },
   },
 }

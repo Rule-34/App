@@ -1,5 +1,3 @@
-import fireAnalytics from '~/assets/js/analytics' // Import analytics
-
 function loadingAnimationHandler(mode, state) {
   if (!state.generalData.everythingIsLoaded) {
     console.debug('Skipping animation until everything is loaded')
@@ -222,25 +220,5 @@ export default {
       })
 
     return data
-  },
-
-  async analyticManager({ state }, execution) {
-    switch (execution) {
-      case 'tags':
-        await fireAnalytics('tags', state)
-        break
-
-      case 'booru':
-        await fireAnalytics('booru', state)
-        break
-
-      case 'settings':
-        await fireAnalytics('settings', state)
-        break
-
-      case 'notifications':
-        await fireAnalytics('notifications')
-        break
-    }
   },
 }

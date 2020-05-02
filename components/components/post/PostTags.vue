@@ -27,6 +27,8 @@
 
 <script>
 import { mapMutations, mapActions } from 'vuex'
+// JS
+import fireAnalytics from '~/assets/js/analytics'
 
 export default {
   name: 'PostTags',
@@ -46,7 +48,7 @@ export default {
 
   methods: {
     ...mapMutations(['pidManager', 'tagManager']),
-    ...mapActions(['fetchWithMode', 'analyticManager']),
+    ...mapActions(['fetchWithMode']),
 
     async getSpecificTag(tag) {
       // Set PID to 0 since we're searching for new tags
@@ -70,7 +72,7 @@ export default {
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
 
       // And fire analytics
-      await this.analyticManager('tags')
+      fireAnalytics('tags', this.$store.state)
     },
   },
 }

@@ -73,6 +73,8 @@
 import { mapActions, mapMutations, mapState } from 'vuex'
 // Components
 import ContentContainer from '~/components/content/ContentContainer.vue'
+// JS
+import fireAnalytics from '~/assets/js/analytics'
 
 export default {
   name: 'Notifications',
@@ -113,15 +115,15 @@ export default {
 
   methods: {
     ...mapMutations(['notificationManager']),
-    ...mapActions(['fetchWithMode', 'analyticManager']),
+    ...mapActions(['fetchWithMode']),
 
-    async toggleNotifications() {
+    toggleNotifications() {
       this.isActive = !this.isActive
 
       this.notificationManager({ mode: 'setLatestTitle' })
 
       if (this.isActive) {
-        await this.analyticManager('notifications')
+        fireAnalytics('notifications')
       }
     },
   },
