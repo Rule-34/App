@@ -1,5 +1,6 @@
 export default {
   mode: 'spa',
+
   /*
    ** Headers of the page
    */
@@ -20,6 +21,7 @@ export default {
       { rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' },
     ],
   },
+
   /*
    ** Customize the progress-bar color
    */
@@ -30,6 +32,7 @@ export default {
     // duration: 5000,
     continuous: true,
   },
+
   /*
    ** Customize the splash loading indicator
    */
@@ -38,10 +41,12 @@ export default {
     color: '#121212',
     background: 'linear-gradient(152deg, #9b9be0 38%, #00d4ff 100%)',
   },
+
   /*
    ** Global CSS
    */
   css: ['~/assets/css/main.css'],
+
   /*
    ** Plugins to load before mounting the App
    */
@@ -59,10 +64,12 @@ export default {
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
     '@nuxtjs/tailwindcss',
   ],
+
   /*
    ** Nuxt.js modules
    */
   modules: ['@nuxtjs/pwa', '@nuxtjs/sitemap'],
+
   /*
    ** Progressive web app
    */
@@ -95,12 +102,14 @@ export default {
       },
     ],
   },
+
   /*
    ** TailwindCSS config
    */
   tailwindcss: {
     cssPath: '~/assets/css/main.css',
   },
+
   /*
    ** Sitemap configuration
    */
@@ -114,6 +123,7 @@ export default {
       lastmodrealtime: true,
     },
   },
+
   /*
    ** Build configuration
    */
@@ -130,6 +140,7 @@ export default {
         },
       },
     },
+
     /*
      ** You can extend webpack config here
      */
