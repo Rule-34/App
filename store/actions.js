@@ -95,7 +95,7 @@ export default {
           limit +
           '&tags=' +
           tags +
-          '&score=' +
+          '&score=>=' +
           score +
           corsProxy
 
