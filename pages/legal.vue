@@ -38,10 +38,10 @@
     <!-- Analytics -->
     <ContentContainer
       title="Analytics"
-      text="Self hosted Matomo analytics are used with the settings tweaked to be completely anonymous, no personal info is gathered."
+      text="Self hosted Matomo analytics are used with everything tweaked to be completely anonymous, no personal info is gathered, opt out on the next link."
       icon="bg-svg-info"
-      link="https://matomo.akbal.dev/"
-      link-text="Self hosted Matomo"
+      link="/privacy-policy#opt-out"
+      link-text="Opt out"
     />
 
     <!-- Contact -->
