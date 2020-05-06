@@ -122,6 +122,7 @@ export default {
       lastmod: new Date(),
       lastmodrealtime: true,
     },
+    routes: ['/privacy-policy', '/terms-of-service'],
   },
 
   /*
