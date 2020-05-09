@@ -50,7 +50,7 @@ export default {
     ...mapState(['searchData', 'sideNavData', 'userSettings']),
 
     // When vuex store changes preference then apply specific theme
-    themeApplied() {
+    isDarkThemeApplied() {
       return this.userSettings.darkTheme.value
     },
   },
@@ -141,7 +141,9 @@ export default {
       // Define template for every page
       titleTemplate: '%s | Rule 34 App',
       bodyAttrs: {
-        class: this.themeApplied ? 'dark bg-background' : 'light bg-background',
+        class: this.isDarkThemeApplied
+          ? 'dark bg-background'
+          : 'light bg-background',
       },
     }
   },
