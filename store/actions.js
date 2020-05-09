@@ -1,6 +1,8 @@
-function loadingAnimationHandler(mode, state) {
-  if (!state.generalData.everythingIsLoaded) {
-    // console.debug('Skipping animation until everything is loaded')
+function loadingAnimationHandler(mode) {
+  // console.debug(window.$nuxt.$root.$loading)
+
+  if (Object.keys(window.$nuxt.$root.$loading).length === 0) {
+    console.debug('Skipping animation until everything is loaded')
 
     return
   }
@@ -31,7 +33,7 @@ export default {
    */
   async fetchWithMode({ dispatch, commit, state }, parameters) {
     // Animation for every request
-    loadingAnimationHandler('start', state)
+    loadingAnimationHandler('start')
 
     /* --- Initialize variables --- */
 
@@ -170,7 +172,7 @@ export default {
     if (!response) {
       console.debug('Returned nothing')
 
-      loadingAnimationHandler('finish', state)
+      loadingAnimationHandler('finish')
 
       return
     }
@@ -187,7 +189,7 @@ export default {
       mode: parameters.returnMode,
     })
 
-    loadingAnimationHandler('finish', state)
+    loadingAnimationHandler('finish')
   },
 
   /**
