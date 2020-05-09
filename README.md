@@ -67,3 +67,26 @@ HTML, CSS, Javascript, NodeJS.
 ### Frameworks and tools
 
 NPM, NuxtJS, VueJS, TailwindCSS, Webpack, etc.
+
+## Development
+
+### Requirements
+
+- NodeJS >= 12
+- NPM
+- Microsoft Build Tools (Windows Only)
+
+### Build setup
+
+```bash
+# Install dependencies
+npm install
+
+# Serve with hot reload at localhost:3000
+npm run dev
+
+# Generate static project
+npm run generate
+```
+
+For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
