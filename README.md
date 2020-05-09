@@ -70,6 +70,11 @@ NPM, NuxtJS, VueJS, TailwindCSS, Webpack, etc.
 
 ## Development
 
+When developing, posts wont load as the API has CORS enabled, for posts to work you'll need a browser extension to bypass CORS
+
+- [Firefox](https://addons.mozilla.org/es/firefox/addon/cors-everywhere/)
+- [Chrome](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf)
+
 ### Requirements
 
 - NodeJS >= 12
