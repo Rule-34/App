@@ -24,7 +24,6 @@ export default () => ({
   },
 
   generalData: {
-    everythingIsLoaded: false,
 
     apiUrl: 'https://api.r34.app/',
     // apiUrl: 'http://localhost:8100/',
