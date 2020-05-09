@@ -60,9 +60,6 @@ export default {
     $route() {
       // console.log('route changed', this.$route)
 
-      // Close the sidenav
-      this.sideNavManager('close')
-
       // console.log(this.$nuxt.$route.name)
 
       // Set different layout if we're on index
@@ -87,6 +84,10 @@ export default {
 
     // Set different layout depending of the route
     routeHandler() {
+      if (this.sideNavData.isActive) {
+        this.sideNavManager('close')
+      }
+
       switch (this.$nuxt.$route.name) {
         case 'index':
           this.isDashboard = true
