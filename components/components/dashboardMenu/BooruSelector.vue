@@ -7,20 +7,20 @@
 
     <!-- Selector -->
     <select
-      :value="selected"
+      :value="booruData.active.domain"
       aria-label="Selector that changes the domain where the content is pulled from"
       class="inline-flex items-center appearance-none outline-none font-light text-primary bg-elevation"
       @change="changeDomain($event.target.value)"
     >
       <!-- Loop for every option -->
-      <template v-for="booru in boorus">
-        <option
-          :key="booru.name"
-          :aria-label="'Changes the domain to ' + booru.name"
-          :value="booru.short"
-          v-text="booru.name"
-        />
-      </template>
+      <option
+        v-for="booru in boorus"
+        :key="booru.domain"
+        :aria-label="'Changes the domain to ' + booru.domain"
+        :value="booru.domain"
+      >
+        {{ booru.domain }}
+      </option>
     </select>
 
     <!-- Drop icon -->
@@ -32,14 +32,13 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
+
 // Third party
 import { ChevronDownIcon, CloudIcon } from 'vue-feather-icons'
+
 // Components
-import {
-  removeBoorusWithValuesByKey,
-  findBoorusWithValueByKey,
-} from '~/assets/lib/rule-34-shared-resources/util/BooruUtils.js'
-// JS
+import { findBoorusWithValueByKey } from '~/assets/lib/rule-34-shared-resources/util/BooruUtils.js'
+
 import fireAnalytics from '~/assets/js/analytics'
 
 export default {
@@ -47,60 +46,42 @@ export default {
   components: { ChevronDownIcon, CloudIcon },
 
   computed: {
-    ...mapState(['dashBoardSettings', 'credentials']),
+    ...mapState(['booruData', 'userSettings', 'credentials']),
 
     // Evaluate NSFW and Experimental settings and return boorus depending of the values
     boorus() {
       return this.evaluateBooruList(
-        this.$store.state.userSettings.nsfw.value,
+        this.userSettings.nsfw.value,
         this.credentials.isPatron
       )
-    },
-
-    selected() {
-      return this.dashBoardSettings.contentDomain
     },
   },
 
   methods: {
-    ...mapMutations(['domainManager', 'pidManager', 'tagManager']),
+    ...mapMutations(['booruDataManager', 'tagManager']),
     ...mapActions(['fetchWithMode']),
 
     evaluateBooruList(nsfwSetting, isPatron) {
-      // If NSFW content is disabled
-      if (!nsfwSetting) {
-        // if (isPatron) {
-        //   return findBoorusWithValueByKey(false, 'nsfw')
-        // }
+      // If NSFW is enabled return NSFW only boorus and vice-versa
+      let modifiedBooruList = nsfwSetting
+        ? findBoorusWithValueByKey(true, 'nsfw', this.booruData.boorus)
+        : findBoorusWithValueByKey(false, 'nsfw', this.booruData.boorus)
 
-        return findBoorusWithValueByKey(false, 'nsfw')
+      // If user is Patron return custom boorus
+      modifiedBooruList = isPatron
+        ? findBoorusWithValueByKey(true, 'patronOnly', modifiedBooruList)
+        : modifiedBooruList
 
-        // If experimental settings are enabled return unfiltered boorus
-      }
-
-      // If NSFW content is enabled
-      if (isPatron) {
-        return findBoorusWithValueByKey(true, 'nsfw')
-      }
-
-      // Else return filtered boorus
-      return removeBoorusWithValuesByKey(
-        ['lolibooru'],
-        'short',
-        findBoorusWithValueByKey(true, 'nsfw')
-      )
+      return modifiedBooruList
     },
 
     // Changes that we have to do when changing domain so request is not malformed
     async changeDomain(domain) {
-      // Send new API to change
-      this.domainManager(domain)
+      // Set domain, type and initial PID
+      this.booruDataManager(domain)
 
       // Reset tags so we dont search those tags on new domain
       this.tagManager({ operation: 'reset' })
-
-      // Reset PID so we dont start with specific PID on new domain, depending of the domain it starts at 0 or at 1
-      this.pidManager({ operation: 'reset' })
 
       // And finally load the posts with everything to default
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
