@@ -59,7 +59,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['userSettings']),
+    ...mapState(['userSettings', 'generalData']),
   },
 
   methods: {
@@ -106,6 +106,9 @@ export default {
       //
       // Else return low res file
       else imageURL = this.post.low_res_file.url
+
+      // Add CORS Proxy^
+      imageURL = this.generalData.CORSProxyURL + '?q=' + imageURL
 
       return imageURL
     },
