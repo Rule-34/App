@@ -80,7 +80,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['credentialsManager', 'domainManager']),
+    ...mapMutations(['credentialsManager', 'booruDataManager']),
 
     // Shh it's a secret!
     unlockExperimental() {
@@ -92,7 +92,7 @@ export default {
         this.clicks++
         console.debug(this.clicks)
         // Reset to default domain
-        this.domainManager('xxx')
+        this.booruDataManager('rule34.xxx')
         // Disable features
         this.credentialsManager({ mode: 'disable' })
       }
