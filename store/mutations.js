@@ -33,15 +33,15 @@ export default {
   pidManager(state, parameters) {
     switch (parameters.operation) {
       case 'specific':
-        state.dashBoardData.pid = parameters.value
+        state.booruData.active.pid = parameters.value
         break
 
       case 'add':
-        state.dashBoardData.pid++
+        state.booruData.active.pid++
         break
 
       case 'subtract':
-        state.dashBoardData.pid--
+        state.booruData.active.pid--
         break
 
       case 'reset':
@@ -63,7 +63,7 @@ export default {
    * @param {String} domain New domain
    */
   domainManager(state, domain) {
-    state.dashBoardSettings.contentDomain = domain
+    state.booruData.active.domain = domain
   },
 
   /**
