@@ -1,7 +1,7 @@
 <template>
   <!-- Controls for navigating pages -->
   <div
-    v-if="!generalData.error && dashBoardData"
+    v-if="!generalData.error"
     :class="{ 'hover-controls-container': userSettings.hoverControls.value }"
   >
     <div

@@ -1,10 +1,10 @@
 <template>
   <!-- Source -->
-  <div v-if="source" class="w-full text-center p-1">
+  <div v-if="source.length" class="w-full text-center p-1">
     <!-- If text is an Url then make it linkable -->
     <a
       v-if="isUrl"
-      :href="source"
+      :href="source[0]"
       class="inline-flex"
       rel="noreferrer noopener nofollow"
       target="_blank"
@@ -16,7 +16,7 @@
     </a>
 
     <!-- If the text is not a url then just show the text -->
-    <p v-else title="Source" v-text="source" />
+    <p v-else title="Source" v-text="source[0]" />
   </div>
 </template>
 
@@ -30,14 +30,14 @@ export default {
 
   props: {
     source: {
-      type: String,
+      type: Array,
       default: undefined,
     },
   },
 
   computed: {
     isUrl() {
-      return this.source.startsWith('http', 'www')
+      return this.source[0].startsWith('http', 'www')
     },
   },
 }
