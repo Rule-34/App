@@ -87,14 +87,14 @@ export default {
       if (this.clicks >= 7) {
         this.clicks = 0
         console.debug('Experimental features enabled!')
-        this.credentialsManager({ mode: 'enableExperimental' })
+        this.credentialsManager({ mode: 'enable' })
       } else {
         this.clicks++
         console.debug(this.clicks)
         // Reset to default domain
         this.domainManager('xxx')
         // Disable features
-        this.credentialsManager({ mode: 'disableExperimental' })
+        this.credentialsManager({ mode: 'disable' })
       }
     },
   },
