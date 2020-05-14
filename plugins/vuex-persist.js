@@ -18,7 +18,7 @@ export default ({ store }) => {
       // Recreate the part of the store that we want to save
       return {
         // Dashboard
-        dashBoardSettings: state.dashBoardSettings,
+        booruData: state.booruData,
 
         // Notifications
         notificationData: {

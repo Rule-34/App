@@ -1,12 +1,19 @@
+import { booruList } from '~/assets/lib/rule-34-shared-resources/util/BooruUtils.js'
+
 export default () => ({
   dashBoardData: {
     data: [], // Data that is rendered to the web app
-    pid: 0, // Page id
   },
 
   // These settings are saved to localStorage
-  dashBoardSettings: {
-    contentDomain: 'xxx',
+  booruData: {
+    active: {
+      domain: 'rule34.xxx',
+      type: 'gelbooru',
+      pid: 0,
+    },
+
+    boorus: booruList,
   },
 
   sideNavData: {
