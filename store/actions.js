@@ -23,17 +23,6 @@ export default {
       })
     }
 
-    // Load safebooru if NSFW is disabled
-    if (
-      !state.userSettings.nsfw.value &&
-      state.booruData.active.domain !== 'safebooru.org'
-    ) {
-      // console.log('Loading safebooru')
-
-      commit('booruDataManager', 'safebooru.org')
-      commit('tagManager', { operation: 'reset' })
-    }
-
     console.debug(
       `Fetching data from Booru "${state.booruData.active.domain}" in ${parameters.mode} mode`
     )
