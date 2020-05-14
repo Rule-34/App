@@ -34,6 +34,7 @@ export default () => ({
 
     apiUrl: 'https://api.r34.app/',
     // apiUrl: 'http://localhost:8100/',
+    CORSProxyURL: 'https://cors-proxy.r34.app/',
 
     error: undefined,
   },
