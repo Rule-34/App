@@ -226,11 +226,11 @@ export default {
   credentialsManager(state, parameters) {
     switch (parameters.mode) {
       // Patronage
-      case 'enableExperimental':
+      case 'enable':
         state.credentials.isPatron = true
         break
 
-      case 'disableExperimental':
+      case 'disable':
         state.credentials.isPatron = false
         break
     }
