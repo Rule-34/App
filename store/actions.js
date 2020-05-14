@@ -1,5 +1,7 @@
 import loadingAnimationHandler from '~/assets/js/loadingAnimationHandler'
 
+import { createAPIURL } from '~/assets/js/createAPIURLFrombooruData'
+
 export default {
   /**
    * Fetches data by mode
@@ -10,21 +12,8 @@ export default {
     // Animation for every request
     loadingAnimationHandler('start')
 
-    /* --- Initialize variables --- */
-
     // For every execution
     let response
-    // For execution api
-    let domain = state.dashBoardSettings.contentDomain
-    // For post data
-    const pid = state.dashBoardData.pid
-    const limit = state.userSettings.postsPerPage.value
-    const tags = state.searchData.tags.join('+')
-    const score = state.userSettings.score.value
-    // For NSFW checking
-    const nsfw = state.userSettings.nsfw.value
-    // Cors Proxy usage?
-    const corsProxy = '&corsProxy=true'
 
     // Reset errors
     if (state.generalData.error) {
@@ -35,25 +24,18 @@ export default {
     }
 
     // Load safebooru if NSFW is disabled
-    if (!nsfw) {
-      if (domain !== 'safebooru') {
-        // console.log('Loading safebooru')
+    if (
+      !state.userSettings.nsfw.value &&
+      state.booruData.active.domain !== 'safebooru.org'
+    ) {
+      // console.log('Loading safebooru')
 
-        commit('domainManager', 'safebooru')
-        commit('tagManager', { operation: 'reset' })
-        commit('pidManager', { operation: 'reset' })
-
-        domain = 'safebooru'
-      }
+      commit('booruDataManager', 'safebooru.org')
+      commit('tagManager', { operation: 'reset' })
     }
 
-    // Populate domain
-    // if (parameters.domain) {
-    //   domain = parameters.domain
-    // }
-
     console.debug(
-      `Fetching data from Booru "${domain}" in ${parameters.mode} mode`
+      `Fetching data from Booru "${state.booruData.active.domain}" in ${parameters.mode} mode`
     )
 
     // Choose mode
@@ -65,20 +47,11 @@ export default {
 
       case 'posts':
         // Craft URL
-        parameters.url =
-          'posts?pid=' +
-          pid +
-          '&limit=' +
-          limit +
-          '&tags=' +
-          tags +
-          '&score=>=' +
-          score +
-          corsProxy
+        parameters.url = createAPIURL('posts', state)
 
         // Fetch data
         response = await dispatch('simpleFetch', {
-          url: state.generalData.apiUrl + domain + '/' + parameters.url,
+          url: parameters.url,
         })
 
         // Set mutation to return
@@ -87,11 +60,11 @@ export default {
 
       case 'single-post':
         // Craft URL
-        parameters.url = 'single-post?id=' + parameters.postId + corsProxy
+        parameters.url = createAPIURL('single-post', state, parameters)
 
         // Fetch data
         response = await dispatch('simpleFetch', {
-          url: state.generalData.apiUrl + domain + '/' + parameters.url,
+          url: parameters.url,
         })
 
         // Set mutation to return
@@ -101,11 +74,11 @@ export default {
 
       case 'tags':
         // Craft URL
-        parameters.url = '?tag=' + parameters.tag + '&limit=20'
+        parameters.url = createAPIURL('tags', state, parameters)
 
         // Fetch data
         response = await dispatch('simpleFetch', {
-          url: state.generalData.apiUrl + domain + '/tags' + parameters.url,
+          url: parameters.url,
         })
 
         // Set mutation to return
