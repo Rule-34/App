@@ -1,6 +1,6 @@
 import loadingAnimationHandler from '~/assets/js/loadingAnimationHandler'
 
-import { createAPIURL } from '~/assets/js/createAPIURLFrombooruData'
+import { createAPIURL } from '~/assets/js/createAPIURLFromBooruData.js'
 
 export default {
   /**
