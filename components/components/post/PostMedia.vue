@@ -24,7 +24,7 @@
       :alt="'Video ' + post.id"
       class="w-full h-auto"
       preload="none"
-      :poster="post.preview_file"
+      :poster="post.preview_file.url"
       loop
     >
       <source :src="post.high_res_file.url" @error="retryToLoadMedia($event)" />
