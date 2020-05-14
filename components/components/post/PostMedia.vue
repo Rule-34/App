@@ -97,17 +97,17 @@ export default {
 
     // Image source
     imageSource() {
-      // Return full image if its setting is enabled OR if low resolution file doesnt exist
-      if (
-        this.userSettings.fullSizeImages.value.url ||
-        !this.post.low_res_file.url
-      ) {
-        return this.post.high_res_file.url
+      let imageURL
 
-        // Else return low res file
-      } else {
-        return this.post.low_res_file.url
-      }
+      // Return full image if its setting is enabled OR if low resolution file doesnt exist
+      if (this.userSettings.fullSizeImages.value || !this.post.low_res_file.url)
+        imageURL = this.post.high_res_file.url
+      //
+      //
+      // Else return low res file
+      else imageURL = this.post.low_res_file.url
+
+      return imageURL
     },
   },
 }
