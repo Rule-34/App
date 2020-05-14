@@ -49,7 +49,7 @@ function tagsTracking(state) {
 }
 
 function booruTracking(state) {
-  SendTimed(0, 'Domains', 'changed', state.dashBoardSettings.contentDomain)
+  SendTimed(0, 'Domains', 'changed', state.booruData.active.domain)
 
   // console.debug('Domain executed succesfully')
 }
