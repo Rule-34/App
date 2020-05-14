@@ -31,7 +31,7 @@ export default {
   props: {
     source: {
       type: Array,
-      default: undefined,
+      default: () => [],
     },
   },
 
