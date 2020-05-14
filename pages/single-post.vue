@@ -43,6 +43,11 @@ import { mapActions, mapMutations, mapState } from 'vuex'
 import Post from '~/components/components/post/Post.vue'
 import Errors from '~/components/general/Errors.vue'
 
+import {
+  findBoorusWithValueByKey,
+  booruTypeList,
+} from '~/assets/lib/rule-34-shared-resources/util/BooruUtils.js'
+
 export default {
   name: 'SinglePost',
 
@@ -53,49 +58,66 @@ export default {
 
   data() {
     return {
-      id: this.$route.query.id ?? undefined,
-      domain: this.$route.query.domain ?? undefined,
+      id: this.$route.query.id,
+      domain: this.$route.query.domain,
+      type: this.$route.query.type,
     }
   },
 
   computed: {
-    ...mapState(['dashBoardData']),
+    ...mapState(['dashBoardData', 'booruData']),
   },
 
   async mounted() {
-    // Check if domain is supported
-    switch (this.domain) {
-      case 'xxx':
-      case 'paheal':
-      case 'danbooru':
-      case 'gelbooru':
-      case 'e621':
-        // Use query domain
-        await this.domainManager(this.domain)
+    // Search for the domain
+    const booruData = findBoorusWithValueByKey(
+      this.domain,
+      'domain',
+      this.booruData.boorus
+    )[0]
 
-        // And then get the post
-        await this.fetchWithMode({
-          mode: 'single-post',
-          returnMode: 'add',
-          postId: this.id,
-        })
-        break
-
-      // If not supported then throw error
-      default:
-        this.errorManager({
-          operation: 'set',
-          data: new Error(
-            `The current domain "${this.domain}" doesnt support getting posts from ID`
-          ),
-        })
-        break
+    // Check if domain data exists
+    if (!booruData) {
+      this.errorManager({
+        operation: 'set',
+        data: new Error(`The current domain "${this.domain}" couldnt be found`),
+      })
+      return
     }
+
+    // Check if type exists and add it if not
+    if (!this.type)
+      this.type = findBoorusWithValueByKey(
+        booruData.type,
+        'type',
+        booruTypeList
+      )[0].type
+
+    // Check if type exists for that domain
+    if (!this.type.singlePost) {
+      this.errorManager({
+        operation: 'set',
+        data: new Error(
+          `The current domain type "${this.type}" doesnt support getting posts from ID`
+        ),
+      })
+      return
+    }
+
+    // Use query domain
+    await this.booruDataManager(this.domain)
+
+    // And then get the post
+    await this.fetchWithMode({
+      mode: 'single-post',
+      returnMode: 'add',
+      postID: this.id,
+    })
   },
 
   methods: {
     ...mapActions(['fetchWithMode']),
-    ...mapMutations(['errorManager', 'domainManager']),
+    ...mapMutations(['errorManager', 'booruDataManager']),
   },
 
   head() {
