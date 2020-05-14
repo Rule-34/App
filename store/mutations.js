@@ -1,5 +1,8 @@
 // Own
-import { findBoorusWithValueByKey } from '~/assets/lib/rule-34-shared-resources/util/BooruUtils.js'
+import {
+  findBoorusWithValueByKey,
+  booruTypeList,
+} from '~/assets/lib/rule-34-shared-resources/util/BooruUtils.js'
 
 export default {
   /**
@@ -46,10 +49,15 @@ export default {
 
       case 'reset':
         // Find domain in list and use its PID
-        state.dashBoardData.pid = findBoorusWithValueByKey(
-          state.dashBoardSettings.contentDomain,
-          'short'
-        )[0].pid
+        // eslint-disable-next-line no-case-declarations
+        const booruType = findBoorusWithValueByKey(
+          state.booruData.active.type,
+          'type',
+          booruTypeList
+        )[0]
+
+        state.booruData.active.pid = booruType.initialPageID
+
         break
 
       default:
@@ -62,8 +70,25 @@ export default {
    * @param {*} state Default store
    * @param {String} domain New domain
    */
-  domainManager(state, domain) {
+  booruDataManager(state, domain) {
     state.booruData.active.domain = domain
+
+    // Search for the domain
+    const booruData = findBoorusWithValueByKey(
+      domain,
+      'domain',
+      state.booruData.boorus
+    )[0]
+
+    // Search for the type
+    const booruType = findBoorusWithValueByKey(
+      booruData.type,
+      'type',
+      booruTypeList
+    )[0]
+
+    state.booruData.active.type = booruData.type
+    state.booruData.active.pid = booruType.initialPageID
   },
 
   /**
