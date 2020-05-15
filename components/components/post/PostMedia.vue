@@ -24,10 +24,13 @@
       :alt="'Video ' + post.id"
       class="w-full h-auto"
       preload="none"
-      :poster="post.preview_file.url"
+      :poster="generalData.CORSProxyURL + '?q=' + post.preview_file.url"
       loop
     >
-      <source :src="post.high_res_file.url" @error="retryToLoadMedia($event)" />
+      <!-- Hotfix -->
+      <source
+        :src="generalData.CORSProxyURL + '?q=' + post.high_res_file.url"
+      />
       Your browser doesnt support HTML5 video.
     </video>
 
