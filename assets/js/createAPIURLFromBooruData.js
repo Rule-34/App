@@ -4,7 +4,7 @@ export function createAPIURL(mode, state, parameters = {}) {
   const queryObj = {
     posts: {
       limit: state.userSettings.postsPerPage.value,
-      pid: state.booruData.active.pid,
+      pid: state.dashBoardData.pid,
       tags: state.searchData.tags.join('+'),
       score: state.userSettings.score.value,
     },

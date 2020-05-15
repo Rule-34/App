@@ -22,7 +22,7 @@
         title="Load specific page"
         @click="getSpecificPage"
       >
-        <button type="button" v-text="booruData.active.pid" />
+        <button type="button" v-text="dashBoardData.pid" />
       </a>
 
       <!-- Get next page -->
@@ -50,7 +50,7 @@ export default {
   },
   // Map data to the store following's
   computed: {
-    ...mapState(['booruData', 'generalData', 'userSettings']),
+    ...mapState(['dashBoardData', 'userSettings']),
   },
 
   methods: {
