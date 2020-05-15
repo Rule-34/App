@@ -49,5 +49,9 @@ export function createAPIURL(mode, state, parameters = {}) {
       throw new Error('No mode specified')
   }
 
+  if (domainData.config) {
+    URL += '&config=' + encodeURIComponent(JSON.stringify(domainData.config))
+  }
+
   return URL
 }
