@@ -3,6 +3,7 @@ import { booruList } from '~/assets/lib/rule-34-shared-resources/util/BooruUtils
 export default () => ({
   dashBoardData: {
     data: [], // Data that is rendered to the web app
+    pid: undefined,
   },
 
   // These settings are saved to localStorage
@@ -10,7 +11,6 @@ export default () => ({
     active: {
       domain: 'rule34.xxx',
       type: 'gelbooru',
-      pid: 0,
     },
 
     boorus: booruList,
