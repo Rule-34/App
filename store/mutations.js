@@ -71,8 +71,6 @@ export default {
    * @param {String} domain New domain
    */
   booruDataManager(state, domain) {
-    state.booruData.active.domain = domain
-
     // Search for the domain
     const booruData = findBoorusWithValueByKey(
       domain,
@@ -80,14 +78,8 @@ export default {
       state.booruData.boorus
     )[0]
 
-    // Search for the type
-    const booruType = findBoorusWithValueByKey(
-      booruData.type,
-      'type',
-      booruTypeList
-    )[0]
+    state.booruData.active = booruData
 
-    state.booruData.active.type = booruData.type
     state.booruData.active.pid = booruType.initialPageID
   },
 
