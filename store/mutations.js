@@ -36,15 +36,15 @@ export default {
   pidManager(state, parameters) {
     switch (parameters.operation) {
       case 'specific':
-        state.booruData.active.pid = parameters.value
+        state.dashBoardData.pid = parameters.value
         break
 
       case 'add':
-        state.booruData.active.pid++
+        state.dashBoardData.pid++
         break
 
       case 'subtract':
-        state.booruData.active.pid--
+        state.dashBoardData.pid--
         break
 
       case 'reset':
@@ -56,7 +56,7 @@ export default {
           booruTypeList
         )[0]
 
-        state.booruData.active.pid = booruType.initialPageID
+        state.dashBoardData.pid = booruType.initialPageID
 
         break
 
