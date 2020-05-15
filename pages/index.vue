@@ -64,7 +64,15 @@ export default {
     Intersect,
   },
 
-  async middleware({ store, dispatch }) {
+  async middleware({ store }) {
+    // Set PID on boot
+    if (store.state.dashBoardData.pid === undefined) {
+      store.commit('pidManager', {
+        operation: 'specific',
+        value: store.getters.getActiveBooruType.initialPageID,
+      })
+    }
+
     // Load the store with posts
     await store.dispatch('fetchWithMode', { mode: 'posts', returnMode: 'add' })
   },
