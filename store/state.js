@@ -8,10 +8,7 @@ export default () => ({
 
   // These settings are saved to localStorage
   booruData: {
-    active: {
-      domain: 'rule34.xxx',
-      type: 'gelbooru',
-    },
+    active: booruList[0],
 
     boorus: booruList,
   },
