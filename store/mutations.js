@@ -80,7 +80,8 @@ export default {
 
     state.booruData.active = booruData
 
-    state.booruData.active.pid = booruType.initialPageID
+    // This is bad practice, it should be an action that commits both mutations separated
+    this.commit('pidManager', { operation: 'reset' })
   },
 
   /**
