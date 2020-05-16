@@ -28,7 +28,7 @@ export default () => ({
   },
 
   generalData: {
-    apiUrl: 'https://rule-34-api.herokuapp.com/',
+    apiUrl: 'https://api.r34.app/',
     // apiUrl: 'http://localhost:8100/',
 
     CORSProxyURL: 'https://cors-proxy.r34.app/',
