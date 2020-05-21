@@ -80,19 +80,30 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['credentialsManager', 'booruDataManager']),
+    ...mapMutations(['credentialsManager', 'booruDataManager', 'pidManager']),
 
     // Shh it's a secret!
     unlockExperimental() {
       if (this.clicks >= 7) {
         this.clicks = 0
-        console.debug('Experimental features enabled!')
+
         this.credentialsManager({ mode: 'enable' })
-      } else {
+
+        console.debug('Experimental features enabled!')
+      }
+
+      //
+      else {
         this.clicks++
+
         console.debug(this.clicks)
+
         // Reset to default domain
         this.booruDataManager('rule34.xxx')
+
+        // Reset Page ID
+        this.pidManager({ operation: 'reset' })
+
         // Disable features
         this.credentialsManager({ mode: 'disable' })
       }
