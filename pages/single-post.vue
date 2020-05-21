@@ -91,7 +91,7 @@ export default {
         booruData.type,
         'type',
         booruTypeList
-      )[0].type
+      )[0]
 
     // Check if type exists for that domain
     if (!this.type.singlePost) {
