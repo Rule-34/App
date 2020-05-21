@@ -1,7 +1,6 @@
 <template>
   <div>
     <!-- if media is an Image -->
-    <!-- Loading is determined if settings are lazy -->
     <img
       v-if="post.type === 'image'"
       :src="imageSource()"
@@ -17,7 +16,6 @@
     />
 
     <!-- if its a Video -->
-    <!-- If lazy loading enabled -->
     <video
       v-else-if="post.type === 'video'"
       :controls="userSettings.videoControls.value"
@@ -63,7 +61,6 @@ export default {
   },
 
   methods: {
-    // Retries to load the image
     retryToLoadMedia(event) {
       // console.log(event.target, this.retryCount)
 
@@ -91,18 +88,14 @@ export default {
 
       // If we have not reached the limit
       else if (this.retryCount < this.userSettings.imgRetry.value) {
-        // Save current source
-        const imgSrc = event.target.src
+        const originalImgSrc = event.target.src
 
-        // Delete source
         event.target.src = ''
 
-        // Set source again to force reload
-        event.target.src = imgSrc
+        event.target.src = originalImgSrc
 
-        // console.log(this.retryCount, imgSrc)
+        // console.log(this.retryCount, originalImgSrc)
 
-        // Add one
         this.retryCount++
       }
 
@@ -122,17 +115,21 @@ export default {
       }
     },
 
-    // Image source
     imageSource() {
       let imageURL
 
       // Return full image if its setting is enabled OR if low resolution file doesnt exist
-      if (this.userSettings.fullSizeImages.value || !this.post.low_res_file.url)
+      if (
+        this.userSettings.fullSizeImages.value ||
+        !this.post.low_res_file.url
+      ) {
         imageURL = this.post.high_res_file.url
-      //
-      //
-      // Else return low res file
-      else imageURL = this.post.low_res_file.url
+      }
+
+      // Return low res file
+      else {
+        imageURL = this.post.low_res_file.url
+      }
 
       return imageURL
     },
