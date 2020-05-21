@@ -79,9 +79,6 @@ export default {
     )[0]
 
     state.booruData.active = booruData
-
-    // This is bad practice, it should be an action that commits both mutations separated
-    this.commit('pidManager', { operation: 'reset' })
   },
 
   /**
