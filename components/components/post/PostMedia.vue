@@ -71,7 +71,7 @@ export default {
       // console.log(event.target, this.retryCount)
 
       // If browser is offline return execution
-      if (this.$nuxt.isOffline) {
+      if (this.$nuxt.isOffline) return
         // If we have not reached the limit
       } else if (this.retryCount < this.userSettings.imgRetry.value) {
         // Save current source
