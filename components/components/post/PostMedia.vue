@@ -3,7 +3,7 @@
     <!-- if media is an Image -->
     <img
       v-if="post.type === 'image'"
-      :src="imageSource()"
+      :src="mediaResolutionChooser().url"
       :loading="userSettings.lazyLoading.value ? 'lazy' : 'auto'"
       :class="{
         'post-animation opacity-0': userSettings.animations.value,
@@ -11,6 +11,7 @@
       }"
       :alt="'Image ' + post.id"
       class="w-full h-auto"
+      :height="mediaResolutionChooser().height"
       @load="mediaLoaded = true"
       @error="retryToLoadMedia($event)"
     />
@@ -115,23 +116,19 @@ export default {
       }
     },
 
-      let imageURL
-
     mediaResolutionChooser() {
       // Return full image if its setting is enabled OR if low resolution file doesnt exist
       if (
         this.userSettings.fullSizeImages.value ||
         !this.post.low_res_file.url
       ) {
-        imageURL = this.post.high_res_file.url
+        return this.post.high_res_file
       }
 
       // Return low res file
       else {
-        imageURL = this.post.low_res_file.url
+        return this.post.low_res_file
       }
-
-      return imageURL
     },
   },
 }
