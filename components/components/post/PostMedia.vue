@@ -18,7 +18,7 @@
 
     <!-- if its a Video -->
     <video
-      v-else-if="post.type === 'video'"
+      v-else
       :controls="userSettings.videoControls.value"
       :alt="'Video ' + post.id"
       class="w-full h-auto"
@@ -29,9 +29,6 @@
       <source :src="post.high_res_file.url" @error="retryToLoadMedia($event)" />
       Your browser doesnt support HTML5 video.
     </video>
-
-    <!-- if its not an image or a video -->
-    <p v-else v-text="'Unknown type of media: ' + post.type" />
   </div>
 </template>
 
