@@ -115,9 +115,9 @@ export default {
       }
     },
 
-    imageSource() {
       let imageURL
 
+    mediaResolutionChooser() {
       // Return full image if its setting is enabled OR if low resolution file doesnt exist
       if (
         this.userSettings.fullSizeImages.value ||
