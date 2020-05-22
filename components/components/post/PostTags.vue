@@ -15,7 +15,7 @@
     <div class="tag-container min-w-full">
       <a
         v-for="tag in tags"
-        :key="tags[tag]"
+        :key="tag"
         class="tag"
         href="#"
         @click="getSpecificTag(tag)"
