@@ -9,7 +9,9 @@
 
       <h2 class="text-default-text-muted">
         For example
-        <a href="/post?domain=xxx&id=1">Post with ID 1 on domain Rule34.xxx</a>
+        <a href="/post?domain=rule34.xxx&id=1"
+          >Post with ID 1 on domain Rule34.xxx</a
+        >
       </h2>
     </div>
 
