@@ -8,6 +8,7 @@
     "
     class="material-container text-center text-default-text m-6 p-2"
   >
+    <!-- Header -->
     <h1
       class="text-2xl font-bold tracking-wide border w-max-content mx-auto mb-1 px-2"
     >
@@ -26,6 +27,7 @@
       <p>
         {{ generalData.error.message }}
       </p>
+      <!-- TODO: This should be "Retry to load?" or something similar -->
       <a href="#" @click="resetTags()">Remove tags?</a>
     </template>
 
