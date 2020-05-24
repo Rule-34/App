@@ -21,20 +21,17 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 // Components
 import DomainSelector from '~/components/pages/dashboard/domain/Selector.vue'
 import Post from '~/components/pages/dashboard/content/Post.vue'
-import Controls from '~/components/pages/dashboard/navigation/page/Controls.vue'
-import Errors from '~/components/utils/Errors.vue'
 
 // Lazy loaded components
-const Notifications = () =>
-  import('~/components/pages/dashboard/navigation/Notifications.vue')
-
 export default {
   components: {
-    Errors,
+    Errors: () => import('~/components/utils/Errors.vue'),
     DomainSelector,
-    Notifications,
+    Notifications: () =>
+      import('~/components/pages/dashboard/navigation/Notifications.vue'),
     Post,
-    Controls,
+    Controls: () =>
+      import('~/components/pages/dashboard/navigation/page/Controls.vue'),
   },
 
   async middleware({ store }) {
