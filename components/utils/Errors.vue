@@ -1,13 +1,5 @@
 <template>
-  <!-- If theres request got errors -->
-  <div
-    v-if="
-      generalData.error ||
-      (!dashBoardData.data.length && !isSinglePost) ||
-      $nuxt.isOffline
-    "
-    class="material-container text-center text-default-text m-6 p-2"
-  >
+  <div class="material-container text-center text-default-text m-6 p-2">
     <h1
       class="text-2xl font-bold tracking-wide border w-max-content mx-auto mb-1 px-2"
     >
