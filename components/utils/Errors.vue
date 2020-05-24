@@ -6,8 +6,15 @@
       Error
     </h1>
 
+    <!-- If browser is offline -->
+    <template v-if="$nuxt.isOffline">
+      <p>
+        You are offline, please connect to the internet
+      </p>
+    </template>
+
     <!-- If ANY error -->
-    <template v-if="generalData.error">
+    <template v-else-if="generalData.error">
       <p>
         {{ generalData.error.message }}
       </p>
@@ -19,18 +26,11 @@
       <h1 class="font-bold" v-text="'There are no more posts to load!'" />
       <a href="#" @click="resetTags()">Remove tags?</a>
     </template>
-
-    <!-- If browser is offline -->
-    <template v-else-if="$nuxt.isOffline">
-      <p>
-        You are offline, please connect to the internet
-      </p>
-    </template>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'Errors',
