@@ -1,8 +1,7 @@
 <template>
   <main>
-    <template v-if="generalData.error">
-      <Errors :is-single-post="true" />
-    </template>
+    <!-- If theres errors -->
+    <Errors :is-single-post="true" />
 
     <!-- First time / Empty query info -->
     <div v-if="!id || !domain" class="material-container text-center p-2">
@@ -42,6 +41,7 @@
 import { mapActions, mapMutations, mapState } from 'vuex'
 // Components
 import Post from '~/components/pages/dashboard/content/Post.vue'
+import Errors from '~/components/utils/Errors.vue'
 
 import {
   findBoorusWithValueByKey,
@@ -53,7 +53,7 @@ export default {
 
   components: {
     Post,
-    Errors: () => import('~/components/utils/Errors.vue'),
+    Errors,
   },
 
   data() {
@@ -65,7 +65,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['dashBoardData', 'booruData', 'generalData']),
+    ...mapState(['dashBoardData', 'booruData']),
   },
 
   async mounted() {
