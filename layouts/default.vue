@@ -29,12 +29,12 @@ import { mapMutations, mapState } from 'vuex'
 // Third party
 import { Touch } from 'vuetify/lib/directives/touch'
 // Components
-import NavToggler from '~/components/navigation/NavToggler.vue'
-import SideNav from '~/components/navigation/SideNav.vue'
+import NavToggler from '~/components/layout/navigation/sidenav/Toggler.vue'
+import SideNav from '~/components/layout/navigation/sidenav/SideNav.vue'
 // Lazy loaded components
 const Search = () =>
   import(
-    /* webpackPrefetch: true */ '~/components/components/search/Search.vue'
+    /* webpackPrefetch: true */ '~/components/pages/dashboard/navigation/search/Search.vue'
   )
 
 export default {

@@ -40,8 +40,8 @@
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
 // Components
-import Post from '~/components/components/post/Post.vue'
-import Errors from '~/components/general/Errors.vue'
+import Post from '~/components/pages/dashboard/content/Post.vue'
+import Errors from '~/components/utils/Errors.vue'
 
 import {
   findBoorusWithValueByKey,

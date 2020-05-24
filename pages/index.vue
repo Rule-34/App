@@ -3,7 +3,7 @@
     <!-- Menu -->
     <div class="m-5 flex flex-row justify-between">
       <!-- Domain selector -->
-      <BooruSelector class="my-auto" />
+      <DomainSelector class="my-auto" />
 
       <!-- Notifications -->
       <Notifications />
@@ -41,20 +41,20 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 import { Intersect } from 'vuetify/lib/directives/intersect'
 import throttle from 'lodash/throttle'
 // Components
-import BooruSelector from '~/components/components/dashboardMenu/BooruSelector.vue'
-import Post from '~/components/components/post/Post.vue'
-import Controls from '~/components/navigation/Controls.vue'
-import Errors from '~/components/general/Errors.vue'
+import DomainSelector from '~/components/pages/dashboard/domain/Selector.vue'
+import Post from '~/components/pages/dashboard/content/Post.vue'
+import Controls from '~/components/pages/dashboard/navigation/page/Controls.vue'
+import Errors from '~/components/utils/Errors.vue'
 // Lazy loaded components
 const Notifications = () =>
   import(
-    /* webpackPrefetch: true */ '~/components/components/dashboardMenu/Notifications.vue'
+    /* webpackPrefetch: true */ '~/components/pages/dashboard/navigation/Notifications.vue'
   )
 
 export default {
   components: {
     Errors,
-    BooruSelector,
+    DomainSelector,
     Notifications,
     Post,
     Controls,
@@ -82,11 +82,6 @@ export default {
   },
 
   mounted() {
-    // Load the store with posts
-    // window.onNuxtReady(() => {
-    //   this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
-    // })
-
     // Navigation with keyboard
     if (this.userSettings.keyboardControls.value) {
       // eslint-disable-next-line nuxt/no-globals-in-created
@@ -122,6 +117,7 @@ export default {
       // And load next posts
       await this.fetchWithMode({ mode: 'posts', returnMode: 'concat' })
     },
+
     // Navigation with keyboard
     navigation() {
       try {
