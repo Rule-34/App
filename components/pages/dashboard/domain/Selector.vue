@@ -42,7 +42,7 @@ import { findBoorusWithValueByKey } from '~/assets/lib/rule-34-shared-resources/
 import fireAnalytics from '~/assets/js/analytics'
 
 export default {
-  name: 'BooruSelector',
+  name: 'DomainSelector',
   components: { ChevronDownIcon, CloudIcon },
 
   computed: {

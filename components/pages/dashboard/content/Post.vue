@@ -21,9 +21,9 @@
 <script>
 import { mapState } from 'vuex'
 // Components
-import PostMedia from '~/components/components/post/PostMedia.vue'
-import PostTags from '~/components/components/post/PostTags.vue'
-import PostSource from '~/components/components/post/PostSource.vue'
+import PostMedia from './PostMedia.vue'
+import PostTags from './PostTags.vue'
+import PostSource from './PostSource.vue'
 
 export default {
   name: 'Post',

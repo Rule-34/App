@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import ContentContainer from '~/components/content/ContentContainer.vue'
+import ContentContainer from '~/components/utils/ContentContainer.vue'
 
 export default {
   components: { ContentContainer },

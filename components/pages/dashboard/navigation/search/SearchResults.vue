@@ -74,7 +74,7 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
-import Errors from '~/components/general/Errors'
+import Errors from '~/components/utils/Errors.vue'
 // JS
 import fireAnalytics from '~/assets/js/analytics'
 

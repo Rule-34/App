@@ -37,8 +37,8 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import SettingSwitch from '~/components/content/SettingSwitch.vue'
+import { mapState } from 'vuex'
+import SettingSwitch from '~/components/pages/settings/Switch.vue'
 // JS
 import fireAnalytics from '~/assets/js/analytics'
 

@@ -72,7 +72,7 @@
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
 // Components
-import ContentContainer from '~/components/content/ContentContainer.vue'
+import ContentContainer from '~/components/utils/ContentContainer.vue'
 // JS
 import fireAnalytics from '~/assets/js/analytics'
 
