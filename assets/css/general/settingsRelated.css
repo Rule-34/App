@@ -2,27 +2,6 @@
 **          SETTINGS RELATED
 **/
 
-/* HOVER CONTROLS SETTING */
-
-.hover-controls-container {
-  @apply fixed bottom-0 inset-x-0 z-10 w-full mx-auto p-2;
-}
-
-.hover-controls {
-  @apply shadow-md mx-auto mb-2;
-}
-
-@screen md {
-  .hover-controls-container {
-    @apply w-2/3;
-  }
-}
-@screen xl {
-  .hover-controls-container {
-    @apply w-1/2;
-  }
-}
-
 /* ZOOM SETTING */
 
 .zoom {
