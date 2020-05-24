@@ -1,84 +1,118 @@
 <template>
-  <!-- Controls for navigating pages -->
-  <div
-    :class="{ 'hover-controls-container': userSettings.hoverControls.value }"
-  >
+  <div>
+    <!-- Normal controls -->
     <div
-      :class="{ 'hover-controls': userSettings.hoverControls.value }"
-      class="material-container flex text-center p-2"
+      v-if="!userSettings.infiniteLoad.value"
+      :class="{ 'hover-controls-container': userSettings.hoverControls.value }"
     >
-      <!-- Get previous page -->
-      <a href="#" class="w-1/3" title="Load last page" @click="getPrevPage">
-        <button type="button">
-          <ArrowLeftIcon class="icon w-4 h-4 inline" />Prev page
-        </button>
-      </a>
-
-      <!-- Get specific page -->
-      <a
-        href="#"
-        class="w-1/3"
-        title="Load specific page"
-        @click="getSpecificPage"
+      <div
+        :class="{ 'hover-controls': userSettings.hoverControls.value }"
+        class="material-container flex text-center p-2"
       >
-        <button type="button" v-text="dashBoardData.pid" />
-      </a>
+        <!-- Get previous page -->
+        <a
+          href="#"
+          class="w-1/3"
+          title="Load previous page"
+          @click="getPrevPage"
+        >
+          <button type="button">
+            <ArrowLeftIcon class="icon w-4 h-4 inline" />
+            Prev page
+          </button>
+        </a>
 
-      <!-- Get next page -->
-      <a href="#" class="w-1/3" title="Load next page" @click="getNextPage">
-        <button type="button">
-          Next page
-          <ArrowRightIcon class="icon w-4 h-4 inline" />
-        </button>
-      </a>
+        <!-- Get specific page -->
+        <a
+          href="#"
+          class="w-1/3"
+          title="Load specific page"
+          @click="getSpecificPage"
+        >
+          <button type="button" v-text="dashBoardData.pid" />
+        </a>
+
+        <!-- Get next page -->
+        <a href="#" class="w-1/3" title="Load next page" @click="getNextPage">
+          <button type="button">
+            Next page
+            <ArrowRightIcon class="icon w-4 h-4 inline" />
+          </button>
+        </a>
+      </div>
     </div>
+
+    <!-- Infinite loading -->
+    <div v-else v-intersect.quiet="InfiniteLoadHandler" class="mx-auto">
+      <p class="text-center text-default-text pb-2">
+        Loading more posts...
+      </p>
+    </div>
+
+    <!-- Space below all posts -->
+    <div v-if="userSettings.hoverControls.value" class="mb-12">&nbsp;</div>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
 
-// Import icons from package
+// Third party
+import { Intersect } from 'vuetify/lib/directives/intersect'
+import throttle from 'lodash/throttle'
+
+// Icons
 import { ArrowLeftIcon, ArrowRightIcon } from 'vue-feather-icons'
 
 export default {
   name: 'Controls',
+
   components: {
     ArrowRightIcon,
     ArrowLeftIcon,
   },
-  // Map data to the store following's
+
+  directives: {
+    Intersect,
+  },
+
   computed: {
     ...mapState(['dashBoardData', 'userSettings']),
   },
 
+  mounted() {
+    // Navigation with keyboard
+    if (this.userSettings.keyboardControls.value) {
+      document.addEventListener('keyup', this.keyboardPageHandler)
+    }
+  },
+
+  destroyed() {
+    // Navigation with keyboard
+    if (this.userSettings.keyboardControls.value) {
+      document.removeEventListener('keyup', this.keyboardPageHandler)
+    }
+  },
+
   methods: {
-    // Map actions and mutations from store following's
     ...mapMutations(['pidManager']),
     ...mapActions(['fetchWithMode']),
 
-    // Get next page from api
+    // Get next page from API
     async getNextPage() {
-      // Get next PID
       this.pidManager({ operation: 'add' })
-
-      // If we have tags added then load next page of tags, else load normal latest posts
 
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
     },
 
-    // Get last page from api
+    // Get last page from API
     async getPrevPage() {
-      // Get last PID
       this.pidManager({ operation: 'subtract' })
-
-      // Load last page
 
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
     },
 
     async getSpecificPage() {
-      // Ask for page to go to
       const specificPage = Number.parseInt(
         prompt('What page do you want to go to?', '69')
       )
@@ -86,16 +120,44 @@ export default {
       // console.log(specificPage)
       // console.log(Number.isInteger(specificPage))
 
-      // Test if something was input
-      if (specificPage) {
-        // Set PID to indicated
-        this.pidManager({ operation: 'specific', value: specificPage })
-
-        // And load specific page
-
-        await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
-      } else {
+      if (!specificPage) {
         alert('Wrong input, only numbers please')
+        return
+      }
+
+      this.pidManager({ operation: 'specific', value: specificPage })
+
+      await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+    },
+
+    InfiniteLoadHandler: throttle(async function () {
+      console.debug('Loading more posts')
+      this.pidManager({ operation: 'add' })
+
+      await this.fetchWithMode({ mode: 'posts', returnMode: 'concat' })
+    }, 5000),
+
+    scrollToTop() {
+      window.scrollTo(0, 0)
+    },
+
+    keyboardPageHandler() {
+      switch (event.keyCode) {
+        case 39:
+          this.getNextPage()
+
+          if (!this.userSettings.infiniteLoad.value) this.scrollToTop()
+
+          console.debug('Loading next page')
+          break
+
+        case 37:
+          this.getPrevPage()
+
+          if (!this.userSettings.infiniteLoad.value) this.scrollToTop()
+
+          console.debug('Loading prev page')
+          break
       }
     },
   },
