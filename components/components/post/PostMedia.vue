@@ -12,6 +12,7 @@
       :alt="'Image ' + post.id"
       class="w-full h-auto"
       :height="mediaResolutionChooser().height"
+      :width="mediaResolutionChooser().width"
       @load="mediaLoaded = true"
       @error="retryToLoadMedia($event)"
     />
