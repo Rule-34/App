@@ -7,7 +7,9 @@
       <Notifications />
     </div>
 
-    <Errors />
+    <template v-if="generalData.error">
+      <Errors />
+    </template>
 
     <Post v-for="post in dashBoardData.data" :key="post.id" :post="post" />
 
@@ -48,7 +50,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['dashBoardData']),
+    ...mapState(['dashBoardData', 'generalData']),
   },
 
   methods: {

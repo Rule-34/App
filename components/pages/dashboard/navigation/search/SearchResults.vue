@@ -6,8 +6,9 @@
     <div
       class="flex-1 flex flex-col p-2 pb-0 max-h-full min-h-full overflow-y-hidden"
     >
-      <!-- If theres errors -->
-      <Errors />
+      <template v-if="generalData.error">
+        <Errors />
+      </template>
 
       <!-- If nothing searched -->
       <h1
@@ -74,14 +75,14 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
-import Errors from '~/components/utils/Errors.vue'
+
 // JS
 import fireAnalytics from '~/assets/js/analytics'
 
 export default {
   name: 'SearchResults',
 
-  components: { Errors },
+  components: { Errors: () => import('~/components/utils/Errors.vue') },
 
   // Get data() from vuex store "searchData"
   computed: {
