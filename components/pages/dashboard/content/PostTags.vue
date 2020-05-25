@@ -29,6 +29,7 @@
 import { mapMutations, mapActions } from 'vuex'
 // JS
 import fireAnalytics from '~/assets/js/analytics'
+import { scrollToTop } from '~/assets/js/scrollUtils.js'
 
 export default {
   name: 'PostTags',
@@ -67,8 +68,9 @@ export default {
         },
       })
 
-      // Search for the tag
+      scrollToTop()
 
+      // Search for the tag
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
 
       // And fire analytics

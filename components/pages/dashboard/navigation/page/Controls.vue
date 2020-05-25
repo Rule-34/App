@@ -66,6 +66,9 @@ import throttle from 'lodash/throttle'
 // Icons
 import { ArrowLeftIcon, ArrowRightIcon } from 'vue-feather-icons'
 
+// JS
+import { scrollToTop } from '~/assets/js/scrollUtils.js'
+
 export default {
   name: 'Controls',
 
@@ -104,12 +107,16 @@ export default {
     async getNextPage() {
       this.pidManager({ operation: 'add' })
 
+      if (!this.userSettings.infiniteLoad.value) scrollToTop()
+
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
     },
 
     // Get last page from API
     async getPrevPage() {
       this.pidManager({ operation: 'subtract' })
+
+      if (!this.userSettings.infiniteLoad.value) scrollToTop()
 
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
     },
@@ -130,6 +137,8 @@ export default {
       this.pidManager({ operation: 'specific', value: specificPage })
 
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+
+      if (!this.userSettings.infiniteLoad.value) scrollToTop()
     },
 
     InfiniteLoadHandler: throttle(async function () {
@@ -139,24 +148,16 @@ export default {
       await this.fetchWithMode({ mode: 'posts', returnMode: 'concat' })
     }, 5000),
 
-    scrollToTop() {
-      window.scrollTo(0, 0)
-    },
-
     keyboardPageHandler() {
       switch (event.keyCode) {
         case 39:
           this.getNextPage()
-
-          if (!this.userSettings.infiniteLoad.value) this.scrollToTop()
 
           console.debug('Loading next page')
           break
 
         case 37:
           this.getPrevPage()
-
-          if (!this.userSettings.infiniteLoad.value) this.scrollToTop()
 
           console.debug('Loading prev page')
           break
