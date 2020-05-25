@@ -124,6 +124,7 @@ export default {
 
       this.tagManager({
         operation: 'concat',
+        tagArray: this.searchData.premadeFilterData,
       })
     },
   },

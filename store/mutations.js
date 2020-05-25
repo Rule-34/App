@@ -140,8 +140,9 @@ export default {
 
       // Instead of adding one, add multiple with concat
       case 'concat':
+        // TODO: Fix filter
         state.searchData.tags = state.searchData.tags.concat(
-          state.searchData.premadeFilterData
+          parameters.tagArray
         )
         break
 
