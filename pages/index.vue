@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 
 // Components
 import DomainSelector from '~/components/pages/dashboard/domain/Selector.vue'
@@ -38,27 +38,10 @@ export default {
       import('~/components/pages/dashboard/navigation/page/Controls.vue'),
   },
 
-  async middleware({ store }) {
-    // Set PID on boot
-    if (store.state.dashBoardData.pid === undefined) {
-      store.commit('pidManager', {
-        operation: 'specific',
-        value: store.getters.getActiveBooruType.initialPageID,
-      })
-    }
-
-    // Load the store with posts
-    await store.dispatch('fetchWithMode', { mode: 'posts', returnMode: 'add' })
-  },
   mixins: [URLQueryManagerMixin],
 
   computed: {
     ...mapState(['dashBoardData']),
-  },
-
-  methods: {
-    ...mapMutations(['pidManager']),
-    ...mapActions(['fetchWithMode']),
   },
 
   head() {
