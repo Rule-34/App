@@ -62,13 +62,13 @@ export default {
         element.style.maxHeight = '0px'
         element.style.opacity = 0
       })
-    }
+    },
 
     // afterLeave(element) {
     //   element.style.maxHeight = null
     //   element.style.opacity = null
     // },
-  }
+  },
 }
 </script>
 
