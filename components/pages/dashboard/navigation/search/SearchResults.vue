@@ -78,8 +78,10 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 import Errors from '~/components/utils/Errors.vue'
+
 // JS
 import fireAnalytics from '~/assets/js/analytics'
+import { scrollToTop } from '~/assets/js/scrollUtils.js'
 
 export default {
   name: 'SearchResults',
@@ -133,7 +135,7 @@ export default {
         mode: 'toggleSearch',
       })
 
-      window.scrollTo(0, 0)
+      scrollToTop()
 
       // Search for the tags
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
