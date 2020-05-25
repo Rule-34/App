@@ -1,7 +1,7 @@
 export default function loadingAnimationHandler(mode) {
-  // console.debug(window.$nuxt.$root.$loading)
+  // console.debug(window.$nuxt.$root.$loading.start)
 
-  if (Object.keys(window.$nuxt.$root.$loading).length === 0) {
+  if (!window.$nuxt.$root.$loading.start) {
     console.debug('Skipping animation until everything is loaded')
 
     return
