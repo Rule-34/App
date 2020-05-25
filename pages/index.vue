@@ -23,6 +23,9 @@ import DomainSelector from '~/components/pages/dashboard/domain/Selector.vue'
 import Post from '~/components/pages/dashboard/content/Post.vue'
 import Errors from '~/components/utils/Errors.vue'
 
+// Mixins
+import URLQueryManagerMixin from '~/components/pages/dashboard/navigation/url/URLQueryManagerMixin.js'
+
 // Lazy loaded components
 export default {
   components: {
@@ -47,6 +50,7 @@ export default {
     // Load the store with posts
     await store.dispatch('fetchWithMode', { mode: 'posts', returnMode: 'add' })
   },
+  mixins: [URLQueryManagerMixin],
 
   computed: {
     ...mapState(['dashBoardData']),
