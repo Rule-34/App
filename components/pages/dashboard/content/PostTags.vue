@@ -13,11 +13,11 @@
   >
     <!-- Workaround for this not jumping is applying collapse to the div before div with padding/margin -->
     <div class="tag-container min-w-full">
-      <a
+      <button
         v-for="tag in tags"
         :key="tag"
-        class="tag"
-        href="#"
+        type="button"
+        class="tag color-util"
         @click="getSpecificTag(tag)"
         v-text="tag"
       />

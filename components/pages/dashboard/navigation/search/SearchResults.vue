@@ -26,13 +26,15 @@
         v-if="searchData.tags.length"
         class="tag-container border-b border-border rounded mb-1 overflow-y-scroll max-h-1/2"
       >
-        <a
+        <button
           v-for="tag in searchData.tags"
           :key="tag"
-          class="tag"
+          type="button"
+          class="tag color-util"
           @click="removeTagFromActive(tag)"
-          >{{ tag }}</a
         >
+          {{ tag }}
+        </button>
       </div>
 
       <!-- Searched tags, click them to add them -->
@@ -41,10 +43,11 @@
         class="flex-1 tag-container rounded rounded-b-none overflow-y-scroll"
       >
         <!-- Add tag to array of added tags, if filter is active then append '-' -->
-        <a
+        <button
           v-for="tag in searchData.data"
           :key="tag.name"
-          class="tag group"
+          type="button"
+          class="tag color-util group"
           @click="addTagToActiveTags(tag.name)"
         >
           <!-- Name of the tag -->
@@ -57,7 +60,7 @@
             class="text-primary-hover group-hover:text-default transition--color"
             >{{ `(${tag.count})` }}
           </span>
-        </a>
+        </button>
       </div>
     </div>
 
