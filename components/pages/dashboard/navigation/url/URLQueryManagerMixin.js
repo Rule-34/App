@@ -38,6 +38,8 @@ export default {
   async created() {
     this.checkAndAddToStateURLQueries()
 
+    this.setDefaultPageIDIfUndefined()
+
     this.setURLQueries()
 
     if (this.dashBoardData.data.length) {
@@ -112,6 +114,18 @@ export default {
         this.tagManager({
           operation: 'concat',
           tagArray,
+        })
+      }
+    },
+
+    setDefaultPageIDIfUndefined() {
+      // Set PID on boot
+      if (this.dashBoardData.pid === undefined) {
+        // console.debug('Setting default PID')
+
+        this.pidManager({
+          operation: 'specific',
+          value: this.getActiveBooruType.initialPageID,
         })
       }
     },
