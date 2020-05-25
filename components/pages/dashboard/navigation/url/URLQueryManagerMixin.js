@@ -14,6 +14,11 @@ export default {
     statePID() {
       return this.dashBoardData.pid
     },
+
+    stateTags() {
+      // TODO: find function that does this specifically for URL queries
+      return this.searchData.tags.toString()
+    },
   },
 
   watch: {
@@ -24,6 +29,11 @@ export default {
     statePID() {
       this.setURLQueries()
     },
+
+    stateTags() {
+      this.setURLQueries()
+    },
+  },
 
   async created() {
     this.checkAndAddToStateURLQueries()
@@ -42,6 +52,7 @@ export default {
   methods: {
     ...mapMutations([
       'pidManager',
+      'tagManager',
       'booruDataManager',
       'errorManager',
     ]),
@@ -88,12 +99,30 @@ export default {
         })
       }
 
+      /*
+       * Tags
+       */
+      if (tags) {
+        const tagArray = tags.split(',')
+
+        // console.debug('Loading Tags from URL query')
+
+        // console.log(tagArray)
+
+        this.tagManager({
+          operation: 'concat',
+          tagArray,
+        })
+      }
+    },
+
     setURLQueries() {
       this.$router.push({
         path: this.$route.path,
         query: {
           domain: this.stateDomain,
           pid: this.statePID,
+          ...(this.stateTags && { tags: this.stateTags }),
         },
       })
     },
