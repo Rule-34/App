@@ -10,9 +10,8 @@
         class="material-container flex text-center p-2"
       >
         <!-- Get previous page -->
-        <a
-          href="#"
-          class="w-1/3"
+        <div
+          class="w-1/3 color-util"
           title="Load previous page"
           @click="getPrevPage"
         >
@@ -20,25 +19,28 @@
             <ArrowLeftIcon class="icon w-4 h-4 inline" />
             Prev page
           </button>
-        </a>
+        </div>
 
         <!-- Get specific page -->
-        <a
-          href="#"
-          class="w-1/3"
+        <div
+          class="w-1/3 color-util"
           title="Load specific page"
           @click="getSpecificPage"
         >
           <button type="button" v-text="dashBoardData.pid" />
-        </a>
+        </div>
 
         <!-- Get next page -->
-        <a href="#" class="w-1/3" title="Load next page" @click="getNextPage">
+        <div
+          class="w-1/3 color-util"
+          title="Load next page"
+          @click="getNextPage"
+        >
           <button type="button">
             Next page
             <ArrowRightIcon class="icon w-4 h-4 inline" />
           </button>
-        </a>
+        </div>
       </div>
     </div>
 

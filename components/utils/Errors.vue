@@ -28,13 +28,13 @@
         {{ generalData.error.message }}
       </p>
       <!-- TODO: This should be "Retry to load?" or something similar -->
-      <a href="#" @click="resetTags()">Remove tags?</a>
+      <button type="button" @click="resetTags()">Remove tags?</button>
     </template>
 
     <!-- If no posts loaded -->
     <template v-else-if="!dashBoardData.data.length && !isSinglePost">
       <h1 class="font-bold" v-text="'There are no more posts to load!'" />
-      <a href="#" @click="resetTags()">Remove tags?</a>
+      <button type="button" @click="resetTags()">Remove tags?</button>
     </template>
   </div>
 </template>
