@@ -48,8 +48,8 @@ function tagsTracking(state) {
   // console.debug('Tags executed succesfully')
 }
 
-function booruTracking(state) {
   SendTimed(0, 'Domains', 'changed', state.booruData.active.domain)
+function domainTracking(state) {
 
   // console.debug('Domain executed succesfully')
 }
@@ -86,8 +86,8 @@ export default function fireAnalytics(mode, state) {
       result = tagsTracking(state)
       break
 
-    case 'booru':
-      result = booruTracking(state)
+    case 'domain':
+      result = domainTracking(state)
       break
 
     case 'settings':
