@@ -18,6 +18,36 @@ function SendTimed(index, category, action, name, value) {
   }, 500 * index)
 }
 
+function tagsTracking(state) {
+  let isFromFilter = false
+
+  if (!state.searchData.tags.length) {
+    console.debug('No tags to track')
+    return
+  }
+
+  state.searchData.tags.forEach((tag, index) => {
+    // console.log(tag, index)
+
+    if (state.searchData.premadeFilterData.includes(tag)) {
+      // console.log('Not sent tag', tag)
+      isFromFilter = true
+
+      return
+    }
+
+    SendTimed(index, 'Tags', 'searched', tag)
+  })
+
+  if (isFromFilter) {
+    // console.debug('Tracked Premade Filter')
+
+    SendTimed(0, 'Tags', 'searched', 'Premade Filter')
+  }
+
+  // console.debug('Tags executed succesfully')
+}
+
 function booruTracking(state) {
   SendTimed(0, 'Domains', 'changed', state.booruData.active.domain)
 
@@ -52,6 +82,10 @@ export default function fireAnalytics(mode, state) {
   // console.log('Analytics fired with something:', mode, state)
   let result
   switch (mode) {
+    case 'tags':
+      result = tagsTracking(state)
+      break
+
     case 'booru':
       result = booruTracking(state)
       break

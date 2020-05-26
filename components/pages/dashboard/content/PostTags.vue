@@ -26,6 +26,7 @@ import { mapMutations, mapActions } from 'vuex'
 import TransitionCollapse from '~/components/utils/TransitionCollapse.vue'
 
 // JS
+import fireAnalytics from '~/assets/js/analytics'
 import { scrollToTop } from '~/assets/js/scrollUtils.js'
 
 export default {
@@ -69,6 +70,8 @@ export default {
 
       // Search for the tag
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+
+      fireAnalytics('tags', this.$store.state)
     },
   },
 }
