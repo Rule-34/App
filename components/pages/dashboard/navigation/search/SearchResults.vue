@@ -80,6 +80,7 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import Errors from '~/components/utils/Errors.vue'
 
 // JS
+import fireAnalytics from '~/assets/js/analytics'
 import { scrollToTop } from '~/assets/js/scrollUtils.js'
 
 export default {
@@ -138,6 +139,9 @@ export default {
 
       // Search for the tags
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+
+      // And fire analytics
+      fireAnalytics('tags', this.$store.state)
     },
   },
 }
