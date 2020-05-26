@@ -90,7 +90,7 @@ export default {
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
 
       // Send analytics
-      fireAnalytics('booru', this.$store.state)
+      fireAnalytics('domain', this.$store.state)
     },
   },
 }
