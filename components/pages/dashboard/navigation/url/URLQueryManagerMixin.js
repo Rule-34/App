@@ -132,7 +132,7 @@ export default {
 
     setURLQueries() {
       this.$router.push({
-        path: this.$route.path,
+        // path: this.$route.path,
         query: {
           domain: this.stateDomain,
           pid: this.statePID,
