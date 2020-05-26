@@ -1,21 +1,29 @@
 // Send tags in an interval of .5 seconds to not flood the analytics server
-function SendTimed(index, category, action, name, value) {
-  setTimeout(function () {
-    console.debug(`
-    ---- Analytic tracking ----
-    Category: ${category}
-    Action: ${action}
-    Value: ${name}
-    Value: ${value}
-    `)
+function SendTimed(index, passedCallback) {
+  setTimeout(passedCallback, 500 * index)
+}
 
-    // In reality its ['trackEvent', category, [name], [value]] but here we skip it
-    if (name) {
-      window._paq.push(['trackEvent', category, action, name])
-    } else {
-      window._paq.push(['trackEvent', category, action])
-    }
-  }, 500 * index)
+function trackSearch({ name, category, results }) {
+  console.debug(`
+  ---- Tracking search ----
+  Name: ${name}
+  Category: ${category}
+  Results: ${results}
+  `)
+
+  window._paq.push(['trackSiteSearch', name, category, results])
+}
+
+function trackEvent({ category, action, name, value }) {
+  console.debug(`
+  ---- Tracking event ----
+  Category: ${category}
+  Action: ${action}
+  Name: ${name}
+  Value: ${value}
+  `)
+
+  window._paq.push(['trackEvent', category, action, name, value])
 }
 
 function tagsTracking(state) {
@@ -36,20 +44,39 @@ function tagsTracking(state) {
       return
     }
 
-    SendTimed(index, 'Tags', 'searched', tag)
+    SendTimed(
+      index,
+      trackSearch({
+        name: tag,
+        category: 'Tags',
+      })
+    )
   })
 
   if (isFromFilter) {
     // console.debug('Tracked Premade Filter')
 
-    SendTimed(0, 'Tags', 'searched', 'Premade Filter')
+    SendTimed(
+      0,
+      trackSearch({
+        name: 'Premade Filter',
+        category: 'Tags',
+      })
+    )
   }
 
   // console.debug('Tags executed succesfully')
 }
 
-  SendTimed(0, 'Domains', 'changed', state.booruData.active.domain)
 function domainTracking(state) {
+  SendTimed(
+    0,
+    trackEvent({
+      category: 'Domains',
+      action: 'changed',
+      name: state.booruData.active.domain,
+    })
+  )
 
   // console.debug('Domain executed succesfully')
 }
@@ -71,7 +98,14 @@ function settingsTracking(state) {
   Object.keys(difference).forEach(function (key, index) {
     // console.log(key, difference[key])
 
-    SendTimed(index, 'Settings', 'toggled', difference[key])
+    SendTimed(
+      index,
+      trackEvent({
+        category: 'Settings',
+        action: 'toggled',
+        name: difference[key],
+      })
+    )
   })
 
   // console.debug('Settings executed succesfully')
@@ -95,7 +129,13 @@ export default function fireAnalytics(mode, state) {
       break
 
     case 'notifications':
-      result = SendTimed(0, 'Notifications', 'opened')
+      result = SendTimed(
+        0,
+        trackEvent({
+          category: 'Notifications',
+          action: 'opened',
+        })
+      )
       break
 
     default:
