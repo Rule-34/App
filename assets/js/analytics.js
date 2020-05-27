@@ -34,24 +34,8 @@ function tagsTracking(state) {
     return
   }
 
-  state.searchData.tags.forEach((tag, index) => {
-    // console.log(tag, index)
 
-    if (state.searchData.premadeFilterData.includes(tag)) {
-      // console.log('Not sent tag', tag)
-      isFromFilter = true
-
-      return
-    }
-
-    SendTimed(
-      index,
-      trackSearch({
-        name: tag,
-        category: 'Tags',
-      })
     )
-  })
 
   if (isFromFilter) {
     // console.debug('Tracked Premade Filter')
@@ -65,7 +49,13 @@ function tagsTracking(state) {
     )
   }
 
-  // console.debug('Tags executed succesfully')
+  SendTimed(
+    0,
+    trackSearch({
+      name: state.searchData.tags.toString(),
+      category: 'Tags',
+    })
+  )
 }
 
 function domainTracking(state) {
@@ -77,8 +67,6 @@ function domainTracking(state) {
       name: state.booruData.active.domain,
     })
   )
-
-  // console.debug('Domain executed succesfully')
 }
 
 function settingsTracking(state) {
@@ -107,8 +95,6 @@ function settingsTracking(state) {
       })
     )
   })
-
-  // console.debug('Settings executed succesfully')
 }
 
 /* -------- Analytics -------- */
