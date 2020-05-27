@@ -34,19 +34,38 @@ function tagsTracking(state) {
     return
   }
 
+  if (
+    state.searchData.tags.length >= state.searchData.premadeFilterData.length
+  ) {
+    // console.debug('Lenght is sufficient')
 
+    isFromFilter = state.searchData.premadeFilterData.every((tag) =>
+      state.searchData.tags.includes(tag)
     )
+  }
 
   if (isFromFilter) {
     // console.debug('Tracked Premade Filter')
 
+    const tagsNotFromFilter = new Set(
+      state.searchData.tags.filter(
+        (tag) => !state.searchData.premadeFilterData.includes(tag)
+      )
+    )
+
     SendTimed(
       0,
       trackSearch({
-        name: 'Premade Filter',
+        name:
+          'Premade Filter' +
+          (tagsNotFromFilter.size
+            ? ',' + Array.from(tagsNotFromFilter).join(',')
+            : ''),
         category: 'Tags',
       })
     )
+
+    return
   }
 
   SendTimed(
