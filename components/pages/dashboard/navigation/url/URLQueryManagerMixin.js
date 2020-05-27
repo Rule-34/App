@@ -40,7 +40,7 @@ export default {
 
     this.setDefaultPageIDIfUndefined()
 
-    this.setURLQueries()
+    // this.setURLQueries()
 
     if (this.dashBoardData.data.length) {
       console.debug('Skip loading anything, we already have data')
