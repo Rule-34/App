@@ -35,6 +35,7 @@ function tagsTracking(state) {
   }
 
   if (
+    state.searchData.premadeFilterData.length > 0 &&
     state.searchData.tags.length >= state.searchData.premadeFilterData.length
   ) {
     // console.debug('Lenght is sufficient')
