@@ -61,12 +61,9 @@
     <!-- Helping -->
     <ContentContainer
       title="Can I help in any way?"
-      text="Of course, we're always in need of support (specially artists/designers), contact me on Discord if you want to help."
+      text="Of course, we're always in need of support (specially artists/designers), contact me on our Discord if you want to help."
       icon="bg-svg-info"
-    >
-      <!-- Slot -->
-      <p class="text-default-text-muted text-xs">Voidless#0521</p>
-    </ContentContainer>
+    />
 
     <!-- text-sm Github -->
     <ContentContainer
