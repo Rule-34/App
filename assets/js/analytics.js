@@ -3,17 +3,6 @@ function SendTimed(index, passedCallback) {
   setTimeout(passedCallback, 500 * index)
 }
 
-function trackSearch({ name, category, results }) {
-  console.debug(`
-  ---- Tracking search ----
-  Name: ${name}
-  Category: ${category}
-  Results: ${results}
-  `)
-
-  window._paq.push(['trackSiteSearch', name, category, results])
-}
-
 function trackEvent({ category, action, name, value }) {
   console.debug(`
   ---- Tracking event ----
@@ -24,58 +13,6 @@ function trackEvent({ category, action, name, value }) {
   `)
 
   window._paq.push(['trackEvent', category, action, name, value])
-}
-
-function tagsTracking(state) {
-  let isFromFilter = false
-
-  if (!state.searchData.tags.length) {
-    console.debug('No tags to track')
-    return
-  }
-
-  if (
-    state.searchData.premadeFilterData.length > 0 &&
-    state.searchData.tags.length >= state.searchData.premadeFilterData.length
-  ) {
-    // console.debug('Lenght is sufficient')
-
-    isFromFilter = state.searchData.premadeFilterData.every((tag) =>
-      state.searchData.tags.includes(tag)
-    )
-  }
-
-  if (isFromFilter) {
-    // console.debug('Tracked Premade Filter')
-
-    const tagsNotFromFilter = new Set(
-      state.searchData.tags.filter(
-        (tag) => !state.searchData.premadeFilterData.includes(tag)
-      )
-    )
-
-    SendTimed(
-      0,
-      trackSearch({
-        name:
-          'Premade Filter' +
-          (tagsNotFromFilter.size
-            ? ',' + Array.from(tagsNotFromFilter).join(',')
-            : ''),
-        category: 'Tags',
-      })
-    )
-
-    return
-  }
-
-  SendTimed(
-    0,
-    trackSearch({
-      name: state.searchData.tags.toString(),
-      category: 'Tags',
-    })
-  )
 }
 
 function domainTracking(state) {
@@ -122,10 +59,6 @@ export default function fireAnalytics(mode, state) {
   // console.log('Analytics fired with something:', mode, state)
   let result
   switch (mode) {
-    case 'tags':
-      result = tagsTracking(state)
-      break
-
     case 'domain':
       result = domainTracking(state)
       break
