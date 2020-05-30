@@ -10,7 +10,7 @@
           
       Keep in mind that all the content we get is from public released APIs from the site itself."
       icon="bg-svg-info"
-      link="https://github.com/VoidlessSeven7/Rule-34-App"
+      link="https://github.com/AlejandroAkbal/Rule-34-App"
       link-text="Github repository"
     />
 

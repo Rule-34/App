@@ -70,7 +70,7 @@
       title="I found a bug/error!"
       text="You can report it on the GitHub repository, or directly to me on our Discord."
       icon="bg-svg-info"
-      link="https://github.com/VoidlessSeven7/Rule-34-App"
+      link="https://github.com/AlejandroAkbal/Rule-34-App"
       link-text="Github"
     >
       <!-- Workaround for having two links -->
