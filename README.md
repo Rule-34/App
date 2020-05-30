@@ -42,7 +42,7 @@ Follow the **[Rule 34 App on Twitter](https://twitter.com/Rule34App)** for annou
 
 ### API
 
-This app uses a JSON wrapper for various Rule 34 APIs, it is developed and mantained by me, and can be found [here](https://github.com/VoidlessSeven7/Rule-34-API).
+This app uses a JSON wrapper for various Rule 34 APIs, it is developed and mantained by me, and can be found [here](https://github.com/AlejandroAkbal/Rule-34-API).
 
 ### Support
 
