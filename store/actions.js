@@ -80,7 +80,7 @@ export default {
         // Fetch data
         response = await dispatch('simpleFetch', {
           url:
-            'https://cdn.statically.io/gist/VoidlessSeven7/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-notifications.json',
+            'https://cdn.statically.io/gist/AlejandroAkbal/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-notifications.json',
         })
 
         // Set mutation to return
@@ -93,7 +93,7 @@ export default {
         // Fetch data
         response = await dispatch('simpleFetch', {
           url:
-            'https://cdn.statically.io/gist/VoidlessSeven7/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-furry-filter.min.json',
+            'https://cdn.statically.io/gist/AlejandroAkbal/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-furry-filter.min.json',
         })
 
         // Set mutation to return
