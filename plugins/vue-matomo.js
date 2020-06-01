@@ -17,7 +17,7 @@ export default ({ app }) => {
     enableHeartBeatTimer: true,
     heartBeatTimerInterval: 30,
 
-    // debug: true,
+    debug: process.env.NODE_ENV === 'development',
 
     // preInitActions: [],
   })
