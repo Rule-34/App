@@ -28,8 +28,10 @@ export default () => ({
   },
 
   generalData: {
-    apiUrl: 'https://api.r34.app/',
-    // apiUrl: 'http://localhost:8100/',
+    apiUrl:
+      process.env.NODE_ENV === 'development'
+        ? 'http://localhost:8100/'
+        : 'https://api.r34.app/',
 
     CORSProxyURL: 'https://cors-proxy.r34.app/',
 
