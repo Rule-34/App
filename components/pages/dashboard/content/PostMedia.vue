@@ -2,7 +2,7 @@
   <div>
     <!-- if media is an Image -->
     <img
-      v-if="post.type === 'image'"
+      v-if="post.media_type === 'image'"
       :src="mediaResolutionChooser().url"
       :loading="userSettings.lazyLoading.value ? 'lazy' : 'auto'"
       :class="{
@@ -19,7 +19,7 @@
 
     <!-- if its a Video -->
     <video
-      v-else
+      v-else-if="post.media_type === 'video'"
       :controls="userSettings.videoControls.value"
       :alt="'Video ' + post.id"
       class="w-full h-auto"
@@ -30,6 +30,8 @@
       <source :src="post.high_res_file.url" @error="retryToLoadMedia($event)" />
       Your browser doesnt support HTML5 video.
     </video>
+
+    <p v-else class="text-center text-default-text">Unknown media type</p>
   </div>
 </template>
 
