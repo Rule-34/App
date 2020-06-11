@@ -56,7 +56,7 @@ If the API is duplicated and a load balancer is placed between them, the request
 
 Since this is a **free** project that I have created, with **no ads** to generate revenue, I ask of you, **if you really like my work**, please donate whatever amount you can to the future of this app.
 
-[Liberapay (Better Patreon)](https://liberapay.com/VoidlessSeven7/) | [Patreon](https://patreon.com/VoidlessSeven7) | [Paypal](https://www.paypal.me/Alejandrorr7)
+[Liberapay (Better Patreon)](https://liberapay.com/AlejandroAkbal/) | [Patreon](https://patreon.com/AlejandroAkbal) | [Paypal](https://www.paypal.me/Alejandrorr7)
 
 ## Technicalities
 

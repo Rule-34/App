@@ -91,13 +91,13 @@
       title="Can I donate for your efforts?"
       text="Of course you can, I've been working really hard on this project, if you feel like contributing to the development please do."
       icon="bg-svg-dollar"
-      link="https://liberapay.com/VoidlessSeven7"
+      link="https://liberapay.com/AlejandroAkbal"
       link-text="Liberapay"
     >
       <!-- Workaround for having two links -->
       <template slot="extra">
         -
-        <a class="text-sm" href="https://patreon.com/VoidlessSeven7">
+        <a class="text-sm" href="https://patreon.com/AlejandroAkbal">
           Patreon
         </a>
         -
