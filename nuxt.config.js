@@ -17,7 +17,7 @@ export default {
       {
         hid: 'monetization',
         name: 'monetization',
-        content: '$ilp.uphold.com/Hb2w46bnxZfM',
+        content: '$ilp.uphold.com/WULDBKGeQb3p',
       },
     ],
     link: [
