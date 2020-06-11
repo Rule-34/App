@@ -14,6 +14,11 @@ export default {
         name: 'description',
         content: 'Browse the most popular boorus in the Rule 34 App',
       },
+      {
+        hid: 'monetization',
+        name: 'monetization',
+        content: '$ilp.uphold.com/Hb2w46bnxZfM',
+      },
     ],
     link: [
       // Font
