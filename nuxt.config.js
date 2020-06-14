@@ -85,6 +85,14 @@ export default {
       start_url: '/?origin=PWA',
       theme_color: '#121212',
       background_color: '#121212',
+      shortcuts: [
+        {
+          name: 'Open Settings',
+          short_name: 'Settings',
+          description: 'Tweak your experience',
+          url: '/settings',
+        },
+      ],
     },
     meta: {
       /* meta options */
