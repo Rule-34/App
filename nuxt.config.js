@@ -82,7 +82,7 @@ export default {
       name: 'Rule 34 App',
       short_name: 'Rule 34 App',
       lang: 'en',
-      start_url: '/?origin=PWA',
+      start_url: '/?utm_source=PWA',
       theme_color: '#121212',
       background_color: '#121212',
       shortcuts: [
@@ -90,7 +90,7 @@ export default {
           name: 'Open Settings',
           short_name: 'Settings',
           description: 'Tweak your experience',
-          url: '/settings',
+          url: '/settings?utm_source=PWA',
         },
       ],
     },
