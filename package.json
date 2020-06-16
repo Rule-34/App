@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@nuxtjs/pwa": "^3.0.0-beta.20",
-    "@nuxtjs/sitemap": "^2.3.1",
+    "@nuxtjs/sitemap": "^2.3.2",
     "@tailwindcss/ui": "^0.3.0",
     "lodash": "^4.17.15",
     "nuxt": "^2.12.2",
