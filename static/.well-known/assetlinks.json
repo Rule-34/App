@@ -8,5 +8,15 @@
         "54:C6:7F:8D:8A:48:88:A5:A7:CF:BB:53:B9:0B:A5:EC:32:0A:E0:02:5D:B7:97:17:99:94:1D:9D:B7:B7:4C:66"
       ]
     }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.r34.twa",
+      "sha256_cert_fingerprints": [
+        "B7:53:74:2F:5E:86:1D:B2:39:AB:A4:FA:76:6D:3A:81:15:82:17:80:63:8D:B6:42:90:53:C3:EB:F2:59:43:9E"
+      ]
+    }
   }
 ]
