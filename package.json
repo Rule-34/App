@@ -15,7 +15,7 @@
     "@nuxtjs/sitemap": "^2.3.1",
     "@tailwindcss/ui": "^0.3.0",
     "lodash": "^4.17.15",
-    "nuxt": "^2.12.2",
+    "nuxt": "^2.13.0",
     "vue-feather-icons": "^5.0.0",
     "vue-matomo": "^3.13.5-0",
     "vuex-persist": "^2.2.0"
