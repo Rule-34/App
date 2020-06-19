@@ -2,6 +2,8 @@ export default {
   mode: 'spa',
   target: 'static',
 
+  modern: 'client',
+
   generate: { fallback: true },
 
   /*
