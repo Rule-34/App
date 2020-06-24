@@ -2,7 +2,7 @@ export default {
   mode: 'spa',
   target: 'static',
 
-  modern: 'client',
+  modern: process.env.NODE_ENV === 'development' ? undefined : 'client',
 
   generate: { fallback: true },
 
