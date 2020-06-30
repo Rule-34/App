@@ -52,7 +52,7 @@
           v-if="link"
           :href="link"
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noopener"
           class="text-sm"
           v-text="linkText"
         />

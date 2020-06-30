@@ -6,7 +6,7 @@
       v-if="isUrl"
       :href="source[0]"
       class="inline-flex"
-      rel="noreferrer noopener nofollow"
+      rel="noopener nofollow"
       target="_blank"
     >
       <p class="color-util" v-text="'Source'" />

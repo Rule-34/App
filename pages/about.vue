@@ -4,7 +4,7 @@
       :class="{ zoom: userSettings.zoom.value }"
       href="https://akbal.dev/"
       target="_blank"
-      rel="noopener noreferrer"
+      rel="noopener"
       class="material-container bg-elevation m-auto p-5 shadow-md"
     >
       <div>
