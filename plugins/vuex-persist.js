@@ -1,8 +1,10 @@
 import VuexPersistence from 'vuex-persist'
 
 export default ({ store }) => {
-  // Hydrate data
+  // Root State
   new VuexPersistence({
+    key: 'state',
+
     reducer: (state) => {
       const SETTINGS_OBJ = { userSettings: {} }
 
@@ -13,24 +15,16 @@ export default ({ store }) => {
         }
       })
 
-      // console.log(SETTINGS_OBJ)
-
       // Recreate the part of the store that we want to save
       return {
-        // Dashboard
         booruData: { active: state.booruData.active },
 
-        // Notifications
         notificationData: {
           data: state.notificationData.data,
           latestTitle: state.notificationData.latestTitle,
         },
 
-        // userSettings
         ...SETTINGS_OBJ,
-
-        // Credentials data
-        credentials: state.credentials,
       }
     },
   }).plugin(store)
