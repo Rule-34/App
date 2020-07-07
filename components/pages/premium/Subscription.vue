@@ -89,7 +89,7 @@
           <a
             target="_blank"
             rel="noopener"
-            href="https://gum.co/gRuqQm"
+            :href="'https://gum.co/' + gumroad.product.product_permalink"
             class="block w-full text-center border-0 rounded-lg bg-gradient-lilac-blue px-6 py-3 text-lg leading-6 font-medium text-default-text focus:outline-none focus:shadow-outline transition ease-in-out duration-150"
           >
             Subscribe
@@ -101,11 +101,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { CheckIcon } from 'vue-feather-icons'
 
 export default {
   components: {
     CheckIcon,
+  },
+
+  computed: {
+    ...mapState('premium', ['gumroad']),
   },
 }
 </script>
