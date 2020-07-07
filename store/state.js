@@ -153,10 +153,4 @@ export default () => ({
       defaultValue: true,
     },
   },
-
-  // These settings are saved to localStorage
-  credentials: {
-    // Is the user a Patron?
-    isPatron: false,
-  },
 })
