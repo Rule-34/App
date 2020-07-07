@@ -28,4 +28,13 @@ export default ({ store }) => {
       }
     },
   }).plugin(store)
+
+  // Premium State
+  new VuexPersistence({
+    key: 'premium',
+
+    reducer: (state) => ({
+      premium: { responseData: state.premium.responseData },
+    }),
+  }).plugin(store)
 }
