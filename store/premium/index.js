@@ -72,7 +72,7 @@ export const actions = {
         url: state.gumroad.authAPI.url,
         options: getters.getFetchOptionsInit,
       },
-      { root: true } // Necessary for tlaking to root actions
+      { root: true } // Necessary for talking to root actions
     )
 
     // console.log(response)
