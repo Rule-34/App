@@ -1,25 +1,23 @@
 @@ -0,0 +1,172 @@
 <template>
-  <main class="h-screen flex flex-col">
-    <div class="my-auto">
-      <!-- Log In -->
-      <template v-if="!isUserPremium">
-        <!-- Log In form -->
-        <login />
+  <main class="grid h-screen" style="place-items: center;">
+    <!-- Log In -->
+    <div v-if="!isUserPremium" class="w-full max-w-screen-sm">
+      <!-- Log In form -->
+      <login />
 
-        <!-- Separator -->
-        <p class="text-default-text leading-loose text-center">Or</p>
+      <!-- Separator -->
+      <p class="text-default-text leading-loose text-center">Or</p>
 
-        <!-- Subscription  -->
-        <subscription />
-      </template>
+      <!-- Subscription  -->
+      <subscription />
+    </div>
 
-      <!-- Control pannel -->
-      <template v-else>
-        <h1 class="text-default-text text-center text-lg">
-          Control pannel
-        </h1>
-      </template>
+    <!-- Control pannel -->
+    <div v-else>
+      <h1 class="text-default-text text-center text-lg">
+        Control pannel
+      </h1>
     </div>
   </main>
 </template>
