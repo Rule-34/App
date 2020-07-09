@@ -20,11 +20,7 @@
     </div>
 
     <!-- Control pannel -->
-    <div v-else>
-      <h1 class="text-default-text text-center text-lg">
-        Control pannel
-      </h1>
-    </div>
+    <ControlPannel v-else class="h-full min-h-screen mx-auto" />
   </main>
 </template>
 
@@ -32,9 +28,10 @@
 import { mapGetters } from 'vuex'
 import Login from '@/components/pages/premium/Login'
 import Subscription from '@/components/pages/premium/Subscription'
+import ControlPannel from '@/components/pages/premium/ControlPannel'
 
 export default {
-  components: { Login, Subscription },
+  components: { Login, Subscription, ControlPannel },
 
   computed: {
     ...mapGetters('premium', ['isUserPremium']),
