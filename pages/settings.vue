@@ -56,7 +56,7 @@ export default {
     // Remove the localStorage object and reload the window
     removeLocalStorage() {
       // Remove localstorage by key
-      localStorage.removeItem('vuex')
+      localStorage.removeItem('state')
 
       // And reload page to see changes
       location.reload()
