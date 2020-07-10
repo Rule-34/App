@@ -93,8 +93,9 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['searchManager', 'pidManager', 'tagManager']),
     ...mapActions(['fetchWithMode']),
+    ...mapMutations(['pidManager', 'tagManager']),
+    ...mapMutations('navigation', ['setSearchActive']),
 
     removeTagFromActive(tagName) {
       this.tagManager({
@@ -130,9 +131,7 @@ export default {
       this.pidManager({ operation: 'reset' })
 
       // Hide the search bar
-      this.searchManager({
-        mode: 'toggleSearch',
-      })
+      this.setSearchActive(false)
 
       scrollToTop()
 

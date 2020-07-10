@@ -9,11 +9,11 @@
     <NavToggler :show-search="isDashboard ? true : false" />
 
     <transition name="sidenav">
-      <SideNav v-if="sideNavData.isActive" />
+      <SideNav v-if="sideNav.isActive" />
     </transition>
 
     <transition name="search">
-      <Search v-if="searchData.isActive" />
+      <Search v-if="search.isActive" />
     </transition>
 
     <!-- Layout content -->
@@ -55,7 +55,8 @@ export default {
   mixins: [StartUpMixin, SideNavMixin, TouchHandlerMixin],
 
   computed: {
-    ...mapState(['searchData', 'sideNavData', 'userSettings']),
+    ...mapState('navigation', ['sideNav', 'search']),
+    ...mapState(['userSettings']),
   },
 
   // Set theme and background color in the body dynamically thanks to the vuex store computed property

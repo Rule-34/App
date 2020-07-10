@@ -13,13 +13,7 @@ export default () => ({
     boorus: booruList,
   },
 
-  sideNavData: {
-    isActive: false,
-  },
-
   searchData: {
-    isActive: false, // Is search bar active
-
     data: [], // Data received while searching for tags
     tags: [], // Tags that are added for searching posts with that tags
 
