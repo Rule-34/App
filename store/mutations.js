@@ -156,6 +156,10 @@ export default {
         state.searchData.data = []
         break
 
+      case 'toggleFilter':
+        state.searchData.isFilterActive = !state.searchData.isFilterActive
+        break
+
       case 'changeFilterData':
         state.searchData.premadeFilterData = parameters.data
         break
