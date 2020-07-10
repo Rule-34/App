@@ -34,7 +34,11 @@ export default ({ store }) => {
     key: 'premium',
 
     reducer: (state) => ({
-      premium: { responseData: state.premium.responseData },
+      premium: {
+        gumroad: {
+          product: { license_key: state.premium.gumroad.product.license_key },
+        },
+      },
     }),
   }).plugin(store)
 }
