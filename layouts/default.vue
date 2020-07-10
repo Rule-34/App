@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapState } from 'vuex'
 
 // Third party
 import { Touch } from 'vuetify/lib/directives/touch'
@@ -33,6 +33,7 @@ import NavToggler from '~/components/layout/navigation/sidenav/Toggler.vue'
 import SideNav from '~/components/layout/navigation/sidenav/SideNav.vue'
 import StartUpMixin from '~/components/utils/StartUpMixin.js'
 import SideNavMixin from '~/components/layout/navigation/sidenav/SideNavMixin.js'
+import TouchHandlerMixin from '~/components/layout/navigation/sidenav/TouchHandlerMixin.js'
 
 // Lazy loaded components
 const Search = () =>
@@ -47,55 +48,14 @@ export default {
 
   directives: { Touch },
 
-  mixins: [StartUpMixin, SideNavMixin],
-
   /**
-   * This is set by the SideNavMixin
-   *
-   * data() {
-   *  return { isDashboard: false }
-   * },
-   *
+   * Warning:
+   * Some methods and variables are set by Mixins
    */
+  mixins: [StartUpMixin, SideNavMixin, TouchHandlerMixin],
 
   computed: {
     ...mapState(['searchData', 'sideNavData', 'userSettings']),
-  },
-
-  methods: {
-    ...mapMutations(['sideNavManager', 'searchManager']),
-
-    touchHandler(direction, event) {
-      const touchThreshold = screen.availWidth * 0.25
-      // console.log(touchThreshold, event)
-
-      switch (direction) {
-        case 'right':
-          if (event.touchstartX > touchThreshold) {
-            return
-          }
-
-          if (this.searchData.isActive && this.isDashboard) {
-            this.searchManager({ mode: 'setSearch', data: false })
-          } else {
-            this.sideNavManager('open')
-          }
-          break
-
-        case 'left':
-          if (event.touchstartX < screen.availWidth - touchThreshold) {
-            return
-          }
-
-          if (!this.sideNavData.isActive && this.isDashboard) {
-            this.searchManager({ mode: 'setSearch', data: true })
-          } else {
-            this.sideNavManager('close')
-          }
-
-          break
-      }
-    },
   },
 
   // Set theme and background color in the body dynamically thanks to the vuex store computed property
