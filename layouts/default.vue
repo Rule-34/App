@@ -26,11 +26,16 @@
 
 <script>
 import { mapMutations, mapState } from 'vuex'
+
 // Third party
 import { Touch } from 'vuetify/lib/directives/touch'
+
 // Components
 import NavToggler from '~/components/layout/navigation/sidenav/Toggler.vue'
 import SideNav from '~/components/layout/navigation/sidenav/SideNav.vue'
+
+import StartUpMixin from '~/components/utils/StartUpMixin.js'
+
 // Lazy loaded components
 const Search = () =>
   import(
@@ -40,12 +45,14 @@ const Search = () =>
 export default {
   // Components
   components: { SideNav, NavToggler, Search },
+
   directives: { Touch },
+
+  mixins: [StartUpMixin],
 
   data() {
     return { isDashboard: false }
   },
-
   computed: {
     ...mapState(['searchData', 'sideNavData', 'userSettings']),
   },
