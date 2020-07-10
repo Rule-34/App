@@ -1,15 +1,15 @@
 <template>
-  <div class="flex relative material-container m-0 rounded-full">
+  <div class="relative flex m-0 rounded-full material-container">
     <!-- Cloud icon -->
     <div for="domain-selector" class="inline-flex items-center pl-2 pr-1">
-      <CloudIcon class="icon text-primary w-4 h-4" />
+      <CloudIcon class="w-4 h-4 icon text-primary" />
     </div>
 
     <!-- Selector -->
     <select
       :value="booruData.active.domain"
       aria-label="Selector that changes the domain where the content is pulled from"
-      class="inline-flex items-center appearance-none outline-none font-light text-primary bg-elevation"
+      class="inline-flex items-center font-light outline-none appearance-none text-primary bg-elevation"
       @change="changeDomain($event.target.value)"
     >
       <!-- Loop for every option -->
@@ -25,7 +25,7 @@
 
     <!-- Drop icon -->
     <div class="inline-flex items-center pl-1 pr-2">
-      <ChevronDownIcon class="icon text-default w-4 h-4" />
+      <ChevronDownIcon class="w-4 h-4 icon text-default" />
     </div>
   </div>
 </template>
@@ -50,10 +50,7 @@ export default {
 
     // Evaluate NSFW and Experimental settings and return boorus depending of the values
     boorus() {
-      return this.evaluateBooruList(
-        this.userSettings.nsfw.value,
-        this.credentials.isPatron
-      )
+      return this.evaluateBooruList(this.userSettings.nsfw.value)
     },
   },
 
@@ -61,16 +58,11 @@ export default {
     ...mapMutations(['booruDataManager', 'pidManager', 'tagManager']),
     ...mapActions(['fetchWithMode']),
 
-    evaluateBooruList(nsfwSetting, isPatron) {
+    evaluateBooruList(nsfwSetting) {
       // If NSFW is enabled return NSFW only boorus and vice-versa
-      let modifiedBooruList = nsfwSetting
+      const modifiedBooruList = nsfwSetting
         ? findBoorusWithValueByKey(true, 'nsfw', this.booruData.boorus)
         : findBoorusWithValueByKey(false, 'nsfw', this.booruData.boorus)
-
-      // If user is Patron return custom boorus
-      modifiedBooruList = isPatron
-        ? findBoorusWithValueByKey(true, 'patronOnly', modifiedBooruList)
-        : modifiedBooruList
 
       return modifiedBooruList
     },
