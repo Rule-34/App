@@ -58,7 +58,6 @@
       title="Thank you for your interest"
       text="It's a pleasure having someone read this wall of text. :')"
       icon="bg-svg-star"
-      @click.native="unlockExperimental()"
     />
 
     <!-- Temporal div TODO: remove -->
@@ -67,48 +66,10 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import ContentContainer from '~/components/utils/ContentContainer.vue'
 
 export default {
   components: { ContentContainer },
-
-  data() {
-    return {
-      clicks: 0,
-    }
-  },
-
-  methods: {
-    ...mapMutations(['credentialsManager', 'booruDataManager', 'pidManager']),
-
-    // Shh it's a secret!
-    unlockExperimental() {
-      if (this.clicks >= 7) {
-        this.clicks = 0
-
-        this.credentialsManager({ mode: 'enable' })
-
-        console.debug('Experimental features enabled!')
-      }
-
-      //
-      else {
-        this.clicks++
-
-        console.debug(this.clicks)
-
-        // Reset to default domain
-        this.booruDataManager('rule34.xxx')
-
-        // Reset Page ID
-        this.pidManager({ operation: 'reset' })
-
-        // Disable features
-        this.credentialsManager({ mode: 'disable' })
-      }
-    },
-  },
 
   head() {
     return {
