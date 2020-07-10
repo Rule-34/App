@@ -8,19 +8,17 @@
   >
     <NavToggler :show-search="isDashboard ? true : false" />
 
-    <!-- Transition for sidenav -->
     <transition name="sidenav">
       <SideNav v-if="sideNavData.isActive" />
     </transition>
 
-    <!-- Transition for Searchbar -->
     <transition name="search">
       <Search v-if="searchData.isActive" />
     </transition>
 
     <!-- Layout content -->
     <!-- Should use VW margin but this is okay -->
-    <nuxt class="mx-auto w-full md:w-2/3 xl:w-1/2" style="padding-top: 1px;" />
+    <nuxt class="w-full mx-auto md:w-2/3 xl:w-1/2" style="padding-top: 1px;" />
   </div>
 </template>
 
@@ -33,8 +31,8 @@ import { Touch } from 'vuetify/lib/directives/touch'
 // Components
 import NavToggler from '~/components/layout/navigation/sidenav/Toggler.vue'
 import SideNav from '~/components/layout/navigation/sidenav/SideNav.vue'
-
 import StartUpMixin from '~/components/utils/StartUpMixin.js'
+import SideNavMixin from '~/components/layout/navigation/sidenav/SideNavMixin.js'
 
 // Lazy loaded components
 const Search = () =>
@@ -43,66 +41,36 @@ const Search = () =>
   )
 
 export default {
-  // Components
+  name: 'DefaultLayout',
+
   components: { SideNav, NavToggler, Search },
 
   directives: { Touch },
 
-  mixins: [StartUpMixin],
+  mixins: [StartUpMixin, SideNavMixin],
 
-  data() {
-    return { isDashboard: false }
-  },
+  /**
+   * This is set by the SideNavMixin
+   *
+   * data() {
+   *  return { isDashboard: false }
+   * },
+   *
+   */
+
   computed: {
     ...mapState(['searchData', 'sideNavData', 'userSettings']),
-  },
-
-  // Watch for route changes
-  watch: {
-    $route() {
-      // console.log('route changed', this.$route)
-
-      // console.log(this.$nuxt.$route.name)
-
-      // Set different layout if we're on index
-      this.routeHandler()
-    },
-  },
-
-  mounted() {
-    // Necessary on mounted for first page load
-    this.routeHandler()
   },
 
   methods: {
     ...mapMutations(['sideNavManager', 'searchManager']),
 
-    // Set different layout depending of the route
-    routeHandler() {
-      if (this.sideNavData.isActive) {
-        this.sideNavManager('close')
-      }
-
-      switch (this.$nuxt.$route.name) {
-        case 'index':
-          this.isDashboard = true
-          break
-
-        default:
-          this.isDashboard = false
-          break
-      }
-    },
-
     touchHandler(direction, event) {
-      // Calculate percentage of the screen to use as touch zone
       const touchThreshold = screen.availWidth * 0.25
-
       // console.log(touchThreshold, event)
 
       switch (direction) {
         case 'right':
-          // Threshold
           if (event.touchstartX > touchThreshold) {
             return
           }
@@ -115,7 +83,6 @@ export default {
           break
 
         case 'left':
-          // Threshold
           if (event.touchstartX < screen.availWidth - touchThreshold) {
             return
           }
@@ -134,7 +101,6 @@ export default {
   // Set theme and background color in the body dynamically thanks to the vuex store computed property
   head() {
     return {
-      // Define template for every page
       titleTemplate: '%s | Rule 34 App',
 
       // Define color theme based on settings
@@ -146,10 +112,6 @@ export default {
     }
   },
 }
-
-// Preload logo
-// const logo = new Image()
-// logo.src = '/icon.png'
 
 // Message to people that open the Devtools
 console.info(
