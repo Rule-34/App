@@ -19,11 +19,6 @@ export default ({ store }) => {
       return {
         booruData: { active: state.booruData.active },
 
-        notificationData: {
-          data: state.notificationData.data,
-          latestTitle: state.notificationData.latestTitle,
-        },
-
         ...SETTINGS_OBJ,
       }
     },
@@ -37,6 +32,20 @@ export default ({ store }) => {
       premium: {
         gumroad: {
           product: { license_key: state.premium.gumroad.product.license_key },
+        },
+      },
+    }),
+  }).plugin(store)
+
+  // Notifications state
+  new VuexPersistence({
+    key: 'notifications',
+
+    reducer: (state) => ({
+      notifications: {
+        // Double because the state and module are named the same
+        notifications: {
+          latestTitle: state.notifications.notifications.latestTitle,
         },
       },
     }),
