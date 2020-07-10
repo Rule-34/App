@@ -170,32 +170,6 @@ export default {
   },
 
   /**
-   *
-   * @param {*} state Default
-   * @param {Object} parameters .operation, .data
-   */
-  notificationManager(state, parameters) {
-    switch (parameters.mode) {
-      // Set count to notification length
-      case 'setLatestTitle':
-        state.notificationData.latestTitle =
-          state.notificationData.data[0].title
-        break
-
-      case 'setData':
-        // Set data
-        state.notificationData.data = parameters.data
-
-        // Set flag so we dont fetch anymore
-        state.notificationData.alreadyFetched = true
-        break
-
-      default:
-        throw new Error('No mode specified')
-    }
-  },
-
-  /**
    * Changes user settings
    * @param {*} state Default
    * @param {Object} parameters Object with settings (.index = name, .value = Boolean)

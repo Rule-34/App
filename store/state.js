@@ -33,14 +33,6 @@ export default () => ({
   },
 
   // These settings are saved to localStorage
-  notificationData: {
-    data: [], // Data fetched from Gist
-
-    latestTitle: '',
-    alreadyFetched: false,
-  },
-
-  // These settings are saved to localStorage
   userSettings: {
     darkTheme: {
       name: 'Dark theme',

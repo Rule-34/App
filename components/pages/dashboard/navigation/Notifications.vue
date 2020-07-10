@@ -1,6 +1,6 @@
 <template>
   <!-- Icon -->
-  <div class="border-util rounded-full shadow bg-elevation relative">
+  <div class="relative rounded-full shadow border-util bg-elevation">
     <!-- Button -->
     <button
       type="button"
@@ -17,15 +17,15 @@
         <g fill="none">
           <!-- Notification bell -->
           <path
-            class="icon fill-current text-default-text-muted"
+            class="fill-current icon text-default-text-muted"
             d="M15 19a3 3 0 11-6 0h6zm3.13-2H5.87C4.838 17 4 16.105 4 15c0-.348.085-.69.246-.992L6.388 10V8C6.388 4.686 8.9 2 12 2s5.611 2.686 5.611 6v2l2.142 4.008c.513.959.201 2.18-.696 2.728a1.778 1.778 0 01-.928.264z"
           />
 
           <!-- Only show if theres a new notification -->
-          <g v-if="newNotification">
+          <g v-if="isThereANewNotification">
             <!-- Bell with a little cut -->
             <path
-              class="icon fill-current text-default-text-muted"
+              class="fill-current icon text-default-text-muted"
               d="M12.338 2.01a6 6 0 005.274 7.977V10l2.141 4.008c.513.959.201 2.18-.696 2.728a1.778 1.778 0 01-.928.264H5.871C4.837 17 4 16.105 4 15c0-.348.085-.69.246-.992L6.388 10V8C6.388 4.686 8.9 2 12 2c.113 0 .226.004.338.01zM15 19a3 3 0 11-6 0h6z"
             />
             <!-- Notification dot -->
@@ -34,7 +34,7 @@
               cy="4.25"
               r="4"
               stroke="hsla(205, 78%, 62%, 0.3)"
-              class="icon fill-current text-primary"
+              class="fill-current icon text-primary"
             />
           </g>
         </g>
@@ -46,7 +46,7 @@
       <aside v-if="isActive" class="notifications--details">
         <!-- Repeat for every notification -->
         <ContentContainer
-          v-for="notification in notificationData.data"
+          v-for="notification in notifications.data"
           :key="notification.title"
           class="m-1"
           :title="notification.title"
@@ -70,9 +70,11 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState, mapGetters } from 'vuex'
+
 // Components
 import ContentContainer from '~/components/utils/ContentContainer.vue'
+
 // JS
 import fireAnalytics from '~/assets/js/analytics'
 
@@ -88,41 +90,31 @@ export default {
   },
 
   computed: {
-    ...mapState(['notificationData']),
-
-    // Returns true if fetched notifications are different than the local notifications by comparing the last title (Or first)
-    newNotification() {
-      return this.notificationData.data.length
-        ? this.notificationData.latestTitle.localeCompare(
-            this.notificationData.data[0].title
-          )
-        : false
-    },
+    ...mapState('notifications', ['notifications']),
+    ...mapGetters('notifications', ['isThereANewNotification']),
   },
 
   async mounted() {
-    // Test if we have already fetched data
-    if (this.notificationData.alreadyFetched) {
-      console.debug('Already fetched notification data, skipping')
+    if (this.notifications.alreadyFetched) {
+      console.debug('Already fetched notification data, skipping...')
       return
     }
 
-    // Fetch notifications, once as its in mounted (Could potentially waste data if visitors arent on Dashboard)
-    await this.fetchWithMode({
-      mode: 'notifications',
-    })
+    await this.fetchNotifications()
+
+    this.setAlreadyFetched(true)
   },
 
   methods: {
-    ...mapMutations(['notificationManager']),
-    ...mapActions(['fetchWithMode']),
+    ...mapMutations('notifications', ['setLatestTitle', 'setAlreadyFetched']),
+    ...mapActions('notifications', ['fetchNotifications']),
 
     toggleNotifications() {
       this.isActive = !this.isActive
 
-      this.notificationManager({ mode: 'setLatestTitle' })
-
       if (this.isActive) {
+        this.setLatestTitle(this.notifications.data[0].title)
+
         fireAnalytics('notifications')
       }
     },
