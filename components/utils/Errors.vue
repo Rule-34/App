@@ -55,11 +55,13 @@ export default {
   },
 
   computed: {
-    ...mapState(['generalData', 'dashBoardData', 'searchData']),
+    ...mapState(['generalData', 'dashBoardData']),
+    ...mapState('navigation', ['search']),
   },
 
   methods: {
-    ...mapMutations(['searchManager', 'tagManager']),
+    ...mapMutations(['tagManager']),
+    ...mapMutations('navigation', ['setSearchActive']),
 
     resetTags() {
       // console.log('Resetted tags')
@@ -68,8 +70,8 @@ export default {
       this.tagManager({ operation: 'reset' })
 
       // Then show page if not active
-      if (!this.searchData.isActive) {
-        this.searchManager({ mode: 'toggleSearch' })
+      if (!this.search.isActive) {
+        this.setSearchActive(true)
       }
     },
   },

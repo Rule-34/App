@@ -2,11 +2,11 @@ import { mapState, mapMutations } from 'vuex'
 
 export default {
   computed: {
-    ...mapState(['searchData']),
+    ...mapState('navigation', ['sideNav', 'search']),
   },
 
   methods: {
-    ...mapMutations(['sideNavManager', 'searchManager']),
+    ...mapMutations('navigation', ['setSideNavActive', 'setSearchActive']),
 
     touchHandler(direction, event) {
       const touchThreshold = screen.availWidth * 0.25
@@ -20,10 +20,10 @@ export default {
             return
           }
 
-          if (this.searchData.isActive && this.isDashboard) {
-            this.searchManager({ mode: 'setSearch', data: false })
+          if (this.search.isActive && this.isDashboard) {
+            this.setSearchActive(false)
           } else {
-            this.sideNavManager('open')
+            this.setSideNavActive(true)
           }
           break
 
@@ -33,10 +33,10 @@ export default {
             return
           }
 
-          if (!this.sideNavData.isActive && this.isDashboard) {
-            this.searchManager({ mode: 'setSearch', data: true })
+          if (!this.sideNav.isActive && this.isDashboard) {
+            this.setSearchActive(true)
           } else {
-            this.sideNavManager('close')
+            this.setSideNavActive(false)
           }
           break
       }

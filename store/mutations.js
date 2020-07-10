@@ -82,28 +82,6 @@ export default {
   },
 
   /**
-   * Handler for Side Nav
-   * @param {*} state Default store
-   * @param {Object} parameters Operation to do (close, open, or nothing to toggle)
-   */
-  sideNavManager(state, operation) {
-    switch (operation) {
-      case 'close':
-        state.sideNavData.isActive = false
-        break
-
-      case 'open':
-        state.sideNavData.isActive = true
-        break
-
-      default:
-        // Toggle
-        state.sideNavData.isActive = !state.sideNavData.isActive
-        break
-    }
-  },
-
-  /**
    *
    * @param {*} state Default
    * @param {String} parameters Error string
@@ -168,19 +146,6 @@ export default {
    */
   searchManager(state, parameters) {
     switch (parameters.mode) {
-      case 'toggleSearch':
-        state.searchData.isActive = !state.searchData.isActive
-        break
-
-      // Set active state
-      case 'setSearch':
-        state.searchData.isActive = parameters.data
-        break
-
-      case 'toggleFilter':
-        state.searchData.isFilterActive = !state.searchData.isFilterActive
-        break
-
       case 'changeData':
         if (parameters.data === undefined) return
 
@@ -236,19 +201,6 @@ export default {
     if (parameters !== undefined) {
       // console.log(parameters);
       state.userSettings[parameters.index].value = parameters.value
-    }
-  },
-
-  credentialsManager(state, parameters) {
-    switch (parameters.mode) {
-      // Patronage
-      case 'enable':
-        state.credentials.isPatron = true
-        break
-
-      case 'disable':
-        state.credentials.isPatron = false
-        break
     }
   },
 }

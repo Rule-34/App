@@ -1,15 +1,9 @@
 <template>
-  <form class="fixed w-full min-h-screen bg-black bg-opacity-25 z-40">
+  <form class="fixed z-40 w-full min-h-screen bg-black bg-opacity-25">
     <!-- Centered container -->
-    <div class="h-screen w-full search-grid">
+    <div class="w-full h-screen search-grid">
       <!-- Separator -->
-      <div
-        @click.self="
-          searchManager({
-            mode: 'toggleSearch',
-          })
-        "
-      />
+      <div @click.self="setSearchActive(false)" />
 
       <!-- Search  -->
       <SearchBar />
@@ -17,34 +11,26 @@
       <!-- Search results -->
       <SearchResults />
 
-      <div
-        @click.self="
-          searchManager({
-            mode: 'toggleSearch',
-          })
-        "
-      />
+      <div @click.self="setSearchActive(false)" />
     </div>
   </form>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 import SearchBar from './SearchBar.vue'
 import SearchResults from './SearchResults.vue'
 
 export default {
   name: 'Search',
+
   components: {
     SearchBar,
     SearchResults,
   },
-  // Get data() from vuex store "searchData"
-  computed: {
-    ...mapState(['searchData']),
-  },
+
   methods: {
-    ...mapMutations(['searchManager']),
+    ...mapMutations('navigation', ['setSearchActive']),
   },
 }
 </script>
