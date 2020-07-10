@@ -8,8 +8,6 @@ export const state = () => ({
   },
 })
 
-export const getters = {}
-
 export const mutations = {
   setSideNavActive(state, value) {
     state.sideNav.isActive = value
@@ -19,5 +17,3 @@ export const mutations = {
     state.search.isActive = value
   },
 }
-
-export const actions = {}
