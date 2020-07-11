@@ -20,7 +20,11 @@ export const state = () => ({
 })
 
 export const getters = {
-  isUserPremium(state, getters, rootState) {
+  hasValidLicenseKey(state) {
+    return state.responseData && state.responseData.success === true
+  },
+
+  isUserPremium(state) {
     return (
       state.responseData &&
       state.responseData.success === true &&

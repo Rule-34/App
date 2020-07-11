@@ -1,12 +1,14 @@
 @@ -0,0 +1,172 @@
 <template>
   <main>
+    <!-- Control pannel -->
+    <ControlPannel
+      v-if="hasValidLicenseKey"
+      class="h-full min-h-screen mx-auto"
+    />
+
     <!-- Log In -->
-    <div
-      v-if="!isUserPremium"
-      class="grid min-h-screen"
-      style="place-items: center;"
-    >
+    <div v-else class="grid min-h-screen" style="place-items: center;">
       <div class="w-full max-w-screen-sm">
         <!-- Log In form -->
         <login />
@@ -18,9 +20,6 @@
         <subscription />
       </div>
     </div>
-
-    <!-- Control pannel -->
-    <ControlPannel v-else class="h-full min-h-screen mx-auto" />
   </main>
 </template>
 
@@ -34,7 +33,7 @@ export default {
   components: { Login, Subscription, ControlPannel },
 
   computed: {
-    ...mapGetters('premium', ['isUserPremium']),
+    ...mapGetters('premium', ['hasValidLicenseKey']),
   },
 
   head() {
