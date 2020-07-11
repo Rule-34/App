@@ -1,7 +1,7 @@
 <template>
   <div :title="description">
-    <div v-if="value !== undefined && !Number.isInteger(value)">
     <!-- If its a number -->
+    <div v-if="setting && Number.isInteger(setting.defaultValue)">
       <div class="inline-block align-middle form-switch">
         <input
           :id="settingIndex"
