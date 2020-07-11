@@ -1,5 +1,5 @@
 <template>
-  <div :title="description">
+  <div :title="setting.description">
     <!-- If its a number -->
     <div v-if="setting && Number.isInteger(setting.defaultValue)">
       <div class="inline-block align-middle form-switch">
