@@ -10,7 +10,13 @@ export default {
    ** Headers of the page
    */
   head: {
-    title: 'Rule 34 App',
+    titleTemplate: (titleChunk) =>
+      titleChunk ? `${titleChunk} | Rule 34 App` : 'Rule 34 App',
+
+    htmlAttrs: {
+      lang: 'en',
+    },
+
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -25,10 +31,10 @@ export default {
         content: '$ilp.uphold.com/FaUNRmQqekxh',
       },
     ],
-    link: [
-      // Font
-      { rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' },
-    ],
+
+    link: [{ rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' }],
+
+    noscript: [{ innerHTML: 'This website requires JavaScript' }],
   },
 
   /*
