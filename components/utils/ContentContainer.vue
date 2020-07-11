@@ -1,9 +1,6 @@
 <template>
   <!-- Loop for every info container -->
-  <article
-    class="material-container"
-    :class="{ zoom: userSettings.zoom.value }"
-  >
+  <article class="material-container" :class="{ zoom: settings.zoom.value }">
     <!-- If separator -->
     <template v-if="separator">
       <div class="p-3 bg-gradient-blue-lilac">
@@ -31,7 +28,7 @@
         <h1 class="text-lg font-bold tracking-wide" v-text="title" />
 
         <!-- Text -->
-        <p v-if="text" class="text-sm mb-1 whitespace-pre-line" v-text="text" />
+        <p v-if="text" class="mb-1 text-sm whitespace-pre-line" v-text="text" />
 
         <!-- We can insert extra info here -->
         <slot class="mb-1" />
@@ -40,7 +37,7 @@
         <picture v-if="img">
           <source :srcset="img + '.webp'" type="image/webp" />
           <img
-            :loading="userSettings.lazyLoading.value ? 'lazy' : 'auto'"
+            :loading="settings.lazyLoading.value ? 'lazy' : 'auto'"
             :src="img + '.png'"
             :alt="title + ' Example'"
             class="mx-auto mt-2"
@@ -86,7 +83,7 @@ export default {
     img: { type: String, required: false, default: undefined },
   },
 
-  computed: mapState(['userSettings']),
+  computed: mapState('user', ['settings']),
 }
 </script>
 

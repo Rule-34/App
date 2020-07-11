@@ -1,7 +1,7 @@
 <template>
   <main class="flex flex-col h-screen p-3">
     <div
-      class="material-container w-full md:w-2/3 xl:w-1/2 m-auto p-5 shadow-xl"
+      class="w-full p-5 m-auto shadow-xl material-container md:w-2/3 xl:w-1/2"
     >
       <div class="flex flex-wrap">
         <div class="w-2/5 m-auto text-center text-default-text">
@@ -9,21 +9,20 @@
 
           <button
             title="Use me when something is not working!"
-            class="text-xs color-util border-util rounded-full px-2 align-middle shadow"
-            @click="removeLocalStorage"
+            class="px-2 text-xs align-middle rounded-full shadow color-util border-util"
+            @click="removeLocalStorage()"
           >
             Reset
           </button>
         </div>
-        <div class="w-3/5 m-auto flex">
+
+        <div class="flex w-3/5 m-auto">
           <div class="mx-auto">
             <SettingSwitch
-              v-for="(setting, index) in userSettings"
-              :key="setting.name"
-              :value="setting.value"
-              :text="setting.name"
-              :switch-id="index"
-              :description="setting.description"
+              v-for="(setting, index) in settings"
+              :key="index"
+              :setting-index="index"
+              :setting="setting"
               class="my-1"
             />
           </div>
@@ -39,26 +38,23 @@
 <script>
 import { mapState } from 'vuex'
 import SettingSwitch from '~/components/pages/settings/Switch.vue'
+
 // JS
 import fireAnalytics from '~/assets/js/analytics'
 
 export default {
   components: { SettingSwitch },
 
-  computed: mapState(['userSettings']),
+  computed: mapState('user', ['settings']),
 
   beforeDestroy() {
-    // Fire analytics when exiting settings
-    fireAnalytics('settings', this.$store.state)
+    fireAnalytics('settings', this.settings)
   },
 
   methods: {
-    // Remove the localStorage object and reload the window
     removeLocalStorage() {
-      // Remove localstorage by key
-      localStorage.removeItem('state')
+      localStorage.removeItem('user')
 
-      // And reload page to see changes
       location.reload()
     },
   },

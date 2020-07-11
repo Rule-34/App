@@ -4,10 +4,10 @@
     <img
       v-if="post.media_type === 'image'"
       :src="mediaResolutionChooser().url"
-      :loading="userSettings.lazyLoading.value ? 'lazy' : 'auto'"
+      :loading="settings.lazyLoading.value ? 'lazy' : 'auto'"
       :class="{
-        'post-animation opacity-0': userSettings.animations.value,
-        'opacity-100': userSettings.animations.value && mediaLoaded,
+        'post-animation opacity-0': settings.animations.value,
+        'opacity-100': settings.animations.value && mediaLoaded,
       }"
       :alt="'Image ' + post.id"
       class="w-full h-auto"
@@ -20,7 +20,7 @@
     <!-- if its a Video -->
     <video
       v-else-if="post.media_type === 'video'"
-      :controls="userSettings.videoControls.value"
+      :controls="settings.videoControls.value"
       :alt="'Video ' + post.id"
       class="w-full h-auto"
       preload="none"
@@ -58,7 +58,8 @@ export default {
   },
 
   computed: {
-    ...mapState(['userSettings', 'generalData']),
+    ...mapState(['generalData']),
+    ...mapState('user', ['settings']),
   },
 
   methods: {
@@ -88,7 +89,7 @@ export default {
       }
 
       // If we have not reached the limit
-      else if (this.retryCount < this.userSettings.imgRetry.value) {
+      else if (this.retryCount < this.settings.imgRetry.value) {
         const originalImgSrc = event.target.src
 
         event.target.src = ''
@@ -118,10 +119,7 @@ export default {
 
     mediaResolutionChooser() {
       // Return full image if its setting is enabled OR if low resolution file doesnt exist
-      if (
-        this.userSettings.fullSizeImages.value ||
-        !this.post.low_res_file.url
-      ) {
+      if (this.settings.fullSizeImages.value || !this.post.low_res_file.url) {
         return this.post.high_res_file
       }
 

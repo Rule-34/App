@@ -1,49 +1,57 @@
 <template>
   <div :title="description">
-    <!-- If its a boolean -->
     <div v-if="value !== undefined && !Number.isInteger(value)">
-      <div class="form-switch inline-block align-middle">
-        <!-- When input changes commit reverse value so it toggles between true and false -->
+    <!-- If its a number -->
+      <div class="inline-block align-middle form-switch">
         <input
-          :id="switchId"
-          v-model="isToggled"
-          :name="switchId"
+          :id="settingIndex"
+          :name="setting.name"
+          :value="setting.value"
+          type="number"
+          min="0"
+          max="100"
+          class="form-switch-numeric color-util border-util"
           @change="
-            userSettingsManager({
-              index: switchId,
-              value: !value
+            setUserSettingValue({
+              setting: settingIndex,
+              value: parseInt($event.target.value, 10),
             })
           "
+        />
+      </div>
+      <label
+        :for="settingIndex"
+        class="text-xs text-default-text"
+        v-text="setting.name"
+      />
+    </div>
+
+    <!-- If its a boolean -->
+    <div v-else>
+      <div class="inline-block align-middle form-switch">
+        <input
+          :id="settingIndex"
+          :name="setting.name"
+          :checked="setting.value"
           type="checkbox"
           class="form-switch-checkbox"
+          @change="
+            setUserSettingValue({
+              setting: settingIndex,
+              value: $event.target.checked,
+            })
+          "
         />
         <label
-          :for="switchId"
+          :for="settingIndex"
           class="form-switch-label color-util border-util"
         />
       </div>
-      <label :for="switchId" v-text="text" class="text-xs text-default-text" />
-    </div>
-
-    <!-- If its a number -->
-    <div v-else>
-      <div class="form-switch inline-block align-middle">
-        <input
-          :id="switchId"
-          v-model.number="innerValue"
-          :name="switchId"
-          @change="
-            userSettingsManager({
-              index: switchId,
-              value: innerValue
-            })
-          "
-          type="number"
-          min="0"
-          class="form-switch-numeric color-util border-util"
-        />
-      </div>
-      <label :for="switchId" v-text="text" class="text-xs text-default-text" />
+      <label
+        :for="settingIndex"
+        class="text-xs text-default-text"
+        v-text="setting.name"
+      />
     </div>
   </div>
 </template>
@@ -53,27 +61,21 @@ import { mapMutations } from 'vuex'
 
 export default {
   name: 'SettingSwitch',
-  // Define all props needed for this component
+
   props: {
-    switchId: { type: String, default: undefined, required: true },
-    value: { type: [Boolean, Number], default: undefined, required: false },
-    text: { type: String, default: undefined, required: true },
-    description: { type: String, default: undefined, required: false }
+    settingIndex: { type: String, default: undefined, required: true }, // The string selector of the object of objects
+    setting: {
+      type: Object,
+      default() {
+        return undefined
+      },
+      required: true,
+    },
   },
-  // Basic data function to keep track of local values
-  data() {
-    return {
-      isToggled: undefined,
-      innerValue: undefined
-    }
-  },
-  mounted() {
-    this.isToggled = this.innerValue = this.value
-  },
-  // Map mutation for easier use
+
   methods: {
-    ...mapMutations(['userSettingsManager'])
-  }
+    ...mapMutations('user', ['setUserSettingValue']),
+  },
 }
 </script>
 
