@@ -13,7 +13,7 @@
         <div
           class="w-1/3 color-util"
           title="Load previous page"
-          @click="getPrevPage"
+          @click="getPrevPage()"
         >
           <button type="button">
             <ArrowLeftIcon class="inline w-4 h-4 icon" />
@@ -25,7 +25,7 @@
         <div
           class="w-1/3 color-util"
           title="Load specific page"
-          @click="getSpecificPage"
+          @click="getSpecificPage()"
         >
           <button type="button" v-text="dashBoardData.pid" />
         </div>
@@ -34,7 +34,7 @@
         <div
           class="w-1/3 color-util"
           title="Load next page"
-          @click="getNextPage"
+          @click="getNextPage()"
         >
           <button type="button">
             Next page
@@ -66,6 +66,9 @@ import throttle from 'lodash/throttle'
 // Icons
 import { ArrowLeftIcon, ArrowRightIcon } from 'vue-feather-icons'
 
+// Components
+import KeyboardNavigationMixin from '~/components/pages/dashboard/navigation/page/KeyboardNavigationMixin.js'
+
 // JS
 import { scrollToTop } from '~/assets/js/scrollUtils.js'
 
@@ -81,23 +84,11 @@ export default {
     Intersect,
   },
 
+  mixins: [KeyboardNavigationMixin],
+
   computed: {
     ...mapState(['dashBoardData']),
     ...mapState('user', ['settings']),
-  },
-
-  mounted() {
-    // Navigation with keyboard
-    if (this.settings.keyboardControls.value) {
-      document.addEventListener('keyup', this.keyboardPageHandler)
-    }
-  },
-
-  destroyed() {
-    // Navigation with keyboard
-    if (this.settings.keyboardControls.value) {
-      document.removeEventListener('keyup', this.keyboardPageHandler)
-    }
   },
 
   methods: {
@@ -148,22 +139,6 @@ export default {
 
       await this.fetchWithMode({ mode: 'posts', returnMode: 'concat' })
     }, 5000),
-
-    keyboardPageHandler() {
-      switch (event.keyCode) {
-        case 39:
-          this.getNextPage()
-
-          console.debug('Loading next page')
-          break
-
-        case 37:
-          this.getPrevPage()
-
-          console.debug('Loading prev page')
-          break
-      }
-    },
   },
 }
 </script>
