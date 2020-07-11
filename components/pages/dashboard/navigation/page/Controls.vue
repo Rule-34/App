@@ -2,12 +2,12 @@
   <div>
     <!-- Normal controls -->
     <div
-      v-if="!userSettings.infiniteLoad.value"
-      :class="{ 'hover-controls-container': userSettings.hoverControls.value }"
+      v-if="!settings.infiniteLoad.value"
+      :class="{ 'hover-controls-container': settings.hoverControls.value }"
     >
       <div
-        :class="{ 'hover-controls': userSettings.hoverControls.value }"
-        class="material-container flex text-center p-2"
+        :class="{ 'hover-controls': settings.hoverControls.value }"
+        class="flex p-2 text-center material-container"
       >
         <!-- Get previous page -->
         <div
@@ -16,7 +16,7 @@
           @click="getPrevPage"
         >
           <button type="button">
-            <ArrowLeftIcon class="icon w-4 h-4 inline" />
+            <ArrowLeftIcon class="inline w-4 h-4 icon" />
             Prev page
           </button>
         </div>
@@ -38,7 +38,7 @@
         >
           <button type="button">
             Next page
-            <ArrowRightIcon class="icon w-4 h-4 inline" />
+            <ArrowRightIcon class="inline w-4 h-4 icon" />
           </button>
         </div>
       </div>
@@ -46,13 +46,13 @@
 
     <!-- Infinite loading -->
     <div v-else v-intersect.quiet="InfiniteLoadHandler" class="mx-auto">
-      <p class="text-center text-default-text pb-2">
+      <p class="pb-2 text-center text-default-text">
         Loading more posts...
       </p>
     </div>
 
     <!-- Space below all posts -->
-    <div v-if="userSettings.hoverControls.value" class="mb-12">&nbsp;</div>
+    <div v-if="settings.hoverControls.value" class="mb-12">&nbsp;</div>
   </div>
 </template>
 
@@ -82,19 +82,20 @@ export default {
   },
 
   computed: {
-    ...mapState(['dashBoardData', 'userSettings']),
+    ...mapState(['dashBoardData']),
+    ...mapState('user', ['settings']),
   },
 
   mounted() {
     // Navigation with keyboard
-    if (this.userSettings.keyboardControls.value) {
+    if (this.settings.keyboardControls.value) {
       document.addEventListener('keyup', this.keyboardPageHandler)
     }
   },
 
   destroyed() {
     // Navigation with keyboard
-    if (this.userSettings.keyboardControls.value) {
+    if (this.settings.keyboardControls.value) {
       document.removeEventListener('keyup', this.keyboardPageHandler)
     }
   },
@@ -107,7 +108,7 @@ export default {
     async getNextPage() {
       this.pidManager({ operation: 'add' })
 
-      if (!this.userSettings.infiniteLoad.value) scrollToTop()
+      if (!this.settings.infiniteLoad.value) scrollToTop()
 
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
     },
@@ -116,7 +117,7 @@ export default {
     async getPrevPage() {
       this.pidManager({ operation: 'subtract' })
 
-      if (!this.userSettings.infiniteLoad.value) scrollToTop()
+      if (!this.settings.infiniteLoad.value) scrollToTop()
 
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
     },
@@ -138,7 +139,7 @@ export default {
 
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
 
-      if (!this.userSettings.infiniteLoad.value) scrollToTop()
+      if (!this.settings.infiniteLoad.value) scrollToTop()
     },
 
     InfiniteLoadHandler: throttle(async function () {

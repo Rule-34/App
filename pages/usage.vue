@@ -42,7 +42,7 @@
     <!-- Recursion for every setting -->
 
     <ContentContainer
-      v-for="setting in userSettings"
+      v-for="setting in settings"
       :key="setting.name"
       :title="setting.name"
       :text="setting.description"
@@ -60,7 +60,7 @@ export default {
   components: { ContentContainer },
 
   computed: {
-    ...mapState(['userSettings']),
+    ...mapState('user', ['settings']),
   },
 
   head() {

@@ -1,11 +1,11 @@
 <template>
   <main class="flex h-screen p-3">
     <a
-      :class="{ zoom: userSettings.zoom.value }"
+      :class="{ zoom: settings.zoom.value }"
       href="https://akbal.dev/"
       target="_blank"
       rel="noopener"
-      class="material-container bg-elevation m-auto p-5 shadow-md"
+      class="p-5 m-auto shadow-md material-container bg-elevation"
     >
       <div>
         <picture>
@@ -20,7 +20,7 @@
           />
         </picture>
         <h1
-          class="material-container rounded-full w-max-content bg-background mx-auto shadow-md mb-1 py-1 px-3"
+          class="px-3 py-1 mx-auto mb-1 rounded-full shadow-md material-container w-max-content bg-background"
         >
           Alejandro Akbal
         </h1>
@@ -37,7 +37,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  computed: mapState(['userSettings']),
+  computed: mapState('user', ['settings']),
 
   head() {
     return {

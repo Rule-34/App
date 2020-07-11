@@ -5,21 +5,29 @@ export default ({ store }) => {
   new VuexPersistence({
     key: 'state',
 
+    reducer: (state) => ({
+      booruData: { active: state.booruData.active },
+    }),
+  }).plugin(store)
+
+  // User state
+  new VuexPersistence({
+    key: 'user',
+
     reducer: (state) => {
-      const SETTINGS_OBJ = { userSettings: {} }
+      const SETTINGS_OBJ = {}
 
       // Recreate every setting's value path to save them to localStorage (this way we dont save other data like titles, defaultValue, etc.)
-      Object.keys(state.userSettings).forEach((key) => {
-        SETTINGS_OBJ.userSettings[key] = {
-          value: state.userSettings[key].value,
+      Object.keys(state.user.settings).forEach((key) => {
+        SETTINGS_OBJ[key] = {
+          value: state.user.settings[key].value,
         }
       })
 
-      // Recreate the part of the store that we want to save
       return {
-        booruData: { active: state.booruData.active },
-
-        ...SETTINGS_OBJ,
+        user: {
+          settings: SETTINGS_OBJ,
+        },
       }
     },
   }).plugin(store)

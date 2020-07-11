@@ -2,8 +2,8 @@
   <!-- Makes element zoomable if setting is enabled -->
   <figure
     v-if="post"
-    :class="{ zoom: userSettings.zoom.value }"
-    class="material-container text-default-text text-center"
+    :class="{ zoom: settings.zoom.value }"
+    class="text-center material-container text-default-text"
   >
     <!-- Media -->
     <post-media :post="post" @click.native="isActive = !isActive" />
@@ -47,7 +47,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['userSettings']),
+    ...mapState('user', ['settings']),
   },
 }
 </script>

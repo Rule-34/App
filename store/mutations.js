@@ -168,17 +168,4 @@ export default {
         throw new Error('No mode specified')
     }
   },
-
-  /**
-   * Changes user settings
-   * @param {*} state Default
-   * @param {Object} parameters Object with settings (.index = name, .value = Boolean)
-   */
-  userSettingsManager(state, parameters) {
-    // Change value
-    if (parameters !== undefined) {
-      // console.log(parameters);
-      state.userSettings[parameters.index].value = parameters.value
-    }
-  },
 }

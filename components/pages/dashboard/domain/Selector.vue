@@ -46,11 +46,12 @@ export default {
   components: { ChevronDownIcon, CloudIcon },
 
   computed: {
-    ...mapState(['booruData', 'userSettings', 'credentials']),
+    ...mapState(['booruData', 'credentials']),
+    ...mapState('user', ['settings']),
 
     // Evaluate NSFW and Experimental settings and return boorus depending of the values
     boorus() {
-      return this.evaluateBooruList(this.userSettings.nsfw.value)
+      return this.evaluateBooruList(this.settings.nsfw.value)
     },
   },
 

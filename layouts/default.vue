@@ -56,7 +56,7 @@ export default {
 
   computed: {
     ...mapState('navigation', ['sideNav', 'search']),
-    ...mapState(['userSettings']),
+    ...mapState('user', ['settings']),
   },
 
   // Set theme and background color in the body dynamically thanks to the vuex store computed property
@@ -66,7 +66,7 @@ export default {
 
       // Define color theme based on settings
       bodyAttrs: {
-        class: this.userSettings.darkTheme.value
+        class: this.settings.darkTheme.value
           ? 'dark bg-background'
           : 'light bg-background',
       },
