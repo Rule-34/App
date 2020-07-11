@@ -62,8 +62,6 @@ export default {
   // Set theme and background color in the body dynamically thanks to the vuex store computed property
   head() {
     return {
-      titleTemplate: '%s | Rule 34 App',
-
       // Define color theme based on settings
       bodyAttrs: {
         class: this.settings.darkTheme.value
