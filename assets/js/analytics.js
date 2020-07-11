@@ -28,19 +28,16 @@ function domainTracking(state) {
 
 function settingsTracking(state) {
   // Compare default settings to user settings to see if theres a difference
-  const difference = Object.keys(state.userSettings).filter(
-    (key) =>
-      state.userSettings[key].value !== state.userSettings[key].defaultValue
+  const difference = Object.keys(state).filter(
+    (key) => state[key].value !== state[key].defaultValue
   )
 
-  // If theres no difference then reject
-  if (!difference.length) {
+  if (!difference) {
     console.debug('No setting difference')
     return
   }
 
-  // When we know theres a difference, track each difference
-  Object.keys(difference).forEach(function (key, index) {
+  Object.keys(difference).forEach((key, index) => {
     // console.log(key, difference[key])
 
     SendTimed(
