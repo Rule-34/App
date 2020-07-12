@@ -82,8 +82,7 @@ export default {
       // And finally load the posts with everything to default
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
 
-      // Send analytics
-      fireAnalytics('domain', this.$store.state)
+      fireAnalytics('domain', { domain: this.getActiveBooru.domain })
     },
   },
 }

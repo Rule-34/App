@@ -15,13 +15,13 @@ function trackEvent({ category, action, name, value }) {
   window._paq.push(['trackEvent', category, action, name, value])
 }
 
-function domainTracking(state) {
+function domainTracking(domain) {
   SendTimed(
     0,
     trackEvent({
       category: 'Domains',
       action: 'changed',
-      name: state.booruData.active.domain,
+      name: domain,
     })
   )
 }
@@ -62,8 +62,7 @@ function notificationsTracking() {
 }
 
 /* -------- Analytics -------- */
-export default function fireAnalytics(mode, state) {
-  // console.log('Analytics fired with something:', mode, state)
+export default function fireAnalytics(mode, { state, domain } = {}) {
   let result
 
   switch (mode) {

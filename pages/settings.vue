@@ -48,7 +48,7 @@ export default {
   computed: mapState('user', ['settings']),
 
   beforeDestroy() {
-    fireAnalytics('settings', this.settings)
+    fireAnalytics('settings', { state: this.settings })
   },
 
   methods: {
