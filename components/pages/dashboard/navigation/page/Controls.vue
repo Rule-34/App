@@ -45,7 +45,12 @@
     </div>
 
     <!-- Infinite loading -->
-    <div v-else v-intersect.quiet="InfiniteLoadHandler" class="mx-auto">
+    <div
+      v-else
+      v-intersect.quiet="InfiniteLoadHandler"
+      class="mx-auto"
+      @click="InfiniteLoadHandler()"
+    >
       <p class="pb-2 text-center text-default-text">
         Loading more posts...
       </p>
