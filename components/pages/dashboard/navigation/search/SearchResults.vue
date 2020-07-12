@@ -1,10 +1,9 @@
 <template>
   <div
-    class="material-container flex flex-col my-auto min-h-full max-h-full md:min-h-2/5 md:max-h-2/5"
+    class="flex flex-col max-h-full min-h-full my-auto material-container md:min-h-2/5 md:max-h-2/5"
   >
-    <!-- Content -->
     <div
-      class="flex-1 flex flex-col p-2 pb-0 max-h-full min-h-full overflow-y-hidden"
+      class="flex flex-col flex-1 max-h-full min-h-full p-2 pb-0 overflow-y-hidden"
     >
       <!-- If theres errors -->
       <Errors />
@@ -87,7 +86,6 @@ export default {
 
   components: { Errors },
 
-  // Get data() from vuex store "searchData"
   computed: {
     ...mapState(['searchData', 'generalData']),
   },
@@ -106,9 +104,7 @@ export default {
       })
     },
 
-    // Add tag to actives
     addTagToActiveTags(tagName) {
-      // If filtering out tags is active
       if (this.searchData.isFilterActive) {
         this.tagManager({
           operation: 'add',
@@ -127,16 +123,13 @@ export default {
     },
 
     async dispatchGetAddedTags() {
-      // Set PID to 0 since we're searching for new tags
       await this.pidManager({ operation: 'reset' })
 
-      // Hide the search bar
       this.setSearchActive(false)
       await this.setSearchActive(false)
 
       scrollToTop()
 
-      // Search for the tags
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
     },
   },

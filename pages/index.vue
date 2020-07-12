@@ -1,7 +1,7 @@
 <template>
   <main>
     <!-- Menu -->
-    <div class="m-5 flex flex-row justify-between">
+    <div class="flex flex-row justify-between m-5">
       <DomainSelector class="my-auto" />
 
       <Notifications />

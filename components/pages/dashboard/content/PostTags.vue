@@ -1,10 +1,9 @@
 <template>
-  <!-- Tags -->
   <div v-if="tags.length" class="w-full overflow-hidden">
     <TransitionCollapse>
       <div v-if="isActive">
         <!-- Workaround for this not jumping is having a div before -->
-        <div class="tag-container min-w-full">
+        <div class="min-w-full tag-container">
           <button
             v-for="tag in tags"
             :key="tag"

@@ -1,18 +1,14 @@
 <template>
-  <!-- Makes element zoomable if setting is enabled -->
   <figure
     v-if="post"
     :class="{ zoom: settings.zoom.value }"
     class="text-center material-container text-default-text"
   >
-    <!-- Media -->
     <post-media :post="post" @click.native="isActive = !isActive" />
 
-    <!-- Tags -->
     <figcaption class="flex flex-wrap overflow-hidden text-sm">
       <post-tags :tags="post.tags" :is-active="isActive" />
 
-      <!-- Source -->
       <post-source :source="post.source" />
     </figcaption>
   </figure>
@@ -20,6 +16,7 @@
 
 <script>
 import { mapState } from 'vuex'
+
 // Components
 import PostMedia from './PostMedia.vue'
 import PostTags from './PostTags.vue'
@@ -41,7 +38,6 @@ export default {
 
   data() {
     return {
-      // Internal toggle for showing tags
       isActive: false,
     }
   },

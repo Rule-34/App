@@ -1,14 +1,11 @@
 <template>
   <form class="fixed z-40 w-full min-h-screen bg-black bg-opacity-25">
-    <!-- Centered container -->
     <div class="w-full h-screen search-grid">
       <!-- Separator -->
       <div @click.self="setSearchActive(false)" />
 
-      <!-- Search  -->
       <SearchBar />
 
-      <!-- Search results -->
       <SearchResults />
 
       <div @click.self="setSearchActive(false)" />
@@ -18,6 +15,8 @@
 
 <script>
 import { mapMutations } from 'vuex'
+
+// Components
 import SearchBar from './SearchBar.vue'
 import SearchResults from './SearchResults.vue'
 
