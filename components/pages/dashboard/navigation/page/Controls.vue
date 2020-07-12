@@ -131,7 +131,7 @@ export default {
       console.debug('Loading more posts')
       this.pidManager({ operation: 'add' })
 
-      this.fetchPosts({ mode: 'concat' })
+      this.fetchPosts('concat')
     }, 5000),
   },
 }

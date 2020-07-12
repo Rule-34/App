@@ -98,7 +98,7 @@ export const actions = {
     commit('setActiveBooru', booruIndex)
   },
 
-  postsManager({ commit }, { operation, value }) {
+  postsManager({ state, commit }, { operation, value }) {
     switch (operation) {
       case 'set':
         commit('setPostsData', value)
@@ -245,8 +245,11 @@ export const actions = {
       { root: true }
     )
 
-    if (mode === 'concat') commit('concatPostsData', response)
-    else commit('setPostsData', response)
+    if (mode === 'concat') {
+      dispatch('postsManager', { operation: 'concat', value: response })
+    } else {
+      dispatch('postsManager', { operation: 'set', value: response })
+    }
   },
 
   async fetchSearchTag({ dispatch, commit }, tag) {
