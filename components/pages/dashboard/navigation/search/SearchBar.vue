@@ -17,12 +17,13 @@
     />
 
     <div class="flex">
-      <button type="button" title="Premade filter" @click="addPremadeTags()">
-        <!-- Premade filter -->
+      <!-- Premade filter -->
+      <!-- TODO: Remake functionality -->
+      <!-- <button type="button" title="Premade filter" @click="addPremadeTags()">
         <GitlabIcon
-          class="icon w-6 h-6 hover:text-default-text-muted transition--color"
+          class="w-6 h-6 icon hover:text-default-text-muted transition--color"
         />
-      </button>
+      </button> -->
 
       <!-- Reset tags -->
       <button
