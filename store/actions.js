@@ -98,6 +98,9 @@ export default {
 
       loadingAnimationHandler('finish')
 
+  loadingAnimationHandler(_, mode) {
+    if (!window.$nuxt.$root.$loading.start) {
+      console.debug('Skipping animation until everything is loaded')
       return
     }
 
@@ -128,9 +131,14 @@ export default {
         if (!response.ok) {
           throw new Error(`Request rejected with status ${response.status}`)
         }
+    switch (mode) {
+      case 'start':
+        console.debug('Starting loading animation')
 
         return response.json()
       })
+        window.$nuxt.$root.$loading.start()
+        break
 
       // Catch errors and commit to errorManager
       .catch((error) => {
@@ -139,10 +147,17 @@ export default {
           operation: 'set',
           data: error,
         })
+      case 'finish':
+        console.debug('Stopping loading animation')
 
         return false
       })
+        window.$nuxt.$root.$loading.finish()
+        break
 
     return data
+      default:
+        throw new Error('No mode specified')
+    }
   },
 }
