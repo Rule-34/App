@@ -59,7 +59,6 @@ export default {
     ...mapState('user', ['settings']),
   },
 
-  // Set theme and background color in the body dynamically thanks to the vuex store computed property
   head() {
     return {
       // Define color theme based on settings
@@ -72,7 +71,6 @@ export default {
   },
 }
 
-// Message to people that open the Devtools
 console.info(
   '%cWe ❤︎ open source!',
   'font-size:32px;font-weight:bold;letter-spacing:0.02em;color:hsl(205, 78%, 62%);background-color:white;padding:8px 16px;'

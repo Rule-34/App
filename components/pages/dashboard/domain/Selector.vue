@@ -36,7 +36,6 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 // Third party
 import { ChevronDownIcon, CloudIcon } from 'vue-feather-icons'
 
-// Components
 import { findBoorusWithValueByKey } from '~/assets/lib/rule-34-shared-resources/util/BooruUtils.js'
 
 import fireAnalytics from '~/assets/js/analytics'
@@ -49,7 +48,6 @@ export default {
     ...mapState(['booruData', 'credentials']),
     ...mapState('user', ['settings']),
 
-    // Evaluate NSFW and Experimental settings and return boorus depending of the values
     boorus() {
       return this.evaluateBooruList(this.settings.nsfw.value)
     },
@@ -60,7 +58,6 @@ export default {
     ...mapActions(['fetchWithMode']),
 
     evaluateBooruList(nsfwSetting) {
-      // If NSFW is enabled return NSFW only boorus and vice-versa
       const modifiedBooruList = nsfwSetting
         ? findBoorusWithValueByKey(true, 'nsfw', this.booruData.boorus)
         : findBoorusWithValueByKey(false, 'nsfw', this.booruData.boorus)

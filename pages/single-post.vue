@@ -21,7 +21,7 @@
       <Post :post="dashBoardData.data[0]" />
 
       <!-- Call to action -->
-      <div class="text-center text-default-text m-5">
+      <div class="m-5 text-center text-default-text">
         <h1>
           If this is your first time here, please enjoy the rest of the Rule 34
           App
@@ -29,7 +29,7 @@
 
         <nuxt-link to="/">
           <button
-            class="color-util border-util bg-elevation rounded-full py-2 px-4 mt-3"
+            class="px-4 py-2 mt-3 rounded-full color-util border-util bg-elevation"
           >
             Go to Dashboard
           </button>

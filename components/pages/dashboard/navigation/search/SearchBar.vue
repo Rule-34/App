@@ -101,7 +101,6 @@ export default {
           tag: this.searchQuery,
         })
       } else {
-        // Remove search data cause search limit is 3 characters
         this.searchManager({
           mode: 'reset',
         })
@@ -115,7 +114,6 @@ export default {
     },
 
     async addPremadeTags() {
-      // Populate filterData data and reuse later
       if (!this.searchData.premadeFilterData.length) {
         await this.fetchWithMode({
           mode: 'filter',
