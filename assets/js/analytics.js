@@ -51,13 +51,24 @@ function settingsTracking(state) {
   })
 }
 
+function notificationsTracking() {
+  SendTimed(
+    0,
+    trackEvent({
+      category: 'Notifications',
+      action: 'opened',
+    })
+  )
+}
+
 /* -------- Analytics -------- */
 export default function fireAnalytics(mode, state) {
   // console.log('Analytics fired with something:', mode, state)
   let result
+
   switch (mode) {
     case 'domain':
-      result = domainTracking(state)
+      result = domainTracking(domain)
       break
 
     case 'settings':
@@ -65,13 +76,7 @@ export default function fireAnalytics(mode, state) {
       break
 
     case 'notifications':
-      result = SendTimed(
-        0,
-        trackEvent({
-          category: 'Notifications',
-          action: 'opened',
-        })
-      )
+      result = notificationsTracking()
       break
 
     default:
