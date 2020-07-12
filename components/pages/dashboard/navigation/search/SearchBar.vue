@@ -1,28 +1,21 @@
 <template>
   <!-- Search bar -->
-  <div class="flex material-container bg-background p-2 my-auto">
+  <div class="flex p-2 my-auto material-container bg-background">
     <!-- Search Icon -->
-    <SearchIcon class="icon text-default w-6 h-6" />
+    <SearchIcon class="w-6 h-6 icon text-default" />
 
     <!-- Input form -->
     <!-- Overflow Hidden is very important -->
     <!-- Input because v-model/:value doesnt work on mobile -->
     <input
-      class="flex-1 text-default-text font-light bg-background mx-2 overflow-hidden outline-none"
+      class="flex-1 mx-2 overflow-hidden font-light outline-none text-default-text bg-background"
       type="search"
       name="tags"
       placeholder="Search: e.g. dragon"
       @input="replaceInput($event)"
-      @keypress.enter.prevent="
-        // Add tag directly to the store
-        tagManager({
-          operation: 'add',
-          tag: {
-            name: $event.target.value,
-          },
-        })
-      "
+      @keypress.enter.prevent="addSearchedTagDirectly($event.target.value)"
     />
+
     <div class="flex">
       <button type="button" title="Premade filter" @click="addPremadeTags()">
         <!-- Premade filter -->
@@ -36,18 +29,22 @@
         class="mx-2"
         type="button"
         title="Reset tags"
-        @click="resetTags()"
+        @click="resetAddedTags()"
       >
         <TrashIcon
-          class="icon w-6 h-6 hover:text-default-text-muted transition--color"
+          class="w-6 h-6 icon hover:text-default-text-muted transition--color"
         />
       </button>
 
       <!-- Filter content -->
-      <button type="button" title="Filter out content" @click="toggleFilter()">
+      <button
+        type="button"
+        title="Filter out content"
+        @click="toggleBlacklistFilter()"
+      >
         <FilterIcon
-          :class="{ 'text-red-400': searchData.isFilterActive }"
-          class="icon w-6 h-6 transition--color"
+          :class="{ 'text-red-400': search.blacklistFilter.isActive }"
+          class="w-6 h-6 icon transition--color"
         />
       </button>
     </div>
@@ -76,12 +73,16 @@ export default {
   },
 
   computed: {
-    ...mapState(['searchData']),
+    ...mapState('booru', ['search']),
   },
 
   methods: {
-    ...mapMutations(['searchManager', 'tagManager']),
-    ...mapActions(['fetchWithMode']),
+    ...mapActions('booru', [
+      'addedTagsManager',
+      'searchedTagsManager',
+      'fetchSearchTag',
+    ]),
+    ...mapMutations('booru', ['setBlacklistFilterActive']),
 
     replaceInput(event) {
       this.searchQuery = event.target.value.replace(/\s+/g, '_').toLowerCase()
@@ -90,40 +91,31 @@ export default {
       this.getTags()
     },
 
-    resetTags() {
-      this.tagManager({ operation: 'reset' })
+    addSearchedTagDirectly(tag) {
+      this.addedTagsManager({
+        operation: 'add',
+        tag: {
+          name: tag,
+        },
+      })
     },
 
-    getTags: debounce(async function () {
+    getTags: debounce(function () {
       if (this.searchQuery.length > 2) {
-        await this.fetchWithMode({
-          mode: 'tags',
-          tag: this.searchQuery,
-        })
+        this.fetchSearchTag(this.searchQuery)
       } else {
-        this.searchManager({
-          mode: 'reset',
+        this.searchedTagsManager({
+          operation: 'reset',
         })
       }
     }, 350),
 
-    toggleFilter() {
-      this.searchManager({
-        mode: 'toggleFilter',
-      })
+    resetAddedTags() {
+      this.addedTagsManager({ operation: 'reset' })
     },
 
-    async addPremadeTags() {
-      if (!this.searchData.premadeFilterData.length) {
-        await this.fetchWithMode({
-          mode: 'filter',
-        })
-      }
-
-      this.tagManager({
-        operation: 'concat',
-        tagArray: this.searchData.premadeFilterData,
-      })
+    toggleBlacklistFilter() {
+      this.setBlacklistFilterActive(!this.search.blacklistFilter.isActive)
     },
   },
 }

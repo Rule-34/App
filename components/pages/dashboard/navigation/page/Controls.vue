@@ -27,7 +27,7 @@
           title="Load specific page"
           @click="getSpecificPage()"
         >
-          <button type="button" v-text="dashBoardData.pid" />
+          <button type="button" v-text="queries.pid" />
         </div>
 
         <!-- Get next page -->
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 // Third party
 import { Intersect } from 'vuetify/lib/directives/intersect'
@@ -87,20 +87,19 @@ export default {
   mixins: [KeyboardNavigationMixin],
 
   computed: {
-    ...mapState(['dashBoardData']),
+    ...mapState('booru', ['queries']),
     ...mapState('user', ['settings']),
   },
 
   methods: {
-    ...mapMutations(['pidManager']),
-    ...mapActions(['fetchWithMode']),
+    ...mapActions('booru', ['fetchPosts', 'pidManager']),
 
     getNextPage() {
       this.pidManager({ operation: 'add' })
 
       if (!this.settings.infiniteLoad.value) scrollToTop()
 
-      await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+      this.fetchPosts()
     },
 
     getPrevPage() {
@@ -108,7 +107,7 @@ export default {
 
       if (!this.settings.infiniteLoad.value) scrollToTop()
 
-      await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+      this.fetchPosts()
     },
 
     getSpecificPage() {
@@ -121,18 +120,18 @@ export default {
         return
       }
 
-      this.pidManager({ operation: 'specific', value: specificPage })
-
-      await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+      this.pidManager({ operation: 'set', value: specificPage })
 
       if (!this.settings.infiniteLoad.value) scrollToTop()
+
+      this.fetchPosts()
     },
 
-    InfiniteLoadHandler: throttle(async function () {
+    InfiniteLoadHandler: throttle(function () {
       console.debug('Loading more posts')
       this.pidManager({ operation: 'add' })
 
-      await this.fetchWithMode({ mode: 'posts', returnMode: 'concat' })
+      this.fetchPosts({ mode: 'concat' })
     }, 5000),
   },
 }

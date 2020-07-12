@@ -1,0 +1,214 @@
+import {
+  booruList,
+  findBoorusWithValueByKey,
+  booruTypeList,
+} from '~/assets/lib/rule-34-shared-resources/util/BooruUtils.js'
+
+export const state = () => ({
+  API: {
+    url:
+      process.env.NODE_ENV === 'development'
+        ? 'http://localhost:8100/'
+        : 'https://api.r34.app/',
+  },
+
+  booru: {
+    active: 0, // This is saved to localStorage // This is an index to booru.list
+    list: booruList,
+  },
+
+  queries: {
+    pid: undefined, // Initial PID is set from booru.active
+  },
+
+  posts: {
+    data: [],
+  },
+
+  search: {
+    addedTags: [],
+    searchedTags: [],
+
+    blacklistFilter: { isActive: false },
+  },
+})
+
+export const getters = {
+  getActiveBooru(state) {
+    return state.booru.list[state.booru.active]
+  },
+
+  getActiveBooruType: (state, getters) => {
+    return findBoorusWithValueByKey(
+      getters.getActiveBooru.type,
+      'type',
+      booruTypeList
+    )[0]
+  },
+
+  // This is only used for Selector.vue
+  getFilteredBooruList: (state, getters, rootState) => {
+    return rootState.user.settings.nsfw.value
+      ? findBoorusWithValueByKey(true, 'nsfw', state.booru.list)
+      : findBoorusWithValueByKey(false, 'nsfw', state.booru.list)
+  },
+}
+
+export const mutations = {
+  setActiveBooru(state, value) {
+    state.booru.active = value
+  },
+
+  setPIDQuery(state, value) {
+    state.queries.pid = value
+  },
+
+  setPostsData(state, value) {
+    state.posts.data = value
+  },
+
+  setAddedTags(state, value) {
+    state.search.addedTags = value
+  },
+
+  pushAddedTags(state, value) {
+    state.search.addedTags.push(value)
+  },
+
+  setSearchedTags(state, value) {
+    state.search.searchedTags = value
+  },
+
+  setBlacklistFilterActive(state, value) {
+    state.search.blacklistFilter.isActive = value
+  },
+}
+
+export const actions = {
+  activeBooruManager({ state, commit }, domain) {
+    // Search for the domain
+    const booruData = findBoorusWithValueByKey(
+      domain,
+      'domain',
+      state.booru.list
+    )[0]
+
+    const booruIndex = state.booru.list.indexOf(booruData) // findIndex could be used
+
+    commit('setActiveBooru', booruIndex)
+  },
+
+  postsManager({ commit }, { operation, value }) {
+    switch (operation) {
+      case 'set':
+        commit('setPostsData', value)
+        break
+
+      case 'concat':
+        commit('setPostsData', [...new Set(state.posts.data.concat(value))])
+        break
+
+      default:
+        throw new Error('No operation specified')
+    }
+  },
+
+  pidManager({ state, commit, getters }, { operation, value }) {
+    switch (operation) {
+      case 'add':
+        commit('setPIDQuery', state.queries.pid + 1)
+        break
+
+      case 'subtract':
+        commit('setPIDQuery', state.queries.pid - 1)
+        break
+
+      case 'set':
+        commit('setPIDQuery', value)
+        break
+
+      case 'reset':
+        commit('setPIDQuery', getters.getActiveBooruType.initialPageID)
+        break
+
+      default:
+        throw new Error('No operation specified')
+    }
+  },
+
+  addedTagsManager({ state, commit }, { operation, value }) {
+    switch (operation) {
+      case 'add':
+        // value: string
+        if (!state.search.addedTags.includes(value))
+          commit('pushAddedTags', value)
+        break
+
+      case 'concat':
+        // value: string[]
+        commit('setAddedTags', state.search.addedTags.concat(value))
+        break
+
+      case 'remove':
+        // value: string
+        commit(
+          'setAddedTags',
+          state.search.addedTags.filter((tag) => {
+            return tag !== value
+          })
+        )
+        break
+
+      case 'reset':
+        commit('setAddedTags', [])
+        break
+
+      default:
+        throw new Error('No operation specified')
+    }
+  },
+
+  searchedTagsManager({ commit }, { operation, value }) {
+    switch (operation) {
+      case 'set':
+        commit('setSearchedTags', value)
+        break
+
+      case 'reset':
+        commit('setSearchedTags', [])
+        break
+
+      default:
+        throw new Error('No operation specified')
+    }
+  },
+
+  async fetchPosts({ dispatch, commit }, mode) {
+    const url = await dispatch('createAPIURL', { mode: 'posts' })
+
+    const response = await dispatch(
+      'simpleFetch',
+      {
+        url,
+      },
+      { root: true }
+    )
+
+    if (mode === 'concat') commit('concatPostsData', response)
+    else commit('setPostsData', response)
+  },
+
+  async fetchSearchTag({ dispatch, commit }, tag) {
+    const url = await dispatch('createAPIURL', { mode: 'tags', tag })
+
+    const response = await dispatch(
+      'simpleFetch',
+      {
+        url,
+      },
+      { root: true }
+    )
+
+    commit('setSearchedTags', response)
+  },
+}

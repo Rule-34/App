@@ -9,7 +9,7 @@
             :key="tag"
             type="button"
             class="tag color-util"
-            @click="getSpecificTag(tag)"
+            @click="fetchSpecificTag(tag)"
             v-text="tag"
           />
         </div>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapMutations, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 
 // Components
 import TransitionCollapse from '~/components/utils/TransitionCollapse.vue'
@@ -35,9 +35,7 @@ export default {
   props: {
     tags: {
       type: Array,
-      default() {
-        return undefined
-      },
+      default: () => [],
     },
 
     isActive: {
@@ -47,27 +45,23 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['pidManager', 'tagManager']),
-    ...mapActions(['fetchWithMode']),
+    ...mapActions('booru', ['addedTagsManager', 'pidManager', 'fetchPosts']),
 
-    async getSpecificTag(tag) {
-      this.pidManager({ operation: 'reset' })
+    async fetchSpecificTag(tag) {
+      await this.pidManager({ operation: 'reset' })
 
-      this.tagManager({
+      await this.addedTagsManager({
         operation: 'reset',
       })
 
-      this.tagManager({
+      await this.addedTagsManager({
         operation: 'add',
-        tag: {
-          name: tag,
-        },
+        value: tag,
       })
 
       scrollToTop()
 
-      // Search for the tag
-      await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+      this.fetchPosts()
     },
   },
 }

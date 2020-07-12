@@ -7,14 +7,14 @@
 
     <!-- Selector -->
     <select
-      :value="booruData.active.domain"
+      :value="getActiveBooru.domain"
       aria-label="Selector that changes the domain where the content is pulled from"
       class="inline-flex items-center font-light outline-none appearance-none text-primary bg-elevation"
       @change="changeDomain($event.target.value)"
     >
       <!-- Loop for every option -->
       <option
-        v-for="booru in boorus"
+        v-for="booru in getFilteredBooruList"
         :key="booru.domain"
         :aria-label="'Changes the domain to ' + booru.domain"
         :value="booru.domain"
@@ -31,49 +31,40 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 // Third party
 import { ChevronDownIcon, CloudIcon } from 'vue-feather-icons'
-
-import { findBoorusWithValueByKey } from '~/assets/lib/rule-34-shared-resources/util/BooruUtils.js'
 
 import fireAnalytics from '~/assets/js/analytics'
 
 export default {
   name: 'DomainSelector',
+
   components: { ChevronDownIcon, CloudIcon },
 
   computed: {
-    ...mapState(['booruData', 'credentials']),
-    ...mapState('user', ['settings']),
-
-    boorus() {
-      return this.evaluateBooruList(this.settings.nsfw.value)
-    },
+    ...mapState('booru', ['posts']),
+    ...mapGetters('booru', ['getActiveBooru', 'getFilteredBooruList']),
   },
 
   methods: {
-    ...mapMutations(['booruDataManager', 'pidManager', 'tagManager']),
-    ...mapActions(['fetchWithMode']),
-
-    evaluateBooruList(nsfwSetting) {
-      const modifiedBooruList = nsfwSetting
-        ? findBoorusWithValueByKey(true, 'nsfw', this.booruData.boorus)
-        : findBoorusWithValueByKey(false, 'nsfw', this.booruData.boorus)
-
-      return modifiedBooruList
-    },
+    ...mapActions('booru', [
+      'activeBooruManager',
+      'pidManager',
+      'addedTagsManager',
+      'fetchPosts',
+    ]),
 
     // Changes that we have to do when changing domain so request is not malformed
     async changeDomain(domain) {
-      this.booruDataManager(domain)
+      await this.activeBooruManager(domain)
 
       await this.pidManager({ operation: 'reset' })
 
-      this.tagManager({ operation: 'reset' })
+      await this.addedTagsManager({ operation: 'reset' })
 
-      await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+      this.fetchPosts()
 
       fireAnalytics('domain', { domain: this.getActiveBooru.domain })
     },

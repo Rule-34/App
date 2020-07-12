@@ -9,7 +9,7 @@
 
     <Errors />
 
-    <Post v-for="post in dashBoardData.data" :key="post.id" :post="post" />
+    <Post v-for="post in posts.data" :key="post.id" :post="post" />
 
     <Controls />
   </main>
@@ -41,7 +41,7 @@ export default {
   mixins: [URLQueryManagerMixin],
 
   computed: {
-    ...mapState(['dashBoardData']),
+    ...mapState('booru', ['posts']),
   },
 
   head() {

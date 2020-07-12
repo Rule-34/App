@@ -10,27 +10,23 @@
 
       <!-- If nothing searched -->
       <h1
-        v-if="
-          !searchData.data.length &&
-          !searchData.tags.length &&
-          !generalData.error
-        "
-        class="flex-1 flex items-center justify-center text-default-text text-xl font-light tracking-wide"
+        v-if="!search.searchedTags.length && !search.addedTags.length"
+        class="flex items-center justify-center flex-1 text-xl font-light tracking-wide text-default-text"
       >
         Search something!
       </h1>
 
       <!-- Added tags, click them to remove them -->
       <div
-        v-if="searchData.tags.length"
-        class="tag-container border-b border-border rounded mb-1 overflow-y-scroll max-h-1/2"
+        v-if="search.addedTags.length"
+        class="mb-1 overflow-y-scroll border-b rounded tag-container border-border max-h-1/2"
       >
         <button
-          v-for="tag in searchData.tags"
+          v-for="tag in search.addedTags"
           :key="tag"
           type="button"
           class="tag color-util"
-          @click="removeTagFromActive(tag)"
+          @click="removeAddedTag(tag)"
         >
           {{ tag }}
         </button>
@@ -38,16 +34,16 @@
 
       <!-- Searched tags, click them to add them -->
       <div
-        v-if="searchData.data.length"
-        class="flex-1 tag-container rounded rounded-b-none overflow-y-scroll"
+        v-if="search.searchedTags.length"
+        class="flex-1 overflow-y-scroll rounded rounded-b-none tag-container"
       >
-        <!-- Add tag to array of added tags, if filter is active then append '-' -->
+        <!-- Add tag to array of added tags -->
         <button
-          v-for="tag in searchData.data"
+          v-for="tag in search.searchedTags"
           :key="tag.name"
           type="button"
           class="tag color-util group"
-          @click="addTagToActiveTags(tag.name)"
+          @click="addToAddedTags(tag.name)"
         >
           <!-- Name of the tag -->
           <span>
@@ -65,9 +61,9 @@
 
     <!-- Apply tags button -->
     <button
-      class="w-full text-center text-lg font-bold tracking-wide text-default-text bg-gradient-lilac-blue py-2 px-4 shadow-md"
+      class="w-full px-4 py-2 text-lg font-bold tracking-wide text-center shadow-md text-default-text bg-gradient-lilac-blue"
       type="submit"
-      @click.prevent="dispatchGetAddedTags()"
+      @click.prevent="fetchAddedTags()"
     >
       Apply tags
     </button>
@@ -87,50 +83,44 @@ export default {
   components: { Errors },
 
   computed: {
-    ...mapState(['searchData', 'generalData']),
+    ...mapState('booru', ['search']),
   },
 
   methods: {
-    ...mapActions(['fetchWithMode']),
-    ...mapMutations(['pidManager', 'tagManager']),
+    ...mapActions('booru', ['addedTagsManager', 'pidManager', 'fetchPosts']),
     ...mapMutations('navigation', ['setSearchActive']),
 
-    removeTagFromActive(tagName) {
-      this.tagManager({
+    removeAddedTag(tag) {
+      this.addedTagsManager({
         operation: 'remove',
-        tag: {
-          name: tagName,
-        },
+        value: tag,
       })
     },
 
-    addTagToActiveTags(tagName) {
-      if (this.searchData.isFilterActive) {
-        this.tagManager({
+    addToAddedTags(tag) {
+      if (this.search.blacklistFilter.isActive) {
+        this.addedTagsManager({
           operation: 'add',
-          tag: {
-            name: '-' + tagName,
-          },
+          value: '-' + tag,
         })
-      } else {
-        this.tagManager({
+      }
+      //
+      else {
+        this.addedTagsManager({
           operation: 'add',
-          tag: {
-            name: tagName,
-          },
+          value: tag,
         })
       }
     },
 
-    async dispatchGetAddedTags() {
+    async fetchAddedTags() {
       await this.pidManager({ operation: 'reset' })
 
-      this.setSearchActive(false)
       await this.setSearchActive(false)
 
       scrollToTop()
 
-      await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
+      this.fetchPosts()
     },
   },
 }

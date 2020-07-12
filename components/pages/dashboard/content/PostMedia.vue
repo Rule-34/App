@@ -58,7 +58,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['generalData']),
+    ...mapState(['general']),
     ...mapState('user', ['settings']),
   },
 
@@ -75,8 +75,7 @@ export default {
       if (this.retryCount === 0) {
         console.debug('Proxifying media')
 
-        event.target.src =
-          this.generalData.CORSProxyURL + '?q=' + event.target.src
+        event.target.src = this.general.CORSProxyURL + '?q=' + event.target.src
 
         if (isVideo) {
           console.debug('Reloading data and playing video')
