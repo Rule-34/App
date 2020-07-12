@@ -95,8 +95,7 @@ export default {
     ...mapMutations(['pidManager']),
     ...mapActions(['fetchWithMode']),
 
-    // Get next page from API
-    async getNextPage() {
+    getNextPage() {
       this.pidManager({ operation: 'add' })
 
       if (!this.settings.infiniteLoad.value) scrollToTop()
@@ -104,8 +103,7 @@ export default {
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
     },
 
-    // Get last page from API
-    async getPrevPage() {
+    getPrevPage() {
       this.pidManager({ operation: 'subtract' })
 
       if (!this.settings.infiniteLoad.value) scrollToTop()
@@ -113,13 +111,10 @@ export default {
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
     },
 
-    async getSpecificPage() {
+    getSpecificPage() {
       const specificPage = Number.parseInt(
         prompt('What page do you want to go to?', '69')
       )
-
-      // console.log(specificPage)
-      // console.log(Number.isInteger(specificPage))
 
       if (!specificPage) {
         alert('Wrong input, only numbers please')

@@ -128,10 +128,11 @@ export default {
 
     async dispatchGetAddedTags() {
       // Set PID to 0 since we're searching for new tags
-      this.pidManager({ operation: 'reset' })
+      await this.pidManager({ operation: 'reset' })
 
       // Hide the search bar
       this.setSearchActive(false)
+      await this.setSearchActive(false)
 
       scrollToTop()
 

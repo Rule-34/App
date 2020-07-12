@@ -1,21 +1,21 @@
 <template>
-  <div class="material-container text-default-text p-4">
+  <div class="p-4 material-container text-default-text">
     <form
       :action="gumroad.authAPI.url"
       :method="gumroad.authAPI.fetchOptions.method"
-      @submit="checkForm"
+      @submit="checkForm()"
     >
       <label
-        class="block text-lg font-medium leading-tight mb-2"
+        class="block mb-2 text-lg font-medium leading-tight"
         for="license-key"
       >
         License Key
       </label>
 
-      <div class="w-full flex items-center mt-1">
+      <div class="flex items-center w-full mt-1">
         <input
           id="license-key"
-          class="appearance-none outline-none block flex-grow w-10/12 font-light bg-background border border-border rounded-md p-2 shadow-sm text-sm"
+          class="flex-grow block w-10/12 p-2 text-sm font-light border rounded-md shadow-sm outline-none appearance-none bg-background border-border"
           placeholder="XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX"
           type="text"
           name="license-key"
@@ -26,7 +26,7 @@
         <!-- Action -->
         <button
           type="submit"
-          class="appearance-none bg-gradient-blue-lilac border-0 rounded-full ml-1 shadow-md"
+          class="ml-1 border-0 rounded-full shadow-md appearance-none bg-gradient-blue-lilac"
         >
           <chevron-right-icon class="icon text-default w-9 h-9" />
         </button>
@@ -54,10 +54,10 @@ export default {
     ...mapActions('premium', ['authenticate']),
     ...mapMutations('premium', ['setRawResponse', 'setLicenseKey']),
 
-    async checkForm(event) {
+    checkForm(event) {
       event.preventDefault()
 
-      await this.authenticate()
+      this.authenticate()
     },
   },
 }

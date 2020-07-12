@@ -70,16 +70,12 @@ export default {
 
     // Changes that we have to do when changing domain so request is not malformed
     async changeDomain(domain) {
-      // Set domain
       this.booruDataManager(domain)
 
-      // Reset Page ID
-      this.pidManager({ operation: 'reset' })
+      await this.pidManager({ operation: 'reset' })
 
-      // Reset tags so we dont search those tags on new domain
       this.tagManager({ operation: 'reset' })
 
-      // And finally load the posts with everything to default
       await this.fetchWithMode({ mode: 'posts', returnMode: 'add' })
 
       fireAnalytics('domain', { domain: this.getActiveBooru.domain })
