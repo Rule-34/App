@@ -5,14 +5,14 @@ export default {
     ...mapState('premium', ['gumroad']),
   },
 
-  async mounted() {
+  mounted() {
     if (!this.gumroad.product.license_key) {
       console.debug('No license key, nothing to fetch')
 
       return
     }
 
-    await this.authenticate()
+    this.authenticate()
   },
 
   methods: {

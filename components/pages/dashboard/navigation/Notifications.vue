@@ -94,13 +94,13 @@ export default {
     ...mapGetters('notifications', ['isThereANewNotification']),
   },
 
-  async mounted() {
+  mounted() {
     if (this.notifications.alreadyFetched) {
       console.debug('Already fetched notification data, skipping...')
       return
     }
 
-    await this.fetchNotifications()
+    this.fetchNotifications()
 
     this.setAlreadyFetched(true)
   },
