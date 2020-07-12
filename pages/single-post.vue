@@ -4,8 +4,8 @@
     <Errors :is-single-post="true" />
 
     <!-- First time / Empty query info -->
-    <div v-if="!id || !domain" class="material-container text-center p-2">
-      <h1 class="text-default-text text-lg">You should add a query!</h1>
+    <div v-if="!id || !domain" class="p-2 text-center material-container">
+      <h1 class="text-lg text-default-text">You should add a query!</h1>
 
       <h2 class="text-default-text-muted">
         For example
@@ -82,7 +82,7 @@ export default {
     if (!booruData) {
       this.errorManager({
         operation: 'set',
-        data: new Error(`The current domain "${this.domain}" couldnt be found`),
+        value: `The current domain "${this.domain}" couldnt be found`,
       })
       return
     }
@@ -99,9 +99,7 @@ export default {
     if (!this.type.singlePost) {
       this.errorManager({
         operation: 'set',
-        data: new Error(
-          `The current domain type "${this.type}" doesnt support getting posts from ID`
-        ),
+        value: `The current domain type "${this.type}" doesnt support getting posts from ID`,
       })
       return
     }

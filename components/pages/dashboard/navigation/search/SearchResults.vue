@@ -5,9 +5,6 @@
     <div
       class="flex flex-col flex-1 max-h-full min-h-full p-2 pb-0 overflow-y-hidden"
     >
-      <!-- If theres errors -->
-      <Errors />
-
       <!-- If nothing searched -->
       <h1
         v-if="!search.searchedTags.length && !search.addedTags.length"
@@ -72,15 +69,12 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
-import Errors from '~/components/utils/Errors.vue'
 
 // JS
 import { scrollToTop } from '~/assets/js/scrollUtils.js'
 
 export default {
   name: 'SearchResults',
-
-  components: { Errors },
 
   computed: {
     ...mapState('booru', ['search']),

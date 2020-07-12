@@ -1,78 +1,41 @@
 <template>
   <!-- If theres request got errors -->
   <div
-    v-if="
-      generalData.error ||
-      (!dashBoardData.data.length && !isSinglePost) ||
-      $nuxt.isOffline
-    "
-    class="material-container text-center text-default-text m-6 p-2"
+    v-if="errors"
+    class="p-2 m-6 text-center material-container text-default-text"
   >
     <!-- Header -->
     <h1
-      class="text-2xl font-bold tracking-wide border w-max-content mx-auto mb-1 px-2"
+      class="px-2 mx-auto mb-1 text-2xl font-bold tracking-wide border w-max-content"
     >
       Error
     </h1>
 
-    <!-- If browser is offline -->
-    <template v-if="$nuxt.isOffline">
-      <p>
-        You are offline, please connect to the internet
-      </p>
-    </template>
-
-    <!-- If ANY error -->
-    <template v-else-if="generalData.error">
-      <p>
-        {{ generalData.error.message }}
-      </p>
-      <!-- TODO: This should be "Retry to load?" or something similar -->
-      <button type="button" class="color-util" @click="resetTags()">
-        Remove tags?
-      </button>
-    </template>
-
-    <!-- If no posts loaded -->
-    <template v-else-if="!dashBoardData.data.length && !isSinglePost">
-      <h1 class="font-bold" v-text="'There are no more posts to load!'" />
-      <button type="button" class="color-util" @click="resetTags()">
-        Remove tags?
-      </button>
-    </template>
+    <!-- Body -->
+    <p>
+      {{ errors }}
+    </p>
+    <button type="button" class="color-util" @click="reload()">
+      Reload the page?
+    </button>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Errors',
 
-  props: {
-    // For separating text
-    isSinglePost: { type: Boolean, required: false, default: false },
+  computed: {
+    ...mapState(['errors']),
   },
 
-  computed: {
-    ...mapState(['generalData', 'dashBoardData']),
-    ...mapState('navigation', ['search']),
-  },
+  // TODO: Add listeners to throw errors when offline, no post data, etc.
 
   methods: {
-    ...mapMutations(['tagManager']),
-    ...mapMutations('navigation', ['setSearchActive']),
-
-    resetTags() {
-      // console.log('Resetted tags')
-
-      // First reset tags
-      this.tagManager({ operation: 'reset' })
-
-      // Then show page if not active
-      if (!this.search.isActive) {
-        this.setSearchActive(true)
-      }
+    reload() {
+      location.reload()
     },
   },
 }
