@@ -46,8 +46,7 @@ export default {
 
   head() {
     return {
-      title: 'Rule 34 App',
-      titleTemplate: null,
+      title: 'Posts',
     }
   },
 }
