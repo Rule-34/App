@@ -24,7 +24,7 @@ import Post from '~/components/pages/dashboard/content/Post.vue'
 import Errors from '~/components/utils/Errors.vue'
 
 // Mixins
-import URLQueryManagerMixin from '~/components/pages/dashboard/navigation/url/URLQueryManagerMixin.js'
+// import URLQueryManagerMixin from '~/components/pages/dashboard/navigation/url/URLQueryManagerMixin.js'
 
 // Lazy loaded components
 export default {
@@ -38,7 +38,7 @@ export default {
       import('~/components/pages/dashboard/navigation/page/Controls.vue'),
   },
 
-  mixins: [URLQueryManagerMixin],
+  // mixins: [URLQueryManagerMixin], // TODO: Remake this
 
   computed: {
     ...mapState('booru', ['posts']),
