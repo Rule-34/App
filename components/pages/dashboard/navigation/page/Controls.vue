@@ -112,7 +112,7 @@ export default {
 
     getSpecificPage() {
       const specificPage = Number.parseInt(
-        prompt('What page do you want to go to?', '69')
+        prompt('What page do you want to go to?')
       )
 
       if (!specificPage) {

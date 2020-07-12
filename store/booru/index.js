@@ -183,6 +183,57 @@ export const actions = {
     }
   },
 
+  createAPIURL({ getters, rootState }, { mode, postID, tag }) {
+    const domainData = getters.getActiveBooru
+
+    const queryObj = {
+      posts: {
+        limit: rootState.user.settings.postsPerPage.value,
+        pid: rootState.booru.queries.pid,
+        tags: rootState.booru.search.addedTags.join('+'),
+        score: rootState.user.settings.score.value,
+      },
+
+      singlePost: {
+        id: postID,
+      },
+
+      tags: { tag },
+    }
+
+    const url = new URL(
+      rootState.booru.API.url + 'booru/' + domainData.type + '/' + mode
+    )
+    url.searchParams.append('domain', domainData.domain)
+
+    switch (mode) {
+      case 'posts':
+        url.searchParams.append('limit', queryObj.posts.limit)
+        url.searchParams.append('pid', queryObj.posts.pid)
+        url.searchParams.append('tags', queryObj.posts.tags)
+        url.searchParams.append('score', '>=' + queryObj.posts.score)
+        break
+
+      case 'single-post':
+        url.searchParams.append('id', queryObj.singlePost.id)
+        break
+
+      case 'tags':
+        url.searchParams.append('tag', queryObj.tags.tag)
+        // url.searchParams.append('limit', queryObj.limit)
+        break
+
+      default:
+        throw new Error('No mode specified')
+    }
+
+    if (domainData.config) {
+      url.searchParams.append('config', JSON.stringify(domainData.config))
+    }
+
+    return url.toString()
+  },
+
   async fetchPosts({ dispatch, commit }, mode) {
     const url = await dispatch('createAPIURL', { mode: 'posts' })
 
