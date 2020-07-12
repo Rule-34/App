@@ -37,12 +37,20 @@ export default {
     return data
   },
 
+  errorManager({ commit }, { operation, value }) {
+    switch (operation) {
+      case 'set':
+        commit('setErrors', value)
         break
 
+      case 'reset':
+        commit('setErrors', undefined)
         break
 
       default:
+        throw new Error('No operation specified')
     }
+  },
 
   loadingAnimationHandler(_, mode) {
     if (!window.$nuxt.$root.$loading.start) {
