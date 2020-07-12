@@ -52,7 +52,7 @@
     </div>
 
     <!-- Space below all posts -->
-    <div v-if="settings.hoverControls.value" class="mb-12">&nbsp;</div>
+    <div v-if="settings.hoverControls.value" class="mb-6">&nbsp;</div>
   </div>
 </template>
 
@@ -150,7 +150,7 @@ export default {
 }
 
 .hover-controls {
-  @apply shadow-md mx-auto mb-2;
+  @apply shadow-md mx-auto my-0;
 }
 
 @screen md {
