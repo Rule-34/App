@@ -31,7 +31,7 @@ import { Touch } from 'vuetify/lib/directives/touch'
 // Components
 import NavToggler from '~/components/layout/navigation/sidenav/Toggler.vue'
 import SideNav from '~/components/layout/navigation/sidenav/SideNav.vue'
-import StartUpMixin from '~/components/utils/StartUpMixin.js'
+import GlobalStartUpMixin from '~/components/utils/GlobalStartUpMixin.js'
 import SideNavMixin from '~/components/layout/navigation/sidenav/SideNavMixin.js'
 import TouchHandlerMixin from '~/components/layout/navigation/sidenav/TouchHandlerMixin.js'
 
@@ -52,7 +52,7 @@ export default {
    * Warning:
    * Some methods and variables are set by Mixins
    */
-  mixins: [StartUpMixin, SideNavMixin, TouchHandlerMixin],
+  mixins: [GlobalStartUpMixin, SideNavMixin, TouchHandlerMixin],
 
   computed: {
     ...mapState('navigation', ['sideNav', 'search']),
