@@ -15,7 +15,7 @@ export default {
   },
 
   data() {
-    return { isDashboard: false }
+    return { isPostsPage: false }
   },
 
   computed: {
@@ -31,11 +31,11 @@ export default {
 
       switch (this.$nuxt.$route.name) {
         case 'index':
-          this.isDashboard = true
+          this.isPostsPage = true
           break
 
         default:
-          this.isDashboard = false
+          this.isPostsPage = false
           break
       }
     },

@@ -12,7 +12,7 @@ Browse the most popular boorus in the Rule 34 App
 
 ### Preview
 
-![Dashboard Preview](.github/images/dashboard.png)
+![Posts Preview](.github/images/dashboard.png)
 ![Settings Preview](.github/images/settings.png)
 
 ### Supported sites

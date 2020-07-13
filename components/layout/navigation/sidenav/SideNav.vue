@@ -110,7 +110,7 @@ export default {
   data() {
     return {
       sideNavLinks: [
-        { title: 'Dashboard', url: '/' },
+        { title: 'Posts', url: '/' },
         { title: 'Faq', url: '/faq' },
         { title: 'Usage', url: '/usage' },
         { title: 'About', url: '/about' },

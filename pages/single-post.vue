@@ -42,7 +42,7 @@
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
 // Components
-import Post from '~/components/pages/dashboard/content/Post.vue'
+import Post from '~/components/pages/posts/content/Post.vue'
 import Errors from '~/components/utils/Errors.vue'
 
 import {

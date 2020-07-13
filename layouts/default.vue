@@ -6,7 +6,7 @@
       right: (e) => touchHandler('right', e),
     }"
   >
-    <NavToggler :show-search="isDashboard ? true : false" />
+    <NavToggler :show-search="isPostsPage" />
 
     <transition name="sidenav">
       <SideNav v-if="sideNav.isActive" />
@@ -38,7 +38,7 @@ import TouchHandlerMixin from '~/components/layout/navigation/sidenav/TouchHandl
 // Lazy loaded components
 const Search = () =>
   import(
-    /* webpackPrefetch: true */ '~/components/pages/dashboard/navigation/search/Search.vue'
+    /* webpackPrefetch: true */ '~/components/pages/posts/navigation/search/Search.vue'
   )
 
 export default {
