@@ -32,13 +32,8 @@
       <!-- Navbar Links -->
       <nav class="flex flex-col justify-between flex-1 p-3 bg-background">
         <ul class="leading-loose text-center md:text-left">
-          <li>
-            <nuxt-link
-              v-for="link in sideNavLinks"
-              :key="link.url"
-              class="nav-links"
-              :to="link.url"
-            >
+          <li v-for="link in sideNavLinks" :key="link.url">
+            <nuxt-link class="nav-links" :to="link.url">
               <span class="absolute inset-0 opacity-0" />
               <span class="relative" v-text="link.title" />
             </nuxt-link>
