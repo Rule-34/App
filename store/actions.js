@@ -4,13 +4,15 @@ export default {
    * @param {*} param0
    * @param {String} url URL to fetch
    */
-  async simpleFetch({ dispatch }, { url, options }) {
+  async simpleFetch({ state, dispatch }, { url, options }) {
     dispatch('loadingAnimationHandler', 'start')
 
-    await dispatch({
-      type: 'errorManager',
-      operation: 'reset',
-    })
+    if (state.errors) {
+      await dispatch({
+        type: 'errorManager',
+        operation: 'reset',
+      })
+    }
 
     const data = await fetch(url, options)
       // Save the data
