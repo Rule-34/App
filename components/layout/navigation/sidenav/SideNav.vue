@@ -21,16 +21,18 @@
 
         <!-- Text on image -->
         <div class="absolute bottom-0 left-0 p-3 transition--color">
-          <h1 class="font-bold">Rule 34 App</h1>
-          <h3 class="font-normal">Browse the most popular boorus</h3>
+          <h1 class="text-lg font-semibold">Rule 34 App</h1>
+          <h3>
+            Browse the most popular boorus
+          </h3>
         </div>
       </div>
 
-      <!-- Separator -->
-      <div class="w-full bg-border" style="height: 1px;"></div>
+      <!-- Fake border -->
+      <div class="w-full bg-border" style="height: 1px;" />
 
       <!-- Navbar Links -->
-      <nav class="flex flex-col justify-between flex-1 p-3 bg-background">
+      <nav class="flex flex-col h-full p-3 bg-background">
         <ul class="leading-loose text-center md:text-left">
           <li v-for="link in sideNavLinks" :key="link.url">
             <nuxt-link class="nav-links" :to="link.url">
@@ -38,7 +40,22 @@
               <span class="relative" v-text="link.title" />
             </nuxt-link>
           </li>
+
+          <!-- Premium -->
+          <li>
+            <nuxt-link class="nav-links" to="/premium">
+              <span class="absolute inset-0 opacity-0" />
+              <span
+                class="relative text-lg font-semibold text-gradient-background bg-gradient-blue-lilac"
+              >
+                Premium
+              </span>
+            </nuxt-link>
+          </li>
         </ul>
+
+        <!-- Separator -->
+        <div class="flex-1">&nbsp;</div>
 
         <ul class="flex flex-row justify-around">
           <!-- Discord -->
@@ -173,5 +190,11 @@ export default {
 .sidenav-enter-active,
 .sidenav-leave-active {
   transition: var(--transition--transform) ease-in-out;
+}
+
+.text-gradient-background {
+  /* Apply your own background with gradient */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 </style>
