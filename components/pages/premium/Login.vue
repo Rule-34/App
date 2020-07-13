@@ -3,7 +3,7 @@
     <form
       :action="gumroad.authAPI.url"
       :method="gumroad.authAPI.fetchOptions.method"
-      @submit="checkForm()"
+      @submit.prevent="checkForm()"
     >
       <label
         class="block mb-2 text-lg font-medium leading-tight"
@@ -55,8 +55,6 @@ export default {
     ...mapMutations('premium', ['setRawResponse', 'setLicenseKey']),
 
     checkForm(event) {
-      event.preventDefault()
-
       this.authenticate()
     },
   },
