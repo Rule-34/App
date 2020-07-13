@@ -19,8 +19,8 @@
 import { mapState } from 'vuex'
 
 // Components
-import DomainSelector from '~/components/pages/dashboard/domain/Selector.vue'
-import Post from '~/components/pages/dashboard/content/Post.vue'
+import DomainSelector from '~/components/pages/posts/domain/Selector.vue'
+import Post from '~/components/pages/posts/content/Post.vue'
 import Errors from '~/components/utils/Errors.vue'
 
 // Mixins
@@ -32,10 +32,10 @@ export default {
     Errors,
     DomainSelector,
     Notifications: () =>
-      import('~/components/pages/dashboard/navigation/Notifications.vue'),
+      import('~/components/pages/posts/navigation/Notifications.vue'),
     Post,
     Controls: () =>
-      import('~/components/pages/dashboard/navigation/page/Controls.vue'),
+      import('~/components/pages/posts/navigation/page/Controls.vue'),
   },
 
   // mixins: [URLQueryManagerMixin], // TODO: Remake this

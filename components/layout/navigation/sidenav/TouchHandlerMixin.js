@@ -20,7 +20,7 @@ export default {
             return
           }
 
-          if (this.search.isActive && this.isDashboard) {
+          if (this.search.isActive && this.isPostsPage) {
             this.setSearchActive(false)
           } else {
             this.setSideNavActive(true)
@@ -33,7 +33,7 @@ export default {
             return
           }
 
-          if (!this.sideNav.isActive && this.isDashboard) {
+          if (!this.sideNav.isActive && this.isPostsPage) {
             this.setSearchActive(true)
           } else {
             this.setSideNavActive(false)
