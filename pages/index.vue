@@ -24,9 +24,8 @@ import Post from '~/components/pages/posts/content/Post.vue'
 import Errors from '~/components/utils/Errors.vue'
 
 // Mixins
-// import URLQueryManagerMixin from '~/components/pages/dashboard/navigation/url/URLQueryManagerMixin.js'
+import PostsStartupMixin from '~/components/pages/posts/util/PostsStartupMixin.js'
 
-// Lazy loaded components
 export default {
   components: {
     Errors,
@@ -39,6 +38,7 @@ export default {
   },
 
   // mixins: [URLQueryManagerMixin], // TODO: Remake this
+  mixins: [PostsStartupMixin],
 
   computed: {
     ...mapState('booru', ['posts']),
