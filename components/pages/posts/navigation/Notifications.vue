@@ -50,20 +50,10 @@
           :key="notification.title"
           class="m-1"
           :title="notification.title"
-          :text="notification.description"
-          :link="notification.link"
-          :link-text="notification.linkText"
-        >
-          <!-- Workaround for having two links -->
-          <template v-if="notification.secondaryText" slot="extra">
-            -
-            <a
-              class="text-sm"
-              :href="notification.secondaryLink"
-              v-text="notification.secondaryText"
-            />
-          </template>
-        </ContentContainer>
+          :text="notification.text"
+          :links="notification.links"
+        />
+        <!-- TODO: redo this -->
       </aside>
     </transition>
   </div>
