@@ -1,17 +1,17 @@
 <template>
-  <aside class="fixed z-30 flex w-full min-h-screen">
+  <aside class="fixed z-30 flex w-full h-screen">
     <!-- Actual Navigation Bar -->
     <!-- Only show borders on medium screens -->
     <div
-      class="relative flex flex-col min-h-full m-0 border-0 rounded-none material-container md:border-r color-util"
+      class="flex flex-col h-full border-0 rounded-none material-container sm:border-r color-util"
     >
       <!-- Hero Image -->
-      <div class="relative w-full overflow-hidden">
+      <div class="relative w-full h-full overflow-hidden">
         <picture>
           <source srcset="~/assets/img/brand/icon.webp" type="image/webp" />
           <img
             loading="eager"
-            class="object-cover w-full h-auto sidebar-img"
+            class="w-full h-auto sidebar-img--transition"
             src="~/assets/img/brand/icon.png"
             alt="Rule 34 App Logo"
             height="512"
@@ -20,7 +20,9 @@
         </picture>
 
         <!-- Text on image -->
-        <div class="absolute bottom-0 left-0 p-3 transition--color">
+        <div
+          class="absolute bottom-0 left-0 p-3 transition-colors duration-300"
+        >
           <h1 class="text-lg font-semibold">Rule 34 App</h1>
           <h3>
             Browse the most popular boorus
@@ -28,12 +30,9 @@
         </div>
       </div>
 
-      <!-- Fake border -->
-      <div class="w-full bg-border" style="height: 1px;" />
-
       <!-- Navbar Links -->
       <nav class="flex flex-col h-full p-3 bg-background">
-        <ul class="leading-loose text-center md:text-left">
+        <ul class="leading-loose text-center sm:text-left">
           <li v-for="link in sideNavLinks" :key="link.url">
             <nuxt-link class="nav-links" :to="link.url">
               <span class="absolute inset-0 opacity-0" />
@@ -107,7 +106,7 @@
 
     <!-- Space for clicking out of the menu -->
     <div
-      class="hidden bg-black bg-opacity-25 md:block md:w-3/4"
+      class="flex-grow bg-black bg-opacity-25"
       @click="setSideNavActive(false)"
     />
   </aside>
@@ -140,29 +139,22 @@ export default {
 <style lang="postcss">
 /* ----- Sidebar related ----- */
 
-@screen md {
-  /* Make the sidebar one fourth of the screen on medium devices */
-  .sidebar {
-    @apply w-1/4;
-  }
+.sidebar-img--transition {
+  transition-timing-function: ease;
+  @apply transition-transform delay-300 duration-500;
 }
 
-.sidebar-img {
-  transition: transform 0.5s ease;
-  transition-delay: 0.35s;
-}
-.sidebar-img:hover {
+.sidebar-img--transition:hover {
   transform: scale(1.5);
 }
 
 /* Sidebar */
 .nav-links {
-  transition: transform 0.35s, var(--transition--color);
-  @apply relative block;
+  @apply relative block transition-transform duration-300;
 }
 
 .nav-links--bottom {
-  transition: transform 0.35s, var(--transition--color);
+  @apply transition-transform duration-300;
 }
 
 .nav-links:hover {
@@ -189,7 +181,7 @@ export default {
 /* Transition that is gonna be applied */
 .sidenav-enter-active,
 .sidenav-leave-active {
-  transition: var(--transition--transform) ease-in-out;
+  @apply transition-transform duration-300 ease-in-out;
 }
 
 .text-gradient-background {
