@@ -43,16 +43,29 @@
         </picture>
 
         <!-- Links -->
-        <a
-          v-if="link"
-          :href="link"
-          target="_blank"
-          rel="noopener"
-          class="text-sm"
-          v-text="linkText"
-        />
-        <!-- Slot for extra info -->
-        <slot name="extra" />
+        <template v-if="links.length">
+          <div>
+            <template v-for="(link, index) in links">
+              <a
+                :key="link.text"
+                :href="link.href"
+                target="_blank"
+                rel="noopener"
+                class="text-sm"
+              >
+                {{ link.text }}
+              </a>
+
+              <!-- Separator -->
+              <template v-if="index !== links.length - 1">
+                -
+              </template>
+            </template>
+          </div>
+        </template>
+
+        <!-- Extra information -->
+        <slot />
       </div>
     </template>
   </article>
@@ -67,18 +80,20 @@ export default {
   props: {
     // For separating text
     separator: { type: Boolean, required: false, default: false },
-    titleUnderline: { type: Boolean, required: false, default: false },
-    // For normal usage
-    title: { type: String, required: true },
-    text: { type: String, required: false, default: undefined },
-    // For links
-    link: { type: String, required: false, default: undefined },
-    linkText: { type: String, required: false, default: undefined },
+
     // For icons
     icon: { type: String, required: false, default: undefined },
     iconPosition: { type: String, required: false, default: 'bg-svg-right' },
+
+    // For normal usage
+    title: { type: String, required: true },
+    text: { type: String, required: false, default: undefined },
+
     // For images
     img: { type: String, required: false, default: undefined },
+
+    // For links
+    links: { type: Array, required: false, default: () => [] },
   },
 
   computed: mapState('user', ['settings']),

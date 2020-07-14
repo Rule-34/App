@@ -10,8 +10,12 @@
           
       Keep in mind that all the content we get is from public released APIs from the site itself."
       icon="bg-svg-info"
-      link="https://github.com/AlejandroAkbal/Rule-34-App"
-      link-text="Github repository"
+      :links="[
+        {
+          text: 'Github repository',
+          href: 'https://github.com/AlejandroAkbal/Rule-34-App',
+        },
+      ]"
     />
 
     <!-- Separator -->
@@ -22,8 +26,12 @@
       title="Terms of service"
       text="You can find an online copy of the Terms Of Service (TOS) in the next link."
       icon="bg-svg-info"
-      link="/terms-of-service"
-      link-text="Terms of service"
+      :links="[
+        {
+          text: 'Terms of service',
+          href: '/terms-of-service',
+        },
+      ]"
     />
 
     <!-- Generated terms of service -->
@@ -31,8 +39,12 @@
       title="Privacy policy"
       text="You can find an online copy of the Privacy policy in the next link."
       icon="bg-svg-info"
-      link="/privacy-policy"
-      link-text="Privacy policy"
+      :links="[
+        {
+          text: 'Privacy policy',
+          href: '/privacy-policy',
+        },
+      ]"
     />
 
     <!-- Analytics -->
@@ -40,8 +52,12 @@
       title="Analytics"
       text="Self hosted Matomo analytics are used with everything tweaked to be completely anonymous, no personal info is gathered, opt out on the next link."
       icon="bg-svg-info"
-      link="/privacy-policy#opt-out"
-      link-text="Opt out"
+      :links="[
+        {
+          text: 'Opt Out',
+          href: '/privacy-policy#opt-out',
+        },
+      ]"
     />
 
     <!-- Contact -->
@@ -49,14 +65,18 @@
       title="Contact"
       text="Please reach me in the following email for suggestions, requests, questions, comments, or any concerns."
       icon="bg-svg-info"
-      link="mailto:contact@r34.app"
-      link-text="contact@r34.app"
+      :links="[
+        {
+          text: 'contact@r34.app',
+          href: 'mailto:contact@r34.app',
+        },
+      ]"
     />
 
     <!-- Thank you -->
     <ContentContainer
       title="Thank you for your interest"
-      text="It's a pleasure having someone read this wall of text. :')"
+      text="It's a pleasure having someone read this wall of text."
       icon="bg-svg-star"
     />
 

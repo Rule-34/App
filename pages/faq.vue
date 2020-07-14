@@ -24,8 +24,7 @@
       title="How can I install this App?"
       text="Follow the instructions on the Rule 34 App Discord."
       icon="bg-svg-info"
-      link="https://discord.gg/fUhYHSZ"
-      link-text="Discord"
+      :links="[{ text: 'Discord', href: 'https://discord.gg/fUhYHSZ' }]"
     />
 
     <!-- Image removal -->
@@ -41,7 +40,7 @@
       text="Settings have a hover description, if your device doesn't support hovering, please refer to the Usage page."
       icon="bg-svg-info"
     >
-      <nuxt-link to="/usage" class="text-sm">Usage information</nuxt-link>
+      <nuxt-link to="/usage" class="text-sm">Usage</nuxt-link>
     </ContentContainer>
 
     <!-- Technical separator -->
@@ -70,14 +69,17 @@
       title="I found a bug/error!"
       text="You can report it on the GitHub repository, or directly to me on our Discord."
       icon="bg-svg-info"
-      link="https://github.com/AlejandroAkbal/Rule-34-App"
-      link-text="Github"
+      :links="[
+        {
+          text: 'Github',
+          href: 'https://github.com/AlejandroAkbal/Rule-34-App',
+        },
+        {
+          text: 'Discord',
+          href: 'https://discord.gg/fUhYHSZ',
+        },
+      ]"
     >
-      <!-- Workaround for having two links -->
-      <template slot="extra">
-        -
-        <a class="text-sm" href="https://discord.gg/fUhYHSZ">Discord</a>
-      </template>
     </ContentContainer>
 
     <ContentContainer
@@ -91,33 +93,33 @@
       title="Can I donate for your efforts?"
       text="Of course you can, I've been working really hard on this project, if you feel like contributing to the development please do."
       icon="bg-svg-dollar"
-      link="https://liberapay.com/AlejandroAkbal"
-      link-text="Liberapay"
+      link=""
+      link-text=""
+      :links="[
+        {
+          text: 'Liberapay',
+          href: 'https://liberapay.com/AlejandroAkbal',
+        },
+        {
+          text: 'Patreon',
+          href: 'https://patreon.com/AlejandroAkbal',
+        },
+        {
+          text: 'Paypal',
+          href: 'https://www.paypal.me/Alejandrorr7',
+        },
+      ]"
     >
-      <!-- Workaround for having two links -->
-      <template slot="extra">
-        -
-        <a class="text-sm" href="https://patreon.com/AlejandroAkbal">
-          Patreon
-        </a>
-        -
-        <a class="text-sm" href="https://www.paypal.me/Alejandrorr7">
-          Paypal
-        </a>
-      </template>
     </ContentContainer>
 
     <!-- Credits -->
     <ContentContainer
       title="Credits"
-      text="Thanks to Jessica for drawing the logo, and me for developing the PWA."
+      text="Thanks to Jessica for drawing the logo, and me for developing the App."
       icon="bg-svg-star"
-    >
-      <!-- Slot -->
-      <p class="text-default-text-muted text-xs">And you, the user!</p>
-    </ContentContainer>
+    />
 
-    <!-- Temporal div TODO: remove -->
+    <!-- Temporal div -->
     <div style="height: 75vh;" />
   </main>
 </template>
