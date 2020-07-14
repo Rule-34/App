@@ -46,9 +46,13 @@ a:focus,
 }
 
 .material-container {
-  @apply bg-elevation border-util rounded-lg overflow-hidden m-5 shadow;
+  @apply overflow-hidden rounded-lg shadow bg-elevation border-util;
   /* Override transition with these */
   transition: var(--transition--transform), var(--transition--border-color);
+}
+
+.container--separator > * {
+  @apply my-4;
 }
 
 /* ---------------- Component specific ---------------- */
@@ -56,16 +60,16 @@ a:focus,
 .icon {
   stroke-width: 1.6;
   /* Align middle is necessary for some reason for mobile devices */
-  @apply text-default align-middle overflow-visible;
+  @apply overflow-visible align-middle text-default;
 }
 
 .tag-container {
-  @apply flex flex-wrap items-start content-start p-1 bg-depth overflow-hidden;
+  @apply flex flex-wrap items-start content-start p-1 overflow-hidden bg-depth;
 }
 
 .tag {
   transition: var(--transition--border-color), var(--transition--color);
-  @apply select-none border border-primary-hover rounded overflow-hidden px-1 m-1;
+  @apply px-1 m-1 overflow-hidden border rounded select-none border-primary-hover;
 }
 
 .tag:hover,

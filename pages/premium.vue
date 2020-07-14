@@ -1,14 +1,12 @@
 @@ -0,0 +1,172 @@
 <template>
-  <main>
-    <ControlPannel
-      v-if="hasValidLicenseKey"
-      class="h-full min-h-screen mx-auto"
-    />
+  <main class="flex h-screen">
+    <template v-if="hasValidLicenseKey">
+    </template>
 
-    <!-- Log In -->
-    <div v-else class="grid min-h-screen" style="place-items: center;">
-      <div class="w-full max-w-screen-sm">
+    <template v-else>
+      <div class="w-full m-auto">
+        <!-- Log In -->
         <errors />
 
         <login />
@@ -18,7 +16,7 @@
 
         <subscription />
       </div>
-    </div>
+    </template>
   </main>
 </template>
 

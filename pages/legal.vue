@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="container--separator">
     <!-- Separator -->
     <ContentContainer :separator="true" title="Disclaimer" />
 
