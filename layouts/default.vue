@@ -18,7 +18,9 @@
 
     <!-- Layout content -->
     <!-- Should use VW margin but this is okay -->
-    <nuxt class="w-full mx-auto md:w-2/3 xl:w-1/2" style="padding-top: 1px;" />
+    <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <nuxt class="max-w-4xl mx-auto" />
+    </div>
   </div>
 </template>
 
