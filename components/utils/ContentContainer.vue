@@ -4,15 +4,12 @@
     <!-- If separator -->
     <template v-if="separator">
       <div class="p-3 bg-gradient-blue-lilac">
-        <div class="text-center text-default-text">
+        <div class="leading-7 text-center text-default-text">
           <!-- Head -->
-          <h1
-            :class="{ underline: titleUnderline }"
-            class="text-lg font-bold tracking-wide"
-            v-text="title"
-          />
+          <h1 class="text-lg font-semibold tracking-wide">{{ title }}</h1>
+
           <!-- Body -->
-          <p v-if="text" class="mb-1" v-text="text" />
+          <p v-if="text" class="text-sm">{{ text }}</p>
         </div>
       </div>
     </template>
@@ -25,13 +22,14 @@
         :class="{ 'bg-svg': icon, [icon]: icon, [iconPosition]: icon }"
       >
         <!-- Title -->
-        <h1 class="text-lg font-bold tracking-wide" v-text="title" />
+        <h1>{{ title }}</h1>
 
         <!-- Text -->
-        <p v-if="text" class="mb-1 text-sm whitespace-pre-line" v-text="text" />
-
-        <!-- We can insert extra info here -->
-        <slot class="mb-1" />
+        <p
+          v-if="text"
+          class="text-sm whitespace-pre-line text-default-text-muted"
+          v-text="text"
+        />
 
         <!-- Image -->
         <picture v-if="img">
