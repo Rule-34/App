@@ -2,8 +2,25 @@
 <template>
   <main class="flex h-screen">
     <template v-if="hasValidLicenseKey">
-      <div class="flex flex-col w-full py-4">
+      <div class="flex flex-col w-full container--separator">
         <PremiumDashboard />
+
+        <!-- Custom Booru  -->
+        <div class="flex p-4 material-container text-default-text">
+          <div class="flex-grow">
+            <h1 class="text-lg">Custom Boorus</h1>
+            <p class="text-sm text-default-text-muted">
+              Add or edit compatible boorus
+            </p>
+          </div>
+
+          <nuxt-link
+            class="flex items-center justify-center px-4 rounded-full material-container bg-background"
+            to="/premium/booru"
+          >
+            Modify
+          </nuxt-link>
+        </div>
 
         <!-- Spacer -->
         <div class="flex-grow" />
