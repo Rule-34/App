@@ -9,7 +9,7 @@
 
           <button
             title="Use me when something is not working!"
-            class="px-2 text-xs align-middle rounded-full shadow color-util border-util"
+            class="px-2 text-xs align-middle rounded-full shadow color-util border-util bg-background"
             @click="removeLocalStorage()"
           >
             Reset
