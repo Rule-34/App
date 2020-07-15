@@ -1,9 +1,5 @@
 <template>
-  <figure
-    v-if="post"
-    :class="{ zoom: settings.zoom.value }"
-    class="text-center material-container text-default-text"
-  >
+  <figure v-if="post" class="text-center material-container text-default-text">
     <post-media :post="post" @click.native="isActive = !isActive" />
 
     <figcaption class="flex flex-wrap overflow-hidden text-sm">
@@ -15,8 +11,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 // Components
 import PostMedia from './PostMedia.vue'
 import PostTags from './PostTags.vue'
@@ -40,10 +34,6 @@ export default {
     return {
       isActive: false,
     }
-  },
-
-  computed: {
-    ...mapState('user', ['settings']),
   },
 }
 </script>

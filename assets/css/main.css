@@ -16,7 +16,6 @@
 
 /* Styling to classes like .btn, .card etc. should be here */
 
-@import './general/settingsRelated.css';
 @import './general/general.css';
 
 /* 

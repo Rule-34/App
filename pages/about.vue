@@ -1,7 +1,6 @@
 <template>
   <main class="flex h-screen p-3">
     <a
-      :class="{ zoom: settings.zoom.value }"
       href="https://akbal.dev/"
       target="_blank"
       rel="noopener"
@@ -34,11 +33,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
-  computed: mapState('user', ['settings']),
-
   head() {
     return {
       title: 'About',
