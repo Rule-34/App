@@ -121,24 +121,3 @@ export default {
   },
 }
 </script>
-
-<style>
-/* Initial state */
-.search-enter,
-.search-leave-to {
-  transform: translateX(100vw);
-}
-
-/* Toggled stated */
-.search-enter-to {
-  transform: translateX(0px);
-}
-
-/* Transition that is gonna be applied */
-.search-enter-active,
-.search-leave-active {
-  transition-property: transform;
-  transition-duration: 0.35s;
-  transition-timing-function: ease-in-out;
-}
-</style>

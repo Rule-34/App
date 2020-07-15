@@ -45,7 +45,7 @@ export default {
 
 <style lang="postcss">
 .navigation-toggler {
-  top: 25px;
+  top: 7vh;
   transform: translateX(-35px);
   transition: var(--transition--transform);
 }
