@@ -11,7 +11,7 @@ export const state = () => ({
     },
 
     product: {
-      product_permalink: 'gRuqQm',
+      product_permalink: 'Rule34App',
       license_key: undefined,
     },
   },
