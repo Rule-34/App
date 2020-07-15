@@ -37,16 +37,6 @@ export const state = () => ({
       defaultValue: true,
     },
 
-    // TODO: slider for how much zoom
-    zoom: {
-      name: 'Hover Zoom',
-      description:
-        'Zoom posts when you hover over them, not really useful, but quite amusing.',
-      image: '/img/usage_examples/hover-zoom',
-      value: false,
-      defaultValue: false,
-    },
-
     lazyLoading: {
       name: 'Lazy load',
       description:
