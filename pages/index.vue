@@ -1,20 +1,18 @@
 <template>
-  <main>
+  <main class="container--separator">
     <!-- Menu -->
-    <div class="flex flex-row justify-between m-5">
-      <DomainSelector class="my-auto" />
+    <div class="flex flex-row items-center justify-between">
+      <DomainSelector />
 
       <Notifications />
     </div>
 
     <!-- Content -->
-    <div class="container--separator">
-      <Errors />
+    <Errors />
 
-      <Post v-for="post in posts.data" :key="post.id" :post="post" />
+    <Post v-for="post in posts.data" :key="post.id" :post="post" />
 
-      <Controls />
-    </div>
+    <Controls />
   </main>
 </template>
 

@@ -17,7 +17,7 @@
     </transition>
 
     <!-- Layout content -->
-    <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+    <div class="px-4 mx-auto overflow-auto max-w-7xl sm:px-6 lg:px-8">
       <nuxt class="max-w-4xl mx-auto" />
     </div>
   </div>
