@@ -21,7 +21,7 @@
       <!-- TODO: Remake functionality -->
       <!-- <button type="button" title="Premade filter" @click="addPremadeTags()">
         <GitlabIcon
-          class="w-6 h-6 icon hover:text-default-text-muted transition--color"
+          class="w-6 h-6 transition-colors duration-300 icon hover:text-default-text-muted"
         />
       </button> -->
 
@@ -33,7 +33,7 @@
         @click="resetAddedTags()"
       >
         <TrashIcon
-          class="w-6 h-6 icon hover:text-default-text-muted transition--color"
+          class="w-6 h-6 transition-colors duration-300 icon hover:text-default-text-muted"
         />
       </button>
 
@@ -45,7 +45,7 @@
       >
         <FilterIcon
           :class="{ 'text-red-400': search.blacklistFilter.isActive }"
-          class="w-6 h-6 icon transition--color"
+          class="w-6 h-6 transition-colors duration-300 icon"
         />
       </button>
     </div>

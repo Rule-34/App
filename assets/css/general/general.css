@@ -1,10 +1,4 @@
 /* ---------------- Document defaults ---------------- */
-:root {
-  --transition--border-color: border-color 0.35s;
-  --transition--color: color 0.35s;
-  --transition--transform: transform 0.35s;
-  --transition--opacity: opacity 0.35s;
-}
 
 /* html {
   scroll-behavior: smooth;
@@ -15,27 +9,10 @@ button:focus {
 }
 
 /* ---------------- Tools and utils ---------------- */
-.transition--color {
-  transition: var(--transition--color);
-}
-
-.border-util {
-  transition: var(--transition--border-color);
-  @apply border border-border;
-}
-
-.border-util:hover,
-.border-util:focus,
-/* Extra */
-.material-container:hover,
-.material-container:focus {
-  @apply border-border-hover;
-}
 
 a,
 .color-util {
-  transition: var(--transition--color);
-  @apply text-primary-hover;
+  @apply transition-colors duration-300 text-primary-hover;
 }
 
 a:hover,
@@ -45,14 +22,19 @@ a:focus,
   @apply text-primary;
 }
 
-.material-container {
-  @apply overflow-hidden rounded-lg shadow bg-elevation border-util;
-  /* Override transition with these */
-  transition: var(--transition--transform), var(--transition--border-color);
+.border-util {
+  @apply transition-colors duration-300 border border-border;
 }
 
-.container--separator > * {
-  @apply my-4;
+.border-util:hover,
+.border-util:focus,
+.material-container:hover,
+.material-container:focus {
+  @apply border-border-hover;
+}
+
+.material-container {
+  @apply overflow-hidden rounded-lg shadow bg-elevation border-util;
 }
 
 /* ---------------- Component specific ---------------- */
@@ -68,8 +50,7 @@ a:focus,
 }
 
 .tag {
-  transition: var(--transition--border-color), var(--transition--color);
-  @apply px-1 m-1 overflow-hidden border rounded select-none border-primary-hover;
+  @apply px-1 m-1 overflow-hidden transition-colors duration-300 border rounded select-none border-primary-hover;
 }
 
 .tag:hover,
@@ -77,16 +58,21 @@ a:focus,
   @apply border-primary;
 }
 
+.container--separator > * {
+  @apply my-4;
+}
+
 /* ---------------- Transitions and animations ---------------- */
 
 /* Page Transition */
 .page-enter-active,
 .page-leave-active {
-  transition: var(--transition--opacity);
+  @apply transition-opacity duration-300;
 }
+
 .page-enter,
 .page-leave-to {
-  opacity: 0;
+  @apply opacity-0;
 }
 
 /* .bg-background {

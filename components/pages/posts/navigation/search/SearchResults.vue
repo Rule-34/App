@@ -49,7 +49,7 @@
 
           <!-- Number of posts with that tag -->
           <span
-            class="text-primary-hover group-hover:text-default transition--color"
+            class="transition-colors duration-300 text-primary-hover group-hover:text-default"
             >{{ `(${tag.count})` }}
           </span>
         </button>
