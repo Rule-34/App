@@ -1,8 +1,8 @@
 @@ -0,0 +1,172 @@
 <template>
-  <main class="flex h-screen">
+  <main>
     <template v-if="hasValidLicenseKey">
-      <div class="flex flex-col w-full container--separator">
+      <div class="flex flex-col h-screen container--separator">
         <PremiumDashboard />
 
         <!-- Custom Booru  -->
@@ -40,7 +40,7 @@
     </template>
 
     <template v-else>
-      <div class="w-full m-auto">
+      <div class="flex flex-col h-screen m-auto justify-evenly">
         <!-- Log In -->
         <errors />
 
