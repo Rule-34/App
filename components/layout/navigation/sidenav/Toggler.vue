@@ -3,7 +3,7 @@
   <div class="fixed z-50 navigation-toggler">
     <button
       class="block w-12 h-12 m-4 border-0 rounded-full shadow-lg select-none md:w-16 md:h-16 md:m-2 bg-gradient-lilac-blue"
-      type="button"
+      type="menu"
       title="Menu"
       @click="setSideNavActive(!sideNav.isActive)"
     >
@@ -11,7 +11,7 @@
     </button>
     <button
       v-if="showSearch"
-      type="button"
+      type="menu"
       class="block w-10 h-10 m-5 border-0 rounded-full shadow-lg select-none md:w-12 md:h-12 md:m-4 bg-gradient-lilac-blue"
       title="Search"
       @click="setSearchActive(!search.isActive)"
