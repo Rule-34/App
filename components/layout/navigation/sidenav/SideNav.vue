@@ -107,7 +107,7 @@
     <!-- Space for clicking out of the menu -->
     <div
       class="flex-grow bg-black bg-opacity-25"
-      @click="setSideNavActive(false)"
+      @click="setSideNavIsActive(false)"
     />
   </aside>
 </template>
@@ -131,7 +131,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('navigation', ['setSideNavActive']),
+    ...mapMutations('navigation', ['setSideNavIsActive']),
   },
 }
 </script>

@@ -12,7 +12,7 @@
           max="100"
           class="form-switch-numeric color-util border-util"
           @change="
-            setUserSettingValue({
+            setSettingValue({
               setting: settingIndex,
               value: parseInt($event.target.value, 10),
             })
@@ -36,7 +36,7 @@
           type="checkbox"
           class="form-switch-checkbox"
           @change="
-            setUserSettingValue({
+            setSettingValue({
               setting: settingIndex,
               value: $event.target.checked,
             })
@@ -74,7 +74,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('user', ['setUserSettingValue']),
+    ...mapMutations('user', ['setSettingValue']),
   },
 }
 </script>

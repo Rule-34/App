@@ -82,7 +82,7 @@ export default {
 
   methods: {
     ...mapActions('booru', ['addedTagsManager', 'pidManager', 'fetchPosts']),
-    ...mapMutations('navigation', ['setSearchActive']),
+    ...mapMutations('navigation', ['setSearchIsActive']),
 
     removeAddedTag(tag) {
       this.addedTagsManager({
@@ -110,7 +110,7 @@ export default {
     async fetchAddedTags() {
       await this.pidManager({ operation: 'reset' })
 
-      await this.setSearchActive(false)
+      await this.setSearchIsActive(false)
 
       scrollToTop()
 
