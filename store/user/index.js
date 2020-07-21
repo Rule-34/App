@@ -1,7 +1,12 @@
 export const state = () => ({
-  // TODO: filters, saved posts
+  custom: {
+    boorus: [],
 
-  // These settings are saved to localStorage
+    // filters: [],
+  },
+
+  // saved: { posts: [] },
+
   settings: {
     darkTheme: {
       name: 'Dark theme',
@@ -103,5 +108,46 @@ export const state = () => ({
 export const mutations = {
   setSettingValue(state, { setting, value }) {
     state.settings[setting].value = value
+  },
+
+  setCustomBoorus(state, value) {
+    state.custom.boorus = value
+  },
+
+  pushCustomBooruValue(state, value) {
+    state.custom.boorus.push(value)
+  },
+}
+
+export const actions = {
+  customBoorusManager({ state, commit }, { operation, value }) {
+    switch (operation) {
+      case 'add': {
+        // value: booruObj
+        const doesTheBooruAlreadyExist = state.custom.boorus.some(
+          (booruObj) => booruObj.domain === value.domain
+        )
+
+        if (!doesTheBooruAlreadyExist) commit('pushCustomBooruValue', value)
+        break
+      }
+
+      case 'remove':
+        // value: booruObj
+        commit(
+          'setCustomBoorus',
+          state.custom.boorus.filter((customBooru) => {
+            return customBooru.domain !== value.domain
+          })
+        )
+        break
+
+      case 'reset':
+        commit('setCustomBoorus', [])
+        break
+
+      default:
+        throw new Error('No operation specified')
+    }
   },
 }
