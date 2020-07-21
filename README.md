@@ -31,13 +31,13 @@ This app can browse the following sites
 
 ### Discord
 
-Join the **[community Discord](https://discord.gg/fUhYHSZ)** to keep up with the updates of this project!
+Join the community **[Discord](https://discord.gg/fUhYHSZ)** to keep up with the updates of this project!
 
 ![Discord](https://img.shields.io/discord/656241666553806861?style=for-the-badge)
 
 ### Twitter
 
-Follow the **[Rule 34 App on Twitter](https://twitter.com/Rule34App)** for announcements and tips on how to use the App!
+Follow the Rule 34 App on **[Twitter](https://twitter.com/Rule34App)** for announcements and tips on how to use the App!
 
 ## Future
 
@@ -63,11 +63,11 @@ Since this is a **free** project that I have created, with **no ads** to generat
 
 ### Languages
 
-HTML, CSS, Javascript, NodeJS.
+HTML, CSS, Javascript, NodeJS, NPM.
 
 ### Frameworks and tools
 
-NPM, NuxtJS, VueJS, TailwindCSS, Webpack, etc.
+NuxtJS, VueJS, TailwindCSS, Webpack, etc.
 
 ## Development
 
