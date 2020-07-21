@@ -55,16 +55,8 @@ export const mutations = {
     state.responseData = response
   },
 
-  removeRawResponse(state) {
-    state.responseData = undefined
-  },
-
   setLicenseKey(state, licenseKey) {
     state.gumroad.product.license_key = licenseKey
-  },
-
-  removeLicenseKey(state) {
-    state.gumroad.product.license_key = undefined
   },
 }
 
