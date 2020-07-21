@@ -92,6 +92,12 @@ export default {
     ]),
 
     async changeDomain(domain) {
+      // Redirect to premium page
+      if (domain === 'Add booru') {
+        this.$router.push({ name: 'premium' })
+        return
+      }
+
       await this.activeBooruManager({ operation: 'search', value: domain })
 
       await this.pidManager({ operation: 'reset' })
