@@ -2,13 +2,13 @@
   <form class="fixed z-40 w-full min-h-screen bg-black bg-opacity-25">
     <div class="w-full h-screen search-grid">
       <!-- Separator -->
-      <div @click.self="setSearchActive(false)" />
+      <div @click.self="setSearchIsActive(false)" />
 
       <SearchBar />
 
       <SearchResults />
 
-      <div @click.self="setSearchActive(false)" />
+      <div @click.self="setSearchIsActive(false)" />
     </div>
   </form>
 </template>
@@ -29,7 +29,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('navigation', ['setSearchActive']),
+    ...mapMutations('navigation', ['setSearchIsActive']),
   },
 }
 </script>

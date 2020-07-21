@@ -9,11 +9,11 @@ export const state = () => ({
 })
 
 export const mutations = {
-  setSideNavActive(state, value) {
+  setSideNavIsActive(state, value) {
     state.sideNav.isActive = value
   },
 
-  setSearchActive(state, value) {
+  setSearchIsActive(state, value) {
     state.search.isActive = value
   },
 }

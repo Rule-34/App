@@ -6,7 +6,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('navigation', ['setSideNavActive', 'setSearchActive']),
+    ...mapMutations('navigation', ['setSideNavIsActive', 'setSearchIsActive']),
 
     touchHandler(direction, event) {
       const touchThreshold = screen.availWidth * 0.25
@@ -21,9 +21,9 @@ export default {
           }
 
           if (this.search.isActive && this.isPostsPage) {
-            this.setSearchActive(false)
+            this.setSearchIsActive(false)
           } else {
-            this.setSideNavActive(true)
+            this.setSideNavIsActive(true)
           }
           break
 
@@ -34,9 +34,9 @@ export default {
           }
 
           if (!this.sideNav.isActive && this.isPostsPage) {
-            this.setSearchActive(true)
+            this.setSearchIsActive(true)
           } else {
-            this.setSideNavActive(false)
+            this.setSideNavIsActive(false)
           }
           break
       }

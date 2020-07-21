@@ -23,11 +23,11 @@ export default {
   },
 
   methods: {
-    ...mapMutations('navigation', ['setSideNavActive']),
+    ...mapMutations('navigation', ['setSideNavIsActive']),
 
     // Set different layout depending of the route
     routeHandler() {
-      if (this.sideNav.isActive) this.setSideNavActive(false)
+      if (this.sideNav.isActive) this.setSideNavIsActive(false)
 
       switch (this.$nuxt.$route.name) {
         case 'index':
