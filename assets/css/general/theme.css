@@ -13,8 +13,8 @@
 
   /*  This is for icons mainly */
   --color-default: hsl(0, 0%, 100%);
-  --color-default-text: hsl(0, 0%, 90%);
-  --color-default-text-muted: hsl(0, 0%, 70%);
+  --color-default-text: hsla(0, 0%, 100%, 0.9);
+  --color-default-text-muted: hsla(0, 0%, 100%, 0.7);
 
   /* For background */
   --color-background: hsl(0, 0%, 7%);
