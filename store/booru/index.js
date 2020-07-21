@@ -1,5 +1,5 @@
 import {
-  booruList,
+  booruList as defaultBooruList,
   findBoorusWithValueByKey,
   booruTypeList,
 } from '~/assets/lib/rule-34-shared-resources/util/BooruUtils.js'
@@ -14,7 +14,6 @@ export const state = () => ({
 
   booru: {
     active: 0, // This is saved to localStorage // This is an index to booru.list
-    list: booruList,
   },
 
   queries: {
@@ -34,8 +33,8 @@ export const state = () => ({
 })
 
 export const getters = {
-  getActiveBooru(state) {
-    return state.booru.list[state.booru.active]
+  getActiveBooru(state, getters) {
+    return getters.getBooruList[state.booru.active]
   },
 
   getActiveBooruType: (state, getters) => {
@@ -46,11 +45,19 @@ export const getters = {
     )[0]
   },
 
-  // This is only used for Selector.vue
-  getFilteredBooruList: (state, getters, rootState) => {
-    return rootState.user.settings.nsfw.value
-      ? findBoorusWithValueByKey(true, 'nsfw', state.booru.list)
-      : findBoorusWithValueByKey(false, 'nsfw', state.booru.list)
+  // Used internally for state
+  getBooruList: (state, getters) => {
+    return [...getters.getDefaultBooruList, ...getters.getPremiumBooruList]
+  },
+
+  // Used for premium separation
+  getDefaultBooruList: () => {
+    return defaultBooruList
+  },
+
+  // Used for premium separation
+  getPremiumBooruList: (state, getters, rootState, rootGetters) => {
+    return rootState.user.custom.boorus
   },
 }
 

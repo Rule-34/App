@@ -12,15 +12,31 @@
       class="inline-flex items-center font-light outline-none appearance-none text-primary bg-elevation"
       @change="changeDomain($event.target.value)"
     >
-      <!-- Loop for every option -->
-      <option
-        v-for="booru in getFilteredBooruList"
-        :key="booru.domain"
-        :aria-label="'Changes the domain to ' + booru.domain"
-        :value="booru.domain"
-      >
-        {{ booru.domain }}
-      </option>
+      <optgroup label="Default">
+        <!-- Loop for every option -->
+        <option
+          v-for="booru in filteredDefaultBooruList"
+          :key="booru.domain"
+          :aria-label="'Changes the domain to ' + booru.domain"
+          :value="booru.domain"
+        >
+          {{ booru.domain }}
+        </option>
+      </optgroup>
+
+      <optgroup label="Custom">
+        <template v-if="isUserPremium">
+          <option
+            v-for="booru in filteredPremiumBooruList"
+            :key="booru.domain"
+            :aria-label="'Changes the domain to ' + booru.domain"
+            :value="booru.domain"
+          >
+            {{ booru.domain }}
+          </option>
+        </template>
+        <option value="Add booru">Add booru</option>
+      </optgroup>
     </select>
 
     <!-- Drop icon -->
@@ -36,6 +52,7 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 // Third party
 import { ChevronDownIcon, CloudIcon } from 'vue-feather-icons'
 
+import { findBoorusWithValueByKey } from '~/assets/lib/rule-34-shared-resources/util/BooruUtils.js'
 import fireAnalytics from '~/assets/js/analytics'
 
 export default {
@@ -45,7 +62,25 @@ export default {
 
   computed: {
     ...mapState('booru', ['posts']),
-    ...mapGetters('booru', ['getActiveBooru', 'getFilteredBooruList']),
+    ...mapState('user', ['settings']),
+    ...mapGetters('booru', [
+      'getActiveBooru',
+      'getDefaultBooruList',
+      'getPremiumBooruList',
+    ]),
+    ...mapGetters('premium', ['isUserPremium']),
+
+    filteredDefaultBooruList() {
+      return this.settings.nsfw.value
+        ? findBoorusWithValueByKey(true, 'nsfw', this.getDefaultBooruList)
+        : findBoorusWithValueByKey(false, 'nsfw', this.getDefaultBooruList)
+    },
+
+    filteredPremiumBooruList() {
+      return this.settings.nsfw.value
+        ? findBoorusWithValueByKey(true, 'nsfw', this.getPremiumBooruList)
+        : findBoorusWithValueByKey(false, 'nsfw', this.getPremiumBooruList)
+    },
   },
 
   methods: {
