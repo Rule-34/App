@@ -37,7 +37,7 @@
         </table>
       </div>
       <p class="p-2 text-xs text-center text-default-text-muted">
-        Click on a booru domain to remove it
+        Tip: Click on a booru domain to remove it
       </p>
     </div>
 
