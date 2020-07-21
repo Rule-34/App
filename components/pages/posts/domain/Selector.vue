@@ -91,9 +91,8 @@ export default {
       'fetchPosts',
     ]),
 
-    // Changes that we have to do when changing domain so request is not malformed
     async changeDomain(domain) {
-      await this.activeBooruManager(domain)
+      await this.activeBooruManager({ operation: 'search', value: domain })
 
       await this.pidManager({ operation: 'reset' })
 

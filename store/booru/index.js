@@ -92,17 +92,29 @@ export const mutations = {
 }
 
 export const actions = {
-  activeBooruManager({ state, commit }, domain) {
-    // Search for the domain
-    const booruData = findBoorusWithValueByKey(
-      domain,
-      'domain',
-      state.booru.list
-    )[0]
+  activeBooruManager({ state, commit, getters }, { operation, value }) {
+    switch (operation) {
+      case 'search': {
+        // Search for the domain
+        const booruData = findBoorusWithValueByKey(
+          value,
+          'domain',
+          getters.getBooruList
+        )[0]
 
-    const booruIndex = state.booru.list.indexOf(booruData) // findIndex could be used
+        const booruIndex = getters.getBooruList.indexOf(booruData) // findIndex could be used
 
-    commit('setActiveBooru', booruIndex)
+        commit('setActiveBooru', booruIndex)
+        break
+      }
+
+      case 'reset':
+        commit('setActiveBooru', 0)
+        break
+
+      default:
+        throw new Error('No operation specified')
+    }
   },
 
   postsManager({ state, commit }, { operation, value }) {
@@ -112,7 +124,7 @@ export const actions = {
         break
 
       case 'concat':
-        commit('setPostsData', [...new Set(state.posts.data.concat(value))])
+        commit('setPostsData', [...new Set([...state.posts.data, ...value])])
         break
 
       default:
