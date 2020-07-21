@@ -26,6 +26,7 @@ export default ({ store }) => {
 
       return {
         user: {
+          custom: state.user.custom,
           settings: SETTINGS_OBJ,
         },
       }
