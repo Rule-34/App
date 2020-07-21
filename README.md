@@ -47,17 +47,15 @@ This app uses a JSON wrapper for various Rule 34 APIs, it is developed and manta
 
 ### Support
 
-Since the API is being hosted on heroku's free tier, It wont hold lots of connections at the same time, specially when serving videos from Rule 34 APIs, So I've planned and developed a solution:
+This project has various costs: domain, hosting, CloudFlare worker, maintenance, etc.
 
-![Network Map](.github/images/wan_map.png)
+I am a student, so I'm not really in a position to maintain everything from my pocket
 
-If the API is duplicated and a load balancer is placed between them, the requests would be distributed efficiently removing pressure from the APIs, keeping everything running smoothly, but the idea has its caveats
+Since this is an **open source** project, with **no advertising** or any other way to generate revenue, I ask of you:
 
-**Funding**, I am not on a wealthy position to maintain everything from my pocket, as I'm already paying for the domain name, hosting, etc.
+> **If you really like my work**, please donate whatever amount you can to ensure the future of this project.
 
-Since this is a **free** project that I have created, with **no ads** to generate revenue, I ask of you, **if you really like my work**, please donate whatever amount you can to the future of this app.
-
-[Liberapay (Better Patreon)](https://liberapay.com/AlejandroAkbal/) | [Patreon](https://patreon.com/AlejandroAkbal) | [Paypal](https://www.paypal.me/Alejandrorr7)
+[GitHub Sponsor](https://github.com/sponsors/AlejandroAkbal) | [LiberaPay](https://liberapay.com/AlejandroAkbal/) | [Patreon](https://patreon.com/AlejandroAkbal) | [PayPal](https://www.paypal.me/Alejandrorr7)
 
 ## Technicalities
 
