@@ -19,12 +19,13 @@ Browse the most popular boorus in the Rule 34 App
 
 This app can browse the following sites
 
-- safebooru.org
 - rule34.xxx
 - rule34.paheal.net
 - danbooru.donmai.us
 - gelbooru.com
 - e621.net
+- safebooru.org
+- e926.net
 
 ## Social
 
