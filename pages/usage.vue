@@ -14,12 +14,6 @@
     />
 
     <ContentContainer
-      title="Search: Furry button"
-      text="Fetch a dynamic filter that applies tags that will ban unpleasant posts from showing (Only for rule34.xxx)."
-      img="/img/usage_examples/search-premade-filter"
-    />
-
-    <ContentContainer
       title="Search: Trash button"
       text="Deletes all added tags."
       img="/img/usage_examples/search-delete"
