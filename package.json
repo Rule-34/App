@@ -22,6 +22,7 @@
     "vuex-persist": "^2.2.0"
   },
   "devDependencies": {
+    "@nuxt/types": "^2.13.3",
     "@nuxtjs/eslint-config": "^3.0.0",
     "@nuxtjs/tailwindcss": "^2.0.0",
     "@nuxtjs/vuetify": "^1.11.2",
