@@ -14,7 +14,7 @@
   "dependencies": {
     "@nuxtjs/pwa": "^3.0.0-beta.20",
     "@nuxtjs/sitemap": "^2.4.0",
-    "@tailwindcss/ui": "^0.3.1",
+    "@tailwindcss/ui": "^0.4.0",
     "lodash": "^4.17.19",
     "nuxt": "^2.13.3",
     "vue-feather-icons": "^5.0.0",
@@ -24,10 +24,10 @@
   "devDependencies": {
     "@nuxt/types": "^2.13.3",
     "@nuxtjs/eslint-config": "^3.0.0",
-    "@nuxtjs/tailwindcss": "^2.0.0",
+    "@nuxtjs/tailwindcss": "^2.1.0",
     "@nuxtjs/vuetify": "^1.11.2",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.4.0",
+    "eslint": "^7.5.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-nuxt": ">=1.0.0",
     "eslint-plugin-prettier": "^3.1.4",
