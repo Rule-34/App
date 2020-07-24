@@ -41,7 +41,7 @@ export default {
    ** Customize the progress-bar color
    */
   loading: {
-    color: 'hsl(190, 100%, 50%)',
+    color: 'var(--color-gradient-two)',
     // height: '5px',
     throttle: 300,
     // duration: 5000,
