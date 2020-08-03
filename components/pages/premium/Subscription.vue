@@ -1,19 +1,19 @@
 <template>
-  <div class="material-container flex flex-col">
+  <div class="flex flex-col material-container">
     <!-- Head -->
     <div class="py-10">
       <!-- Title -->
       <h3
-        class="text-center text-default-text text-3xl leading-9 font-semibold"
+        class="text-3xl font-semibold leading-9 text-center text-default-text"
       >
         Premium
       </h3>
 
       <!-- Price -->
-      <div class="mt-4 flex items-center justify-center">
+      <div class="flex items-center justify-center mt-4">
         <!-- Currency and cost -->
         <span
-          class="px-3 flex items-start text-5xl leading-none tracking-tight text-default-text"
+          class="flex items-start px-3 text-5xl leading-none tracking-tight text-default-text"
         >
           <span class="mt-1 mr-2 text-3xl font-medium">
             €
@@ -24,7 +24,7 @@
         </span>
 
         <!-- Recurring -->
-        <span class="text-xl leading-8 font-medium text-default-text-muted">
+        <span class="text-xl font-medium leading-8 text-default-text-muted">
           /month
         </span>
       </div>
@@ -32,52 +32,52 @@
 
     <!-- Description -->
     <div
-      class="flex flex-col justify-between bg-background border-t border-border p-6"
+      class="flex flex-col justify-between p-6 border-t bg-background border-border"
     >
       <ul>
         <!--  -->
         <li class="flex items-start">
           <div class="flex-shrink-0">
-            <check-icon class="icon h-6 w-6 text-gradient-one" />
+            <check-icon class="w-6 h-6 icon text-gradient-one" />
           </div>
           <p
-            class="text-default-text-muted text-base font-medium leading-6 ml-3"
+            class="ml-3 text-base font-medium leading-6 text-default-text-muted"
           >
             Add your own boorus
           </p>
         </li>
 
         <!--  -->
-        <li class="mt-4 flex items-start">
+        <li class="flex items-start mt-4">
           <div class="flex-shrink-0">
-            <check-icon class="icon h-6 w-6 text-gradient-one" />
+            <check-icon class="w-6 h-6 icon text-gradient-one" />
           </div>
           <p
-            class="text-default-text-muted text-base font-medium leading-6 ml-3"
+            class="ml-3 text-base font-medium leading-6 text-default-text-muted"
           >
             Save posts
           </p>
         </li>
 
         <!--  -->
-        <li class="mt-4 flex items-start">
+        <li class="flex items-start mt-4">
           <div class="flex-shrink-0">
-            <check-icon class="icon h-6 w-6 text-gradient-one" />
+            <check-icon class="w-6 h-6 icon text-gradient-one" />
           </div>
           <p
-            class="text-default-text-muted text-base font-medium leading-6 ml-3"
+            class="ml-3 text-base font-medium leading-6 text-default-text-muted"
           >
             Create search filters
           </p>
         </li>
 
         <!--  -->
-        <li class="mt-4 flex items-start">
+        <li class="flex items-start mt-4">
           <div class="flex-shrink-0">
-            <check-icon class="icon h-6 w-6 text-gradient-one" />
+            <check-icon class="w-6 h-6 icon text-gradient-one" />
           </div>
           <p
-            class="text-default-text-muted text-base font-medium leading-6 ml-3"
+            class="ml-3 text-base font-medium leading-6 text-default-text-muted"
           >
             Much more in the future
           </p>
@@ -90,7 +90,7 @@
             target="_blank"
             rel="noopener"
             :href="'https://gum.co/' + gumroad.product.product_permalink"
-            class="block w-full text-center border-0 rounded-lg bg-gradient-lilac-blue px-6 py-3 text-lg leading-6 font-medium text-default-text focus:outline-none focus:shadow-outline transition ease-in-out duration-150"
+            class="block w-full px-6 py-3 text-lg font-medium leading-6 text-center transition duration-150 ease-in-out border-0 rounded-lg bg-gradient-lilac-blue text-default-text focus:outline-none focus:shadow-outline"
           >
             Subscribe
           </a>
