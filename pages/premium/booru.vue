@@ -48,7 +48,7 @@
     <form
       class="flex flex-col p-4 material-container text-default-text"
       action="#"
-      @submit.prevent="addCustomBooruToState(formBooru)"
+      @submit.prevent="addCustomBooruToState()"
     >
       <!-- Domain -->
       <label class="text-default-text-muted" for="booruDomain">Domain</label>
@@ -151,9 +151,21 @@ export default {
     ...mapActions('booru', ['activeBooruManager']),
 
     addCustomBooruToState(booruObj) {
+      let parsedConfig = null
+
+      try {
+        parsedConfig = JSON.parse(this.formBooru.config)
+      } catch (error) {
+        console.log(error)
+        parsedConfig = null
+      }
+
       this.customBoorusManager({
         operation: 'add',
-        value: { ...booruObj }, // Weird fix because it mutates the vuex store from here???
+        value: {
+          ...this.formBooru,
+          config: parsedConfig,
+        },
       })
     },
 
