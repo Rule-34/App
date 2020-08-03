@@ -8,7 +8,12 @@
       <!-- Hero Image -->
       <div class="relative w-full h-full overflow-hidden">
         <picture>
-          <source srcset="~/assets/img/brand/icon.webp" type="image/webp" />
+          <source
+            srcset="~/assets/img/brand/icon.webp"
+            type="image/webp"
+            height="512"
+            width="512"
+          />
           <img
             loading="eager"
             class="w-full h-auto sidebar-img--transition"
