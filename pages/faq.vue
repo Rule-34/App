@@ -1,5 +1,5 @@
 <template>
-  <main class="container--separator">
+  <main class="mt-4 space-y-4">
     <ContentContainer
       :separator="true"
       title="General"

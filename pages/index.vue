@@ -1,5 +1,5 @@
 <template>
-  <main class="container--separator">
+  <main class="mt-4 space-y-4">
     <!-- Menu -->
     <div class="flex flex-row items-center justify-between">
       <DomainSelector />

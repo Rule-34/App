@@ -58,13 +58,6 @@ a:focus,
   @apply border-primary;
 }
 
-.container--separator > * {
-  /* If this is used on the root level of a page, it pushes de SideNav and content down
-  * Use `overflow: auto;` on a parent to fix it
-  */
-  @apply my-4;
-}
-
 /* ---------------- Transitions and animations ---------------- */
 
 /* Page Transition */
