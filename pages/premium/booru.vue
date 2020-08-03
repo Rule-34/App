@@ -109,9 +109,9 @@
         rows="2"
       />
 
-      <button type="button" class="text-sm text-default-text-muted">
+      <!-- <button type="button" class="text-sm text-default-text-muted">
         Test booru
-      </button>
+      </button> -->
 
       <button
         type="submit"
