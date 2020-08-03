@@ -13,11 +13,11 @@ export const state = () => ({
   },
 
   booru: {
-    active: 0, // This is saved to localStorage // This is an index to booru.list
+    active: 0, // This is saved to localStorage
   },
 
   queries: {
-    pid: undefined, // Initial PID is set from booru.active
+    pid: undefined, // Initial PID is set on boot and is derived from the getActiveBooruType getter
   },
 
   posts: {
