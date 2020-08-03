@@ -1,5 +1,5 @@
 <template>
-  <main class="flex flex-col justify-around h-screen mt-4 space-y-4">
+  <main class="flex flex-col justify-around h-screen space-y-4 space-y-4-fixer">
     <div>
       <!-- Booru list -->
       <div class="px-2 py-1 overflow-x-scroll material-container">

@@ -2,7 +2,7 @@
 <template>
   <main>
     <template v-if="hasValidLicenseKey">
-      <div class="flex flex-col h-screen mt-4 space-y-4">
+      <div class="flex flex-col h-screen space-y-4 space-y-4-fixer">
         <PremiumDashboard />
 
         <!-- Custom Booru  -->

@@ -58,6 +58,10 @@ a:focus,
   @apply border-primary;
 }
 
+.space-y-4-fixer > :first-child {
+  @apply mt-4;
+}
+
 /* ---------------- Transitions and animations ---------------- */
 
 /* Page Transition */

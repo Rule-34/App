@@ -1,5 +1,5 @@
 <template>
-  <main class="mt-4 space-y-4">
+  <main class="space-y-4 space-y-4-fixer">
     <!-- General Usage -->
 
     <ContentContainer
