@@ -54,18 +54,13 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
-import {
-  FilterIcon,
-  SearchIcon,
-  TrashIcon,
-  GitlabIcon,
-} from 'vue-feather-icons'
+import { FilterIcon, SearchIcon, TrashIcon } from 'vue-feather-icons'
 import debounce from 'lodash/debounce'
 
 export default {
   name: 'SearchBar',
 
-  components: { SearchIcon, FilterIcon, TrashIcon, GitlabIcon },
+  components: { SearchIcon, FilterIcon, TrashIcon },
 
   data() {
     return {
@@ -95,9 +90,7 @@ export default {
     addSearchedTagDirectly(tag) {
       this.addedTagsManager({
         operation: 'add',
-        tag: {
-          name: tag,
-        },
+        value: tag,
       })
     },
 
