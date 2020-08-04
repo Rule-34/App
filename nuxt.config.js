@@ -4,6 +4,7 @@ export default {
 
   modern: process.env.NODE_ENV === 'development' ? undefined : 'client',
 
+  // Generate 404 page for hosts
   generate: { fallback: true },
 
   /*
