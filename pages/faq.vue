@@ -101,10 +101,6 @@
           href: 'https://liberapay.com/AlejandroAkbal',
         },
         {
-          text: 'Patreon',
-          href: 'https://patreon.com/AlejandroAkbal',
-        },
-        {
           text: 'Paypal',
           href: 'https://www.paypal.me/Alejandrorr7',
         },

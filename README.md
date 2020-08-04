@@ -55,7 +55,7 @@ Since this is an **open source** project, with **no advertising** or any other w
 
 > **If you really like my work**, please donate whatever amount you can to ensure the future of this project.
 
-[GitHub Sponsor](https://github.com/sponsors/AlejandroAkbal) | [LiberaPay](https://liberapay.com/AlejandroAkbal/) | [Patreon](https://patreon.com/AlejandroAkbal) | [PayPal](https://www.paypal.me/Alejandrorr7)
+[GitHub Sponsor](https://github.com/sponsors/AlejandroAkbal) | [LiberaPay](https://liberapay.com/AlejandroAkbal/) | [PayPal](https://www.paypal.me/Alejandrorr7)
 
 ## Technicalities
 
