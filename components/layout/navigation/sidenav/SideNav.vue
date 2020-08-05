@@ -64,7 +64,10 @@
         <ul class="flex flex-row justify-around">
           <!-- Discord -->
           <li>
-            <a class="flex nav-links--bottom" href="https://discord.gg/fUhYHSZ">
+            <a
+              class="flex nav-links--bottom"
+              href="https://redirect.r34.app/discord"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -90,7 +93,7 @@
           <li>
             <a
               class="flex nav-links--bottom"
-              href="https://liberapay.com/AlejandroAkbal/"
+              href="https://redirect.r34.app/liberapay/"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
