@@ -13,7 +13,7 @@
       :links="[
         {
           text: 'Github repository',
-          href: 'https://github.com/AlejandroAkbal/Rule-34-App',
+          href: 'https://redirect.r34.app/github',
         },
       ]"
     />

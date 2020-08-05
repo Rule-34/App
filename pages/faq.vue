@@ -24,7 +24,7 @@
       title="How can I install this App?"
       text="Follow the instructions on the Rule 34 App Discord."
       icon="bg-svg-info"
-      :links="[{ text: 'Discord', href: 'https://discord.gg/fUhYHSZ' }]"
+      :links="[{ text: 'Discord', href: 'https://redirect.r34.app/discord' }]"
     />
 
     <!-- Image removal -->
@@ -71,12 +71,12 @@
       icon="bg-svg-info"
       :links="[
         {
-          text: 'Github',
-          href: 'https://github.com/AlejandroAkbal/Rule-34-App',
+          text: 'GitHub',
+          href: 'https://redirect.r34.app/github',
         },
         {
           text: 'Discord',
-          href: 'https://discord.gg/fUhYHSZ',
+          href: 'https://redirect.r34.app/discord',
         },
       ]"
     >
@@ -97,12 +97,12 @@
       link-text=""
       :links="[
         {
-          text: 'Liberapay',
-          href: 'https://liberapay.com/AlejandroAkbal',
+          text: 'LiberaPay',
+          href: 'https://redirect.r34.app/liberapay',
         },
         {
-          text: 'Paypal',
-          href: 'https://www.paypal.me/Alejandrorr7',
+          text: 'PayPal',
+          href: 'https://redirect.r34.app/paypal',
         },
       ]"
     >

@@ -31,19 +31,19 @@ This app can browse the following sites
 
 ### Discord
 
-Join the community **[Discord](https://discord.gg/fUhYHSZ)** to keep up with the updates of this project!
+Join the community **[Discord](https://redirect.r34.app/discord)** to keep up with the updates of this project!
 
 ![Discord](https://img.shields.io/discord/656241666553806861?style=for-the-badge)
 
 ### Twitter
 
-Follow the Rule 34 App on **[Twitter](https://twitter.com/Rule34App)** for announcements and tips on how to use the App!
+Follow the Rule 34 App on **[Twitter](https://redirect.r34.app/twitter)** for announcements and tips on how to use the App!
 
 ## Future
 
 ### API
 
-This app uses a JSON wrapper for various Rule 34 APIs, it is developed and mantained by me, and can be found [here](https://github.com/AlejandroAkbal/Rule-34-API).
+This app uses a JSON wrapper for various Rule 34 APIs, it is developed and mantained by me, and can be found [here](https://redirect.r34.app/github/api).
 
 ### Support
 
@@ -55,7 +55,7 @@ Since this is an **open source** project, with **no advertising** or any other w
 
 > **If you really like my work**, please donate whatever amount you can to ensure the future of this project.
 
-[GitHub Sponsor](https://github.com/sponsors/AlejandroAkbal) | [LiberaPay](https://liberapay.com/AlejandroAkbal/) | [PayPal](https://www.paypal.me/Alejandrorr7)
+[GitHub Sponsor](https://redirect.r34.app/github/sponsor) | [LiberaPay](https://redirect.r34.app/liberapay) | [PayPal](https://redirect.r34.app/paypal)
 
 ## Technicalities
 

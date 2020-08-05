@@ -77,7 +77,7 @@ console.info(
   'font-size:32px;font-weight:bold;letter-spacing:0.02em;color:hsl(205, 78%, 62%);background-color:white;padding:8px 16px;'
 )
 console.info(
-  '%cContribute: https://github.com/AlejandroAkbal/Rule-34-App\nJoin our discord: https://discord.gg/fUhYHSZ',
+  '%cContribute: https://redirect.r34.app/github\nJoin our discord: https://redirect.r34.app/discord',
   'background-color:hsl(0, 0%, 7%);padding:4px 8px;font-size:16px;color:white;'
 )
 </script>
