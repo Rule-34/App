@@ -26,6 +26,8 @@ export default {
         name: 'description',
         content: 'Browse the most popular boorus in the Rule 34 App',
       },
+
+      // Coil.com
       {
         hid: 'monetization',
         name: 'monetization',
@@ -33,7 +35,12 @@ export default {
       },
     ],
 
-    link: [{ rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' }],
+    link: [
+      // Font
+      { rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' },
+      { rel: 'preconnect', href: 'https://rsms.me' },
+      { rel: 'dns-prefetch ', href: 'https://rsms.me' },
+    ],
 
     noscript: [{ innerHTML: 'This website requires JavaScript' }],
   },
@@ -75,11 +82,13 @@ export default {
    ** Nuxt.js dev-modules
    */
   buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
-    // '@nuxtjs/eslint-module',
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
     '@nuxtjs/tailwindcss',
   ],
+
+  tailwindcss: {
+    cssPath: '~/assets/css/main.css',
+  },
 
   /*
    ** Nuxt.js modules
@@ -128,13 +137,6 @@ export default {
   },
 
   /*
-   ** TailwindCSS config
-   */
-  tailwindcss: {
-    cssPath: '~/assets/css/main.css',
-  },
-
-  /*
    ** Sitemap configuration
    */
   sitemap: {
@@ -165,15 +167,6 @@ export default {
         },
       },
     },
-
-    /*
-     ** You can extend webpack config here
-     */
-    // extend(config, ctx) {
-    //   if (ctx.isDev) {
-    //     config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
-    //   }
-    // },
   },
 
   telemetry: false,
