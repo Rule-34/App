@@ -5,17 +5,6 @@ module.exports = {
   target: 'modern',
 
   purge: {
-    // Fix: not purging anything. This shouldnt be necessary, but it is for now
-    content: [
-      // 'assets/**/*.css',
-      // 'assets/**/*.js',
-      'components/**/*.vue',
-      'layouts/**/*.vue',
-      'pages/**/*.vue',
-      'plugins/**/*.js',
-      'nuxt.config.js',
-    ],
-
     options: {
       whitelistPatterns: [/active/, /fade/, /enter/, /leave/],
     },
@@ -80,9 +69,10 @@ module.exports = {
         '1/2': '50%',
         '3/4': '75%',
       },
-    },
-    fontFamily: {
-      sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+
+      fontFamily: {
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+      },
     },
   },
   // Recommended variant order
@@ -94,9 +84,5 @@ module.exports = {
     textColor: ['responsive', 'group-hover', 'hover', 'focus'],
   },
 
-  plugins: [
-    require('@tailwindcss/ui')({
-      layout: 'sidebar',
-    }),
-  ],
+  plugins: [require('@tailwindcss/ui')],
 }
