@@ -72,7 +72,7 @@
       :links="[
         {
           text: 'GitHub',
-          href: 'https://redirect.r34.app/github',
+          href: 'https://github.com/AlejandroAkbal/Rule-34-App',
         },
         {
           text: 'Discord',
