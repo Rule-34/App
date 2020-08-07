@@ -37,13 +37,13 @@ Join the community **[Discord](https://redirect.r34.app/discord)** to keep up wi
 
 ### Twitter
 
-Follow the Rule 34 App on **[Twitter](https://redirect.r34.app/twitter)** for announcements and tips on how to use the App!
+Follow the Rule 34 App on **[Twitter](https://twitter.com/Rule34App)** for announcements and tips on how to use the App!
 
 ## Future
 
 ### API
 
-This app uses a JSON wrapper for various Rule 34 APIs, it is developed and mantained by me, and can be found [here](https://redirect.r34.app/github/api).
+This app uses a JSON wrapper for various Rule 34 APIs, it is developed and mantained by me, and can be found [here](https://github.com/AlejandroAkbal/Rule-34-API).
 
 ### Support
 
@@ -55,7 +55,7 @@ Since this is an **open source** project, with **no advertising** or any other w
 
 > **If you really like my work**, please donate whatever amount you can to ensure the future of this project.
 
-[GitHub Sponsor](https://redirect.r34.app/github/sponsor) | [LiberaPay](https://redirect.r34.app/liberapay) | [PayPal](https://redirect.r34.app/paypal)
+[GitHub Sponsor](https://github.com/sponsors/AlejandroAkbal) | [LiberaPay](https://redirect.r34.app/liberapay) | [PayPal](https://redirect.r34.app/paypal)
 
 ## Technicalities
 
