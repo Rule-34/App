@@ -13,7 +13,7 @@
     </transition>
 
     <transition name="search">
-      <div v-if="search.isActive" class="fixed z-40 h-screen">
+      <div v-if="search.isActive" class="fixed z-40 w-full h-screen">
         <Search class="h-full bg-black bg-opacity-25" />
       </div>
     </transition>
