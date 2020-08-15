@@ -173,25 +173,6 @@ export default {
   transform: scale(1.1);
 }
 
-/* Transition */
-
-/* Initial state */
-.sidenav-enter,
-.sidenav-leave-to {
-  transform: translateX(-100vw);
-}
-
-/* Toggled stated */
-.sidenav-enter-to {
-  transform: translateX(0px);
-}
-
-/* Transition that is gonna be applied */
-.sidenav-enter-active,
-.sidenav-leave-active {
-  @apply transition-transform duration-300 ease-in-out;
-}
-
 .text-gradient-background {
   /* Apply your own background with gradient */
   -webkit-background-clip: text;

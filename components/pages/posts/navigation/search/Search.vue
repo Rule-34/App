@@ -45,21 +45,4 @@ export default {
     grid-template-rows: 1fr;
   }
 }
-
-/* Initial state */
-.search-enter,
-.search-leave-to {
-  transform: translateX(100vw);
-}
-
-/* Toggled stated */
-.search-enter-to {
-  transform: translateX(0px);
-}
-
-/* Transition that is gonna be applied */
-.search-enter-active,
-.search-leave-active {
-  @apply transition-transform duration-300;
-}
 </style>

@@ -79,3 +79,41 @@ console.info(
   'background-color:hsl(0, 0%, 7%);padding:4px 8px;font-size:16px;color:white;'
 )
 </script>
+
+<style lang="postcss">
+/* Transition */
+
+/* Initial state */
+.sidenav-enter,
+.sidenav-leave-to {
+  transform: translateX(-100vw);
+}
+
+/* Toggled stated */
+.sidenav-enter-to {
+  transform: translateX(0px);
+}
+
+/* Transition that is gonna be applied */
+.sidenav-enter-active,
+.sidenav-leave-active {
+  @apply transition-transform duration-300 ease-in-out;
+}
+
+/* Initial state */
+.search-enter,
+.search-leave-to {
+  transform: translateX(100vw);
+}
+
+/* Toggled stated */
+.search-enter-to {
+  transform: translateX(0px);
+}
+
+/* Transition that is gonna be applied */
+.search-enter-active,
+.search-leave-active {
+  @apply transition-transform duration-300 ease-in-out;
+}
+</style>
