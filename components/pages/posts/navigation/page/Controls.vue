@@ -17,7 +17,7 @@
         >
           <button type="button">
             <ArrowLeftIcon class="inline w-4 h-4 icon" />
-            Prev page
+            Prev
           </button>
         </div>
 
@@ -37,7 +37,7 @@
           @click="getNextPage()"
         >
           <button type="button">
-            Next page
+            Next
             <ArrowRightIcon class="inline w-4 h-4 icon" />
           </button>
         </div>
