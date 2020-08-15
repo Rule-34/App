@@ -32,15 +32,11 @@ import { Touch } from 'vuetify/lib/directives/touch'
 // Components
 import NavToggler from '~/components/layout/navigation/sidenav/Toggler.vue'
 import SideNav from '~/components/layout/navigation/sidenav/SideNav.vue'
+import Search from '~/components/pages/posts/navigation/search/Search.vue'
+
 import GlobalStartUpMixin from '~/components/utils/GlobalStartUpMixin.js'
 import SideNavMixin from '~/components/layout/navigation/sidenav/SideNavMixin.js'
 import TouchHandlerMixin from '~/components/layout/navigation/sidenav/TouchHandlerMixin.js'
-
-// Lazy loaded components
-const Search = () =>
-  import(
-    /* webpackPrefetch: true */ '~/components/pages/posts/navigation/search/Search.vue'
-  )
 
 export default {
   name: 'DefaultLayout',
