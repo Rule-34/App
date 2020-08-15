@@ -13,7 +13,9 @@
     </transition>
 
     <transition name="search">
-      <Search v-if="search.isActive" />
+      <div v-if="search.isActive" class="fixed z-40 h-screen">
+        <Search class="h-full bg-black bg-opacity-25" />
+      </div>
     </transition>
 
     <!-- Layout content -->
