@@ -1,12 +1,10 @@
 <template>
-  <aside class="fixed z-30 flex w-full h-screen">
-    <!-- Actual Navigation Bar -->
-    <!-- Only show borders on medium screens -->
+  <aside class="flex">
     <div
-      class="flex flex-col h-full border-0 rounded-none material-container sm:border-r color-util"
+      class="flex flex-col border-0 rounded-none material-container sm:border-r color-util"
     >
-      <!-- Hero Image -->
-      <div class="relative w-full h-full overflow-hidden">
+      <div class="relative h-full overflow-hidden">
+        <!-- Hero Image -->
         <picture>
           <source
             srcset="~/assets/img/brand/icon.webp"
@@ -114,7 +112,7 @@
 
     <!-- Space for clicking out of the menu -->
     <div
-      class="flex-grow bg-black bg-opacity-25"
+      class="flex-1 hidden bg-transparent md:block"
       @click="setSideNavIsActive(false)"
     />
   </aside>
