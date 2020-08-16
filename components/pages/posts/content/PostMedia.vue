@@ -26,6 +26,7 @@
       preload="none"
       :poster="post.preview_file.url"
       loop
+      playsinline
     >
       <source :src="post.high_res_file.url" @error="retryToLoadMedia($event)" />
       Your browser doesnt support HTML5 video.
