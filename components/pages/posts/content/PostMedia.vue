@@ -14,6 +14,7 @@
       :height="mediaResolutionChooser().height"
       :width="mediaResolutionChooser().width"
       @load="mediaLoaded = true"
+      referrerpolicy="no-referrer"
       @error="retryToLoadMedia($event)"
     />
 
