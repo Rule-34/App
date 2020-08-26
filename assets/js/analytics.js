@@ -32,7 +32,7 @@ function settingsTracking(state) {
     (key) => state[key].value !== state[key].defaultValue
   )
 
-  if (!difference) {
+  if (!difference.length) {
     console.debug('No setting difference')
     return
   }
