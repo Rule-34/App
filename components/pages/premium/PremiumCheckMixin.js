@@ -8,7 +8,6 @@ export default {
   mounted() {
     if (!this.gumroad.product.license_key) {
       console.debug('No license key, nothing to fetch')
-
       return
     }
 

@@ -29,6 +29,7 @@
         </div>
       </div>
     </div>
+
     <nav class="mx-auto">
       <nuxt-link to="/usage" class="text-xs">What does X do?</nuxt-link>
     </nav>
@@ -37,19 +38,13 @@
 
 <script>
 import { mapState } from 'vuex'
-import SettingSwitch from '~/components/pages/settings/Switch.vue'
 
-// JS
-import fireAnalytics from '~/assets/js/analytics'
+import SettingSwitch from '~/components/pages/settings/Switch.vue'
 
 export default {
   components: { SettingSwitch },
 
   computed: mapState('user', ['settings']),
-
-  beforeDestroy() {
-    fireAnalytics('settings', { state: this.settings })
-  },
 
   methods: {
     removeLocalStorage() {
