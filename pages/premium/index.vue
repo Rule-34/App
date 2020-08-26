@@ -42,7 +42,7 @@
     <template v-else>
       <div class="flex flex-col h-screen m-auto justify-evenly">
         <!-- Log In -->
-        <errors />
+        <ErrorManager />
 
         <login />
 
@@ -63,10 +63,10 @@ import Login from '@/components/pages/premium/Login'
 import Subscription from '@/components/pages/premium/Subscription'
 import PremiumDashboard from '@/components/pages/premium/PremiumDashboard'
 
-import Errors from '~/components/utils/Errors.vue'
+import ErrorManager from '~/components/utils/ErrorManager.vue'
 
 export default {
-  components: { Login, Subscription, Errors, PremiumDashboard },
+  components: { Login, Subscription, ErrorManager, PremiumDashboard },
 
   computed: {
     ...mapGetters('premium', ['hasValidLicenseKey']),
