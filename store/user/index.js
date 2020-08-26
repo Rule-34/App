@@ -85,8 +85,8 @@ export const state = () => ({
       name: 'Image retry',
       description:
         'Number of times that an image will be attempted to be loaded if it fails.',
-      value: 3,
-      defaultValue: 3,
+      value: 1,
+      defaultValue: 1,
     },
 
     animations: {
