@@ -1,5 +1,13 @@
 <template>
   <div>
+    <template v-if="showError">
+      <Error
+        :show-action="false"
+        :render-borders="false"
+        error-data="Media couln't be loaded"
+      />
+    </template>
+
     <template v-else-if="isImage">
       <!-- if media is an Image -->
       <img
@@ -38,14 +46,25 @@
       </video>
     </template>
 
+    <template v-else>
+      <Error
+        :show-action="false"
+        :render-borders="false"
+        error-data="Unknown media type"
+      />
+    </template>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 
+import Error from '~/components/utils/Error'
+
 export default {
   name: 'PostMedia',
+
+  components: { Error },
 
   props: {
     post: {
@@ -58,6 +77,8 @@ export default {
 
   data() {
     return {
+      showError: false,
+
       hasMediaLoaded: false,
 
       retryLogic: {
