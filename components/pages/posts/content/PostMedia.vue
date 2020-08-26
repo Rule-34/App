@@ -1,39 +1,43 @@
 <template>
   <div>
-    <!-- if media is an Image -->
-    <img
-      v-if="post.media_type === 'image'"
-      :src="mediaResolutionChooser().url"
-      :loading="settings.lazyLoading.value ? 'lazy' : 'auto'"
-      :class="{
-        'post-animation opacity-0': settings.animations.value,
-        'opacity-100': settings.animations.value && mediaLoaded,
-      }"
-      :alt="'Image ' + post.id"
-      class="w-full h-auto"
-      :height="mediaResolutionChooser().height"
-      :width="mediaResolutionChooser().width"
-      @load="mediaLoaded = true"
-      referrerpolicy="no-referrer"
-      @error="retryToLoadMedia($event)"
-    />
+    <template v-else-if="isImage">
+      <!-- if media is an Image -->
+      <img
+        :src="mediaResolutionChooser.url"
+        :loading="settings.lazyLoading.value ? 'lazy' : 'auto'"
+        :class="{
+          'post-animation opacity-0': settings.animations.value,
+          'opacity-100': hasMediaLoaded && settings.animations.value,
+        }"
+        :alt="'Image ' + post.id"
+        class="w-full h-auto"
+        :height="mediaResolutionChooser.height"
+        :width="mediaResolutionChooser.width"
+        referrerpolicy="no-referrer"
+        @load="hasMediaLoaded = true"
+        @error="retryToLoadManager($event)"
+      />
+    </template>
 
-    <!-- if its a Video -->
-    <video
-      v-else-if="post.media_type === 'video'"
-      :controls="settings.videoControls.value"
-      :alt="'Video ' + post.id"
-      class="w-full h-auto"
-      preload="none"
-      :poster="post.preview_file.url"
-      loop
-      playsinline
-    >
-      <source :src="post.high_res_file.url" @error="retryToLoadMedia($event)" />
-      Your browser doesnt support HTML5 video.
-    </video>
+    <template v-else-if="isVideo">
+      <!-- if its a Video -->
+      <video
+        :controls="settings.videoControls.value"
+        :alt="'Video ' + post.id"
+        class="w-full h-auto"
+        preload="none"
+        :poster="post.preview_file.url"
+        loop
+        playsinline
+      >
+        <source
+          :src="mediaResolutionChooser.url"
+          @error="retryToLoadManager($event)"
+        />
+        Your browser doesnt support HTML5 video.
+      </video>
+    </template>
 
-    <p v-else class="text-center text-default-text">Unknown media type</p>
   </div>
 </template>
 
@@ -54,71 +58,36 @@ export default {
 
   data() {
     return {
-      mediaLoaded: false,
-      retryCount: 0,
+      hasMediaLoaded: false,
+
+      retryLogic: {
+        count: 0,
+
+        tried: {
+          proxy: false,
+          extraSlash: false,
+          proxyWithExtraSlash: false,
+        },
+      },
     }
   },
 
   computed: {
     ...mapState(['general']),
     ...mapState('user', ['settings']),
-  },
 
-  methods: {
-    retryToLoadMedia(event) {
-      // console.log(event.target, this.retryCount)
+    isImage() {
+      return this.post.media_type === 'image'
+    },
 
-      const isVideo = event.target.parentElement.nodeName === 'VIDEO'
-
-      // If browser is offline return
-      if (this.$nuxt.isOffline) return
-
-      // Proxy images if they fail to load
-      if (this.retryCount === 0) {
-        console.debug('Proxifying media')
-
-        event.target.src = this.general.CORSProxyURL + '?q=' + event.target.src
-
-        if (isVideo) {
-          console.debug('Reloading data and playing video')
-
-          event.target.parentElement.load()
-          event.target.parentElement.play()
-        }
-
-        this.retryCount++
-      }
-
-      // If we have not reached the limit
-      else if (this.retryCount < this.settings.imgRetry.value) {
-        const originalImgSrc = event.target.src
-
-        event.target.src = ''
-
-        event.target.src = originalImgSrc
-
-        // console.log(this.retryCount, originalImgSrc)
-
-        this.retryCount++
-      }
-
-      // Load error image
-      else {
-        // console.log('Cant load the image')
-
-        // Set error image
-        if (isVideo) {
-          event.target.parentElement.poster = require('~/assets/img/utils/error.png')
-        } else {
-          event.target.src = require('~/assets/img/utils/error.png')
-        }
-
-        // Stop retrying // This doesnt do anything
-        event.target.onerror = null
-      }
+    isVideo() {
+      return this.post.media_type === 'video'
     },
 
     mediaResolutionChooser() {
+      // Always return high res file if its a video
+      if (this.isVideo) return this.post.high_res_file
+
       // Return full image if its setting is enabled OR if low resolution file doesnt exist
       if (this.settings.fullSizeImages.value || !this.post.low_res_file.url) {
         return this.post.high_res_file
@@ -128,6 +97,114 @@ export default {
       else {
         return this.post.low_res_file
       }
+    },
+  },
+
+  methods: {
+    retryToLoadManager(event) {
+      // console.log('Media source: ', event.target.src)
+
+      if (this.showError) {
+        console.debug('Error set, dont try to load image anymore')
+        return
+      }
+
+      if (this.$nuxt.isOffline) {
+        console.debug('Browser offline, dont try to load image anymore')
+        this.showError = true
+        return
+      }
+
+      // Proxy URL
+      if (!this.retryLogic.tried.proxy) {
+        console.debug('Proxying media')
+
+        event.target.src = this.addProxyToURL(this.mediaResolutionChooser.url)
+
+        if (this.isVideo) {
+          console.debug('Reloading data and playing video')
+          this.reloadVideoElement(event.target.parentElement)
+        }
+
+        this.retryLogic.tried.proxy = true
+      }
+
+      // Add extra slash to URL
+      else if (!this.retryLogic.tried.extraSlash) {
+        console.debug('Adding extra slash')
+
+        event.target.src = this.addExtraSlashToURL(
+          this.mediaResolutionChooser.url
+        )
+
+        if (this.isVideo) {
+          console.debug('Reloading data and playing video')
+          this.reloadVideoElement(event.target.parentElement)
+        }
+
+        this.retryLogic.tried.extraSlash = true
+      }
+
+      // Proxy URL with extra slash
+      else if (!this.retryLogic.tried.proxyWithExtraSlash) {
+        console.debug('Proxying media with extra slash')
+
+        event.target.src = this.addProxyToURL(
+          this.addExtraSlashToURL(this.mediaResolutionChooser.url)
+        )
+
+        if (this.isVideo) {
+          console.debug('Reloading data and playing video')
+          this.reloadVideoElement(event.target.parentElement)
+        }
+
+        this.retryLogic.tried.proxyWithExtraSlash = true
+      }
+
+      // Retry to load it
+      else if (this.retryLogic.count < this.settings.imgRetry.value) {
+        console.debug(`Retry ${this.retryLogic.count} to load the media`)
+
+        event.target.src = ''
+
+        event.target.src = this.mediaResolutionChooser.url
+
+        if (this.isVideo) {
+          console.debug('Reloading data and playing video')
+          this.reloadVideoElement(event.target.parentElement)
+        }
+
+        this.retryLogic.count++
+      }
+
+      // At last, show error
+      else {
+        console.debug("Can't load media")
+
+        this.showError = true
+      }
+    },
+
+    reloadVideoElement(videoElement) {
+      videoElement.load()
+      videoElement.play()
+    },
+
+    addProxyToURL(url) {
+      return this.general.CORSProxyURL + '?q=' + url
+    },
+
+    addExtraSlashToURL(url) {
+      const currentURL = new URL(url)
+
+      /* console.log({
+        original: currentURL.toString(),
+        modified: currentURLWithExtraSlash,
+      }) */
+
+      return currentURL
+        .toString()
+        .replace(currentURL.hostname, currentURL.hostname + '/')
     },
   },
 }
