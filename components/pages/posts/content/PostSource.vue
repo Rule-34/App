@@ -1,21 +1,26 @@
 <template>
   <div v-if="source.length" class="w-full p-1 text-center">
-    <!-- If text is an Url then make it linkable -->
-    <a
-      v-if="isUrl"
-      :href="source[0]"
-      class="inline-flex"
-      rel="noopener nofollow"
-      target="_blank"
-    >
-      <p class="color-util" v-text="'Source'" />
+    <template v-if="isUrl">
+      <!-- If text is an Url then make it linkable -->
+      <a
+        :href="source[0]"
+        class="inline-flex"
+        rel="noopener nofollow"
+        target="_blank"
+      >
+        <p class="color-util">
+          {{ sourceText }}
+        </p>
 
-      <!-- Link Icon -->
-      <ExternalLinkIcon class="w-5 h-5 ml-2 icon text-default" />
-    </a>
+        <!-- Icon -->
+        <ExternalLinkIcon class="w-5 h-5 ml-2 icon text-default" />
+      </a>
+    </template>
 
-    <!-- If the text is not a url then just show the text -->
-    <p v-else title="Source" v-text="source[0]" />
+    <template v-else>
+      <!-- If the text is not a url then just show the text -->
+      <p title="Source">{{ sourceText }}</p>
+    </template>
   </div>
 </template>
 
@@ -36,7 +41,25 @@ export default {
 
   computed: {
     isUrl() {
-      return this.source[0].startsWith('http', 'www')
+      try {
+        // eslint-disable-next-line no-new
+        new URL(this.source[0])
+        return true
+      } catch {
+        return false
+      }
+    },
+
+    sourceText() {
+      // Return only the domain of the Url
+      if (this.isUrl) {
+        return new URL(this.source[0]).hostname
+      }
+
+      // Return the entire source as it's text
+      else {
+        return this.source[0]
+      }
     },
   },
 }
