@@ -1,11 +1,11 @@
 <template>
-  <Error v-if="errors" />
+  <Error v-if="errors" :error-data="errors" />
 </template>
 
 <script>
 import { mapState } from 'vuex'
 
-import Error from './Error'
+import Error from './Error.vue'
 
 export default {
   name: 'ErrorManager',
