@@ -46,69 +46,69 @@
 
     <!-- Booru editor -->
     <form
-      class="flex flex-col p-4 material-container text-default-text"
+      class="flex flex-col p-4 space-y-2 material-container text-default-text"
       action="#"
       @submit.prevent="addCustomBooruToState()"
     >
       <!-- Domain -->
-      <label class="text-default-text-muted" for="booruDomain">Domain</label>
+      <label>
+        <p class="mb-1 text-default-text-muted">Domain</p>
 
-      <input
-        id="booruDomain"
-        v-model="formBooru.domain"
-        type="text"
-        name="booruDomain"
-        value=""
-        class="p-1 mt-1 mb-2 outline-none bg-background"
-        required
-        placeholder="example.com"
-      />
+        <input
+          v-model="formBooru.domain"
+          type="text"
+          name="booruDomain"
+          value=""
+          class="block w-full p-1 outline-none bg-background"
+          required
+          placeholder="example.com"
+        />
+      </label>
 
       <!-- Type -->
-      <label class="text-default-text-muted" for="booruType">
-        Booru type
-      </label>
+      <label>
+        <p class="mb-1 text-default-text-muted">Booru type</p>
 
-      <select
-        id="booruType"
-        v-model="formBooru.type"
-        name="booruType"
-        class="p-1 mt-1 mb-2 outline-none bg-background w-max-content"
-        required
-      >
-        <option
-          v-for="booruType in booruTypeList"
-          :key="booruType.type"
-          :value="booruType.type"
+        <select
+          v-model="formBooru.type"
+          name="booruType"
+          class="block p-1 outline-none bg-background w-max-content"
+          required
         >
-          {{ booruType.type }}
-        </option>
-      </select>
+          <option
+            v-for="booruType in booruTypeList"
+            :key="booruType.type"
+            :value="booruType.type"
+          >
+            {{ booruType.type }}
+          </option>
+        </select>
+      </label>
 
       <!-- NSFW -->
-      <label class="text-default-text-muted" for="booruNSFW">NSFW</label>
+      <label>
+        <p class="mb-1 text-default-text-muted">NSFW</p>
 
-      <input
-        id="booruNSFW"
-        v-model="formBooru.nsfw"
-        name="booruNSFW"
-        class="p-1 mt-1 mb-2 outline-none bg-background"
-        type="checkbox"
-      />
-
-      <!-- Config -->
-      <label class="text-default-text-muted" for="booruConfig">
-        Configuration
+        <input
+          v-model="formBooru.nsfw"
+          name="booruNSFW"
+          class="block p-1 outline-none bg-background"
+          type="checkbox"
+        />
       </label>
 
-      <textarea
-        id="booruConfig"
-        v-model="formBooru.config"
-        class="p-1 mt-1 mb-2 outline-none bg-background"
-        name="booruConfig"
-        rows="2"
-        spellcheck="false"
-      />
+      <!-- Configuration -->
+      <label>
+        <p class="mb-1 text-default-text-muted">Configuration</p>
+
+        <textarea
+          v-model="formBooru.config"
+          class="block w-full p-1 outline-none bg-background"
+          name="booruConfig"
+          rows="2"
+          spellcheck="false"
+        />
+      </label>
 
       <!-- <button type="button" class="text-sm text-default-text-muted">
         Test booru
@@ -116,7 +116,7 @@
 
       <button
         type="submit"
-        class="w-full px-2 py-1 mt-2 tracking-wide rounded-full shadow-md bg-gradient-blue-lilac"
+        class="w-full px-2 py-1 tracking-wide rounded-full shadow-md bg-gradient-blue-lilac"
       >
         Add
       </button>
