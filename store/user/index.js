@@ -2,7 +2,33 @@ export const state = () => ({
   custom: {
     boorus: [],
 
-    // filters: [],
+    tagCollections: [
+      {
+        name: 'Ban Furry',
+        tags: [
+          '-furry',
+          '-furry_only',
+          '-fur',
+          '-canid',
+          '-canine',
+          '-dragon',
+          '-anthro',
+          '-anthrofied',
+          '-anthro_on_anthro',
+          '-scaly',
+          '-accipitrid',
+          '-accipitriform',
+          '-animal_genitalia',
+          '-ferrettre',
+          '-rodent',
+          '-equine',
+        ],
+      },
+      {
+        name: 'Common Indecencies',
+        tags: ['-scat', '-diaper', '-shitpost', '-gore'],
+      },
+    ],
   },
 
   // saved: { posts: [] },
@@ -117,6 +143,14 @@ export const mutations = {
   pushCustomBooruValue(state, value) {
     state.custom.boorus.push(value)
   },
+
+  setCustomTagCollections(state, value) {
+    state.custom.tagCollections = value
+  },
+
+  pushCustomTagCollection(state, value) {
+    state.custom.tagCollections.push(value)
+  },
 }
 
 export const actions = {
@@ -144,6 +178,55 @@ export const actions = {
 
       case 'reset':
         commit('setCustomBoorus', [])
+        break
+
+      default:
+        throw new Error('No operation specified')
+    }
+  },
+
+  customTagCollectionsManager({ state, commit }, { operation, value }) {
+    switch (operation) {
+      case 'add': {
+        const doesTheTagCollectionAlreadyExist = state.custom.tagCollections.some(
+          (tagCollection) => tagCollection.name === value.name
+        )
+
+        if (doesTheTagCollectionAlreadyExist) {
+          console.debug('A tag collection with this name already exists!')
+          return
+        }
+
+        commit('pushCustomTagCollection', value)
+        break
+      }
+
+      // case 'modify': {
+      //   const targetIndex = state.custom.tagCollections.findIndex(
+      //     (tagCollection) => tagCollection.name === value.name
+      //   )
+
+      //   const modifiedArray = state.custom.tagCollections
+
+      //   modifiedArray[targetIndex] = value
+
+      //   commit('setCustomTagCollections', modifiedArray)
+      //   break
+      // }
+
+      case 'remove': {
+        const arrayWithoutCollection = state.custom.tagCollections.filter(
+          (tagCollection) => {
+            return tagCollection.name !== value.name
+          }
+        )
+
+        commit('setCustomTagCollections', arrayWithoutCollection)
+        break
+      }
+
+      case 'reset':
+        commit('setCustomTagCollections', [])
         break
 
       default:
