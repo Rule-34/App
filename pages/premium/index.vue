@@ -22,6 +22,23 @@
           </nuxt-link>
         </div>
 
+        <!-- Custom Tag Collections  -->
+        <div class="flex p-4 material-container text-default-text">
+          <div class="flex-grow">
+            <h1 class="text-lg">Custom Tag Collections</h1>
+            <p class="text-sm text-default-text-muted">
+              Add or edit tag collections
+            </p>
+          </div>
+
+          <nuxt-link
+            class="flex items-center justify-center px-4 rounded-full material-container bg-background"
+            to="/premium/tags"
+          >
+            Modify
+          </nuxt-link>
+        </div>
+
         <!-- Spacer -->
         <div class="flex-grow" />
 
