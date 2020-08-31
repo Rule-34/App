@@ -146,5 +146,18 @@ export default {
       })
     },
   },
+
+  head() {
+    return {
+      title: 'Custom Tag Collections',
+      meta: [
+        {
+          hid: 'customTagCollections',
+          name: 'description',
+          content: 'Modify the Custom Tag Collections',
+        },
+      ],
+    }
+  },
 }
 </script>
