@@ -107,6 +107,7 @@
         class="p-1 mt-1 mb-2 outline-none bg-background"
         name="booruConfig"
         rows="2"
+        spellcheck="false"
       />
 
       <!-- <button type="button" class="text-sm text-default-text-muted">
