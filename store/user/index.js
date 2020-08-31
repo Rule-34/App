@@ -123,24 +123,27 @@ export const actions = {
   customBoorusManager({ state, commit }, { operation, value }) {
     switch (operation) {
       case 'add': {
-        // value: booruObj
         const doesTheBooruAlreadyExist = state.custom.boorus.some(
           (booruObj) => booruObj.domain === value.domain
         )
 
-        if (!doesTheBooruAlreadyExist) commit('pushCustomBooruValue', value)
+        if (doesTheBooruAlreadyExist) {
+          console.debug('A booru with this domain already exists!')
+          return
+        }
+
+        commit('pushCustomBooruValue', value)
         break
       }
 
-      case 'remove':
-        // value: booruObj
-        commit(
-          'setCustomBoorus',
-          state.custom.boorus.filter((customBooru) => {
-            return customBooru.domain !== value.domain
-          })
-        )
+      case 'remove': {
+        const arrayWithoutBooru = state.custom.boorus.filter((customBooru) => {
+          return customBooru.domain !== value.domain
+        })
+
+        commit('setCustomBoorus', arrayWithoutBooru)
         break
+      }
 
       case 'reset':
         commit('setCustomBoorus', [])
