@@ -4,7 +4,7 @@ export const state = () => ({
 
     tagCollections: [
       {
-        name: 'Ban Furry',
+        name: 'Furry',
         tags: [
           '-furry',
           '-furry_only',
