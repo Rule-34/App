@@ -179,5 +179,18 @@ export default {
       this.activeBooruManager({ operation: 'reset' })
     },
   },
+
+  head() {
+    return {
+      title: 'Custom Boorus',
+      meta: [
+        {
+          hid: 'customBoorus',
+          name: 'description',
+          content: 'Modify the Custom Boorus',
+        },
+      ],
+    }
+  },
 }
 </script>
