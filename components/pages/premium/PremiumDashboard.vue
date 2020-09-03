@@ -17,9 +17,7 @@
 
     <!-- Remaining -->
     <div class="my-4 text-center">
-      <p class="text-sm text-default-text-muted">
-        Your subscription is
-      </p>
+      <p class="text-sm text-default-text-muted">Your subscription is</p>
       <p class="text-3xl font-semibold text-gradient-one">
         {{ isUserPremium ? 'Active' : 'Not active' }}
       </p>
