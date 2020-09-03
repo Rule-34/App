@@ -19,16 +19,17 @@ export default {
   },
 
   computed: {
-    ...mapState('navigation', ['sideNav']),
+    ...mapState('navigation', ['sideNav', 'search']),
   },
 
   methods: {
-    ...mapMutations('navigation', ['setSideNavIsActive']),
+    ...mapMutations('navigation', ['setSideNavIsActive', 'setSearchIsActive']),
 
-    // Set different layout depending of the route
     routeHandler() {
+      // Close Side Nav on route change
       if (this.sideNav.isActive) this.setSideNavIsActive(false)
 
+      // Set different layout depending of the route
       switch (this.$nuxt.$route.name) {
         case 'index':
           this.isPostsPage = true
