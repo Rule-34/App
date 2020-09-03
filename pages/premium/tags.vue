@@ -17,7 +17,7 @@
                 v-for="tagCollection in custom.tagCollections"
                 :key="tagCollection.name"
               >
-                <td @click="deleteTagCollection(tagCollection)">
+                <td class="text-sm" @click="deleteTagCollection(tagCollection)">
                   {{ tagCollection.name }}
                 </td>
 
@@ -43,11 +43,7 @@
       </div>
 
       <p class="p-2 text-xs text-center text-default-text-muted">
-        Tip: Click on a tag collection name to remove it
-      </p>
-
-      <p class="p-2 text-xs text-center text-default-text-muted">
-        Tip: Click on a tag collection tags to modify it
+        Tip: Click on the name to remove it, and on the tags to copy it
       </p>
     </div>
 
