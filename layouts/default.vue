@@ -39,7 +39,7 @@ import SideNav from '~/components/layout/navigation/sidenav/SideNav.vue'
 import Search from '~/components/pages/posts/navigation/search/Search.vue'
 
 import GlobalStartUpMixin from '~/components/utils/GlobalStartUpMixin.js'
-import SideNavMixin from '~/components/layout/navigation/sidenav/SideNavMixin.js'
+import NavigationMixin from '~/components/layout/navigation/NavigationMixin.js'
 import TouchHandlerMixin from '~/components/layout/navigation/sidenav/TouchHandlerMixin.js'
 
 export default {
@@ -53,7 +53,7 @@ export default {
    * Warning:
    * Some methods and variables are set by Mixins
    */
-  mixins: [GlobalStartUpMixin, SideNavMixin, TouchHandlerMixin],
+  mixins: [GlobalStartUpMixin, NavigationMixin, TouchHandlerMixin],
 
   computed: {
     ...mapState('navigation', ['sideNav', 'search']),
