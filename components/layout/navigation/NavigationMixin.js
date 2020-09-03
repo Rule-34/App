@@ -29,6 +29,9 @@ export default {
       // Close Side Nav on route change
       if (this.sideNav.isActive) this.setSideNavIsActive(false)
 
+      // Close Search on route change
+      if (this.search.isActive) this.setSearchIsActive(false)
+
       // Set different layout depending of the route
       switch (this.$nuxt.$route.name) {
         case 'index':
