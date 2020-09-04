@@ -139,9 +139,12 @@ export const actions = {
         commit('setPostsData', value)
         break
 
-      case 'concat':
-        commit('setPostsData', [...new Set([...state.posts.data, ...value])])
+      case 'concat': {
+        const uniqueMergedPosts = [...new Set([...state.posts.data, ...value])]
+
+        commit('setPostsData', uniqueMergedPosts)
         break
+      }
 
       default:
         throw new Error('No operation specified')
@@ -173,26 +176,38 @@ export const actions = {
 
   addedTagsManager({ state, commit }, { operation, value }) {
     switch (operation) {
-      case 'add':
+      case 'add': {
         // value: string
-        if (!state.search.addedTags.includes(value))
-          commit('pushAddedTags', value)
-        break
+        const isTheTagAlreadyAdded = state.search.addedTags.includes(value)
 
-      case 'concat':
+        if (isTheTagAlreadyAdded) {
+          console.debug('This tag is already added!')
+          return
+        }
+
+        commit('pushAddedTags', value)
+        break
+      }
+
+      case 'concat': {
         // value: string[]
-        commit('setAddedTags', state.search.addedTags.concat(value))
-        break
+        const uniqueMergedAddedTags = [
+          ...new Set([...state.search.addedTags, ...value]),
+        ]
 
-      case 'remove':
-        // value: string
-        commit(
-          'setAddedTags',
-          state.search.addedTags.filter((tag) => {
-            return tag !== value
-          })
-        )
+        commit('setAddedTags', uniqueMergedAddedTags)
         break
+      }
+
+      case 'remove': {
+        // value: string
+        const addedTagsWithoutValue = state.search.addedTags.filter(
+          (tag) => tag !== value
+        )
+
+        commit('setAddedTags', addedTagsWithoutValue)
+        break
+      }
 
       case 'reset':
         commit('setAddedTags', [])

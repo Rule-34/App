@@ -35,7 +35,7 @@
         <picture v-if="img">
           <source :srcset="img + '.webp'" type="image/webp" />
           <img
-            :loading="settings.lazyLoading.value ? 'lazy' : 'auto'"
+            loading="lazy"
             :src="img + '.png'"
             :alt="title + ' Example'"
             class="mx-auto mt-2"
@@ -57,9 +57,7 @@
               </a>
 
               <!-- Separator -->
-              <template v-if="index !== links.length - 1">
-                -
-              </template>
+              <template v-if="index !== links.length - 1"> - </template>
             </template>
           </div>
         </template>
@@ -72,8 +70,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
   name: 'ContentContainer',
 
@@ -95,8 +91,6 @@ export default {
     // For links
     links: { type: Array, required: false, default: () => [] },
   },
-
-  computed: mapState('user', ['settings']),
 }
 </script>
 
