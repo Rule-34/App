@@ -56,7 +56,7 @@ export const getters = {
 
 export const mutations = {
   setRawResponse(state, value) {
-    state.responseData = value
+    state.responseData = Object.freeze(value)
   },
 
   setLicenseKey(state, value) {
