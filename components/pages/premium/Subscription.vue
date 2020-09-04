@@ -51,7 +51,7 @@
           <p
             class="ml-3 text-base font-medium leading-6 text-default-text-muted"
           >
-            <span class="line-through">Save posts</span> (WIP)
+            Create Tag Collections
           </p>
         </li>
 
@@ -63,7 +63,7 @@
           <p
             class="ml-3 text-base font-medium leading-6 text-default-text-muted"
           >
-            <span class="line-through">Create search filters</span> (WIP)
+            <span class="line-through">Save posts</span> (WIP)
           </p>
         </li>
 
