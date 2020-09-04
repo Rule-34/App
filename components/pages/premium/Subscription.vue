@@ -15,12 +15,8 @@
         <span
           class="flex items-start px-3 text-5xl leading-none tracking-tight text-default-text"
         >
-          <span class="mt-1 mr-2 text-3xl font-medium">
-            €
-          </span>
-          <span class="font-extrabold">
-            6,9
-          </span>
+          <span class="mt-1 mr-2 text-3xl font-medium"> € </span>
+          <span class="font-extrabold"> 6,9 </span>
         </span>
 
         <!-- Recurring -->
@@ -89,7 +85,7 @@
           <a
             target="_blank"
             rel="noopener"
-            :href="'https://gum.co/' + gumroad.product.product_permalink"
+            :href="'https://gum.co/' + getGumroadProduct.product_permalink"
             class="block w-full px-6 py-3 text-lg font-medium leading-6 text-center transition duration-150 ease-in-out border-0 rounded-lg bg-gradient-lilac-blue text-default-text focus:outline-none focus:shadow-outline"
           >
             Subscribe
@@ -101,7 +97,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { CheckIcon } from 'vue-feather-icons'
 
 export default {
@@ -110,7 +106,7 @@ export default {
   },
 
   computed: {
-    ...mapState('premium', ['gumroad']),
+    ...mapGetters('premium', ['getGumroadProduct']),
   },
 }
 </script>

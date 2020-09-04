@@ -6,12 +6,18 @@ export const state = () => ({
     data: undefined,
 
     latestTitle: undefined, // This is saved to localStorage
-
-    alreadyFetched: false,
   },
 })
 
 export const getters = {
+  getNotifications(state) {
+    return state.notifications.data
+  },
+
+  hasNotificationsBeenFetched(state) {
+    return !!state.notifications.data
+  },
+
   isThereANewNotification(state) {
     if (!state.notifications.data) return false
 
@@ -33,10 +39,6 @@ export const mutations = {
 
   setLatestTitle(state, value) {
     state.notifications.latestTitle = value
-  },
-
-  setAlreadyFetched(state, value) {
-    state.notifications.alreadyFetched = value
   },
 }
 

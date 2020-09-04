@@ -1,4 +1,4 @@
-import { mapState, mapMutations } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   watch: {
@@ -19,7 +19,7 @@ export default {
   },
 
   computed: {
-    ...mapState('navigation', ['sideNav', 'search']),
+    ...mapGetters('navigation', ['isSideNavActive', 'isSearchActive']),
   },
 
   methods: {
@@ -27,10 +27,10 @@ export default {
 
     routeHandler() {
       // Close Side Nav on route change
-      if (this.sideNav.isActive) this.setSideNavIsActive(false)
+      if (this.isSideNavActive)
 
       // Close Search on route change
-      if (this.search.isActive) this.setSearchIsActive(false)
+      if (this.isSearchActive)
 
       // Set different layout depending of the route
       switch (this.$nuxt.$route.name) {

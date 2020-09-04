@@ -1,12 +1,12 @@
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 // JS
 import fireAnalytics from '~/assets/js/analytics'
 
 export default {
-  computed: mapState('user', ['settings']),
+  computed: mapGetters('user', ['getUserSettings']),
 
   mounted() {
-    fireAnalytics('settings', { state: this.settings })
+    fireAnalytics('settings', { state: this.getUserSettings })
   },
 }

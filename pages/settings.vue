@@ -19,7 +19,7 @@
         <div class="flex w-3/5 m-auto">
           <div class="mx-auto">
             <SettingSwitch
-              v-for="(setting, index) in settings"
+              v-for="(setting, index) in getUserSettings"
               :key="index"
               :setting-index="index"
               :setting="setting"
@@ -37,14 +37,16 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 import SettingSwitch from '~/components/pages/settings/Switch.vue'
 
 export default {
   components: { SettingSwitch },
 
-  computed: mapState('user', ['settings']),
+  computed: {
+    ...mapGetters('user', ['getUserSettings']),
+  },
 
   methods: {
     removeLocalStorage() {

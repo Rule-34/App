@@ -10,14 +10,14 @@
     <!-- Content -->
     <ErrorManager />
 
-    <Post v-for="post in posts.data" :key="post.id" :post="post" />
+    <Post v-for="post in getPosts" :key="post.id" :post="post" />
 
     <Controls />
   </main>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 // Components
 import DomainSelector from '~/components/pages/posts/domain/Selector.vue'
@@ -42,7 +42,7 @@ export default {
   mixins: [PostsStartupMixin],
 
   computed: {
-    ...mapState('booru', ['posts']),
+    ...mapGetters('booru', ['getPosts']),
   },
 
   head() {

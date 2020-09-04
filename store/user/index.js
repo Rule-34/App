@@ -131,6 +131,20 @@ export const state = () => ({
   },
 })
 
+export const getters = {
+  getCustomBoorus(state) {
+    return state.custom.boorus
+  },
+
+  getTagCollections(state) {
+    return state.custom.tagCollections
+  },
+
+  getUserSettings(state) {
+    return state.settings
+  },
+}
+
 export const mutations = {
   setSettingValue(state, { setting, value }) {
     state.settings[setting].value = value

@@ -1,8 +1,8 @@
-import { mapState, mapMutations } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapState('navigation', ['sideNav', 'search']),
+    ...mapGetters('navigation', ['isSideNavActive', 'isSearchActive']),
   },
 
   methods: {
@@ -16,12 +16,11 @@ export default {
         case 'right':
           if (event.touchstartX > touchThreshold) {
             console.debug('Insufficient touch threshold')
-
             return
           }
 
-          if (this.search.isActive && this.isPostsPage) {
             this.setSearchIsActive(false)
+          if (this.isSearchActive && this.isPostsPage) {
           } else {
             this.setSideNavIsActive(true)
           }
@@ -33,10 +32,9 @@ export default {
             return
           }
 
-          if (!this.sideNav.isActive && this.isPostsPage) {
             this.setSearchIsActive(true)
+          if (!this.isSideNavActive && this.isPostsPage) {
           } else {
-            this.setSideNavIsActive(false)
           }
           break
       }

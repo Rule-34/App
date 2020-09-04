@@ -12,9 +12,9 @@
           </thead>
 
           <tbody class="text-default-text-muted">
-            <template v-if="custom.tagCollections.length">
+            <template v-if="getTagCollections.length">
               <tr
-                v-for="tagCollection in custom.tagCollections"
+                v-for="tagCollection in getTagCollections"
                 :key="tagCollection.name"
               >
                 <td class="text-sm" @click="deleteTagCollection(tagCollection)">
@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {
@@ -112,7 +112,7 @@ export default {
   },
 
   computed: {
-    ...mapState('user', ['custom']),
+    ...mapGetters('user', ['getTagCollections']),
   },
 
   methods: {

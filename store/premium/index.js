@@ -20,6 +20,10 @@ export const state = () => ({
 })
 
 export const getters = {
+  getGumroadProduct(state) {
+    return state.gumroad.product
+  },
+
   hasValidLicenseKey(state) {
     return state.responseData && state.responseData.success === true
   },
@@ -51,12 +55,12 @@ export const getters = {
 }
 
 export const mutations = {
-  setRawResponse(state, response) {
-    state.responseData = response
+  setRawResponse(state, value) {
+    state.responseData = value
   },
 
-  setLicenseKey(state, licenseKey) {
-    state.gumroad.product.license_key = licenseKey
+  setLicenseKey(state, value) {
+    state.gumroad.product.license_key = value
   },
 }
 

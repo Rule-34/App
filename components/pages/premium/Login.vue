@@ -1,10 +1,6 @@
 <template>
   <div class="p-4 material-container text-default-text">
-    <form
-      :action="gumroad.authAPI.url"
-      :method="gumroad.authAPI.fetchOptions.method"
-      @submit.prevent="checkForm()"
-    >
+    <form @submit.prevent="checkForm()">
       <label
         class="block mb-2 text-lg font-medium leading-tight"
         for="license-key"
@@ -36,7 +32,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapMutations, mapActions } from 'vuex'
 import { ChevronRightIcon } from 'vue-feather-icons'
 
 export default {
@@ -46,13 +42,9 @@ export default {
     ChevronRightIcon,
   },
 
-  computed: {
-    ...mapState('premium', ['gumroad']),
-  },
-
   methods: {
     ...mapActions('premium', ['authenticate']),
-    ...mapMutations('premium', ['setRawResponse', 'setLicenseKey']),
+    ...mapMutations('premium', ['setLicenseKey']),
 
     checkForm(event) {
       this.authenticate()
