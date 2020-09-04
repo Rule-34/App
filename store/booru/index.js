@@ -145,14 +145,14 @@ export const actions = {
     }
   },
 
-  pidManager({ state, commit, getters }, { operation, value }) {
+  pidManager({ commit, getters }, { operation, value }) {
     switch (operation) {
       case 'add':
-        commit('setPIDQuery', state.queries.pid + 1)
+        commit('setPIDQuery', getters.getPageID + 1)
         break
 
       case 'subtract':
-        commit('setPIDQuery', state.queries.pid - 1)
+        commit('setPIDQuery', getters.getPageID - 1)
         break
 
       case 'set':
@@ -168,25 +168,27 @@ export const actions = {
     }
   },
 
-  addedTagsManager({ state, commit }, { operation, value }) {
+  addedTagsManager({ commit, getters }, { operation, value }) {
     switch (operation) {
       case 'add': {
         // value: string
-        const isTheTagAlreadyAdded = state.search.addedTags.includes(value)
+        const isTheTagAlreadyAdded = getters.getSearchAddedTags.includes(value)
 
         if (isTheTagAlreadyAdded) {
           console.debug('This tag is already added!')
           return
         }
 
-        commit('pushAddedTags', value)
+        const addedTagsWithNewTag = [...getters.getSearchAddedTags, value]
+
+        commit('setAddedTags', addedTagsWithNewTag)
         break
       }
 
       case 'concat': {
         // value: string[]
         const uniqueMergedAddedTags = [
-          ...new Set([...state.search.addedTags, ...value]),
+          ...new Set([...getters.getSearchAddedTags, ...value]),
         ]
 
         commit('setAddedTags', uniqueMergedAddedTags)
@@ -195,7 +197,7 @@ export const actions = {
 
       case 'remove': {
         // value: string
-        const addedTagsWithoutValue = state.search.addedTags.filter(
+        const addedTagsWithoutValue = getters.getSearchAddedTags.filter(
           (tag) => tag !== value
         )
 
