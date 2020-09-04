@@ -10,7 +10,7 @@
       &nbsp;
     </button>
     <button
-      v-if="showSearch"
+      v-show="showSearch"
       type="menu"
       class="block w-10 h-10 m-5 border-0 rounded-full shadow-lg select-none md:w-12 md:h-12 md:m-4 bg-gradient-lilac-blue"
       title="Search"

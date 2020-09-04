@@ -15,7 +15,7 @@
 
       <!-- Added tags, click them to remove them -->
       <div
-        v-if="getSearchAddedTags.length"
+        v-show="getSearchAddedTags.length"
         class="mb-1 overflow-y-scroll border-b rounded tag-container border-border max-h-1/2"
       >
         <button
@@ -31,7 +31,7 @@
 
       <!-- Searched tags, click them to add them -->
       <div
-        v-if="getSearchSearchedTags.length"
+        v-show="getSearchSearchedTags.length"
         class="flex-1 overflow-y-scroll rounded rounded-b-none tag-container"
       >
         <!-- Add tag to array of added tags -->
