@@ -1,19 +1,19 @@
 <template>
   <form class="p-4 md:p-0 md:gap-4 search-grid">
     <!-- Space for clicking out -->
-    <div @click.self="setSearchIsActive(false)" />
+    <div @click.self="closeSearchMenu()" />
 
     <SearchBar />
 
     <SearchResults />
 
     <!-- Space for clicking out -->
-    <div @click.self="setSearchIsActive(false)" />
+    <div @click.self="closeSearchMenu()" />
   </form>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 
 // Components
 import SearchBar from './SearchBar.vue'
@@ -28,7 +28,11 @@ export default {
   },
 
   methods: {
-    ...mapMutations('navigation', ['setSearchIsActive']),
+    ...mapActions('navigation', ['searchNavigationManager']),
+
+    closeSearchMenu() {
+      this.searchNavigationManager({ operation: 'set', value: false })
+    },
   },
 }
 </script>
