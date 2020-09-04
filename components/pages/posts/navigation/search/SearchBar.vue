@@ -64,7 +64,7 @@ export default {
 
   data() {
     return {
-      searchQuery: '',
+      searchQuery: null,
     }
   },
 
@@ -101,13 +101,14 @@ export default {
     },
 
     getTags: debounce(function () {
-      if (this.searchQuery.length > 2) {
-        this.fetchSearchTag(this.searchQuery)
-      } else {
+      if (this.searchQuery.length < 2) {
         this.searchedTagsManager({
           operation: 'reset',
         })
+        return
       }
+
+      this.fetchSearchTag(this.searchQuery)
     }, 350),
 
     resetAddedTags() {
