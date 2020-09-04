@@ -1,5 +1,5 @@
 <template>
-  <div v-if="source.length" class="w-full p-1 text-center">
+  <div class="w-full p-1 text-center">
     <template v-if="isUrl">
       <!-- If text is an Url then make it linkable -->
       <a

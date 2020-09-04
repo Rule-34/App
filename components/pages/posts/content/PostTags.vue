@@ -1,5 +1,5 @@
 <template>
-  <div v-if="tags.length" class="w-full overflow-hidden">
+  <div class="w-full overflow-hidden">
     <TransitionCollapse>
       <div v-if="isActive">
         <!-- Workaround for this not jumping is having a div before -->
