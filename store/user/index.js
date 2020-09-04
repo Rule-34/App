@@ -168,10 +168,10 @@ export const mutations = {
 }
 
 export const actions = {
-  customBoorusManager({ state, commit }, { operation, value }) {
+  customBoorusManager({ getters, commit }, { operation, value }) {
     switch (operation) {
       case 'add': {
-        const doesTheBooruAlreadyExist = state.custom.boorus.some(
+        const doesTheBooruAlreadyExist = getters.getCustomBoorus.some(
           (booruObj) => booruObj.domain === value.domain
         )
 
@@ -180,14 +180,18 @@ export const actions = {
           return
         }
 
-        commit('pushCustomBooruValue', value)
+        const arrayWithAddedBooru = [...getters.getCustomBoorus, value]
+
+        commit('setCustomBoorus', arrayWithAddedBooru)
         break
       }
 
       case 'remove': {
-        const arrayWithoutBooru = state.custom.boorus.filter((customBooru) => {
-          return customBooru.domain !== value.domain
-        })
+        const arrayWithoutBooru = getters.getCustomBoorus.filter(
+          (customBooru) => {
+            return customBooru.domain !== value.domain
+          }
+        )
 
         commit('setCustomBoorus', arrayWithoutBooru)
         break
@@ -202,10 +206,10 @@ export const actions = {
     }
   },
 
-  customTagCollectionsManager({ state, commit }, { operation, value }) {
+  customTagCollectionsManager({ getters, commit }, { operation, value }) {
     switch (operation) {
       case 'add': {
-        const doesTheTagCollectionAlreadyExist = state.custom.tagCollections.some(
+        const doesTheTagCollectionAlreadyExist = getters.getTagCollections.some(
           (tagCollection) => tagCollection.name === value.name
         )
 
@@ -214,31 +218,20 @@ export const actions = {
           return
         }
 
-        commit('pushCustomTagCollection', value)
+        const arrayWithTagCollection = [...getters.getTagCollections, value]
+
+        commit('setCustomTagCollections', arrayWithTagCollection)
         break
       }
 
-      // case 'modify': {
-      //   const targetIndex = state.custom.tagCollections.findIndex(
-      //     (tagCollection) => tagCollection.name === value.name
-      //   )
-
-      //   const modifiedArray = state.custom.tagCollections
-
-      //   modifiedArray[targetIndex] = value
-
-      //   commit('setCustomTagCollections', modifiedArray)
-      //   break
-      // }
-
       case 'remove': {
-        const arrayWithoutCollection = state.custom.tagCollections.filter(
+        const arrayWithoutTagCollection = getters.getTagCollections.filter(
           (tagCollection) => {
             return tagCollection.name !== value.name
           }
         )
 
-        commit('setCustomTagCollections', arrayWithoutCollection)
+        commit('setCustomTagCollections', arrayWithoutTagCollection)
         break
       }
 
