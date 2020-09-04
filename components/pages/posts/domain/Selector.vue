@@ -91,18 +91,18 @@ export default {
       'fetchPosts',
     ]),
 
-    async changeDomain(domain) {
+    changeDomain(domain) {
       // Redirect to premium page
       if (domain === 'Add booru') {
         this.$router.push({ name: 'premium' })
         return
       }
 
-      await this.activeBooruManager({ operation: 'search', value: domain })
+      this.activeBooruManager({ operation: 'search', value: domain })
 
-      await this.pidManager({ operation: 'reset' })
+      this.pidManager({ operation: 'reset' })
 
-      await this.addedTagsManager({ operation: 'reset' })
+      this.addedTagsManager({ operation: 'reset' })
 
       this.fetchPosts()
 

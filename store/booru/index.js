@@ -265,9 +265,9 @@ export const actions = {
     )
 
     if (mode === 'concat') {
-      dispatch('postsManager', { operation: 'concat', value: response })
+      await dispatch('postsManager', { operation: 'concat', value: response })
     } else {
-      dispatch('postsManager', { operation: 'set', value: response })
+      await dispatch('postsManager', { operation: 'set', value: response })
     }
   },
 

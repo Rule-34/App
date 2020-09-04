@@ -107,8 +107,8 @@ export default {
       }
     },
 
-    async fetchAddedTags() {
-      await this.pidManager({ operation: 'reset' })
+    fetchAddedTags() {
+      this.pidManager({ operation: 'reset' })
 
       await this.setSearchIsActive(false)
 

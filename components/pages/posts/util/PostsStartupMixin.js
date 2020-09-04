@@ -12,9 +12,9 @@ export default {
   methods: {
     ...mapActions('booru', ['fetchPosts', 'pidManager']),
 
-    async setInitialPageIDAndFetch() {
+    setInitialPageIDAndFetch() {
       if (this.queries.pid === undefined)
-        await this.pidManager({ operation: 'reset' })
+        this.pidManager({ operation: 'reset' })
 
       if (!this.posts.data.length) this.fetchPosts()
     },
