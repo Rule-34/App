@@ -1,4 +1,4 @@
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   mounted() {
@@ -6,17 +6,16 @@ export default {
   },
 
   computed: {
-    ...mapState('booru', ['posts', 'queries']),
+    ...mapGetters('booru', ['getPageID', 'getPosts']),
   },
 
   methods: {
     ...mapActions('booru', ['fetchPosts', 'pidManager']),
 
     setInitialPageIDAndFetch() {
-      if (this.queries.pid === undefined)
-        this.pidManager({ operation: 'reset' })
+      if (this.getPageID === undefined) this.pidManager({ operation: 'reset' })
 
-      if (!this.posts.data.length) this.fetchPosts()
+      if (!this.getPosts.length) this.fetchPosts()
     },
   },
 }

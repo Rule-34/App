@@ -1,8 +1,8 @@
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapState('user', ['settings']),
+    ...mapGetters('user', ['getUserSettings']),
   },
 
   methods: {
@@ -25,13 +25,13 @@ export default {
 
   mounted() {
     // Navigation with keyboard
-    if (this.settings.keyboardControls.value)
+    if (this.getUserSettings.keyboardControls.value)
       document.addEventListener('keyup', this.keyboardPageHandler)
   },
 
   destroyed() {
     // Navigation with keyboard
-    if (this.settings.keyboardControls.value)
+    if (this.getUserSettings.keyboardControls.value)
       document.removeEventListener('keyup', this.keyboardPageHandler)
   },
 }

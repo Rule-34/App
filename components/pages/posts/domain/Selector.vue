@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 // Third party
 import { ChevronDownIcon, CloudIcon } from 'vue-feather-icons'
@@ -63,8 +63,7 @@ export default {
   components: { ChevronDownIcon, CloudIcon },
 
   computed: {
-    ...mapState('booru', ['posts']),
-    ...mapState('user', ['settings']),
+    ...mapGetters('user', ['getUserSettings']),
     ...mapGetters('booru', [
       'getActiveBooru',
       'getDefaultBooruList',
@@ -73,13 +72,13 @@ export default {
     ...mapGetters('premium', ['isUserPremium']),
 
     filteredDefaultBooruList() {
-      return this.settings.nsfw.value
+      return this.getUserSettings.nsfw.value
         ? findBoorusWithValueByKey(true, 'nsfw', this.getDefaultBooruList)
         : findBoorusWithValueByKey(false, 'nsfw', this.getDefaultBooruList)
     },
 
     filteredPremiumBooruList() {
-      return this.settings.nsfw.value
+      return this.getUserSettings.nsfw.value
         ? findBoorusWithValueByKey(true, 'nsfw', this.getPremiumBooruList)
         : findBoorusWithValueByKey(false, 'nsfw', this.getPremiumBooruList)
     },

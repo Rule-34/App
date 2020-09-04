@@ -1,12 +1,12 @@
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapState('premium', ['gumroad']),
+    ...mapGetters('premium', ['getGumroadProduct']),
   },
 
   mounted() {
-    if (!this.gumroad.product.license_key) {
+    if (!this.getGumroadProduct.license_key) {
       console.debug('No license key, nothing to fetch')
       return
     }

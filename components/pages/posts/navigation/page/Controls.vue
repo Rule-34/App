@@ -2,11 +2,13 @@
   <div>
     <!-- Normal controls -->
     <div
-      v-if="!settings.infiniteLoad.value"
-      :class="{ 'hover-controls-container': settings.hoverControls.value }"
+      v-if="!getUserSettings.infiniteLoad.value"
+      :class="{
+        'hover-controls-container': getUserSettings.hoverControls.value,
+      }"
     >
       <div
-        :class="{ 'hover-controls': settings.hoverControls.value }"
+        :class="{ 'hover-controls': getUserSettings.hoverControls.value }"
         class="flex p-2 text-center material-container"
       >
         <!-- Get previous page -->
@@ -27,7 +29,7 @@
           title="Load specific page"
           @click="getSpecificPage()"
         >
-          <button type="button" v-text="queries.pid" />
+          <button type="button" v-text="getPageID" />
         </div>
 
         <!-- Get next page -->
@@ -51,18 +53,16 @@
       class="mx-auto"
       @click="InfiniteLoadHandler()"
     >
-      <p class="pb-2 text-center text-default-text">
-        Loading more posts...
-      </p>
+      <p class="pb-2 text-center text-default-text">Loading more posts...</p>
     </div>
 
     <!-- Space below all posts -->
-    <div v-if="settings.hoverControls.value" class="mb-6">&nbsp;</div>
+    <div v-if="getUserSettings.hoverControls.value" class="mb-6">&nbsp;</div>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 // Third party
 import { Intersect } from 'vuetify/lib/directives/intersect'
@@ -92,8 +92,8 @@ export default {
   mixins: [KeyboardNavigationMixin],
 
   computed: {
-    ...mapState('booru', ['queries']),
-    ...mapState('user', ['settings']),
+    ...mapGetters('booru', ['getPageID']),
+    ...mapGetters('user', ['getUserSettings']),
   },
 
   methods: {
@@ -102,7 +102,7 @@ export default {
     getNextPage() {
       this.pidManager({ operation: 'add' })
 
-      if (!this.settings.infiniteLoad.value) scrollToTop()
+      if (!this.getUserSettings.infiniteLoad.value) scrollToTop()
 
       this.fetchPosts()
     },
@@ -110,7 +110,7 @@ export default {
     getPrevPage() {
       this.pidManager({ operation: 'subtract' })
 
-      if (!this.settings.infiniteLoad.value) scrollToTop()
+      if (!this.getUserSettings.infiniteLoad.value) scrollToTop()
 
       this.fetchPosts()
     },
@@ -127,7 +127,7 @@ export default {
 
       this.pidManager({ operation: 'set', value: specificPage })
 
-      if (!this.settings.infiniteLoad.value) scrollToTop()
+      if (!this.getUserSettings.infiniteLoad.value) scrollToTop()
 
       this.fetchPosts()
     },

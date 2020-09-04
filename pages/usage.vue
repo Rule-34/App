@@ -36,7 +36,7 @@
     <!-- Recursion for every setting -->
 
     <ContentContainer
-      v-for="setting in settings"
+      v-for="setting in getUserSettings"
       :key="setting.name"
       :title="setting.name"
       :text="setting.description"
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 // Components
 import ContentContainer from '~/components/utils/ContentContainer.vue'
 
@@ -54,7 +54,7 @@ export default {
   components: { ContentContainer },
 
   computed: {
-    ...mapState('user', ['settings']),
+    ...mapGetters('user', ['getUserSettings']),
   },
 
   head() {

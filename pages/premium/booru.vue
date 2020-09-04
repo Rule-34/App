@@ -14,8 +14,8 @@
           </thead>
 
           <tbody class="text-default-text-muted">
-            <template v-if="custom.boorus.length">
-              <tr v-for="booru in custom.boorus" :key="booru.domain">
+            <template v-if="getCustomBoorus.length">
+              <tr v-for="booru in getCustomBoorus" :key="booru.domain">
                 <td @click="removeCustomBooruFromState(booru)">
                   {{ booru.domain }}
                 </td>
@@ -36,6 +36,7 @@
           </tbody>
         </table>
       </div>
+
       <p class="p-2 text-xs text-center text-default-text-muted">
         Tip: Click on a booru domain to remove it
       </p>
@@ -125,7 +126,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/util/BooruUtils.js'
 
@@ -144,7 +145,7 @@ export default {
   },
 
   computed: {
-    ...mapState('user', ['custom']),
+    ...mapGetters('user', ['getCustomBoorus']),
   },
 
   methods: {

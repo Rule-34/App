@@ -46,7 +46,7 @@
       <aside v-if="isActive" class="notifications--details">
         <!-- Repeat for every notification -->
         <ContentContainer
-          v-for="notification in notifications.data"
+          v-for="notification in getNotifications"
           :key="notification.title"
           class="m-1"
           :title="notification.title"
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState, mapGetters } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 
 // Components
 import ContentContainer from '~/components/utils/ContentContainer.vue'
@@ -80,13 +80,16 @@ export default {
   },
 
   computed: {
-    ...mapState('notifications', ['notifications']),
-    ...mapGetters('notifications', ['isThereANewNotification']),
+    ...mapGetters('notifications', [
+      'getNotifications',
+      'hasNotificationsBeenFetched',
+      'isThereANewNotification',
+    ]),
   },
 
   mounted() {
-    if (this.notifications.alreadyFetched) {
-      console.debug('Already fetched notification data, skipping...')
+    if (this.hasNotificationsBeenFetched) {
+      console.debug('Already fetched notifications, skipping...')
       return
     }
 

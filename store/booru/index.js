@@ -33,6 +33,21 @@ export const state = () => ({
 })
 
 export const getters = {
+  // Used for premium separation
+  getDefaultBooruList: () => {
+    return defaultBooruList
+  },
+
+  // Used for premium separation
+  getPremiumBooruList: (state, getters, rootState, rootGetters) => {
+    return rootGetters['user/getCustomBoorus']
+  },
+
+  // Used internally as a complete list of boorus
+  getBooruList: (state, getters) => {
+    return [...getters.getDefaultBooruList, ...getters.getPremiumBooruList]
+  },
+
   getActiveBooru(state, getters) {
     return getters.getBooruList[state.booru.active]
   },
@@ -45,19 +60,20 @@ export const getters = {
     )[0]
   },
 
-  // Used internally for state
-  getBooruList: (state, getters) => {
-    return [...getters.getDefaultBooruList, ...getters.getPremiumBooruList]
+  getPageID: (state) => {
+    return state.queries.pid
   },
 
-  // Used for premium separation
-  getDefaultBooruList: () => {
-    return defaultBooruList
+  getPosts: (state) => {
+    return state.posts.data
   },
 
-  // Used for premium separation
-  getPremiumBooruList: (state, getters, rootState, rootGetters) => {
-    return rootState.user.custom.boorus
+  getSearchAddedTags: (state) => {
+    return state.search.addedTags
+  },
+
+  getSearchSearchedTags: (state) => {
+    return state.search.searchedTags
   },
 }
 

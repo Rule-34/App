@@ -9,13 +9,13 @@
     <NavToggler :show-search="isPostsPage" />
 
     <transition name="sidenav">
-      <div v-if="sideNav.isActive" class="fixed z-30 w-full h-screen">
+      <div v-if="isSideNavActive" class="fixed z-30 w-full h-screen">
         <SideNav class="h-full bg-black bg-opacity-25" />
       </div>
     </transition>
 
     <transition name="search">
-      <div v-if="search.isActive" class="fixed z-40 w-full h-screen">
+      <div v-if="isSearchActive" class="fixed z-40 w-full h-screen">
         <Search class="h-full bg-black bg-opacity-25" />
       </div>
     </transition>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 // Third party
 import { Touch } from 'vuetify/lib/directives/touch'
@@ -56,15 +56,15 @@ export default {
   mixins: [GlobalStartUpMixin, NavigationMixin, TouchHandlerMixin],
 
   computed: {
-    ...mapState('navigation', ['sideNav', 'search']),
-    ...mapState('user', ['settings']),
+    ...mapGetters('navigation', ['isSideNavActive', 'isSearchActive']),
+    ...mapGetters('user', ['getUserSettings']),
   },
 
   head() {
     return {
       // Define color theme based on settings
       bodyAttrs: {
-        class: this.settings.darkTheme.value
+        class: this.getUserSettings.darkTheme.value
           ? 'dark bg-background'
           : 'light bg-background',
       },

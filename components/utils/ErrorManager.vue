@@ -1,9 +1,9 @@
 <template>
-  <Error v-if="errors" :error-data="errors" />
+  <Error v-if="getErrors" :error-data="getErrors" />
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 import Error from './Error.vue'
 
@@ -15,7 +15,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['errors']),
+    ...mapGetters(['getErrors']),
   },
 }
 </script>

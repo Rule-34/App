@@ -12,10 +12,10 @@
       <!-- if media is an Image -->
       <img
         :src="mediaResolutionChooser.url"
-        :loading="settings.lazyLoading.value ? 'lazy' : 'auto'"
+        :loading="getUserSettings.lazyLoading.value ? 'lazy' : 'auto'"
         :class="{
-          'post-animation opacity-0': settings.animations.value,
-          'opacity-100': hasMediaLoaded && settings.animations.value,
+          'post-animation opacity-0': getUserSettings.animations.value,
+          'opacity-100': hasMediaLoaded && getUserSettings.animations.value,
         }"
         :alt="'Image ' + post.id"
         class="w-full h-auto"
@@ -30,7 +30,7 @@
     <template v-else-if="isVideo">
       <!-- if its a Video -->
       <video
-        :controls="settings.videoControls.value"
+        :controls="getUserSettings.videoControls.value"
         :alt="'Video ' + post.id"
         class="w-full h-auto"
         preload="none"
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 import Error from '~/components/utils/Error'
 
@@ -94,8 +94,8 @@ export default {
   },
 
   computed: {
-    ...mapState(['general']),
-    ...mapState('user', ['settings']),
+    ...mapGetters('user', ['getUserSettings']),
+    ...mapGetters(['getCORSProxyURL']),
 
     isImage() {
       return this.post.media_type === 'image'
@@ -110,7 +110,10 @@ export default {
       if (this.isVideo) return this.post.high_res_file
 
       // Return full image if its setting is enabled OR if low resolution file doesnt exist
-      if (this.settings.fullSizeImages.value || !this.post.low_res_file.url) {
+      if (
+        this.getUserSettings.fullSizeImages.value ||
+        !this.post.low_res_file.url
+      ) {
         return this.post.high_res_file
       }
 
@@ -183,7 +186,7 @@ export default {
       }
 
       // Retry to load it
-      else if (this.retryLogic.count < this.settings.imgRetry.value) {
+      else if (this.retryLogic.count < this.getUserSettings.imgRetry.value) {
         console.debug(`Retry ${this.retryLogic.count} to load the media`)
 
         event.target.src = ''
@@ -212,7 +215,7 @@ export default {
     },
 
     addProxyToURL(url) {
-      return this.general.CORSProxyURL + '?q=' + url
+      return this.getCORSProxyURL + '?q=' + url
     },
 
     addExtraSlashToURL(url) {
