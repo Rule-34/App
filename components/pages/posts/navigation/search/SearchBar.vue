@@ -37,14 +37,14 @@
         />
       </button>
 
-      <!-- Filter content -->
+      <!-- Negative -->
       <button
         type="button"
         title="Filter out content"
-        @click="toggleBlacklistFilter()"
+        @click="toggleNegativeTags()"
       >
         <FilterIcon
-          :class="{ 'text-red-400': search.blacklistFilter.isActive }"
+          :class="{ 'text-red-400': isNegativeTagsActive }"
           class="w-6 h-6 transition-colors duration-300 icon"
         />
       </button>
@@ -53,8 +53,8 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
-import { FilterIcon, SearchIcon, TrashIcon } from 'vue-feather-icons'
+import { mapGetters, mapActions } from 'vuex'
+import { TagIcon, SearchIcon, FilterIcon, TrashIcon } from 'vue-feather-icons'
 import debounce from 'lodash/debounce'
 
 export default {
@@ -69,7 +69,10 @@ export default {
   },
 
   computed: {
-    ...mapState('booru', ['search']),
+    ...mapGetters('navigation', [
+      'isNegativeTagsActive',
+    ]),
+    ...mapGetters('premium', ['isUserPremium']),
   },
 
   methods: {
@@ -78,10 +81,13 @@ export default {
       'searchedTagsManager',
       'fetchSearchTag',
     ]),
-    ...mapMutations('booru', ['setBlacklistFilterActive']),
+    ...mapActions('navigation', [
+      'negativeTagsManager',
+    ]),
 
     replaceInput(event) {
-      this.searchQuery = event.target.value.replace(/\s+/g, '_').toLowerCase()
+      this.searchQuery = event.target.value.replace(/\s+/g, '_')
+
       event.target.value = this.searchQuery
 
       this.getTags()
@@ -108,8 +114,10 @@ export default {
       this.addedTagsManager({ operation: 'reset' })
     },
 
-    toggleBlacklistFilter() {
-      this.setBlacklistFilterActive(!this.search.blacklistFilter.isActive)
+    toggleNegativeTags() {
+      this.negativeTagsManager({ operation: 'toggle' })
+    },
+
     },
   },
 }

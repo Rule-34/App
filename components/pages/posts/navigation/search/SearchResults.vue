@@ -93,19 +93,12 @@ export default {
     },
 
     addToAddedTags(tag) {
-      if (this.search.blacklistFilter.isActive) {
-        this.addedTagsManager({
-          operation: 'add',
-          value: '-' + tag,
-        })
-      }
-      //
-      else {
-        this.addedTagsManager({
-          operation: 'add',
-          value: tag,
-        })
-      }
+      const prefix = this.isNegativeTagsActive ? '-' : ''
+
+      this.addedTagsManager({
+        operation: 'add',
+        value: prefix + tag,
+      })
     },
 
     fetchAddedTags() {
