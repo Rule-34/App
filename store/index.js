@@ -1,4 +1,28 @@
-export default {
+export const state = () => ({
+  general: {
+    CORSProxyURL: 'https://cors-proxy.r34.app/',
+  },
+
+  errors: undefined,
+})
+
+export const getters = {
+  getCORSProxyURL(state) {
+    return state.general.CORSProxyURL
+  },
+
+  getErrors(state) {
+    return state.errors
+  },
+}
+
+export const mutations = {
+  setErrors(state, value) {
+    state.errors = value
+  },
+}
+
+export const actions = {
   /**
    * Simple fetch that returns error to vue store
    * @param {*} param0
