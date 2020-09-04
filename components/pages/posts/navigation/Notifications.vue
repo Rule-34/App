@@ -94,19 +94,17 @@ export default {
     }
 
     this.fetchNotifications()
-
-    this.setAlreadyFetched(true)
   },
 
   methods: {
-    ...mapMutations('notifications', ['setLatestTitle', 'setAlreadyFetched']),
+    ...mapMutations('notifications', ['setLatestTitle']),
     ...mapActions('notifications', ['fetchNotifications']),
 
     toggleNotifications() {
       this.isActive = !this.isActive
 
       if (this.isActive) {
-        this.setLatestTitle(this.notifications.data[0].title)
+        this.setLatestTitle(this.getNotifications[0].title)
 
         fireAnalytics('notifications')
       }
