@@ -34,7 +34,7 @@ export const getters = {
 
 export const mutations = {
   setNotificationData(state, value) {
-    state.notifications.data = value
+    state.notifications.data = Object.freeze(value)
   },
 
   setLatestTitle(state, value) {

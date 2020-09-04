@@ -151,19 +151,11 @@ export const mutations = {
   },
 
   setCustomBoorus(state, value) {
-    state.custom.boorus = value
-  },
-
-  pushCustomBooruValue(state, value) {
-    state.custom.boorus.push(value)
+    state.custom.boorus = Object.freeze(value)
   },
 
   setCustomTagCollections(state, value) {
-    state.custom.tagCollections = value
-  },
-
-  pushCustomTagCollection(state, value) {
-    state.custom.tagCollections.push(value)
+    state.custom.tagCollections = Object.freeze(value)
   },
 }
 

@@ -85,19 +85,15 @@ export const mutations = {
   },
 
   setPostsData(state, value) {
-    state.posts.data = value
+    state.posts.data = Object.freeze(value)
   },
 
   setAddedTags(state, value) {
-    state.search.addedTags = value
-  },
-
-  pushAddedTags(state, value) {
-    state.search.addedTags.push(value)
+    state.search.addedTags = Object.freeze(value)
   },
 
   setSearchedTags(state, value) {
-    state.search.searchedTags = value
+    state.search.searchedTags = Object.freeze(value)
   },
 }
 
