@@ -27,8 +27,6 @@ export const state = () => ({
   search: {
     addedTags: [],
     searchedTags: [],
-
-    blacklistFilter: { isActive: false },
   },
 })
 
@@ -100,10 +98,6 @@ export const mutations = {
 
   setSearchedTags(state, value) {
     state.search.searchedTags = value
-  },
-
-  setBlacklistFilterActive(state, value) {
-    state.search.blacklistFilter.isActive = value
   },
 }
 
