@@ -47,14 +47,14 @@ export default {
   methods: {
     ...mapActions('booru', ['addedTagsManager', 'pidManager', 'fetchPosts']),
 
-    async fetchSpecificTag(tag) {
-      await this.pidManager({ operation: 'reset' })
+    fetchSpecificTag(tag) {
+      this.pidManager({ operation: 'reset' })
 
-      await this.addedTagsManager({
+      this.addedTagsManager({
         operation: 'reset',
       })
 
-      await this.addedTagsManager({
+      this.addedTagsManager({
         operation: 'add',
         value: tag,
       })
