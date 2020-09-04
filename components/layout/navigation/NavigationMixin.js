@@ -23,14 +23,19 @@ export default {
   },
 
   methods: {
-    ...mapMutations('navigation', ['setSideNavIsActive', 'setSearchIsActive']),
+    ...mapActions('navigation', [
+      'sideNavNavigationManager',
+      'searchNavigationManager',
+    ]),
 
     routeHandler() {
       // Close Side Nav on route change
       if (this.isSideNavActive)
+        this.sideNavNavigationManager({ operation: 'set', value: false })
 
       // Close Search on route change
       if (this.isSearchActive)
+        this.searchNavigationManager({ operation: 'set', value: false })
 
       // Set different layout depending of the route
       switch (this.$nuxt.$route.name) {

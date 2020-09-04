@@ -7,7 +7,7 @@
     >
       <!-- If nothing searched -->
       <h1
-        v-if="!search.searchedTags.length && !search.addedTags.length"
+        v-if="!getSearchSearchedTags.length && !getSearchAddedTags.length"
         class="flex items-center justify-center flex-1 text-xl font-light tracking-wide text-default-text"
       >
         Search something!
@@ -15,11 +15,11 @@
 
       <!-- Added tags, click them to remove them -->
       <div
-        v-if="search.addedTags.length"
+        v-if="getSearchAddedTags.length"
         class="mb-1 overflow-y-scroll border-b rounded tag-container border-border max-h-1/2"
       >
         <button
-          v-for="tag in search.addedTags"
+          v-for="tag in getSearchAddedTags"
           :key="tag"
           type="button"
           class="tag color-util"
@@ -31,12 +31,12 @@
 
       <!-- Searched tags, click them to add them -->
       <div
-        v-if="search.searchedTags.length"
+        v-if="getSearchSearchedTags.length"
         class="flex-1 overflow-y-scroll rounded rounded-b-none tag-container"
       >
         <!-- Add tag to array of added tags -->
         <button
-          v-for="tag in search.searchedTags"
+          v-for="tag in getSearchSearchedTags"
           :key="tag.name"
           type="button"
           class="tag color-util group"
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 // JS
 import { scrollToTop } from '~/assets/js/scrollUtils.js'
@@ -77,12 +77,13 @@ export default {
   name: 'SearchResults',
 
   computed: {
-    ...mapState('booru', ['search']),
+    ...mapGetters('booru', ['getSearchAddedTags', 'getSearchSearchedTags']),
+    ...mapGetters('navigation', ['isNegativeTagsActive']),
   },
 
   methods: {
     ...mapActions('booru', ['addedTagsManager', 'pidManager', 'fetchPosts']),
-    ...mapMutations('navigation', ['setSearchIsActive']),
+    ...mapActions('navigation', ['searchNavigationManager']),
 
     removeAddedTag(tag) {
       this.addedTagsManager({
@@ -110,7 +111,7 @@ export default {
     fetchAddedTags() {
       this.pidManager({ operation: 'reset' })
 
-      await this.setSearchIsActive(false)
+      this.searchNavigationManager({ operation: 'set', value: false })
 
       scrollToTop()
 
