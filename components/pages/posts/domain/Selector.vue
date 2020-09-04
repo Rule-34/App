@@ -19,6 +19,7 @@
           :key="booru.domain"
           :aria-label="'Changes the domain to ' + booru.domain"
           :value="booru.domain"
+          :selected="getActiveBooru.domain === booru.domain"
         >
           {{ booru.domain }}
         </option>
@@ -31,6 +32,7 @@
             :key="booru.domain"
             :aria-label="'Changes the domain to ' + booru.domain"
             :value="booru.domain"
+            :selected="getActiveBooru.domain === booru.domain"
           >
             {{ booru.domain }}
           </option>
