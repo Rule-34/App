@@ -47,6 +47,8 @@
         />
       </button>
     </div>
+
+    <SearchTagCollections v-if="isTagCollectionsActive" />
   </div>
 </template>
 
@@ -55,10 +57,18 @@ import { mapGetters, mapActions } from 'vuex'
 import { TagIcon, SearchIcon, FilterIcon, TrashIcon } from 'vue-feather-icons'
 import debounce from 'lodash/debounce'
 
+import SearchTagCollections from './SearchTagCollections'
+
 export default {
   name: 'SearchBar',
 
-  components: { SearchIcon, FilterIcon, TrashIcon },
+  components: {
+    TagIcon,
+    SearchIcon,
+    FilterIcon,
+    TrashIcon,
+    SearchTagCollections,
+  },
 
   data() {
     return {
