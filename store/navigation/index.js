@@ -7,6 +7,7 @@ export const state = () => ({
     isActive: false,
 
     negativeTags: { isActive: false },
+    tagCollections: { isActive: false },
   },
 })
 
@@ -23,6 +24,9 @@ export const getters = {
     return state.search.negativeTags.isActive
   },
 
+  isTagCollectionsActive(state) {
+    return state.search.tagCollections.isActive
+  },
 }
 
 export const mutations = {
@@ -37,6 +41,11 @@ export const mutations = {
   setSearchNegativeTagsIsActive(state, value) {
     state.search.negativeTags.isActive = value
   },
+
+  setSearchTagCollectionsIsActive(state, value) {
+    state.search.tagCollections.isActive = value
+  },
+}
 
 export const actions = {
   sideNavNavigationManager({ commit, getters }, { operation, value }) {
@@ -84,4 +93,21 @@ export const actions = {
     }
   },
 
+  tagCollectionsNavigationManager({ commit, getters }, { operation, value }) {
+    switch (operation) {
+      case 'toggle':
+        commit(
+          'setSearchTagCollectionsIsActive',
+          !getters.isTagCollectionsActive
+        )
+        break
+
+      case 'set':
+        commit('setSearchTagCollectionsIsActive', value)
+        break
+
+      default:
+        throw new Error('No operation specified')
+    }
+  },
 }
