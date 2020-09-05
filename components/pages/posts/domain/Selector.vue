@@ -37,7 +37,7 @@
             {{ booru.domain }}
           </option>
         </template>
-        <option value="Add booru">Add booru</option>
+        <option value="Add booru">&lt;Add Booru&gt;</option>
       </optgroup>
     </select>
 
