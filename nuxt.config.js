@@ -59,7 +59,11 @@ export default {
   /*
    ** Customize the splash loading indicator
    */
-  loadingIndicator: false,
+  loadingIndicator: {
+    name: 'cube-grid',
+    color: '#121212',
+    background: 'linear-gradient(152deg, #9b9be0 38%, #00d4ff 100%)',
+  },
 
   /*
    ** Global CSS
