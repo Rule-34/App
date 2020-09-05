@@ -41,13 +41,7 @@ export default {
 
   computed: {
     isUrl() {
-      try {
-        // eslint-disable-next-line no-new
-        new URL(this.source[0])
-        return true
-      } catch {
-        return false
-      }
+      return this.source[0].startsWith('http', 'www')
     },
 
     sourceText() {
