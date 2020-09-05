@@ -16,22 +16,20 @@
       @keypress.enter.prevent="addSearchedTagDirectly($event.target.value)"
     />
 
-    <div class="flex">
-      <!-- Premade filter -->
-      <!-- TODO: Remake functionality -->
-      <!-- <button type="button" title="Premade filter" @click="addPremadeTags()">
-        <GitlabIcon
+    <div class="flex space-x-1">
+      <!-- Tag collections -->
+      <button
+        type="button"
+        title="Custom Tag Collections"
+        @click="toggleTagCollections()"
+      >
+        <TagIcon
           class="w-6 h-6 transition-colors duration-300 icon hover:text-default-text-muted"
         />
-      </button> -->
+      </button>
 
-      <!-- Reset tags -->
-      <button
-        class="mx-2"
-        type="button"
-        title="Reset tags"
-        @click="resetAddedTags()"
-      >
+      <!-- Reset -->
+      <button type="button" title="Reset tags" @click="resetAddedTags()">
         <TrashIcon
           class="w-6 h-6 transition-colors duration-300 icon hover:text-default-text-muted"
         />
@@ -71,6 +69,7 @@ export default {
   computed: {
     ...mapGetters('navigation', [
       'isNegativeTagsActive',
+      'isTagCollectionsActive',
     ]),
     ...mapGetters('premium', ['isUserPremium']),
   },
@@ -82,6 +81,7 @@ export default {
       'fetchSearchTag',
     ]),
     ...mapActions('navigation', [
+      'tagCollectionsNavigationManager',
       'negativeTagsManager',
     ]),
 
@@ -119,6 +119,13 @@ export default {
       this.negativeTagsManager({ operation: 'toggle' })
     },
 
+    toggleTagCollections() {
+      if (!this.isUserPremium) {
+        this.$router.push({ name: 'premium' })
+        return
+      }
+
+      this.tagCollectionsNavigationManager({ operation: 'toggle' })
     },
   },
 }
