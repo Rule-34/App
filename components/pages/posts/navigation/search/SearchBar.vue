@@ -51,6 +51,7 @@
     <transition name="page">
       <SearchTagCollections
         v-if="tagCollections.isActive"
+        class="absolute inset-0 z-30 bg-black bg-opacity-25"
         @toggleTagCollections="toggleTagCollections()"
       />
     </transition>
@@ -62,7 +63,7 @@ import { mapGetters, mapActions } from 'vuex'
 import { TagIcon, SearchIcon, FilterIcon, TrashIcon } from 'vue-feather-icons'
 import debounce from 'lodash/debounce'
 
-import SearchTagCollections from './SearchTagCollections'
+const SearchTagCollections = () => import('./SearchTagCollections')
 
 export default {
   name: 'SearchBar',
