@@ -1,14 +1,14 @@
 <template>
   <form class="p-4 md:p-0 md:gap-4 search-grid">
     <!-- Space for clicking out -->
-    <div @click.self="closeSearchMenu()" />
+    <div @click.self.stop="closeSearchMenu()" />
 
     <SearchBar />
 
     <SearchResults />
 
     <!-- Space for clicking out -->
-    <div @click.self="closeSearchMenu()" />
+    <div @click.self.stop="closeSearchMenu()" />
   </form>
 </template>
 
@@ -37,7 +37,7 @@ export default {
 }
 </script>
 
-<style lang="postcss" scoped>
+<style lang="postcss">
 .search-grid {
   display: grid;
   grid-template-rows: 0.5fr 1fr 3fr 0.5fr;
