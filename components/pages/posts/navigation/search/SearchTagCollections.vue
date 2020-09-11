@@ -1,36 +1,34 @@
 <template>
-    <div class="p-4 m-auto pointer-events-auto material-container">
-  <div class="absolute inset-0 z-30 flex pointer-events-none">
-      <h2
-        class="text-lg font-semibold tracking-wide text-center text-gradient-one"
+  <div class="flex" @click.self.stop="toggleTagCollections()">
+    <menu class="flex flex-col w-4/5 p-4 m-auto h-3/5 material-container">
+      <!-- Title -->
+      <header
+        class="mb-4 text-xl font-semibold tracking-wide text-center text-gradient-one"
       >
         Tag Collections
-      </h2>
+      </header>
 
       <!-- Tag Collections -->
-      <div class="mt-4">
+      <section class="flex-grow space-y-2 overflow-y-scroll text-default-text">
         <template v-if="getTagCollections.length">
-          <div
+          <article
             v-for="(tagCollection, index) in getTagCollections"
             :key="tagCollection.name"
-            class="flex items-center justify-between"
+            class="flex items-center justify-between px-2 py-1 material-container bg-background"
+            @click="addTagCollectionToAddedTags(index)"
           >
             <p class="truncate">{{ tagCollection.name }}</p>
 
-            <p
-              class="flex-shrink-0 tag text-default-text hover:text-default-text-muted"
-              @click="addTagCollectionToAddedTags(index)"
-            >
-              {{ `${tagCollection.tags.length} tags` }}
-            </p>
-          </div>
+            <div class="flex-shrink-0 color-util">
+              {{ tagCollection.tags.length }}
+
+              <TagIcon class="inline w-5 h-5 icon" />
+            </div>
+          </article>
         </template>
 
         <template v-else>
-          <div class="text-center">
-            <h3>No Tag Collections available</h3>
-            <nuxt-link to="/premium">Create one?</nuxt-link>
-          </div>
+          <article class="text-center">
             <Error
               :render-borders="false"
               error-data="No Tag Collections available"
@@ -39,14 +37,21 @@
                 <nuxt-link to="/premium">Create one?</nuxt-link>
               </template>
             </Error>
+          </article>
         </template>
-      </div>
-    </div>
+      </section>
+
+      <!-- CTA -->
+      <footer class="-mb-2 text-center">
+        <nuxt-link class="text-sm" to="/premium"> Create more </nuxt-link>
+      </footer>
+    </menu>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { TagIcon } from 'vue-feather-icons'
 
 import Error from '~/components/utils/Error.vue'
 
@@ -54,6 +59,7 @@ export default {
   name: 'SearchBar',
 
   components: {
+    TagIcon,
     Error,
   },
 
@@ -70,6 +76,10 @@ export default {
         value: this.getTagCollections[tagCollectionIndex].tags,
       })
 
+      this.toggleTagCollections()
+    },
+
+    toggleTagCollections() {
       this.$emit('toggleTagCollections')
     },
   },
