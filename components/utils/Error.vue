@@ -21,9 +21,12 @@
 
     <!-- Action -->
     <div v-if="showAction">
-      <button type="button" class="color-util" @click="reload()">
-        Reload the page?
-      </button>
+      <slot name="customAction">
+        <!-- Fallback -->
+        <button type="button" class="color-util" @click="reload()">
+          Reload the page?
+        </button>
+      </slot>
     </div>
   </div>
 </template>
