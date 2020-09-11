@@ -31,6 +31,14 @@
             <h3>No Tag Collections available</h3>
             <nuxt-link to="/premium">Create one?</nuxt-link>
           </div>
+            <Error
+              :render-borders="false"
+              error-data="No Tag Collections available"
+            >
+              <template v-slot:customAction>
+                <nuxt-link to="/premium">Create one?</nuxt-link>
+              </template>
+            </Error>
         </template>
       </div>
     </div>
@@ -40,8 +48,14 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
+import Error from '~/components/utils/Error.vue'
+
 export default {
   name: 'SearchBar',
+
+  components: {
+    Error,
+  },
 
   computed: {
     ...mapGetters('user', ['getTagCollections']),
