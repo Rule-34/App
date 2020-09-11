@@ -1,6 +1,6 @@
 <template>
-  <div class="absolute inset-0 z-50 flex pointer-events-none text-default-text">
     <div class="p-4 m-auto pointer-events-auto material-container">
+  <div class="absolute inset-0 z-30 flex pointer-events-none">
       <h2
         class="text-lg font-semibold tracking-wide text-center text-gradient-one"
       >
