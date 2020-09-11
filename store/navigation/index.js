@@ -7,7 +7,6 @@ export const state = () => ({
     isActive: false,
 
     negativeTags: { isActive: false },
-    tagCollections: { isActive: false },
   },
 })
 
@@ -22,10 +21,6 @@ export const getters = {
 
   isNegativeTagsActive(state) {
     return state.search.negativeTags.isActive
-  },
-
-  isTagCollectionsActive(state) {
-    return state.search.tagCollections.isActive
   },
 }
 
@@ -86,24 +81,6 @@ export const actions = {
 
       case 'set':
         commit('setSearchNegativeTagsIsActive', value)
-        break
-
-      default:
-        throw new Error('No operation specified')
-    }
-  },
-
-  tagCollectionsNavigationManager({ commit, getters }, { operation, value }) {
-    switch (operation) {
-      case 'toggle':
-        commit(
-          'setSearchTagCollectionsIsActive',
-          !getters.isTagCollectionsActive
-        )
-        break
-
-      case 'set':
-        commit('setSearchTagCollectionsIsActive', value)
         break
 
       default:
