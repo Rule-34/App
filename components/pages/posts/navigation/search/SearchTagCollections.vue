@@ -49,7 +49,6 @@ export default {
 
   methods: {
     ...mapActions('booru', ['addedTagsManager']),
-    ...mapActions('navigation', ['tagCollectionsNavigationManager']),
 
     addTagCollectionToAddedTags(tagCollectionIndex) {
       this.addedTagsManager({
@@ -57,7 +56,7 @@ export default {
         value: this.getTagCollections[tagCollectionIndex].tags,
       })
 
-      this.tagCollectionsNavigationManager({ operation: 'set', value: false })
+      this.$emit('toggleTagCollections')
     },
   },
 }

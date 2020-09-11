@@ -48,7 +48,12 @@
       </button>
     </div>
 
-    <SearchTagCollections v-if="isTagCollectionsActive" />
+    <transition name="page">
+      <SearchTagCollections
+        v-if="tagCollections.isActive"
+        @toggleTagCollections="toggleTagCollections()"
+      />
+    </transition>
   </div>
 </template>
 
@@ -73,14 +78,13 @@ export default {
   data() {
     return {
       searchQuery: null,
+
+      tagCollections: { isActive: false },
     }
   },
 
   computed: {
-    ...mapGetters('navigation', [
-      'isNegativeTagsActive',
-      'isTagCollectionsActive',
-    ]),
+    ...mapGetters('navigation', ['isNegativeTagsActive']),
     ...mapGetters('premium', ['isUserPremium']),
   },
 
@@ -90,10 +94,7 @@ export default {
       'searchedTagsManager',
       'fetchSearchTag',
     ]),
-    ...mapActions('navigation', [
-      'tagCollectionsNavigationManager',
-      'negativeTagsManager',
-    ]),
+    ...mapActions('navigation', ['negativeTagsManager']),
 
     replaceInput(event) {
       this.searchQuery = event.target.value.replace(/\s+/g, '_')
@@ -135,7 +136,7 @@ export default {
         return
       }
 
-      this.tagCollectionsNavigationManager({ operation: 'toggle' })
+      this.tagCollections.isActive = !this.tagCollections.isActive
     },
   },
 }
