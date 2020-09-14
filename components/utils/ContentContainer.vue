@@ -36,6 +36,7 @@
           <source :srcset="img + '.webp'" type="image/webp" />
           <img
             loading="lazy"
+            decoding="async"
             :src="img + '.png'"
             :alt="title + ' Example'"
             class="mx-auto mt-2"
