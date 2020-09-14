@@ -4,6 +4,11 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 module.exports = {
   target: 'modern',
 
+  future: {
+    removeDeprecatedGapUtilities: true,
+    purgeLayersByDefault: true,
+  },
+
   purge: {
     options: {
       whitelistPatterns: [/active/, /fade/, /enter/, /leave/],
@@ -55,7 +60,7 @@ module.exports = {
       },
 
       maxHeight: {
-        '0': '0px',
+        0: '0px',
         '1/4': '25%',
         '2/5': '40%',
         '1/2': '50%',
@@ -63,7 +68,7 @@ module.exports = {
       },
 
       minHeight: {
-        '0': '0px',
+        0: '0px',
         '1/4': '25%',
         '2/5': '40%',
         '1/2': '50%',
