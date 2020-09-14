@@ -22,6 +22,7 @@
         :height="mediaResolutionChooser.height"
         :width="mediaResolutionChooser.width"
         referrerpolicy="no-referrer"
+        decoding="async"
         @load="hasMediaLoaded = true"
         @error="retryToLoadManager($event)"
       />
