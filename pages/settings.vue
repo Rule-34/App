@@ -50,7 +50,7 @@ export default {
 
   methods: {
     removeLocalStorage() {
-      localStorage.removeItem('user')
+      localStorage.clear()
 
       location.reload()
     },
