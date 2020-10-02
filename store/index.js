@@ -4,6 +4,10 @@ export const state = () => ({
   },
 
   errors: undefined,
+
+  statistics: {
+    timesTheAppHasBeenOpened: 0,
+  },
 })
 
 export const getters = {
@@ -14,11 +18,19 @@ export const getters = {
   getErrors(state) {
     return state.errors
   },
+
+  getTimesTheAppHasBeenOpened(state) {
+    return state.statistics.timesTheAppHasBeenOpened
+  },
 }
 
 export const mutations = {
   setErrors(state, value) {
     state.errors = value
+  },
+
+  setTimesTheAppHasBeenOpened(state, value) {
+    state.statistics.timesTheAppHasBeenOpened = value
   },
 }
 
