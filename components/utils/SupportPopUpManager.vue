@@ -33,19 +33,15 @@ export default {
     ...mapGetters(['getTimesTheAppHasBeenOpened']),
   },
 
-  watch: {
-    getTimesTheAppHasBeenOpened(value) {
-      if (value % 10 === 0) {
-        this.isSupportPopUpActive = true
-        //
-      } else {
-        this.isSupportPopUpActive = false
-      }
-    },
-  },
-
   mounted() {
     this.setTimesTheAppHasBeenOpened(this.getTimesTheAppHasBeenOpened + 1)
+
+    if (this.getTimesTheAppHasBeenOpened % 10 === 0) {
+      this.isSupportPopUpActive = true
+      //
+    } else {
+      this.isSupportPopUpActive = false
+    }
   },
 
   methods: {
