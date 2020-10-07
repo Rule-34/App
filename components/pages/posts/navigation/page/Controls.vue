@@ -78,8 +78,6 @@ import KeyboardNavigationMixin from '~/components/pages/posts/navigation/page/Ke
 import { scrollToTop } from '~/assets/js/scrollUtils.js'
 
 export default {
-  name: 'Controls',
-
   components: {
     ArrowRightIcon,
     ArrowLeftIcon,

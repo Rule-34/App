@@ -23,7 +23,6 @@
 
 <script>
 export default {
-  name: 'TransitionCollapse',
   methods: {
     beforeEnter(element) {
       requestAnimationFrame(() => {

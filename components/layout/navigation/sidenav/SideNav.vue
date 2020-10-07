@@ -120,8 +120,6 @@
 import { mapMutations } from 'vuex'
 
 export default {
-  name: 'SideNav',
-
   data() {
     return {
       sideNavLinks: [

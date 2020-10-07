@@ -72,8 +72,6 @@
 
 <script>
 export default {
-  name: 'ContentContainer',
-
   props: {
     // For separating text
     separator: { type: Boolean, required: false, default: false },

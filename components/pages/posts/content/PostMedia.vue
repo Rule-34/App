@@ -63,8 +63,6 @@ import { mapGetters } from 'vuex'
 import Error from '~/components/utils/Error'
 
 export default {
-  name: 'PostMedia',
-
   components: { Error },
 
   props: {

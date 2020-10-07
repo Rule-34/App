@@ -28,8 +28,6 @@ import TransitionCollapse from '~/components/utils/TransitionCollapse.vue'
 import { scrollToTop } from '~/assets/js/scrollUtils.js'
 
 export default {
-  name: 'PostTags',
-
   components: { TransitionCollapse },
 
   props: {

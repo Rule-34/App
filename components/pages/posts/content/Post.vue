@@ -21,8 +21,6 @@ import PostTags from './PostTags.vue'
 import PostSource from './PostSource.vue'
 
 export default {
-  name: 'Post',
-
   components: { PostMedia, PostTags, PostSource },
 
   props: {
