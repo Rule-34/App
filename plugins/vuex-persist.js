@@ -59,4 +59,13 @@ export default ({ store }) => {
       },
     }),
   }).plugin(store)
+
+  // Default state
+  new VuexPersistence({
+    key: 'vuex',
+
+    reducer: (state) => ({
+      statistics: state.statistics,
+    }),
+  }).plugin(store)
 }
