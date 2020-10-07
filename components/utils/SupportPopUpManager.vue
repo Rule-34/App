@@ -1,8 +1,12 @@
 <template>
-  <transition name="search">
+  <!-- 
+    This should use Vue 3's teleport feature
+    https://v3.vuejs.org/guide/teleport.html
+  -->
+  <transition name="page">
     <div v-if="isSupportPopUpActive" class="fixed z-40 w-full h-screen">
       <SupportPopUp
-        class="h-full bg-black bg-opacity-25"
+        class="h-full bg-black bg-opacity-75"
         @toggleSupportPopUp="toggleSupportPopUp()"
       />
     </div>
