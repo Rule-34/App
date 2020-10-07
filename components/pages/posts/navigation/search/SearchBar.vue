@@ -66,8 +66,6 @@ import debounce from 'lodash/debounce'
 const SearchTagCollections = () => import('./SearchTagCollections')
 
 export default {
-  name: 'SearchBar',
-
   components: {
     TagIcon,
     SearchIcon,

@@ -33,8 +33,6 @@
 
 <script>
 export default {
-  name: 'Error',
-
   props: {
     errorTitle: {
       type: String,

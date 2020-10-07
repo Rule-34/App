@@ -36,8 +36,6 @@ import { mapMutations, mapActions } from 'vuex'
 import { ChevronRightIcon } from 'vue-feather-icons'
 
 export default {
-  name: 'Login',
-
   components: {
     ChevronRightIcon,
   },

@@ -20,8 +20,6 @@ import SearchBar from './SearchBar.vue'
 import SearchResults from './SearchResults.vue'
 
 export default {
-  name: 'Search',
-
   components: {
     SearchBar,
     SearchResults,

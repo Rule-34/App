@@ -8,8 +8,6 @@ import { mapGetters } from 'vuex'
 import Error from './Error.vue'
 
 export default {
-  name: 'ErrorManager',
-
   components: {
     Error,
   },

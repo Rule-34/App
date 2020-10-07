@@ -69,8 +69,6 @@ import ContentContainer from '~/components/utils/ContentContainer.vue'
 import fireAnalytics from '~/assets/js/analytics'
 
 export default {
-  name: 'Notifications',
-
   components: { ContentContainer },
 
   data() {

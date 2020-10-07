@@ -28,8 +28,6 @@
 import { ExternalLinkIcon } from 'vue-feather-icons'
 
 export default {
-  name: 'PostSource',
-
   components: { ExternalLinkIcon },
 
   props: {

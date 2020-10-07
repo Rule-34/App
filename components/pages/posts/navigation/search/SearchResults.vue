@@ -74,8 +74,6 @@ import { mapGetters, mapActions } from 'vuex'
 import { scrollToTop } from '~/assets/js/scrollUtils.js'
 
 export default {
-  name: 'SearchResults',
-
   computed: {
     ...mapGetters('booru', ['getSearchAddedTags', 'getSearchSearchedTags']),
     ...mapGetters('navigation', ['isNegativeTagsActive']),

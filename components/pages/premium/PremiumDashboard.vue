@@ -38,8 +38,6 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'PremiumDashboard',
-
   computed: {
     ...mapGetters('premium', ['isUserPremium', 'getUserEmail']),
   },
