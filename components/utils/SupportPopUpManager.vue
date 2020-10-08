@@ -16,6 +16,8 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 
+import fireAnalytics from '~/assets/js/analytics'
+
 const SupportPopUp = () => import('./SupportPopUp.vue')
 
 export default {
@@ -38,7 +40,8 @@ export default {
 
     if (this.getTimesTheAppHasBeenOpened % 10 === 0) {
       this.isSupportPopUpActive = true
-      //
+
+      fireAnalytics('supportPopUp')
     } else {
       this.isSupportPopUpActive = false
     }
