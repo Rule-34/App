@@ -57,6 +57,14 @@ function notificationsTracking() {
     trackEvent({
       category: 'Notifications',
       action: 'opened',
+
+function supportPopUpTracking() {
+  SendTimed(
+    0,
+    trackEvent({
+      category: 'PopUp',
+      action: 'Shown',
+      name: 'Support',
     })
   )
 }
@@ -76,6 +84,10 @@ export default function fireAnalytics(mode, { state, domain } = {}) {
 
     case 'notifications':
       result = notificationsTracking()
+      break
+
+    case 'supportPopUp':
+      result = supportPopUpTracking()
       break
 
     default:
