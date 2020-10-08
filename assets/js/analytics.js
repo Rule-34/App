@@ -20,7 +20,7 @@ function domainTracking(domain) {
     0,
     trackEvent({
       category: 'Domains',
-      action: 'changed',
+      action: 'Switch',
       name: domain,
     })
   )
@@ -44,7 +44,7 @@ function settingsTracking(state) {
       index,
       trackEvent({
         category: 'Settings',
-        action: 'toggled',
+        action: 'Toggle',
         name: difference[key],
       })
     )
@@ -56,14 +56,17 @@ function notificationsTracking() {
     0,
     trackEvent({
       category: 'Notifications',
-      action: 'opened',
+      action: 'Open',
+    })
+  )
+}
 
 function supportPopUpTracking() {
   SendTimed(
     0,
     trackEvent({
-      category: 'PopUp',
-      action: 'Shown',
+      category: 'PopUps',
+      action: 'Show',
       name: 'Support',
     })
   )
