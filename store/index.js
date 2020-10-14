@@ -64,7 +64,7 @@ export const actions = {
         dispatch({
           type: 'errorManager',
           operation: 'set',
-          value: error.message,
+          value: error,
         })
 
         return false
@@ -75,10 +75,15 @@ export const actions = {
     return data
   },
 
-  errorManager({ commit }, { operation, value }) {
+  errorManager({ commit, dispatch }, { operation, value }) {
     switch (operation) {
       case 'set':
-        commit('setErrors', value)
+        commit('setErrors', value.message)
+
+        dispatch({
+          type: 'errorSender',
+          error: value,
+        })
         break
 
       case 'reset':
@@ -88,6 +93,10 @@ export const actions = {
       default:
         throw new Error('No operation specified')
     }
+  },
+
+  errorSender(_, error) {
+    window.$nuxt.$sentry.captureException(error)
   },
 
   loadingAnimationHandler(_, mode) {
