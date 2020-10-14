@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@nuxtjs/pwa": "^3.1.1",
+    "@nuxtjs/sentry": "^4.3.5",
     "@nuxtjs/sitemap": "^2.4.0",
     "@tailwindcss/ui": "^0.6.2",
     "lodash": "^4.17.20",
