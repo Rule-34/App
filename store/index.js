@@ -95,7 +95,7 @@ export const actions = {
     }
   },
 
-  errorSender(_, error) {
+  errorSender(_, { error }) {
     window.$nuxt.$sentry.captureException(error)
   },
 
