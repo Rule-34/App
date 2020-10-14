@@ -1,8 +1,10 @@
+const isDevEnv = process.env.NODE_ENV === 'development'
+
 export default {
   target: 'static',
   ssr: false,
 
-  modern: process.env.NODE_ENV === 'development' ? undefined : 'client',
+  modern: isDevEnv ? undefined : 'client',
 
   // Generate 404 page for hosts
   generate: { fallback: true },
@@ -157,13 +159,17 @@ export default {
    */
   sitemap: {
     hostname: 'https://r34.app',
+
     gzip: true,
+
     defaults: {
       changefreq: 'daily',
       priority: 1,
       lastmod: new Date(),
       lastmodrealtime: true,
     },
+
+    // Static HTML files
     routes: ['/privacy-policy', '/terms-of-service'],
   },
 
