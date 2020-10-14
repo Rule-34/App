@@ -151,7 +151,9 @@ export default {
     disableServerSide: true,
 
     // Additional config
-    // config: {},
+    config: {
+      ignoreErrors: ['Request rejected with status', 'Failed to fetch'],
+    },
   },
 
   /*
