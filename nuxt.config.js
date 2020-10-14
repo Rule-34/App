@@ -93,7 +93,7 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/pwa', '@nuxtjs/sitemap'],
+  modules: ['@nuxtjs/pwa', '@nuxtjs/sentry', '@nuxtjs/sitemap'],
 
   /*
    ** Progressive web app
@@ -134,6 +134,22 @@ export default {
         // method: 'GET'
       },
     ],
+  },
+
+  /*
+   ** Sentry.io
+   */
+  sentry: {
+    dsn: process.env.SENTRY_DSN || '',
+
+    lazy: true,
+
+    disabled: isDevEnv,
+    disableClientSide: false,
+    disableServerSide: true,
+
+    // Additional config
+    // config: {},
   },
 
   /*
