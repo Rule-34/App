@@ -152,7 +152,11 @@ export default {
 
     // Additional config
     config: {
-      ignoreErrors: ['Request rejected with status', 'Failed to fetch'],
+      ignoreErrors: [
+        'Request rejected with status',
+        'Failed to fetch',
+        'AbortError',
+      ],
     },
   },
 
