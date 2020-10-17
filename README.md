@@ -83,6 +83,9 @@ When developing, posts wont load as the API has CORS enabled, for posts to work 
 ### Build setup
 
 ```bash
+# Modify .env file
+cp .env.example .env
+
 # Install dependencies
 npm install
 
