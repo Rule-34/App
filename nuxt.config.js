@@ -150,6 +150,9 @@ export default {
     disableClientSide: false,
     disableServerSide: true,
 
+    publishRelease: true,
+    sourceMapStyle: 'hidden-source-map',
+
     // Additional config
     config: {
       ignoreErrors: [
