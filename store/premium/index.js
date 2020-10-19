@@ -66,16 +66,29 @@ export const mutations = {
 
 export const actions = {
   async authenticate({ state, dispatch, commit, getters }) {
-    const response = await dispatch(
-      'simpleFetch',
-      {
-        url: state.gumroad.authAPI.url,
-        options: getters.getFetchOptionsInit,
-      },
-      { root: true } // Necessary for talking to root actions
-    )
+    try {
+      const response = await dispatch(
+        'simpleFetch',
+        {
+          url: state.gumroad.authAPI.url,
+          options: getters.getFetchOptionsInit,
+        },
+        { root: true }
+      )
 
-    // console.log(response)
-    commit('setRawResponse', response)
+      commit('setRawResponse', response)
+
+      //
+    } catch (error) {
+      dispatch(
+        'errorManager',
+        {
+          operation: 'set',
+          value: error,
+          message: "Couldn't authenticate",
+        },
+        { root: true }
+      )
+    }
   },
 }
