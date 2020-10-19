@@ -277,7 +277,7 @@ export const actions = {
   },
 
   async fetchPosts({ dispatch }, mode) {
-    const url = dispatch('createAPIURL', { mode: 'posts' })
+    const url = await dispatch('createAPIURL', { mode: 'posts' }) // Tip: Actions that return a value have to be awaited
 
     try {
       const response = await dispatch(
@@ -309,7 +309,7 @@ export const actions = {
   },
 
   async fetchSearchTag({ dispatch, commit }, tag) {
-    const url = dispatch('createAPIURL', { mode: 'tags', tag })
+    const url = await dispatch('createAPIURL', { mode: 'tags', tag })
 
     try {
       const response = await dispatch(
