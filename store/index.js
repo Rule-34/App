@@ -35,50 +35,35 @@ export const mutations = {
 }
 
 export const actions = {
-  /**
-   * Simple fetch that returns error to vue store
-   * @param {*} param0
-   * @param {String} url URL to fetch
-   */
   async simpleFetch({ state, dispatch }, { url, options }) {
     dispatch('loadingAnimationHandler', 'start')
 
     if (state.errors) {
-      await dispatch({
+      dispatch({
         type: 'errorManager',
         operation: 'reset',
       })
     }
 
-    const data = await fetch(url, options)
-      // Save the data
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Request rejected with status ${response.status}`)
-        }
+    try {
+      const response = await fetch(url, options)
 
-        return response.json()
-      })
+      if (!response.ok) {
+        throw new Error(`Request rejected with status ${response.status}`)
+      }
 
-      .catch((error) => {
-        dispatch({
-          type: 'errorManager',
-          operation: 'set',
-          value: error,
-        })
+      return response.json()
 
-        return false
-      })
-
-    dispatch('loadingAnimationHandler', 'finish')
-
-    return data
+      //
+    } finally {
+      dispatch('loadingAnimationHandler', 'finish')
+    }
   },
 
-  errorManager({ commit, dispatch }, { operation, value }) {
+  errorManager({ commit, dispatch }, { operation, value, message }) {
     switch (operation) {
       case 'set':
-        commit('setErrors', value.message)
+        commit('setErrors', message || value.message)
 
         dispatch({
           type: 'errorSender',

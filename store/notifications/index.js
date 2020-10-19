@@ -44,15 +44,28 @@ export const mutations = {
 
 export const actions = {
   async fetchNotifications({ state, dispatch, commit }) {
-    const response = await dispatch(
-      'simpleFetch',
-      {
-        url: state.notifications.url,
-      },
-      { root: true } // Necessary for talking to root actions
-    )
+    try {
+      const response = await dispatch(
+        'simpleFetch',
+        {
+          url: state.notifications.url,
+        },
+        { root: true }
+      )
 
-    // console.log(response)
-    commit('setNotificationData', response)
+      commit('setNotificationData', response)
+
+      //
+    } catch (error) {
+      dispatch(
+        'errorManager',
+        {
+          operation: 'set',
+          value: error,
+          message: "Couldn't fetch notifications",
+        },
+        { root: true }
+      )
+    }
   },
 }

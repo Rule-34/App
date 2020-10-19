@@ -276,35 +276,63 @@ export const actions = {
     return url.toString()
   },
 
-  async fetchPosts({ dispatch, commit }, mode) {
-    const url = await dispatch('createAPIURL', { mode: 'posts' })
+  async fetchPosts({ dispatch }, mode) {
+    const url = dispatch('createAPIURL', { mode: 'posts' })
 
-    const response = await dispatch(
-      'simpleFetch',
-      {
-        url,
-      },
-      { root: true }
-    )
+    try {
+      const response = await dispatch(
+        'simpleFetch',
+        {
+          url,
+        },
+        { root: true }
+      )
 
-    if (mode === 'concat') {
-      await dispatch('postsManager', { operation: 'concat', value: response })
-    } else {
-      await dispatch('postsManager', { operation: 'set', value: response })
+      if (mode === 'concat') {
+        dispatch('postsManager', { operation: 'concat', value: response })
+      } else {
+        dispatch('postsManager', { operation: 'set', value: response })
+      }
+
+      //
+    } catch (error) {
+      dispatch(
+        'errorManager',
+        {
+          operation: 'set',
+          value: error,
+          message: "Couldn't fetch posts",
+        },
+        { root: true }
+      )
     }
   },
 
   async fetchSearchTag({ dispatch, commit }, tag) {
-    const url = await dispatch('createAPIURL', { mode: 'tags', tag })
+    const url = dispatch('createAPIURL', { mode: 'tags', tag })
 
-    const response = await dispatch(
-      'simpleFetch',
-      {
-        url,
-      },
-      { root: true }
-    )
+    try {
+      const response = await dispatch(
+        'simpleFetch',
+        {
+          url,
+        },
+        { root: true }
+      )
 
-    commit('setSearchedTags', response)
+      commit('setSearchedTags', response)
+
+      //
+    } catch (error) {
+      dispatch(
+        'errorManager',
+        {
+          operation: 'set',
+          value: error,
+          message: "Couldn't fetch search tags",
+        },
+        { root: true }
+      )
+    }
   },
 }
