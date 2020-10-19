@@ -44,16 +44,24 @@
     <!-- Content -->
     <transition name="page">
       <aside v-if="isActive" class="notifications--details">
-        <!-- Repeat for every notification -->
-        <ContentContainer
-          v-for="notification in getNotifications"
-          :key="notification.title"
-          class="m-1"
-          :title="notification.title"
-          :text="notification.text"
-          :links="notification.links"
-        />
-        <!-- TODO: redo this -->
+        <template v-if="getNotifications">
+          <ContentContainer
+            v-for="notification in getNotifications"
+            :key="notification.title"
+            class="m-1"
+            :title="notification.title"
+            :text="notification.text"
+            :links="notification.links"
+          />
+        </template>
+
+        <template v-else>
+          <ContentContainer
+            class="m-1"
+            title="Notifications"
+            text="There are no notifications available."
+          />
+        </template>
       </aside>
     </transition>
   </div>
@@ -101,7 +109,7 @@ export default {
     toggleNotifications() {
       this.isActive = !this.isActive
 
-      if (this.isActive) {
+      if (this.isActive && this.getNotifications) {
         this.setLatestTitle(this.getNotifications[0].title)
 
         fireAnalytics('notifications')
