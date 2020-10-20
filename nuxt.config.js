@@ -159,6 +159,8 @@ export default {
         'Request rejected with status',
         'Failed to fetch',
         'AbortError',
+        'Network',
+        'NetworkError',
       ],
     },
   },
