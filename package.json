@@ -9,7 +9,9 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "analyze": "nuxt build --analyze",
-    "webp": "for i in static/img/*.png; do cwebp -q 80 ${i%%.*}.png -o ${i%%.*}.webp; done"
+    "webp": "for i in static/img/*.png; do cwebp -q 80 ${i%%.*}.png -o ${i%%.*}.webp; done",
+    "release": "standard-version",
+    "release:publish": "git push --follow-tags origin master && npm publish"
   },
   "dependencies": {
     "@nuxtjs/pwa": "^3.2.2",
