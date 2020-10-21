@@ -150,7 +150,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'Modify the Custom Tag Collections',
+          content: 'Create custom tag collections',
         },
       ],
     }

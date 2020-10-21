@@ -64,7 +64,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'Learn what every setting in the the Rule 34 App does.',
+          content: 'Learn how to use App',
         },
       ],
     }

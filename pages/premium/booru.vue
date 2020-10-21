@@ -188,7 +188,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'Modify the Custom Boorus',
+          content: 'Add custom Boorus',
         },
       ],
     }
