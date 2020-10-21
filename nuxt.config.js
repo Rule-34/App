@@ -160,7 +160,7 @@ export default {
         'Failed to fetch',
         'AbortError',
         'Network',
-        'NetworkError',
+        'ResizeObserver loop limit exceeded',
       ],
     },
   },
