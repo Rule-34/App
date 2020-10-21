@@ -81,7 +81,7 @@
     />
 
     <!-- Temporal div TODO: remove -->
-    <div style="height: 75vh;" />
+    <div style="height: 75vh" />
   </main>
 </template>
 
@@ -96,7 +96,7 @@ export default {
       title: 'Legal',
       meta: [
         {
-          hid: 'legal',
+          hid: 'description',
           name: 'description',
           content: 'Legal information about the Rule 34 App.',
         },

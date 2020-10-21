@@ -62,7 +62,7 @@ export default {
       title: 'Usage',
       meta: [
         {
-          hid: 'usage',
+          hid: 'description',
           name: 'description',
           content: 'Learn what every setting in the the Rule 34 App does.',
         },
