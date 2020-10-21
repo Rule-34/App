@@ -96,7 +96,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'Premium subscription for the Rule 34 App',
+          content: 'Premium subscription',
         },
       ],
     }

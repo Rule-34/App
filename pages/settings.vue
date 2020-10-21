@@ -63,7 +63,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'Tweak your experience on the Rule 34 App.',
+          content: 'Tweak your experience',
         },
       ],
     }
