@@ -94,7 +94,7 @@ export default {
       title: 'Premium',
       meta: [
         {
-          hid: 'premium',
+          hid: 'description',
           name: 'description',
           content: 'Premium subscription for the Rule 34 App',
         },

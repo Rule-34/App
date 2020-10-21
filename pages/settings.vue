@@ -61,7 +61,7 @@ export default {
       title: 'Settings',
       meta: [
         {
-          hid: 'settings',
+          hid: 'description',
           name: 'description',
           content: 'Tweak your experience on the Rule 34 App.',
         },

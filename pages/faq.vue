@@ -116,7 +116,7 @@
     />
 
     <!-- Temporal div -->
-    <div style="height: 75vh;" />
+    <div style="height: 75vh" />
   </main>
 </template>
 
@@ -131,7 +131,7 @@ export default {
       title: 'Faq',
       meta: [
         {
-          hid: 'faq',
+          hid: 'description',
           name: 'description',
           content: 'Frequently asked questions about the Rule 34 App.',
         },

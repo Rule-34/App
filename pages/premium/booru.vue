@@ -186,7 +186,7 @@ export default {
       title: 'Custom Boorus',
       meta: [
         {
-          hid: 'customBoorus',
+          hid: 'description',
           name: 'description',
           content: 'Modify the Custom Boorus',
         },

@@ -39,7 +39,7 @@ export default {
       title: 'About',
       meta: [
         {
-          hid: 'about',
+          hid: 'description',
           name: 'description',
           content: 'Information about the Rule 34 App and Its creator.',
         },
