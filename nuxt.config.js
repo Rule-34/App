@@ -28,12 +28,9 @@ export default {
         name: 'description',
         content: 'Browse the most popular boorus in the Rule 34 App',
       },
-
-      // Coil.com
       {
-        hid: 'monetization',
         name: 'monetization',
-        content: '$ilp.uphold.com/FaUNRmQqekxh',
+        content: process.env.MONETIZATION_URI || '',
       },
     ],
 
