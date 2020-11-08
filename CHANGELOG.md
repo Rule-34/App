@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/AlejandroAkbal/Rule-34-App/compare/v1.0.1...v1.1.0) (2020-11-08)
+
+
+### Features
+
+* **meta:** use env to collect monetization meta value ([db843f9](https://github.com/AlejandroAkbal/Rule-34-App/commit/db843f9112d04848e74086917852a1a5c8da63fc))
+
 ### [1.0.1](https://github.com/AlejandroAkbal/Rule-34-App/compare/v1.0.0...v1.0.1) (2020-10-21)
 
 
