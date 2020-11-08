@@ -3,12 +3,12 @@ import VueMatomo from 'vue-matomo'
 
 export default ({ app }) => {
   Vue.use(VueMatomo, {
-    host: 'https://matomo.akbal.dev',
+    host: 'https://matomo2.akbal.dev',
     siteId: 1,
 
-    trackerUrl: 'https://matomo.akbal.dev/m',
+    // trackerUrl: 'https://matomo.akbal.dev/m',
 
-    trackerScriptUrl: 'https://matomo.akbal.dev/m.js',
+    // trackerScriptUrl: 'https://matomo.akbal.dev/m.js',
 
     router: app.router,
 
