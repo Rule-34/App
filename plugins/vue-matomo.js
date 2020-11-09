@@ -3,7 +3,7 @@ import VueMatomo from 'vue-matomo'
 
 export default ({ app }) => {
   Vue.use(VueMatomo, {
-    host: 'https://matomo2.akbal.dev',
+    host: 'https://matomo.akbal.dev',
     siteId: 1,
 
     // trackerUrl: 'https://matomo.akbal.dev/m',
