@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/Rule-34/App/compare/v1.1.1...v1.2.0) (2020-12-20)
+
+
+### Features
+
+* replace @nuxtjs/vuetify with vuetify ([85d4233](https://github.com/Rule-34/App/commit/85d4233b0cc0ef3ae5e69cb9492705819415be76))
+
+
+### Bug Fixes
+
+* fix vuetify imports ([98ba393](https://github.com/Rule-34/App/commit/98ba3934c5202efb3c646d8a1d63d2bceee4d3f6))
+
 ### [1.1.1](https://github.com/AlejandroAkbal/Rule-34-App/compare/v1.1.0...v1.1.1) (2020-11-11)
 
 ## [1.1.0](https://github.com/AlejandroAkbal/Rule-34-App/compare/v1.0.1...v1.1.0) (2020-11-08)
