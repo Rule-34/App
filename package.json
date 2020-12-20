@@ -17,6 +17,7 @@
     "@nuxtjs/pwa": "^3.3.2",
     "@nuxtjs/sentry": "^4.5.0",
     "@nuxtjs/sitemap": "^2.4.0",
+    "@nuxtjs/tailwindcss": "^3.4.1",
     "@tailwindcss/ui": "^0.7.2",
     "lodash": "^4.17.20",
     "nuxt": "^2.14.12",
@@ -27,7 +28,6 @@
   "devDependencies": {
     "@nuxt/types": "^2.14.12",
     "@nuxtjs/eslint-config": "^5.0.0",
-    "@nuxtjs/tailwindcss": "^3.4.1",
     "@nuxtjs/vuetify": "^1.11.2",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.16.0",
