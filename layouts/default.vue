@@ -33,7 +33,7 @@
 import { mapGetters } from 'vuex'
 
 // Third party
-import { Touch } from 'vuetify/lib'
+import { Touch } from 'vuetify/lib/directives/touch'
 
 // Components
 import NavToggler from '~/components/layout/navigation/sidenav/Toggler.vue'
