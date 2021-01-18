@@ -1,23 +1,19 @@
 # Rule 34 App
 
-Browse the most popular boorus in the Rule 34 App
-
-> Actually a Progressive Web App (PWA)
-
-## Visit it
-
-[https://r34.app/](https://r34.app/)
+Browse the most popular Boorus in the [Rule 34 App](https://r34.app/).
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/703629e2-193f-4bb0-9349-f02a22d50ed1/deploy-status)](https://app.netlify.com/sites/rule34-app/deploys)
 
-### Preview
+## Preview
 
 ![Posts Preview](.github/images/dashboard.png)
 ![Settings Preview](.github/images/settings.png)
 
-### Supported sites
+## Information
 
-This app can browse the following sites
+### Supported Boorus
+
+This app can browse the following Boorus.
 
 - rule34.xxx
 - rule34.paheal.net
@@ -27,45 +23,48 @@ This app can browse the following sites
 - safebooru.org
 - e926.net
 
+### Links
+
+Links to useful information.
+
+- [Frequently Asked Questions](https://www.notion.so/alejandroakbal/Frequently-Asked-Questions-fed2de7c56784703b26d3e6532004f4a)
+- [How to install the App](https://www.notion.so/alejandroakbal/App-Installation-5b1be2062ffe48bda39ac1236421fc84)
+
 ## Social
-
-### Discord
-
-Join the community **[Discord](https://redirect.r34.app/discord)** to keep up with the updates of this project!
-
-![Discord](https://img.shields.io/discord/656241666553806861?style=for-the-badge)
 
 ### Twitter
 
-Follow the Rule 34 App on **[Twitter](https://twitter.com/Rule34App)** for announcements and tips on how to use the App!
+Follow the Rule 34 App on **[Twitter](https://twitter.com/Rule34App)** for announcements, tips, discount codes and more.
 
-## Future
+![Twitter Follow](https://img.shields.io/twitter/follow/Rule34App?style=for-the-badge)
 
-### API
+### Discord
 
-This app uses a JSON wrapper for various Rule 34 APIs, it is developed and mantained by me, and can be found [here](https://github.com/AlejandroAkbal/Rule-34-API).
+Join the **[Discord](https://redirect.r34.app/discord)** community to keep up with the updates of the project and receive support.
 
-### Support
+![Discord](https://img.shields.io/discord/656241666553806861?style=for-the-badge)
 
-This project has various costs: domain, hosting, CloudFlare worker, maintenance, etc.
+## Support
 
-I am a student, so I'm not really in a position to maintain everything from my pocket
+This project has various costs: domain, email, hosting, Cloudflare worker, maintenance, etc.
 
-Since this is an **open source** project, with **no advertising** or any other way to generate revenue, I ask of you:
+I am a student, so I'm not really in a position to maintain everything from my pocket...
 
-> **If you really like my work**, please donate whatever amount you can to ensure the future of this project.
-
-[GitHub Sponsor](https://github.com/sponsors/AlejandroAkbal) | [LiberaPay](https://redirect.r34.app/liberapay) | [PayPal](https://redirect.r34.app/paypal)
+So if you want to help me continue working on the App, you can [make a donation](https://www.notion.so/alejandroakbal/Donations-1489536213a242a0be30597e8b101447).
 
 ## Technicalities
 
 ### Languages
 
-HTML, CSS, Javascript, NodeJS, NPM.
+HTML, CSS, JavaScript, NodeJS, NPM.
 
 ### Frameworks and tools
 
 NuxtJS, VueJS, TailwindCSS, Webpack, etc.
+
+## API
+
+This App uses an [API](https://github.com/Rule-34/API) to communicate with all the Boorus.
 
 ## Development
 
@@ -92,10 +91,3 @@ npm run generate
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
-
-### Tips
-
-When developing, posts wont load as the API has CORS enabled, for posts to work you'll need a browser extension to bypass CORS
-
-- [Firefox](https://addons.mozilla.org/es/firefox/addon/cors-everywhere/)
-- [Chrome](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf)
