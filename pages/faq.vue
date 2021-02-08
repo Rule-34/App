@@ -97,12 +97,8 @@
       link-text=""
       :links="[
         {
-          text: 'LiberaPay',
-          href: 'https://redirect.r34.app/liberapay',
-        },
-        {
-          text: 'PayPal',
-          href: 'https://redirect.r34.app/paypal',
+          text: 'Donations',
+          href: 'https://redirect.r34.app/donations',
         },
       ]"
     >
