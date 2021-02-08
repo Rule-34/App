@@ -27,8 +27,8 @@ This app can browse the following Boorus.
 
 Links to useful information.
 
-- [Frequently Asked Questions](https://www.notion.so/alejandroakbal/Frequently-Asked-Questions-fed2de7c56784703b26d3e6532004f4a)
-- [How to install the App](https://www.notion.so/alejandroakbal/App-Installation-5b1be2062ffe48bda39ac1236421fc84)
+- [Frequently Asked Questions](https://docs.r34.app/frequently-asked-questions)
+- [How to install the App](https://docs.r34.app/app-installation)
 
 ## Social
 
@@ -50,7 +50,7 @@ This project has various costs: domain, email, hosting, Cloudflare worker, maint
 
 I am a student, so I'm not really in a position to maintain everything from my pocket...
 
-So if you want to help me continue working on the App, you can [make a donation](https://www.notion.so/alejandroakbal/Donations-1489536213a242a0be30597e8b101447).
+So if you want to help me continue working on the App, you can [make a donation](https://docs.r34.app/donations).
 
 ## Technicalities
 

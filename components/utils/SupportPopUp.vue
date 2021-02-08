@@ -7,7 +7,7 @@
 
 Or even better, subscribe to unlock new features!"
         :links="[
-          { href: 'https://redirect.r34.app/liberapay', text: 'Donation' },
+          { href: 'https://redirect.r34.app/donations', text: 'Donation' },
           { href: '/premium', text: 'Subscription' },
         ]"
       />

@@ -89,7 +89,7 @@
           <li>
             <a
               class="flex nav-links--bottom"
-              href="https://redirect.r34.app/liberapay/"
+              href="https://redirect.r34.app/donations"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
