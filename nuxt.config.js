@@ -170,17 +170,18 @@ export default {
   sitemap: {
     hostname: 'https://r34.app',
 
-    gzip: true,
-
     defaults: {
       changefreq: 'daily',
-      priority: 1,
+      priority: 0.8,
       lastmod: new Date(),
-      lastmodrealtime: true,
     },
 
     // Static HTML files
-    routes: ['/privacy-policy', '/terms-of-service'],
+    routes: [
+      { url: '/', priority: 1.0 },
+      { url: '/privacy-policy', priority: 0.6 },
+      { url: '/terms-of-service', priority: 0.6 },
+    ],
   },
 
   /*
