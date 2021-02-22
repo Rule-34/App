@@ -87,6 +87,10 @@ export default {
     '@nuxtjs/sitemap',
   ],
 
+  axios: {
+    progress: true,
+  },
+
   auth: {
     strategies: {
       local: {

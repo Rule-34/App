@@ -35,10 +35,7 @@ export const actions = {
       })
     }
 
-    const response = await this.$axios.$get(url, {
-      ...options,
-      ...{ progress: true },
-    })
+    const response = await this.$axios.$get(url, options)
 
     return response
   },
