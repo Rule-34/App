@@ -79,7 +79,47 @@ export default {
     cssPath: '~/assets/css/main.css',
   },
 
-  modules: ['@nuxtjs/pwa', '@nuxtjs/sentry', '@nuxtjs/sitemap'],
+  modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
+    '@nuxtjs/pwa',
+    '@nuxtjs/sentry',
+    '@nuxtjs/sitemap',
+  ],
+
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          property: 'access_token',
+          required: true,
+          type: 'Bearer',
+        },
+
+        user: {
+          property: false,
+          autoFetch: true,
+        },
+
+        endpoints: {
+          login: { url: `${process.env.API_URL}/auth/login`, method: 'post' },
+          logout: false,
+          user: { url: `${process.env.API_URL}/auth/profile`, method: 'get' },
+        },
+      },
+    },
+
+    redirect: {
+      login: '/premium',
+      logout: false,
+      callback: false,
+      home: false,
+    },
+
+    watchLoggedIn: false,
+
+    vuex: { namespace: 'authentication' },
+  },
 
   pwa: {
     manifest: {
