@@ -5,28 +5,8 @@ import {
 } from '~/assets/lib/rule-34-shared-resources/dist/util/BooruUtils.js'
 
 export const state = () => ({
-  API: {
-    url:
-      process.env.NODE_ENV === 'development'
-        ? 'http://localhost:8100/'
-        : 'https://api.r34.app/',
-  },
-
-  booru: {
-    active: 0, // This is saved to localStorage
-  },
-
-  queries: {
-    pid: undefined, // Initial PID is set on boot and is derived from the getActiveBooruType getter
-  },
-
   posts: {
     data: [],
-  },
-
-  search: {
-    addedTags: [],
-    searchedTags: [],
   },
 })
 
@@ -46,11 +26,19 @@ export const getters = {
     return [...getters.getDefaultBooruList, ...getters.getPremiumBooruList]
   },
 
-  getActiveBooru(state, getters) {
-    return getters.getBooruList[state.booru.active]
+  getActiveBooru(state, getters, rootState, rootGetters) {
+    let booru = rootGetters['url/urlDomain']
+
+    booru = findBoorusWithValueByKey(booru, 'domain', getters.getBooruList)[0]
+
+    if (booru === undefined) {
+      booru = getters.getDefaultBooruList[0]
+    }
+
+    return booru
   },
 
-  getActiveBooruType: (state, getters) => {
+  getActiveBooruType: (state, getters, rootState, rootGetters) => {
     return findBoorusWithValueByKey(
       getters.getActiveBooru.type,
       'type',
@@ -58,65 +46,92 @@ export const getters = {
     )[0]
   },
 
-  getPageID: (state) => {
-    return state.queries.pid
-  },
-
   getPosts: (state) => {
     return state.posts.data
   },
 
-  getSearchAddedTags: (state) => {
-    return state.search.addedTags
+  getPageID: (state, getters, rootState, rootGetters) => {
+    let pageID = rootGetters['url/urlPage']
+
+    pageID = Number(pageID)
+
+    if (isNaN(pageID)) {
+      pageID = getters.getActiveBooruType.initialPageID
+    }
+
+    return pageID
   },
 
-  getSearchSearchedTags: (state) => {
-    return state.search.searchedTags
+  getTags: (state, getters, rootState, rootGetters) => {
+    let tags = rootGetters['url/urlTags']
+
+    // Default value
+    if (tags === undefined) {
+      tags = []
+    } else {
+      tags = tags.split(',')
+    }
+
+    return tags
   },
 }
 
 export const mutations = {
-  setActiveBooru(state, value) {
-    state.booru.active = value
-  },
-
-  setPIDQuery(state, value) {
-    state.queries.pid = value
-  },
-
   setPostsData(state, value) {
     state.posts.data = Object.freeze(value)
-  },
-
-  setAddedTags(state, value) {
-    state.search.addedTags = Object.freeze(value)
-  },
-
-  setSearchedTags(state, value) {
-    state.search.searchedTags = Object.freeze(value)
   },
 }
 
 export const actions = {
-  activeBooruManager({ state, commit, getters }, { operation, value }) {
+  activeBooruManager(context, { operation, value }) {
+    const { dispatch, getters } = context
+
     switch (operation) {
-      case 'search': {
-        // Search for the domain
-        const booruData = findBoorusWithValueByKey(
+      case 'set': {
+        const booru = findBoorusWithValueByKey(
           value,
           'domain',
           getters.getBooruList
         )[0]
 
-        const booruIndex = getters.getBooruList.indexOf(booruData) // findIndex could be used
+        const booruType = findBoorusWithValueByKey(
+          booru.type,
+          'type',
+          booruTypeList
+        )[0]
 
-        commit('setActiveBooru', booruIndex)
+        dispatch(
+          'url/pushRouteQueries',
+          {
+            domain: booru.domain,
+            page: booruType.initialPageID,
+            tags: [],
+          },
+          { root: true }
+        )
         break
       }
 
-      case 'reset':
-        commit('setActiveBooru', 0)
+      case 'reset': {
+        const booru = getters.getDefaultBooruList[0]
+
+        const booruType = findBoorusWithValueByKey(
+          booru.type,
+          'type',
+          booruTypeList
+        )[0]
+
+        dispatch(
+          'url/pushRouteQueries',
+          {
+            domain: booru.domain,
+            page: booruType.initialPageID,
+            tags: [],
+          },
+          { root: true }
+        )
         break
+      }
 
       default:
         throw new Error('No operation specified')
@@ -141,22 +156,48 @@ export const actions = {
     }
   },
 
-  pidManager({ commit, getters }, { operation, value }) {
+  async pidManager(context, { operation, value }) {
+    const { getters, dispatch } = context
+
     switch (operation) {
       case 'add':
-        commit('setPIDQuery', getters.getPageID + 1)
+        await dispatch(
+          'url/pushRouteQueries',
+          {
+            page: getters.getPageID + 1,
+          },
+          { root: true }
+        )
         break
 
       case 'subtract':
-        commit('setPIDQuery', getters.getPageID - 1)
+        await dispatch(
+          'url/pushRouteQueries',
+          {
+            page: getters.getPageID - 1,
+          },
+          { root: true }
+        )
         break
 
       case 'set':
-        commit('setPIDQuery', value)
+        await dispatch(
+          'url/pushRouteQueries',
+          {
+            page: value,
+          },
+          { root: true }
+        )
         break
 
       case 'reset':
-        commit('setPIDQuery', getters.getActiveBooruType.initialPageID)
+        await dispatch(
+          'url/pushRouteQueries',
+          {
+            page: getters.getActiveBooruType.initialPageID,
+          },
+          { root: true }
+        )
         break
 
       default:
@@ -164,45 +205,67 @@ export const actions = {
     }
   },
 
-  addedTagsManager({ commit, getters }, { operation, value }) {
+  /**
+   * @param {*} context
+   * @param {Object} options
+   * @param {string} options.operation
+   * @param {string[]} options.value
+   */
+  async tagsManager(context, { operation, value }) {
+    const { getters, dispatch } = context
+
     switch (operation) {
-      case 'add': {
-        // value: string
-        const isTheTagAlreadyAdded = getters.getSearchAddedTags.includes(value)
-
-        if (isTheTagAlreadyAdded) {
-          console.debug('This tag is already added!')
-          return
-        }
-
-        const addedTagsWithNewTag = [...getters.getSearchAddedTags, value]
-
-        commit('setAddedTags', addedTagsWithNewTag)
+      case 'set': {
+        await dispatch(
+          'url/pushRouteQueries',
+          {
+            page: getters.getActiveBooruType.initialPageID,
+            tags: value,
+          },
+          { root: true }
+        )
         break
       }
 
-      case 'concat': {
-        // value: string[]
-        const uniqueMergedAddedTags = [
-          ...new Set([...getters.getSearchAddedTags, ...value]),
-        ]
+      case 'merge': {
+        const uniqueMergedTags = [...new Set([...getters.getTags, ...value])]
 
-        commit('setAddedTags', uniqueMergedAddedTags)
+        await dispatch(
+          'url/pushRouteQueries',
+          {
+            page: getters.getActiveBooruType.initialPageID,
+            tags: uniqueMergedTags,
+          },
+          { root: true }
+        )
         break
       }
 
       case 'remove': {
-        // value: string
-        const addedTagsWithoutValue = getters.getSearchAddedTags.filter(
-          (tag) => tag !== value
+        const tagsWithoutValues = getters.getTags.filter(
+          (tag) => !value.includes(tag)
         )
 
-        commit('setAddedTags', addedTagsWithoutValue)
+        await dispatch(
+          'url/pushRouteQueries',
+          {
+            page: getters.getActiveBooruType.initialPageID,
+            tags: tagsWithoutValues,
+          },
+          { root: true }
+        )
         break
       }
 
       case 'reset':
-        commit('setAddedTags', [])
+        await dispatch(
+          'url/pushRouteQueries',
+          {
+            page: getters.getActiveBooruType.initialPageID,
+            tags: [],
+          },
+          { root: true }
+        )
         break
 
       default:
@@ -210,29 +273,18 @@ export const actions = {
     }
   },
 
-  searchedTagsManager({ commit }, { operation, value }) {
-    switch (operation) {
-      case 'set':
-        commit('setSearchedTags', value)
-        break
+  createApiUrl(context, { mode, postID, tag }) {
+    const { getters, rootState } = context
 
-      case 'reset':
-        commit('setSearchedTags', [])
-        break
+    const apiUrl = this.app.$config.API_URL
 
-      default:
-        throw new Error('No operation specified')
-    }
-  },
+    const activeBooru = getters.getActiveBooru
 
-  createAPIURL({ getters, rootState }, { mode, postID, tag }) {
-    const domainData = getters.getActiveBooru
-
-    const queryObj = {
+    const queries = {
       posts: {
         limit: rootState.user.settings.postsPerPage.value,
-        pid: rootState.booru.queries.pid,
-        tags: rootState.booru.search.addedTags.join('+'),
+        pageID: getters.getPageID,
+        tags: getters.getTags.join(','),
         score: rootState.user.settings.score.value,
       },
 
@@ -243,25 +295,33 @@ export const actions = {
       tags: { tag },
     }
 
-    const url = new URL(
-      rootState.booru.API.url + 'booru/' + domainData.type + '/' + mode
+    const urlToFetch = new URL(
+      apiUrl + '/booru/' + activeBooru.type + '/' + mode
     )
-    url.searchParams.append('domain', domainData.domain)
+
+    urlToFetch.searchParams.append('baseEndpoint', activeBooru.domain)
 
     switch (mode) {
       case 'posts':
-        url.searchParams.append('limit', queryObj.posts.limit)
-        url.searchParams.append('pid', queryObj.posts.pid)
-        url.searchParams.append('tags', queryObj.posts.tags)
-        url.searchParams.append('score', '>=' + queryObj.posts.score)
-        break
+        if (queries.posts.limit) {
+          urlToFetch.searchParams.append('limit', queries.posts.limit)
+        }
 
-      case 'single-post':
-        url.searchParams.append('id', queryObj.singlePost.id)
+        if (queries.posts.pageID) {
+          urlToFetch.searchParams.append('pageID', queries.posts.pageID)
+        }
+
+        if (queries.posts.tags && queries.posts.tags.length) {
+          urlToFetch.searchParams.append('tags', queries.posts.tags)
+        }
+
+        if (queries.posts.score) {
+          urlToFetch.searchParams.append('score', '>=' + queries.posts.score)
+        }
         break
 
       case 'tags':
-        url.searchParams.append('tag', queryObj.tags.tag)
+        urlToFetch.searchParams.append('tag', queries.tags.tag)
         // url.searchParams.append('limit', queryObj.limit)
         break
 
@@ -269,15 +329,35 @@ export const actions = {
         throw new Error('No mode specified')
     }
 
-    if (domainData.config) {
-      url.searchParams.append('config', JSON.stringify(domainData.config))
+    if (activeBooru.config) {
+      if (activeBooru.config?.options?.HTTPScheme) {
+        urlToFetch.searchParams.append(
+          'httpScheme',
+          activeBooru.config.options.HTTPScheme
+        )
+      }
+
+      // if (activeBooru.config?.endpoints?.tags) {
+      //   urlToFetch.searchParams.append(
+      //     'tagsEndpoint',
+      //     activeBooru.config.endpoints.tags
+      //   )
+      // }
+
+      // if (activeBooru.config?.queryIdentifiers?.tags?.tag) {
+      //   urlToFetch.searchParams.append(
+      //     'defaultQueryIdentifiersTagsTag',
+      //     activeBooru.config.queryIdentifiers.tags.tag
+      //   )
+      // }
     }
 
-    return url.toString()
+    return urlToFetch.toString()
   },
 
   async fetchPosts({ dispatch }, mode) {
-    const url = await dispatch('createAPIURL', { mode: 'posts' }) // Tip: Actions that return a value have to be awaited
+    // Tip: Actions that return a value have to be awaited
+    const url = await dispatch('createApiUrl', { mode: 'posts' })
 
     try {
       const response = await dispatch(
@@ -308,8 +388,8 @@ export const actions = {
     }
   },
 
-  async fetchSearchTag({ dispatch, commit }, tag) {
-    const url = await dispatch('createAPIURL', { mode: 'tags', tag })
+  async fetchTags({ dispatch, commit }, tag) {
+    const url = await dispatch('createApiUrl', { mode: 'tags', tag })
 
     try {
       const response = await dispatch(
@@ -320,7 +400,7 @@ export const actions = {
         { root: true }
       )
 
-      commit('setSearchedTags', response)
+      return response
 
       //
     } catch (error) {
