@@ -19,11 +19,9 @@
           "
         />
       </div>
-      <label
-        :for="settingIndex"
-        class="text-xs text-default-text"
-        v-text="setting.name"
-      />
+      <label :for="settingIndex" class="text-xs text-default-text">
+        {{ setting.name }}
+      </label>
     </div>
 
     <!-- If its a boolean -->
@@ -47,11 +45,9 @@
           class="form-switch-label color-util border-util"
         />
       </div>
-      <label
-        :for="settingIndex"
-        class="text-xs text-default-text"
-        v-text="setting.name"
-      />
+      <label :for="settingIndex" class="text-xs text-default-text">
+        {{ setting.name }}
+      </label>
     </div>
   </div>
 </template>
