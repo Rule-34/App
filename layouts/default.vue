@@ -56,7 +56,7 @@ export default {
    * Warning:
    * Some methods and variables are set by Mixins
    */
-  mixins: [NavigationMixin, TouchHandlerMixin],
+  mixins: [GlobalStartUpMixin, NavigationMixin, TouchHandlerMixin],
 
   head() {
     return {
