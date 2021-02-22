@@ -1,6 +1,6 @@
 <template>
   <div class="p-4 material-container text-default-text">
-    <form @submit.prevent="checkForm()">
+    <form @submit.prevent="userLogin">
       <label
         class="block mb-2 text-lg font-medium leading-tight"
         for="license-key"
@@ -11,12 +11,12 @@
       <div class="flex items-center w-full mt-1">
         <input
           id="license-key"
+          v-model="login.password"
           class="flex-grow block w-10/12 p-2 text-sm font-light border rounded-md shadow-sm outline-none appearance-none bg-background border-border"
           placeholder="XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX"
           type="text"
           name="license-key"
           required
-          @input="setLicenseKey($event.target.value)"
         />
 
         <!-- Action -->
@@ -40,12 +40,22 @@ export default {
     ChevronRightIcon,
   },
 
+  data() {
+    return {
+      login: {
+        password: '',
+      },
+    }
+  },
+
   methods: {
     ...mapActions('premium', ['authenticate']),
     ...mapMutations('premium', ['setLicenseKey']),
 
-    checkForm(event) {
-      this.authenticate()
+    async userLogin() {
+      await this.setLicenseKey(this.login.password)
+
+      await this.authenticate()
     },
   },
 }
