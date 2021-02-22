@@ -33,7 +33,7 @@
               :render-borders="false"
               error-data="No Tag Collections available"
             >
-              <template v-slot:customAction>
+              <template #customAction>
                 <nuxt-link to="/premium">Create one?</nuxt-link>
               </template>
             </Error>
@@ -66,11 +66,11 @@ export default {
   },
 
   methods: {
-    ...mapActions('booru', ['addedTagsManager']),
+    ...mapActions('booru', ['tagsManager']),
 
-    addTagCollectionToAddedTags(tagCollectionIndex) {
-      this.addedTagsManager({
-        operation: 'concat',
+    async addTagCollectionToAddedTags(tagCollectionIndex) {
+      await this.tagsManager({
+        operation: 'merge',
         value: this.getTagCollections[tagCollectionIndex].tags,
       })
 

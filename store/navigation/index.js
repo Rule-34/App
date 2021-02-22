@@ -5,8 +5,6 @@ export const state = () => ({
 
   search: {
     isActive: false,
-
-    negativeTags: { isActive: false },
   },
 })
 
@@ -18,10 +16,6 @@ export const getters = {
   isSearchActive(state) {
     return state.search.isActive
   },
-
-  isNegativeTagsActive(state) {
-    return state.search.negativeTags.isActive
-  },
 }
 
 export const mutations = {
@@ -31,10 +25,6 @@ export const mutations = {
 
   setSearchIsActive(state, value) {
     state.search.isActive = value
-  },
-
-  setSearchNegativeTagsIsActive(state, value) {
-    state.search.negativeTags.isActive = value
   },
 
   setSearchTagCollectionsIsActive(state, value) {
@@ -66,21 +56,6 @@ export const actions = {
 
       case 'set':
         commit('setSearchIsActive', value)
-        break
-
-      default:
-        throw new Error('No operation specified')
-    }
-  },
-
-  negativeTagsManager({ commit, getters }, { operation, value }) {
-    switch (operation) {
-      case 'toggle':
-        commit('setSearchNegativeTagsIsActive', !getters.isNegativeTagsActive)
-        break
-
-      case 'set':
-        commit('setSearchNegativeTagsIsActive', value)
         break
 
       default:
