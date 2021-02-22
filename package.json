@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nuxt",
     "start": "nuxt start",
-    "generate": "nuxt generate",
+    "generate": "nuxt generate --modern",
     "analyze": "nuxt build --analyze",
     "webp": "for i in static/img/*.png; do cwebp -q 80 ${i%%.*}.png -o ${i%%.*}.webp; done",
     "release": "standard-version",
