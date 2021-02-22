@@ -15,17 +15,6 @@ function trackEvent({ category, action, name, value }) {
   window._paq.push(['trackEvent', category, action, name, value])
 }
 
-function domainTracking(domain) {
-  SendTimed(
-    0,
-    trackEvent({
-      category: 'Domains',
-      action: 'Switch',
-      name: domain,
-    })
-  )
-}
-
 function settingsTracking(state) {
   // Compare default settings to user settings to see if theres a difference
   const difference = Object.keys(state).filter(
@@ -77,10 +66,6 @@ export default function fireAnalytics(mode, { state, domain } = {}) {
   let result
 
   switch (mode) {
-    case 'domain':
-      result = domainTracking(domain)
-      break
-
     case 'settings':
       result = settingsTracking(state)
       break
