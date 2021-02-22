@@ -1,88 +1,51 @@
 export const state = () => ({
   gumroad: {
-    authAPI: {
-      url: 'https://auth.r34.app/',
-
-      fetchOptions: {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: undefined, // Must be set by a getter
-      },
-    },
-
     product: {
-      product_permalink: 'Rule34App',
       license_key: undefined,
     },
   },
-
-  responseData: undefined,
 })
 
 export const getters = {
+  // hasValidLicenseKey
 
-  hasValidLicenseKey(state) {
-    return state.responseData && state.responseData.success === true
+  getLicenseKey(state, getters, rootState, rootGetters) {
+    return state.gumroad.product.license_key
   },
 
-  isUserPremium(state) {
-    return (
-      state.responseData &&
-      state.responseData.success === true &&
-      state.responseData.purchase.disputed === false &&
-      state.responseData.purchase.refunded === false &&
-      state.responseData.purchase.subscription_cancelled_at === null &&
-      state.responseData.purchase.subscription_failed_at === null
-    )
+  isUserPremium(state, getters, rootState, rootGetters) {
+    return rootState.authentication.user?.is_subscription_valid
   },
 
-  getUserEmail(state) {
-    return state.responseData && state.responseData.success
-      ? state.responseData.purchase.email
-      : undefined
-  },
-
-  getFetchOptionsInit(state) {
-    return {
-      ...state.gumroad.authAPI.fetchOptions,
-
-      body: JSON.stringify(state.gumroad.product),
-    }
+  getUserEmail(state, getters, rootState, rootGetters) {
+    return rootState.authentication.user?.email
   },
 }
 
 export const mutations = {
-  setRawResponse(state, value) {
-    state.responseData = Object.freeze(value)
-  },
-
   setLicenseKey(state, value) {
     state.gumroad.product.license_key = value
   },
 }
 
 export const actions = {
-  async authenticate({ state, dispatch, commit, getters }) {
+  async authenticate(context) {
+    const { dispatch, getters } = context
+
     try {
-      const response = await dispatch(
-        'simpleFetch',
-        {
-          url: state.gumroad.authAPI.url,
-          options: getters.getFetchOptionsInit,
+      await this.$auth.loginWith('local', {
+        data: {
+          username: '_',
+          password: getters.getLicenseKey,
         },
-        { root: true }
-      )
-
-      commit('setRawResponse', response)
-
-      //
+      })
     } catch (error) {
       dispatch(
         'errorManager',
         {
           operation: 'set',
           value: error,
-          message: "Couldn't authenticate",
+          message: 'Could not authenticate.',
         },
         { root: true }
       )
