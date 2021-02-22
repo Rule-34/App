@@ -28,8 +28,6 @@ export const mutations = {
 
 export const actions = {
   async simpleFetch({ state, dispatch }, { url, options }) {
-    dispatch('loadingAnimationHandler', 'start')
-
     if (state.errors) {
       dispatch({
         type: 'errorManager',
@@ -37,19 +35,12 @@ export const actions = {
       })
     }
 
-    try {
-      const response = await fetch(url, options)
+    const response = await this.$axios.$get(url, {
+      ...options,
+      ...{ progress: true },
+    })
 
-      if (!response.ok) {
-        throw new Error(`Request rejected with status ${response.status}`)
-      }
-
-      return response.json()
-
-      //
-    } finally {
-      dispatch('loadingAnimationHandler', 'finish')
-    }
+    return response
   },
 
   errorManager({ commit, dispatch }, { operation, value, message }) {
@@ -74,29 +65,5 @@ export const actions = {
 
   errorSender(_, { error }) {
     window.$nuxt.$sentry.captureException(error)
-  },
-
-  loadingAnimationHandler(_, mode) {
-    if (!window.$nuxt.$root.$loading.start) {
-      console.debug('Skipping animation until everything is loaded')
-      return
-    }
-
-    switch (mode) {
-      case 'start':
-        // console.debug('Starting loading animation')
-
-        window.$nuxt.$root.$loading.start()
-        break
-
-      case 'finish':
-        // console.debug('Stopping loading animation')
-
-        window.$nuxt.$root.$loading.finish()
-        break
-
-      default:
-        throw new Error('No mode specified')
-    }
   },
 }
