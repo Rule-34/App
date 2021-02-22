@@ -123,19 +123,24 @@ export default {
     disableClientSide: false,
     disableServerSide: true,
 
-    publishRelease: true,
-    sourceMapStyle: 'hidden-source-map',
+    // publishRelease: true,
+    // sourceMapStyle: 'hidden-source-map',
 
-    // Additional config
     config: {
       ignoreErrors: [
-        'Request rejected with status',
-        'Failed to fetch',
-        'AbortError',
-        'NotAllowedError',
+        // Network
+        'Fetch',
+        'Request',
         'Network',
-        'ResizeObserver loop limit exceeded',
+
+        'URL',
+
+        // Plugins
         'vue-matomo',
+
+        // Misc
+        'native code',
+        'extension',
       ],
     },
   },
