@@ -29,7 +29,7 @@
           title="Load specific page"
           @click="getSpecificPage()"
         >
-          <button type="button" v-text="getPageID" />
+          <button type="button">{{ getPageID }}</button>
         </div>
 
         <!-- Get next page -->

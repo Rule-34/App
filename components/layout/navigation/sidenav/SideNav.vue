@@ -35,10 +35,10 @@
       <nav class="flex flex-col h-full p-3 bg-background">
         <ul class="leading-loose text-center sm:text-left">
           <li v-for="link in sideNavLinks" :key="link.url">
-            <nuxt-link class="nav-links" :to="link.url">
+            <NuxtLink class="nav-links" :to="link.url">
               <span class="absolute inset-0 opacity-0" />
-              <span class="relative" v-text="link.title" />
-            </nuxt-link>
+              <span class="relative"> {{ link.title }}</span>
+            </NuxtLink>
           </li>
 
           <!-- Premium -->

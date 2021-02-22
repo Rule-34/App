@@ -28,8 +28,9 @@
         <p
           v-if="text"
           class="text-sm whitespace-pre-line text-default-text-muted"
-          v-text="text"
-        />
+        >
+          {{ text }}
+        </p>
 
         <!-- Image -->
         <picture v-if="img">

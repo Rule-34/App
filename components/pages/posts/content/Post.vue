@@ -50,6 +50,7 @@
     </div>
 
     <figcaption class="flex flex-wrap overflow-hidden text-sm">
+      <!-- Tags -->
       <template v-if="post.tags.length">
         <div class="w-full overflow-hidden">
           <TransitionCollapse>
@@ -70,6 +71,7 @@
         </div>
       </template>
 
+      <!-- Source -->
       <template v-if="post.source.length">
         <div class="w-full p-1 text-center">
           <template v-if="isUrl">
