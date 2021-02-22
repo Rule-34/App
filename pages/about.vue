@@ -31,11 +31,20 @@
       </div>
     </main>
 
+    <footer class="p-2 text-xs text-center text-default-text-muted">
+      v{{ app_version }}
+    </footer>
   </div>
 </template>
 
 <script>
+import { version } from '~/package.json'
+
 export default {
+  data() {
+    return { app_version: version }
+  },
+
   head() {
     return {
       title: 'About',
