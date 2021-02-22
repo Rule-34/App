@@ -29,7 +29,7 @@ export default {
         return
       }
 
-      console.debug('URL `domain` changed.', [from, to])
+      // console.debug('URL `domain` changed.', [from, to])
 
       await this.fetchPosts()
     },
@@ -40,7 +40,7 @@ export default {
         return
       }
 
-      console.debug('URL `page` changed.', [from, to])
+      // console.debug('URL `page` changed.', [from, to])
 
       await this.fetchPosts()
     },
@@ -51,7 +51,7 @@ export default {
         return
       }
 
-      console.debug('URL `tags` changed.', [from, to])
+      // console.debug('URL `tags` changed.', [from, to])
 
       await this.fetchPosts()
     },
