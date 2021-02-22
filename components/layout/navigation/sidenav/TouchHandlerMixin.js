@@ -13,7 +13,7 @@ export default {
 
     touchHandler(direction, event) {
       const touchThreshold = screen.availWidth * 0.25
-      // console.log(touchThreshold, event)
+      // console.debug(touchThreshold, event)
 
       switch (direction) {
         case 'right':
@@ -23,9 +23,15 @@ export default {
           }
 
           if (this.isSearchActive && this.isPostsPage) {
-            this.searchNavigationManager({ operation: 'set', value: false })
+            this.searchNavigationManager({
+              operation: 'set',
+              value: false,
+            })
           } else {
-            this.sideNavNavigationManager({ operation: 'set', value: true })
+            this.sideNavNavigationManager({
+              operation: 'set',
+              value: true,
+            })
           }
           break
 
@@ -36,9 +42,15 @@ export default {
           }
 
           if (!this.isSideNavActive && this.isPostsPage) {
-            this.searchNavigationManager({ operation: 'set', value: true })
+            this.searchNavigationManager({
+              operation: 'set',
+              value: true,
+            })
           } else {
-            this.sideNavNavigationManager({ operation: 'set', value: false })
+            this.sideNavNavigationManager({
+              operation: 'set',
+              value: false,
+            })
           }
           break
       }
