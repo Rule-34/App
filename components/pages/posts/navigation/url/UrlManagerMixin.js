@@ -2,6 +2,22 @@ import { mapGetters, mapActions } from 'vuex'
 import { isEqual } from 'lodash-es'
 
 export default {
+  head() {
+    const tags = this.urlTags?.split(',').join(', ')
+
+    return {
+      title: tags || 'Posts',
+
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: `Rule 34 of ${tags} on ${this.urlDomain}.`,
+        },
+      ],
+    }
+  },
+
   computed: {
     ...mapGetters('url', ['urlDomain', 'urlPage', 'urlTags']),
   },
