@@ -22,7 +22,7 @@ function settingsTracking(state) {
   )
 
   if (!difference.length) {
-    console.debug('No setting difference')
+    // console.debug('No setting difference')
     return
   }
 
