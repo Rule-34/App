@@ -1,8 +1,8 @@
 import {
-  booruList as defaultBooruList,
+  defaultBooruList,
   findBoorusWithValueByKey,
   booruTypeList,
-} from '~/assets/lib/rule-34-shared-resources/util/BooruUtils.js'
+} from '~/assets/lib/rule-34-shared-resources/dist/util/BooruUtils.js'
 
 export const state = () => ({
   API: {
