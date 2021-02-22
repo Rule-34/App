@@ -20,9 +20,6 @@ export const state = () => ({
 })
 
 export const getters = {
-  getGumroadProduct(state) {
-    return state.gumroad.product
-  },
 
   hasValidLicenseKey(state) {
     return state.responseData && state.responseData.success === true

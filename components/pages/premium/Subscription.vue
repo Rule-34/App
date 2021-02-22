@@ -85,7 +85,7 @@
           <a
             target="_blank"
             rel="noopener"
-            :href="'https://gum.co/' + getGumroadProduct.product_permalink"
+            :href="'https://gum.co/Rule34App'"
             class="block w-full px-6 py-3 text-lg font-medium leading-6 text-center transition duration-150 ease-in-out border-0 rounded-lg bg-gradient-lilac-blue text-default-text focus:outline-none focus:shadow-outline"
           >
             Subscribe
@@ -97,16 +97,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import { CheckIcon } from 'vue-feather-icons'
 
 export default {
   components: {
     CheckIcon,
-  },
-
-  computed: {
-    ...mapGetters('premium', ['getGumroadProduct']),
   },
 }
 </script>
