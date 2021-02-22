@@ -66,7 +66,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 // Third party
 import { Intersect } from 'vuetify/lib/directives/intersect'
-import throttle from 'lodash/throttle'
+import { throttle } from 'lodash-es'
 
 // Icons
 import { ArrowLeftIcon, ArrowRightIcon } from 'vue-feather-icons'
