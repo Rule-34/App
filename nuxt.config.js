@@ -3,12 +3,8 @@ export default {
 
   ssr: false,
 
-  // Generate 404 page for hosts
   generate: { fallback: true },
 
-  /*
-   ** Headers of the page
-   */
   publicRuntimeConfig: {
     NODE_ENV: process.env.NODE_ENV,
 
@@ -19,8 +15,10 @@ export default {
   },
 
   head: {
-    titleTemplate: (titleChunk) =>
-      titleChunk ? `${titleChunk} | Rule 34 App` : 'Rule 34 App',
+    titleTemplate: (titleChunk) => {
+      // If undefined or blank then we don't need the separator
+      return titleChunk ? `${titleChunk} | Rule 34 App` : 'Rule 34 App'
+    },
 
     htmlAttrs: {
       lang: 'en',
@@ -50,9 +48,6 @@ export default {
     noscript: [{ innerHTML: 'This website requires JavaScript' }],
   },
 
-  /*
-   ** Customize the progress-bar color
-   */
   loading: {
     color: 'var(--color-gradient-two)',
     // height: '5px',
@@ -61,31 +56,19 @@ export default {
     continuous: true,
   },
 
-  /*
-   ** Customize the splash loading indicator
-   */
   loadingIndicator: {
     name: 'cube-grid',
     color: '#121212',
     background: 'linear-gradient(152deg, #9b9be0 38%, #00d4ff 100%)',
   },
 
-  /*
-   ** Global CSS
-   */
   css: ['~/assets/css/main.css'],
 
-  /*
-   ** Plugins to load before mounting the App
-   */
   plugins: [
     { src: '~/plugins/vuex-persist.js', mode: 'client', ssr: false },
     { src: '~/plugins/vue-matomo.js', mode: 'client', ssr: false },
   ],
 
-  /*
-   ** Nuxt.js dev-modules
-   */
   buildModules: [
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
     '@nuxtjs/tailwindcss',
@@ -95,14 +78,8 @@ export default {
     cssPath: '~/assets/css/main.css',
   },
 
-  /*
-   ** Nuxt.js modules
-   */
   modules: ['@nuxtjs/pwa', '@nuxtjs/sentry', '@nuxtjs/sitemap'],
 
-  /*
-   ** Progressive web app
-   */
   pwa: {
     manifest: {
       name: 'Rule 34 App',
@@ -131,19 +108,11 @@ export default {
   workbox: {
     runtimeCaching: [
       {
-        // Should be a regex string. Compiles into new RegExp('https://my-cdn.com/.*')
-        urlPattern: ['https://rsms.me/.*', 'https://r34.app/.*'],
-        // Defaults to `networkFirst` if omitted
-        // handler: 'networkFirst',
-        // Defaults to `GET` if omitted
-        // method: 'GET'
+        urlPattern: ['https://rsms.me/.*'],
       },
     ],
   },
 
-  /*
-   ** Sentry.io
-   */
   sentry: {
     dsn: process.env.SENTRY_DSN,
 
@@ -170,9 +139,6 @@ export default {
     },
   },
 
-  /*
-   ** Sitemap configuration
-   */
   sitemap: {
     hostname: 'https://r34.app',
 
@@ -190,22 +156,8 @@ export default {
     ],
   },
 
-  /*
-   ** Build configuration
-   */
   build: {
-    // Necessary for CSS Purge
     extractCSS: true,
-
-    //  Remove console.log everywhere
-    terser: {
-      terserOptions: {
-        compress: {
-          // drop_console: true,
-          pure_funcs: ['console.log', 'console.debug'],
-        },
-      },
-    },
   },
 
   telemetry: false,
