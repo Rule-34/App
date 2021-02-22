@@ -1,6 +1,14 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  data() {
+    return { isPostsPage: false }
+  },
+
+  computed: {
+    ...mapGetters('navigation', ['isSideNavActive', 'isSearchActive']),
+  },
+
   watch: {
     $route() {
       // console.log('route changed', this.$route)
@@ -12,14 +20,6 @@ export default {
 
   mounted() {
     this.routeHandler()
-  },
-
-  data() {
-    return { isPostsPage: false }
-  },
-
-  computed: {
-    ...mapGetters('navigation', ['isSideNavActive', 'isSearchActive']),
   },
 
   methods: {
