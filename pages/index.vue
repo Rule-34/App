@@ -10,7 +10,9 @@
     <!-- Content -->
     <ErrorManager />
 
-    <Post v-for="post in getPosts" :key="post.id" :post="post" />
+    <template v-for="post in getPosts">
+      <Post :key="post.id" :post="post" />
+    </template>
 
     <Controls />
   </main>
@@ -20,35 +22,28 @@
 import { mapGetters } from 'vuex'
 
 // Components
-import DomainSelector from '~/components/pages/posts/domain/Selector.vue'
-import Post from '~/components/pages/posts/content/Post.vue'
 import ErrorManager from '~/components/utils/ErrorManager.vue'
+import DomainSelector from '~/components/pages/posts/domain/Selector.vue'
+import Notifications from '~/components/pages/posts/navigation/Notifications.vue'
+import Post from '~/components/pages/posts/content/Post.vue'
+import Controls from '~/components/pages/posts/navigation/page/Controls.vue'
 
 // Mixins
-import PostsStartupMixin from '~/components/pages/posts/util/PostsStartupMixin.js'
+import UrlManagerMixin from '~/components/pages/posts/navigation/url/UrlManagerMixin.js'
 
 export default {
   components: {
     ErrorManager,
     DomainSelector,
-    Notifications: () =>
-      import('~/components/pages/posts/navigation/Notifications.vue'),
+    Notifications,
     Post,
-    Controls: () =>
-      import('~/components/pages/posts/navigation/page/Controls.vue'),
+    Controls,
   },
 
-  // mixins: [URLQueryManagerMixin], // TODO: Remake this
-  mixins: [PostsStartupMixin],
+  mixins: [UrlManagerMixin],
 
   computed: {
     ...mapGetters('booru', ['getPosts']),
-  },
-
-  head() {
-    return {
-      title: 'Posts',
-    }
   },
 }
 </script>

@@ -37,6 +37,7 @@
             {{ booru.domain }}
           </option>
         </template>
+
         <option value="Add booru">&lt;Add Booru&gt;</option>
       </optgroup>
     </select>
@@ -54,60 +55,30 @@ import { mapGetters, mapActions } from 'vuex'
 // Third party
 import { ChevronDownIcon, CloudIcon } from 'vue-feather-icons'
 
-import { findBoorusWithValueByKey } from '~/assets/lib/rule-34-shared-resources/util/BooruUtils.js'
-import fireAnalytics from '~/assets/js/analytics'
-
 export default {
   name: 'DomainSelector',
 
   components: { ChevronDownIcon, CloudIcon },
 
   computed: {
-    ...mapGetters('user', ['getUserSettings']),
     ...mapGetters('booru', [
       'getActiveBooru',
       'getDefaultBooruList',
       'getPremiumBooruList',
     ]),
     ...mapGetters('premium', ['isUserPremium']),
-
-    filteredDefaultBooruList() {
-      return this.getUserSettings.nsfw.value
-        ? findBoorusWithValueByKey(true, 'nsfw', this.getDefaultBooruList)
-        : findBoorusWithValueByKey(false, 'nsfw', this.getDefaultBooruList)
-    },
-
-    filteredPremiumBooruList() {
-      return this.getUserSettings.nsfw.value
-        ? findBoorusWithValueByKey(true, 'nsfw', this.getPremiumBooruList)
-        : findBoorusWithValueByKey(false, 'nsfw', this.getPremiumBooruList)
-    },
   },
 
   methods: {
-    ...mapActions('booru', [
-      'activeBooruManager',
-      'pidManager',
-      'addedTagsManager',
-      'fetchPosts',
-    ]),
+    ...mapActions('booru', ['activeBooruManager']),
 
-    changeDomain(domain) {
-      // Redirect to premium page
+    async changeDomain(domain) {
       if (domain === 'Add booru') {
-        this.$router.push({ name: 'premium' })
+        await this.$router.push({ name: 'premium' })
         return
       }
 
-      this.activeBooruManager({ operation: 'search', value: domain })
-
-      this.pidManager({ operation: 'reset' })
-
-      this.addedTagsManager({ operation: 'reset' })
-
-      this.fetchPosts()
-
-      fireAnalytics('domain', { domain: this.getActiveBooru.domain })
+      await this.activeBooruManager({ operation: 'set', value: domain })
     },
   },
 }
