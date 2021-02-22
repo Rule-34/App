@@ -131,6 +131,8 @@ import { mapGetters, mapActions } from 'vuex'
 import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/dist/util/BooruUtils.js'
 
 export default {
+  middleware: 'auth',
+
   data() {
     return {
       booruTypeList,
