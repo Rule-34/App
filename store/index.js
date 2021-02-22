@@ -1,8 +1,4 @@
 export const state = () => ({
-  general: {
-    CORSProxyURL: 'https://cors-proxy.r34.app/',
-  },
-
   errors: undefined,
 
   statistics: {
@@ -11,10 +7,6 @@ export const state = () => ({
 })
 
 export const getters = {
-  getCORSProxyURL(state) {
-    return state.general.CORSProxyURL
-  },
-
   getErrors(state) {
     return state.errors
   },
@@ -92,13 +84,13 @@ export const actions = {
 
     switch (mode) {
       case 'start':
-        console.debug('Starting loading animation')
+        // console.debug('Starting loading animation')
 
         window.$nuxt.$root.$loading.start()
         break
 
       case 'finish':
-        console.debug('Stopping loading animation')
+        // console.debug('Stopping loading animation')
 
         window.$nuxt.$root.$loading.finish()
         break
