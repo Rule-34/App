@@ -1,15 +1,6 @@
 import VuexPersistence from 'vuex-persist'
 
 export default ({ store }) => {
-  // Booru State
-  new VuexPersistence({
-    key: 'booru',
-
-    reducer: (state) => ({
-      booru: { booru: { active: state.booru.booru.active } },
-    }),
-  }).plugin(store)
-
   // User state
   new VuexPersistence({
     key: 'user',
