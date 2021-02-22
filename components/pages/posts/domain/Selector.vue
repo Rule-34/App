@@ -8,16 +8,15 @@
     <!-- Selector -->
     <select
       :value="getActiveBooru.domain"
-      aria-label="Selector that changes the domain where the content is pulled from"
+      aria-label="Change the domain where the content is pulled from"
       class="inline-flex items-center font-light outline-none appearance-none text-primary bg-elevation"
       @change="changeDomain($event.target.value)"
     >
       <optgroup label="Default">
-        <!-- Loop for every option -->
         <option
-          v-for="booru in filteredDefaultBooruList"
+          v-for="booru in getDefaultBooruList"
           :key="booru.domain"
-          :aria-label="'Changes the domain to ' + booru.domain"
+          :aria-label="'Change domain to ' + booru.domain"
           :value="booru.domain"
           :selected="getActiveBooru.domain === booru.domain"
         >
@@ -28,9 +27,9 @@
       <optgroup label="Custom">
         <template v-if="isUserPremium">
           <option
-            v-for="booru in filteredPremiumBooruList"
+            v-for="booru in getPremiumBooruList"
             :key="booru.domain"
-            :aria-label="'Changes the domain to ' + booru.domain"
+            :aria-label="'Change domain to ' + booru.domain"
             :value="booru.domain"
             :selected="getActiveBooru.domain === booru.domain"
           >
