@@ -20,12 +20,12 @@
       </div>
     </transition>
 
-    <SupportPopUpManager />
-
     <!-- Layout content -->
     <div class="px-4 mx-auto overflow-auto max-w-7xl sm:px-6 lg:px-8">
       <nuxt class="max-w-4xl mx-auto" />
     </div>
+
+    <SupportPopUpManager />
   </div>
 </template>
 
@@ -56,12 +56,7 @@ export default {
    * Warning:
    * Some methods and variables are set by Mixins
    */
-  mixins: [GlobalStartUpMixin, NavigationMixin, TouchHandlerMixin],
-
-  computed: {
-    ...mapGetters('navigation', ['isSideNavActive', 'isSearchActive']),
-    ...mapGetters('user', ['getUserSettings']),
-  },
+  mixins: [NavigationMixin, TouchHandlerMixin],
 
   head() {
     return {
@@ -73,6 +68,11 @@ export default {
       },
     }
   },
+
+  computed: {
+    ...mapGetters('navigation', ['isSideNavActive', 'isSearchActive']),
+    ...mapGetters('user', ['getUserSettings']),
+  },
 }
 
 console.info(
@@ -80,7 +80,7 @@ console.info(
   'font-size:32px;font-weight:bold;letter-spacing:0.02em;color:hsl(205, 78%, 62%);background-color:white;padding:8px 16px;'
 )
 console.info(
-  '%cContribute: https://github.com/AlejandroAkbal/Rule-34-App\nJoin our discord: https://redirect.r34.app/discord',
+  '%cContribute: https://redirect.r34.app/github\nJoin our discord: https://redirect.r34.app/discord',
   'background-color:hsl(0, 0%, 7%);padding:4px 8px;font-size:16px;color:white;'
 )
 </script>
