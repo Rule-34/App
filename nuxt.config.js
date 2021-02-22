@@ -65,8 +65,9 @@ export default {
   css: ['~/assets/css/main.css'],
 
   plugins: [
-    { src: '~/plugins/vuex-persist.js', mode: 'client', ssr: false },
-    { src: '~/plugins/vue-matomo.js', mode: 'client', ssr: false },
+    { src: '~/plugins/vuex-router-sync.js', mode: 'client' },
+    { src: '~/plugins/vuex-persist.js', mode: 'client' },
+    { src: '~/plugins/vue-matomo.js', mode: 'client' },
   ],
 
   buildModules: [
