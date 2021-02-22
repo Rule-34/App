@@ -2,16 +2,16 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters('premium', ['getGumroadProduct']),
+    ...mapGetters('premium', ['getLicenseKey']),
   },
 
-  mounted() {
-    if (!this.getGumroadProduct.license_key) {
-      console.debug('No license key, nothing to fetch')
+  async mounted() {
+    if (!this.getLicenseKey) {
+      console.debug('No license key, nothing to fetch.')
       return
     }
 
-    this.authenticate()
+    await this.authenticate()
   },
 
   methods: {

@@ -1,7 +1,7 @@
 @@ -0,0 +1,172 @@
 <template>
   <main>
-    <template v-if="hasValidLicenseKey">
+    <template v-if="isUserPremium">
       <div class="flex flex-col h-screen space-y-4 space-y-4-fixer">
         <PremiumDashboard />
 
@@ -61,12 +61,12 @@
         <!-- Log In -->
         <ErrorManager />
 
-        <login />
+        <Login />
 
         <!-- Separator -->
         <p class="leading-loose text-center text-default-text">Or</p>
 
-        <subscription />
+        <Subscription />
       </div>
     </template>
   </main>
@@ -85,10 +85,6 @@ import ErrorManager from '~/components/utils/ErrorManager.vue'
 export default {
   components: { Login, Subscription, ErrorManager, PremiumDashboard },
 
-  computed: {
-    ...mapGetters('premium', ['hasValidLicenseKey']),
-  },
-
   head() {
     return {
       title: 'Premium',
@@ -96,10 +92,14 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'Premium subscription',
+          content: 'Premium subscription.',
         },
       ],
     }
+  },
+
+  computed: {
+    ...mapGetters('premium', ['isUserPremium']),
   },
 }
 </script>
