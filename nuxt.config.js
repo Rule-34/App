@@ -1,10 +1,7 @@
-const isDevEnv = process.env.NODE_ENV === 'development'
-
 export default {
   target: 'static',
-  ssr: false,
 
-  modern: isDevEnv ? undefined : 'client',
+  ssr: false,
 
   // Generate 404 page for hosts
   generate: { fallback: true },
@@ -12,6 +9,15 @@ export default {
   /*
    ** Headers of the page
    */
+  publicRuntimeConfig: {
+    NODE_ENV: process.env.NODE_ENV,
+
+    API_URL: process.env.API_URL,
+
+    MATOMO_HOST: process.env.MATOMO_HOST,
+    MATOMO_SITE_ID: process.env.MATOMO_SITE_ID,
+  },
+
   head: {
     titleTemplate: (titleChunk) =>
       titleChunk ? `${titleChunk} | Rule 34 App` : 'Rule 34 App',
@@ -30,7 +36,7 @@ export default {
       },
       {
         name: 'monetization',
-        content: process.env.MONETIZATION_URI || '',
+        content: process.env.MONETIZATION_URI,
       },
     ],
 
@@ -139,11 +145,11 @@ export default {
    ** Sentry.io
    */
   sentry: {
-    dsn: process.env.SENTRY_DSN || '',
+    dsn: process.env.SENTRY_DSN,
 
     lazy: true,
 
-    disabled: isDevEnv,
+    disabled: process.env.SENTRY_ENABLED,
     disableClientSide: false,
     disableServerSide: true,
 

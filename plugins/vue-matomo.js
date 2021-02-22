@@ -1,14 +1,17 @@
 import Vue from 'vue'
 import VueMatomo from 'vue-matomo'
 
-export default ({ app }) => {
+export default (context) => {
+  const { app, $config } = context
+
   Vue.use(VueMatomo, {
-    host: 'https://matomo.akbal.dev',
-    siteId: 1,
+    host: $config.MATOMO_HOST,
 
-    // trackerUrl: 'https://matomo.akbal.dev/m',
+    siteId: $config.MATOMO_SITE_ID,
 
-    // trackerScriptUrl: 'https://matomo.akbal.dev/m.js',
+    // trackerUrl: '',
+
+    // trackerScriptUrl: '',
 
     router: app.router,
 
@@ -17,7 +20,7 @@ export default ({ app }) => {
     enableHeartBeatTimer: true,
     heartBeatTimerInterval: 30,
 
-    debug: process.env.NODE_ENV === 'development',
+    debug: $config.NODE_ENV === 'development',
 
     // preInitActions: [],
   })
