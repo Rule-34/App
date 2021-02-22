@@ -18,16 +18,14 @@
     <!-- Remaining -->
     <div class="my-4 text-center">
       <p class="text-sm text-default-text-muted">Your subscription is</p>
-      <p class="text-3xl font-semibold text-gradient-one">
-        {{ isUserPremium ? 'Active' : 'Not active' }}
-      </p>
+      <p class="text-3xl font-semibold text-gradient-one">Active</p>
     </div>
 
     <!-- Log out -->
     <button
       type="button"
       class="block ml-auto leading-none color-util"
-      @click="logOut()"
+      @click="logOut"
     >
       Log out
     </button>
@@ -43,8 +41,10 @@ export default {
   },
 
   methods: {
-    logOut() {
+    async logOut() {
       localStorage.removeItem('premium')
+
+      await this.$auth.logout()
 
       location.reload()
     },
