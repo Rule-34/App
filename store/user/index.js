@@ -68,14 +68,6 @@ export const state = () => ({
       defaultValue: true,
     },
 
-    lazyLoading: {
-      name: 'Lazy load',
-      description:
-        'Load media when it enters view, so you only use data when you see it.',
-      value: true,
-      defaultValue: true,
-    },
-
     fullSizeImages: {
       name: 'Full size images',
       description:
@@ -113,20 +105,6 @@ export const state = () => ({
         'Number of times that an image will be attempted to be loaded if it fails.',
       value: 1,
       defaultValue: 1,
-    },
-
-    animations: {
-      name: 'Animations',
-      description: 'Use animations and other resource-heavy resources.',
-      value: true,
-      defaultValue: true,
-    },
-
-    nsfw: {
-      name: 'NSFW',
-      description: 'Allows NSFW content to be shown.',
-      value: true,
-      defaultValue: true,
     },
   },
 })
