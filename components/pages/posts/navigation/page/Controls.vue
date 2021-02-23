@@ -74,9 +74,6 @@ import { ArrowLeftIcon, ArrowRightIcon } from 'vue-feather-icons'
 // Components
 import KeyboardNavigationMixin from '~/components/pages/posts/navigation/page/KeyboardNavigationMixin.js'
 
-// JS
-import { scrollToTop } from '~/assets/js/scrollUtils.js'
-
 export default {
   components: {
     ArrowRightIcon,
