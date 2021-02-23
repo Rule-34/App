@@ -1,6 +1,13 @@
 export const state = () => ({
   custom: {
-    boorus: [],
+    boorus: [
+      {
+        domain: 'xbooru.com',
+        type: 'gelbooru',
+        nsfw: true,
+        config: null,
+      },
+    ],
 
     tagCollections: [
       {
