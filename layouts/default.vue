@@ -20,12 +20,10 @@
       </div>
     </transition>
 
-    <!-- Layout content -->
-    <div class="px-4 mx-auto overflow-auto max-w-7xl sm:px-6 lg:px-8">
-      <nuxt class="max-w-4xl mx-auto" />
-    </div>
-
     <SupportPopUpManager />
+
+    <!-- Layout content -->
+    <nuxt />
   </div>
 </template>
 
@@ -46,8 +44,6 @@ import NavigationMixin from '~/components/layout/navigation/NavigationMixin.js'
 import TouchHandlerMixin from '~/components/layout/navigation/sidenav/TouchHandlerMixin.js'
 
 export default {
-  name: 'DefaultLayout',
-
   components: { SideNav, NavToggler, Search, SupportPopUpManager },
 
   directives: { Touch },
