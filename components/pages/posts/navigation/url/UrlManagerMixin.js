@@ -1,5 +1,5 @@
 import { mapGetters, mapActions } from 'vuex'
-import { isEqual } from 'lodash-es'
+import { isEqual, debounce } from 'lodash-es'
 
 export default {
   head() {
@@ -31,7 +31,7 @@ export default {
 
       // console.debug('URL `domain` changed.', [from, to])
 
-      await this.fetchPosts()
+      await this.debouncedFetchPosts()
     },
 
     async urlPage(from, to) {
@@ -42,7 +42,7 @@ export default {
 
       // console.debug('URL `page` changed.', [from, to])
 
-      await this.fetchPosts()
+      await this.debouncedFetchPosts()
     },
 
     async urlTags(from, to) {
@@ -53,7 +53,7 @@ export default {
 
       // console.debug('URL `tags` changed.', [from, to])
 
-      await this.fetchPosts()
+      await this.debouncedFetchPosts()
     },
   },
 
@@ -66,5 +66,13 @@ export default {
   methods: {
     ...mapActions('url', ['setInitialUrlState']),
     ...mapActions('booru', ['fetchPosts']),
+
+    debouncedFetchPosts: debounce(
+      async function () {
+        await this.fetchPosts()
+      },
+      1,
+      { maxWait: 5 }
+    ),
   },
 }
