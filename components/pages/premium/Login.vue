@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapMutations, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import { ChevronRightIcon } from 'vue-feather-icons'
 
 export default {
@@ -50,12 +50,9 @@ export default {
 
   methods: {
     ...mapActions('premium', ['authenticate']),
-    ...mapMutations('premium', ['setLicenseKey']),
 
     async userLogin() {
-      await this.setLicenseKey(this.login.password)
-
-      await this.authenticate()
+      await this.authenticate(this.login)
     },
   },
 }
