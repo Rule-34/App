@@ -94,10 +94,19 @@ export default {
   auth: {
     strategies: {
       local: {
+        scheme: 'refresh',
+
         token: {
+          type: 'Bearer',
           property: 'access_token',
           required: true,
-          type: 'Bearer',
+          maxAge: 1800, // 30 minutes
+        },
+
+        refreshToken: {
+          property: 'refresh_token',
+          required: true,
+          maxAge: 60 * 60 * 24 * 15, // 15 days
         },
 
         user: {
@@ -106,7 +115,11 @@ export default {
         },
 
         endpoints: {
-          login: { url: `${process.env.API_URL}/auth/login`, method: 'post' },
+          login: { url: `${process.env.API_URL}/auth/log-in`, method: 'post' },
+          refresh: {
+            url: `${process.env.API_URL}/auth/refresh`,
+            method: 'post',
+          },
           logout: false,
           user: { url: `${process.env.API_URL}/auth/profile`, method: 'get' },
         },
@@ -115,12 +128,12 @@ export default {
 
     redirect: {
       login: '/premium',
-      logout: false,
+      logout: '/premium',
       callback: false,
       home: false,
     },
 
-    watchLoggedIn: false,
+    watchLoggedIn: true,
 
     vuex: { namespace: 'authentication' },
   },
