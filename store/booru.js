@@ -282,7 +282,7 @@ export const actions = {
 
     const queries = {
       posts: {
-        limit: rootState.user.settings.postsPerPage.value,
+        limit: 20, // TODO: Temporary limit
         pageID: getters.getPageID,
         tags: getters.getTags.join(','),
         score: rootState.user.settings.score.value,
