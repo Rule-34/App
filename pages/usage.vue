@@ -1,26 +1,36 @@
 <template>
   <main class="space-y-4 space-y-4-fixer">
+    <!-- Navigation -->
+
+    <ContentContainer :separator="true" title="Navigation" />
+
+    <ContentContainer
+      title="Touch navigation"
+      text="Devices with touch support can swipe `right` to open the navigation menu, and `left` to open the search menu."
+    />
+
+    <ContentContainer
+      title="Keyboard controls"
+      text="Keyboard's `right` and `left` arrows will navigate pages similar to clicking the control's buttons."
+      img="/img/usage_examples/keyboard-controls"
+    />
+
     <!-- General Usage -->
 
     <ContentContainer
       :separator="true"
-      title="General usage"
+      title="Search"
       text="Normal usage of the PWA is explained below"
     />
 
     <ContentContainer
-      title="Touch navigation"
-      text="Devices with touch support can swipe right to open the navigation menu, and left to open the search menu."
-    />
-
-    <ContentContainer
-      title="Search: Trash button"
+      title="Trash button"
       text="Deletes all added tags."
       img="/img/usage_examples/search-delete"
     />
 
     <ContentContainer
-      title="Search: Filter button"
+      title="Filter button"
       text="Toggling the filter will ban from appearing the next added tags."
       img="/img/usage_examples/search-filter"
     />
