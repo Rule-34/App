@@ -292,7 +292,7 @@ export const actions = {
         id: postID,
       },
 
-      tags: { tag },
+      tags: { tag, limit: 15 },
     }
 
     const urlToFetch = new URL(
@@ -322,7 +322,10 @@ export const actions = {
 
       case 'tags':
         urlToFetch.searchParams.append('tag', queries.tags.tag)
-        // url.searchParams.append('limit', queryObj.limit)
+
+        if (queries.tags.limit) {
+          urlToFetch.searchParams.append('limit', queries.tags.limit)
+        }
         break
 
       default:
