@@ -18,7 +18,7 @@ export default {
       switch (direction) {
         case 'right':
           if (event.touchstartX > touchThreshold) {
-            console.debug('Insufficient touch threshold')
+            // console.debug('Insufficient touch threshold')
             return
           }
 
@@ -37,7 +37,7 @@ export default {
 
         case 'left':
           if (event.touchstartX < screen.availWidth - touchThreshold) {
-            console.debug('Insufficient touch threshold')
+            // console.debug('Insufficient touch threshold')
             return
           }
 

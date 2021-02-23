@@ -173,7 +173,7 @@ export default {
 
   methods: {
     ...mapActions('navigation', ['searchNavigationManager']),
-    ...mapActions('booru', ['tagsManager', 'fetchPosts', 'fetchTags']),
+    ...mapActions('booru', ['tagsManager', 'fetchTags']),
 
     // #region Navigation
     async closeSearchMenu() {

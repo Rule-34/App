@@ -15,7 +15,7 @@
         <div
           class="w-1/3 color-util"
           title="Load previous page"
-          @click="getPrevPage()"
+          @click="getPrevPage"
         >
           <button type="button">
             <ArrowLeftIcon class="inline w-4 h-4 icon" />
@@ -27,7 +27,7 @@
         <div
           class="w-1/3 color-util"
           title="Load specific page"
-          @click="getSpecificPage()"
+          @click="getSpecificPage"
         >
           <button type="button">{{ getPageID }}</button>
         </div>
@@ -36,7 +36,7 @@
         <div
           class="w-1/3 color-util"
           title="Load next page"
-          @click="getNextPage()"
+          @click="getNextPage"
         >
           <button type="button">
             Next
@@ -51,7 +51,7 @@
       v-else
       v-intersect.quiet="InfiniteLoadHandler"
       class="mx-auto"
-      @click="InfiniteLoadHandler()"
+      @click="InfiniteLoadHandler"
     >
       <p class="pb-2 text-center text-default-text">Loading more posts...</p>
     </div>
