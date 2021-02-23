@@ -340,19 +340,26 @@ export const actions = {
         )
       }
 
-      // if (activeBooru.config?.endpoints?.tags) {
-      //   urlToFetch.searchParams.append(
-      //     'tagsEndpoint',
-      //     activeBooru.config.endpoints.tags
-      //   )
-      // }
+      if (activeBooru.config?.endpoints?.tags) {
+        urlToFetch.searchParams.append(
+          'tagsEndpoint',
+          activeBooru.config.endpoints.tags
+        )
+      }
 
-      // if (activeBooru.config?.queryIdentifiers?.tags?.tag) {
-      //   urlToFetch.searchParams.append(
-      //     'defaultQueryIdentifiersTagsTag',
-      //     activeBooru.config.queryIdentifiers.tags.tag
-      //   )
-      // }
+      if (activeBooru.config?.queryIdentifiers?.tags?.tag) {
+        urlToFetch.searchParams.append(
+          'defaultQueryIdentifiersTagsTag',
+          activeBooru.config.queryIdentifiers.tags.tag
+        )
+      }
+
+      if (activeBooru.config?.queryIdentifiers?.tags?.tagEnding !== undefined) {
+        urlToFetch.searchParams.append(
+          'defaultQueryIdentifiersTagsTagEnding',
+          activeBooru.config.queryIdentifiers.tags.tagEnding
+        )
+      }
     }
 
     return urlToFetch.toString()
