@@ -1,21 +1,27 @@
 <template>
-  <main class="space-y-4 space-y-4-fixer">
-    <!-- Menu -->
-    <div class="flex flex-row items-center justify-between">
+  <div
+    class="container flex flex-col min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
+  >
+    <!-- Top menu -->
+    <nav class="flex flex-row items-center justify-between py-4">
       <DomainSelector />
 
       <Notifications />
-    </div>
+    </nav>
 
     <!-- Content -->
-    <ErrorManager />
+    <main class="flex flex-col flex-auto min-h-full pb-4 space-y-4">
+      <ErrorManager />
 
-    <template v-for="post in getPosts">
-      <Post :key="post.id" :post="post" />
-    </template>
+      <ul class="flex-auto space-y-4">
+        <li v-for="post in getPosts" :key="post.id">
+          <Post :post="post" />
+        </li>
+      </ul>
 
-    <Controls />
-  </main>
+      <Controls />
+    </main>
+  </div>
 </template>
 
 <script>
