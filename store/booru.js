@@ -1,4 +1,3 @@
-import { debounce } from 'lodash-es'
 import {
   defaultBooruList,
   findBoorusWithValueByKey,
@@ -356,42 +355,38 @@ export const actions = {
     return urlToFetch.toString()
   },
 
-  fetchPosts: debounce(
-    async function ({ dispatch }, mode) {
-      // Tip: Actions that return a value have to be awaited
-      const url = await dispatch('createApiUrl', { mode: 'posts' })
+  async fetchPosts({ dispatch }, mode) {
+    // Tip: Actions that return a value have to be awaited
+    const url = await dispatch('createApiUrl', { mode: 'posts' })
 
-      try {
-        const response = await dispatch(
-          'simpleFetch',
-          {
-            url,
-          },
-          { root: true }
-        )
+    try {
+      const response = await dispatch(
+        'simpleFetch',
+        {
+          url,
+        },
+        { root: true }
+      )
 
-        if (mode === 'concat') {
-          dispatch('postsManager', { operation: 'concat', value: response })
-        } else {
-          dispatch('postsManager', { operation: 'set', value: response })
-        }
-
-        //
-      } catch (error) {
-        dispatch(
-          'errorManager',
-          {
-            operation: 'set',
-            value: error,
-            message: "Couldn't fetch posts",
-          },
-          { root: true }
-        )
+      if (mode === 'concat') {
+        dispatch('postsManager', { operation: 'concat', value: response })
+      } else {
+        dispatch('postsManager', { operation: 'set', value: response })
       }
-    },
-    1,
-    { maxWait: 5 }
-  ),
+
+      //
+    } catch (error) {
+      dispatch(
+        'errorManager',
+        {
+          operation: 'set',
+          value: error,
+          message: "Couldn't fetch posts",
+        },
+        { root: true }
+      )
+    }
+  },
 
   async fetchTags({ dispatch, commit }, tag) {
     const url = await dispatch('createApiUrl', { mode: 'tags', tag })
