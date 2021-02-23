@@ -1,6 +1,9 @@
 export const getters = {
   isUserPremium(state, getters, rootState, rootGetters) {
-    return rootState.authentication.user?.is_subscription_valid
+    return (
+      rootState.authentication.loggedIn &&
+      rootState.authentication.user?.is_subscription_valid
+    )
   },
 
   getUserEmail(state, getters, rootState, rootGetters) {
