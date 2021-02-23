@@ -48,15 +48,6 @@ export const state = () => ({
       defaultValue: true,
     },
 
-    keyboardControls: {
-      name: 'Keyboard controls',
-      description:
-        "Keyboard's right and left arrows will navigate pages like clicking the control's buttons.",
-      image: '/img/usage_examples/keyboard-controls',
-      value: false,
-      defaultValue: false,
-    },
-
     hoverControls: {
       name: 'Hover controls',
       description:

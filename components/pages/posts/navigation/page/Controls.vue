@@ -92,25 +92,17 @@ export default {
   },
 
   methods: {
-    ...mapActions('booru', ['fetchPosts', 'pidManager']),
+    ...mapActions('booru', ['pidManager']),
 
-    getNextPage() {
-      this.pidManager({ operation: 'add' })
-
-      if (!this.getUserSettings.infiniteLoad.value) scrollToTop()
-
-      this.fetchPosts()
+    async getNextPage() {
+      await this.pidManager({ operation: 'add' })
     },
 
-    getPrevPage() {
-      this.pidManager({ operation: 'subtract' })
-
-      if (!this.getUserSettings.infiniteLoad.value) scrollToTop()
-
-      this.fetchPosts()
+    async getPrevPage() {
+      await this.pidManager({ operation: 'subtract' })
     },
 
-    getSpecificPage() {
+    async getSpecificPage() {
       const specificPage = Number.parseInt(
         prompt('What page do you want to go to?')
       )
@@ -120,18 +112,13 @@ export default {
         return
       }
 
-      this.pidManager({ operation: 'set', value: specificPage })
-
-      if (!this.getUserSettings.infiniteLoad.value) scrollToTop()
-
-      this.fetchPosts()
+      await this.pidManager({ operation: 'set', value: specificPage })
     },
 
-    InfiniteLoadHandler: throttle(function () {
+    InfiniteLoadHandler: throttle(async function () {
       console.debug('Loading more posts')
-      this.pidManager({ operation: 'add' })
 
-      this.fetchPosts('concat')
+      await this.pidManager({ operation: 'add' })
     }, 5000),
   },
 }

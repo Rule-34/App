@@ -1,23 +1,19 @@
-import { mapGetters } from 'vuex'
-
 export default {
-  computed: {
-    ...mapGetters('user', ['getUserSettings']),
-  },
-
   methods: {
-    keyboardPageHandler() {
+    async keyboardPageHandler() {
       switch (event.keyCode) {
         case 39:
-          this.getNextPage()
+          console.debug('Loading next page via keyboard action.')
 
-          console.debug('Loading next page')
+          await this.getNextPage()
+
           break
 
         case 37:
-          this.getPrevPage()
+          console.debug('Loading previous page via keyboard action.')
 
-          console.debug('Loading prev page')
+          await this.getPrevPage()
+
           break
       }
     },
@@ -25,13 +21,11 @@ export default {
 
   mounted() {
     // Navigation with keyboard
-    if (this.getUserSettings.keyboardControls.value)
-      document.addEventListener('keyup', this.keyboardPageHandler)
+    document.addEventListener('keyup', this.keyboardPageHandler)
   },
 
   destroyed() {
     // Navigation with keyboard
-    if (this.getUserSettings.keyboardControls.value)
-      document.removeEventListener('keyup', this.keyboardPageHandler)
+    document.removeEventListener('keyup', this.keyboardPageHandler)
   },
 }
