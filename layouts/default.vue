@@ -9,9 +9,7 @@
     <NavToggler :show-search="isPostsPage" />
 
     <transition name="sidenav">
-      <div v-if="isSideNavActive" class="fixed z-20 w-full h-screen">
-        <SideNav class="h-full bg-black bg-opacity-25" />
-      </div>
+      <SideNav v-if="isSideNavActive" />
     </transition>
 
     <transition name="search">
