@@ -24,19 +24,6 @@ export default ({ store }) => {
     },
   }).plugin(store)
 
-  // Premium State
-  new VuexPersistence({
-    key: 'premium',
-
-    reducer: (state) => ({
-      premium: {
-        gumroad: {
-          product: { license_key: state.premium.gumroad.product.license_key },
-        },
-      },
-    }),
-  }).plugin(store)
-
   // Notifications state
   new VuexPersistence({
     key: 'notifications',
