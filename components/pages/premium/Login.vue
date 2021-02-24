@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 material-container text-default-text">
+  <div class="p-4 rounded-container text-default-text">
     <form @submit.prevent="userLogin">
       <label
         class="block mb-2 text-lg font-medium leading-tight"

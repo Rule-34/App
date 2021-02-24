@@ -1,6 +1,6 @@
 <template>
   <!-- Loop for every info container -->
-  <article class="material-container">
+  <article class="rounded-container">
     <!-- If separator -->
     <template v-if="separator">
       <div class="p-3 bg-gradient-blue-lilac">
