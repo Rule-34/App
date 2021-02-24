@@ -19,7 +19,7 @@
     <SupportPopUpManager />
 
     <!-- Layout content -->
-    <nuxt />
+    <Nuxt />
   </div>
 </template>
 
