@@ -1,52 +1,64 @@
 <template>
-  <div class="flex" @click.self.stop="toggleTagCollections()">
-    <menu class="flex flex-col w-4/5 p-4 m-auto h-3/5 material-container">
-      <!-- Title -->
-      <header
-        class="mb-4 text-xl font-semibold tracking-wide text-center text-gradient-one"
+  <aside
+    class="fixed inset-0 z-40 w-full h-full bg-black bg-opacity-25"
+    @click.self.stop="toggleTagCollections"
+  >
+    <!-- Constraint -->
+    <div
+      class="h-full max-w-2xl p-6 mx-auto sm:p-8 lg:p-10"
+      @click.self.stop="toggleTagCollections"
+    >
+      <!-- Content -->
+      <menu
+        class="flex flex-col w-full h-full p-4 m-0 border-0 rounded-lg shadow bg-elevation border-util"
       >
-        Tag Collections
-      </header>
+        <!-- Title -->
+        <header
+          class="text-xl font-semibold tracking-wide text-center text-gradient-one"
+        >
+          Tag Collections
+        </header>
 
-      <!-- Tag Collections -->
-      <section class="flex-grow space-y-2 overflow-y-scroll text-default-text">
-        <template v-if="getTagCollections.length">
-          <article
-            v-for="(tagCollection, index) in getTagCollections"
-            :key="tagCollection.name"
-            class="flex items-center justify-between px-2 py-1 material-container bg-background"
-            @click="addTagCollectionToAddedTags(index)"
-          >
-            <p class="truncate">{{ tagCollection.name }}</p>
+        <!-- Tag Collections -->
+        <section
+          class="flex-auto mt-4 space-y-2 overflow-y-scroll text-default-text"
+        >
+          <template v-if="getTagCollections.length">
+            <article
+              v-for="(tagCollection, index) in getTagCollections"
+              :key="tagCollection.name"
+              class="flex items-center justify-between px-2 py-1 material-container bg-background"
+              @click="addTagCollectionToTags(index)"
+            >
+              <p class="truncate">{{ tagCollection.name }}</p>
 
-            <div class="flex-shrink-0 color-util">
-              {{ tagCollection.tags.length }}
+              <div class="flex-shrink-0 color-util">
+                {{ tagCollection.tags.length }}
 
-              <TagIcon class="inline w-5 h-5 icon" />
-            </div>
-          </article>
-        </template>
+                <TagIcon class="inline w-5 h-5 icon" />
+              </div>
+            </article>
+          </template>
 
-        <template v-else>
-          <article class="text-center">
+          <template v-else>
             <Error
               :render-borders="false"
               error-data="No Tag Collections available"
             >
               <template #customAction>
-                <nuxt-link to="/premium">Create one?</nuxt-link>
+                <NuxtLink to="/premium">Create some?</NuxtLink>
               </template>
             </Error>
-          </article>
-        </template>
-      </section>
+          </template>
+        </section>
 
-      <!-- CTA -->
-      <footer class="-mb-2 text-center">
-        <nuxt-link class="text-sm" to="/premium"> Create more </nuxt-link>
-      </footer>
-    </menu>
-  </div>
+        <!-- CTA -->
+        <footer class="text-center">
+          <NuxtLink class="text-sm" to="/premium">Create more</NuxtLink>
+        </footer>
+      </menu>
+    </div>
+  </aside>
 </template>
 
 <script>
@@ -68,13 +80,11 @@ export default {
   methods: {
     ...mapActions('booru', ['tagsManager']),
 
-    async addTagCollectionToAddedTags(tagCollectionIndex) {
+    async addTagCollectionToTags(tagCollectionIndex) {
       await this.tagsManager({
         operation: 'merge',
         value: this.getTagCollections[tagCollectionIndex].tags,
       })
-
-      this.toggleTagCollections()
     },
 
     toggleTagCollections() {
