@@ -1,17 +1,20 @@
 <template>
-  <main class="flex flex-col justify-around h-screen space-y-4 space-y-4-fixer">
+  <main class="flex flex-col max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
     <div>
       <!-- Booru list -->
-      <div class="px-2 py-1 overflow-x-scroll material-container">
-        <table class="w-full text-left text-default-text">
+      <div class="px-2 py-1 overflow-scroll rounded-container">
+        <table
+          class="w-full text-left border-separate"
+          style="border-spacing: 0.25em"
+        >
           <thead>
             <tr>
-              <th class="font-normal">Name</th>
-              <th class="font-normal">Tags</th>
+              <th class="font-normal text-default-text">Name</th>
+              <th class="font-normal text-default-text">Tags</th>
             </tr>
           </thead>
 
-          <tbody class="text-default-text-muted">
+          <tbody class="truncate text-default-text-muted">
             <template v-if="getTagCollections.length">
               <tr
                 v-for="tagCollection in getTagCollections"
@@ -22,7 +25,7 @@
                 </td>
 
                 <td
-                  class="text-sm"
+                  class="text-xs"
                   @click="copyTagCollectionToFormCollection(tagCollection)"
                 >
                   {{ tagCollection.tags.join(', ') }}
@@ -33,7 +36,7 @@
             <!-- No tag collections -->
             <template v-else>
               <tr>
-                <td class="text-center" colspan="10">
+                <td class="text-sm text-center" colspan="999">
                   There are no custom tag collections
                 </td>
               </tr>
@@ -43,18 +46,17 @@
       </div>
 
       <p class="p-2 text-xs text-center text-default-text-muted">
-        Tip: Click on the name to remove it, and on the tags to copy it
+        Click on the name to remove, and on the tags to copy.
       </p>
     </div>
 
     <!-- Spacer -->
-    <div class="flex-grow">&nbsp;</div>
+    <div class="flex-auto">&nbsp;</div>
 
     <!-- Booru editor -->
     <form
-      class="flex flex-col p-4 space-y-2 material-container text-default-text"
-      action="#"
-      @submit.prevent="addTagCollection()"
+      class="flex flex-col p-4 space-y-2 rounded-container text-default-text"
+      @submit.prevent="addTagCollection"
     >
       <!-- Name -->
       <label>
@@ -64,7 +66,6 @@
           v-model="formTagCollection.name"
           type="text"
           name="tagCollectionName"
-          value=""
           class="block w-full p-1 outline-none bg-background"
           required
         />
@@ -84,7 +85,7 @@
         />
 
         <p class="p-2 text-xs italic text-right text-default-text-muted">
-          Separate tags with commas, ","
+          Separate tags with spaced commas (", ").
         </p>
       </label>
 
@@ -110,6 +111,19 @@ export default {
         name: null,
         tags: null,
       },
+    }
+  },
+
+  head() {
+    return {
+      title: 'Custom tag collections',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'Create custom tag collections',
+        },
+      ],
     }
   },
 
@@ -143,19 +157,6 @@ export default {
         value: tagCollection,
       })
     },
-  },
-
-  head() {
-    return {
-      title: 'Custom tag collections',
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'Create custom tag collections',
-        },
-      ],
-    }
   },
 }
 </script>
