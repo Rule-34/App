@@ -12,7 +12,7 @@
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
         viewBox="0 0 24 24"
-        class="w-5 h-5"
+        class="w-5 h-5 icon"
       >
         <g fill="none">
           <!-- Notification bell -->
