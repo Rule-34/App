@@ -1,39 +1,41 @@
 <template>
-  <main class="flex flex-col h-screen p-3">
-    <div
-      class="w-full p-5 m-auto shadow-xl material-container md:w-2/3 xl:w-1/2"
+  <div
+    class="container relative flex flex-col items-center justify-center min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
+  >
+    <main
+      class="p-5 rounded-lg shadow-xl w-max-content bg-elevation border-util"
     >
-      <div class="flex flex-wrap">
-        <div class="w-2/5 m-auto text-center text-default-text">
+      <div class="flex flex-row gap-x-10">
+        <!-- Reset -->
+        <div
+          class="flex flex-col items-center justify-center flex-auto gap-y-2 text-default-text"
+        >
           <h1 class="text-lg">Settings</h1>
 
           <button
-            title="Use me when something is not working!"
-            class="px-2 text-xs align-middle rounded-full shadow color-util border-util bg-background"
-            @click="removeLocalStorage()"
+            title="Reset all settings"
+            aria-label="Reset all settings"
+            class="px-2 text-xs rounded-full shadow color-util border-util bg-background"
+            @click="removeLocalStorage"
           >
             Reset
           </button>
         </div>
 
-        <div class="flex w-3/5 m-auto">
-          <div class="mx-auto">
-            <SettingSwitch
-              v-for="(setting, index) in getUserSettings"
-              :key="index"
-              :setting-index="index"
-              :setting="setting"
-              class="my-1"
-            />
-          </div>
+        <div class="flex items-center justify-center flex-auto">
+          <ul class="space-y-2">
+            <li v-for="(setting, index) in getUserSettings" :key="index">
+              <SettingSwitch :setting-index="index" :setting="setting" />
+            </li>
+          </ul>
         </div>
       </div>
-    </div>
+    </main>
 
-    <nav class="mx-auto">
+    <footer class="absolute inset-x-0 bottom-0 p-2 text-center">
       <NuxtLink to="/usage" class="text-xs">What does X do?</NuxtLink>
-    </nav>
-  </main>
+    </footer>
+  </div>
 </template>
 
 <script>
