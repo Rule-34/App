@@ -23,18 +23,7 @@
         @click="toggleSearch"
       >
         <!-- Search Icon -->
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="text-default"
-        >
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
+        <SearchIcon class="icon" />
       </button>
     </div>
   </aside>
@@ -42,9 +31,14 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { SearchIcon } from 'vue-feather-icons'
 
 export default {
   name: 'NavToggler',
+
+  components: {
+    SearchIcon,
+  },
 
   props: { showSearch: { type: Boolean, default: false, required: false } },
 
