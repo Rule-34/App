@@ -17,7 +17,7 @@
       <button
         v-show="showSearch"
         type="menu"
-        class="flex items-center justify-center w-10 h-10 p-2 border-0 rounded-full shadow-lg md:w-12 md:h-12 bg-gradient-lilac-blue"
+        class="flex items-center justify-center w-10 h-10 p-3 border-0 rounded-full shadow-lg md:w-12 md:h-12 bg-gradient-lilac-blue"
         title="Search"
         aria-label="Toggle the search menu"
         @click="toggleSearch"
