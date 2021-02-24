@@ -2,7 +2,7 @@
   <main class="flex flex-col justify-around h-screen space-y-4 space-y-4-fixer">
     <div>
       <!-- Booru list -->
-      <div class="px-2 py-1 overflow-x-scroll material-container">
+      <div class="px-2 py-1 overflow-x-scroll rounded-container">
         <table class="w-full text-left text-default-text">
           <thead>
             <tr>
@@ -47,7 +47,7 @@
 
     <!-- Booru editor -->
     <form
-      class="flex flex-col p-4 space-y-2 material-container text-default-text"
+      class="flex flex-col p-4 space-y-2 rounded-container text-default-text"
       action="#"
       @submit.prevent="addCustomBooruToState()"
     >

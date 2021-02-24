@@ -37,6 +37,10 @@ a:focus,
   @apply overflow-hidden rounded-lg shadow bg-elevation border-util;
 }
 
+.rounded-container {
+  @apply border rounded-lg shadow bg-elevation border-border;
+}
+
 /* ---------------- Component specific ---------------- */
 
 .icon {

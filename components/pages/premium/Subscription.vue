@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col material-container">
+  <div class="flex flex-col rounded-container">
     <!-- Head -->
     <div class="py-10">
       <!-- Title -->

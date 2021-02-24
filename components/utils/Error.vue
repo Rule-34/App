@@ -1,7 +1,7 @@
 <template>
   <div
     class="p-2 m-6 text-center text-default-text"
-    :class="{ 'material-container': renderBorders }"
+    :class="{ 'rounded-container': renderBorders }"
   >
     <!-- Header -->
     <div>
