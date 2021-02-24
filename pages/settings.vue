@@ -31,7 +31,7 @@
     </div>
 
     <nav class="mx-auto">
-      <nuxt-link to="/usage" class="text-xs">What does X do?</nuxt-link>
+      <NuxtLink to="/usage" class="text-xs">What does X do?</NuxtLink>
     </nav>
   </main>
 </template>

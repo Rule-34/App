@@ -14,12 +14,12 @@
             </p>
           </div>
 
-          <nuxt-link
+          <NuxtLink
             class="flex items-center justify-center px-4 rounded-full material-container bg-background"
             to="/premium/booru"
           >
             Modify
-          </nuxt-link>
+          </NuxtLink>
         </div>
 
         <!-- Custom Tag Collections  -->
@@ -31,12 +31,12 @@
             </p>
           </div>
 
-          <nuxt-link
+          <NuxtLink
             class="flex items-center justify-center px-4 rounded-full material-container bg-background"
             to="/premium/tags"
           >
             Modify
-          </nuxt-link>
+          </NuxtLink>
         </div>
 
         <!-- Spacer -->
