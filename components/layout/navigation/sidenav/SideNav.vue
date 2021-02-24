@@ -13,7 +13,7 @@
 
           <img
             loading="eager"
-            class="w-full h-auto transition-transform duration-500 ease-in-out delay-300 transform hover:scale-150"
+            class="transition-transform duration-500 ease-in-out delay-300 transform hover:scale-150"
             src="~/assets/img/brand/icon.png"
             alt="Rule 34 App Logo"
             height="512"
