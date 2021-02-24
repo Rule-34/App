@@ -1,4 +1,8 @@
 <template>
+  <!-- 
+    This should use Vue 3's teleport feature
+    https://v3.vuejs.org/guide/teleport.html
+  -->
   <aside
     class="fixed inset-0 z-40 w-full h-full bg-black bg-opacity-25"
     @click.self.stop="toggleTagCollections"
@@ -10,7 +14,7 @@
     >
       <!-- Content -->
       <menu
-        class="flex flex-col w-full h-full p-4 m-0 border-0 rounded-lg shadow bg-elevation border-util"
+        class="flex flex-col w-full h-full p-4 m-0 rounded-lg shadow bg-elevation border-util"
       >
         <!-- Title -->
         <header

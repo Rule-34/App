@@ -2,7 +2,9 @@
   <div
     class="container relative flex flex-col items-center justify-center min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
   >
-    <main class="p-5 rounded-lg shadow-md bg-elevation border-util">
+    <main
+      class="p-5 rounded-lg shadow-md w-max-content bg-elevation border-util"
+    >
       <picture>
         <source srcset="~/assets/img/brand/akbal.webp" type="image/webp" />
 
@@ -25,7 +27,7 @@
         Alejandro Akbal
       </a>
 
-      <small class="block text-default-text">
+      <small class="block text-center text-default-text">
         I'm a software developer and this App is a project that I do in my free
         time.
       </small>
