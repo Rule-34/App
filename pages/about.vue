@@ -2,9 +2,7 @@
   <div
     class="container relative flex flex-col items-center justify-center min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
   >
-    <main
-      class="p-5 rounded-lg shadow-md w-max-content bg-elevation border-util"
-    >
+    <main class="p-5 shadow-md w-max-content material-container">
       <picture>
         <source srcset="~/assets/img/brand/akbal.webp" type="image/webp" />
 

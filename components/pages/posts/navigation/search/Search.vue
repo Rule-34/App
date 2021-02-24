@@ -16,9 +16,7 @@
         <!-- Content -->
         <form class="flex flex-col w-full h-full gap-4 max-h-3/4">
           <!-- Search bar -->
-          <div
-            class="flex flex-row h-auto p-2 rounded-lg shadow bg-elevation border-util"
-          >
+          <div class="flex flex-row h-auto p-2 material-container">
             <!-- Search Icon -->
             <SearchIcon class="w-6 h-6 icon" />
 
@@ -75,9 +73,7 @@
           </div>
 
           <!-- Search results -->
-          <div
-            class="flex flex-col h-full gap-2 p-2 rounded-lg shadow bg-elevation border-util"
-          >
+          <div class="flex flex-col h-full gap-2 p-2 material-container">
             <!-- If nothing searched -->
             <template v-if="!search.data && !getTags.length">
               <h1
