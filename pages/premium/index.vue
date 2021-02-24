@@ -1,21 +1,54 @@
 @@ -0,0 +1,172 @@
 <template>
-  <main>
+  <main
+    class="container flex flex-col items-center justify-center min-h-screen p-4 mx-auto sm:p-6 lg:p-8"
+  >
     <template v-if="isUserPremium">
-      <div class="flex flex-col h-screen space-y-4 space-y-4-fixer">
-        <PremiumDashboard />
+      <div class="flex flex-col flex-auto w-full space-y-4">
+        <!-- Dashboard -->
+        <div class="p-4 rounded-container text-default-text">
+          <!-- Icon and email -->
+          <div class="py-1 truncate">
+            <!-- Icon -->
+            <span
+              class="inline-flex items-center justify-center w-10 h-10 border rounded-full shadow border-depth bg-background"
+            >
+              <span class="font-medium leading-none">
+                {{ getUserEmail.charAt(0).toUpperCase() }}
+              </span>
+            </span>
+
+            <!-- Email -->
+            <span class="ml-1">{{ getUserEmail }}</span>
+          </div>
+
+          <!-- Status -->
+          <div class="my-4 text-center">
+            <p class="text-sm text-default-text-muted">Your subscription is</p>
+            <p class="text-3xl font-semibold text-gradient-one">Active</p>
+          </div>
+
+          <!-- Log out -->
+          <button
+            type="button"
+            class="block ml-auto leading-none color-util"
+            @click="logOut"
+          >
+            Log out
+          </button>
+        </div>
 
         <!-- Custom Booru  -->
-        <div class="flex p-4 material-container text-default-text">
-          <div class="flex-grow">
-            <h1 class="text-lg">Custom Boorus</h1>
+        <div class="flex p-4 rounded-container text-default-text">
+          <div class="flex-auto">
+            <h1>Custom Boorus</h1>
             <p class="text-sm text-default-text-muted">
               Add or edit compatible boorus
             </p>
           </div>
 
           <NuxtLink
-            class="flex items-center justify-center px-4 rounded-full material-container bg-background"
+            class="flex items-center justify-center px-4 transition-colors duration-300 border rounded-full shadow border-border bg-background hover:border-border-hover"
             to="/premium/booru"
           >
             Modify
@@ -23,16 +56,16 @@
         </div>
 
         <!-- Custom Tag Collections  -->
-        <div class="flex p-4 material-container text-default-text">
+        <div class="flex p-4 rounded-container text-default-text">
           <div class="flex-grow">
-            <h1 class="text-lg">Custom Tag Collections</h1>
+            <h1>Custom Tag Collections</h1>
             <p class="text-sm text-default-text-muted">
               Add or edit tag collections
             </p>
           </div>
 
           <NuxtLink
-            class="flex items-center justify-center px-4 rounded-full material-container bg-background"
+            class="flex items-center justify-center px-4 transition-colors duration-300 border rounded-full shadow border-border bg-background hover:border-border-hover"
             to="/premium/tags"
           >
             Modify
@@ -45,11 +78,7 @@
         <!-- Notice -->
         <p class="text-sm text-center text-default-text-muted">
           Manage your subscription on
-          <a
-            rel="noopener nofollow"
-            target="_blank"
-            href="https://gumroad.com/library"
-          >
+          <a rel="noopener" target="_blank" href="https://gumroad.com/library">
             Gumroad
           </a>
         </p>
@@ -57,14 +86,14 @@
     </template>
 
     <template v-else>
-      <div class="flex flex-col h-screen m-auto justify-evenly">
+      <div class="flex flex-col flex-auto w-full justify-evenly">
         <!-- Log In -->
         <ErrorManager />
 
         <Login />
 
         <!-- Separator -->
-        <p class="leading-loose text-center text-default-text">Or</p>
+        <p class="leading-loose text-center text-default-text-muted">Or</p>
 
         <Subscription />
       </div>
@@ -78,12 +107,11 @@ import { mapGetters } from 'vuex'
 // Components
 import Login from '@/components/pages/premium/Login'
 import Subscription from '@/components/pages/premium/Subscription'
-import PremiumDashboard from '@/components/pages/premium/PremiumDashboard'
 
 import ErrorManager from '~/components/utils/ErrorManager.vue'
 
 export default {
-  components: { Login, Subscription, ErrorManager, PremiumDashboard },
+  components: { Login, Subscription, ErrorManager },
 
   head() {
     return {
@@ -99,7 +127,17 @@ export default {
   },
 
   computed: {
-    ...mapGetters('premium', ['isUserPremium']),
+    ...mapGetters('premium', ['isUserPremium', 'getUserEmail']),
+  },
+
+  methods: {
+    async logOut() {
+      localStorage.removeItem('premium')
+
+      await this.$auth.logout()
+
+      location.reload()
+    },
   },
 }
 </script>
