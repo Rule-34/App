@@ -1,143 +1,150 @@
 <template>
-  <form class="p-4 md:p-0 md:gap-4 search-grid">
-    <!-- Space for clicking out -->
-    <div @click.self.stop="closeSearchMenu" />
-
-    <!-- Search bar -->
-    <div class="flex p-2 my-auto material-container bg-background">
-      <SearchIcon class="w-6 h-6 icon text-default" />
-
-      <!-- Input form -->
-      <!-- Overflow Hidden is very important -->
-      <!-- Input because v-model/:value doesn't work on mobile -->
-      <input
-        class="flex-1 mx-2 overflow-hidden font-light outline-none text-default-text bg-background"
-        type="search"
-        name="tags"
-        placeholder="Search: e.g. dragon"
-        @input="inputHandler"
-        @keypress.enter.prevent="addTagDirectly"
-      />
-
-      <div class="flex space-x-1">
-        <!-- Tag collections -->
-        <button
-          type="button"
-          aria-label="Toggle Custom Tag Collections"
-          title="Custom Tag Collections"
-          @click="toggleTagCollections"
-        >
-          <TagIcon
-            class="w-6 h-6 transition-colors duration-300 icon hover:text-default-text-muted"
-          />
-        </button>
-
-        <!-- Reset -->
-        <button
-          type="button"
-          aria-label="Reset tags"
-          title="Reset tags"
-          @click="resetTags"
-        >
-          <TrashIcon
-            class="w-6 h-6 transition-colors duration-300 icon hover:text-default-text-muted"
-          />
-        </button>
-
-        <!-- Negative -->
-        <button
-          type="button"
-          aria-label="Filter out content"
-          title="Filter out content"
-          @click="toggleBanMode"
-        >
-          <FilterIcon
-            :class="{ 'text-red-400': isBanModeEnabled }"
-            class="w-6 h-6 transition-colors duration-300 icon"
-          />
-        </button>
-      </div>
-
-      <transition name="page">
-        <SearchTagCollections
-          v-if="tagCollections.isActive"
-          class="absolute inset-0 z-30 bg-black bg-opacity-25"
-          @toggleTagCollections="toggleTagCollections"
-        />
-      </transition>
-    </div>
-
-    <!-- Search results -->
+  <aside
+    class="fixed z-30 w-full h-full bg-black bg-opacity-25"
+    @click.self.stop="toggleSearchMenu"
+  >
+    <!-- Constraint -->
     <div
-      class="flex flex-col max-h-full min-h-full my-auto material-container md:min-h-2/5 md:max-h-2/5"
+      class="h-full max-w-3xl px-4 mx-auto sm:px-6 lg:px-8"
+      @click.self.stop="toggleSearchMenu"
     >
+      <!-- Center content -->
       <div
-        class="flex flex-col flex-1 max-h-full min-h-full p-2 pb-0 overflow-y-hidden"
+        class="flex flex-col items-center justify-center h-full"
+        @click.self.stop="toggleSearchMenu"
       >
-        <!-- If nothing searched -->
-        <h1
-          v-if="!search.data && !getTags.length"
-          class="flex items-center justify-center flex-1 text-xl font-light tracking-wide text-default-text"
-        >
-          Search something!
-        </h1>
-
-        <!-- Added tags, click them to remove them -->
-        <div
-          v-show="getTags.length"
-          class="mb-1 overflow-y-scroll border-b rounded tag-container border-border max-h-1/2"
-        >
-          <button
-            v-for="tag in getTags"
-            :key="tag"
-            type="button"
-            class="tag color-util"
-            @click="removeTag(tag)"
+        <!-- Content -->
+        <form class="flex flex-col w-full h-full gap-4 max-h-3/4">
+          <!-- Search bar -->
+          <div
+            class="flex flex-row h-auto p-2 rounded-lg shadow bg-elevation border-util"
           >
-            {{ tag }}
-          </button>
-        </div>
+            <!-- Search Icon -->
+            <SearchIcon class="w-6 h-6 icon" />
 
-        <!-- Searched tags, click them to add them -->
-        <div
-          v-show="search.data"
-          class="flex-1 overflow-y-scroll rounded rounded-b-none tag-container"
-        >
-          <!-- Add tag to array of added tags -->
-          <button
-            v-for="tag in search.data"
-            :key="tag.name"
-            type="button"
-            class="tag color-util group"
-            @click="addTag(tag.name)"
+            <!-- Input form -->
+            <!-- Overflow Hidden is very important -->
+            <!-- Input because v-model/:value doesn't work on mobile -->
+            <input
+              class="flex-1 mx-2 overflow-hidden font-light outline-none text-default-text bg-elevation"
+              type="search"
+              name="tags"
+              placeholder="Search: e.g. dragon"
+              @input="inputHandler"
+              @keypress.enter.prevent="addTagDirectly"
+            />
+
+            <div class="flex space-x-1">
+              <!-- Tag collections -->
+              <button
+                type="button"
+                aria-label="Toggle Custom Tag Collections"
+                title="Custom Tag Collections"
+                @click="toggleTagCollections"
+              >
+                <TagIcon
+                  class="w-6 h-6 transition-colors duration-300 icon hover:text-default-text-muted"
+                />
+              </button>
+
+              <!-- Reset -->
+              <button
+                type="button"
+                aria-label="Reset tags"
+                title="Reset tags"
+                @click="resetTags"
+              >
+                <TrashIcon
+                  class="w-6 h-6 transition-colors duration-300 icon hover:text-default-text-muted"
+                />
+              </button>
+
+              <!-- Negative -->
+              <button
+                type="button"
+                aria-label="Filter out content"
+                title="Filter out content"
+                @click="toggleBanMode"
+              >
+                <FilterIcon
+                  :class="{ 'text-red-400': isBanModeEnabled }"
+                  class="w-6 h-6 transition-colors duration-300 icon"
+                />
+              </button>
+            </div>
+          </div>
+
+          <!-- Search results -->
+          <div
+            class="flex flex-col h-full gap-2 p-2 rounded-lg shadow bg-elevation border-util"
           >
-            <!-- Name of the tag -->
-            <span>
-              {{ tag.name }}
-            </span>
+            <!-- If nothing searched -->
+            <template v-if="!search.data && !getTags.length">
+              <h1
+                class="flex items-center justify-center flex-auto text-xl font-light tracking-wide text-default-text"
+              >
+                Search something!
+              </h1>
+            </template>
 
-            <!-- Number of posts with that tag -->
-            <span
-              class="transition-colors duration-300 text-primary-hover group-hover:text-default"
-              >{{ `(${tag.count})` }}
-            </span>
-          </button>
-        </div>
+            <template v-else>
+              <!-- Added tags, click them to remove them -->
+              <template v-if="getTags.length">
+                <div
+                  class="flex-initial overflow-y-scroll border-0 rounded tag-container border-border"
+                >
+                  <button
+                    v-for="tag in getTags"
+                    :key="tag"
+                    type="button"
+                    class="tag color-util"
+                    @click="removeTag(tag)"
+                  >
+                    {{ tag }}
+                  </button>
+                </div>
+              </template>
+
+              <!-- Searched tags, click them to add them -->
+
+              <template v-if="search.data">
+                <div
+                  class="flex-auto overflow-y-scroll border-0 rounded border-border tag-container"
+                >
+                  <!-- Add tag to array of added tags -->
+                  <button
+                    v-for="tag in search.data"
+                    :key="tag.name"
+                    type="button"
+                    class="tag color-util group"
+                    @click="addTag(tag.name)"
+                  >
+                    <!-- Name of the tag -->
+                    <span>
+                      {{ tag.name }}
+                    </span>
+
+                    <!-- Number of posts with that tag -->
+                    <span
+                      class="transition-colors duration-300 text-primary-hover group-hover:text-default"
+                      >{{ `(${tag.count})` }}
+                    </span>
+                  </button>
+                </div>
+              </template>
+            </template>
+          </div>
+        </form>
       </div>
-
-      <!-- Apply tags button -->
-      <!-- <button
-        class="w-full px-4 py-2 text-lg font-bold tracking-wide text-center shadow-md text-default-text bg-gradient-lilac-blue"
-        type="submit"
-        @click.prevent="fetchAddedTags"
-      >
-        Apply tags
-      </button> -->
     </div>
 
-    <!-- Space for clicking out -->
-    <div @click.self.stop="closeSearchMenu" />
-  </form>
+    <transition name="page">
+      <SearchTagCollections
+        v-if="tagCollections.isActive"
+        @toggleTagCollections="toggleTagCollections"
+      />
+    </transition>
+  </aside>
 </template>
 
 <script>
@@ -176,8 +183,8 @@ export default {
     ...mapActions('booru', ['tagsManager', 'fetchTags']),
 
     // #region Navigation
-    async closeSearchMenu() {
-      await this.searchNavigationManager({ operation: 'set', value: false })
+    toggleSearchMenu() {
+      this.searchNavigationManager({ operation: 'toggle' })
     },
     // #endregion
 
@@ -248,17 +255,3 @@ export default {
   },
 }
 </script>
-
-<style lang="postcss">
-.search-grid {
-  display: grid;
-  grid-template-rows: 0.5fr 1fr 3fr 0.5fr;
-}
-
-@screen md {
-  .search-grid {
-    grid-template-columns: 1fr 2fr 3fr 1fr;
-    grid-template-rows: 1fr;
-  }
-}
-</style>
