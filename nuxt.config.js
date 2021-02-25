@@ -15,8 +15,9 @@ export default {
   },
 
   head: {
+    title: null,
+
     titleTemplate: (titleChunk) => {
-      // If undefined or blank then we don't need the separator
       return titleChunk ? `${titleChunk} | Rule 34 App` : 'Rule 34 App'
     },
 
