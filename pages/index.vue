@@ -48,18 +48,6 @@ export default {
 
   mixins: [UrlManagerMixin],
 
-  head() {
-    return {
-      meta: [
-        {
-          hid: 'referrer',
-          name: 'referrer',
-          content: 'no-referrer',
-        },
-      ],
-    }
-  },
-
   computed: {
     ...mapGetters('booru', ['getPosts']),
   },
