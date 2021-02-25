@@ -46,7 +46,7 @@
       </div>
 
       <p class="p-2 text-xs text-center text-default-text-muted">
-        Click on the name to remove, and on the tags to copy.
+        Click on the `name` to remove. Click on the `tags` to copy.
       </p>
     </div>
 
@@ -144,18 +144,19 @@ export default {
       })
     },
 
-    copyTagCollectionToFormCollection(tagCollection) {
-      this.formTagCollection = {
-        name: tagCollection.name,
-        tags: tagCollection.tags.join(', '),
-      } // Reconstruct object as a weird fix so Vuex doesnt crash
-    },
-
     deleteTagCollection(tagCollection) {
       this.customTagCollectionsManager({
         operation: 'remove',
         value: tagCollection,
       })
+    },
+
+    copyTagCollectionToFormCollection(tagCollection) {
+      // Clone as a weird fix so Vuex does not crash
+      this.formTagCollection = {
+        name: tagCollection.name,
+        tags: tagCollection.tags.join(', '),
+      }
     },
   },
 }
