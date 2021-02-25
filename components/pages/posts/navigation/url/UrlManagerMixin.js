@@ -5,16 +5,8 @@ export default {
   head() {
     const tags = this.urlTags?.split(',').join(', ')
 
-    return {
-      title: tags || 'Posts',
-
+    const head = {
       meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: `Rule 34 of ${tags} on ${this.urlDomain}.`,
-        },
-
         // TODO: test if it actually works
         {
           hid: 'referrer',
@@ -23,6 +15,18 @@ export default {
         },
       ],
     }
+
+    if (tags) {
+      head.title = tags
+
+      head.meta.push({
+        hid: 'description',
+        name: 'description',
+        content: `Rule 34 Hentai porn of ${tags} on ${this.urlDomain}.`,
+      })
+    }
+
+    return head
   },
 
   computed: {
