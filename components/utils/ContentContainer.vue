@@ -9,12 +9,12 @@
       <h1>{{ title }}</h1>
 
       <!-- Text -->
+      <!-- Using v-text as using {{}} would add a `new line` character that `whitespace-pre-line` would interpret. -->
       <p
         v-if="text"
         class="text-sm whitespace-pre-line text-default-text-muted"
-      >
-        {{ text }}
-      </p>
+        v-text="text"
+      />
 
       <!-- Image -->
       <picture v-if="img">
