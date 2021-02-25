@@ -36,11 +36,12 @@
           <div class="flex-shrink-0">
             <check-icon class="w-6 h-6 icon text-gradient-one" />
           </div>
-          <p
-            class="ml-3 text-base font-medium leading-6 text-default-text-muted"
+          <NuxtLink
+            to="/premium/booru"
+            class="ml-3 text-base font-medium leading-6 color-util"
           >
             Add your own boorus
-          </p>
+          </NuxtLink>
         </li>
 
         <!--  -->
@@ -48,11 +49,12 @@
           <div class="flex-shrink-0">
             <check-icon class="w-6 h-6 icon text-gradient-one" />
           </div>
-          <p
-            class="ml-3 text-base font-medium leading-6 text-default-text-muted"
+          <NuxtLink
+            to="/premium/tags"
+            class="ml-3 text-base font-medium leading-6 color-util"
           >
             Create Tag Collections
-          </p>
+          </NuxtLink>
         </li>
 
         <!--  -->
