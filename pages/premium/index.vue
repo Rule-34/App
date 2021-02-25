@@ -1,7 +1,7 @@
 @@ -0,0 +1,172 @@
 <template>
   <main
-    class="container flex flex-col items-center justify-center min-h-screen p-4 mx-auto sm:p-6 lg:p-8"
+    class="flex flex-col items-center justify-center max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8"
   >
     <template v-if="isUserPremium">
       <div class="flex flex-col flex-auto w-full space-y-4">

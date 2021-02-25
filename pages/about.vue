@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container relative flex flex-col items-center justify-center min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
+    class="relative flex flex-col items-center justify-center max-w-3xl min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
   >
     <main class="p-5 shadow-md w-max-content material-container">
       <picture>
