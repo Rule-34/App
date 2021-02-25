@@ -63,14 +63,6 @@ a:focus,
   @apply border-primary;
 }
 
-.space-y-4-fixer > :first-child {
-  @apply mt-4;
-}
-
-.space-y-4-fixer > :last-child {
-  @apply mb-4;
-}
-
 /* ---------------- Transitions and animations ---------------- */
 
 /* Page Transition */
