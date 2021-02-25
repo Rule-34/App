@@ -22,6 +22,9 @@
                 <td class="text-sm" @click="removeCustomBooru(booru)">
                   {{ booru.domain }}
                 </td>
+                <td class="text-sm" @click="copyBooruToForm(booru)">
+                  {{ booru.type }}
+                </td>
                 <td class="text-sm">{{ booru.nsfw }}</td>
                 <td class="text-sm">{{ booru.config !== null }}</td>
               </tr>
@@ -193,6 +196,15 @@ export default {
       this.activeBooruManager({ operation: 'reset' })
     },
 
+    copyBooruToForm(booru) {
+      // Clone as a weird fix so Vuex does not crash
+      this.formBooru = {
+        domain: booru.domain,
+        type: booru.type,
+        nsfw: booru.nsfw,
+        config: JSON.stringify(booru.config),
+      }
+    },
   },
 }
 </script>
