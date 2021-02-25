@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container relative flex flex-col items-center justify-center min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
+    class="max-w-3xl relative flex flex-col items-center justify-center min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
   >
     <main
       class="p-5 rounded-lg shadow-xl w-max-content bg-elevation border-util"

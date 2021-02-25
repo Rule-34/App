@@ -1,5 +1,5 @@
 <template>
-  <main class="container min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
+  <main class="max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
     <div class="space-y-4">
       <!-- Separator -->
       <ContentContainer :separator="true" title="Disclaimer" />

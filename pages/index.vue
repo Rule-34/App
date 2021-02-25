@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container flex flex-col min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
+    class="flex flex-col max-w-3xl min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
   >
     <!-- Top menu -->
     <nav class="flex flex-row items-center justify-between py-4">
