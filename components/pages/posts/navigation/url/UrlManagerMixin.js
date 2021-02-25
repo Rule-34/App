@@ -14,6 +14,13 @@ export default {
           name: 'description',
           content: `Rule 34 of ${tags} on ${this.urlDomain}.`,
         },
+
+        // TODO: test if it actually works
+        {
+          hid: 'referrer',
+          name: 'referrer',
+          content: 'no-referrer',
+        },
       ],
     }
   },
