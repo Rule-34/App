@@ -1,0 +1,22 @@
+<template>
+  <article class="rounded-container">
+    <div class="p-3 bg-gradient-blue-lilac">
+      <div class="leading-7 text-center text-default-text">
+        <!-- Head -->
+        <h1 class="text-lg font-semibold tracking-wide">{{ title }}</h1>
+
+        <!-- Body -->
+        <p v-if="text" class="text-sm">{{ text }}</p>
+      </div>
+    </div>
+  </article>
+</template>
+
+<script>
+export default {
+  props: {
+    title: { type: String, required: true },
+    text: { type: String, required: false, default: undefined },
+  },
+}
+</script>
