@@ -1,7 +1,7 @@
 <template>
   <figure class="text-center material-container text-default-text">
     <!-- Media -->
-    <div @click="isActive = !isActive">
+    <div class="relative" @click="toggleTags">
       <template v-if="error.show">
         <Error
           :show-action="false"
@@ -30,7 +30,6 @@
 
       <template v-else-if="isVideo">
         <!-- TODO: Show button to show tags -->
-
         <video
           :alt="'Video ' + post.id"
           class="w-full h-auto"
@@ -46,6 +45,19 @@
           />
           Your browser does not support HTML5 video.
         </video>
+
+        <div class="absolute inset-y-0 right-0 p-4 pointer-events-none">
+          <div class="flex flex-col items-center justify-center w-full h-full">
+            <button
+              type="button"
+              class="p-1 bg-black bg-opacity-25 border border-transparent rounded-md pointer-events-auto group"
+            >
+              <TagIcon
+                class="w-5 h-5 transition-colors duration-300 icon text-default-text-muted group-hover:text-default"
+              />
+            </button>
+          </div>
+        </div>
       </template>
     </div>
 
@@ -103,13 +115,13 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { ExternalLinkIcon } from 'vue-feather-icons'
+import { ExternalLinkIcon, TagIcon } from 'vue-feather-icons'
 
 import TransitionCollapse from '~/components/utils/TransitionCollapse.vue'
 import Error from '~/components/utils/Error'
 
 export default {
-  components: { Error, TransitionCollapse, ExternalLinkIcon },
+  components: { Error, TransitionCollapse, ExternalLinkIcon, TagIcon },
 
   props: {
     post: {
@@ -205,6 +217,10 @@ export default {
 
   methods: {
     ...mapActions('booru', ['tagsManager']),
+
+    toggleTags() {
+      this.isActive = !this.isActive
+    },
 
     // #region Post media
     retryToLoadManager(event) {
