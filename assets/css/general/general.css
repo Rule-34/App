@@ -38,7 +38,8 @@ a:focus,
 }
 
 .rounded-container {
-  @apply border rounded-lg shadow bg-elevation border-border;
+  /* Overflow hidden so the content is rounded */
+  @apply overflow-hidden border rounded-lg shadow bg-elevation border-border;
 }
 
 /* ---------------- Component specific ---------------- */
