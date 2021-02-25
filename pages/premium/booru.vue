@@ -1,34 +1,36 @@
 <template>
-  <main class="flex flex-col justify-around h-screen space-y-4 space-y-4-fixer">
+  <main class="flex flex-col max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
     <div>
       <!-- Booru list -->
       <div class="px-2 py-1 overflow-x-scroll rounded-container">
-        <table class="w-full text-left text-default-text">
+        <table
+          class="w-full text-left border-separate"
+          style="border-spacing: 0.25em"
+        >
           <thead>
             <tr>
-              <th class="font-normal">Domain</th>
-              <th class="font-normal">Type</th>
-              <th class="font-normal">NSFW</th>
-              <th class="font-normal">Config</th>
+              <th class="font-normal text-default-text">Domain</th>
+              <th class="font-normal text-default-text">Type</th>
+              <th class="font-normal text-default-text">NSFW</th>
+              <th class="font-normal text-default-text">Config</th>
             </tr>
           </thead>
 
           <tbody class="text-default-text-muted">
             <template v-if="getCustomBoorus.length">
               <tr v-for="booru in getCustomBoorus" :key="booru.domain">
-                <td @click="removeCustomBooruFromState(booru)">
+                <td class="text-sm" @click="removeCustomBooru(booru)">
                   {{ booru.domain }}
                 </td>
-                <td>{{ booru.type }}</td>
-                <td>{{ booru.nsfw }}</td>
-                <td>{{ booru.config !== null }}</td>
+                <td class="text-sm">{{ booru.nsfw }}</td>
+                <td class="text-sm">{{ booru.config !== null }}</td>
               </tr>
             </template>
 
             <!-- No boorus -->
             <template v-else>
               <tr>
-                <td class="text-center" colspan="10">
+                <td class="text-sm text-center" colspan="999">
                   There are no custom boorus
                 </td>
               </tr>
@@ -38,18 +40,17 @@
       </div>
 
       <p class="p-2 text-xs text-center text-default-text-muted">
-        Tip: Click on a booru domain to remove it
+        Click on the `domain` to remove. Click on the `type` to copy.
       </p>
     </div>
 
     <!-- Spacer -->
-    <div class="flex-grow">&nbsp;</div>
+    <div class="flex-auto">&nbsp;</div>
 
     <!-- Booru editor -->
     <form
       class="flex flex-col p-4 space-y-2 rounded-container text-default-text"
-      action="#"
-      @submit.prevent="addCustomBooruToState()"
+      @submit.prevent="addFormBooruToCustomBoorus"
     >
       <!-- Domain -->
       <label>
@@ -59,7 +60,6 @@
           v-model="formBooru.domain"
           type="text"
           name="booruDomain"
-          value=""
           class="block w-full p-1 outline-none bg-background"
           required
           placeholder="example.com"
@@ -131,8 +131,6 @@ import { mapGetters, mapActions } from 'vuex'
 import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/dist/util/BooruUtils.js'
 
 export default {
-  middleware: 'auth',
-
   data() {
     return {
       booruTypeList,
@@ -146,6 +144,19 @@ export default {
     }
   },
 
+  head() {
+    return {
+      title: 'Custom Boorus',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'Add custom Boorus',
+        },
+      ],
+    }
+  },
+
   computed: {
     ...mapGetters('user', ['getCustomBoorus']),
   },
@@ -154,7 +165,7 @@ export default {
     ...mapActions('user', ['customBoorusManager']),
     ...mapActions('booru', ['activeBooruManager']),
 
-    addCustomBooruToState(booruObj) {
+    addFormBooruToCustomBoorus(booruObj) {
       let parsedConfig = null
 
       try {
@@ -173,7 +184,7 @@ export default {
       })
     },
 
-    removeCustomBooruFromState(booruObj) {
+    removeCustomBooru(booruObj) {
       this.customBoorusManager({
         operation: 'remove',
         value: booruObj,
@@ -181,19 +192,7 @@ export default {
 
       this.activeBooruManager({ operation: 'reset' })
     },
-  },
 
-  head() {
-    return {
-      title: 'Custom Boorus',
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'Add custom Boorus',
-        },
-      ],
-    }
   },
 }
 </script>
