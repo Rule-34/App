@@ -27,6 +27,7 @@
               class="flex-1 mx-2 overflow-hidden font-light outline-none text-default-text bg-elevation"
               type="search"
               name="tags"
+              autofocus
               placeholder="Search: e.g. dragon"
               @input="inputHandler"
               @keypress.enter.prevent="addTagDirectly"
