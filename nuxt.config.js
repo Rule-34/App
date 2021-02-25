@@ -31,7 +31,8 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: 'Browse the most popular boorus in the Rule 34 App',
+        content:
+          'Browse the most popular Rule 34 Hentai porn with the Rule 34 App.',
       },
       {
         name: 'monetization',
