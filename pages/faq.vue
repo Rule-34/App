@@ -1,11 +1,7 @@
 <template>
   <main class="max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
     <div class="space-y-4">
-      <ContentContainer
-        :separator="true"
-        title="General"
-        text="Questions related to the App"
-      />
+      <ContentSeparator title="General" text="Questions related to the App" />
 
       <ContentContainer
         title="Notice"
@@ -23,10 +19,11 @@
 </template>
 
 <script>
+import ContentSeparator from '~/components/utils/ContentSeparator.vue'
 import ContentContainer from '~/components/utils/ContentContainer.vue'
 
 export default {
-  components: { ContentContainer },
+  components: { ContentSeparator, ContentContainer },
 
   head() {
     return {

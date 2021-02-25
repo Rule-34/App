@@ -3,7 +3,7 @@
     <div class="space-y-4">
       <!-- Navigation -->
 
-      <ContentContainer :separator="true" title="Navigation" />
+      <ContentSeparator title="Navigation" />
 
       <ContentContainer
         title="Touch navigation"
@@ -17,8 +17,7 @@
       />
 
       <!-- General Usage -->
-      <ContentContainer
-        :separator="true"
+      <ContentSeparator
         title="Search"
         text="Normal usage of the PWA is explained below"
       />
@@ -36,8 +35,7 @@
       />
 
       <!-- User Settings -->
-      <ContentContainer
-        :separator="true"
+      <ContentSeparator
         title="User settings"
         text="Customizable settings are explained below"
       />
@@ -57,10 +55,11 @@
 <script>
 import { mapGetters } from 'vuex'
 // Components
+import ContentSeparator from '~/components/utils/ContentSeparator.vue'
 import ContentContainer from '~/components/utils/ContentContainer.vue'
 
 export default {
-  components: { ContentContainer },
+  components: { ContentSeparator, ContentContainer },
 
   head() {
     return {

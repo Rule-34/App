@@ -2,7 +2,7 @@
   <main class="max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
     <div class="space-y-4">
       <!-- Separator -->
-      <ContentContainer :separator="true" title="Disclaimer" />
+      <ContentSeparator title="Disclaimer" />
 
       <!-- Remove media -->
       <ContentContainer
@@ -20,7 +20,7 @@
       />
 
       <!-- Separator -->
-      <ContentContainer :separator="true" title="Privacy policy" />
+      <ContentSeparator title="Privacy policy" />
 
       <!-- Generated terms of service -->
       <ContentContainer
@@ -85,10 +85,11 @@
 </template>
 
 <script>
+import ContentSeparator from '~/components/utils/ContentSeparator.vue'
 import ContentContainer from '~/components/utils/ContentContainer.vue'
 
 export default {
-  components: { ContentContainer },
+  components: { ContentSeparator, ContentContainer },
 
   head() {
     return {

@@ -1,82 +1,62 @@
 <template>
-  <!-- Loop for every info container -->
   <article class="rounded-container">
-    <!-- If separator -->
-    <template v-if="separator">
-      <div class="p-3 bg-gradient-blue-lilac">
-        <div class="leading-7 text-center text-default-text">
-          <!-- Head -->
-          <h1 class="text-lg font-semibold tracking-wide">{{ title }}</h1>
+    <!-- Sets icon bg if icon is defined -->
+    <div
+      class="p-3 text-default-text"
+      :class="{ 'bg-svg': icon, [icon]: icon, [iconPosition]: icon }"
+    >
+      <!-- Title -->
+      <h1>{{ title }}</h1>
 
-          <!-- Body -->
-          <p v-if="text" class="text-sm">{{ text }}</p>
-        </div>
-      </div>
-    </template>
-
-    <!-- If normal post -->
-    <template v-else>
-      <!-- Sets icon bg if icon is defined -->
-      <div
-        class="p-3 text-default-text"
-        :class="{ 'bg-svg': icon, [icon]: icon, [iconPosition]: icon }"
+      <!-- Text -->
+      <p
+        v-if="text"
+        class="text-sm whitespace-pre-line text-default-text-muted"
       >
-        <!-- Title -->
-        <h1>{{ title }}</h1>
+        {{ text }}
+      </p>
 
-        <!-- Text -->
-        <p
-          v-if="text"
-          class="text-sm whitespace-pre-line text-default-text-muted"
-        >
-          {{ text }}
-        </p>
+      <!-- Image -->
+      <picture v-if="img">
+        <source :srcset="img + '.webp'" type="image/webp" />
+        <img
+          loading="lazy"
+          decoding="async"
+          :src="img + '.png'"
+          :alt="title + ' Example'"
+          class="mx-auto mt-2"
+        />
+      </picture>
 
-        <!-- Image -->
-        <picture v-if="img">
-          <source :srcset="img + '.webp'" type="image/webp" />
-          <img
-            loading="lazy"
-            decoding="async"
-            :src="img + '.png'"
-            :alt="title + ' Example'"
-            class="mx-auto mt-2"
-          />
-        </picture>
+      <!-- Links -->
+      <template v-if="links.length">
+        <div>
+          <template v-for="(link, index) in links">
+            <a
+              :key="link.text"
+              :href="link.href"
+              target="_blank"
+              rel="noopener"
+              class="text-sm"
+            >
+              {{ link.text }}
+            </a>
 
-        <!-- Links -->
-        <template v-if="links.length">
-          <div>
-            <template v-for="(link, index) in links">
-              <a
-                :key="link.text"
-                :href="link.href"
-                target="_blank"
-                rel="noopener"
-                class="text-sm"
-              >
-                {{ link.text }}
-              </a>
+            <!-- Separator -->
+            <template v-if="index !== links.length - 1"> - </template>
+          </template>
+        </div>
+      </template>
 
-              <!-- Separator -->
-              <template v-if="index !== links.length - 1"> - </template>
-            </template>
-          </div>
-        </template>
-
-        <!-- Extra information -->
-        <slot />
-      </div>
-    </template>
+      <!-- Extra information -->
+      <slot />
+    </div>
   </article>
 </template>
 
 <script>
 export default {
   props: {
-    // For separating text
-    separator: { type: Boolean, required: false, default: false },
-
     // For icons
     icon: { type: String, required: false, default: undefined },
     iconPosition: { type: String, required: false, default: 'bg-svg-right' },
