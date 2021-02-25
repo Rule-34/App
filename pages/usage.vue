@@ -17,10 +17,7 @@
       />
 
       <!-- General Usage -->
-      <ContentSeparator
-        title="Search"
-        text="Normal usage of the PWA is explained below"
-      />
+      <ContentSeparator title="Search" />
 
       <ContentContainer
         title="Trash button"
