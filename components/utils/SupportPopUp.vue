@@ -1,11 +1,11 @@
 <template>
-  <div class="flex" @click.self.stop="toggleSupportPopUp()">
+  <div class="flex" @click.self.stop="toggleSupportPopUp">
     <div class="px-2 m-auto md:px-0">
       <ContentContainer
         title="Support us!"
-        text="Looks like you're enjoying the App, do you mind supporting this project with a donation?
+        text="Looks like you're enjoying the App, do you mind supporting the project with a donation?
 
-Or even better, subscribe to unlock new features!"
+Or even better, subscribe to unlock Premium features!"
         :links="[
           {
             href: 'https://redirect.r34.app/donations',
