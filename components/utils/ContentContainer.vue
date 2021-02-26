@@ -32,15 +32,25 @@
       <template v-if="links.length">
         <div>
           <template v-for="(link, index) in links">
-            <a
-              :key="link.text"
-              :href="link.href"
-              target="_blank"
-              rel="noopener"
-              class="text-sm"
-            >
-              {{ link.text }}
-            </a>
+            <!-- Internal link -->
+            <template v-if="link.isInternal">
+              <NuxtLink :key="link.text" :to="link.href" class="text-sm">
+                {{ link.text }}
+              </NuxtLink>
+            </template>
+
+            <!-- External link -->
+            <template v-else>
+              <a
+                :key="link.text"
+                :href="link.href"
+                target="_blank"
+                rel="noopener"
+                class="text-sm"
+              >
+                {{ link.text }}
+              </a>
+            </template>
 
             <!-- Separator -->
             <template v-if="index !== links.length - 1"> - </template>
