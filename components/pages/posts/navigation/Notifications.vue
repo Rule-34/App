@@ -1,6 +1,6 @@
 <template>
   <!-- Icon -->
-  <div class="relative rounded-full shadow border-util bg-elevation">
+  <div class="rounded-full shadow border-util bg-elevation">
     <!-- Button -->
     <button
       type="button"
@@ -41,6 +41,10 @@
       </svg>
     </button>
 
+    <!-- 
+    This should use Vue 3's teleport feature
+    https://v3.vuejs.org/guide/teleport.html
+    -->
     <!-- Notification menu -->
     <transition name="notifications">
       <aside v-if="isActive" class="fixed inset-0 overflow-hidden">
