@@ -5,8 +5,8 @@
     <button
       type="button"
       class="flex p-1"
-      aria-label="Notifications"
-      @click="toggleNotifications()"
+      aria-label="Toggle notification menu"
+      @click="toggleNotifications"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -41,27 +41,83 @@
       </svg>
     </button>
 
-    <!-- Content -->
-    <transition name="page">
-      <aside v-if="isActive" class="notifications--details">
-        <template v-if="getNotifications">
-          <ContentContainer
-            v-for="notification in getNotifications"
-            :key="notification.title"
-            class="m-1"
-            :title="notification.title"
-            :text="notification.text"
-            :links="notification.links"
-          />
-        </template>
+    <!-- Notification menu -->
+    <transition name="notifications">
+      <aside v-if="isActive" class="fixed inset-0 overflow-hidden">
+        <div class="absolute inset-0 overflow-hidden">
+          <!-- Background -->
+          <div
+            class="absolute inset-0 transition-opacity bg-black bg-opacity-25"
+            aria-hidden="true"
+            @click="toggleNotifications"
+          ></div>
 
-        <template v-else>
-          <ContentContainer
-            class="m-1"
-            title="Notifications"
-            text="There are no notifications available."
-          />
-        </template>
+          <section
+            class="absolute inset-y-0 right-0 flex max-w-full pl-10"
+            aria-labelledby="slide-over-heading"
+          >
+            <div class="w-screen max-w-md">
+              <div
+                class="flex flex-col h-full py-6 overflow-y-scroll shadow-xl bg-background"
+              >
+                <div class="px-4 sm:px-6">
+                  <div class="flex items-start justify-between">
+                    <h2
+                      id="slide-over-heading"
+                      class="text-lg font-medium text-default-text"
+                    >
+                      Notifications
+                    </h2>
+                    <div class="flex items-center ml-3 h-7">
+                      <button
+                        class="p-1 rounded-full text-default bg-elevation focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                        @click="toggleNotifications"
+                      >
+                        <span class="sr-only">Close panel</span>
+                        <!-- Heroicon name: outline/x -->
+                        <svg
+                          class="w-6 h-6"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <ul class="relative flex-1 px-4 mt-3 space-y-2 sm:px-6">
+                  <!-- Replace with your content -->
+                  <template v-if="!getNotifications">
+                    <ContentContainer
+                      title="Notifications"
+                      text="There are no notifications available."
+                    />
+                  </template>
+
+                  <template v-else>
+                    <ContentContainer
+                      v-for="notification in getNotifications"
+                      :key="notification.title"
+                      :title="notification.title"
+                      :text="notification.text"
+                      :links="notification.links"
+                    />
+                  </template>
+                  <!-- /End replace -->
+                </ul>
+              </div>
+            </div>
+          </section>
+        </div>
       </aside>
     </transition>
   </div>
@@ -112,7 +168,7 @@ export default {
       if (this.isActive && this.getNotifications) {
         this.setLatestTitle(this.getNotifications[0].title)
 
-        fireAnalytics('notifications')
+        // fireAnalytics('notifications')
       }
     },
   },
@@ -120,20 +176,29 @@ export default {
 </script>
 
 <style lang="postcss">
-.notifications--details {
-  /* Offset a little so its more natural */
-  top: 120%;
-  right: -15px;
+/* 
+      Slide-over panel, show/hide based on slide-over state.
 
-  /* Width */
-  min-width: 80vw;
+        Entering: "transform transition ease-in-out duration-500 sm:duration-700"
+          From: "translate-x-full"
+          To: "translate-x-0"
+        Leaving: "transform transition ease-in-out duration-500 sm:duration-700"
+          From: "translate-x-0"
+          To: "translate-x-full" 
+*/
 
-  @apply absolute z-10 overflow-hidden;
+.notifications-enter-active,
+.notifications-leave-active {
+  @apply transform transition ease-in-out duration-300;
 }
 
-@screen md {
-  .notifications--details {
-    min-width: 20vw;
-  }
+.notifications-enter,
+.notifications-leave-to {
+  @apply translate-x-full;
+}
+
+.notifications-enter-to,
+.notifications-leave {
+  @apply translate-x-0;
 }
 </style>
