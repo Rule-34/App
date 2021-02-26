@@ -273,6 +273,7 @@ export const actions = {
     }
   },
 
+  // TODO: This should be handled by an API library
   createApiUrl(context, { mode, postID, tag }) {
     const { getters, rootState } = context
 
@@ -292,7 +293,7 @@ export const actions = {
         id: postID,
       },
 
-      tags: { tag, limit: 15 },
+      tags: { tag, limit: 15, order: 'count' },
     }
 
     const urlToFetch = new URL(
@@ -322,6 +323,10 @@ export const actions = {
 
       case 'tags':
         urlToFetch.searchParams.append('tag', queries.tags.tag)
+
+        if (queries.tags.order) {
+          urlToFetch.searchParams.append('order', queries.tags.order)
+        }
 
         if (queries.tags.limit) {
           urlToFetch.searchParams.append('limit', queries.tags.limit)
