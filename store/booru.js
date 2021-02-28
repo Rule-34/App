@@ -63,7 +63,7 @@ export const getters = {
       return getters.getActiveBooruType.initialPageID
     }
 
-    return pageID
+    return Number(pageID)
   },
 
   getTags: (state, getters, rootState, rootGetters) => {
