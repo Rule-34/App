@@ -45,13 +45,19 @@
     </div>
 
     <!-- Infinite loading -->
-    <div
-      v-else
-      v-intersect.quiet="InfiniteLoadHandler"
-      class="mx-auto"
-      @click="InfiniteLoadHandler"
-    >
-      <p class="pb-2 text-center text-default-text">Loading more posts...</p>
+    <div v-else class="mx-auto">
+      <p
+        v-intersect="{
+          handler: InfiniteLoadHandler,
+          options: {
+            threshold: [0, 0.5, 1.0],
+          },
+        }"
+        class="pb-2 text-center text-default-text-muted"
+        @click="InfiniteLoadHandler"
+      >
+        Stay here to load more posts...
+      </p>
     </div>
 
     <!-- Space below all posts -->
@@ -112,15 +118,41 @@ export default {
       await this.pidManager({ operation: 'set', value: specificPage })
     },
 
-    InfiniteLoadHandler: throttle(async function () {
-      console.debug('Loading more posts')
+    InfiniteLoadHandler(entries, observer) {
+      const elementAttribute = 'data-is-visible'
+      const timeoutDelay = 3000
 
-      await this.pidManager({ operation: 'add' })
-    }, 5000),
+      // console.log({ entries, observer })
+
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting || entry.intersectionRatio <= 0) {
+          //
+
+          if (entry.target.getAttribute(elementAttribute)) {
+            // console.debug('Removed attribute from element.')
+            entry.target.removeAttribute(elementAttribute)
+          }
+
+          // console.debug('Element is not visible.')
+          return
+        }
+
+        entry.target.setAttribute(elementAttribute, true)
+
+        setTimeout(async () => {
+          const isVisible = entry.target.getAttribute(elementAttribute)
+
+          if (!isVisible) {
+            // console.debug('Timeout: Element does not have attribute.')
+            return
+          }
+
+          console.debug('Loading more posts...')
+
+          await this.pidManager({ operation: 'add' })
+        }, timeoutDelay)
+      })
+    },
   },
-}
-
-
-
 }
 </script>
