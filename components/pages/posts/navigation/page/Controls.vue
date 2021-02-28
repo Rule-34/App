@@ -4,45 +4,43 @@
     <div
       v-if="!getUserSettings.infiniteLoad.value"
       :class="{
-        'hover-controls-container': getUserSettings.hoverControls.value,
+        'fixed bottom-0 inset-x-0 z-10 max-w-3xl p-2 mx-auto sm:p-4 lg:p-6':
+          getUserSettings.hoverControls.value,
       }"
     >
-      <div
-        :class="{ 'hover-controls': getUserSettings.hoverControls.value }"
-        class="flex p-2 text-center material-container"
-      >
-        <!-- Get previous page -->
-        <div
-          class="w-1/3 color-util"
+      <div class="flex justify-around p-2 text-center material-container">
+        <!-- Previous page -->
+        <button
+          type="button"
+          class="color-util"
           title="Load previous page"
+          aria-label="Load previous page"
           @click="getPrevPage"
         >
-          <button type="button">
-            <ArrowLeftIcon class="inline w-4 h-4 icon" />
-            Prev
-          </button>
-        </div>
+          <span class="text-default">&larr;</span> Prev
+        </button>
 
         <!-- Get specific page -->
-        <div
-          class="w-1/3 color-util"
+        <button
+          class="color-util"
           title="Load specific page"
+          aria-label="Load specific page"
+          type="button"
           @click="getSpecificPage"
         >
-          <button type="button">{{ getPageID }}</button>
-        </div>
+          {{ getPageID }}
+        </button>
 
-        <!-- Get next page -->
-        <div
-          class="w-1/3 color-util"
+        <!-- Next page -->
+        <button
+          type="button"
+          class="color-util"
           title="Load next page"
+          aria-label="Load next page"
           @click="getNextPage"
         >
-          <button type="button">
-            Next
-            <ArrowRightIcon class="inline w-4 h-4 icon" />
-          </button>
-        </div>
+          Next <span class="text-default">&rarr;</span>
+        </button>
       </div>
     </div>
 
@@ -57,7 +55,15 @@
     </div>
 
     <!-- Space below all posts -->
-    <div v-if="getUserSettings.hoverControls.value" class="mb-6">&nbsp;</div>
+    <div
+      v-if="
+        !getUserSettings.infiniteLoad.value &&
+        getUserSettings.hoverControls.value
+      "
+      class="mb-2 sm:mb-4 lg:mb-6"
+    >
+      &nbsp;
+    </div>
   </div>
 </template>
 
@@ -66,20 +72,11 @@ import { mapGetters, mapActions } from 'vuex'
 
 // Third party
 import { Intersect } from 'vuetify/lib/directives/intersect'
-import { throttle } from 'lodash-es'
-
-// Icons
-import { ArrowLeftIcon, ArrowRightIcon } from 'vue-feather-icons'
 
 // Components
 import KeyboardNavigationMixin from '~/components/pages/posts/navigation/page/KeyboardNavigationMixin.js'
 
 export default {
-  components: {
-    ArrowRightIcon,
-    ArrowLeftIcon,
-  },
-
   directives: {
     Intersect,
   },
@@ -122,26 +119,8 @@ export default {
     }, 5000),
   },
 }
+
+
+
+}
 </script>
-<style lang="postcss">
-/* HOVER CONTROLS SETTING */
-
-.hover-controls-container {
-  @apply fixed bottom-0 inset-x-0 z-10 w-full mx-auto p-2;
-}
-
-.hover-controls {
-  @apply shadow-md mx-auto my-0;
-}
-
-@screen md {
-  .hover-controls-container {
-    @apply w-2/3;
-  }
-}
-@screen xl {
-  .hover-controls-container {
-    @apply w-1/2;
-  }
-}
-</style>
