@@ -74,7 +74,7 @@
                     </h2>
                     <div class="flex items-center ml-3 h-7">
                       <button
-                        class="p-1 rounded-full text-default bg-elevation focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                        class="p-1 rounded-full text-default border-util bg-elevation focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                         @click="toggleNotifications"
                       >
                         <span class="sr-only">Close panel</span>
