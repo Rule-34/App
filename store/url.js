@@ -50,8 +50,6 @@ export const actions = {
       },
     }
 
-    // console.log(routerQueries)
-
     await this.$router.push(routerQueries)
   },
 }
