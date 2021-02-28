@@ -1,6 +1,17 @@
 import VuexPersistence from 'vuex-persist'
 
 export default ({ store }) => {
+  // Booru state
+  new VuexPersistence({
+    key: 'booru',
+
+    reducer: (state) => ({
+      booru: {
+        history: state.booru.history,
+      },
+    }),
+  }).plugin(store)
+
   // Default state
   new VuexPersistence({
     key: 'vuex',
