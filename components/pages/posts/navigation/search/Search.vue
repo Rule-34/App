@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="fixed z-30 w-full h-full bg-black bg-opacity-25"
+    class="fixed z-20 w-full h-full bg-black bg-opacity-25"
     @click.self.stop="toggleSearchMenu"
   >
     <!-- Constraint -->

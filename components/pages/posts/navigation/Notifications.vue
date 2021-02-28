@@ -47,7 +47,7 @@
     -->
     <!-- Notification menu -->
     <transition name="notifications">
-      <aside v-if="isActive" class="fixed inset-0 overflow-hidden">
+      <aside v-if="isActive" class="fixed inset-0 z-10 overflow-hidden">
         <div class="absolute inset-0 overflow-hidden">
           <!-- Background -->
           <div
