@@ -1,6 +1,29 @@
 import VuexPersistence from 'vuex-persist'
 
 export default ({ store }) => {
+  // Default state
+  new VuexPersistence({
+    key: 'vuex',
+
+    reducer: (state) => ({
+      statistics: state.statistics,
+    }),
+  }).plugin(store)
+
+  // Notifications state
+  new VuexPersistence({
+    key: 'notifications',
+
+    reducer: (state) => ({
+      notifications: {
+        // Double because the state and module are named the same
+        notifications: {
+          latestTitle: state.notifications.notifications.latestTitle,
+        },
+      },
+    }),
+  }).plugin(store)
+
   // User state
   new VuexPersistence({
     key: 'user',
@@ -22,28 +45,5 @@ export default ({ store }) => {
         },
       }
     },
-  }).plugin(store)
-
-  // Notifications state
-  new VuexPersistence({
-    key: 'notifications',
-
-    reducer: (state) => ({
-      notifications: {
-        // Double because the state and module are named the same
-        notifications: {
-          latestTitle: state.notifications.notifications.latestTitle,
-        },
-      },
-    }),
-  }).plugin(store)
-
-  // Default state
-  new VuexPersistence({
-    key: 'vuex',
-
-    reducer: (state) => ({
-      statistics: state.statistics,
-    }),
   }).plugin(store)
 }
