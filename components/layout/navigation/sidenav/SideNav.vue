@@ -1,5 +1,5 @@
 <template>
-  <aside class="fixed z-20 flex w-full min-h-screen md:flex-row">
+  <aside class="fixed z-40 flex w-full min-h-screen md:flex-row">
     <div class="flex flex-col md:border-r bg-elevation border-border">
       <!-- Hero Image -->
       <div class="relative h-full overflow-hidden">

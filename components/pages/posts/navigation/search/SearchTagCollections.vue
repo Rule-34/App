@@ -4,7 +4,7 @@
     https://v3.vuejs.org/guide/teleport.html
   -->
   <aside
-    class="fixed inset-0 z-40 w-full h-full bg-black bg-opacity-25"
+    class="fixed inset-0 z-30 w-full h-full bg-black bg-opacity-25"
     @click.self.stop="toggleTagCollections"
   >
     <!-- Constraint -->
