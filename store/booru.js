@@ -5,6 +5,10 @@ import {
 } from '~/assets/lib/rule-34-shared-resources/dist/util/BooruUtils.js'
 
 export const state = () => ({
+  history: {
+    lastDomainUsed: defaultBooruList[0].domain,
+  },
+
   posts: {
     data: [],
   },
@@ -27,15 +31,17 @@ export const getters = {
   },
 
   getActiveBooru(state, getters, rootState, rootGetters) {
-    let booru = rootGetters['url/urlDomain']
+    const domain = rootGetters['url/urlDomain']
 
-    booru = findBoorusWithValueByKey(booru, 'domain', getters.getBooruList)[0]
-
-    if (booru === undefined) {
-      booru = getters.getDefaultBooruList[0]
+    if (domain === undefined) {
+      return findBoorusWithValueByKey(
+        state.history.lastDomainUsed,
+        'domain',
+        getters.getBooruList
+      )[0]
     }
 
-    return booru
+    return findBoorusWithValueByKey(domain, 'domain', getters.getBooruList)[0]
   },
 
   getActiveBooruType: (state, getters, rootState, rootGetters) => {
@@ -51,32 +57,32 @@ export const getters = {
   },
 
   getPageID: (state, getters, rootState, rootGetters) => {
-    let pageID = rootGetters['url/urlPage']
+    const pageID = rootGetters['url/urlPage']
 
-    pageID = Number(pageID)
-
-    if (isNaN(pageID)) {
-      pageID = getters.getActiveBooruType.initialPageID
+    if (pageID === undefined) {
+      return getters.getActiveBooruType.initialPageID
     }
 
     return pageID
   },
 
   getTags: (state, getters, rootState, rootGetters) => {
-    let tags = rootGetters['url/urlTags']
+    const tags = rootGetters['url/urlTags']
 
     // Default value
     if (tags === undefined) {
-      tags = []
-    } else {
-      tags = tags.split(',')
+      return []
     }
 
-    return tags
+    return tags.split(',')
   },
 }
 
 export const mutations = {
+  setLastDomainUsed(state, value) {
+    state.history.lastDomainUsed = value
+  },
+
   setPostsData(state, value) {
     state.posts.data = Object.freeze(value)
   },
@@ -84,7 +90,7 @@ export const mutations = {
 
 export const actions = {
   activeBooruManager(context, { operation, value }) {
-    const { dispatch, getters } = context
+    const { dispatch, commit, getters } = context
 
     switch (operation) {
       case 'set': {
@@ -99,6 +105,8 @@ export const actions = {
           'type',
           booruTypeList
         )[0]
+
+        commit('setLastDomainUsed', booru.domain)
 
         dispatch(
           'url/pushRouteQueries',
@@ -120,6 +128,8 @@ export const actions = {
           'type',
           booruTypeList
         )[0]
+
+        commit('setLastDomainUsed', booru.domain)
 
         dispatch(
           'url/pushRouteQueries',
