@@ -166,7 +166,6 @@ export default {
 
   methods: {
     ...mapActions('user', ['customBoorusManager']),
-    ...mapActions('booru', ['activeBooruManager']),
 
     addFormBooruToCustomBoorus(booruObj) {
       let parsedConfig = null
@@ -192,8 +191,6 @@ export default {
         operation: 'remove',
         value: booruObj,
       })
-
-      this.activeBooruManager({ operation: 'reset' })
     },
 
     copyBooruToForm(booru) {
