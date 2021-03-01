@@ -139,9 +139,9 @@
             </template>
 
             <!-- Submit -->
-            <div class="absolute inset-x-0 bottom-0 flex">
+            <div class="absolute inset-x-0 bottom-0 flex overflow-hidden">
               <button
-                class="w-full px-4 py-2 text-lg font-bold tracking-wide text-center shadow-md text-default-text bg-gradient-lilac-blue"
+                class="w-full px-4 py-2 text-lg font-bold tracking-wide text-center text-default-text bg-gradient-lilac-blue"
                 type="submit"
               >
                 Apply tags
