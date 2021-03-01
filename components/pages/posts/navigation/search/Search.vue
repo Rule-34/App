@@ -14,7 +14,10 @@
         @click.self.stop="toggleSearchMenu"
       >
         <!-- Content -->
-        <form class="flex flex-col w-full h-full gap-4 max-h-3/4">
+        <form
+          class="flex flex-col w-full h-full gap-4 max-h-3/4"
+          @submit.prevent="addTagsToBooruState"
+        >
           <!-- Search bar -->
           <div class="flex flex-row h-auto p-2 material-container">
             <!-- Search Icon -->
@@ -30,7 +33,9 @@
               autofocus
               placeholder="Search: e.g. dragon"
               @input="inputHandler"
-              @keypress.enter.prevent="addTagDirectly"
+              @keypress.enter.prevent="
+                addSearchTagDirectly($event.target.value)
+              "
             />
 
             <div class="flex space-x-1">
@@ -74,9 +79,11 @@
           </div>
 
           <!-- Search results -->
-          <div class="flex flex-col h-full gap-2 p-2 material-container">
+          <div
+            class="relative flex flex-col h-full gap-2 p-2 material-container"
+          >
             <!-- If nothing searched -->
-            <template v-if="!search.data && !getTags.length">
+            <template v-if="!search.data.length && !search.tags.length">
               <h1
                 class="flex items-center justify-center flex-auto text-xl font-light tracking-wide text-default-text"
               >
@@ -86,12 +93,12 @@
 
             <template v-else>
               <!-- Added tags, click them to remove them -->
-              <template v-if="getTags.length">
+              <template v-if="search.tags.length">
                 <div
                   class="flex-initial overflow-y-scroll border-0 rounded tag-container border-border"
                 >
                   <button
-                    v-for="tag in getTags"
+                    v-for="tag in search.tags"
                     :key="tag"
                     type="button"
                     class="tag color-util"
@@ -104,7 +111,7 @@
 
               <!-- Searched tags, click them to add them -->
 
-              <template v-if="search.data">
+              <template v-if="search.data.length">
                 <div
                   class="flex-auto overflow-y-scroll border-0 rounded border-border tag-container"
                 >
@@ -114,7 +121,7 @@
                     :key="tag.name"
                     type="button"
                     class="tag color-util group"
-                    @click="addTag(tag.name)"
+                    @click="addSearchTagDirectly(tag.name)"
                   >
                     <!-- Name of the tag -->
                     <span>
@@ -130,6 +137,16 @@
                 </div>
               </template>
             </template>
+
+            <!-- Submit -->
+            <div class="absolute inset-x-0 bottom-0 flex">
+              <button
+                class="w-full px-4 py-2 text-lg font-bold tracking-wide text-center shadow-md text-default-text bg-gradient-lilac-blue"
+                type="submit"
+              >
+                Apply tags
+              </button>
+            </div>
           </div>
         </form>
       </div>
@@ -162,7 +179,15 @@ export default {
 
   data() {
     return {
-      search: { query: '', data: undefined },
+      search: {
+        query: '',
+
+        // Act as a buffer
+        tags: [],
+
+        // Searched data
+        data: [],
+      },
 
       isBanModeEnabled: false,
 
@@ -173,6 +198,10 @@ export default {
   computed: {
     ...mapGetters('premium', ['isUserPremium']),
     ...mapGetters('booru', ['getTags']),
+  },
+
+  mounted() {
+    this.search.tags = this.getTags
   },
 
   methods: {
@@ -193,29 +222,28 @@ export default {
 
       event.target.value = input
 
-      await this.fetchTagsFromApi(input)
+      await this.fetchSearchDataFromApi(input)
     },
 
-    async addTagDirectly(event) {
-      await this.tagsManager({
-        operation: 'merge',
-        value: [event.target.value],
-      })
+    addSearchTagDirectly(tag) {
+      const prefix = this.isBanModeEnabled ? '-' : ''
+
+      this.mergeSearchTags([prefix + tag])
     },
 
-    fetchTagsFromApi: debounce(async function (tag) {
-      if (tag.length <= 1) {
+    fetchSearchDataFromApi: debounce(async function (tags) {
+      if (tags.length <= 1) {
         await this.tagsManager({
           operation: 'reset',
         })
         return
       }
 
-      this.search.data = await this.fetchTags(tag)
+      this.search.data = await this.fetchTags(tags)
     }, 350),
 
-    async resetTags() {
-      await this.tagsManager({ operation: 'reset' })
+    resetTags() {
+      this.search.tags = []
     },
 
     toggleBanMode() {
@@ -233,19 +261,18 @@ export default {
     // #endregion
 
     // #region Search results
-    async removeTag(tag) {
-      await this.tagsManager({
-        operation: 'remove',
-        value: [tag],
-      })
+    removeTag(tagToRemove) {
+      this.search.tags = this.search.tags.filter((tag) => tag !== tagToRemove)
     },
 
-    async addTag(tag) {
-      const prefix = this.isBanModeEnabled ? '-' : ''
+    mergeSearchTags(tags) {
+      this.search.tags = [...new Set([...this.search.tags, ...tags])]
+    },
 
+    async addTagsToBooruState() {
       await this.tagsManager({
-        operation: 'merge',
-        value: [prefix + tag],
+        operation: 'set',
+        value: this.search.tags,
       })
     },
     // #endregion
