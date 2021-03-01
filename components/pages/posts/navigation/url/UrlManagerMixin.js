@@ -3,8 +3,6 @@ import { isEqual, debounce } from 'lodash-es'
 
 export default {
   head() {
-    const tags = this.urlTags?.split(',').join(', ')
-
     const head = {
       meta: [
         // TODO: test if it actually works
@@ -15,6 +13,8 @@ export default {
         },
       ],
     }
+
+    const tags = this.urlTags?.split(',').join(', ')
 
     if (tags) {
       head.title = tags

@@ -22,6 +22,8 @@ export const actions = {
   async setInitialUrlState(context) {
     const { dispatch } = context
 
+    console.debug('Setting initial URL state')
+
     await dispatch('pushRouteQueries', {})
   },
 
