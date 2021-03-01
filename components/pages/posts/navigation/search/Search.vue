@@ -155,6 +155,7 @@
     <transition name="page">
       <SearchTagCollections
         v-if="tagCollections.isActive"
+        :search-tags="search.tags"
         @toggleTagCollections="toggleTagCollections"
         @mergeToSearchTags="mergeSearchTags"
       />

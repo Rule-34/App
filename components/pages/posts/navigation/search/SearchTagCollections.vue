@@ -55,8 +55,18 @@
         </section>
 
         <!-- CTA -->
-        <footer class="text-center">
-          <NuxtLink class="text-sm" to="/premium">Create more</NuxtLink>
+        <footer class="space-y-1 text-sm text-center">
+          <NuxtLink to="/premium">Create more</NuxtLink>
+
+          <p class="text-xs text-default-text-muted">Or</p>
+
+          <button
+            class="text-sm color-util"
+            type="button"
+            @click="saveSearchTagsToTagCollection"
+          >
+            Create from current tags
+          </button>
         </footer>
       </menu>
     </div>
@@ -75,12 +85,26 @@ export default {
     Error,
   },
 
+  props: {
+    searchTags: {
+      type: Array,
+      default() {
+        return []
+      },
+    },
+  },
+
   computed: {
     ...mapGetters('user', ['getTagCollections']),
   },
 
   methods: {
     ...mapActions('booru', ['tagsManager']),
+    ...mapActions('user', ['customTagCollectionsManager']),
+
+    toggleTagCollections() {
+      this.$emit('toggleTagCollections')
+    },
 
     addTagCollectionToTags(tagCollectionIndex) {
       this.$emit(
@@ -91,8 +115,27 @@ export default {
       this.toggleTagCollections()
     },
 
-    toggleTagCollections() {
-      this.$emit('toggleTagCollections')
+    saveSearchTagsToTagCollection() {
+      if (!this.searchTags.length) {
+        return
+      }
+
+      const tagCollectionName = prompt(
+        'Choose a name for the new Tag Collection.'
+      )
+
+      if (!tagCollectionName) {
+        alert('Wrong input, only text please.')
+        return
+      }
+
+      this.customTagCollectionsManager({
+        operation: 'add',
+        value: {
+          name: tagCollectionName,
+          tags: this.searchTags,
+        },
+      })
     },
   },
 }
