@@ -28,6 +28,9 @@ export const actions = {
   async pushRouteQueries(context, { domain, page, tags }) {
     const { rootGetters } = context
 
+    const shouldReplaceHistory =
+      domain === undefined && page === undefined && tags === undefined
+
     if (domain === undefined) {
       domain = rootGetters['booru/getActiveBooru'].domain
     }
@@ -50,6 +53,10 @@ export const actions = {
       },
     }
 
-    await this.$router.push(routerQueries)
+    if (!shouldReplaceHistory) {
+      await this.$router.push(routerQueries)
+    } else {
+      await this.$router.replace(routerQueries)
+    }
   },
 }
