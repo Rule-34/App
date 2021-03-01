@@ -69,7 +69,9 @@ export default {
   },
 
   async mounted() {
-    await this.setInitialUrlState()
+    if (this.urlDomain === undefined || this.urlPage === undefined) {
+      await this.setInitialUrlState()
+    }
 
     await this.fetchPosts()
   },
