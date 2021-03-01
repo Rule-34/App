@@ -111,7 +111,7 @@ export default {
       )
 
       if (!specificPage) {
-        alert('Wrong input, only numbers please')
+        alert('Wrong input, only numbers please.')
         return
       }
 
