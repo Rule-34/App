@@ -82,11 +82,13 @@ export default {
   methods: {
     ...mapActions('booru', ['tagsManager']),
 
-    async addTagCollectionToTags(tagCollectionIndex) {
-      await this.tagsManager({
-        operation: 'merge',
-        value: this.getTagCollections[tagCollectionIndex].tags,
-      })
+    addTagCollectionToTags(tagCollectionIndex) {
+      this.$emit(
+        'mergeToSearchTags',
+        this.getTagCollections[tagCollectionIndex].tags
+      )
+
+      this.toggleTagCollections()
     },
 
     toggleTagCollections() {

@@ -156,6 +156,7 @@
       <SearchTagCollections
         v-if="tagCollections.isActive"
         @toggleTagCollections="toggleTagCollections"
+        @mergeToSearchTags="mergeSearchTags"
       />
     </transition>
   </aside>
