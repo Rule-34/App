@@ -2,6 +2,85 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/Rule-34/App/compare/v1.2.0...v2.0.0) (2021-03-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* the source of truth is now the URL
+* merge all post components into one
+* remove unnecessary settings that complicate development
+
+### Features
+
+* adapt to new vuex store ([037b72b](https://github.com/Rule-34/App/commit/037b72b13e55782e6e1a1b607393054b63f68c45))
+* add copy funcitonality ([7ef4838](https://github.com/Rule-34/App/commit/7ef4838a45d090aafc74837f551267706bd39b05))
+* add default Premium booru ([ea6449b](https://github.com/Rule-34/App/commit/ea6449bb1d61c7937bdcd478d1985b9eea6238b7))
+* add last revision section ([c81ddb2](https://github.com/Rule-34/App/commit/c81ddb2dda6fed339a582fa7506af0e797966013))
+* add limit for tags ([c2dab28](https://github.com/Rule-34/App/commit/c2dab28a63d8bc1f220f5414f1e18939e1a056cd))
+* add link prop if link is internal ([4eb6a81](https://github.com/Rule-34/App/commit/4eb6a81ddd211335ef47ca126f39b7fc7910b6d3))
+* add refresh jwt auth ([498d3cd](https://github.com/Rule-34/App/commit/498d3cdd955f422eb844dddd2276bacbf4d7fffc))
+* add router vuex sync plugin ([53c32b9](https://github.com/Rule-34/App/commit/53c32b927beea006ac5c1d6968774e92a0195064))
+* apply hover reactive container where useful ([9820e3a](https://github.com/Rule-34/App/commit/9820e3a6617290298c33dfb0d92dd05c02e3b02d))
+* autofocus search ([e80cea0](https://github.com/Rule-34/App/commit/e80cea0312d9903f9c40637fc2e2c96519b073b0))
+* button on videos to show tags ([d131c20](https://github.com/Rule-34/App/commit/d131c2015adb4eb7a266e79f1d93bc9d1793214c))
+* completely rewrite notifications layout ([6ec0a43](https://github.com/Rule-34/App/commit/6ec0a438c356dc51d3f1a23d0f193386711fd8c8))
+* configure nuxt auth ([6761185](https://github.com/Rule-34/App/commit/67611850417cd48b0b0dee95c0e59bf1049b0fb0))
+* create class that is not reactive to hover and apply it instead of hover variant ([6558c83](https://github.com/Rule-34/App/commit/6558c8373a4e9f2e4c0e82714d6984977e430694))
+* create functionality to save current tags to tag collection ([baf0cc0](https://github.com/Rule-34/App/commit/baf0cc035fa9211ea8aeb7de2157b98708ad7e5c))
+* dynamic title and description derived from tags and domain ([8a88247](https://github.com/Rule-34/App/commit/8a882477169444bf1bd922f033b440a639e4457e))
+* fetch minified version ([2e5902f](https://github.com/Rule-34/App/commit/2e5902f218381691d84f3306518312b1493db325))
+* fetch with supported config values ([9686496](https://github.com/Rule-34/App/commit/96864962292f861dd7be083234b8016df045d33f))
+* generate in modern mode ([23fbe8c](https://github.com/Rule-34/App/commit/23fbe8c58a4741ecd44f943309ee512d7401d284))
+* hardcode gumroad product permalink ([dfcf055](https://github.com/Rule-34/App/commit/dfcf055c43b188f1301d593d2312af2a5f500b87))
+* improve close button border ([d3c205b](https://github.com/Rule-34/App/commit/d3c205bb524d8e547e80e5033b7cb53596b5cc30))
+* improve Controls layout and accessibility ([20e695d](https://github.com/Rule-34/App/commit/20e695d3b05533113ee0a008b9e845846c66c8ca))
+* improve info in the usage page ([b367853](https://github.com/Rule-34/App/commit/b3678539a7732ff207624a47c3f8d75a0a5234fd))
+* link to premium pages ([8e9a85d](https://github.com/Rule-34/App/commit/8e9a85d7f21a0d13243ffd4d1ffcdfe8f5db97b3))
+* log out with nuxt auth ([8606fe0](https://github.com/Rule-34/App/commit/8606fe0d9a23bed63cf21bf478d2dd8d0dc16f42))
+* login with nuxt auth ([5f26d6b](https://github.com/Rule-34/App/commit/5f26d6b097221685b8edb82496b18f7964b68ff8))
+* merge all post components into one ([ca34f8e](https://github.com/Rule-34/App/commit/ca34f8e0e81f3970b2a95213409e3d433c9485f5))
+* merge all search components into one and make improvements ([c0dadd7](https://github.com/Rule-34/App/commit/c0dadd73b621fdd5986944ebf679ef75efc48d44))
+* merge TagsCollection in search buffer ([517648d](https://github.com/Rule-34/App/commit/517648d4c784bd32340a632e585985bbb37f335c))
+* persist last booru used ([4f5e767](https://github.com/Rule-34/App/commit/4f5e767d60172cfa9865800c55b7256151c98b36))
+* reimagine infinite loading ([e2edbb7](https://github.com/Rule-34/App/commit/e2edbb707c113dc55e7896145d4931af9a736d42))
+* remember last booru used ([aaa90f5](https://github.com/Rule-34/App/commit/aaa90f5a07e7e3a93f1662a1f0d92015d36c32a6))
+* remove keyboard user setting and enable it always ([82369c0](https://github.com/Rule-34/App/commit/82369c01ebcf236ff281750f33568e05f008a180))
+* remove no longer necessary auth logic ([c5bfa4a](https://github.com/Rule-34/App/commit/c5bfa4a61f140bf8394db6f6559dc5e5f874b44f))
+* replace history if every query is undefined ([5e99a18](https://github.com/Rule-34/App/commit/5e99a1808797b5b0626211af2e0bf847e9154071))
+* replace links with new documentation page ([2342c85](https://github.com/Rule-34/App/commit/2342c852435ec0ff623bde58796a85b363318641))
+* restore scrollBehaviour ([626d8bc](https://github.com/Rule-34/App/commit/626d8bc4ff9fecdc612e90134ae654a25f58d5e6))
+* rewrite vuex logic to set the source of truth the URL queries ([fd0e3fe](https://github.com/Rule-34/App/commit/fd0e3fec3bb7ebf08cb167c5f4b6c7796611809c))
+* set user agent referrer in meta tag ([bf0bd85](https://github.com/Rule-34/App/commit/bf0bd8519aa827f4cb9f637fb2d23458b65d5a35))
+* show version ([ed91cf8](https://github.com/Rule-34/App/commit/ed91cf8d726d46daca9098c80d994935991a01c5))
+* synchronise vue router with vuex ([9b58d84](https://github.com/Rule-34/App/commit/9b58d84ed6cd82ec16657c7163e857508a71170f))
+* tags are now in a buffer before they are searched for ([6ffebfc](https://github.com/Rule-34/App/commit/6ffebfc3535c296e423996730dffaaf662055b57))
+* tweak premium check ([6abda5e](https://github.com/Rule-34/App/commit/6abda5ebd716f312e04b0acf33821f92df948b60))
+* use axios to simplify fetching data ([541caca](https://github.com/Rule-34/App/commit/541caca171dd2951fb71446c13e5e8b82a4c9fcf))
+* use middleware to redirect on unathorised ([0fdf4a6](https://github.com/Rule-34/App/commit/0fdf4a6544617ad9f906155b1cdf4b8f256c2328))
+* use new prop ([21f7708](https://github.com/Rule-34/App/commit/21f7708ab9a53d2f846609891a78e2c989f95334))
+* use runtime config ([444da40](https://github.com/Rule-34/App/commit/444da4017090c56670cd7ceb4c6b1d5895d872db))
+* **sitemap:** improve sitemap generation ([22f7cdc](https://github.com/Rule-34/App/commit/22f7cdc19f77f386f43a205b61d963346f26eb08))
+
+
+### Bug Fixes
+
+* add missing border ([6f41d2a](https://github.com/Rule-34/App/commit/6f41d2a4f437c61f5bbab19b2bde9c58aa7bef56))
+* API "regression" ([59d4225](https://github.com/Rule-34/App/commit/59d422505d9cdf036c64569a00bd76ce21cc89e1))
+* fix css class ([8a0ada6](https://github.com/Rule-34/App/commit/8a0ada6f5266b5ec572a6b942f8fe66f4fe55694))
+* fix layout width ([6fe5b6c](https://github.com/Rule-34/App/commit/6fe5b6c16f74bc6b548299c238744b05166eddb0))
+* fix multiple fetches at launch ([fadd6fd](https://github.com/Rule-34/App/commit/fadd6fd862c148d2706a49d68b329c9e8f7e920a))
+* fix path ([1432c2a](https://github.com/Rule-34/App/commit/1432c2a79b796f87943f1d2f732dea38316a758d))
+* fix regression ([98fef75](https://github.com/Rule-34/App/commit/98fef7533a912f419b0ee446b039aa84e432a8ff))
+* fix regression from last commits ([832cb71](https://github.com/Rule-34/App/commit/832cb7159049f27c5d4f27821be41ed5158600a3))
+* fix title being repeated ([4688799](https://github.com/Rule-34/App/commit/468879949a818045431fd54698ea9e6d2e9f2991))
+* hopefully fix image jumping ([b402894](https://github.com/Rule-34/App/commit/b4028945f211300e3ccbf289af3ae381e4e66fab))
+* move head() to Mixin so both work ([69eaec3](https://github.com/Rule-34/App/commit/69eaec3650e0b94a98a11bc060dd20d6a98ed42e))
+* only set initial URL state if important query values are undefined ([129c5d1](https://github.com/Rule-34/App/commit/129c5d19b1b688d41f00ff2f35e721b62447b74c))
+
+
+* remove unnecessary settings that complicate development ([650f0bb](https://github.com/Rule-34/App/commit/650f0bb2a426c33c5d70bf9a1e28b1aa4f7239cd))
+
 ## [1.2.0](https://github.com/Rule-34/App/compare/v1.1.1...v1.2.0) (2020-12-20)
 
 
