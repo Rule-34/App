@@ -178,7 +178,7 @@ export default {
 
     lazy: true,
 
-    disabled: process.env.SENTRY_ENABLED,
+    disabled: process.env.SENTRY_DISABLED,
     disableClientSide: false,
     disableServerSide: true,
 
