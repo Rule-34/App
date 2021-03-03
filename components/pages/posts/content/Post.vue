@@ -223,7 +223,7 @@ export default {
     },
 
     // #region Post media
-    retryToLoadManager(event) {
+    async retryToLoadManager(event) {
       // console.log('Media source: ', event.target.src)
 
       if (this.showError) {
@@ -254,7 +254,7 @@ export default {
         if (this.isVideo) {
           console.info('Reloading data and playing video')
           event.target.parentElement.load()
-          event.target.parentElement.play()
+          await event.target.parentElement.play()
         }
 
         this.media.retryLogic.tried.extraSlash = true
@@ -269,7 +269,7 @@ export default {
         if (this.isVideo) {
           console.info('Reloading data and playing video')
           event.target.parentElement.load()
-          event.target.parentElement.play()
+          await event.target.parentElement.play()
         }
 
         this.media.retryLogic.tried.proxy = true
@@ -286,7 +286,7 @@ export default {
         if (this.isVideo) {
           console.info('Reloading data and playing video')
           event.target.parentElement.load()
-          event.target.parentElement.play()
+          await event.target.parentElement.play()
         }
 
         this.media.retryLogic.tried.proxyWithExtraSlash = true
@@ -307,7 +307,7 @@ export default {
         if (this.isVideo) {
           console.info('Reloading data and playing video')
           event.target.parentElement.load()
-          event.target.parentElement.play()
+          await event.target.parentElement.play()
         }
 
         this.media.retryLogic.count++
