@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/Rule-34/App/compare/v2.0.0...v2.1.0) (2021-03-03)
+
+
+### Features
+
+* lower inifiniteLoading timeout ([c68d0c4](https://github.com/Rule-34/App/commit/c68d0c410288da2e0be37b3056d6142434b3f54a))
+* style inifiniteLoading indicator ([a429092](https://github.com/Rule-34/App/commit/a429092e311c32e0156a696d645eb6a1663ddbc9))
+
+
+### Bug Fixes
+
+* await video play ([8e582e4](https://github.com/Rule-34/App/commit/8e582e4e9aafa28bd352dc0670d9317f769a5fca))
+* don't set data if undefined ([6a3d7e1](https://github.com/Rule-34/App/commit/6a3d7e1bc2084069c69a29201ca63060921759e4))
+
 ## [2.0.0](https://github.com/Rule-34/App/compare/v1.2.0...v2.0.0) (2021-03-01)
 
 
