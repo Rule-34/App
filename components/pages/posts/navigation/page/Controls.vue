@@ -120,7 +120,7 @@ export default {
 
     InfiniteLoadHandler(entries, observer) {
       const elementAttribute = 'data-is-visible'
-      const timeoutDelay = 3000
+      const timeoutDelay = 1500
 
       // console.log({ entries, observer })
 
