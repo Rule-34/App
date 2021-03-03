@@ -52,9 +52,9 @@ export default {
 
   loading: {
     color: 'var(--color-gradient-two)',
+    // failedColor: '',
     // height: '5px',
-    throttle: 300,
-    // duration: 5000,
+    throttle: 200,
     continuous: true,
   },
 
