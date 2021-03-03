@@ -45,7 +45,7 @@
     </div>
 
     <!-- Infinite loading -->
-    <div v-else class="mx-auto">
+    <div v-else class="py-12 mx-auto">
       <p
         v-intersect="{
           handler: InfiniteLoadHandler,
@@ -53,7 +53,7 @@
             threshold: [0, 0.5, 1.0],
           },
         }"
-        class="pb-2 text-center text-default-text-muted"
+        class="text-center text-default-text-muted animate-pulse"
         @click="InfiniteLoadHandler"
       >
         Stay here to load more posts...
