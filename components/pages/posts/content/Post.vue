@@ -29,7 +29,6 @@
       </template>
 
       <template v-else-if="isVideo">
-        <!-- TODO: Show button to show tags -->
         <video
           :alt="'Video ' + post.id"
           class="w-full h-auto"
