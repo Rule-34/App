@@ -241,7 +241,14 @@ export default {
         return
       }
 
-      this.search.data = await this.fetchTags(tags)
+      const data = await this.fetchTags(tags)
+
+      if (!data) {
+        console.debug('No tag data.')
+        return
+      }
+
+      this.search.data = data
     }, 350),
 
     resetTags() {
