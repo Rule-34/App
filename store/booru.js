@@ -406,7 +406,7 @@ export const actions = {
         {
           operation: 'set',
           value: error,
-          message: "Couldn't fetch posts",
+          message: 'Could not fetch posts',
         },
         { root: true }
       )
@@ -434,7 +434,7 @@ export const actions = {
         {
           operation: 'set',
           value: error,
-          message: "Couldn't fetch search tags",
+          message: 'Could not fetch search tags',
         },
         { root: true }
       )
