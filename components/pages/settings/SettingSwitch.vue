@@ -56,8 +56,6 @@
 import { mapMutations } from 'vuex'
 
 export default {
-  name: 'SettingSwitch',
-
   props: {
     settingIndex: { type: String, default: undefined, required: true }, // The string selector of the object of objects
     setting: {

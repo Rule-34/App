@@ -19,12 +19,7 @@
 </template>
 
 <script>
-import ContentSeparator from '~/components/utils/ContentSeparator.vue'
-import ContentContainer from '~/components/utils/ContentContainer.vue'
-
 export default {
-  components: { ContentSeparator, ContentContainer },
-
   head() {
     return {
       title: 'Faq',

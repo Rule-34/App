@@ -55,8 +55,6 @@ import { mapGetters, mapActions } from 'vuex'
 import { ChevronDownIcon, CloudIcon } from 'vue-feather-icons'
 
 export default {
-  name: 'DomainSelector',
-
   components: { ChevronDownIcon, CloudIcon },
 
   computed: {

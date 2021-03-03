@@ -66,6 +66,8 @@ export default {
 
   css: ['~/assets/css/main.css'],
 
+  components: [{ path: '~/components', pathPrefix: false }],
+
   plugins: [
     { src: '~/plugins/vuex-router-sync.js', mode: 'client' },
     { src: '~/plugins/vuex-persist.js', mode: 'client' },

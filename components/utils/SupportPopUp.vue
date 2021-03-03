@@ -19,11 +19,7 @@ Or even better, subscribe to unlock Premium features!"
 </template>
 
 <script>
-import ContentContainer from '~/components/utils/ContentContainer.vue'
-
 export default {
-  components: { ContentContainer },
-
   methods: {
     toggleSupportPopUp() {
       this.$emit('toggleSupportPopUp')

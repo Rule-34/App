@@ -41,11 +41,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import SettingSwitch from '~/components/pages/settings/Switch.vue'
-
 export default {
-  components: { SettingSwitch },
-
   computed: {
     ...mapGetters('user', ['getUserSettings']),
   },
