@@ -62,7 +62,7 @@ export const actions = {
         {
           operation: 'set',
           value: error,
-          message: 'Could not fetch notifications',
+          message: 'Could not fetch notifications.',
         },
         { root: true }
       )
