@@ -6,7 +6,7 @@
       right: (e) => touchHandler('right', e),
     }"
   >
-    <NavToggler :show-search="isPostsPage" />
+    <SideNavToggler :show-search="isPostsPage" />
 
     <transition name="sidenav">
       <SideNav v-if="isSideNavActive" />
@@ -29,19 +29,11 @@ import { mapGetters } from 'vuex'
 // Third party
 import { Touch } from 'vuetify/lib/directives/touch'
 
-// Components
-import NavToggler from '~/components/layout/navigation/sidenav/Toggler.vue'
-import SideNav from '~/components/layout/navigation/sidenav/SideNav.vue'
-import Search from '~/components/pages/posts/navigation/search/Search.vue'
-import SupportPopUpManager from '~/components/utils/SupportPopUpManager.vue'
-
 import GlobalStartUpMixin from '~/components/utils/GlobalStartUpMixin.js'
 import NavigationMixin from '~/components/layout/navigation/NavigationMixin.js'
 import TouchHandlerMixin from '~/components/layout/navigation/sidenav/TouchHandlerMixin.js'
 
 export default {
-  components: { SideNav, NavToggler, Search, SupportPopUpManager },
-
   directives: { Touch },
 
   /**

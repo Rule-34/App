@@ -34,8 +34,6 @@ import { mapActions } from 'vuex'
 import { SearchIcon } from 'vue-feather-icons'
 
 export default {
-  name: 'NavToggler',
-
   components: {
     SearchIcon,
   },

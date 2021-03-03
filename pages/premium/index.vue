@@ -90,12 +90,12 @@
         <!-- Log In -->
         <ErrorManager />
 
-        <Login />
+        <PremiumLogin />
 
         <!-- Separator -->
         <p class="leading-loose text-center text-default-text-muted">Or</p>
 
-        <Subscription />
+        <PremiumSubscription />
       </div>
     </template>
   </main>
@@ -104,15 +104,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-// Components
-import Login from '@/components/pages/premium/Login'
-import Subscription from '@/components/pages/premium/Subscription'
-
-import ErrorManager from '~/components/utils/ErrorManager.vue'
-
 export default {
-  components: { Login, Subscription, ErrorManager },
-
   head() {
     return {
       title: 'Premium',

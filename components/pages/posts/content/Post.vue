@@ -116,11 +116,8 @@
 import { mapGetters, mapActions } from 'vuex'
 import { ExternalLinkIcon, TagIcon } from 'vue-feather-icons'
 
-import TransitionCollapse from '~/components/utils/TransitionCollapse.vue'
-import Error from '~/components/utils/Error'
-
 export default {
-  components: { Error, TransitionCollapse, ExternalLinkIcon, TagIcon },
+  components: { ExternalLinkIcon, TagIcon },
 
   props: {
     post: {

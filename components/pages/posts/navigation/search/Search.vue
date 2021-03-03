@@ -168,15 +168,12 @@ import { mapGetters, mapActions } from 'vuex'
 import { TagIcon, SearchIcon, FilterIcon, TrashIcon } from 'vue-feather-icons'
 import { debounce } from 'lodash-es'
 
-import SearchTagCollections from './SearchTagCollections.vue'
-
 export default {
   components: {
     TagIcon,
     SearchIcon,
     FilterIcon,
     TrashIcon,
-    SearchTagCollections,
   },
 
   data() {

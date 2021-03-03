@@ -130,15 +130,10 @@
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 
-// Components
-import ContentContainer from '~/components/utils/ContentContainer.vue'
-
 // JS
 import fireAnalytics from '~/assets/js/analytics'
 
 export default {
-  components: { ContentContainer },
-
   data() {
     return {
       isActive: false,

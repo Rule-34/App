@@ -77,12 +77,9 @@
 import { mapGetters, mapActions } from 'vuex'
 import { TagIcon } from 'vue-feather-icons'
 
-import Error from '~/components/utils/Error.vue'
-
 export default {
   components: {
     TagIcon,
-    Error,
   },
 
   props: {

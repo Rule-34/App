@@ -18,13 +18,7 @@ import { mapGetters, mapMutations } from 'vuex'
 
 import fireAnalytics from '~/assets/js/analytics'
 
-const SupportPopUp = () => import('./SupportPopUp.vue')
-
 export default {
-  components: {
-    SupportPopUp,
-  },
-
   data() {
     return {
       isSupportPopUpActive: false,
