@@ -5,10 +5,10 @@
     <main
       class="p-5 rounded-lg shadow-xl w-max-content bg-elevation border-util"
     >
-      <div class="flex flex-row gap-x-10">
+      <div class="flex flex-row space-x-10">
         <!-- Reset -->
         <div
-          class="flex flex-col items-center justify-center flex-auto gap-y-2 text-default-text"
+          class="flex flex-col items-center justify-center flex-auto space-y-2 text-default-text"
         >
           <h1 class="text-lg">Settings</h1>
 

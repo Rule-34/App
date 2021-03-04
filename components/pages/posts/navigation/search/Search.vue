@@ -15,7 +15,7 @@
       >
         <!-- Content -->
         <form
-          class="flex flex-col w-full h-full gap-4 max-h-3/4"
+          class="flex flex-col w-full h-full space-y-4 max-h-3/4"
           @submit.prevent="addTagsToBooruState"
         >
           <!-- Search bar -->
@@ -80,7 +80,7 @@
 
           <!-- Search results -->
           <div
-            class="relative flex flex-col h-full gap-2 p-2 material-container"
+            class="relative flex flex-col h-full p-2 space-y-2 material-container"
           >
             <!-- If nothing searched -->
             <template v-if="!search.data.length && !search.tags.length">
