@@ -196,7 +196,7 @@ export default {
         'Request',
         'Network',
 
-        'URL',
+        // 'URL',
 
         // Plugins
         'vue-matomo',

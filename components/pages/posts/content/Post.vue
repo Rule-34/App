@@ -318,6 +318,8 @@ export default {
         this.error.message = message
         this.error.show = true
       }
+
+      // console.debug(event.target.src)
     },
 
     addProxyToURL(url) {
