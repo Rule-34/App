@@ -13,7 +13,7 @@
       <template v-else-if="isImage">
         <img
           :src="mediaResolutionChooser.url"
-          loading="'lazy'"
+          loading="lazy"
           :class="{
             'opacity-100': media.hasLoaded,
           }"
