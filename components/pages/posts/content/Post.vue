@@ -321,7 +321,7 @@ export default {
     },
 
     addProxyToURL(url) {
-      return this.$config.PROXY_URL + url
+      return this.$config.PROXY_URL + encodeURIComponent(url)
     },
 
     addExtraSlashToURL(url) {
