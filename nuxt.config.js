@@ -10,6 +10,8 @@ export default {
 
     API_URL: process.env.API_URL,
 
+    PROXY_URL: process.env.PROXY_URL,
+
     MATOMO_HOST: process.env.MATOMO_HOST,
     MATOMO_SITE_ID: process.env.MATOMO_SITE_ID,
   },
