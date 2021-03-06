@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/Rule-34/App/compare/v2.1.0...v2.2.0) (2021-03-06)
+
+
+### Features
+
+* encode url ([6adace7](https://github.com/Rule-34/App/commit/6adace764aef2244f5e7b75e515647699391f286))
+
+
+### Bug Fixes
+
+* fix env variable not being available on runtime ([572c831](https://github.com/Rule-34/App/commit/572c8314a155f885aaddc097a0e751849fb40b97))
+* fix typo preventing image lazy load ([29ed05c](https://github.com/Rule-34/App/commit/29ed05ca97940350faa844f93c3ac06f87b3620e))
+
 ## [2.1.0](https://github.com/Rule-34/App/compare/v2.0.0...v2.1.0) (2021-03-03)
 
 
