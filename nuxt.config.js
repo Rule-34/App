@@ -74,6 +74,7 @@ export default {
     { src: '~/plugins/vuex-router-sync.js', mode: 'client' },
     { src: '~/plugins/vuex-persist.js', mode: 'client' },
     { src: '~/plugins/vue-matomo.js', mode: 'client' },
+    { src: '~/plugins/pwa-update.js', mode: 'client' },
   ],
 
   buildModules: [
