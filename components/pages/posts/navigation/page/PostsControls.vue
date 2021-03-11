@@ -128,9 +128,9 @@ export default {
       // console.log({ entries, observer })
 
       entries.forEach((entry) => {
-        if (!entry.isIntersecting || entry.intersectionRatio <= 0) {
-          //
+        // console.debug(entry.intersectionRatio)
 
+        if (!entry.isIntersecting || entry.intersectionRatio < 1) {
           if (entry.target.getAttribute(elementAttribute)) {
             // console.debug('Removed attribute from element.')
             entry.target.removeAttribute(elementAttribute)
