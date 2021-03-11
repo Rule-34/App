@@ -1,75 +1,78 @@
 <template>
   <div>
-    <!-- Normal controls -->
-    <div
-      v-if="!getUserSettings.infiniteLoad.value"
-      :class="{
-        'fixed bottom-0 inset-x-0 z-10 max-w-3xl p-2 mx-auto sm:p-4 lg:p-6':
-          getUserSettings.hoverControls.value,
-      }"
-    >
-      <div class="flex justify-around p-2 text-center material-container">
-        <!-- Previous page -->
-        <button
-          type="button"
-          class="color-util"
-          title="Load previous page"
-          aria-label="Load previous page"
-          @click="getPrevPage"
-        >
-          <span class="text-default">&larr;</span> Prev
-        </button>
+    <template v-if="!getUserSettings.infiniteLoad.value">
+      <!-- Normal controls -->
+      <div
+        :class="{
+          'fixed bottom-0 inset-x-0 z-10 max-w-3xl p-2 mx-auto sm:p-4 lg:p-6':
+            getUserSettings.hoverControls.value,
+        }"
+      >
+        <div class="flex justify-around p-2 text-center material-container">
+          <!-- Previous page -->
+          <button
+            type="button"
+            class="color-util"
+            title="Load previous page"
+            aria-label="Load previous page"
+            @click="getPrevPage"
+          >
+            <span class="text-default">&larr;</span> Prev
+          </button>
 
-        <!-- Get specific page -->
-        <button
-          class="color-util"
-          title="Load specific page"
-          aria-label="Load specific page"
-          type="button"
-          @click="getSpecificPage"
-        >
-          {{ getPageID }}
-        </button>
+          <!-- Get specific page -->
+          <button
+            class="color-util"
+            title="Load specific page"
+            aria-label="Load specific page"
+            type="button"
+            @click="getSpecificPage"
+          >
+            {{ getPageID }}
+          </button>
 
-        <!-- Next page -->
-        <button
-          type="button"
-          class="color-util"
-          title="Load next page"
-          aria-label="Load next page"
-          @click="getNextPage"
-        >
-          Next <span class="text-default">&rarr;</span>
-        </button>
+          <!-- Next page -->
+          <button
+            type="button"
+            class="color-util"
+            title="Load next page"
+            aria-label="Load next page"
+            @click="getNextPage"
+          >
+            Next <span class="text-default">&rarr;</span>
+          </button>
+        </div>
       </div>
-    </div>
+    </template>
 
-    <!-- Infinite loading -->
-    <div v-else class="py-12 mx-auto">
-      <p
+    <template v-else>
+      <!-- Infinite loading -->
+      <div
+        class="py-12 mx-auto"
         v-intersect="{
           handler: InfiniteLoadHandler,
           options: {
-            threshold: [0, 0.5, 1.0],
+            threshold: [0, 0.25, 0.5, 0.75, 1.0],
           },
         }"
-        class="text-center text-default-text-muted animate-pulse"
         @click="InfiniteLoadHandler"
       >
-        Stay here to load more posts...
-      </p>
-    </div>
+        <p class="text-center text-default-text-muted animate-pulse">
+          Stay here to load more posts...
+        </p>
+      </div>
 
-    <!-- Space below all posts -->
-    <div
-      v-if="
-        !getUserSettings.infiniteLoad.value &&
-        getUserSettings.hoverControls.value
-      "
-      class="mb-2 sm:mb-4 lg:mb-6"
-    >
-      &nbsp;
-    </div>
+      <!-- Space below all posts -->
+      <div
+        v-if="
+          !getUserSettings.infiniteLoad.value &&
+          getUserSettings.hoverControls.value
+        "
+        class="mb-2 sm:mb-4 lg:mb-6"
+      >
+        &nbsp;
+      </div>
+    </template>
   </div>
 </template>
 
