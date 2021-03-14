@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.4.0](https://github.com/Rule-34/App/compare/v2.3.0...v2.4.0) (2021-03-14)
+
+
+### Features
+
+* add back button explanation ([7529475](https://github.com/Rule-34/App/commit/7529475e4e5e87d8fe5e89034eba57c8b3217678))
+* show active link in bold ([c2a6980](https://github.com/Rule-34/App/commit/c2a6980c39a8a5cf9437c47a0ce18b3f52a740f4))
+
 ## [2.3.0](https://github.com/Rule-34/App/compare/v2.2.0...v2.3.0) (2021-03-11)
 
 
