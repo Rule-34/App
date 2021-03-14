@@ -6,6 +6,11 @@
       <ContentSeparator title="Navigation" />
 
       <ContentContainer
+        title="Back"
+        text="The `back` button on your browser/device is respected and allows you to go back to a past domain, page or tag."
+      />
+
+      <ContentContainer
         title="Touch navigation"
         text="Devices with touch support can swipe `right` to open the navigation menu, and `left` to open the search menu."
       />
