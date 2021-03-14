@@ -43,15 +43,14 @@ export const state = () => ({
   settings: {
     darkTheme: {
       name: 'Dark theme',
-      description: 'Enable dark theme app-wide.',
+      description: 'Enable the dark theme.',
       value: true,
       defaultValue: true,
     },
 
     hoverControls: {
       name: 'Hover controls',
-      description:
-        'Controls will hover over content and be fixed on the screen.',
+      description: 'Page controls will be fixed over the content.',
       image: '/img/usage_examples/hover-controls',
       value: false,
       defaultValue: false,
@@ -60,7 +59,7 @@ export const state = () => ({
     fullSizeImages: {
       name: 'Full size images',
       description:
-        'Load full images instead of downscaled size images, data intensive.',
+        'Load full images instead of downscaled images, data intensive.',
       image: '/img/usage_examples/full-size-images',
       value: false,
       defaultValue: false,
@@ -68,23 +67,21 @@ export const state = () => ({
 
     infiniteLoad: {
       name: 'Infinite loading',
-      description:
-        'Load posts infinitely instead of using Controls, VERY resource heavy.',
+      description: 'Load posts infinitely instead of using the page controls.',
       value: false,
       defaultValue: false,
     },
 
     score: {
       name: 'Minimum score',
-      description: 'Sets the required score for a post to show.',
+      description: 'Required score for a post to show.',
       value: 0,
       defaultValue: 0,
     },
 
     imgRetry: {
       name: 'Image retry',
-      description:
-        'Number of times that an image will be attempted to be loaded if it fails.',
+      description: 'Number of attempts to load an image.',
       value: 1,
       defaultValue: 1,
     },

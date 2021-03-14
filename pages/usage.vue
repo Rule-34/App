@@ -12,12 +12,12 @@
 
       <ContentContainer
         title="Touch navigation"
-        text="Devices with touch support can swipe `right` to open the navigation menu, and `left` to open the search menu."
+        text="Devices with touch support can swipe `left-to-right` to open the navigation menu, and `right-to-left` to open the search menu."
       />
 
       <ContentContainer
-        title="Keyboard controls"
-        text="Keyboard's `right` and `left` arrows will navigate pages similar to clicking the control's buttons."
+        title="Keyboard page controls"
+        text="Keyboard's `right` and `left` arrows will navigate pages similar to clicking the page controls buttons."
         img="/img/usage_examples/keyboard-controls"
       />
 
@@ -37,10 +37,7 @@
       />
 
       <!-- User Settings -->
-      <ContentSeparator
-        title="User settings"
-        text="Customizable settings are explained below"
-      />
+      <ContentSeparator title="User settings" />
 
       <!-- Recursion for every setting -->
       <ContentContainer
