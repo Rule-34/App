@@ -44,6 +44,10 @@ a:focus,
 
 /* ---------------- Component specific ---------------- */
 
+.nuxt-link-exact-active {
+  @apply font-bold text-primary;
+}
+
 .icon {
   stroke-width: 1.6;
   /* Align middle is necessary for some reason for mobile devices */
