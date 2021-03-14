@@ -57,15 +57,6 @@ export const state = () => ({
       defaultValue: false,
     },
 
-    videoControls: {
-      name: 'Video controls',
-      description:
-        "Videos will have controls, but clicking it won't show tags.",
-      image: '/img/usage_examples/video-controls',
-      value: true,
-      defaultValue: true,
-    },
-
     fullSizeImages: {
       name: 'Full size images',
       description:
