@@ -22,9 +22,19 @@
 
         <div class="flex items-center justify-center flex-auto">
           <ul class="space-y-2">
-            <li v-for="(setting, index) in getUserSettings" :key="index">
-              <SettingSwitch :setting-index="index" :setting="setting" />
-            </li>
+            <template v-for="(setting, index) in getUserSettings">
+              <li :key="index">
+                <template
+                  v-if="setting && Number.isInteger(setting.defaultValue)"
+                >
+                  <SettingNumber :setting-index="index" :setting="setting" />
+                </template>
+
+                <template v-else>
+                  <SettingSwitch :setting-index="index" :setting="setting" />
+                </template>
+              </li>
+            </template>
           </ul>
         </div>
       </div>
