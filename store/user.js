@@ -41,13 +41,6 @@ export const state = () => ({
   // saved: { posts: [] },
 
   settings: {
-    darkTheme: {
-      name: 'Dark theme',
-      description: 'Enable the dark theme.',
-      value: true,
-      defaultValue: true,
-    },
-
     hoverControls: {
       name: 'Hover controls',
       description: 'Page controls will be fixed over the content.',
