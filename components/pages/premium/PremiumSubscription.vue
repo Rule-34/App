@@ -77,7 +77,7 @@
           <p
             class="ml-3 text-base font-medium leading-6 text-default-text-muted"
           >
-            Much more in the future
+            Support the development
           </p>
         </li>
       </ul>
