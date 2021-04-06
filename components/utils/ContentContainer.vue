@@ -34,7 +34,11 @@
           <template v-for="(link, index) in links">
             <!-- Internal link -->
             <template v-if="link.isInternal">
-              <NuxtLink :key="link.text" :to="link.href" class="text-sm">
+              <NuxtLink
+                :key="link.text"
+                :to="link.href"
+                class="text-sm color-util"
+              >
                 {{ link.text }}
               </NuxtLink>
             </template>
@@ -46,7 +50,7 @@
                 :href="link.href"
                 target="_blank"
                 rel="noopener"
-                class="text-sm"
+                class="text-sm color-util"
               >
                 {{ link.text }}
               </a>

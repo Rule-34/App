@@ -76,7 +76,7 @@
         <select
           v-model="formBooru.type"
           name="booruType"
-          class="block p-1 outline-none bg-background w-max-content"
+          class="block p-1 outline-none bg-background w-max"
           required
         >
           <option

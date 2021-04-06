@@ -2,9 +2,7 @@
   <div
     class="relative flex flex-col items-center justify-center max-w-3xl min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
   >
-    <main
-      class="p-5 rounded-lg shadow-xl w-max-content bg-elevation border-util"
-    >
+    <main class="p-5 rounded-lg shadow-xl w-max bg-elevation border-util">
       <div class="flex flex-row space-x-10">
         <!-- Reset -->
         <div
@@ -33,7 +31,9 @@
     </main>
 
     <footer class="absolute inset-x-0 bottom-0 p-2 text-center">
-      <NuxtLink to="/usage" class="text-xs">What does X do?</NuxtLink>
+      <NuxtLink to="/usage" class="text-xs color-util">
+        What does X do?
+      </NuxtLink>
     </footer>
   </div>
 </template>

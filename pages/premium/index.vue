@@ -25,7 +25,7 @@
           <!-- Status -->
           <div class="my-4 text-center">
             <p class="text-sm text-default-text-muted">Your subscription is</p>
-            <p class="text-3xl font-semibold text-gradient-one">Active</p>
+            <p class="text-3xl font-semibold text-lilac-gra">Active</p>
           </div>
 
           <!-- Log out -->
@@ -48,7 +48,7 @@
           </div>
 
           <NuxtLink
-            class="flex items-center justify-center px-4 transition-colors duration-300 border rounded-full shadow border-border bg-background hover:border-border-hover"
+            class="flex items-center justify-center px-4 transition-colors duration-300 border rounded-full shadow color-util border-border bg-background hover:border-border-hover"
             to="/premium/booru"
           >
             Modify
@@ -65,7 +65,7 @@
           </div>
 
           <NuxtLink
-            class="flex items-center justify-center px-4 transition-colors duration-300 border rounded-full shadow border-border bg-background hover:border-border-hover"
+            class="flex items-center justify-center px-4 transition-colors duration-300 border rounded-full shadow color-util border-border bg-background hover:border-border-hover"
             to="/premium/tags"
           >
             Modify
@@ -78,7 +78,12 @@
         <!-- Notice -->
         <p class="text-sm text-center text-default-text-muted">
           Manage your subscription on
-          <a rel="noopener" target="_blank" href="https://gumroad.com/library">
+          <a
+            rel="noopener"
+            target="_blank"
+            href="https://gumroad.com/library"
+            class="color-util"
+          >
             Gumroad
           </a>
         </p>

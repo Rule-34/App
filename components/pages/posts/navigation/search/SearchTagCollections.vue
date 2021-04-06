@@ -16,7 +16,7 @@
       <menu class="flex flex-col w-full h-full p-4 m-0 material-container">
         <!-- Title -->
         <header
-          class="text-xl font-semibold tracking-wide text-center text-gradient-one"
+          class="text-xl font-semibold tracking-wide text-center text-lilac-gra"
         >
           Tag Collections
         </header>
@@ -48,7 +48,9 @@
               error-data="No Tag Collections available"
             >
               <template #customAction>
-                <NuxtLink to="/premium">Create some?</NuxtLink>
+                <NuxtLink to="/premium" class="color-util">
+                  Create some?
+                </NuxtLink>
               </template>
             </Error>
           </template>
@@ -56,7 +58,7 @@
 
         <!-- CTA -->
         <footer class="space-y-1 text-sm text-center">
-          <NuxtLink to="/premium">Create more</NuxtLink>
+          <NuxtLink to="/premium" class="color-util">Create more</NuxtLink>
 
           <p class="text-xs text-default-text-muted">Or</p>
 
