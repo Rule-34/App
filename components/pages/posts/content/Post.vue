@@ -89,7 +89,7 @@
             <!-- If text is an Url then make it linkable -->
             <a
               :href="post.source[0]"
-              class="inline-flex"
+              class="inline-flex color-util"
               rel="noopener"
               target="_blank"
             >

@@ -20,7 +20,7 @@
         href="https://akbal.dev/"
         target="_blank"
         rel="noopener"
-        class="block px-3 py-1 mx-auto mt-5 mb-2 rounded-full shadow-md border-util w-max-content bg-background"
+        class="block px-3 py-1 mx-auto mt-5 mb-2 rounded-full shadow-md color-util border-util w-max bg-background"
       >
         Alejandro Akbal
       </a>

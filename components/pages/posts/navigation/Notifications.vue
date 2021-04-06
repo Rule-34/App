@@ -178,17 +178,17 @@ export default {
 /* 
       Slide-over panel, show/hide based on slide-over state.
 
-        Entering: "transform transition ease-in-out duration-500 sm:duration-700"
+        Entering: "transform transition  duration-500 sm:duration-700"
           From: "translate-x-full"
           To: "translate-x-0"
-        Leaving: "transform transition ease-in-out duration-500 sm:duration-700"
+        Leaving: "transform transition  duration-500 sm:duration-700"
           From: "translate-x-0"
           To: "translate-x-full" 
 */
 
 .notifications-enter-active,
 .notifications-leave-active {
-  @apply transform transition ease-in-out duration-300;
+  @apply transform transition  duration-300;
 }
 
 .notifications-enter,

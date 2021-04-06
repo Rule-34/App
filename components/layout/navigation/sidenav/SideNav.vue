@@ -13,7 +13,7 @@
 
           <img
             loading="eager"
-            class="transition-transform duration-500 ease-in-out delay-300 transform hover:scale-150"
+            class="transition-transform duration-500 delay-300 transform hover:scale-150"
             src="~/assets/img/brand/icon.png"
             alt="Rule 34 App Logo"
             height="512"
@@ -35,7 +35,7 @@
         <ul class="flex-auto leading-loose text-center sm:text-left">
           <li v-for="link in sideNavLinks" :key="link.url">
             <NuxtLink
-              class="relative block transition-transform duration-300 transform hover:translate-x-1"
+              class="relative block transition-transform duration-300 transform color-util hover:translate-x-1"
               :to="link.url"
             >
               <span class="absolute inset-0 opacity-0" />
@@ -46,7 +46,7 @@
           <!-- Premium -->
           <li>
             <NuxtLink
-              class="relative block transition-transform duration-300 transform hover:translate-x-1"
+              class="relative block transition-transform duration-300 transform color-util hover:translate-x-1"
               to="/premium"
             >
               <span class="absolute inset-0 opacity-0" />
@@ -63,7 +63,7 @@
           <!-- Discord -->
           <li>
             <a
-              class="flex transition-transform duration-300 transform hover:scale-110"
+              class="flex transition-transform duration-300 transform color-util hover:scale-110"
               href="https://redirect.r34.app/discord"
             >
               <svg
@@ -83,7 +83,7 @@
           <!-- Legal -->
           <li>
             <NuxtLink
-              class="flex transition-transform duration-300 transform hover:scale-110"
+              class="flex transition-transform duration-300 transform color-util hover:scale-110"
               to="/legal"
             >
               Legal
@@ -93,7 +93,7 @@
           <!-- Donate -->
           <li>
             <a
-              class="flex transition-transform duration-300 transform hover:scale-110"
+              class="flex transition-transform duration-300 transform color-util hover:scale-110"
               href="https://redirect.r34.app/donations"
             >
               <svg

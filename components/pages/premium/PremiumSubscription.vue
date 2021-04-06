@@ -34,7 +34,7 @@
         <!--  -->
         <li class="flex items-start">
           <div class="flex-shrink-0">
-            <check-icon class="w-6 h-6 icon text-gradient-one" />
+            <check-icon class="w-6 h-6 icon text-lilac-gra" />
           </div>
           <NuxtLink
             to="/premium/booru"
@@ -47,7 +47,7 @@
         <!--  -->
         <li class="flex items-start mt-4">
           <div class="flex-shrink-0">
-            <check-icon class="w-6 h-6 icon text-gradient-one" />
+            <check-icon class="w-6 h-6 icon text-lilac-gra" />
           </div>
           <NuxtLink
             to="/premium/tags"
@@ -60,7 +60,7 @@
         <!--  -->
         <li class="flex items-start mt-4">
           <div class="flex-shrink-0">
-            <check-icon class="w-6 h-6 icon text-gradient-one" />
+            <check-icon class="w-6 h-6 icon text-lilac-gra" />
           </div>
           <p
             class="ml-3 text-base font-medium leading-6 text-default-text-muted"
@@ -72,7 +72,7 @@
         <!--  -->
         <li class="flex items-start mt-4">
           <div class="flex-shrink-0">
-            <check-icon class="w-6 h-6 icon text-gradient-one" />
+            <check-icon class="w-6 h-6 icon text-lilac-gra" />
           </div>
           <p
             class="ml-3 text-base font-medium leading-6 text-default-text-muted"
@@ -88,7 +88,7 @@
             target="_blank"
             rel="noopener"
             :href="'https://gum.co/Rule34App'"
-            class="block w-full px-6 py-3 text-lg font-medium leading-6 text-center transition duration-150 ease-in-out border-0 rounded-lg bg-gradient-lilac-blue text-default-text focus:outline-none focus:shadow-outline"
+            class="block w-full px-6 py-3 text-lg font-medium leading-6 text-center transition border-0 rounded-lg color-util bg-gradient-lilac-blue text-default-text focus:outline-none focus:ring"
           >
             Subscribe
           </a>
