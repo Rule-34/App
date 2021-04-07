@@ -1,4 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
+const defaultColors = require('tailwindcss/colors')
 
 module.exports = {
   mode: 'jit',
@@ -12,42 +13,26 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // TODO: redo colors
+        primary: defaultColors.cyan,
 
-        // Colors
-        primary: 'hsl(205, 78%, 62%)',
-        'primary-hover': 'hsl(209, 62%, 50%)',
+        accent: defaultColors.violet,
 
-        // accent: 'var(--color-accent)',
-        // 'accent-hover': 'var(--color-accent-hover)',
+        // --- Default colors for text --- \\
+        // Title: black or white
+        // Text: text-gray-200
+        // Muted: text-gray-300
 
-        default: 'hsl(0, 0%, 100%)',
-        'default-text': 'hsla(0, 0%, 100%, 0.9)',
-        'default-text-muted': 'hsla(0, 0%, 100%, 0.7)',
+        darkGray: {
+          100: ' hsl(209, 15%, 20%)', // Borders
 
-        background: 'hsl(0, 0%, 7%)',
+          300: ' hsl(209, 15%, 9%)', // Elevation
 
-        elevation: 'hsl(209, 15%, 9%)',
+          500: 'hsl(209, 10%, 13%)',
 
-        depth: 'hsl(209, 10%, 13%)',
+          700: 'hsl(0, 0%, 7%)', // Background
+        },
 
-        border: 'hsl(214, 32%, 25%)',
-        'border-hover': 'var(--color-primary-hover)',
-
-        'lilac-gra': 'hsl(240, 53%, 74%)',
-        'blue-gra': 'hsl(190, 100%, 50%)',
-      },
-
-      // Top, left, etc.
-      inset: {
-        // '-14': '-3.5rem',
-        // '-16': '-4rem',
-      },
-
-      // padding, margin, width, and height
-      spacing: {
-        // '7vw': '7vw',
-        // '14vw': '14vw'
+        ...defaultColors,
       },
 
       maxHeight: {
