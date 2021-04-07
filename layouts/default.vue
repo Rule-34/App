@@ -46,7 +46,7 @@ export default {
     return {
       // Define color theme based on settings
       bodyAttrs: {
-        class: 'bg-background',
+        class: 'bg-darkGray-700',
       },
     }
   },

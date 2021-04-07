@@ -23,18 +23,18 @@
 
         <!-- Tag Collections -->
         <section
-          class="flex-auto mt-4 space-y-2 overflow-y-scroll text-default-text"
+          class="flex-auto mt-4 space-y-2 overflow-y-scroll text-gray-200"
         >
           <template v-if="getTagCollections.length">
             <article
               v-for="(tagCollection, index) in getTagCollections"
               :key="tagCollection.name"
-              class="flex items-center justify-between px-2 py-1 material-container bg-background"
+              class="flex items-center justify-between px-2 py-1 material-container bg-darkGray-700"
               @click="addTagCollectionToTags(index)"
             >
               <p class="truncate">{{ tagCollection.name }}</p>
 
-              <div class="flex-shrink-0 color-util">
+              <div class="flex-shrink-0 link">
                 {{ tagCollection.tags.length }}
 
                 <TagIcon class="inline w-5 h-5 icon" />
@@ -48,9 +48,7 @@
               error-data="No Tag Collections available"
             >
               <template #customAction>
-                <NuxtLink to="/premium" class="color-util">
-                  Create some?
-                </NuxtLink>
+                <NuxtLink to="/premium" class="link"> Create some? </NuxtLink>
               </template>
             </Error>
           </template>
@@ -58,12 +56,12 @@
 
         <!-- CTA -->
         <footer class="space-y-1 text-sm text-center">
-          <NuxtLink to="/premium" class="color-util">Create more</NuxtLink>
+          <NuxtLink to="/premium" class="link">Create more</NuxtLink>
 
-          <p class="text-xs text-default-text-muted">Or</p>
+          <p class="text-xs text-gray-300">Or</p>
 
           <button
-            class="text-sm color-util"
+            class="text-sm link"
             type="button"
             @click="saveSearchTagsToTagCollection"
           >
