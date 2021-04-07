@@ -1,27 +1,34 @@
 <template>
-  <div :title="setting.description">
-    <div class="inline-block align-middle form-switch">
-      <input
-        :id="settingIndex"
-        :name="setting.name"
-        :checked="setting.value"
-        type="checkbox"
-        class="form-switch-checkbox"
-        @change="
-          setSettingValue({
-            setting: settingIndex,
-            value: $event.target.checked,
-          })
-        "
-      />
-      <label
-        :for="settingIndex"
-        class="form-switch-label color-util border-util"
-      />
-    </div>
-    <label :for="settingIndex" class="text-xs text-default-text">
-      {{ setting.name }}
-    </label>
+  <div class="flex items-center">
+    <!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
+    <button
+      type="button"
+      class="relative inline-flex flex-shrink-0 w-16 h-6 transition-colors duration-200 border-2 rounded-full cursor-pointer border-darkGray-100 focus:focus-util"
+      :class="[settingData.value ? 'bg-primary-500' : 'bg-darkGray-700']"
+      :aria-pressed="settingData.value"
+      :aria-labelledby="settingName"
+      @click="
+        setSettingValue({
+          setting: settingName,
+          value: !settingData.value,
+        })
+      "
+    >
+      <span class="sr-only">Use setting</span>
+
+      <!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
+      <span
+        aria-hidden="true"
+        class="inline-block w-5 h-5 transition duration-200 transform bg-white rounded-full shadow pointer-events-none ring-0"
+        :class="[settingData.value ? 'translate-x-10' : 'translate-x-0']"
+      ></span>
+    </button>
+
+    <span class="ml-3" :id="settingName">
+      <span class="text-sm text-gray-300">
+        {{ settingData.name }}
+      </span>
+    </span>
   </div>
 </template>
 
@@ -30,19 +37,12 @@ import { mapMutations } from 'vuex'
 
 export default {
   props: {
-    settingIndex: { type: String, default: undefined, required: true },
+    settingName: { type: String, required: true },
 
-    setting: {
+    settingData: {
       type: Object,
-
       required: true,
     },
-  },
-
-  computed: {
-    // isEnabled() {
-    //   return setting.
-    // }
   },
 
   methods: {
@@ -50,36 +50,3 @@ export default {
   },
 }
 </script>
-
-<style lang="postcss">
-/* The container */
-.form-switch {
-  @apply relative select-none w-12 mr-2 leading-normal;
-}
-
-.form-switch-checkbox {
-  @apply hidden;
-}
-
-.form-switch-checkbox:checked + .form-switch-label {
-  @apply bg-primary-hover shadow-none;
-}
-
-.form-switch-checkbox:checked + .form-switch-label:before {
-  @apply right-0;
-}
-
-/* Label that acts as the checkbox */
-.form-switch-label {
-  @apply block overflow-hidden cursor-pointer bg-background rounded-full h-6 shadow-inner;
-  transition: background-color 0.2s ease-in;
-}
-
-/* The ball */
-.form-switch-label:before {
-  @apply absolute block bg-background inset-y-0 w-6 border border-border rounded-full -ml-1;
-  right: 50%;
-  content: '';
-  transition: all 0.2s ease-in;
-}
-</style>
