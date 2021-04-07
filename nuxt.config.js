@@ -83,7 +83,7 @@ export default {
   ],
 
   tailwindcss: {
-    viewer: false,
+    viewer: true,
 
     cssPath: '~/assets/css/main.css',
 
