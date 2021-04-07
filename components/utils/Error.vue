@@ -1,7 +1,7 @@
 <template>
   <div
-    class="p-2 m-6 text-center text-default-text"
-    :class="{ 'rounded-container': renderBorders }"
+    class="p-2 m-6 text-center text-gray-200"
+    :class="{ 'material-container': renderBorders }"
   >
     <!-- Header -->
     <div>
@@ -23,7 +23,7 @@
     <div v-if="showAction">
       <slot name="customAction">
         <!-- Fallback -->
-        <button type="button" class="color-util" @click="reload()">
+        <button type="button" class="link" @click="reload()">
           Reload the page?
         </button>
       </slot>

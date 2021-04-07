@@ -2,21 +2,21 @@
   <main class="flex flex-col max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
     <div>
       <!-- Booru list -->
-      <div class="px-2 py-1 overflow-x-scroll rounded-container">
+      <div class="px-2 py-1 overflow-x-scroll material-container">
         <table
           class="w-full text-left border-separate"
           style="border-spacing: 0.25em"
         >
           <thead>
             <tr>
-              <th class="font-normal text-default-text">Domain</th>
-              <th class="font-normal text-default-text">Type</th>
-              <th class="font-normal text-default-text">NSFW</th>
-              <th class="font-normal text-default-text">Config</th>
+              <th class="font-normal text-gray-200">Domain</th>
+              <th class="font-normal text-gray-200">Type</th>
+              <th class="font-normal text-gray-200">NSFW</th>
+              <th class="font-normal text-gray-200">Config</th>
             </tr>
           </thead>
 
-          <tbody class="text-default-text-muted">
+          <tbody class="text-gray-300">
             <template v-if="getCustomBoorus.length">
               <tr v-for="booru in getCustomBoorus" :key="booru.domain">
                 <td class="text-sm" @click="removeCustomBooru(booru)">
@@ -42,7 +42,7 @@
         </table>
       </div>
 
-      <p class="p-2 text-xs text-center text-default-text-muted">
+      <p class="p-2 text-xs text-center text-gray-300">
         Click on the `domain` to remove. Click on the `type` to copy.
       </p>
     </div>
@@ -52,18 +52,18 @@
 
     <!-- Booru editor -->
     <form
-      class="flex flex-col p-4 space-y-2 rounded-container text-default-text"
+      class="flex flex-col p-4 space-y-2 text-gray-200 material-container"
       @submit.prevent="addFormBooruToCustomBoorus"
     >
       <!-- Domain -->
       <label>
-        <p class="mb-1 text-default-text-muted">Domain</p>
+        <p class="mb-1 text-gray-300">Domain</p>
 
         <input
           v-model="formBooru.domain"
           type="text"
           name="booruDomain"
-          class="block w-full p-1 outline-none bg-background"
+          class="block w-full p-1 outline-none bg-darkGray-700"
           required
           placeholder="example.com"
         />
@@ -71,12 +71,12 @@
 
       <!-- Type -->
       <label>
-        <p class="mb-1 text-default-text-muted">Booru type</p>
+        <p class="mb-1 text-gray-300">Booru type</p>
 
         <select
           v-model="formBooru.type"
           name="booruType"
-          class="block p-1 outline-none bg-background w-max"
+          class="block p-1 outline-none bg-darkGray-700 w-max"
           required
         >
           <option
@@ -91,36 +91,36 @@
 
       <!-- NSFW -->
       <label>
-        <p class="mb-1 text-default-text-muted">NSFW</p>
+        <p class="mb-1 text-gray-300">NSFW</p>
 
         <input
           v-model="formBooru.nsfw"
           name="booruNSFW"
-          class="block p-1 outline-none bg-background"
+          class="block p-1 outline-none bg-darkGray-700"
           type="checkbox"
         />
       </label>
 
       <!-- Configuration -->
       <label>
-        <p class="mb-1 text-default-text-muted">Configuration</p>
+        <p class="mb-1 text-gray-300">Configuration</p>
 
         <textarea
           v-model="formBooru.config"
-          class="block w-full p-1 outline-none bg-background"
+          class="block w-full p-1 outline-none bg-darkGray-700"
           name="booruConfig"
           rows="2"
           spellcheck="false"
         />
       </label>
 
-      <!-- <button type="button" class="text-sm text-default-text-muted">
+      <!-- <button type="button" class="text-sm text-gray-300">
         Test booru
       </button> -->
 
       <button
         type="submit"
-        class="w-full px-2 py-1 tracking-wide rounded-full shadow-md bg-gradient-blue-lilac"
+        class="w-full px-2 py-1 tracking-wide rounded-full bg-gradient-to-r from-primary-400 to-accent-400"
       >
         Add
       </button>

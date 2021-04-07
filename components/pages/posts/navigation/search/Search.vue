@@ -27,7 +27,7 @@
             <!-- Overflow Hidden is very important -->
             <!-- Input because v-model/:value doesn't work on mobile -->
             <input
-              class="flex-1 mx-2 overflow-hidden font-light outline-none text-default-text bg-elevation"
+              class="flex-1 mx-2 overflow-hidden font-light text-gray-200 outline-none bg-darkGray-300"
               type="search"
               name="tags"
               autofocus
@@ -47,7 +47,7 @@
                 @click="toggleTagCollections"
               >
                 <TagIcon
-                  class="w-6 h-6 transition-colors duration-300 icon hover:text-default-text-muted"
+                  class="w-6 h-6 transition-colors duration-300 icon hover:text-gray-300"
                 />
               </button>
 
@@ -59,7 +59,7 @@
                 @click="resetTags"
               >
                 <TrashIcon
-                  class="w-6 h-6 transition-colors duration-300 icon hover:text-default-text-muted"
+                  class="w-6 h-6 transition-colors duration-300 icon hover:text-gray-300"
                 />
               </button>
 
@@ -85,7 +85,7 @@
             <!-- If nothing searched -->
             <template v-if="!search.data.length && !search.tags.length">
               <h1
-                class="flex items-center justify-center flex-auto text-xl font-light tracking-wide text-default-text"
+                class="flex items-center justify-center flex-auto text-xl font-light tracking-wide text-gray-200"
               >
                 Search something!
               </h1>
@@ -95,13 +95,13 @@
               <!-- Added tags, click them to remove them -->
               <template v-if="search.tags.length">
                 <div
-                  class="flex-initial overflow-y-scroll border-0 rounded tag-container border-border"
+                  class="flex-initial overflow-y-scroll border-0 rounded tag-container border-darkGray-100"
                 >
                   <button
                     v-for="tag in search.tags"
                     :key="tag"
                     type="button"
-                    class="tag color-util"
+                    class="tag link"
                     @click="removeTag(tag)"
                   >
                     {{ tag }}
@@ -113,14 +113,14 @@
 
               <template v-if="search.data.length">
                 <div
-                  class="flex-auto overflow-y-scroll border-0 rounded border-border tag-container"
+                  class="flex-auto overflow-y-scroll border-0 rounded border-darkGray-100 tag-container"
                 >
                   <!-- Add tag to array of added tags -->
                   <button
                     v-for="tag in search.data"
                     :key="tag.name"
                     type="button"
-                    class="tag color-util group"
+                    class="tag link group"
                     @click="addSearchTagDirectly(tag.name)"
                   >
                     <!-- Name of the tag -->
@@ -130,7 +130,7 @@
 
                     <!-- Number of posts with that tag -->
                     <span
-                      class="transition-colors duration-300 text-primary-hover group-hover:text-default"
+                      class="transition-colors duration-300 text-primary-700 group-hover:text-gray-300"
                       >{{ `(${tag.count})` }}
                     </span>
                   </button>
@@ -141,7 +141,7 @@
             <!-- Submit -->
             <div class="absolute inset-x-0 bottom-0 flex overflow-hidden">
               <button
-                class="w-full px-4 py-2 text-lg font-bold tracking-wide text-center text-default-text bg-gradient-lilac-blue"
+                class="w-full px-4 py-2 text-lg font-medium tracking-wide text-center text-black bg-gradient-to-r from-accent-400 to-primary-400"
                 type="submit"
               >
                 Apply tags

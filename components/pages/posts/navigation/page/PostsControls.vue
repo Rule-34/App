@@ -12,17 +12,17 @@
           <!-- Previous page -->
           <button
             type="button"
-            class="color-util"
+            class="link"
             title="Load previous page"
             aria-label="Load previous page"
             @click="getPrevPage"
           >
-            <span class="text-default">&larr;</span> Prev
+            <span class="text-white">&larr;</span> Prev
           </button>
 
           <!-- Get specific page -->
           <button
-            class="color-util"
+            class="link"
             title="Load specific page"
             aria-label="Load specific page"
             type="button"
@@ -34,12 +34,12 @@
           <!-- Next page -->
           <button
             type="button"
-            class="color-util"
+            class="link"
             title="Load next page"
             aria-label="Load next page"
             @click="getNextPage"
           >
-            Next <span class="text-default">&rarr;</span>
+            Next <span class="text-white">&rarr;</span>
           </button>
         </div>
       </div>
@@ -57,7 +57,7 @@
         }"
         @click="InfiniteLoadHandler"
       >
-        <p class="text-center text-default-text-muted animate-pulse">
+        <p class="text-center text-gray-300 animate-pulse">
           Stay here to load more posts...
         </p>
       </div>

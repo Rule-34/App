@@ -1,10 +1,9 @@
 <template>
-  <!-- Icon -->
-  <div class="rounded-full shadow border-util bg-elevation">
+  <div>
     <!-- Button -->
     <button
       type="button"
-      class="flex p-1"
+      class="flex p-1 border rounded-full focus:focus-util border-darkGray-100 bg-darkGray-300"
       aria-label="Toggle notification menu"
       @click="toggleNotifications"
     >
@@ -17,7 +16,7 @@
         <g fill="none">
           <!-- Notification bell -->
           <path
-            class="fill-current icon text-default-text-muted"
+            class="text-gray-300 fill-current icon"
             d="M15 19a3 3 0 11-6 0h6zm3.13-2H5.87C4.838 17 4 16.105 4 15c0-.348.085-.69.246-.992L6.388 10V8C6.388 4.686 8.9 2 12 2s5.611 2.686 5.611 6v2l2.142 4.008c.513.959.201 2.18-.696 2.728a1.778 1.778 0 01-.928.264z"
           />
 
@@ -25,7 +24,7 @@
           <g v-if="isThereANewNotification">
             <!-- Bell with a little cut -->
             <path
-              class="fill-current icon text-default-text-muted"
+              class="text-gray-300 fill-current icon"
               d="M12.338 2.01a6 6 0 005.274 7.977V10l2.141 4.008c.513.959.201 2.18-.696 2.728a1.778 1.778 0 01-.928.264H5.871C4.837 17 4 16.105 4 15c0-.348.085-.69.246-.992L6.388 10V8C6.388 4.686 8.9 2 12 2c.113 0 .226.004.338.01zM15 19a3 3 0 11-6 0h6z"
             />
             <!-- Notification dot -->
@@ -34,7 +33,7 @@
               cy="4.25"
               r="4"
               stroke="hsla(205, 78%, 62%, 0.3)"
-              class="fill-current icon text-primary"
+              class="fill-current icon text-primary-500"
             />
           </g>
         </g>
@@ -62,19 +61,19 @@
           >
             <div class="w-screen max-w-md">
               <div
-                class="flex flex-col h-full py-6 overflow-y-scroll shadow-xl bg-background"
+                class="flex flex-col h-full py-6 overflow-y-scroll bg-darkGray-700"
               >
                 <div class="px-4 sm:px-6">
                   <div class="flex items-start justify-between">
                     <h2
                       id="slide-over-heading"
-                      class="text-lg font-medium text-default-text"
+                      class="text-lg font-medium text-gray-200"
                     >
                       Notifications
                     </h2>
                     <div class="flex items-center ml-3 h-7">
                       <button
-                        class="p-1 rounded-full text-default border-util bg-elevation focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                        class="p-1 text-white border rounded-full border-darkGray-100 bg-darkGray-300 focus:focus-util"
                         @click="toggleNotifications"
                       >
                         <span class="sr-only">Close panel</span>
