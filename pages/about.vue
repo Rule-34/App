@@ -2,37 +2,32 @@
   <div
     class="relative flex flex-col items-center justify-center max-w-3xl min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
   >
-    <main class="p-5 shadow-md material-container">
-      <picture>
-        <source srcset="~/assets/img/brand/akbal.webp" type="image/webp" />
-
-        <img
-          src="~/assets/img/brand/akbal.png"
-          alt="Akbal logo"
-          loading="eager"
-          height="206"
-          width="231"
-          class="mx-auto"
-        />
-      </picture>
+    <main class="p-5 material-container">
+      <img
+        src="https://cdn.statically.io/img/raw.githubusercontent.com/h=1024,w=1024,q=90/AlejandroAkbal/brand/main/src/assets/Logo_white.png"
+        alt="Akbal logo"
+        height="206"
+        width="231"
+        class="mx-auto border rounded-full border-darkGray-100"
+      />
 
       <a
         href="https://akbal.dev/"
         target="_blank"
         rel="noopener"
-        class="block px-3 py-1 mx-auto mt-5 mb-2 rounded-full shadow-md color-util border-util w-max bg-background"
+        class="block px-3 py-1 mx-auto mt-5 mb-3 border rounded-full link w-max bg-darkGray-700 border-darkGray-100"
       >
         Alejandro Akbal
       </a>
 
-      <small class="block text-center text-default-text">
-        I'm a software developer and this App is a project that I do in my free
-        time.
+      <small class="block text-center text-gray-200">
+        The software engineer that created this app, works whenever he has time
+        and will.
       </small>
     </main>
 
     <footer
-      class="absolute inset-x-0 bottom-0 p-2 text-xs text-center text-default-text-muted"
+      class="absolute inset-x-0 bottom-0 p-2 text-xs text-center text-gray-300"
     >
       v{{ app_version }}
     </footer>
