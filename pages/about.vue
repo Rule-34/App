@@ -6,9 +6,9 @@
       <img
         src="https://cdn.statically.io/img/raw.githubusercontent.com/h=1024,w=1024,q=90/AlejandroAkbal/brand/main/src/assets/Logo_white.png"
         alt="Akbal logo"
-        height="206"
-        width="231"
-        class="mx-auto rounded-full border-util"
+        height="1024"
+        width="1024"
+        class="w-1/2 h-auto mx-auto rounded-full border-util"
       />
 
       <a
