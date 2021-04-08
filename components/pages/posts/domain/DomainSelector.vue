@@ -9,7 +9,7 @@
     <select
       :value="getActiveBooru.domain"
       aria-label="Change the domain where the content is pulled from"
-      class="inline-flex items-center font-light outline-none appearance-none text-primary-500 bg-darkGray-300"
+      class="inline-flex items-center font-light outline-none appearance-none text-primary-600 bg-darkGray-300"
       @change="changeDomain($event.target.value)"
     >
       <optgroup label="Default">
