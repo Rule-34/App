@@ -18,9 +18,9 @@ module.exports = {
         accent: defaultColors.violet,
 
         // --- Default colors for text --- \\
-        // Title: black or white
-        // Text: text-gray-200
-        // Muted: text-gray-300
+        // Icons: black or white
+        // Text: text-gray-200 | text-gray-800
+        // Muted: text-gray-300 | text-gray-700
 
         darkGray: {
           100: ' hsl(209, 15%, 20%)', // Borders
