@@ -19,7 +19,9 @@
           @submit.prevent="addTagsToBooruState"
         >
           <!-- Search bar -->
-          <div class="flex flex-row h-auto p-2 material-container">
+          <div
+            class="flex flex-row h-auto p-2 material-container focus-within:focus-util"
+          >
             <!-- Search Icon -->
             <SearchIcon class="w-6 h-6 icon" />
 
@@ -44,6 +46,7 @@
                 type="button"
                 aria-label="Toggle Custom Tag Collections"
                 title="Custom Tag Collections"
+                class="focus:focus-util"
                 @click="toggleTagCollections"
               >
                 <TagIcon
@@ -56,6 +59,7 @@
                 type="button"
                 aria-label="Reset tags"
                 title="Reset tags"
+                class="focus:focus-util"
                 @click="resetTags"
               >
                 <TrashIcon
@@ -68,11 +72,14 @@
                 type="button"
                 aria-label="Filter out content"
                 title="Filter out content"
+                class="focus:focus-util"
                 @click="toggleBanMode"
               >
                 <FilterIcon
-                  :class="{ 'text-red-400': isBanModeEnabled }"
-                  class="w-6 h-6 transition-colors duration-300 icon"
+                  :class="{
+                    'text-red-500 hover:text-red-400': isBanModeEnabled,
+                  }"
+                  class="w-6 h-6 transition-colors duration-300 icon hover:text-gray-300"
                 />
               </button>
             </div>
@@ -130,7 +137,7 @@
 
                     <!-- Number of posts with that tag -->
                     <span
-                      class="transition-colors duration-300 text-primary-700 group-hover:text-gray-300"
+                      class="transition-colors duration-300 text-primary-600 group-hover:text-primary-500"
                       >{{ `(${tag.count})` }}
                     </span>
                   </button>
@@ -139,9 +146,9 @@
             </template>
 
             <!-- Submit -->
-            <div class="absolute inset-x-0 bottom-0 flex overflow-hidden">
+            <div class="absolute inset-x-0 bottom-0 flex">
               <button
-                class="w-full px-4 py-2 text-lg font-medium tracking-wide text-center text-black bg-gradient-to-r from-accent-400 to-primary-400"
+                class="w-full px-4 py-2 text-lg font-medium tracking-wide text-center text-black bg-gradient-to-r from-accent-400 to-primary-400 focus:focus-util"
                 type="submit"
               >
                 Apply tags
