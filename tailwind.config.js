@@ -6,14 +6,14 @@ module.exports = {
 
   purge: {
     options: {
-      safelist: [/active/, /fade/, /enter/, /leave/],
+      safelist: [/active/, /fade/, /enter/, /leave/, 'nuxt-link-exact-active'],
     },
   },
 
   theme: {
     extend: {
       colors: {
-        primary: defaultColors.cyan,
+        primary: defaultColors.lightBlue,
 
         accent: defaultColors.violet,
 
