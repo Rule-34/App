@@ -23,7 +23,7 @@
     * NOT TO BE USED DIRECTLY AS CSS 
     * IN CLASSES IT SHOULD BE USED AS `focus:focus-util`
     */
-    @apply outline-none ring-4 ring-primary-500;
+    @apply outline-none ring-4 ring-primary-400;
   }
 
   /*  */
@@ -35,11 +35,11 @@
   /*  */
 
   .link {
-    @apply transition-colors duration-300 text-primary-600;
+    @apply transition-colors duration-300 text-primary-500;
   }
 
   .link:hover {
-    @apply text-primary-500;
+    @apply text-primary-400;
   }
 
   .link:focus {
@@ -90,7 +90,7 @@
 /* #region Transitions and animations */
 
 .nuxt-link-exact-active {
-  @apply font-bold text-primary-500;
+  @apply font-bold text-primary-400;
 }
 
 /* Page Transition */

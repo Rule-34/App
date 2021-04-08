@@ -33,7 +33,7 @@
               cy="4.25"
               r="4"
               stroke="hsla(205, 78%, 62%, 0.3)"
-              class="fill-current icon text-primary-500"
+              class="fill-current icon text-primary-400"
             />
           </g>
         </g>
