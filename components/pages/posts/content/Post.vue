@@ -76,8 +76,9 @@
                   type="button"
                   class="tag link"
                   @click="fetchSpecificTag(tag)"
-                  v-text="tag"
-                />
+                >
+                  {{ tag }}
+                </button>
               </div>
             </div>
           </TransitionCollapse>
