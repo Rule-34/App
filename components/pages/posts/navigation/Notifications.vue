@@ -3,7 +3,7 @@
     <!-- Button -->
     <button
       type="button"
-      class="flex p-1 border rounded-full focus:focus-util border-darkGray-100 bg-darkGray-300"
+      class="flex p-1 rounded-full border-util focus:focus-util bg-darkGray-300"
       aria-label="Toggle notification menu"
       @click="toggleNotifications"
     >
@@ -73,7 +73,7 @@
                     </h2>
                     <div class="flex items-center ml-3 h-7">
                       <button
-                        class="p-1 text-white border rounded-full border-darkGray-100 bg-darkGray-300 focus:focus-util"
+                        class="p-1 text-white rounded-full border-util bg-darkGray-300 focus:focus-util"
                         @click="toggleNotifications"
                       >
                         <span class="sr-only">Close panel</span>

@@ -8,14 +8,14 @@
         alt="Akbal logo"
         height="206"
         width="231"
-        class="mx-auto border rounded-full border-darkGray-100"
+        class="mx-auto rounded-full border-util"
       />
 
       <a
         href="https://akbal.dev/"
         target="_blank"
         rel="noopener"
-        class="block px-3 py-1 mx-auto mt-5 mb-3 border rounded-full link w-max bg-darkGray-700 border-darkGray-100"
+        class="block px-3 py-1 mx-auto mt-5 mb-3 rounded-full link w-max bg-darkGray-700 border-util"
       >
         Alejandro Akbal
       </a>

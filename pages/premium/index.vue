@@ -10,7 +10,7 @@
           <div class="py-1 truncate">
             <!-- Icon -->
             <span
-              class="inline-flex items-center justify-center w-10 h-10 border rounded-full border-darkGray-100 bg-darkGray-700"
+              class="inline-flex items-center justify-center w-10 h-10 rounded-full border-util bg-darkGray-700"
             >
               <span class="font-medium leading-none text-white">
                 {{ getUserEmail.charAt(0).toUpperCase() }}
@@ -45,7 +45,7 @@
           </div>
 
           <NuxtLink
-            class="flex items-center justify-center px-4 transition-colors duration-300 border rounded-full link border-darkGray-100 bg-darkGray-700 hover:border-darkGray-100-hover"
+            class="flex items-center justify-center px-4 transition-colors duration-300 rounded-full link border-util bg-darkGray-700"
             to="/premium/booru"
           >
             Modify
@@ -60,7 +60,7 @@
           </div>
 
           <NuxtLink
-            class="flex items-center justify-center px-4 transition-colors duration-300 border rounded-full link border-darkGray-100 bg-darkGray-700 hover:border-darkGray-100-hover"
+            class="flex items-center justify-center px-4 transition-colors duration-300 rounded-full border-util link bg-darkGray-700"
             to="/premium/tags"
           >
             Modify
