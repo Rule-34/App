@@ -45,14 +45,15 @@
           Your browser does not support HTML5 video.
         </video>
 
+        <!-- Video tag button -->
         <div class="absolute inset-y-0 right-0 p-4 pointer-events-none">
           <div class="flex flex-col items-center justify-center w-full h-full">
             <button
               type="button"
-              class="p-1 bg-black bg-opacity-25 border border-transparent rounded-md pointer-events-auto group"
+              class="p-1 bg-black border border-transparent rounded-lg pointer-events-auto bg-opacity-30 group focus:focus-util"
             >
               <TagIcon
-                class="w-5 h-5 text-gray-300 transition-colors duration-300 icon group-hover:text-white"
+                class="w-5 h-5 text-gray-200 transition-colors duration-300 icon group-hover:text-white"
               />
             </button>
           </div>
