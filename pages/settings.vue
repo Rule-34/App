@@ -13,7 +13,7 @@
           <button
             title="Reset all settings"
             aria-label="Reset all settings"
-            class="px-2 py-1 text-xs border rounded-full link border-darkGray-100 bg-darkGray-700"
+            class="px-2 py-1 text-xs rounded-full border-util link bg-darkGray-700"
             @click="removeLocalStorage"
           >
             Reset
