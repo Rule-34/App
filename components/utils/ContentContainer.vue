@@ -6,11 +6,15 @@
       :class="{ 'bg-svg': icon, [icon]: icon, [iconPosition]: icon }"
     >
       <!-- Title -->
-      <h1 class="text-lg text-gray-200">{{ title }}</h1>
+      <h1 class="text-gray-200">{{ title }}</h1>
 
       <!-- Text -->
       <!-- Using v-text as using {{}} would add a `new line` character that `whitespace-pre-line` would interpret. -->
-      <p v-if="text" class="text-gray-300 whitespace-pre-line" v-text="text" />
+      <p
+        v-if="text"
+        class="text-sm text-gray-300 whitespace-pre-line"
+        v-text="text"
+      />
 
       <!-- Image -->
       <picture v-if="img">
@@ -30,7 +34,7 @@
           <template v-for="(link, index) in links">
             <!-- Internal link -->
             <template v-if="link.isInternal">
-              <NuxtLink :key="link.text" :to="link.href" class="link">
+              <NuxtLink :key="link.text" :to="link.href" class="text-sm link">
                 {{ link.text }}
               </NuxtLink>
             </template>
@@ -42,7 +46,7 @@
                 :href="link.href"
                 target="_blank"
                 rel="noopener"
-                class="link"
+                class="text-sm link"
               >
                 {{ link.text }}
               </a>
