@@ -6,7 +6,7 @@
         <h1 class="text-lg font-semibold tracking-wide">{{ title }}</h1>
 
         <!-- Body -->
-        <p v-if="text">{{ text }}</p>
+        <p v-if="text" class="text-sm">{{ text }}</p>
       </div>
     </div>
   </article>
