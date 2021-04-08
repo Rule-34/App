@@ -45,8 +45,6 @@ export default {
     link: [
       // Font
       { rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' },
-      { rel: 'preconnect', href: 'https://rsms.me' },
-      { rel: 'dns-prefetch ', href: 'https://rsms.me' },
     ],
 
     noscript: [{ innerHTML: 'This website requires JavaScript' }],
