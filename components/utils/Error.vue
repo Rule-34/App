@@ -6,7 +6,7 @@
     <!-- Header -->
     <div>
       <h1
-        class="px-2 mx-auto mb-1 text-2xl font-bold tracking-wide border border-white w-max"
+        class="px-2 mx-auto mb-1 text-2xl font-bold leading-normal tracking-wide border border-white w-max"
       >
         {{ errorTitle }}
       </h1>
