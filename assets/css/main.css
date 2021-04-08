@@ -12,7 +12,7 @@
     } */
 }
 
-/* TODO: Search & Premium forms */
+/* TODO: Search */
 /* TODO: Change color hierarchy, first dark, then hovered light. */
 
 @layer components {
@@ -71,7 +71,7 @@
   /*  */
 
   .tag-container {
-    @apply flex flex-wrap items-start content-start gap-1 p-1 overflow-hidden bg-darkGray-700;
+    @apply flex flex-wrap items-start content-start gap-2 p-2 overflow-hidden bg-darkGray-500;
   }
 
   /*  */
@@ -81,7 +81,7 @@
     * NOT TO BE USED DIRECTLY AS CSS 
     * IN CLASSES IT SHOULD BE USED WITH `.link`
     */
-    @apply px-1 overflow-hidden select-none border-util;
+    @apply px-1 overflow-hidden leading-normal border border-current rounded-none select-none;
   }
 
   /* #endregion */
