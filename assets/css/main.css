@@ -12,14 +12,11 @@
     } */
 }
 
+/* TODO: Search & Premium forms */
+/* TODO: Change color hierarchy, first dark, then hovered light. */
+
 @layer components {
-  /* #region Components */
-
-  .nuxt-link-exact-active {
-    @apply font-bold text-primary-700;
-  }
-
-  /*  */
+  /* #region Utils */
 
   .focus-util {
     /*
@@ -29,12 +26,31 @@
     @apply outline-none ring-4 ring-primary-500;
   }
 
+  /*  */
+
   .border-util {
     @apply border rounded border-darkGray-100;
   }
 
   /*  */
 
+  .link {
+    @apply transition-colors duration-300 text-primary-600;
+  }
+
+  .link:hover {
+    @apply text-primary-500;
+  }
+
+  .link:focus {
+    @apply focus-util;
+  }
+
+  /* #endregion */
+
+  /* #region Components */
+
+  /*  */
 
   .icon {
     stroke-width: 1.6;
@@ -69,25 +85,13 @@
   }
 
   /* #endregion */
-
-  /* #region Utils */
-
-  .link {
-    @apply transition-colors duration-300 text-primary-400;
-  }
-
-  .link:hover {
-    @apply text-primary-500;
-  }
-
-  .link:focus {
-    @apply focus-util;
-  }
-
-  /* #endregion */
 }
 
 /* #region Transitions and animations */
+
+.nuxt-link-exact-active {
+  @apply font-bold text-primary-500;
+}
 
 /* Page Transition */
 .page-enter-active,
