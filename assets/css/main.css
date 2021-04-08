@@ -29,11 +29,12 @@
     @apply outline-none ring-4 ring-primary-500;
   }
 
+  .border-util {
+    @apply border rounded border-darkGray-100;
+  }
+
   /*  */
 
-  /* TODO: border-util */
-  /* TODO: text-default */
-  /* TODO: border-depth */
 
   .icon {
     stroke-width: 1.6;
@@ -44,7 +45,7 @@
   /*  */
 
   .material-container {
-    @apply overflow-hidden border rounded-lg bg-darkGray-300 border-darkGray-100;
+    @apply overflow-hidden rounded-lg bg-darkGray-300 border-util;
   }
 
   /* .material-container:focus-within {
@@ -64,7 +65,7 @@
     * NOT TO BE USED DIRECTLY AS CSS 
     * IN CLASSES IT SHOULD BE USED WITH `.link`
     */
-    @apply px-1 overflow-hidden border rounded select-none border-darkGray-100;
+    @apply px-1 overflow-hidden select-none border-util;
   }
 
   /* #endregion */
