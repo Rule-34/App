@@ -5,6 +5,12 @@
       class="p-3"
       :class="{ 'bg-svg': icon, [icon]: icon, [iconPosition]: icon }"
     >
+      <!--
+        WARNING: THIS IS THE ONLY PART OF THE WEBSITE WHERE
+        UNNECESSARY USE OF `TEXT-SM` IS ALLOWED, OTHERWISE IT MAKES
+        THE FONT LOOK TINY
+      -->
+
       <!-- Title -->
       <h1 class="text-gray-200">{{ title }}</h1>
 
