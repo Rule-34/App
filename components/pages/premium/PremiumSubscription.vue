@@ -38,7 +38,7 @@
             to="/premium/booru"
             class="ml-3 text-base font-medium leading-6 link"
           >
-            Add your own boorus
+            Add more boorus
           </NuxtLink>
         </li>
 
@@ -51,7 +51,7 @@
             to="/premium/tags"
             class="ml-3 text-base font-medium leading-6 link"
           >
-            Create Tag Collections
+            Create collections of Tags
           </NuxtLink>
         </li>
 
