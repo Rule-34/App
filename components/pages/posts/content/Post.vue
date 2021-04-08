@@ -49,6 +49,7 @@
         <div class="absolute inset-y-0 right-0 p-4 pointer-events-none">
           <div class="flex flex-col items-center justify-center w-full h-full">
             <button
+              aria-label="Toggle tags panel"
               type="button"
               class="p-1 bg-black border border-transparent rounded-lg pointer-events-auto bg-opacity-30 group focus:focus-util"
             >

@@ -6,7 +6,7 @@
         class="flex items-center justify-center w-12 h-12 p-4 border-0 border-transparent rounded-full md:w-16 md:h-16 bg-gradient-to-b from-primary-400 to-accent-400 focus:focus-util"
         type="menu"
         title="Menu"
-        aria-label="Toggle the Menu"
+        aria-label="Toggle the menu"
         @click="toggleSideNav"
       >
         &nbsp;
