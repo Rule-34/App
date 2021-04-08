@@ -77,16 +77,14 @@
       </ul>
 
       <div class="mt-8">
-        <div class="rounded-lg">
-          <a
-            target="_blank"
-            rel="noopener"
-            href="https://gum.co/Rule34App"
-            class="block w-full px-6 py-3 text-lg font-medium leading-6 text-center text-black transition border-0 rounded-lg bg-gradient-to-r from-accent-400 to-primary-400 focus:focus-util hover:text-gray-800"
-          >
-            Subscribe
-          </a>
-        </div>
+        <a
+          target="_blank"
+          rel="noopener"
+          href="https://gum.co/Rule34App"
+          class="block w-full px-6 py-3 text-lg font-medium leading-6 text-center text-black transition border-0 rounded-lg bg-gradient-to-r from-accent-400 to-primary-400 focus:focus-util hover:text-gray-800"
+        >
+          Subscribe
+        </a>
       </div>
     </div>
   </div>
