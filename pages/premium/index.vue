@@ -93,7 +93,7 @@
         <PremiumLogin />
 
         <!-- Separator -->
-        <p class="leading-loose text-center text-gray-300">Or</p>
+        <p class="text-center text-gray-300">Or</p>
 
         <PremiumSubscription />
       </div>
