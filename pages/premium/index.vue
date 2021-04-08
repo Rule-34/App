@@ -22,8 +22,8 @@
           </div>
 
           <!-- Status -->
-          <div class="my-4 text-center">
-            <p class="text-sm text-gray-300">Your subscription is</p>
+          <div class="my-1 text-center">
+            <p class="text-gray-300">Your subscription is</p>
             <p class="text-3xl font-semibold text-accent-400">Active</p>
           </div>
 
@@ -38,14 +38,14 @@
         </div>
 
         <!-- Custom Booru  -->
-        <div class="flex p-4 material-container">
+        <div class="flex flex-row items-center p-4 material-container">
           <div class="flex-auto">
-            <h1 class="text-gray-200">Custom Boorus</h1>
-            <p class="text-sm text-gray-300">Add or edit compatible boorus</p>
+            <h1 class="text-lg font-medium text-gray-200">Custom Boorus</h1>
+            <p class="text-gray-300">Add or edit compatible boorus</p>
           </div>
 
           <NuxtLink
-            class="flex items-center justify-center px-4 transition-colors duration-300 rounded-full link border-util bg-darkGray-700"
+            class="px-3 py-2 rounded-full link border-util bg-darkGray-700"
             to="/premium/booru"
           >
             Modify
@@ -53,14 +53,14 @@
         </div>
 
         <!-- Custom Tag Collections  -->
-        <div class="flex p-4 material-container">
+        <div class="flex flex-row items-center p-4 material-container">
           <div class="flex-grow">
-            <h1 class="text-gray-200">Custom Tag Collections</h1>
-            <p class="text-sm text-gray-300">Add or edit tag collections</p>
+            <h1 class="text-lg font-medium text-gray-200">Tag Collections</h1>
+            <p class="text-gray-300">Add or edit tag collections</p>
           </div>
 
           <NuxtLink
-            class="flex items-center justify-center px-4 transition-colors duration-300 rounded-full border-util link bg-darkGray-700"
+            class="px-3 py-2 rounded-full link border-util bg-darkGray-700"
             to="/premium/tags"
           >
             Modify
