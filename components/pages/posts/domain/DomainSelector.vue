@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex m-0 rounded-full material-container focus-within:focus-util"
+    class="relative flex rounded-full material-container focus-within:focus-util"
   >
     <!-- Cloud icon -->
     <div for="domain-selector" class="inline-flex items-center pl-2 pr-1">

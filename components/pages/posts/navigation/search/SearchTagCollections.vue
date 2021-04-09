@@ -13,7 +13,7 @@
       @click.self.stop="toggleTagCollections"
     >
       <!-- Content -->
-      <menu class="flex flex-col w-full h-full p-4 m-0 material-container">
+      <menu class="flex flex-col w-full h-full p-4 material-container">
         <!-- Title -->
         <header
           class="text-xl font-semibold tracking-wide text-center text-lilac-gra"
