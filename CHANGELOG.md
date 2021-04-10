@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.5.0](https://github.com/Rule-34/App/compare/v2.4.0...v2.5.0) (2021-04-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* major refactor on CSS styles
+
+### Features
+
+* add border utility ([883df49](https://github.com/Rule-34/App/commit/883df49070b25c3eb3b362520ea280d70dd86b8c))
+* cancel search buffer on enter ([ebc53dc](https://github.com/Rule-34/App/commit/ebc53dc5ed23fd0a0a7d3536938be94f2919e46d))
+* choose colors ([c6c809a](https://github.com/Rule-34/App/commit/c6c809a6c9454de1f837c81dc0ec9b6646ea781a))
+* improve aria labels ([1979990](https://github.com/Rule-34/App/commit/19799903199399b438e1d63cbd502bb67dff3086))
+* improve design ([87fd2fd](https://github.com/Rule-34/App/commit/87fd2fd555c65b49427f7e765f97a10929b74561))
+* improve error layout ([f261ded](https://github.com/Rule-34/App/commit/f261dedb42e60345055e6706a1b2286f7552ccfe))
+* improve greatly tag collections layout ([09f469d](https://github.com/Rule-34/App/commit/09f469d06f77e4bc70f82fef18817866ff48ddd8))
+* improve layout ([5e5e689](https://github.com/Rule-34/App/commit/5e5e689d25115a3d300f50b85d8223feb2d0260d))
+* improve search accessibility ([8de8829](https://github.com/Rule-34/App/commit/8de882959ef85183d0084340a46f3999f6123259))
+* improve tag button ([88dd7a7](https://github.com/Rule-34/App/commit/88dd7a75fd4468344dff882bcab1f9c27841a6aa))
+* improve tags ([e59824c](https://github.com/Rule-34/App/commit/e59824cc20f68424904d44bb3af66f63afb3c05e))
+* use better primary color ([f62c081](https://github.com/Rule-34/App/commit/f62c0815ea2196ae2acae813fa584357d6f86ef1))
+
+
+### Bug Fixes
+
+* change colors again for accessibility ([a1ff4bd](https://github.com/Rule-34/App/commit/a1ff4bd0eaaa4a2536c453ce34f79157f0dc8c1b))
+* fix width issues ([a131e22](https://github.com/Rule-34/App/commit/a131e228d1663628df6c20a1c13f5436df46f106))
+* re add missing leading ([f503bcc](https://github.com/Rule-34/App/commit/f503bcc28423add8bc553f0df82d4650e69ef032))
+* use correct color ([9523202](https://github.com/Rule-34/App/commit/9523202897cc9f86b7f13a6441a4b2b83e2614ad))
+* use new css ([1496f8f](https://github.com/Rule-34/App/commit/1496f8f19cbab6220a9a22cdeff6da2d0e9b7c89))
+
+
+* major refactor on CSS styles ([d09be61](https://github.com/Rule-34/App/commit/d09be6164ccf989e68bd4d91ca2fa12a4a045415))
+
 ## [2.4.0](https://github.com/Rule-34/App/compare/v2.3.0...v2.4.0) (2021-03-14)
 
 
