@@ -4,6 +4,9 @@
   "description": "Browse the most popular boorus in the Rule 34 App",
   "author": "Alejandro Akbal",
   "private": true,
+  "engines": {
+    "node": "15.x"
+  },
   "scripts": {
     "dev": "nuxt",
     "start": "nuxt start",
