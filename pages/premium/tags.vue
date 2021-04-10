@@ -2,30 +2,30 @@
   <main class="flex flex-col max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
     <div>
       <!-- Booru list -->
-      <div class="px-2 py-1 overflow-scroll rounded-container">
+      <div class="px-2 py-1 overflow-x-scroll material-container">
         <table
           class="w-full text-left border-separate"
           style="border-spacing: 0.25em"
         >
           <thead>
             <tr>
-              <th class="font-normal text-default-text">Name</th>
-              <th class="font-normal text-default-text">Tags</th>
+              <th class="text-lg font-normal text-gray-200">Name</th>
+              <th class="text-lg font-normal text-gray-200">Tags</th>
             </tr>
           </thead>
 
-          <tbody class="truncate text-default-text-muted">
+          <tbody class="text-gray-300 truncate">
             <template v-if="getTagCollections.length">
               <tr
                 v-for="tagCollection in getTagCollections"
                 :key="tagCollection.name"
               >
-                <td class="text-sm" @click="deleteTagCollection(tagCollection)">
+                <td @click="deleteTagCollection(tagCollection)">
                   {{ tagCollection.name }}
                 </td>
 
                 <td
-                  class="text-xs"
+                  class="text-sm"
                   @click="copyTagCollectionToFormCollection(tagCollection)"
                 >
                   {{ tagCollection.tags.join(', ') }}
@@ -36,7 +36,7 @@
             <!-- No tag collections -->
             <template v-else>
               <tr>
-                <td class="text-sm text-center" colspan="999">
+                <td class="text-center" colspan="999">
                   There are no custom tag collections
                 </td>
               </tr>
@@ -45,7 +45,7 @@
         </table>
       </div>
 
-      <p class="p-2 text-xs text-center text-default-text-muted">
+      <p class="p-2 text-xs text-center text-gray-300">
         Click on the `name` to remove. Click on the `tags` to copy.
       </p>
     </div>
@@ -55,43 +55,43 @@
 
     <!-- Booru editor -->
     <form
-      class="flex flex-col p-4 space-y-2 rounded-container text-default-text"
+      class="p-4 space-y-4 material-container"
       @submit.prevent="addTagCollection"
     >
       <!-- Name -->
-      <label>
-        <p class="mb-1 text-default-text-muted">Name</p>
+      <label class="block space-y-1">
+        <p class="text-lg text-gray-200">Name</p>
 
         <input
           v-model="formTagCollection.name"
           type="text"
           name="tagCollectionName"
-          class="block w-full p-1 outline-none bg-background"
+          class="block p-1 text-gray-300 outline-none border-util bg-darkGray-700 focus:focus-util"
           required
         />
       </label>
 
       <!-- Tags -->
-      <label>
-        <p class="mb-1 text-default-text-muted">Tags</p>
+      <label class="block space-y-1">
+        <p class="text-lg text-gray-200">Tags</p>
 
         <textarea
           v-model="formTagCollection.tags"
-          class="block w-full p-1 outline-none bg-background"
+          class="block w-full p-1 text-gray-300 outline-none bg-darkGray-700 border-util focus:focus-util"
           name="tagCollectionTags"
-          rows="2"
+          rows="3"
           required
           spellcheck="false"
         />
 
-        <p class="p-2 text-xs italic text-right text-default-text-muted">
+        <p class="p-2 text-xs italic text-right text-gray-300">
           Separate tags with spaced commas (", ").
         </p>
       </label>
 
       <button
         type="submit"
-        class="w-full px-2 py-1 tracking-wide rounded-full shadow-md bg-gradient-blue-lilac"
+        class="w-full px-2 py-1 tracking-wide rounded-full bg-gradient-to-r from-primary-400 to-accent-400 focus:focus-util"
       >
         Add
       </button>

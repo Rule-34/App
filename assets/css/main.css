@@ -1,27 +1,104 @@
-/* 
- * Tailwind
- * base
- */
-@import 'tailwindcss/base';
+/* #region Tailwind */
 
-/* Styling to elements like h1, p, button, etc. should be here */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@import './general/theme.css';
+/* #endregion */
 
-/* 
- * Tailwind
- * components
- */
-@import 'tailwindcss/components';
+@layer base {
+  /* html {
+  scroll-behavior: smooth;
+    } */
+}
 
-/* Styling to classes like .btn, .card etc. should be here */
+@layer components {
+  /* #region Utils */
 
-@import './general/general.css';
+  .focus-util {
+    /*
+    * NOT TO BE USED DIRECTLY AS CSS 
+    * IN CLASSES IT SHOULD BE USED AS `focus:focus-util`
+    */
+    @apply outline-none ring-4 ring-primary-400;
+  }
 
-/* 
- * Tailwind
- * utilities
- */
-@import 'tailwindcss/utilities';
+  /*  */
 
-/* Styling to utilities like .text-shadow-sm should be here */
+  .border-util {
+    @apply border rounded border-darkGray-100;
+  }
+
+  /*  */
+
+  .link {
+    @apply transition-colors duration-300 text-primary-500;
+  }
+
+  .link:hover {
+    @apply text-primary-400;
+  }
+
+  .link:focus {
+    @apply focus-util;
+  }
+
+  /* #endregion */
+
+  /* #region Components */
+
+  /*  */
+
+  .icon {
+    stroke-width: 1.6;
+    /* Align middle is necessary for some reason for mobile devices */
+    @apply overflow-visible text-white align-middle;
+  }
+
+  /*  */
+
+  .material-container {
+    @apply overflow-hidden rounded-lg bg-darkGray-300 border-util;
+  }
+
+  /* .material-container:focus-within {
+    @apply focus-util;
+  } */
+
+  /*  */
+
+  .tag-container {
+    @apply flex flex-wrap items-start content-start gap-2 p-2 overflow-hidden bg-darkGray-500;
+  }
+
+  /*  */
+
+  .tag {
+    /*
+    * NOT TO BE USED DIRECTLY AS CSS 
+    * IN CLASSES IT SHOULD BE USED WITH `.link`
+    */
+    @apply px-1 overflow-hidden leading-normal border border-current rounded-none select-none;
+  }
+
+  /* #endregion */
+}
+
+/* #region Transitions and animations */
+
+.nuxt-link-exact-active {
+  @apply font-bold text-primary-400;
+}
+
+/* Page Transition */
+.page-enter-active,
+.page-leave-active {
+  @apply transition-opacity duration-300;
+}
+
+.page-enter,
+.page-leave-to {
+  @apply opacity-0;
+}
+
+/* #endregion */

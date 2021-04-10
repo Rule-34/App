@@ -1,62 +1,38 @@
-// tailwind.config.js
 const defaultTheme = require('tailwindcss/defaultTheme')
+const defaultColors = require('tailwindcss/colors')
 
 module.exports = {
-  target: 'modern',
-
-  future: {
-    removeDeprecatedGapUtilities: true,
-    purgeLayersByDefault: true,
-  },
+  mode: 'jit',
 
   purge: {
     options: {
-      whitelistPatterns: [/active/, /fade/, /enter/, /leave/],
+      safelist: [/active/, /fade/, /enter/, /leave/, 'nuxt-link-exact-active'],
     },
   },
 
   theme: {
     extend: {
       colors: {
-        // Colors
-        primary: 'var(--color-primary)',
-        'primary-hover': 'var(--color-primary-hover)',
+        primary: defaultColors.lightBlue,
 
-        // accent: 'var(--color-accent)',
-        // 'accent-hover': 'var(--color-accent-hover)',
+        accent: defaultColors.violet,
 
-        default: 'var(--color-default)',
-        'default-text': 'var(--color-default-text)',
-        'default-text-muted': 'var(--color-default-text-muted)',
+        // --- Default colors for text --- \\
+        // Icons: black or white
+        // Text: text-gray-200 | text-gray-800
+        // Muted: text-gray-300 | text-gray-700
 
-        background: 'var(--color-background)',
+        darkGray: {
+          100: ' hsl(209, 15%, 20%)', // Borders
 
-        elevation: 'var(--color-elevation)',
+          300: ' hsl(209, 15%, 9%)', // Elevation
 
-        depth: 'var(--color-depth)',
+          500: 'hsl(209, 10%, 13%)',
 
-        border: 'var(--color-border)',
-        'border-hover': 'var(--color-border-hover)',
+          700: 'hsl(0, 0%, 7%)', // Background
+        },
 
-        'gradient-one': 'var(--color-gradient-one)',
-        'gradient-two': 'var(--color-gradient-two)',
-      },
-
-      // Top, left, etc.
-      inset: {
-        // '-14': '-3.5rem',
-        // '-16': '-4rem',
-      },
-
-      // padding, margin, width, and height
-      spacing: {
-        // '7vw': '7vw',
-        // '14vw': '14vw'
-      },
-
-      width: {
-        'max-content': 'max-content',
-        'min-content': 'min-content',
+        ...defaultColors,
       },
 
       maxHeight: {
@@ -80,14 +56,12 @@ module.exports = {
       },
     },
   },
-  // Recommended variant order
-  // ['responsive', 'group-hover', 'focus-within', 'first', 'last', 'odd', 'even', 'hover', 'focus', 'active', 'visited', 'disabled']
 
-  // Every variant possible
-  // variants: ['responsive', 'group-hover', 'focus-within', 'first', 'last', 'odd', 'even', 'hover', 'focus', 'active', 'visited', 'disabled'],
-  variants: {
-    textColor: ['responsive', 'group-hover', 'hover', 'focus'],
-  },
-
-  plugins: [require('@tailwindcss/ui')],
+  plugins: [
+    require('@tailwindcss/forms')({
+      strategy: 'class',
+    }),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/aspect-ratio'),
+  ],
 }

@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="fixed z-20 w-full h-full bg-black bg-opacity-25"
+    class="fixed z-20 w-full h-full bg-black bg-opacity-75"
     @click.self.stop="toggleSearchMenu"
   >
     <!-- Constraint -->
@@ -27,11 +27,12 @@
             <!-- Overflow Hidden is very important -->
             <!-- Input because v-model/:value doesn't work on mobile -->
             <input
-              class="flex-1 mx-2 overflow-hidden font-light outline-none text-default-text bg-elevation"
+              class="flex-1 mx-2 overflow-hidden font-light text-gray-200 outline-none bg-darkGray-300 focus:focus-util"
               type="search"
-              name="tags"
+              name="search-tags"
               autofocus
-              placeholder="Search: e.g. dragon"
+              aria-label="Search for tags"
+              placeholder="Search: e.g. mario"
               @input="inputHandler"
               @keypress.enter.prevent="
                 addSearchTagDirectly($event.target.value)
@@ -44,10 +45,11 @@
                 type="button"
                 aria-label="Toggle Custom Tag Collections"
                 title="Custom Tag Collections"
+                class="focus:focus-util"
                 @click="toggleTagCollections"
               >
                 <TagIcon
-                  class="w-6 h-6 transition-colors duration-300 icon hover:text-default-text-muted"
+                  class="w-6 h-6 transition-colors duration-300 icon hover:text-gray-300"
                 />
               </button>
 
@@ -56,10 +58,11 @@
                 type="button"
                 aria-label="Reset tags"
                 title="Reset tags"
+                class="focus:focus-util"
                 @click="resetTags"
               >
                 <TrashIcon
-                  class="w-6 h-6 transition-colors duration-300 icon hover:text-default-text-muted"
+                  class="w-6 h-6 transition-colors duration-300 icon hover:text-gray-300"
                 />
               </button>
 
@@ -68,11 +71,14 @@
                 type="button"
                 aria-label="Filter out content"
                 title="Filter out content"
+                class="focus:focus-util"
                 @click="toggleBanMode"
               >
                 <FilterIcon
-                  :class="{ 'text-red-400': isBanModeEnabled }"
-                  class="w-6 h-6 transition-colors duration-300 icon"
+                  :class="{
+                    'text-red-500 hover:text-red-400': isBanModeEnabled,
+                  }"
+                  class="w-6 h-6 transition-colors duration-300 icon hover:text-gray-300"
                 />
               </button>
             </div>
@@ -85,7 +91,7 @@
             <!-- If nothing searched -->
             <template v-if="!search.data.length && !search.tags.length">
               <h1
-                class="flex items-center justify-center flex-auto text-xl font-light tracking-wide text-default-text"
+                class="flex items-center justify-center flex-auto text-xl font-light tracking-wide text-gray-200"
               >
                 Search something!
               </h1>
@@ -95,13 +101,13 @@
               <!-- Added tags, click them to remove them -->
               <template v-if="search.tags.length">
                 <div
-                  class="flex-initial overflow-y-scroll border-0 rounded tag-container border-border"
+                  class="flex-initial overflow-y-scroll border-0 rounded tag-container border-darkGray-100"
                 >
                   <button
                     v-for="tag in search.tags"
                     :key="tag"
                     type="button"
-                    class="tag color-util"
+                    class="tag link"
                     @click="removeTag(tag)"
                   >
                     {{ tag }}
@@ -113,14 +119,14 @@
 
               <template v-if="search.data.length">
                 <div
-                  class="flex-auto overflow-y-scroll border-0 rounded border-border tag-container"
+                  class="flex-auto overflow-y-scroll border-0 rounded border-darkGray-100 tag-container"
                 >
                   <!-- Add tag to array of added tags -->
                   <button
                     v-for="tag in search.data"
                     :key="tag.name"
                     type="button"
-                    class="tag color-util group"
+                    class="tag link group"
                     @click="addSearchTagDirectly(tag.name)"
                   >
                     <!-- Name of the tag -->
@@ -130,7 +136,7 @@
 
                     <!-- Number of posts with that tag -->
                     <span
-                      class="transition-colors duration-300 text-primary-hover group-hover:text-default"
+                      class="transition-colors duration-300 text-primary-600 group-hover:text-primary-500"
                       >{{ `(${tag.count})` }}
                     </span>
                   </button>
@@ -139,9 +145,9 @@
             </template>
 
             <!-- Submit -->
-            <div class="absolute inset-x-0 bottom-0 flex overflow-hidden">
+            <div class="absolute inset-x-0 bottom-0 flex">
               <button
-                class="w-full px-4 py-2 text-lg font-bold tracking-wide text-center text-default-text bg-gradient-lilac-blue"
+                class="w-full px-4 py-2 text-lg font-medium tracking-wide text-center text-black bg-gradient-to-r from-accent-400 to-primary-400 focus:focus-util"
                 type="submit"
               >
                 Apply tags
@@ -225,6 +231,9 @@ export default {
     },
 
     addSearchTagDirectly(tag) {
+      // Reset current search buffer
+      this.fetchSearchDataFromApi('')
+
       const prefix = this.isBanModeEnabled ? '-' : ''
 
       this.mergeSearchTags([prefix + tag])

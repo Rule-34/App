@@ -46,9 +46,7 @@ export default {
     return {
       // Define color theme based on settings
       bodyAttrs: {
-        class: this.getUserSettings.darkTheme.value
-          ? 'dark bg-background'
-          : 'light bg-background',
+        class: 'bg-darkGray-700',
       },
     }
   },
@@ -86,7 +84,7 @@ console.info(
 /* Transition that is gonna be applied */
 .sidenav-enter-active,
 .sidenav-leave-active {
-  @apply transition-transform duration-300 ease-in-out;
+  @apply transition-transform duration-300;
 }
 
 /* Initial state */
@@ -103,6 +101,6 @@ console.info(
 /* Transition that is gonna be applied */
 .search-enter-active,
 .search-leave-active {
-  @apply transition-transform duration-300 ease-in-out;
+  @apply transition-transform duration-300;
 }
 </style>

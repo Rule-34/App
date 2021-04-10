@@ -1,33 +1,29 @@
 <template>
   <div
-    class="p-2 m-6 text-center text-default-text"
-    :class="{ 'rounded-container': renderBorders }"
+    class="p-4 m-6 text-center text-gray-200"
+    :class="{ 'material-container': renderBorders }"
   >
     <!-- Header -->
-    <div>
-      <h1
-        class="px-2 mx-auto mb-1 text-2xl font-bold tracking-wide border w-max-content"
-      >
-        {{ errorTitle }}
-      </h1>
-    </div>
+    <h1
+      class="px-2 mx-auto text-2xl font-bold leading-normal tracking-wide border border-white w-max"
+    >
+      {{ errorTitle }}
+    </h1>
 
     <!-- Body -->
-    <div>
-      <p>
-        {{ errorData }}
-      </p>
-    </div>
+    <p class="mt-2">
+      {{ errorData }}
+    </p>
 
     <!-- Action -->
-    <div v-if="showAction">
+    <template v-if="showAction">
       <slot name="customAction">
         <!-- Fallback -->
-        <button type="button" class="color-util" @click="reload()">
+        <button type="button" class="link" @click="reload()">
           Reload the page?
         </button>
       </slot>
-    </div>
+    </template>
   </div>
 </template>
 

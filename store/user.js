@@ -11,7 +11,7 @@ export const state = () => ({
 
     tagCollections: [
       {
-        name: 'Furry',
+        name: 'Furry blocklist',
         tags: [
           '-furry',
           '-furry_only',
@@ -32,7 +32,7 @@ export const state = () => ({
         ],
       },
       {
-        name: 'Common Indecencies',
+        name: 'Indecencies blocklist',
         tags: ['-scat', '-diaper', '-shitpost', '-gore'],
       },
     ],
@@ -41,13 +41,6 @@ export const state = () => ({
   // saved: { posts: [] },
 
   settings: {
-    darkTheme: {
-      name: 'Dark theme',
-      description: 'Enable the dark theme.',
-      value: true,
-      defaultValue: true,
-    },
-
     hoverControls: {
       name: 'Hover controls',
       description: 'Page controls will be fixed over the content.',
@@ -70,6 +63,14 @@ export const state = () => ({
       description: 'Load posts infinitely instead of using the page controls.',
       value: false,
       defaultValue: false,
+    },
+
+    postsPerPage: {
+      name: 'Posts per page',
+      description:
+        'Number of posts to load per page, hard limit on most boorus is 100.',
+      value: 20,
+      defaultValue: 20,
     },
 
     score: {

@@ -3,10 +3,10 @@
   <aside class="fixed z-50 navigation-toggler">
     <div class="flex flex-col items-center justify-center">
       <button
-        class="flex items-center justify-center w-12 h-12 p-4 border-0 border-transparent rounded-full shadow-lg md:w-16 md:h-16 bg-gradient-lilac-blue"
+        class="flex items-center justify-center w-12 h-12 p-4 border-0 border-transparent rounded-full md:w-16 md:h-16 bg-gradient-to-b from-primary-400 to-accent-400 focus:focus-util"
         type="menu"
         title="Menu"
-        aria-label="Toggle the Menu"
+        aria-label="Toggle the menu"
         @click="toggleSideNav"
       >
         &nbsp;
@@ -17,7 +17,7 @@
       <button
         v-show="showSearch"
         type="menu"
-        class="flex items-center justify-center w-10 h-10 p-3 border-0 rounded-full shadow-lg md:w-12 md:h-12 bg-gradient-lilac-blue"
+        class="flex items-center justify-center w-10 h-10 p-3 border-0 rounded-full md:w-12 md:h-12 bg-gradient-to-t from-primary-400 to-accent-400 focus:focus-util"
         title="Search"
         aria-label="Toggle the search menu"
         @click="toggleSearch"

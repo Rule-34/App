@@ -5,7 +5,7 @@
 
       <ContentContainer
         title="Notice"
-        text="The 'Frequently Asked Questions' page has been moved to the documentation subdomain."
+        text="The `Frequently Asked Questions` page has been moved to the documentation subdomain."
         icon="bg-svg-info"
         :links="[
           {

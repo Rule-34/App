@@ -5,7 +5,6 @@ export default {
   head() {
     const head = {
       meta: [
-        // TODO: test if it actually works
         {
           hid: 'referrer',
           name: 'referrer',
