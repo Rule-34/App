@@ -2,38 +2,41 @@
   <main class="flex flex-col max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
     <div>
       <!-- Booru list -->
-      <div class="px-2 py-1 overflow-x-scroll rounded-container">
+      <div class="px-2 py-1 overflow-x-scroll material-container">
         <table
           class="w-full text-left border-separate"
           style="border-spacing: 0.25em"
         >
           <thead>
             <tr>
-              <th class="font-normal text-default-text">Domain</th>
-              <th class="font-normal text-default-text">Type</th>
-              <th class="font-normal text-default-text">NSFW</th>
-              <th class="font-normal text-default-text">Config</th>
+              <th class="text-lg font-normal text-gray-200">Domain</th>
+              <th class="text-lg font-normal text-gray-200">Type</th>
+              <th class="text-lg font-normal text-gray-200">NSFW</th>
+              <th class="text-lg font-normal text-gray-200">Config</th>
             </tr>
           </thead>
 
-          <tbody class="text-default-text-muted">
+          <tbody class="text-gray-300">
             <template v-if="getCustomBoorus.length">
               <tr v-for="booru in getCustomBoorus" :key="booru.domain">
-                <td class="text-sm" @click="removeCustomBooru(booru)">
+                <td @click="removeCustomBooru(booru)">
                   {{ booru.domain }}
                 </td>
-                <td class="text-sm" @click="copyBooruToForm(booru)">
+
+                <td @click="copyBooruToForm(booru)">
                   {{ booru.type }}
                 </td>
-                <td class="text-sm">{{ booru.nsfw }}</td>
-                <td class="text-sm">{{ booru.config !== null }}</td>
+
+                <td>{{ booru.nsfw }}</td>
+
+                <td>{{ booru.config !== null }}</td>
               </tr>
             </template>
 
             <!-- No boorus -->
             <template v-else>
               <tr>
-                <td class="text-sm text-center" colspan="999">
+                <td class="text-center" colspan="999">
                   There are no custom boorus
                 </td>
               </tr>
@@ -42,7 +45,7 @@
         </table>
       </div>
 
-      <p class="p-2 text-xs text-center text-default-text-muted">
+      <p class="p-2 text-xs text-center text-gray-300">
         Click on the `domain` to remove. Click on the `type` to copy.
       </p>
     </div>
@@ -52,31 +55,31 @@
 
     <!-- Booru editor -->
     <form
-      class="flex flex-col p-4 space-y-2 rounded-container text-default-text"
+      class="flex flex-wrap gap-4 p-4 material-container"
       @submit.prevent="addFormBooruToCustomBoorus"
     >
       <!-- Domain -->
-      <label>
-        <p class="mb-1 text-default-text-muted">Domain</p>
+      <label class="space-y-1">
+        <p class="text-gray-200">Domain</p>
 
         <input
           v-model="formBooru.domain"
           type="text"
-          name="booruDomain"
-          class="block w-full p-1 outline-none bg-background"
+          name="domain"
+          class="block h-8 p-1 text-gray-300 outline-none border-util bg-darkGray-700 focus:focus-util"
           required
           placeholder="example.com"
         />
       </label>
 
       <!-- Type -->
-      <label>
-        <p class="mb-1 text-default-text-muted">Booru type</p>
+      <label class="space-y-1">
+        <p class="text-gray-200">Booru type</p>
 
         <select
           v-model="formBooru.type"
-          name="booruType"
-          class="block p-1 outline-none bg-background w-max-content"
+          name="type"
+          class="block h-8 p-1 text-gray-300 outline-none bg-darkGray-700 border-util w-max focus:focus-util"
           required
         >
           <option
@@ -90,37 +93,37 @@
       </label>
 
       <!-- NSFW -->
-      <label>
-        <p class="mb-1 text-default-text-muted">NSFW</p>
+      <label class="flex flex-col space-y-1">
+        <p class="text-gray-200">NSFW</p>
 
         <input
           v-model="formBooru.nsfw"
-          name="booruNSFW"
-          class="block p-1 outline-none bg-background"
+          name="nsfw"
+          class="self-center flex-auto block p-1 outline-none bg-darkGray-700 focus:focus-util"
           type="checkbox"
         />
       </label>
 
       <!-- Configuration -->
-      <label>
-        <p class="mb-1 text-default-text-muted">Configuration</p>
+      <label class="flex-auto space-y-1">
+        <p class="text-gray-200">Configuration</p>
 
         <textarea
           v-model="formBooru.config"
-          class="block w-full p-1 outline-none bg-background"
-          name="booruConfig"
-          rows="2"
+          class="block w-full p-1 text-gray-300 outline-none border-util bg-darkGray-700 focus:focus-util"
+          name="config"
+          rows="3"
           spellcheck="false"
         />
       </label>
 
-      <!-- <button type="button" class="text-sm text-default-text-muted">
+      <!-- <button type="button" class="text-sm text-gray-200">
         Test booru
       </button> -->
 
       <button
         type="submit"
-        class="w-full px-2 py-1 tracking-wide rounded-full shadow-md bg-gradient-blue-lilac"
+        class="w-full px-2 py-1 tracking-wide rounded-full bg-gradient-to-r from-primary-400 to-accent-400 focus:focus-util"
       >
         Add
       </button>

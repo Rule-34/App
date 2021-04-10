@@ -1,6 +1,6 @@
 <template>
   <aside class="fixed z-40 flex w-full min-h-screen md:flex-row">
-    <div class="flex flex-col md:border-r bg-elevation border-border">
+    <div class="flex flex-col md:border-r bg-darkGray-300 border-darkGray-100">
       <!-- Hero Image -->
       <div class="relative h-full overflow-hidden">
         <picture>
@@ -13,7 +13,7 @@
 
           <img
             loading="eager"
-            class="transition-transform duration-500 ease-in-out delay-300 transform hover:scale-150"
+            class="transition-transform duration-500 delay-300 transform hover:scale-150"
             src="~/assets/img/brand/icon.png"
             alt="Rule 34 App Logo"
             height="512"
@@ -23,19 +23,19 @@
 
         <!-- Text on image -->
         <div
-          class="absolute bottom-0 left-0 p-3 transition-colors duration-300 color-util"
+          class="absolute bottom-0 left-0 p-3 transition-colors duration-300 link"
         >
           <h1 class="text-lg font-semibold">Rule 34 App</h1>
           <h3>Browse the most popular boorus</h3>
         </div>
       </div>
 
-      <nav class="flex flex-col h-full p-3 bg-background">
+      <nav class="flex flex-col h-full p-3 bg-darkGray-700">
         <!-- Navbar Links -->
-        <ul class="flex-auto leading-loose text-center sm:text-left">
+        <ul class="flex-auto space-y-2 text-center sm:text-left">
           <li v-for="link in sideNavLinks" :key="link.url">
             <NuxtLink
-              class="relative block transition-transform duration-300 transform hover:translate-x-1"
+              class="relative block transition-transform duration-300 transform link hover:translate-x-1"
               :to="link.url"
             >
               <span class="absolute inset-0 opacity-0" />
@@ -46,12 +46,12 @@
           <!-- Premium -->
           <li>
             <NuxtLink
-              class="relative block transition-transform duration-300 transform hover:translate-x-1"
+              class="relative block transition-transform duration-300 transform link hover:translate-x-1"
               to="/premium"
             >
               <span class="absolute inset-0 opacity-0" />
               <span
-                class="relative text-lg font-semibold text-transparent bg-clip-text bg-gradient-blue-lilac"
+                class="relative text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-accent-400 to-primary-400"
               >
                 Premium
               </span>
@@ -63,7 +63,7 @@
           <!-- Discord -->
           <li>
             <a
-              class="flex transition-transform duration-300 transform hover:scale-110"
+              class="flex transition-transform duration-300 transform link hover:scale-110"
               href="https://redirect.r34.app/discord"
             >
               <svg
@@ -83,7 +83,7 @@
           <!-- Legal -->
           <li>
             <NuxtLink
-              class="flex transition-transform duration-300 transform hover:scale-110"
+              class="flex transition-transform duration-300 transform link hover:scale-110"
               to="/legal"
             >
               Legal
@@ -93,7 +93,7 @@
           <!-- Donate -->
           <li>
             <a
-              class="flex transition-transform duration-300 transform hover:scale-110"
+              class="flex transition-transform duration-300 transform link hover:scale-110"
               href="https://redirect.r34.app/donations"
             >
               <svg
@@ -115,7 +115,7 @@
 
     <!-- Space for clicking out of the menu -->
     <div
-      class="flex-1 hidden bg-black bg-opacity-25 md:block"
+      class="flex-1 hidden bg-black bg-opacity-75 md:block"
       @click="sideNavNavigationManager({ operation: 'toggle' })"
     >
       &nbsp;

@@ -1,18 +1,24 @@
 <template>
-  <article class="rounded-container">
+  <article class="material-container">
     <!-- Sets icon bg if icon is defined -->
     <div
-      class="p-3 text-default-text"
+      class="p-3"
       :class="{ 'bg-svg': icon, [icon]: icon, [iconPosition]: icon }"
     >
+      <!--
+        WARNING: THIS IS THE ONLY PART OF THE WEBSITE WHERE
+        UNNECESSARY USE OF `TEXT-SM` IS ALLOWED, OTHERWISE IT MAKES
+        THE FONT LOOK TINY
+      -->
+
       <!-- Title -->
-      <h1>{{ title }}</h1>
+      <h1 class="text-gray-200">{{ title }}</h1>
 
       <!-- Text -->
       <!-- Using v-text as using {{}} would add a `new line` character that `whitespace-pre-line` would interpret. -->
       <p
         v-if="text"
-        class="text-sm whitespace-pre-line text-default-text-muted"
+        class="text-sm text-gray-300 whitespace-pre-line"
         v-text="text"
       />
 
@@ -30,11 +36,11 @@
 
       <!-- Links -->
       <template v-if="links.length">
-        <div>
+        <div class="text-gray-300">
           <template v-for="(link, index) in links">
             <!-- Internal link -->
             <template v-if="link.isInternal">
-              <NuxtLink :key="link.text" :to="link.href" class="text-sm">
+              <NuxtLink :key="link.text" :to="link.href" class="text-sm link">
                 {{ link.text }}
               </NuxtLink>
             </template>
@@ -46,7 +52,7 @@
                 :href="link.href"
                 target="_blank"
                 rel="noopener"
-                class="text-sm"
+                class="text-sm link"
               >
                 {{ link.text }}
               </a>

@@ -1,5 +1,5 @@
 <template>
-  <figure class="text-center material-container text-default-text">
+  <figure class="text-center text-gray-200 material-container">
     <!-- Media -->
     <div class="relative" @click="toggleTags">
       <template v-if="error.show">
@@ -45,14 +45,16 @@
           Your browser does not support HTML5 video.
         </video>
 
+        <!-- Video tag button -->
         <div class="absolute inset-y-0 right-0 p-4 pointer-events-none">
           <div class="flex flex-col items-center justify-center w-full h-full">
             <button
+              aria-label="Toggle tags panel"
               type="button"
-              class="p-1 bg-black bg-opacity-25 border border-transparent rounded-md pointer-events-auto group"
+              class="p-1 bg-black border border-transparent rounded-lg pointer-events-auto bg-opacity-40 group focus:focus-util"
             >
               <TagIcon
-                class="w-5 h-5 transition-colors duration-300 icon text-default-text-muted group-hover:text-default"
+                class="w-5 h-5 text-gray-200 transition-colors duration-300 icon group-hover:text-white"
               />
             </button>
           </div>
@@ -72,10 +74,11 @@
                   v-for="tag in post.tags"
                   :key="tag"
                   type="button"
-                  class="tag color-util"
+                  class="tag link"
                   @click="fetchSpecificTag(tag)"
-                  v-text="tag"
-                />
+                >
+                  {{ tag }}
+                </button>
               </div>
             </div>
           </TransitionCollapse>
@@ -89,16 +92,16 @@
             <!-- If text is an Url then make it linkable -->
             <a
               :href="post.source[0]"
-              class="inline-flex"
+              class="inline-flex link"
               rel="noopener"
               target="_blank"
             >
-              <p class="color-util">
+              <p class="link">
                 {{ sourceText }}
               </p>
 
               <!-- Icon -->
-              <ExternalLinkIcon class="w-5 h-5 ml-2 icon text-default" />
+              <ExternalLinkIcon class="w-5 h-5 ml-2 icon" />
             </a>
           </template>
 

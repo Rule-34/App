@@ -1,15 +1,17 @@
 <template>
-  <div class="relative flex m-0 rounded-full material-container">
+  <div
+    class="relative flex rounded-full material-container focus-within:focus-util"
+  >
     <!-- Cloud icon -->
     <div for="domain-selector" class="inline-flex items-center pl-2 pr-1">
-      <CloudIcon class="w-4 h-4 icon text-primary" />
+      <CloudIcon class="w-4 h-4 icon text-primary-400" />
     </div>
 
     <!-- Selector -->
     <select
       :value="getActiveBooru.domain"
       aria-label="Change the domain where the content is pulled from"
-      class="inline-flex items-center font-light outline-none appearance-none text-primary bg-elevation"
+      class="inline-flex items-center font-light outline-none appearance-none text-primary-400 bg-darkGray-300"
       @change="changeDomain($event.target.value)"
     >
       <optgroup label="Default">
@@ -43,7 +45,7 @@
 
     <!-- Drop icon -->
     <div class="inline-flex items-center pl-1 pr-2">
-      <ChevronDownIcon class="w-4 h-4 icon text-default" />
+      <ChevronDownIcon class="w-4 h-4 icon" />
     </div>
   </div>
 </template>
