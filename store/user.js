@@ -67,7 +67,8 @@ export const state = () => ({
 
     postsPerPage: {
       name: 'Posts per page',
-      description: 'Number of posts to load per page, hard limit is 100.',
+      description:
+        'Number of posts to load per page, hard limit on most boorus is 100.',
       value: 20,
       defaultValue: 20,
     },
