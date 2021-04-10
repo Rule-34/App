@@ -65,6 +65,13 @@ export const state = () => ({
       defaultValue: false,
     },
 
+    postsPerPage: {
+      name: 'Posts per page',
+      description: 'Number of posts to load per page, hard limit is 100.',
+      value: 20,
+      defaultValue: 20,
+    },
+
     score: {
       name: 'Minimum score',
       description: 'Required score for a post to show.',
