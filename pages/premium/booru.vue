@@ -65,7 +65,7 @@
         <input
           v-model="formBooru.domain"
           type="text"
-          name="booruDomain"
+          name="domain"
           class="block h-8 p-1 text-gray-300 outline-none border-util bg-darkGray-700 focus:focus-util"
           required
           placeholder="example.com"
@@ -78,7 +78,7 @@
 
         <select
           v-model="formBooru.type"
-          name="booruType"
+          name="type"
           class="block h-8 p-1 text-gray-300 outline-none bg-darkGray-700 border-util w-max focus:focus-util"
           required
         >
@@ -98,7 +98,7 @@
 
         <input
           v-model="formBooru.nsfw"
-          name="booruNSFW"
+          name="nsfw"
           class="self-center flex-auto block p-1 outline-none bg-darkGray-700 focus:focus-util"
           type="checkbox"
         />
@@ -111,7 +111,7 @@
         <textarea
           v-model="formBooru.config"
           class="block w-full p-1 text-gray-300 outline-none border-util bg-darkGray-700 focus:focus-util"
-          name="booruConfig"
+          name="config"
           rows="3"
           spellcheck="false"
         />

@@ -29,7 +29,7 @@
             <input
               class="flex-1 mx-2 overflow-hidden font-light text-gray-200 outline-none bg-darkGray-300 focus:focus-util"
               type="search"
-              name="tags"
+              name="search-tags"
               autofocus
               placeholder="Search: e.g. dragon"
               @input="inputHandler"
