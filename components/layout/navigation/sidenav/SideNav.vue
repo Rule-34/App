@@ -115,7 +115,7 @@
 
     <!-- Space for clicking out of the menu -->
     <div
-      class="flex-1 hidden bg-black bg-opacity-25 md:block"
+      class="flex-1 hidden bg-black bg-opacity-75 md:block"
       @click="sideNavNavigationManager({ operation: 'toggle' })"
     >
       &nbsp;

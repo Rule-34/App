@@ -50,7 +50,7 @@
         <div class="absolute inset-0 overflow-hidden">
           <!-- Background -->
           <div
-            class="absolute inset-0 transition-opacity bg-black bg-opacity-25"
+            class="absolute inset-0 bg-black bg-opacity-75"
             aria-hidden="true"
             @click="toggleNotifications"
           ></div>
