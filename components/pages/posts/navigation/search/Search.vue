@@ -19,9 +19,7 @@
           @submit.prevent="addTagsToBooruState"
         >
           <!-- Search bar -->
-          <div
-            class="flex flex-row h-auto p-2 material-container focus-within:focus-util"
-          >
+          <div class="flex flex-row h-auto p-2 material-container">
             <!-- Search Icon -->
             <SearchIcon class="w-6 h-6 icon" />
 
@@ -29,7 +27,7 @@
             <!-- Overflow Hidden is very important -->
             <!-- Input because v-model/:value doesn't work on mobile -->
             <input
-              class="flex-1 mx-2 overflow-hidden font-light text-gray-200 outline-none bg-darkGray-300"
+              class="flex-1 mx-2 overflow-hidden font-light text-gray-200 outline-none bg-darkGray-300 focus:focus-util"
               type="search"
               name="tags"
               autofocus
