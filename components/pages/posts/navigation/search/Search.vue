@@ -31,7 +31,8 @@
               type="search"
               name="search-tags"
               autofocus
-              placeholder="Search: e.g. dragon"
+              aria-label="Search for tags"
+              placeholder="Search: e.g. mario"
               @input="inputHandler"
               @keypress.enter.prevent="
                 addSearchTagDirectly($event.target.value)
