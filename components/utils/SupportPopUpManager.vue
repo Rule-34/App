@@ -38,7 +38,7 @@ import fireAnalytics from '~/assets/js/analytics'
 export default {
   data() {
     return {
-      isSupportPopUpActive: false,
+      isActive: false,
     }
   },
 
@@ -50,11 +50,11 @@ export default {
     this.setTimesTheAppHasBeenOpened(this.getTimesTheAppHasBeenOpened + 1)
 
     if (this.getTimesTheAppHasBeenOpened % 10 === 0) {
-      this.isSupportPopUpActive = true
+      this.isActive = true
 
       fireAnalytics('supportPopUp')
     } else {
-      this.isSupportPopUpActive = false
+      this.isActive = false
     }
   },
 
@@ -62,7 +62,7 @@ export default {
     ...mapMutations(['setTimesTheAppHasBeenOpened']),
 
     toggleSupportPopUp() {
-      this.isSupportPopUpActive = !this.isSupportPopUpActive
+      this.isActive = !this.isActive
     },
   },
 }
