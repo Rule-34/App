@@ -1,76 +1,106 @@
 <template>
-  <!-- 
-    This should use Vue 3's teleport feature
-    https://v3.vuejs.org/guide/teleport.html
-  -->
-  <aside
-    class="fixed inset-0 z-30 w-full h-full bg-black bg-opacity-25"
-    @click.self.stop="toggleTagCollections"
+  <div
+    class="fixed inset-0 z-30 overflow-y-auto"
+    aria-labelledby="tag-collections-title"
+    role="dialog"
+    aria-modal="true"
   >
-    <!-- Constraint -->
     <div
-      class="h-full max-w-2xl p-6 mx-auto sm:p-8 lg:p-10"
-      @click.self.stop="toggleTagCollections"
+      class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0"
     >
-      <!-- Content -->
-      <menu class="flex flex-col w-full h-full p-4 material-container">
-        <!-- Title -->
-        <header
-          class="text-xl font-semibold tracking-wide text-center text-lilac-gra"
-        >
-          Tag Collections
-        </header>
+      <!-- Background overlay -->
+      <div
+        class="fixed inset-0 bg-black bg-opacity-75"
+        aria-hidden="true"
+        @click.self.stop="toggleTagCollections"
+      >
+        <!--  -->
+      </div>
 
-        <!-- Tag Collections -->
-        <section
-          class="flex-auto mt-4 space-y-2 overflow-y-scroll text-gray-200"
-        >
-          <template v-if="getTagCollections.length">
-            <article
-              v-for="(tagCollection, index) in getTagCollections"
-              :key="tagCollection.name"
-              class="flex items-center justify-between px-2 py-1 material-container bg-darkGray-700"
-              @click="addTagCollectionToTags(index)"
-            >
-              <p class="truncate">{{ tagCollection.name }}</p>
+      <!-- This element is to trick the browser into centering the modal contents. -->
+      <span
+        class="hidden sm:inline-block sm:align-middle sm:h-screen"
+        aria-hidden="true"
+      >
+        &#8203;
+      </span>
 
-              <div class="flex-shrink-0 link">
-                {{ tagCollection.tags.length }}
+      <!-- Modal panel -->
+      <div
+        class="inline-block w-full max-w-xl p-4 align-bottom transform material-container sm:align-middle"
+      >
+        <div class="text-center">
+          <h3
+            class="text-lg font-medium leading-6 text-accent-400"
+            id="tag-collections-title"
+          >
+            Tag Collections
+          </h3>
+        </div>
 
-                <TagIcon class="inline w-5 h-5 icon" />
-              </div>
-            </article>
-          </template>
+        <div class="my-4">
+          <!--  -->
 
-          <template v-else>
-            <Error
-              :render-borders="false"
-              error-data="No Tag Collections available"
-            >
-              <template #customAction>
-                <NuxtLink to="/premium" class="link"> Create some? </NuxtLink>
-              </template>
-            </Error>
-          </template>
-        </section>
+          <ul class="space-y-3">
+            <!--  -->
 
-        <!-- CTA -->
-        <footer class="space-y-1 text-sm text-center">
+            <template v-if="getTagCollections.length">
+              <!--  -->
+
+              <li
+                class="px-2 py-1 text-left border-util focus-within:focus-util"
+                v-for="(tagCollection, index) in getTagCollections"
+                :key="tagCollection.name"
+              >
+                <!--  -->
+
+                <button
+                  type="button"
+                  class="flex justify-between w-full"
+                  @click="addTagCollectionToTags(index)"
+                >
+                  <span class="text-gray-300 truncate">
+                    {{ tagCollection.name }}
+                  </span>
+
+                  <span class="flex-shrink-0 text-primary-500">
+                    {{ tagCollection.tags.length }}
+
+                    <TagIcon class="inline w-5 h-5 icon" />
+                  </span>
+                </button>
+              </li>
+            </template>
+
+            <template v-else>
+              <Error
+                :render-borders="false"
+                error-data="No Tag Collections available"
+              >
+                <template #customAction>
+                  <NuxtLink to="/premium" class="link"> Create some? </NuxtLink>
+                </template>
+              </Error>
+            </template>
+          </ul>
+        </div>
+
+        <div class="space-y-1 text-sm">
           <NuxtLink to="/premium" class="link">Create more</NuxtLink>
 
           <p class="text-xs text-gray-300">Or</p>
 
           <button
-            class="text-sm link"
+            class="link"
             type="button"
             @click="saveSearchTagsToTagCollection"
           >
             Create from current tags
           </button>
-        </footer>
-      </menu>
+        </div>
+      </div>
     </div>
-  </aside>
+  </div>
 </template>
 
 <script>
