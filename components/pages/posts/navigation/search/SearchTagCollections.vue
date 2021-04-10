@@ -48,7 +48,7 @@
               <!--  -->
 
               <li
-                class="px-2 py-1 text-left border-util focus-within:focus-util"
+                class="px-2 py-1 text-left border-util focus-within:focus-util group"
                 v-for="(tagCollection, index) in getTagCollections"
                 :key="tagCollection.name"
               >
@@ -59,11 +59,15 @@
                   class="flex justify-between w-full"
                   @click="addTagCollectionToTags(index)"
                 >
-                  <span class="text-gray-300 truncate">
+                  <span
+                    class="text-gray-300 truncate group-hover:text-gray-200"
+                  >
                     {{ tagCollection.name }}
                   </span>
 
-                  <span class="flex-shrink-0 text-primary-500">
+                  <span
+                    class="flex-shrink-0 text-primary-500 group-hover:text-primary-400"
+                  >
                     {{ tagCollection.tags.length }}
 
                     <TagIcon class="inline w-5 h-5 icon" />
