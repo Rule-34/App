@@ -11,7 +11,7 @@ export const state = () => ({
 
     tagCollections: [
       {
-        name: 'Furry',
+        name: 'Furry blocklist',
         tags: [
           '-furry',
           '-furry_only',
@@ -32,7 +32,7 @@ export const state = () => ({
         ],
       },
       {
-        name: 'Common Indecencies',
+        name: 'Indecencies blocklist',
         tags: ['-scat', '-diaper', '-shitpost', '-gore'],
       },
     ],
