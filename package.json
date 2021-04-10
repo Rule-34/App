@@ -5,7 +5,8 @@
   "author": "Alejandro Akbal",
   "private": true,
   "engines": {
-    "node": "15.x"
+    "node": "15.x",
+    "npm": "7.x"
   },
   "scripts": {
     "dev": "nuxt",
