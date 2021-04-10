@@ -231,6 +231,9 @@ export default {
     },
 
     addSearchTagDirectly(tag) {
+      // Reset current search buffer
+      this.fetchSearchDataFromApi('')
+
       const prefix = this.isBanModeEnabled ? '-' : ''
 
       this.mergeSearchTags([prefix + tag])
