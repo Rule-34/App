@@ -49,7 +49,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'Information about the App',
+          content: 'Information about the creator.',
         },
       ],
     }
