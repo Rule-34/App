@@ -1,9 +1,18 @@
 import VuexPersistence from 'vuex-persist'
 
-export default ({ store }) => {
+export default (context) => {
+  const {
+    store,
+    $localForage,
+    app: { router },
+  } = context
+
   // Booru state
   new VuexPersistence({
     key: 'booru',
+
+    storage: $localForage,
+    asyncStorage: true,
 
     reducer: (state) => ({
       booru: {
@@ -16,6 +25,9 @@ export default ({ store }) => {
   new VuexPersistence({
     key: 'vuex',
 
+    storage: $localForage,
+    asyncStorage: true,
+
     reducer: (state) => ({
       statistics: state.statistics,
     }),
@@ -24,6 +36,9 @@ export default ({ store }) => {
   // Notifications state
   new VuexPersistence({
     key: 'notifications',
+
+    storage: $localForage,
+    asyncStorage: true,
 
     reducer: (state) => ({
       notifications: {
@@ -38,6 +53,9 @@ export default ({ store }) => {
   // User state
   new VuexPersistence({
     key: 'user',
+
+    storage: $localForage,
+    asyncStorage: true,
 
     reducer: (state) => {
       const SETTINGS_OBJ = {}
