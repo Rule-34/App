@@ -75,4 +75,12 @@ export default (context) => {
       }
     },
   }).plugin(store)
+
+  // Fix for async storage
+  const waitForStorageToBeReady = async (to, from, next) => {
+    await store.restored
+    next()
+  }
+
+  router.beforeEach(waitForStorageToBeReady)
 }
