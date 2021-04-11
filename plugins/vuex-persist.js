@@ -9,7 +9,7 @@ export default (context) => {
 
   // Booru state
   new VuexPersistence({
-    key: 'booru',
+    key: 'vuex-booru',
 
     storage: $localForage,
     asyncStorage: true,
@@ -23,7 +23,7 @@ export default (context) => {
 
   // Default state
   new VuexPersistence({
-    key: 'vuex',
+    key: 'vuex-root',
 
     storage: $localForage,
     asyncStorage: true,
@@ -35,7 +35,7 @@ export default (context) => {
 
   // Notifications state
   new VuexPersistence({
-    key: 'notifications',
+    key: 'vuex-notifications',
 
     storage: $localForage,
     asyncStorage: true,
@@ -52,7 +52,7 @@ export default (context) => {
 
   // User state
   new VuexPersistence({
-    key: 'user',
+    key: 'vuex-user',
 
     storage: $localForage,
     asyncStorage: true,
