@@ -38,7 +38,7 @@
             to="/premium/custom-boorus"
             class="ml-3 text-base font-medium leading-6 link"
           >
-            Add more boorus
+            Add more Boorus
           </NuxtLink>
         </li>
 
