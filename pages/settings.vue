@@ -77,7 +77,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'Tweak your experience',
+          content: 'Settings to tweak your experience.',
         },
       ],
     }

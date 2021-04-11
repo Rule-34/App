@@ -119,7 +119,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'Create custom tag collections',
+          content: 'Create collections of tags.',
         },
       ],
     }
