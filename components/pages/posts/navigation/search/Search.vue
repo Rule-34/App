@@ -19,7 +19,9 @@
           @submit.prevent="addTagsToBooruState"
         >
           <!-- Search bar -->
-          <div class="flex flex-row h-auto p-2 material-container">
+          <div
+            class="flex flex-row h-auto p-2 material-container focus-within:focus-util"
+          >
             <!-- Search Icon -->
             <SearchIcon class="w-6 h-6 icon" />
 
@@ -27,7 +29,7 @@
             <!-- Overflow Hidden is very important -->
             <!-- Input because v-model/:value doesn't work on mobile -->
             <input
-              class="flex-1 mx-2 overflow-hidden font-light text-gray-200 outline-none bg-darkGray-300 focus:focus-util"
+              class="flex-1 mx-2 overflow-hidden font-light text-gray-200 outline-none bg-darkGray-300"
               type="search"
               name="search-tags"
               autofocus
@@ -45,7 +47,6 @@
                 type="button"
                 aria-label="Toggle Custom Tag Collections"
                 title="Custom Tag Collections"
-                class="focus:focus-util"
                 @click="toggleTagCollections"
               >
                 <TagIcon
@@ -58,7 +59,6 @@
                 type="button"
                 aria-label="Reset tags"
                 title="Reset tags"
-                class="focus:focus-util"
                 @click="resetTags"
               >
                 <TrashIcon
@@ -71,7 +71,6 @@
                 type="button"
                 aria-label="Filter out content"
                 title="Filter out content"
-                class="focus:focus-util"
                 @click="toggleBanMode"
               >
                 <FilterIcon
