@@ -240,9 +240,8 @@ export default {
 
     fetchSearchDataFromApi: debounce(async function (tags) {
       if (tags.length <= 1) {
-        await this.tagsManager({
-          operation: 'reset',
-        })
+        // Reset searched data
+        this.search.data = []
         return
       }
 
