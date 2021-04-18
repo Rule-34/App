@@ -17,7 +17,7 @@
           :class="{
             'opacity-100': media.hasLoaded,
           }"
-          :alt="'Image ' + post.id"
+          :alt="'Image ' + postData.id"
           class="w-full h-auto opacity-0 post-animation"
           :height="mediaResolutionChooser.height"
           :width="mediaResolutionChooser.width"
@@ -30,10 +30,10 @@
 
       <template v-else-if="isVideo">
         <video
-          :alt="'Video ' + post.id"
+          :alt="'Video ' + postData.id"
           class="w-full h-auto"
           preload="none"
-          :poster="post.preview_file.url"
+          :poster="postData.preview_file.url"
           controls
           loop
           playsinline
@@ -64,14 +64,14 @@
 
     <figcaption class="flex flex-wrap overflow-hidden text-sm">
       <!-- Tags -->
-      <template v-if="post.tags.length">
+      <template v-if="postData.tags.length">
         <div class="w-full overflow-hidden">
           <TransitionCollapse>
             <div v-if="isActive">
               <!-- Workaround for this not jumping is having a div before -->
               <div class="min-w-full tag-container">
                 <button
-                  v-for="tag in post.tags"
+                  v-for="tag in postData.tags"
                   :key="tag"
                   type="button"
                   class="tag link"
@@ -86,12 +86,12 @@
       </template>
 
       <!-- Source -->
-      <template v-if="post.source.length">
+      <template v-if="postData.source.length">
         <div class="w-full p-1 text-center">
           <template v-if="isUrl">
             <!-- If text is an Url then make it linkable -->
             <a
-              :href="post.source[0]"
+              :href="postData.source[0]"
               class="inline-flex link"
               rel="noopener"
               target="_blank"
@@ -123,11 +123,9 @@ export default {
   components: { ExternalLinkIcon, TagIcon },
 
   props: {
-    post: {
+    postData: {
       type: Object,
-      default() {
-        return undefined
-      },
+      required: true,
     },
   },
 
@@ -161,44 +159,44 @@ export default {
 
     // #region Post media
     isImage() {
-      return this.post.media_type === 'image'
+      return this.postData.media_type === 'image'
     },
 
     isVideo() {
-      return this.post.media_type === 'video'
+      return this.postData.media_type === 'video'
     },
 
     mediaResolutionChooser() {
       // Always return high res file if its a video
-      if (this.isVideo && this.post.high_res_file) {
-        return this.post.high_res_file
+      if (this.isVideo && this.postData.high_res_file) {
+        return this.postData.high_res_file
       }
 
       // Return full image if its setting is enabled OR if low resolution file doesn't exist
       if (
-        !this.post.low_res_file.url ||
+        !this.postData.low_res_file.url ||
         this.getUserSettings.fullSizeImages.value
       ) {
-        return this.post.high_res_file
+        return this.postData.high_res_file
       }
 
       // Return low res file
-      return this.post.low_res_file
+      return this.postData.low_res_file
     },
     // #endregion
 
     // #region Post media
     isUrl() {
-      return this.post.source[0].startsWith('http', 'www')
+      return this.postData.source[0].startsWith('http', 'www')
     },
 
     sourceText() {
       if (this.isUrl) {
-        return new URL(this.post.source[0]).hostname
+        return new URL(this.postData.source[0]).hostname
       }
 
       // Return the entire source as it's text
-      return this.post.source[0]
+      return this.postData.source[0]
     },
     // #endregion
   },
