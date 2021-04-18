@@ -15,7 +15,7 @@
 
       <ul class="flex-auto space-y-4">
         <li v-for="post in getPosts" :key="post.id">
-          <Post :post="post" />
+          <Post :post-data="post" />
         </li>
       </ul>
 
