@@ -127,6 +127,11 @@ export default {
       type: Object,
       required: true,
     },
+
+    viewOnly: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -343,6 +348,11 @@ export default {
 
     // #region Post tags
     fetchSpecificTag(tag) {
+      if (this.viewOnly) {
+        console.info('View only')
+        return
+      }
+
       this.tagsManager({
         operation: 'set',
         value: [tag],
