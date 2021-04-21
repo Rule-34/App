@@ -22,6 +22,7 @@
     "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/sentry": "^5.0.3",
     "@nuxtjs/sitemap": "^2.4.0",
+    "@nuxtjs/tailwindcss": "^4.0.3",
     "lodash-es": "^4.17.21",
     "nuxt": "^2.15.4",
     "vue-feather-icons": "^5.1.0",
@@ -33,7 +34,6 @@
   "devDependencies": {
     "@nuxt/types": "^2.15.4",
     "@nuxtjs/eslint-config": "^6.0.0",
-    "@nuxtjs/tailwindcss": "^4.0.3",
     "@tailwindcss/aspect-ratio": "^0.2.0",
     "@tailwindcss/forms": "^0.3.2",
     "@tailwindcss/typography": "^0.4.0",
