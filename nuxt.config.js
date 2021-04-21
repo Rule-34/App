@@ -195,17 +195,17 @@ export default {
     config: {
       ignoreErrors: [
         // Network
-        'Fetch',
-        'Request',
-        'Network',
+        // 'Fetch',
+        // 'Request',
+        // 'Network',
 
         // 'URL',
 
         // Plugins
-        'vue-matomo',
+        // 'vue-matomo',
 
         // Misc
-        'native code',
+        // 'native code',
         'extension',
       ],
     },
