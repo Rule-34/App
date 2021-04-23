@@ -64,8 +64,8 @@ export default {
 
   loadingIndicator: {
     name: 'cube-grid',
-    color: '#121212',
-    background: 'linear-gradient(152deg, #9b9be0 38%, #00d4ff 100%)',
+    color: TAILWIND_CONFIG.theme.extend.colors.darkGray[700],
+    background: `linear-gradient(152deg, ${TAILWIND_CONFIG.theme.extend.colors.primary[400]} 38%, ${TAILWIND_CONFIG.theme.extend.colors.accent[400]} 90%)`,
   },
 
   css: ['~/assets/css/main.css'],
