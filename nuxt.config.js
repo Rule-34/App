@@ -1,3 +1,5 @@
+import * as TAILWIND_CONFIG from './tailwind.config'
+
 export default {
   target: 'static',
 
@@ -51,9 +53,11 @@ export default {
   },
 
   loading: {
-    color: 'var(--color-gradient-two)',
-    // failedColor: '',
+    color: TAILWIND_CONFIG.theme.extend.colors.primary[400],
+    failedColor: TAILWIND_CONFIG.theme.extend.colors.red[400],
+
     // height: '5px',
+
     throttle: 200,
     continuous: true,
   },
@@ -153,8 +157,8 @@ export default {
       short_name: 'Rule 34 App',
       lang: 'en',
       start_url: '/?utm_source=PWA',
-      theme_color: '#121212',
-      background_color: '#121212',
+      theme_color: TAILWIND_CONFIG.theme.extend.colors.darkGray[700],
+      background_color: TAILWIND_CONFIG.theme.extend.colors.darkGray[700],
       shortcuts: [
         {
           name: 'Open Settings',
