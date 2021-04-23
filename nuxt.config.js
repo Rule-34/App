@@ -201,6 +201,9 @@ export default {
 
         // 'URL',
 
+        // Media
+        'AbortError',
+
         // Plugins
         'vue-matomo',
 
