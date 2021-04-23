@@ -1,6 +1,6 @@
 {
   "name": "rule-34-app",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "Browse the most popular boorus in the Rule 34 App",
   "author": "Alejandro Akbal",
   "private": true,
@@ -17,35 +17,33 @@
     "release:publish": "git push --follow-tags origin master"
   },
   "dependencies": {
-    "@nuxtjs/auth-next": "5.0.0-1617968180.f699074",
+    "@nuxtjs/auth-next": "5.0.0-1618898588.9655d0e",
     "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/sentry": "^5.0.3",
     "@nuxtjs/sitemap": "^2.4.0",
+    "@nuxtjs/tailwindcss": "^4.0.3",
+    "@tailwindcss/aspect-ratio": "^0.2.0",
+    "@tailwindcss/forms": "^0.3.2",
+    "@tailwindcss/typography": "^0.4.0",
     "lodash-es": "^4.17.21",
     "nuxt": "^2.15.4",
     "vue-feather-icons": "^5.1.0",
     "vue-matomo": "^3.14.0-0",
-    "vuetify": "^2.4.9",
+    "vuetify": "^2.4.10",
     "vuex-persist": "^3.1.3",
     "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.4",
     "@nuxtjs/eslint-config": "^6.0.0",
-    "@nuxtjs/localforage": "^1.1.0",
-    "@nuxtjs/tailwindcss": "^4.0.3",
-    "@tailwindcss/aspect-ratio": "^0.2.0",
-    "@tailwindcss/forms": "^0.3.2",
-    "@tailwindcss/typography": "^0.4.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.24.0",
-    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-prettier": "^8.2.0",
     "eslint-plugin-nuxt": ">=2.0.0",
-    "eslint-plugin-prettier": "^3.3.1",
-    "postcss": "^8.2.9",
+    "eslint-plugin-prettier": "^3.4.0",
+    "postcss": "^8.2.10",
     "prettier": "^2.2.1",
-    "standard-version": "^9.2.0",
-    "tailwindcss": "^2.1.1"
+    "standard-version": "^9.2.0"
   }
 }

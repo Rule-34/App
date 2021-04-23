@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.5.1](https://github.com/Rule-34/App/compare/v2.5.0...v2.5.1) (2021-04-23)
+
+
+### Features
+
+* use configuration colors from TailwindCSS ([557d69d](https://github.com/Rule-34/App/commit/557d69df72a668841d660d5d2e27bb22d6fdf5f1))
+
 ## [2.5.0](https://github.com/Rule-34/App/compare/v2.4.0...v2.5.0) (2021-04-10)
 
 
