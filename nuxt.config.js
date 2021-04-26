@@ -209,11 +209,13 @@ export default {
         'AbortError',
 
         // Plugins
+        'matomo',
         'vue-matomo',
 
         // Misc
         'native code',
         'extension',
+        'unknown module',
       ],
     },
   },
