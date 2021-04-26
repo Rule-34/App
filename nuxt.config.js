@@ -197,6 +197,8 @@ export default {
     // sourceMapStyle: 'hidden-source-map',
 
     config: {
+      whitelistUrls: ['r34.app', 'akbal.dev'],
+
       ignoreErrors: [
         // Network
         'Fetch',
