@@ -114,12 +114,12 @@ export default {
 
   head() {
     return {
-      title: 'Custom tag collections',
+      title: 'Tag Collections',
       meta: [
         {
           hid: 'description',
           name: 'description',
-          content: 'Create custom tag collections',
+          content: 'Create collections of tags.',
         },
       ],
     }

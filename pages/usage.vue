@@ -62,7 +62,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'Learn how to use App',
+          content: 'How to use some features.',
         },
       ],
     }

@@ -35,10 +35,10 @@
             <check-icon class="w-6 h-6 icon text-accent-400" />
           </div>
           <NuxtLink
-            to="/premium/booru"
+            to="/premium/custom-boorus"
             class="ml-3 text-base font-medium leading-6 link"
           >
-            Add more boorus
+            Add more Boorus
           </NuxtLink>
         </li>
 
@@ -48,7 +48,7 @@
             <check-icon class="w-6 h-6 icon text-accent-400" />
           </div>
           <NuxtLink
-            to="/premium/tags"
+            to="/premium/tag-collections"
             class="ml-3 text-base font-medium leading-6 link"
           >
             Create collections of Tags
