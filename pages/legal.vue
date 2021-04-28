@@ -93,7 +93,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'Legal information',
+          content: 'Legal information.',
         },
       ],
     }

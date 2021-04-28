@@ -46,7 +46,7 @@
 
           <NuxtLink
             class="px-3 py-2 rounded-full link border-util bg-darkGray-700"
-            to="/premium/booru"
+            to="/premium/custom-boorus"
           >
             Modify
           </NuxtLink>
@@ -61,7 +61,7 @@
 
           <NuxtLink
             class="px-3 py-2 rounded-full link border-util bg-darkGray-700"
-            to="/premium/tags"
+            to="/premium/tag-collections"
           >
             Modify
           </NuxtLink>

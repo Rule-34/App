@@ -82,6 +82,8 @@ export default {
   buildModules: [
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
     '@nuxtjs/tailwindcss',
+    //
+    '@nuxtjs/localforage',
   ],
 
   tailwindcss: {
@@ -90,6 +92,11 @@ export default {
     cssPath: '~/assets/css/main.css',
 
     jit: true,
+  },
+
+  localforage: {
+    name: 'Rule34App',
+    storeName: 'localForage',
   },
 
   modules: [
@@ -201,9 +208,9 @@ export default {
 
       ignoreErrors: [
         // Network
-        'Fetch',
-        'Request',
-        'Network',
+        // 'Fetch',
+        // 'Request',
+        // 'Network',
 
         // 'URL',
 
