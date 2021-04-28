@@ -35,10 +35,9 @@
               autofocus
               aria-label="Search for tags"
               placeholder="Search: e.g. mario"
+              v-model="search.query"
               @input="inputHandler"
-              @keypress.enter.prevent="
-                addSearchTagDirectly($event.target.value)
-              "
+              @keypress.enter.prevent="inputEnterHandler"
             />
 
             <div class="flex space-x-1">
@@ -126,7 +125,7 @@
                     :key="tag.name"
                     type="button"
                     class="tag link group"
-                    @click="addSearchTagDirectly(tag.name)"
+                    @click="addTagConsideringBanMode(tag.name)"
                   >
                     <!-- Name of the tag -->
                     <span>
@@ -202,6 +201,12 @@ export default {
   computed: {
     ...mapGetters('premium', ['isUserPremium']),
     ...mapGetters('booru', ['getTags']),
+
+    // Workaround so we can use cancel on debounce
+    // See https://github.com/vuejs/vue/issues/2870
+    debouncedFetchSearchDataFromApi: function () {
+      return debounce(this.fetchSearchDataFromApi, 350)
+    },
   },
 
   mounted() {
@@ -220,43 +225,38 @@ export default {
 
     // #region Search bar
     async inputHandler(event) {
-      let input = event.target.value
+      // Replace empty spaces with underscores
+      this.search.query = this.search.query.replace(/\s+/g, '_')
 
-      input = input.replace(/\s+/g, '_')
-
-      event.target.value = input
-
-      await this.fetchSearchDataFromApi(input)
-    },
-
-    addSearchTagDirectly(tag) {
-      // Reset current search buffer
-      this.fetchSearchDataFromApi('')
-
-      const prefix = this.isBanModeEnabled ? '-' : ''
-
-      this.mergeSearchTags([prefix + tag])
-    },
-
-    fetchSearchDataFromApi: debounce(async function (tags) {
-      if (tags.length <= 1) {
-        // Reset searched data
-        this.search.data = []
+      if (this.search.query.length === 0) {
+        this.debouncedFetchSearchDataFromApi.cancel()
+        this.resetSearchData()
         return
       }
 
+      await this.debouncedFetchSearchDataFromApi(this.search.query)
+    },
+
+    inputEnterHandler(tag) {
+      this.debouncedFetchSearchDataFromApi.cancel()
+
+      this.mergeSearchTags([this.search.query])
+    },
+
+    async fetchSearchDataFromApi(tags) {
       const data = await this.fetchTags(tags)
 
       if (!data) {
         console.debug('No tag data.')
+        this.resetSearchData()
         return
       }
 
       this.search.data = data
-    }, 350),
+    },
 
-    resetTags() {
-      this.search.tags = []
+    resetSearchData() {
+      this.search.data = []
     },
 
     toggleBanMode() {
@@ -274,12 +274,22 @@ export default {
     // #endregion
 
     // #region Search results
+    addTagConsideringBanMode(tag) {
+      const prefix = this.isBanModeEnabled ? '-' : ''
+
+      this.mergeSearchTags([prefix + tag])
+    },
+
     removeTag(tagToRemove) {
       this.search.tags = this.search.tags.filter((tag) => tag !== tagToRemove)
     },
 
     mergeSearchTags(tags) {
       this.search.tags = [...new Set([...this.search.tags, ...tags])]
+    },
+
+    resetTags() {
+      this.search.tags = []
     },
 
     async addTagsToBooruState() {
