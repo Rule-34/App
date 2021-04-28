@@ -1,13 +1,19 @@
 # Rule 34 App
 
-Browse the most popular Boorus in the [Rule 34 App](https://r34.app/).
+A Progressive Web App to browse the most popular Rule 34 Hentai Porn.
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/703629e2-193f-4bb0-9349-f02a22d50ed1/deploy-status)](https://app.netlify.com/sites/rule34-app/deploys)
 
-## Preview
+## Screenshots
 
-![Posts Preview](.github/images/dashboard.png)
-![Settings Preview](.github/images/settings.png)
+![Posts](https://i.imgur.com/uOiZbXw.png) ![Search](https://i.imgur.com/DmsT5TA.png)
+
+## Usage
+
+Use the following link to use it on any device that has a _modern_ internet browser.
+_This includes Android, iOS and most consoles like the PS4 And Xbox One._
+
+**[✨ https://r34.app ✨](https://r34.app/?utm_source=Reddit&utm_medium=New_Post)**
 
 ## Information
 
@@ -23,7 +29,7 @@ This app can browse the following Boorus.
 - safebooru.org
 - e926.net
 
-### Links
+### Documentation
 
 Links to useful information.
 
@@ -36,13 +42,13 @@ Links to useful information.
 
 Follow the Rule 34 App on **[Twitter](https://twitter.com/Rule34App)** for announcements, tips, discount codes and more.
 
-![Twitter Follow](https://img.shields.io/twitter/follow/Rule34App?style=for-the-badge)
+![Twitter badge](https://img.shields.io/twitter/follow/Rule34App?style=for-the-badge)
 
 ### Discord
 
 Join the **[Discord](https://redirect.r34.app/discord)** community to keep up with the updates of the project and receive support.
 
-![Discord](https://img.shields.io/discord/656241666553806861?style=for-the-badge)
+![Discord badge](https://img.shields.io/discord/656241666553806861?style=for-the-badge)
 
 ## Support
 
@@ -72,7 +78,6 @@ This App uses an [API](https://github.com/Rule-34/API) to communicate with all t
 
 - NodeJS >= 12
 - NPM
-- Microsoft Build Tools (Windows Only)
 
 ### Build setup
 
