@@ -19,6 +19,7 @@
   "dependencies": {
     "@nuxtjs/auth-next": "5.0.0-1618898588.9655d0e",
     "@nuxtjs/axios": "^5.13.1",
+    "@nuxtjs/localforage": "^1.1.0",
     "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/sentry": "^5.0.3",
     "@nuxtjs/sitemap": "^2.4.0",
@@ -37,7 +38,6 @@
   "devDependencies": {
     "@nuxt/types": "^2.15.4",
     "@nuxtjs/eslint-config": "^6.0.0",
-    "@nuxtjs/localforage": "^1.1.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.24.0",
     "eslint-config-prettier": "^8.2.0",
