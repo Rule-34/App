@@ -124,8 +124,6 @@ export default {
 
   methods: {
     async logOut() {
-      localStorage.removeItem('premium')
-
       await this.$auth.logout()
 
       location.reload()
