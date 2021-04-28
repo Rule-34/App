@@ -37,6 +37,7 @@
   "devDependencies": {
     "@nuxt/types": "^2.15.4",
     "@nuxtjs/eslint-config": "^6.0.0",
+    "@nuxtjs/localforage": "^1.1.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.24.0",
     "eslint-config-prettier": "^8.2.0",
