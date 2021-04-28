@@ -35,7 +35,7 @@
               autofocus
               aria-label="Search for tags"
               placeholder="Search: e.g. mario"
-              v-model="search.query"
+              :value="search.query"
               @input="inputHandler"
               @keypress.enter.prevent="inputEnterHandler"
             />
@@ -225,8 +225,12 @@ export default {
 
     // #region Search bar
     async inputHandler(event) {
+      const inputData = event.target.value
+
       // Replace empty spaces with underscores
-      this.search.query = this.search.query.replace(/\s+/g, '_')
+      const replacedInputData = inputData.replace(/\s+/g, '_')
+
+      this.search.query = replacedInputData
 
       if (this.search.query.length === 0) {
         this.debouncedFetchSearchDataFromApi.cancel()
