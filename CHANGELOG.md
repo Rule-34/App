@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.5.2](https://github.com/Rule-34/App/compare/v2.5.1...v2.5.2) (2021-04-28)
+
+
+### Features
+
+* **sentry:** allow only some URLs ([c1b52f9](https://github.com/Rule-34/App/commit/c1b52f972d4d7e74bb623f67cc7a707e4fe412fd))
+* add view only prop ([b5bba57](https://github.com/Rule-34/App/commit/b5bba57527823d408c5899fbbaf7ddb7b1f09b20))
+* use localForage as storage ([e5f960d](https://github.com/Rule-34/App/commit/e5f960d58dcfc5a450b1349caae666a1a0b4c879))
+
+
+### Bug Fixes
+
+* clear localForage on app reset ([3b5e6e0](https://github.com/Rule-34/App/commit/3b5e6e0440aaf0897f882538d959a3fb26224756))
+* fix regression ([146d4b5](https://github.com/Rule-34/App/commit/146d4b59c6dfd9a87ff6dbe82607bd41aecb1ca2))
+* use fix for async storage ([e10da7d](https://github.com/Rule-34/App/commit/e10da7d7c1a61126b99616373530ab6f7c781db6))
+
 ### [2.5.1](https://github.com/Rule-34/App/compare/v2.5.0...v2.5.1) (2021-04-23)
 
 
