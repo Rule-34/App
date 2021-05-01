@@ -208,9 +208,9 @@ export default {
 
       ignoreErrors: [
         // Network
-        'Fetch',
-        'Request',
-        'Network',
+        // 'Fetch',
+        'Request failed with status code',
+        'Network Error',
 
         // 'URL',
 
