@@ -207,21 +207,19 @@ export default {
       whitelistUrls: ['r34.app', 'akbal.dev'],
 
       ignoreErrors: [
-        // Network
+        // - Network -
         // 'Fetch',
         'Request failed with status code',
         'Network Error',
 
-        // 'URL',
-
-        // Media
+        // - Media -
         'AbortError',
 
-        // Plugins
+        // - Plugins -
         'matomo',
         'vue-matomo',
 
-        // Misc
+        // - Misc -
         'native code',
         'extension',
         'unknown module',
