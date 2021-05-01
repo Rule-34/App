@@ -225,6 +225,8 @@ export default {
         'native code',
         'extension',
         'unknown module',
+        'Background sync is disabled',
+        'ResizeObserver loop limit exceeded',
       ],
     },
   },
