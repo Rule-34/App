@@ -214,6 +214,7 @@ export default {
 
         // - Media -
         'AbortError',
+        'Request aborted',
 
         // - Plugins -
         'matomo',
@@ -223,7 +224,7 @@ export default {
         'native code',
         'extension',
         'unknown module',
-        'Background sync is disabled',
+        'Background Sync is disabled',
         'ResizeObserver loop limit exceeded',
       ],
     },
