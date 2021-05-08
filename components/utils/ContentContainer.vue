@@ -51,7 +51,6 @@
                 :key="link.text"
                 :href="link.href"
                 target="_blank"
-                rel="noopener"
                 class="text-sm link"
               >
                 {{ link.text }}

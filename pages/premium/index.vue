@@ -73,12 +73,7 @@
         <!-- Notice -->
         <p class="text-sm text-center text-gray-300">
           Manage your subscription on
-          <a
-            rel="noopener"
-            target="_blank"
-            href="https://gumroad.com/library"
-            class="link"
-          >
+          <a href="https://gumroad.com/library" target="_blank" class="link">
             Gumroad</a
           >.
         </p>
