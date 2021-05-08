@@ -11,12 +11,12 @@
 
     <template v-else-if="isImage">
       <!-- Fix for weird space below button -->
-      <div class="flex">
+      <div class="flex overflow-hidden">
         <button
           type="button"
           :aria-expanded="isActive"
           aria-label="Toggle tags panel"
-          class="relative w-full group"
+          class="relative w-full h-auto group"
           @click="toggleTags"
           @keydown.enter="toggleTags"
         >
