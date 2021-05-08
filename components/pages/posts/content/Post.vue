@@ -1,42 +1,56 @@
 <template>
-  <figure class="text-center text-gray-200 material-container">
+  <figure class="material-container">
     <!-- Media -->
-    <div class="relative" @click="toggleTags">
-      <template v-if="error.show">
-        <Error
-          :show-action="false"
-          :render-borders="false"
-          :error-data="error.message"
-        />
-      </template>
+    <template v-if="error.show">
+      <Error
+        :show-action="false"
+        :render-borders="false"
+        :error-data="error.message"
+      />
+    </template>
 
-      <template v-else-if="isImage">
-        <img
-          :src="mediaResolutionChooser.url"
-          loading="lazy"
-          :class="{
-            'opacity-100': media.hasLoaded,
-          }"
-          :alt="'Image ' + postData.id"
-          class="w-full h-auto opacity-0 post-animation"
-          :height="mediaResolutionChooser.height"
-          :width="mediaResolutionChooser.width"
-          referrerpolicy="no-referrer"
-          decoding="async"
-          @load="media.hasLoaded = true"
-          @error="retryToLoadManager"
-        />
-      </template>
+    <template v-else-if="isImage">
+      <!-- Fix for weird space below button -->
+      <div class="flex">
+        <button
+          type="button"
+          :aria-expanded="isActive"
+          aria-label="Toggle tags panel"
+          class="relative group"
+          @click="toggleTags"
+          @keydown.enter="toggleTags"
+        >
+          <img
+            :src="mediaResolutionChooser.url"
+            :height="mediaResolutionChooser.height"
+            :width="mediaResolutionChooser.width"
+            :alt="'Image ' + postData.id"
+            loading="lazy"
+            decoding="async"
+            referrerpolicy="no-referrer"
+            :class="{
+              'opacity-100': media.hasLoaded,
+            }"
+            @load="media.hasLoaded = true"
+            @error="retryToLoadManager"
+          />
 
-      <template v-else-if="isVideo">
+          <!-- Fix for focus ring not applying on other elements -->
+          <div class="absolute inset-0 ring-inset group-focus:focus-util"></div>
+        </button>
+      </div>
+    </template>
+
+    <template v-else-if="isVideo">
+      <div class="relative">
         <video
-          :alt="'Video ' + postData.id"
-          class="w-full h-auto"
           preload="none"
           :poster="postData.preview_file.url"
+          :alt="'Video ' + postData.id"
           controls
           loop
           playsinline
+          class="w-full h-auto"
         >
           <source
             :src="mediaResolutionChooser.url"
@@ -49,9 +63,10 @@
         <div class="absolute inset-y-0 right-0 p-4 pointer-events-none">
           <div class="flex flex-col items-center justify-center w-full h-full">
             <button
-              aria-label="Toggle tags panel"
               type="button"
+              aria-label="Toggle tags panel"
               class="p-1 bg-black border border-transparent rounded-lg pointer-events-auto bg-opacity-40 group focus:focus-util"
+              @click="toggleTags"
             >
               <TagIcon
                 class="w-5 h-5 text-gray-200 transition-colors duration-300 icon group-hover:text-white"
@@ -59,8 +74,8 @@
             </button>
           </div>
         </div>
-      </template>
-    </div>
+      </div>
+    </template>
 
     <figcaption class="flex flex-wrap overflow-hidden text-sm">
       <!-- Action bar & Tags -->
