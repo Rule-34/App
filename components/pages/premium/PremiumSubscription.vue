@@ -71,6 +71,19 @@
             <check-icon class="w-6 h-6 icon text-accent-400" />
           </div>
           <p class="ml-3 text-base font-medium leading-6 text-gray-300">
+            Find sources with
+            <a href="https://saucenao.com/" target="_blank" class="link">
+              Saucenao
+            </a>
+          </p>
+        </li>
+
+        <!--  -->
+        <li class="flex items-start mt-4">
+          <div class="flex-shrink-0">
+            <check-icon class="w-6 h-6 icon text-accent-400" />
+          </div>
+          <p class="ml-3 text-base font-medium leading-6 text-gray-300">
             Support the development
           </p>
         </li>
