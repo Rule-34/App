@@ -28,6 +28,7 @@
             loading="lazy"
             decoding="async"
             referrerpolicy="no-referrer"
+            class="w-full h-auto transition-opacity duration-700 opacity-0"
             :class="{
               'opacity-100': media.hasLoaded,
             }"
@@ -409,9 +410,3 @@ export default {
   },
 }
 </script>
-
-<style lang="postcss">
-.post-animation {
-  transition: opacity 0.75s;
-}
-</style>
