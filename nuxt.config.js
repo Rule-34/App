@@ -87,11 +87,9 @@ export default {
   ],
 
   tailwindcss: {
-    viewer: true,
+    viewer: false,
 
     cssPath: '~/assets/css/main.css',
-
-    jit: true,
   },
 
   localforage: {
