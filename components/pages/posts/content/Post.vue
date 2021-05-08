@@ -63,12 +63,44 @@
     </div>
 
     <figcaption class="flex flex-wrap overflow-hidden text-sm">
-      <!-- Tags -->
+      <!-- Action bar & Tags -->
       <template v-if="postData.tags.length">
         <div class="w-full overflow-hidden">
           <TransitionCollapse>
+            <!-- Workaround for content not jumping is having a div before -->
             <div v-if="isActive">
-              <!-- Workaround for this not jumping is having a div before -->
+              <!-- Action bar -->
+              <div class="flex items-center bg-darkGray-100 justify-evenly">
+                <!--  -->
+
+                <!-- Saucenao -->
+                <template v-if="!error.show && !isVideo">
+                  <template v-if="isUserPremium">
+                    <a
+                      :href="`https://saucenao.com/search.php?url=${mediaResolutionChooser.url}`"
+                      target="_blank"
+                      class="flex items-center gap-2 my-2 link"
+                    >
+                      <SearchIcon class="w-5 h-5 icon" />
+
+                      Saucenao
+                    </a>
+                  </template>
+
+                  <template v-else>
+                    <NuxtLink
+                      to="/premium"
+                      class="flex items-center gap-2 my-2 link"
+                    >
+                      <SearchIcon class="w-5 h-5 icon" />
+
+                      Saucenao
+                    </NuxtLink>
+                  </template>
+                </template>
+              </div>
+
+              <!-- Tags -->
               <div class="min-w-full tag-container">
                 <button
                   v-for="tag in postData.tags"
@@ -116,10 +148,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { ExternalLinkIcon, TagIcon } from 'vue-feather-icons'
+import { ExternalLinkIcon, TagIcon, SearchIcon } from 'vue-feather-icons'
 
 export default {
-  components: { ExternalLinkIcon, TagIcon },
+  components: { ExternalLinkIcon, TagIcon, SearchIcon },
 
   props: {
     postData: {
@@ -160,6 +192,7 @@ export default {
 
   computed: {
     ...mapGetters('user', ['getUserSettings']),
+    ...mapGetters('premium', ['isUserPremium']),
 
     // #region Post media
     isImage() {
