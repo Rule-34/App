@@ -16,7 +16,7 @@
           type="button"
           :aria-expanded="isActive"
           aria-label="Toggle tags panel"
-          class="relative group"
+          class="relative w-full group"
           @click="toggleTags"
           @keydown.enter="toggleTags"
         >
