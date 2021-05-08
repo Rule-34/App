@@ -90,13 +90,17 @@
         <div class="w-full p-1 text-center">
           <template v-if="isUrl">
             <!-- If text is an Url then make it linkable -->
-            <a :href="postData.source[0]" class="flex link" target="_blank">
+            <a
+              :href="postData.source[0]"
+              class="inline-flex gap-2 link"
+              target="_blank"
+            >
               <p class="link">
                 {{ sourceText }}
               </p>
 
               <!-- Icon -->
-              <ExternalLinkIcon class="w-5 h-5 ml-2 icon" />
+              <ExternalLinkIcon class="w-5 h-5 icon" />
             </a>
           </template>
 
