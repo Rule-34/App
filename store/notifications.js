@@ -1,7 +1,7 @@
 export const state = () => ({
   notifications: {
     url:
-      'https://cdn.statically.io/gist/AlejandroAkbal/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-notifications.min.json',
+      'https://gitcdn.xyz/repo/AlejandroAkbal/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-notifications.json',
 
     data: undefined,
 
