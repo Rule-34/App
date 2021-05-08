@@ -145,7 +145,7 @@
             <!-- Submit -->
             <div class="absolute inset-x-0 bottom-0 flex">
               <button
-                class="w-full px-4 py-2 text-lg font-medium tracking-wide text-center text-black bg-gradient-to-r from-accent-400 to-primary-400 focus:focus-util"
+                class="w-full px-4 py-2 text-lg font-medium tracking-wide text-center text-black bg-gradient-to-r from-accent-400 to-primary-400 ring-inset focus:focus-util"
                 type="submit"
               >
                 Apply tags
