@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.6.0](https://github.com/Rule-34/App/compare/v2.5.3...v2.6.0) (2021-05-08)
+
+
+### Features
+
+* create saucenao functionality ([c6ce001](https://github.com/Rule-34/App/commit/c6ce001221994907a9b005e70bcaf08eecebd56e))
+* make posts accessible ([dd7db7e](https://github.com/Rule-34/App/commit/dd7db7ea9f3680e27f51ffa9517f166d57a881b7))
+
+
+### Bug Fixes
+
+* fix accessibility issue ([83c83e0](https://github.com/Rule-34/App/commit/83c83e08a68adef3badd7b20d01582ab7dce63e2))
+* fix regression ([b476d6e](https://github.com/Rule-34/App/commit/b476d6e7bb8f73fc1afdb9df8030e6c3f2e4a4a4))
+* remove use of v-model since it does not work on some devices ([799f73f](https://github.com/Rule-34/App/commit/799f73fd491d24399dd25bebf530ae8e17288a55))
+
 ### [2.5.3](https://github.com/Rule-34/App/compare/v2.5.2...v2.5.3) (2021-04-28)
 
 
