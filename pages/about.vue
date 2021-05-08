@@ -14,7 +14,6 @@
       <a
         href="https://akbal.dev/"
         target="_blank"
-        rel="noopener"
         class="block px-3 py-1 mx-auto mt-5 mb-3 rounded-full link w-max bg-darkGray-700 border-util"
       >
         Alejandro Akbal
