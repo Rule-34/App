@@ -86,16 +86,16 @@
             <!-- Workaround for content not jumping is having a div before -->
             <div v-if="isActive">
               <!-- Action bar -->
-              <div class="flex items-center bg-darkGray-100 justify-evenly">
-                <!--  -->
-
+              <div
+                class="flex items-center py-2 bg-darkGray-100 justify-evenly"
+              >
                 <!-- Saucenao -->
                 <template v-if="!error.show && !isVideo">
                   <template v-if="isUserPremium">
                     <a
                       :href="`https://saucenao.com/search.php?url=${mediaResolutionChooser.url}`"
                       target="_blank"
-                      class="flex items-center gap-2 my-2 link"
+                      class="flex items-center gap-2 link"
                     >
                       <SearchIcon class="w-5 h-5 icon" />
 
@@ -106,7 +106,7 @@
                   <template v-else>
                     <NuxtLink
                       to="/premium"
-                      class="flex items-center gap-2 my-2 link"
+                      class="flex items-center gap-2 link"
                     >
                       <span class="sr-only">
                         Search source of the post via SauceNAO
