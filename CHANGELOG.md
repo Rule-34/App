@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.6.1](https://github.com/Rule-34/App/compare/v2.6.0...v2.6.1) (2021-05-09)
+
+
+### Features
+
+* add download action ([3677f1f](https://github.com/Rule-34/App/commit/3677f1f4efa38544312b5592a0caf60073c61c68))
+* add screen reader descriptions ([b2dfda3](https://github.com/Rule-34/App/commit/b2dfda3e33e13c7e1b3f08d7094678b4b91e8f2d))
+
+
+### Bug Fixes
+
+* fix overflowing image ([0e1cef7](https://github.com/Rule-34/App/commit/0e1cef797fc45b88c2f379c82b08165b38746c95))
+* fix regression ([1c03360](https://github.com/Rule-34/App/commit/1c033607c24f718a16dcdebdc64943d1caa5601d))
+
 ## [2.6.0](https://github.com/Rule-34/App/compare/v2.5.3...v2.6.0) (2021-05-08)
 
 
