@@ -108,9 +108,13 @@
                       to="/premium"
                       class="flex items-center gap-2 my-2 link"
                     >
+                      <span class="sr-only">
+                        Search source of the post via SauceNAO
+                      </span>
+
                       <SearchIcon class="w-5 h-5 icon" />
 
-                      Saucenao
+                      SauceNAO
                     </NuxtLink>
                   </template>
                 </template>
@@ -122,6 +126,8 @@
                   title="Download"
                   class="link"
                 >
+                  <span class="sr-only">Download post</span>
+
                   <DownloadIcon class="w-5 h-5 icon" />
                 </a>
               </div>
