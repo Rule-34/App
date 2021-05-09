@@ -114,6 +114,10 @@
                     </NuxtLink>
                   </template>
                 </template>
+
+                <a :href="mediaResolutionChooser.url" class="link" download>
+                  <SearchIcon class="w-5 h-5 icon" />
+                </a>
               </div>
 
               <!-- Tags -->
@@ -154,7 +158,7 @@
 
           <template v-else>
             <!-- If the text is not a url then just show the text -->
-            <p title="Source">{{ sourceText }}</p>
+            <p class="text-gray-200" title="Source">{{ sourceText }}</p>
           </template>
         </div>
       </template>
