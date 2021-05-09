@@ -115,8 +115,14 @@
                   </template>
                 </template>
 
-                <a :href="mediaResolutionChooser.url" class="link" download>
-                  <SearchIcon class="w-5 h-5 icon" />
+                <a
+                  :href="mediaResolutionChooser.url"
+                  target="_blank"
+                  download
+                  title="Download"
+                  class="link"
+                >
+                  <DownloadIcon class="w-5 h-5 icon" />
                 </a>
               </div>
 
@@ -168,10 +174,15 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { ExternalLinkIcon, TagIcon, SearchIcon } from 'vue-feather-icons'
+import {
+  ExternalLinkIcon,
+  TagIcon,
+  SearchIcon,
+  DownloadIcon,
+} from 'vue-feather-icons'
 
 export default {
-  components: { ExternalLinkIcon, TagIcon, SearchIcon },
+  components: { ExternalLinkIcon, TagIcon, SearchIcon, DownloadIcon },
 
   props: {
     postData: {
