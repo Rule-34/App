@@ -7,6 +7,10 @@ export default {
 
   generate: { fallback: true },
 
+  server: {
+    host: '0.0.0.0',
+  },
+
   publicRuntimeConfig: {
     NODE_ENV: process.env.NODE_ENV,
 
