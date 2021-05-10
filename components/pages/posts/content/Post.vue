@@ -118,18 +118,6 @@
                     </NuxtLink>
                   </template>
                 </template>
-
-                <a
-                  :href="mediaResolutionChooser.url"
-                  target="_blank"
-                  download
-                  title="Download"
-                  class="link"
-                >
-                  <span class="sr-only">Download post</span>
-
-                  <DownloadIcon class="w-5 h-5 icon" />
-                </a>
               </div>
 
               <!-- Tags -->
