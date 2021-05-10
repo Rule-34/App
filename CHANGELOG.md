@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.6.2](https://github.com/Rule-34/App/compare/v2.6.1...v2.6.2) (2021-05-10)
+
+
+### Bug Fixes
+
+* fix image selection ([d68e84e](https://github.com/Rule-34/App/commit/d68e84e169071236019d3f9e9dbd0b884059f1b4))
+
 ### [2.6.1](https://github.com/Rule-34/App/compare/v2.6.0...v2.6.1) (2021-05-09)
 
 
