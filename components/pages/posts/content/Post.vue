@@ -16,7 +16,7 @@
           type="button"
           :aria-expanded="isActive"
           aria-label="Toggle tags panel"
-          class="relative w-full h-auto group"
+          class="relative w-full h-auto pointer-events-auto group"
           @click="toggleTags"
           @keydown.enter="toggleTags"
         >
@@ -37,7 +37,9 @@
           />
 
           <!-- Fix for focus ring not applying on other elements -->
-          <div class="absolute inset-0 ring-inset group-focus:focus-util"></div>
+          <div
+            class="absolute inset-0 pointer-events-none ring-inset group-focus:focus-util"
+          ></div>
         </button>
       </div>
     </template>
