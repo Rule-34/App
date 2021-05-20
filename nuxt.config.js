@@ -202,8 +202,8 @@ export default {
     disableClientSide: false,
     disableServerSide: true,
 
-    // publishRelease: true,
-    // sourceMapStyle: 'hidden-source-map',
+    publishRelease: true,
+    sourceMapStyle: 'hidden-source-map',
 
     config: {
       whitelistUrls: ['r34.app', 'akbal.dev'],
