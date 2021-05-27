@@ -28,51 +28,25 @@ export default {
     return head
   },
 
-  computed: {
-    ...mapGetters('url', ['urlDomain', 'urlPage', 'urlTags']),
+  async fetch() {
+    await this.debouncedFetchPosts()
   },
 
+  // Fetch option
+  fetchOnServer: false,
+
   watch: {
-    async urlDomain(from, to) {
-      if (from === to) {
-        console.debug('Same domain, skipping...', [from, to])
-        return
-      }
+    '$route.query': '$fetch',
+  },
 
-      // console.debug('URL `domain` changed.', [from, to])
-
-      await this.debouncedFetchPosts()
-    },
-
-    async urlPage(from, to) {
-      if (from === to) {
-        console.debug('Same page, skipping...', [from, to])
-        return
-      }
-
-      // console.debug('URL `page` changed.', [from, to])
-
-      await this.debouncedFetchPosts()
-    },
-
-    async urlTags(from, to) {
-      if (isEqual(from, to)) {
-        console.debug('Same tags, skipping...', [from, to])
-        return
-      }
-
-      // console.debug('URL `tags` changed.', [from, to])
-
-      await this.debouncedFetchPosts()
-    },
+  computed: {
+    ...mapGetters('url', ['urlDomain', 'urlPage', 'urlTags']),
   },
 
   async mounted() {
     if (this.urlDomain === undefined || this.urlPage === undefined) {
       await this.setInitialUrlState()
     }
-
-    await this.fetchPosts()
   },
 
   methods: {
