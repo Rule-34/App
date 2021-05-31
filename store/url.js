@@ -57,10 +57,10 @@ export const actions = {
       routerLocation.query.tags = tags.join(',')
     }
 
-    if (!shouldReplaceHistory) {
-      await this.$router.push(routerLocation)
-    } else {
+    if (shouldReplaceHistory) {
       await this.$router.replace(routerLocation)
+    } else {
+      await this.$router.push(routerLocation)
     }
   },
 }
