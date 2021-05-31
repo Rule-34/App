@@ -4,6 +4,8 @@ const defaultColors = require('tailwindcss/colors')
 module.exports = {
   mode: 'jit',
 
+  darkMode: false,
+
   purge: {
     options: {
       safelist: [/active/, /fade/, /enter/, /leave/, 'nuxt-link-exact-active'],
