@@ -1,3 +1,4 @@
+import PACKAGE_JSON from './package.json'
 import * as TAILWIND_CONFIG from './tailwind.config'
 
 export default {
@@ -198,14 +199,16 @@ export default {
 
     lazy: true,
 
-    disabled: process.env.SENTRY_DISABLED,
+    disabled: process.env.SENTRY_DISABLED || false,
     disableClientSide: false,
     disableServerSide: true,
 
-    // publishRelease: true,
-    // sourceMapStyle: 'hidden-source-map',
+    publishRelease: true,
+    sourceMapStyle: 'hidden-source-map',
 
     config: {
+      release: PACKAGE_JSON.version,
+
       whitelistUrls: ['r34.app', 'akbal.dev'],
 
       ignoreErrors: [

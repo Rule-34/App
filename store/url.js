@@ -45,20 +45,22 @@ export const actions = {
       tags = rootGetters['booru/getTags']
     }
 
-    const routerQueries = {
+    const routerLocation = {
       query: {
         domain,
         page,
-        ...(tags.length && {
-          tags: tags.join(','),
-        }),
       },
     }
 
-    if (!shouldReplaceHistory) {
-      await this.$router.push(routerQueries)
+    // Set tags
+    if (tags.length) {
+      routerLocation.query.tags = tags.join(',')
+    }
+
+    if (shouldReplaceHistory) {
+      await this.$router.replace(routerLocation)
     } else {
-      await this.$router.replace(routerQueries)
+      await this.$router.push(routerLocation)
     }
   },
 }
