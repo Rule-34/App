@@ -76,7 +76,7 @@
           <p class="ml-3 text-base font-medium leading-6 text-gray-300">
             Find sources with
             <a href="https://saucenao.com/" target="_blank" class="link">
-              Saucenao
+              SauceNAO
             </a>
           </p>
         </li>
