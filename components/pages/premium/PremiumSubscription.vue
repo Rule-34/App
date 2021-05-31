@@ -60,9 +60,12 @@
           <div class="flex-shrink-0">
             <check-icon class="w-6 h-6 icon text-accent-400" />
           </div>
-          <p class="ml-3 text-base font-medium leading-6 text-gray-300">
-            <span class="line-through">Save posts</span> (WIP)
-          </p>
+          <NuxtLink
+            to="/premium/saved-posts"
+            class="ml-3 text-base font-medium leading-6 link"
+          >
+            Save posts
+          </NuxtLink>
         </li>
 
         <!--  -->
