@@ -52,6 +52,7 @@ export const actions = {
       },
     }
 
+    // Set tags
     if (tags.length) {
       routerLocation.query.tags = tags.join(',')
     }
