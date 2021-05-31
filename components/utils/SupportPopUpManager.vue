@@ -49,13 +49,14 @@ export default {
   mounted() {
     this.setTimesTheAppHasBeenOpened(this.getTimesTheAppHasBeenOpened + 1)
 
-    if (this.getTimesTheAppHasBeenOpened % 10 === 0) {
-      this.isActive = true
-
-      fireAnalytics('supportPopUp')
-    } else {
-      this.isActive = false
+    // Only show popup every 10 times the app has been opened
+    if (this.getTimesTheAppHasBeenOpened % 10 !== 0) {
+      return
     }
+
+    this.isActive = true
+
+    fireAnalytics('supportPopUp')
   },
 
   methods: {
