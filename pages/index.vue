@@ -15,7 +15,7 @@
 
       <ul class="flex-auto space-y-4">
         <li v-for="post in getPosts" :key="post.id">
-          <Post :post-data="post" />
+          <Post :post-domain="getActiveBooru.domain" :post-data="post" />
         </li>
       </ul>
 
@@ -34,7 +34,7 @@ export default {
   mixins: [UrlManagerMixin],
 
   computed: {
-    ...mapGetters('booru', ['getPosts']),
+    ...mapGetters('booru', ['getActiveBooru', 'getPosts']),
   },
 }
 </script>
