@@ -149,6 +149,11 @@ export default {
   components: { ExternalLinkIcon, TagIcon, DownloadIcon },
 
   props: {
+    postDomain: {
+      type: String,
+      required: true,
+    },
+
     postData: {
       type: Object,
       required: true,
