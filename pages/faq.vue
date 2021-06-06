@@ -1,7 +1,7 @@
 <template>
   <main class="max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
     <div class="space-y-4">
-      <ContentSeparator title="General" text="Questions related to the App" />
+      <ContentSeparator title="Frequently Asked Questions" />
 
       <ContentContainer
         title="Notice"
