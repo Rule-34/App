@@ -90,6 +90,10 @@ export const state = () => ({
 })
 
 export const getters = {
+  getUserSettings(state) {
+    return state.settings
+  },
+
   getCustomBoorus(state) {
     return state.custom.boorus
   },
@@ -98,8 +102,6 @@ export const getters = {
     return state.custom.tagCollections
   },
 
-  getUserSettings(state) {
-    return state.settings
   },
 }
 
