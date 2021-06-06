@@ -91,36 +91,7 @@
               <div class="flex items-center bg-darkGray-100 justify-evenly">
                 <!-- Saucenao -->
                 <template v-if="!error.show && !isVideo">
-                  <template v-if="isUserPremium">
-                    <a
-                      :href="`https://saucenao.com/search.php?url=${mediaResolutionChooser.url}`"
-                      target="_blank"
-                      class="flex items-center gap-2 my-2 link"
-                    >
-                      <span class="sr-only">
-                        Search source of the post via SauceNAO
-                      </span>
-
-                      <SearchIcon class="w-5 h-5 icon" />
-
-                      SauceNAO
-                    </a>
-                  </template>
-
-                  <template v-else>
-                    <NuxtLink
-                      to="/premium"
-                      class="flex items-center gap-2 my-2 link"
-                    >
-                      <span class="sr-only">
-                        Search source of the post via SauceNAO
-                      </span>
-
-                      <SearchIcon class="w-5 h-5 icon" />
-
-                      SauceNAO
-                    </NuxtLink>
-                  </template>
+                  <PostSaucenao :mediaUrl="mediaResolutionChooser.url" />
                 </template>
               </div>
 
@@ -172,15 +143,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import {
-  ExternalLinkIcon,
-  TagIcon,
-  SearchIcon,
-  DownloadIcon,
-} from 'vue-feather-icons'
+import { ExternalLinkIcon, TagIcon, DownloadIcon } from 'vue-feather-icons'
 
 export default {
-  components: { ExternalLinkIcon, TagIcon, SearchIcon, DownloadIcon },
+  components: { ExternalLinkIcon, TagIcon, DownloadIcon },
 
   props: {
     postData: {
@@ -221,7 +187,6 @@ export default {
 
   computed: {
     ...mapGetters('user', ['getUserSettings']),
-    ...mapGetters('premium', ['isUserPremium']),
 
     // #region Post media
     isImage() {
