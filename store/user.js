@@ -36,9 +36,71 @@ export const state = () => ({
         tags: ['-scat', '-diaper', '-shitpost', '-gore'],
       },
     ],
-  },
 
-  // saved: { posts: [] },
+    savedPosts: {
+      // Domain
+      'rule34.xxx': [
+        // Default post
+        {
+          data: {
+            id: 1,
+            score: null,
+            high_res_file: {
+              url: 'https://safebooru.org/images/1/e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg',
+              width: 1200,
+              height: 900,
+            },
+            low_res_file: {
+              url: 'https://safebooru.org/samples/1/sample_e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg',
+              width: 850,
+              height: 638,
+            },
+            preview_file: {
+              url: 'https://safebooru.org/thumbnails/1/thumbnail_e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg',
+              width: 150,
+              height: 112,
+            },
+            tags: [
+              '1girl',
+              'bag',
+              'black_hair',
+              'blush',
+              'bob_cut',
+              'bowieknife',
+              'breath',
+              'coat',
+              'girls',
+              'gloves',
+              'jacket',
+              'landscape',
+              'miniskirt',
+              'mountain',
+              'necktie',
+              'original',
+              'pantyhose',
+              'peacoat',
+              'purse',
+              'scarf',
+              'short_hair',
+              'skirt',
+              'snow',
+              'solo',
+              'toggles',
+              'uniform',
+            ],
+            source: [],
+            rating: 'safe',
+            media_type: 'image',
+          },
+
+          meta: {
+            // :')
+            created_at: new Date(1997, 8 + 1, 22, '21'),
+          },
+        },
+      ],
+    },
+  },
 
   settings: {
     hoverControls: {
@@ -102,6 +164,8 @@ export const getters = {
     return state.custom.tagCollections
   },
 
+  getSavedPosts(state) {
+    return state.custom.savedPosts
   },
 }
 
@@ -116,6 +180,10 @@ export const mutations = {
 
   setCustomTagCollections(state, value) {
     state.custom.tagCollections = Object.freeze(value)
+  },
+
+  setSavedPosts(state, value) {
+    state.custom.savedPosts = Object.freeze(value)
   },
 }
 
@@ -194,5 +262,39 @@ export const actions = {
       default:
         throw new Error('No operation specified')
     }
+  },
+
+  addPostToSavedPosts({ getters, commit }, { domain, post }) {
+    const savedPosts = JSON.parse(JSON.stringify(getters.getSavedPosts))
+
+    const postData = { data: post, meta: { created_at: Date.now() } }
+
+    // Create domain if it doesn't exist
+    if (savedPosts[domain] === undefined) {
+      savedPosts[domain] = []
+    }
+
+    // Add new Post
+    savedPosts[domain].push(postData)
+
+    commit('setSavedPosts', savedPosts)
+  },
+
+  removePostFromSavedPosts({ getters, commit }, { domain, post }) {
+    const savedPosts = JSON.parse(JSON.stringify(getters.getSavedPosts))
+
+    // Create domain if it doesn't exist
+    if (savedPosts[domain] === undefined) {
+      savedPosts[domain] = []
+    }
+
+    // Remove post with the same ID
+    const domainData = savedPosts[domain].filter(
+      (value, index) => value.data.id !== post.id
+    )
+
+    savedPosts[domain] = domainData
+
+    commit('setSavedPosts', savedPosts)
   },
 }
