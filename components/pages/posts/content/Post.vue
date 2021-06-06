@@ -90,8 +90,12 @@
               <!-- Action bar -->
               <div class="flex items-center bg-darkGray-100 justify-evenly">
                 <!-- Saucenao -->
-                <template v-if="!error.show && !isVideo">
-                  <PostSaucenao :mediaUrl="mediaResolutionChooser.url" />
+                <template v-if="!error.show">
+                  <template v-if="!isVideo">
+                    <PostSaucenao :media-url="mediaResolutionChooser.url" />
+                  </template>
+
+                  <PostSave :post-domain="postDomain" :post-data="postData" />
                 </template>
               </div>
 
