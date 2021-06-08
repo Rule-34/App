@@ -67,13 +67,24 @@ export default {
     ...mapGetters('user', ['getSavedPosts']),
 
     savedPostsFromSelectedBooru() {
+      let SAVED_POSTS = null
+
       if (this.selectedBooru === 'all') {
-        return this.getSavedPosts
+        SAVED_POSTS = JSON.parse(JSON.stringify(this.getSavedPosts))
       }
 
-      return this.getSavedPosts.filter(
-        (POST) => POST.meta_data.booru_domain === this.selectedBooru
-      )
+      //
+      else {
+        const FILTERED_SAVED_POSTS = this.getSavedPosts.filter(
+          (POST) => POST.meta_data.booru_domain === this.selectedBooru
+        )
+
+        SAVED_POSTS = FILTERED_SAVED_POSTS
+      }
+
+      const SORTED_SAVED_POSTS = this.sortPostsByDate(SAVED_POSTS)
+
+      return SORTED_SAVED_POSTS
     },
 
     availableBoorusWithSavedPosts() {
@@ -94,6 +105,17 @@ export default {
       const BOORU = event.target.value
 
       this.selectedBooru = BOORU
+    },
+
+    sortPostsByDate(POSTS) {
+      const SORTED_POSTS = POSTS.sort((POST_A, POST_B) => {
+        const POST_A_DATE_STRING = POST_A.meta_data.created_at
+        const POST_B_DATE_STRING = POST_B.meta_data.created_at
+
+        return new Date(POST_B_DATE_STRING) - new Date(POST_A_DATE_STRING)
+      })
+
+      return SORTED_POSTS
     },
   },
 }
