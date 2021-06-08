@@ -37,69 +37,132 @@ export const state = () => ({
       },
     ],
 
-    savedPosts: {
-      // Domain
-      'rule34.xxx': [
-        // Default post
-        {
-          data: {
-            id: 1,
-            score: null,
-            high_res_file: {
-              url: 'https://safebooru.org/images/1/e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg',
-              width: 1200,
-              height: 900,
-            },
-            low_res_file: {
-              url: 'https://safebooru.org/samples/1/sample_e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg',
-              width: 850,
-              height: 638,
-            },
-            preview_file: {
-              url: 'https://safebooru.org/thumbnails/1/thumbnail_e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg',
-              width: 150,
-              height: 112,
-            },
-            tags: [
-              '1girl',
-              'bag',
-              'black_hair',
-              'blush',
-              'bob_cut',
-              'bowieknife',
-              'breath',
-              'coat',
-              'girls',
-              'gloves',
-              'jacket',
-              'landscape',
-              'miniskirt',
-              'mountain',
-              'necktie',
-              'original',
-              'pantyhose',
-              'peacoat',
-              'purse',
-              'scarf',
-              'short_hair',
-              'skirt',
-              'snow',
-              'solo',
-              'toggles',
-              'uniform',
-            ],
-            source: [],
-            rating: 'safe',
-            media_type: 'image',
-          },
+    savedPosts: [
+      // 1st default post
+      {
+        meta_data: {
+          booru_domain: 'rule34.xxx',
 
-          meta: {
-            // :')
-            created_at: new Date(1997, 8 + 1, 22, '21'),
-          },
+          // :')
+          created_at: new Date(1997, 8 - 1, 22, '21'),
         },
-      ],
-    },
+
+        data: {
+          id: 1,
+          score: null,
+          high_res_file: {
+            url: 'https://safebooru.org/images/1/e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg',
+            width: 1200,
+            height: 900,
+          },
+          low_res_file: {
+            url: 'https://safebooru.org/samples/1/sample_e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg',
+            width: 850,
+            height: 638,
+          },
+          preview_file: {
+            url: 'https://safebooru.org/thumbnails/1/thumbnail_e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg',
+            width: 150,
+            height: 112,
+          },
+          tags: [
+            '1girl',
+            'bag',
+            'black_hair',
+            'blush',
+            'bob_cut',
+            'bowieknife',
+            'breath',
+            'coat',
+            'girls',
+            'gloves',
+            'jacket',
+            'landscape',
+            'miniskirt',
+            'mountain',
+            'necktie',
+            'original',
+            'pantyhose',
+            'peacoat',
+            'purse',
+            'scarf',
+            'short_hair',
+            'skirt',
+            'snow',
+            'solo',
+            'toggles',
+            'uniform',
+          ],
+          source: [],
+          rating: 'safe',
+          media_type: 'image',
+        },
+      },
+
+      // 2nd default post
+      {
+        meta_data: {
+          booru_domain: 'gelbooru.com',
+
+          // :')
+          created_at: new Date(2000, 1 - 1, 31, '0'),
+        },
+
+        data: {
+          id: 5,
+          score: 35,
+          high_res_file: {
+            url: 'https://img3.gelbooru.com/images/b0/b5/b0b53e29fdeb13285591a524f23972d4.gif',
+            width: 533,
+            height: 800,
+          },
+          low_res_file: {
+            url: 'https://img3.gelbooru.com/images/b0/b5/b0b53e29fdeb13285591a524f23972d4.gif',
+            width: 533,
+            height: 800,
+          },
+          preview_file: {
+            url: 'https://img3.gelbooru.com/thumbnails/b0/b5/thumbnail_b0b53e29fdeb13285591a524f23972d4.jpg',
+            width: 166,
+            height: 250,
+          },
+          tags: [
+            '1girl',
+            'bare_shoulders',
+            'bunny',
+            'carrot',
+            'contrapposto',
+            'disgaea',
+            'flat_chest',
+            'hair_ribbon',
+            'harada_takehito',
+            'looking_at_viewer',
+            'looking_back',
+            'nippon_ichi',
+            'original',
+            'pleinair',
+            'pointy_ears',
+            'ribbon',
+            'short_hair',
+            'simple_background',
+            'smile',
+            'solo',
+            'speech_bubble',
+            'standing',
+            'sweatdrop',
+            'thighhighs',
+            'translation_request',
+            'usagi-san',
+            'white_background',
+            'white_legwear',
+            'zettai_ryouiki',
+          ],
+          source: [],
+          rating: 'safe',
+          media_type: 'image',
+        },
+      },
+    ],
   },
 
   settings: {
@@ -265,36 +328,32 @@ export const actions = {
   },
 
   addPostToSavedPosts({ getters, commit }, { domain, post }) {
-    const savedPosts = JSON.parse(JSON.stringify(getters.getSavedPosts))
+    const SAVED_POSTS = JSON.parse(JSON.stringify(getters.getSavedPosts))
 
-    const postData = { data: post, meta: { created_at: Date.now() } }
-
-    // Create domain if it doesn't exist
-    if (savedPosts[domain] === undefined) {
-      savedPosts[domain] = []
+    const NEW_POST_DATA = {
+      meta_data: { booru_domain: domain, created_at: Date.now() },
+      data: post,
     }
 
     // Add new Post
-    savedPosts[domain].push(postData)
+    SAVED_POSTS.push(NEW_POST_DATA)
 
-    commit('setSavedPosts', savedPosts)
+    commit('setSavedPosts', SAVED_POSTS)
   },
 
   removePostFromSavedPosts({ getters, commit }, { domain, post }) {
-    const savedPosts = JSON.parse(JSON.stringify(getters.getSavedPosts))
-
-    // Create domain if it doesn't exist
-    if (savedPosts[domain] === undefined) {
-      savedPosts[domain] = []
-    }
+    const SAVED_POSTS = JSON.parse(JSON.stringify(getters.getSavedPosts))
 
     // Remove post with the same ID
-    const domainData = savedPosts[domain].filter(
-      (value, index) => value.data.id !== post.id
-    )
+    const FILTERED_SAVED_POSTS = SAVED_POSTS.filter((SAVED_POST) => {
+      return (
+        // Post ID
+        SAVED_POST.data.id !== post.id &&
+        // Post Domain
+        SAVED_POST.meta_data.booru_domain !== domain
+      )
+    })
 
-    savedPosts[domain] = domainData
-
-    commit('setSavedPosts', savedPosts)
+    commit('setSavedPosts', FILTERED_SAVED_POSTS)
   },
 }

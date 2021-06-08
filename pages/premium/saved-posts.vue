@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   head() {
@@ -43,79 +43,43 @@ export default {
   },
 
   data() {
-    return {}
+    return {
+      selectedBooru: 'all',
+    }
   },
 
   computed: {
     ...mapGetters('user', ['getSavedPosts']),
-    ...mapGetters('booru', ['getActiveBooru']),
 
-    savedPostsFromCurrentBooru() {
-      const currentDomain = this.getActiveBooru.domain
+    savedPostsFromSelectedBooru() {
+      if (this.selectedBooru === 'all') {
+        return this.getSavedPosts
+      }
 
-      return this.getSavedPosts[currentDomain]
+      return this.getSavedPosts.filter(
+        (POST) => POST.meta_data.booru_domain === this.selectedBooru
+      )
+    },
+
+    availableBoorusWithSavedPosts() {
+      const BOORU_DOMAINS = this.getSavedPosts.map(
+        (POST) => POST.meta_data.booru_domain
+      )
+
+      const UNIQUE_BOORU_DOMAINS = [...new Set(BOORU_DOMAINS)]
+
+      return UNIQUE_BOORU_DOMAINS
     },
   },
 
   methods: {
-    ...mapActions('user', ['addPostToSavedPosts', 'removePostFromSavedPosts']),
-  },
+    booruChangeListener(event) {
+      event.preventDefault()
 
-  created() {
-    const testDomain = this.getActiveBooru.domain
-    const testPost = {
-      id: 1,
-      score: null,
-      high_res_file: {
-        url: 'https://safebooru.org/images/1/e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg',
-        width: 1200,
-        height: 900,
-      },
-      low_res_file: {
-        url: 'https://safebooru.org/samples/1/sample_e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg',
-        width: 850,
-        height: 638,
-      },
-      preview_file: {
-        url: 'https://safebooru.org/thumbnails/1/thumbnail_e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg',
-        width: 150,
-        height: 112,
-      },
-      tags: [
-        '1girl',
-        'bag',
-        'black_hair',
-        'blush',
-        'bob_cut',
-        'bowieknife',
-        'breath',
-        'coat',
-        'girls',
-        'gloves',
-        'jacket',
-        'landscape',
-        'miniskirt',
-        'mountain',
-        'necktie',
-        'original',
-        'pantyhose',
-        'peacoat',
-        'purse',
-        'scarf',
-        'short_hair',
-        'skirt',
-        'snow',
-        'solo',
-        'toggles',
-        'uniform',
-      ],
-      source: [],
-      rating: 'safe',
-      media_type: 'image',
-    }
+      const BOORU = event.target.value
 
-    // this.addPostToSavedPosts({ domain: testDomain, post: testPost })
-    // this.removePostFromSavedPosts({ domain: testDomain, post: testPost })
+      this.selectedBooru = BOORU
+    },
   },
 }
 </script>

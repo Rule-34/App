@@ -2,7 +2,7 @@
   <button
     type="button"
     class="flex items-center gap-2 my-2 link group"
-    @click="savePostHandler"
+    @click="savePostClickHandler"
   >
     <span class="sr-only"> Save post </span>
 
@@ -40,18 +40,21 @@ export default {
     ...mapGetters('user', ['getSavedPosts']),
     ...mapGetters('premium', ['isUserPremium']),
 
+    /**
+     * This function is located here instead of on the store so it is dynamically processed
+     */
     isPostSaved() {
       const savedPosts = this.getSavedPosts
 
       const domain = this.postDomain
       const postData = this.postData
 
-      if (!savedPosts.hasOwnProperty(domain)) {
-        return false
-      }
-
-      const isPostSaved = savedPosts[domain].some(
-        (post) => post.data.id === postData.id
+      const isPostSaved = savedPosts.some(
+        (POST) =>
+          // Post ID
+          POST.data.id === postData.id &&
+          // Post Domain
+          POST.meta_data.booru_domain === domain
       )
 
       return isPostSaved
@@ -59,13 +62,9 @@ export default {
   },
 
   methods: {
-    ...mapActions('user', [
-      'addPostToSavedPosts',
-      'removePostFromSavedPosts',
-      'isPostInSavedPosts',
-    ]),
+    ...mapActions('user', ['addPostToSavedPosts', 'removePostFromSavedPosts']),
 
-    async savePostHandler() {
+    async savePostClickHandler() {
       if (!this.isUserPremium) {
         await this.$router.push({ name: 'premium' })
         return
