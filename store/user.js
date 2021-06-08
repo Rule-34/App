@@ -331,7 +331,7 @@ export const actions = {
     const SAVED_POSTS = JSON.parse(JSON.stringify(getters.getSavedPosts))
 
     const NEW_POST_DATA = {
-      meta_data: { booru_domain: domain, created_at: Date.now() },
+      meta_data: { booru_domain: domain, created_at: new Date().toJSON() },
       data: post,
     }
 
