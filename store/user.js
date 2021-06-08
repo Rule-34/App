@@ -346,11 +346,13 @@ export const actions = {
 
     // Remove post with the same ID
     const FILTERED_SAVED_POSTS = SAVED_POSTS.filter((SAVED_POST) => {
-      return (
-        // Post ID
-        SAVED_POST.data.id !== post.id &&
+      return !(
         // Post Domain
-        SAVED_POST.meta_data.booru_domain !== domain
+        (
+          SAVED_POST.meta_data.booru_domain === domain &&
+          // Post ID
+          SAVED_POST.data.id === post.id
+        )
       )
     })
 
