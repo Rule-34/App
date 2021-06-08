@@ -1,6 +1,6 @@
 <template>
   <main
-    class="flex flex-col items-center justify-center max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8"
+    class="flex flex-col items-center justify-center max-w-3xl min-h-screen p-4 mx-auto  sm:p-6 lg:p-8"
   >
     <template v-if="isUserPremium">
       <div class="flex flex-col flex-auto w-full space-y-4">
@@ -10,7 +10,7 @@
           <div class="py-1 truncate">
             <!-- Icon -->
             <span
-              class="inline-flex items-center justify-center w-10 h-10 rounded-full border-util bg-darkGray-700"
+              class="inline-flex items-center justify-center w-10 h-10 rounded-full  border-util bg-darkGray-700"
             >
               <span class="font-medium leading-none text-white">
                 {{ getUserEmail.charAt(0).toUpperCase() }}
@@ -41,7 +41,7 @@
         <div class="flex flex-row items-center p-4 material-container">
           <div class="flex-auto">
             <h1 class="text-lg font-medium text-gray-200">Custom Boorus</h1>
-            <p class="text-gray-300">Add or edit compatible boorus</p>
+            <p class="text-gray-300">Manage compatible boorus</p>
           </div>
 
           <NuxtLink
@@ -56,12 +56,27 @@
         <div class="flex flex-row items-center p-4 material-container">
           <div class="flex-grow">
             <h1 class="text-lg font-medium text-gray-200">Tag Collections</h1>
-            <p class="text-gray-300">Add or edit tag collections</p>
+            <p class="text-gray-300">Manage your collections of tags</p>
           </div>
 
           <NuxtLink
             class="px-3 py-2 rounded-full link border-util bg-darkGray-700"
             to="/premium/tag-collections"
+          >
+            Modify
+          </NuxtLink>
+        </div>
+
+        <!-- Saved Posts  -->
+        <div class="flex flex-row items-center p-4 material-container">
+          <div class="flex-grow">
+            <h1 class="text-lg font-medium text-gray-200">Saved Posts</h1>
+            <p class="text-gray-300">Manage your saved posts</p>
+          </div>
+
+          <NuxtLink
+            class="px-3 py-2 rounded-full link border-util bg-darkGray-700"
+            to="/premium/saved-posts"
           >
             Modify
           </NuxtLink>
