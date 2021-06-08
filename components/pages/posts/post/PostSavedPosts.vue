@@ -41,7 +41,7 @@ export default {
     ...mapGetters('premium', ['isUserPremium']),
 
     /**
-     * This function is located here instead of on the store so it is dynamically processed
+     * This function is located here instead of in the vuex actions because we cant use `await` on a computed method.
      */
     isPostSaved() {
       const savedPosts = this.getSavedPosts
