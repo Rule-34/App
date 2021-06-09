@@ -229,8 +229,18 @@ export default {
         'native code',
         'extension',
         'unknown module',
+        'NotAllowedError',
         'Background Sync is disabled',
         'ResizeObserver loop limit exceeded',
+
+        // Matomo
+        "undefined is not an object (evaluating 'ao.sync.register')",
+
+        // localForage
+        'QuotaExceededError',
+
+        // Axios
+        'timeout of 0ms exceeded',
       ],
     },
   },
