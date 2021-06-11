@@ -49,7 +49,7 @@ export default {
 
   data() {
     return {
-      selectedBooru: 'all',
+      selectedBooru: '<All Boorus>',
     }
   },
 
@@ -73,7 +73,7 @@ export default {
     savedPostsFromSelectedBooru() {
       let SAVED_POSTS = null
 
-      if (this.selectedBooru === 'all') {
+      if (this.selectedBooru === '<All Boorus>') {
         SAVED_POSTS = JSON.parse(JSON.stringify(this.getSavedPosts))
       }
 
