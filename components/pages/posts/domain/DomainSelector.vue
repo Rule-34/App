@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex rounded-full material-container focus-within:focus-util"
+    class="relative flex rounded-full  material-container focus-within:focus-util"
   >
     <!-- Cloud icon -->
     <div for="domain-selector" class="inline-flex items-center pl-2 pr-1">
@@ -9,75 +9,62 @@
 
     <!-- Selector -->
     <select
-      :value="getActiveBooru.domain"
       aria-label="Change the domain where the content is pulled from"
-      class="inline-flex items-center font-light outline-none appearance-none text-primary-400 bg-darkGray-300"
-      @change="changeDomain($event.target.value)"
+      class="inline-flex items-center font-light outline-none appearance-none  text-primary-400 bg-darkGray-300"
+      @change="emitDomainChange"
     >
-      <optgroup label="Default">
-        <option
-          v-for="booru in getDefaultBooruList"
-          :key="booru.domain"
-          :aria-label="'Change domain to ' + booru.domain"
-          :value="booru.domain"
-          :selected="getActiveBooru.domain === booru.domain"
-        >
-          {{ booru.domain }}
-        </option>
-      </optgroup>
+      <template v-for="domainGroup in domainGroupList">
+        <!--  -->
 
-      <optgroup label="Custom">
-        <template v-if="isUserPremium">
-          <option
-            v-for="booru in getPremiumBooruList"
-            :key="booru.domain"
-            :aria-label="'Change domain to ' + booru.domain"
-            :value="booru.domain"
-            :selected="getActiveBooru.domain === booru.domain"
-          >
-            {{ booru.domain }}
-          </option>
-        </template>
+        <optgroup :label="domainGroup.name" :key="domainGroup.name">
+          <!--  -->
 
-        <option value="Add booru">&lt;Add Booru&gt;</option>
-      </optgroup>
+          <template v-for="domain in domainGroup.domains">
+            <!--  -->
+
+            <option
+              :key="domain"
+              :aria-label="'Change domain to ' + domain"
+              :value="domain"
+              :selected="activeDomain === domain"
+            >
+              {{ domain }}
+            </option>
+          </template>
+        </optgroup>
+      </template>
     </select>
 
     <!-- Drop icon -->
-    <div class="inline-flex items-center pl-1 pr-2">
+    <div for="domain-selector" class="inline-flex items-center pl-1 pr-2">
       <ChevronDownIcon class="w-4 h-4 icon" />
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-
-// Third party
 import { ChevronDownIcon, CloudIcon } from 'vue-feather-icons'
 
 export default {
   components: { ChevronDownIcon, CloudIcon },
 
-  computed: {
-    ...mapGetters('booru', [
-      'getActiveBooru',
-      'getDefaultBooruList',
-      'getPremiumBooruList',
-    ]),
-    ...mapGetters('premium', ['isUserPremium']),
+  props: {
+    activeDomain: {
+      type: String,
+      required: true,
+    },
+
+    domainGroupList: {
+      type: Array,
+      required: true,
+    },
   },
 
   methods: {
-    ...mapActions('booru', ['activeBooruManager']),
+    emitDomainChange(event) {
+      const DOMAIN = event.target.value
 
-    async changeDomain(domain) {
-      if (domain === 'Add booru') {
-        await this.$router.push({ name: 'premium' })
-        return
-      }
-
-      await this.activeBooruManager({ operation: 'set', value: domain })
+      this.$emit('domainChange', DOMAIN)
     },
   },
 }
