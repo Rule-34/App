@@ -1,9 +1,9 @@
 <template>
   <div
-    class="relative flex rounded-full  material-container focus-within:focus-util"
+    class="relative flex items-center justify-center gap-2 rounded-full  material-container focus-within:focus-util"
   >
     <!-- Cloud icon -->
-    <div for="domain-selector" class="inline-flex items-center pl-2 pr-1">
+    <div for="domain-selector" class="inline-flex items-center pl-2">
       <CloudIcon class="w-4 h-4 icon text-primary-400" />
     </div>
 
@@ -36,7 +36,7 @@
     </select>
 
     <!-- Drop icon -->
-    <div for="domain-selector" class="inline-flex items-center pl-1 pr-2">
+    <div for="domain-selector" class="inline-flex items-center pr-2">
       <ChevronDownIcon class="w-4 h-4 icon" />
     </div>
   </div>
