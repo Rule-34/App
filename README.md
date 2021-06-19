@@ -6,7 +6,7 @@ A Progressive Web App to browse the most popular Rule 34 Hentai Porn.
 
 ## Screenshots
 
-![Posts](https://cdn.statically.io/img/i.imgur.com/f=auto,h=500,q=90/uOiZbXw.png) ![Search](https://cdn.statically.io/img/i.imgur.com/f=auto,h=500,q=90/DmsT5TA.png)
+![Posts](https://i.imgur.com/uOiZbXw_d.png?maxwidth=400&fidelity=high) ![Search](https://i.imgur.com/DmsT5TA_d.png?maxwidth=400&fidelity=high)
 
 ## Usage
 
