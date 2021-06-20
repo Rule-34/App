@@ -13,11 +13,28 @@
     <main class="flex flex-col flex-auto min-h-full pb-4 space-y-4">
       <ErrorManager />
 
-      <ul class="flex-auto space-y-4">
-        <li v-for="post in getPosts" :key="post.id">
-          <Post :post-data="post" />
-        </li>
-      </ul>
+      <DynamicScroller
+        :items="getPosts"
+        :min-item-size="1000"
+        :page-mode="true"
+        :buffer="3000"
+        class="flex-auto"
+      >
+        <template v-slot="{ item, index, active }">
+          <DynamicScrollerItem
+            :item="item"
+            :active="active"
+            :data-index="index"
+          >
+            <Post
+              :key="item.id"
+              :post-domain="getActiveBooru.domain"
+              :post-data="item"
+              class="my-2"
+            />
+          </DynamicScrollerItem>
+        </template>
+      </DynamicScroller>
 
       <PostsControls />
     </main>
