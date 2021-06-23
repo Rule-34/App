@@ -1,11 +1,11 @@
 <template>
   <figure class="material-container">
     <!-- Media -->
-    <template v-if="error.show">
+    <template v-if="idState.error.show">
       <Error
         :show-action="false"
         :render-borders="false"
-        :error-data="error.message"
+        :error-data="idState.error.message"
       />
     </template>
 
@@ -14,7 +14,7 @@
       <div class="flex overflow-hidden">
         <button
           type="button"
-          :aria-expanded="isActive"
+          :aria-expanded="idState.isActive"
           aria-label="Toggle tags panel"
           class="relative w-full h-auto pointer-events-auto group"
           @click="toggleTags"
@@ -30,15 +30,15 @@
             referrerpolicy="no-referrer"
             class="w-full h-auto transition-opacity duration-700 opacity-0"
             :class="{
-              'opacity-100': media.hasLoaded,
+              'opacity-100': idState.media.hasLoaded,
             }"
-            @load="media.hasLoaded = true"
+            @load="idState.media.hasLoaded = true"
             @error="retryToLoadManager"
           />
 
           <!-- Fix for focus ring not applying on other elements -->
           <div
-            class="absolute inset-0 pointer-events-none ring-inset group-focus:focus-util"
+            class="absolute inset-0 pointer-events-none  ring-inset group-focus:focus-util"
           ></div>
         </button>
       </div>
@@ -68,11 +68,11 @@
             <button
               type="button"
               aria-label="Toggle tags panel"
-              class="p-1 bg-black border border-transparent rounded-lg pointer-events-auto bg-opacity-40 group focus:focus-util"
+              class="p-1 bg-black border border-transparent rounded-lg pointer-events-auto  bg-opacity-40 group focus:focus-util"
               @click="toggleTags"
             >
               <TagIcon
-                class="w-5 h-5 text-gray-200 transition-colors duration-300 icon group-hover:text-white"
+                class="w-5 h-5 text-gray-200 transition-colors duration-300  icon group-hover:text-white"
               />
             </button>
           </div>
@@ -86,11 +86,11 @@
         <div class="w-full overflow-hidden">
           <TransitionCollapse>
             <!-- Workaround for content not jumping is having a div before -->
-            <div v-if="isActive">
+            <div v-if="idState.isActive">
               <!-- Action bar -->
               <div class="flex items-center bg-darkGray-100 justify-evenly">
                 <!-- Saucenao -->
-                <template v-if="!error.show && !isVideo">
+                <template v-if="!idState.error.show && !isVideo">
                   <template v-if="isUserPremium">
                     <a
                       :href="`https://saucenao.com/search.php?url=${mediaResolutionChooser.url}`"
@@ -178,9 +178,16 @@ import {
   SearchIcon,
   DownloadIcon,
 } from 'vue-feather-icons'
+import { IdState } from 'vue-virtual-scroller'
 
 export default {
   components: { ExternalLinkIcon, TagIcon, SearchIcon, DownloadIcon },
+
+  mixins: [
+    IdState({
+      idProp: (vm) => vm.postData.id,
+    }),
+  ],
 
   props: {
     postData: {
@@ -194,7 +201,7 @@ export default {
     },
   },
 
-  data() {
+  idState() {
     return {
       isActive: false,
 
@@ -273,8 +280,8 @@ export default {
 
       console.warn(message)
 
-      this.error.message = message
-      this.error.show = true
+      this.idState.error.message = message
+      this.idState.error.show = true
     }
   },
 
@@ -282,7 +289,7 @@ export default {
     ...mapActions('booru', ['tagsManager']),
 
     toggleTags() {
-      this.isActive = !this.isActive
+      this.idState.isActive = !this.idState.isActive
     },
 
     // #region Post media
@@ -301,13 +308,13 @@ export default {
 
         console.warn(message)
 
-        this.error.message = message
-        this.error.show = true
+        this.idState.error.message = message
+        this.idState.error.show = true
         return
       }
 
       // Add extra slash to URL
-      if (!this.media.retryLogic.tried.extraSlash) {
+      if (!this.idState.media.retryLogic.tried.extraSlash) {
         console.info('Adding extra slash...')
 
         event.target.src = this.addExtraSlashToURL(
@@ -320,11 +327,11 @@ export default {
           await event.target.parentElement.play()
         }
 
-        this.media.retryLogic.tried.extraSlash = true
+        this.idState.media.retryLogic.tried.extraSlash = true
       }
 
       // Proxy URL
-      else if (!this.media.retryLogic.tried.proxy) {
+      else if (!this.idState.media.retryLogic.tried.proxy) {
         console.info('Proxying media...')
 
         event.target.src = this.addProxyToURL(this.mediaResolutionChooser.url)
@@ -335,11 +342,11 @@ export default {
           await event.target.parentElement.play()
         }
 
-        this.media.retryLogic.tried.proxy = true
+        this.idState.media.retryLogic.tried.proxy = true
       }
 
       // Proxy URL with extra slash
-      else if (!this.media.retryLogic.tried.proxyWithExtraSlash) {
+      else if (!this.idState.media.retryLogic.tried.proxyWithExtraSlash) {
         console.info('Proxying media with extra slash...')
 
         event.target.src = this.addProxyToURL(
@@ -352,15 +359,16 @@ export default {
           await event.target.parentElement.play()
         }
 
-        this.media.retryLogic.tried.proxyWithExtraSlash = true
+        this.idState.media.retryLogic.tried.proxyWithExtraSlash = true
       }
 
       // Retry to load it
       else if (
-        this.media.retryLogic.count < this.getUserSettings.imgRetry.value
+        this.idState.media.retryLogic.count <
+        this.getUserSettings.imgRetry.value
       ) {
         console.info(
-          `Retry number ${this.media.retryLogic.count} to load the media`
+          `Retry number ${this.idState.media.retryLogic.count} to load the media`
         )
 
         event.target.src = ''
@@ -373,7 +381,7 @@ export default {
           await event.target.parentElement.play()
         }
 
-        this.media.retryLogic.count++
+        this.idState.media.retryLogic.count++
       }
 
       // At last, show error
@@ -382,8 +390,8 @@ export default {
 
         console.warn(message)
 
-        this.error.message = message
-        this.error.show = true
+        this.idState.error.message = message
+        this.idState.error.show = true
       }
 
       // console.debug(event.target.src)
