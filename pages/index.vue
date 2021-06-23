@@ -17,7 +17,7 @@
         :items="getPosts"
         :min-item-size="1000"
         :page-mode="true"
-        :buffer="3000"
+        :buffer="dynamicBufferHeight"
         class="flex-auto"
       >
         <template v-slot="{ item, index, active }">
@@ -51,7 +51,11 @@ export default {
   mixins: [UrlManagerMixin],
 
   computed: {
-    ...mapGetters('booru', ['getPosts']),
+    ...mapGetters('booru', ['getPosts', 'getActiveBooru']),
+
+    dynamicBufferHeight() {
+      return window.screen.availHeight * 1.5
+    },
   },
 }
 </script>
