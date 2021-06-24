@@ -18,9 +18,9 @@
       <ErrorManager />
 
       <DynamicPostScroller
-        class="flex-auto"
         :posts="getPosts"
         :postsDomain="getActiveBooru.domain"
+        class="flex-auto"
       />
 
       <PostsControls />

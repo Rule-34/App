@@ -11,8 +11,8 @@
         <!--  -->
         <Post
           :key="`${postsDomain}-${item.id}`"
-          :post-domain="postsDomain"
-          :post-data="item"
+          :postData="item"
+          :postDomain="postsDomain"
         />
       </DynamicScrollerItem>
     </template>
