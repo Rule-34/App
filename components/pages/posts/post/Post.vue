@@ -158,7 +158,7 @@ export default {
 
   mixins: [
     IdState({
-      idProp: (vm) => vm.postData.id,
+      idProp: (vm) => `${vm.postDomain}-${vm.postData.id}`,
     }),
   ],
 
