@@ -151,6 +151,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { ExternalLinkIcon, TagIcon, DownloadIcon } from 'vue-feather-icons'
+import { IdState } from 'vue-virtual-scroller'
 
 export default {
   components: { ExternalLinkIcon, TagIcon, DownloadIcon },
