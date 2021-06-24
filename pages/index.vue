@@ -17,28 +17,11 @@
     <main class="flex flex-col flex-auto min-h-full pb-4 space-y-4">
       <ErrorManager />
 
-      <DynamicScroller
-        :items="getPosts"
-        :min-item-size="1000"
-        :page-mode="true"
-        :buffer="dynamicBufferHeight"
+      <DynamicPostScroller
         class="flex-auto"
-      >
-        <template v-slot="{ item, index, active }">
-          <DynamicScrollerItem
-            :item="item"
-            :active="active"
-            :data-index="index"
-          >
-            <Post
-              :key="item.id"
-              :post-domain="getActiveBooru.domain"
-              :post-data="item"
-              class="my-2"
-            />
-          </DynamicScrollerItem>
-        </template>
-      </DynamicScroller>
+        :posts="getPosts"
+        :postsDomain="getActiveBooru.domain"
+      />
 
       <PostsControls />
     </main>
@@ -62,10 +45,6 @@ export default {
       'getPosts',
     ]),
     ...mapGetters('premium', ['isUserPremium']),
-
-    dynamicBufferHeight() {
-      return window.screen.availHeight * 1.5
-    },
 
     booruGroupList() {
       const BOORU_LIST = []
