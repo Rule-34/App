@@ -41,3 +41,16 @@ export default {
   },
 }
 </script>
+
+<style lang="postcss">
+/* Apply spacing to elements inside DynamicScrollerItem */
+
+.vue-recycle-scroller__item-wrapper
+  > :not([hidden])
+  ~ :not([hidden])
+  > :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+}
+</style>
