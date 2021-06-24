@@ -90,7 +90,7 @@
               <!-- Action bar -->
               <div class="flex items-center bg-darkGray-100 justify-evenly">
                 <!-- Saucenao -->
-                <template v-if="!error.show">
+                <template v-if="!idState.error.show">
                   <template v-if="!isVideo">
                     <PostSaucenao :media-url="mediaResolutionChooser.url" />
                   </template>
@@ -273,7 +273,7 @@ export default {
     async retryToLoadManager(event) {
       // console.log('Media source: ', event.target.src)
 
-      if (this.showError) {
+      if (this.idState.error.show) {
         const message = 'An error is set.'
 
         console.warn(message)
