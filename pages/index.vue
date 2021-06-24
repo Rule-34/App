@@ -107,6 +107,7 @@ export default {
       }
 
       await this.activeBooruManager({ operation: 'set', value: domain })
+    },
   },
 }
 </script>
