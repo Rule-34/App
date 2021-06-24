@@ -9,7 +9,11 @@
       <!--  -->
       <DynamicScrollerItem :item="item" :active="active" :data-index="index">
         <!--  -->
-        <Post :key="item.id" :post-domain="postsDomain" :post-data="item" />
+        <Post
+          :key="`${postsDomain}-${item.id}`"
+          :post-domain="postsDomain"
+          :post-data="item"
+        />
       </DynamicScrollerItem>
     </template>
   </DynamicScroller>
