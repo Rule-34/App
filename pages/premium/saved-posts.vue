@@ -53,17 +53,18 @@ export default {
     ...mapGetters('user', ['getSavedPosts']),
 
     boorusThatHaveSavedPosts() {
-      const BOORU_DOMAINS = this.getSavedPosts.map(
+      const BOORU_DOMAIN_LIST = this.getSavedPosts.map(
         (POST) => POST.meta_data.booru_domain
       )
 
-      const UNIQUE_BOORU_DOMAINS = [...new Set(BOORU_DOMAINS)]
+      const UNIQUE_BOORU_DOMAIN_LIST = [...new Set(BOORU_DOMAIN_LIST)]
 
-      const DOMAIN_GROUP_LIST = [
-        { name: 'Default', domains: ['<All Boorus>', ...UNIQUE_BOORU_DOMAINS] },
-      ]
+      const BOORU_GROUP = {
+        name: 'Default',
+        domains: ['<All Boorus>', ...UNIQUE_BOORU_DOMAIN_LIST],
+      }
 
-      return DOMAIN_GROUP_LIST
+      return [BOORU_GROUP]
     },
 
     savedPostsFromSelectedBooru() {

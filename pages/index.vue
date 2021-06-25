@@ -47,32 +47,34 @@ export default {
     ...mapGetters('premium', ['isUserPremium']),
 
     booruGroupList() {
-      const BOORU_LIST = []
+      const BOORU_GROUP_LIST = []
 
-      // Default boorus
       const DOMAINS_FROM_DEFAULT_BOORU_LIST = this.getDefaultBooruList.map(
         (BOORU) => BOORU.domain
       )
-      const DEFAULT_BOORU_LIST = {
+
+      // Default Booru list
+      const DEFAULT_BOORU_GROUP = {
         name: 'Default',
         domains: DOMAINS_FROM_DEFAULT_BOORU_LIST,
       }
 
-      BOORU_LIST.push(DEFAULT_BOORU_LIST)
+      BOORU_GROUP_LIST.push(DEFAULT_BOORU_GROUP)
 
-      // Premium boorus
       const DOMAINS_FROM_PREMIUM_BOORU_LIST = this.getPremiumBooruList.map(
         (BOORU) => BOORU.domain
       )
-      const PREMIUM_BOORU_LIST = {
+
+      // Premium Booru list
+      const PREMIUM_BOORU_GROUP = {
         name: 'Custom',
         domains: [...DOMAINS_FROM_PREMIUM_BOORU_LIST, '<Add Booru>'],
       }
 
       if (this.isUserPremium) {
-        BOORU_LIST.push(PREMIUM_BOORU_LIST)
+        BOORU_GROUP_LIST.push(PREMIUM_BOORU_GROUP)
       }
-      return BOORU_LIST
+      return BOORU_GROUP_LIST
     },
   },
 
