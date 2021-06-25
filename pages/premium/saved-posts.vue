@@ -10,23 +10,19 @@
       />
     </nav>
 
-    <ul class="space-y-4">
-      <template v-if="savedPostsFromSelectedBooru.length">
-        <li v-for="POST in savedPostsFromSelectedBooru" :key="POST.data.id">
-          <Post
-            :post-domain="POST.meta_data.booru_domain"
-            :post-data="POST.data"
-            :view-only="true"
-          />
-        </li>
-      </template>
+    <template v-if="savedPostsFromSelectedBooru.length">
+      <DynamicPostScroller
+        :posts="savedPostsFromSelectedBooru"
+        :postsDomain="selectedBooru"
+        :viewOnly="true"
+      />
+    </template>
 
-      <template v-else>
-        <li class="my-3 text-center text-gray-300">
-          There are no saved posts. Go save some!
-        </li>
-      </template>
-    </ul>
+    <template v-else>
+      <li class="my-3 text-center text-gray-300">
+        There are no saved posts. Go save some!
+      </li>
+    </template>
   </main>
 </template>
 
