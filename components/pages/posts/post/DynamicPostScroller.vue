@@ -13,6 +13,7 @@
           :key="`${postsDomain}-${item.id}`"
           :postData="item"
           :postDomain="postsDomain"
+          :viewOnly="viewOnly"
         />
       </DynamicScrollerItem>
     </template>
