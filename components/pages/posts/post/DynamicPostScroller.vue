@@ -10,9 +10,9 @@
       <DynamicScrollerItem :item="item" :active="active" :data-index="index">
         <!--  -->
         <Post
-          :key="`${postsDomain}-${item.id}`"
+          :key="`${getPostDomain(item)}-${item.id}`"
           :postData="item"
-          :postDomain="postsDomain"
+          :postDomain="getPostDomain(item)"
           :viewOnly="viewOnly"
         />
       </DynamicScrollerItem>
@@ -30,7 +30,7 @@ export default {
 
     postsDomain: {
       type: String,
-      required: true,
+      default: undefined,
     },
 
     viewOnly: {
@@ -42,6 +42,17 @@ export default {
   computed: {
     dynamicBufferHeight() {
       return window.screen.availHeight * 1.5
+    },
+  },
+
+  methods: {
+    getPostDomain(post) {
+      // If domain is not assigned directly, load it from the `_saved_post_metadata` attribute on the `posts` prop
+      if (this.postsDomain === '<All Boorus>') {
+        return post['_saved_post_meta_data'].booru_domain
+      }
+
+      return this.postsDomain
     },
   },
 }
