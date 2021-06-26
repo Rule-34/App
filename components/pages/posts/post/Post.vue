@@ -233,10 +233,18 @@ export default {
 
     // #region Post media
     isUrl() {
+      if (!this.post.data.source.length) {
+        return false
+      }
+
       return this.post.data.source[0].startsWith('http', 'www')
     },
 
     sourceText() {
+      if (!this.post.data.source.length) {
+        return null
+      }
+
       if (this.isUrl) {
         return new URL(this.post.data.source[0]).hostname
       }
