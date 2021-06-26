@@ -14,8 +14,8 @@
       <div class="flex overflow-hidden">
         <button
           type="button"
-          :aria-expanded="idState.isActive"
           aria-label="Toggle tags panel"
+          :aria-expanded="idState.isActive"
           class="relative w-full h-auto pointer-events-auto group"
           @click="toggleTags"
           @keydown.enter="toggleTags"
@@ -70,8 +70,10 @@
             <button
               type="button"
               aria-label="Toggle tags panel"
+              :aria-expanded="idState.isActive"
               class="p-1 bg-black border border-transparent rounded-lg pointer-events-auto  bg-opacity-40 group focus:focus-util"
               @click="toggleTags"
+              @keydown.enter="toggleTags"
             >
               <TagIcon
                 class="w-5 h-5 text-gray-200 transition-colors duration-300  icon group-hover:text-white"
