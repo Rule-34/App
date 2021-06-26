@@ -1,5 +1,6 @@
 <template>
   <DynamicScroller
+    keyField="id"
     :items="posts"
     :min-item-size="1000"
     :page-mode="true"
@@ -32,17 +33,6 @@ export default {
   computed: {
     dynamicBufferHeight() {
       return window.screen.availHeight * 1.5
-    },
-  },
-
-  methods: {
-    getPostDomain(post) {
-      // If domain is not assigned directly, load it from the `_saved_post_metadata` attribute on the `posts` prop
-      if (this.postsDomain === '<All Boorus>') {
-        return post['_saved_post_meta_data'].booru_domain
-      }
-
-      return this.postsDomain
     },
   },
 }

@@ -41,16 +41,7 @@ export default {
     isPostSaved() {
       const savedPosts = this.getSavedPosts
 
-      const domain = this.postDomain
-      const postData = this.postData
-
-      const isPostSaved = savedPosts.some(
-        (POST) =>
-          // Post ID
-          POST.data.id === postData.id &&
-          // Post Domain
-          POST.meta_data.booru_domain === domain
-      )
+      const isPostSaved = savedPosts.some((POST) => POST.id === this.post.id)
 
       return isPostSaved
     },
@@ -67,13 +58,11 @@ export default {
 
       if (this.isPostSaved) {
         await this.removePostFromSavedPosts({
-          domain: this.postDomain,
-          post: this.postData,
+          postId: this.post.id,
         })
       } else {
         await this.addPostToSavedPosts({
-          domain: this.postDomain,
-          post: this.postData,
+          post: this.post,
         })
       }
     },
