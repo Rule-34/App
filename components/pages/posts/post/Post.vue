@@ -24,7 +24,7 @@
             :src="mediaResolutionChooser.url"
             :height="mediaResolutionChooser.height"
             :width="mediaResolutionChooser.width"
-            :alt="'Image ' + postData.id"
+            :alt="'Image ' + post.data.id"
             loading="lazy"
             decoding="async"
             referrerpolicy="no-referrer"
@@ -47,9 +47,9 @@
     <template v-else-if="isVideo">
       <div class="relative">
         <video
+          :alt="'Video ' + post.data.id"
+          :poster="post.data.preview_file.url"
           preload="none"
-          :poster="postData.preview_file.url"
-          :alt="'Video ' + postData.id"
           controls
           loop
           playsinline
@@ -82,7 +82,7 @@
 
     <figcaption class="flex flex-wrap overflow-hidden text-sm">
       <!-- Action bar & Tags -->
-      <template v-if="postData.tags.length">
+      <template v-if="post.data.tags.length">
         <div class="w-full overflow-hidden">
           <TransitionCollapse>
             <!-- Workaround for content not jumping is having a div before -->
@@ -95,17 +95,14 @@
                     <PostSaucenao :media-url="mediaResolutionChooser.url" />
                   </template>
 
-                  <PostSavedPosts
-                    :post-domain="postDomain"
-                    :post-data="postData"
-                  />
+                  <PostSavedPosts :post="post" />
                 </template>
               </div>
 
               <!-- Tags -->
               <div class="min-w-full tag-container">
                 <button
-                  v-for="tag in postData.tags"
+                  v-for="tag in post.data.tags"
                   :key="tag"
                   type="button"
                   class="tag link"
@@ -120,12 +117,12 @@
       </template>
 
       <!-- Source -->
-      <template v-if="postData.source.length">
+      <template v-if="post.data.source.length">
         <div class="w-full p-1 text-center">
           <template v-if="isUrl">
             <!-- If text is an Url then make it linkable -->
             <a
-              :href="postData.source[0]"
+              :href="post.data.source[0]"
               class="inline-flex gap-2 link"
               target="_blank"
             >
@@ -158,17 +155,12 @@ export default {
 
   mixins: [
     IdState({
-      idProp: (vm) => `${vm.postDomain}-${vm.postData.id}`,
+      idProp: (vm) => vm.post.id,
     }),
   ],
 
   props: {
-    postDomain: {
-      type: String,
-      required: true,
-    },
-
-    postData: {
+    post: {
       type: Object,
       required: true,
     },
@@ -209,44 +201,44 @@ export default {
 
     // #region Post media
     isImage() {
-      return this.postData.media_type === 'image'
+      return this.post.data.media_type === 'image'
     },
 
     isVideo() {
-      return this.postData.media_type === 'video'
+      return this.post.data.media_type === 'video'
     },
 
     mediaResolutionChooser() {
       // Always return high res file if its a video
-      if (this.isVideo && this.postData.high_res_file) {
-        return this.postData.high_res_file
+      if (this.isVideo && this.post.data.high_res_file) {
+        return this.post.data.high_res_file
       }
 
       // Return full image if its setting is enabled OR if low resolution file doesn't exist
       if (
-        !this.postData.low_res_file.url ||
+        !this.post.data.low_res_file.url ||
         this.getUserSettings.fullSizeImages.value
       ) {
-        return this.postData.high_res_file
+        return this.post.data.high_res_file
       }
 
       // Return low res file
-      return this.postData.low_res_file
+      return this.post.data.low_res_file
     },
     // #endregion
 
     // #region Post media
     isUrl() {
-      return this.postData.source[0].startsWith('http', 'www')
+      return this.post.data.source[0].startsWith('http', 'www')
     },
 
     sourceText() {
       if (this.isUrl) {
-        return new URL(this.postData.source[0]).hostname
+        return new URL(this.post.data.source[0]).hostname
       }
 
       // Return the entire source as it's text
-      return this.postData.source[0]
+      return this.post.data.source[0]
     },
     // #endregion
   },

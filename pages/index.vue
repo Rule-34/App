@@ -17,11 +17,7 @@
     <main class="flex flex-col flex-auto min-h-full pb-4 space-y-4">
       <ErrorManager />
 
-      <DynamicPostScroller
-        :posts="getPosts"
-        :postsDomain="getActiveBooru.domain"
-        class="flex-auto"
-      />
+      <DynamicPostScroller :posts="getPosts" class="flex-auto" />
 
       <PostsControls />
     </main>
