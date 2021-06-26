@@ -13,7 +13,6 @@
     <template v-if="savedPostsFromSelectedBooru.length">
       <DynamicPostScroller
         :posts="savedPostsFromSelectedBooru"
-        :postsDomain="selectedBooru"
         :viewOnly="true"
       />
     </template>
