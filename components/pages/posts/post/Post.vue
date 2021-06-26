@@ -21,6 +21,7 @@
           @keydown.enter="toggleTags"
         >
           <img
+            :key="mediaResolutionChooser.url"
             :src="mediaResolutionChooser.url"
             :height="mediaResolutionChooser.height"
             :width="mediaResolutionChooser.width"
@@ -47,6 +48,7 @@
     <template v-else-if="isVideo">
       <div class="relative">
         <video
+          :key="mediaResolutionChooser.url"
           :alt="'Video ' + post.data.id"
           :poster="post.data.preview_file.url"
           preload="none"
