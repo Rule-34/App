@@ -9,12 +9,7 @@
       <!--  -->
       <DynamicScrollerItem :item="item" :active="active" :data-index="index">
         <!--  -->
-        <Post
-          :key="`${getPostDomain(item)}-${item.id}`"
-          :postData="item"
-          :postDomain="getPostDomain(item)"
-          :viewOnly="viewOnly"
-        />
+        <Post :post="item" :viewOnly="viewOnly" />
       </DynamicScrollerItem>
     </template>
   </DynamicScroller>
@@ -26,11 +21,6 @@ export default {
     posts: {
       type: Array,
       required: true,
-    },
-
-    postsDomain: {
-      type: String,
-      default: undefined,
     },
 
     viewOnly: {

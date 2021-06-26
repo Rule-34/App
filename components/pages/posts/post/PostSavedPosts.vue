@@ -23,12 +23,7 @@ import { HeartIcon } from 'vue-feather-icons'
 
 export default {
   props: {
-    postDomain: {
-      type: String,
-      required: true,
-    },
-
-    postData: {
+    post: {
       type: Object,
       required: true,
     },
