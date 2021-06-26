@@ -40,12 +40,7 @@ export const state = () => ({
     savedPosts: [
       // 1st default post
       {
-        meta_data: {
-          booru_domain: 'rule34.xxx',
-
-          // :')
-          created_at: new Date(1997, 8 - 1, 22, '21'),
-        },
+        id: 'rule34.xxx-1',
 
         data: {
           id: 1,
@@ -97,16 +92,18 @@ export const state = () => ({
           rating: 'safe',
           media_type: 'image',
         },
+
+        meta_data: {
+          booru_domain: 'rule34.xxx',
+
+          // :')
+          created_at: new Date(1997, 8 - 1, 22, '21'),
+        },
       },
 
       // 2nd default post
       {
-        meta_data: {
-          booru_domain: 'gelbooru.com',
-
-          // :')
-          created_at: new Date(2000, 1 - 1, 31, '0'),
-        },
+        id: 'gelbooru.com-5',
 
         data: {
           id: 5,
@@ -160,6 +157,13 @@ export const state = () => ({
           source: [],
           rating: 'safe',
           media_type: 'image',
+        },
+
+        meta_data: {
+          booru_domain: 'gelbooru.com',
+
+          // :')
+          created_at: new Date(2000, 1 - 1, 31, '0'),
         },
       },
     ],
@@ -327,13 +331,11 @@ export const actions = {
     }
   },
 
-  addPostToSavedPosts({ getters, commit }, { domain, post }) {
+  addPostToSavedPosts({ getters, commit }, { post }) {
     const SAVED_POSTS = JSON.parse(JSON.stringify(getters.getSavedPosts))
 
-    const NEW_POST_DATA = {
-      meta_data: { booru_domain: domain, created_at: new Date().toJSON() },
-      data: post,
-    }
+    const NEW_POST_DATA = post
+    NEW_POST_DATA.meta_data.created_at = new Date().toJSON()
 
     // Add new Post
     SAVED_POSTS.push(NEW_POST_DATA)
@@ -341,19 +343,12 @@ export const actions = {
     commit('setSavedPosts', SAVED_POSTS)
   },
 
-  removePostFromSavedPosts({ getters, commit }, { domain, post }) {
+  removePostFromSavedPosts({ getters, commit }, { postId }) {
     const SAVED_POSTS = JSON.parse(JSON.stringify(getters.getSavedPosts))
 
     // Remove post with the same ID
     const FILTERED_SAVED_POSTS = SAVED_POSTS.filter((SAVED_POST) => {
-      return !(
-        // Post Domain
-        (
-          SAVED_POST.meta_data.booru_domain === domain &&
-          // Post ID
-          SAVED_POST.data.id === post.id
-        )
-      )
+      return SAVED_POST.id !== postId
     })
 
     commit('setSavedPosts', FILTERED_SAVED_POSTS)

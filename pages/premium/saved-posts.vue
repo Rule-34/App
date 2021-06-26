@@ -71,11 +71,10 @@ export default {
       let SAVED_POSTS = null
 
       if (this.selectedBooru === '<All Boorus>') {
+        //
         SAVED_POSTS = JSON.parse(JSON.stringify(this.getSavedPosts))
-      }
-
-      //
-      else {
+      } else {
+        //
         const FILTERED_SAVED_POSTS = this.getSavedPosts.filter(
           (POST) => POST.meta_data.booru_domain === this.selectedBooru
         )
@@ -85,15 +84,7 @@ export default {
 
       const SORTED_SAVED_POSTS = this.sortPostsByDate(SAVED_POSTS)
 
-      // Transform the structure
-      const SIMPLE_SAVED_POSTS = SORTED_SAVED_POSTS.map((SAVED_POST) => {
-        return {
-          ...SAVED_POST.data,
-          _saved_post_meta_data: SAVED_POST.meta_data,
-        }
-      })
-
-      return SIMPLE_SAVED_POSTS
+      return SORTED_SAVED_POSTS
     },
   },
 

@@ -382,9 +382,11 @@ export const actions = {
     return urlToFetch.toString()
   },
 
-  async fetchPosts({ dispatch }, mode) {
+  async fetchPosts({ getters, dispatch }, mode) {
     // Tip: Actions that return a value have to be awaited
     const url = await dispatch('createApiUrl', { mode: 'posts' })
+
+    const ACTIVE_BOORU_DOMAIN = getters.getActiveBooru.domain
 
     try {
       const response = await dispatch(
@@ -395,10 +397,22 @@ export const actions = {
         { root: true }
       )
 
+      // This is how a final booru object looks like
+      const POSTS = response.map((POST) => {
+        return {
+          id: `${ACTIVE_BOORU_DOMAIN}-${POST.id}`,
+          data: POST,
+          meta_data: {
+            booru_domain: ACTIVE_BOORU_DOMAIN,
+            created_at: null,
+          },
+        }
+      })
+
       if (mode === 'concat') {
-        dispatch('postsManager', { operation: 'concat', value: response })
+        dispatch('postsManager', { operation: 'concat', value: POSTS })
       } else {
-        dispatch('postsManager', { operation: 'set', value: response })
+        dispatch('postsManager', { operation: 'set', value: POSTS })
       }
 
       //
