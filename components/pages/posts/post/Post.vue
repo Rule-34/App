@@ -88,7 +88,7 @@
         <div class="w-full overflow-hidden">
           <TransitionCollapse>
             <!-- Workaround for content not jumping is having a div before -->
-            <div v-if="idState.isActive">
+            <div v-show="idState.isActive">
               <!-- Action bar -->
               <div class="flex items-center bg-darkGray-100 justify-evenly">
                 <!-- Saucenao -->
