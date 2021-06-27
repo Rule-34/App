@@ -24,6 +24,13 @@
           </li>
         </template>
 
+        <template v-else>
+          <li class="my-3 text-center text-gray-300">
+            There are no more posts :(
+          </li>
+        </template>
+      </ul>
+
       <PostsControls />
     </main>
   </div>
