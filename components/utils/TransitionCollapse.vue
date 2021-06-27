@@ -1,21 +1,10 @@
 <template>
   <transition
-    enter-active-class="collapse-enter-active"
-    leave-active-class="collapse-leave-active"
+    name="collapse"
     @before-enter="beforeEnter"
     @enter="enter"
     @leave="leave"
   >
-    <!-- 
-
-    @before-leave="beforeLeave"
-
-    @after-leave="afterLeave"
-    
-    @after-enter="afterEnter"
-    
-      -->
-
     <!-- Content -->
     <slot />
   </transition>
@@ -34,27 +23,10 @@ export default {
     enter(element) {
       requestAnimationFrame(() => {
         element.style.maxHeight = `${element.scrollHeight}px`
-        // console.log('Scroll', element.scrollHeight)
 
         element.style.opacity = 1
       })
     },
-
-    // afterEnter(element) {
-    //   element.style.maxHeight = null
-    //   element.style.opacity = null
-    // },
-
-    // This would be the toggled state
-
-    // beforeLeave(element) {
-    //   requestAnimationFrame(() => {
-    //     element.style.maxHeight = `${element.offsetHeight}px`
-    //     // console.log('Offset', element.offsetHeight)
-
-    //     element.style.opacity = 1
-    //   })
-    // },
 
     leave(element) {
       requestAnimationFrame(() => {
@@ -62,11 +34,6 @@ export default {
         element.style.opacity = 0
       })
     },
-
-    // afterLeave(element) {
-    //   element.style.maxHeight = null
-    //   element.style.opacity = null
-    // },
   },
 }
 </script>
