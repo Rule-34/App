@@ -17,7 +17,12 @@
     <main class="flex flex-col flex-auto min-h-full pb-4 space-y-4">
       <ErrorManager />
 
-      <DynamicPostScroller :posts="getPosts" class="flex-auto" />
+      <ul class="flex-auto space-y-4">
+        <template v-if="getPosts.length">
+          <li v-for="POST in getPosts" :key="POST.id">
+            <Post :post="POST" />
+          </li>
+        </template>
 
       <PostsControls />
     </main>
