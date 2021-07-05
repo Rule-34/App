@@ -4,8 +4,8 @@
 
     <nav class="flex flex-row items-center justify-between py-4">
       <DomainSelector
-        :activeDomain="selectedBooru"
-        :domainGroupList="boorusThatHaveSavedPosts"
+        :active-domain="selectedBooru"
+        :domain-group-list="boorusThatHaveSavedPosts"
         @domainChange="onDomainChange"
       />
     </nav>
@@ -13,7 +13,7 @@
     <ul class="space-y-4">
       <template v-if="savedPostsFromSelectedBooru.length">
         <li v-for="POST in savedPostsFromSelectedBooru" :key="POST.id">
-          <Post :post="POST" :viewOnly="true" />
+          <Post :post="POST" :view-only="true" />
         </li>
       </template>
 
@@ -30,6 +30,12 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  data() {
+    return {
+      selectedBooru: '<All Boorus>',
+    }
+  },
+
   head() {
     return {
       title: 'Saved posts',
@@ -40,12 +46,6 @@ export default {
           content: 'Save posts for later.',
         },
       ],
-    }
-  },
-
-  data() {
-    return {
-      selectedBooru: '<All Boorus>',
     }
   },
 
@@ -89,7 +89,7 @@ export default {
   },
 
   methods: {
-    async onDomainChange(DOMAIN) {
+    onDomainChange(DOMAIN) {
       this.selectedBooru = DOMAIN
     },
 
