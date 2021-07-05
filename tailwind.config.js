@@ -15,7 +15,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: defaultColors.lightBlue,
+        primary: defaultColors.sky,
 
         accent: defaultColors.violet,
 
