@@ -2,6 +2,51 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://github.com/Rule-34/App/compare/v2.6.4...v2.7.0) (2021-07-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* pass the entire data via props
+* change the posts structure to be equal to saved posts structure
+
+### Features
+
+* add booru selector ([65f6aa4](https://github.com/Rule-34/App/commit/65f6aa46e01bab358986d8c8a4d941821f184f8e))
+* add domain prop ([4d72078](https://github.com/Rule-34/App/commit/4d7207855f35f8555f815dc341f27abd056cb4f5))
+* add empty source checks ([24b0030](https://github.com/Rule-34/App/commit/24b00301b22eb7b3020d09422b3285127b1b8890))
+* add keys to media so they are switched instantly ([aa7c4f7](https://github.com/Rule-34/App/commit/aa7c4f7c2c8d6b15cac2e1b05b7490136c66e861))
+* add no posts indicator ([c63b6b4](https://github.com/Rule-34/App/commit/c63b6b428f54a307df3a0c66a3015f7205c14b1d))
+* add virtual scroll for posts page ([91b064f](https://github.com/Rule-34/App/commit/91b064f588bb8e87d03dea9e4e312b5ea4580d25))
+* add virtual scroll plugin ([af2c9d3](https://github.com/Rule-34/App/commit/af2c9d3aa4e20c076a2cde820025991335de5339))
+* create initial saved posts page ([b4570e5](https://github.com/Rule-34/App/commit/b4570e51faf799ea9189c5567af3c46dda27e87d))
+* create saved posts component ([6b25ab0](https://github.com/Rule-34/App/commit/6b25ab023cad461f2f7547f3042708daaf4446d9))
+* create vuex architecture for saved posts ([caf0bac](https://github.com/Rule-34/App/commit/caf0bac13a8e092ad28110eaa7cfea2580641673))
+* dynamically assign buffer height ([3dfb658](https://github.com/Rule-34/App/commit/3dfb6582c3a3429e3aeb90dabd4de10cdc51464e))
+* get post domain from saved post attribute ([9d007d2](https://github.com/Rule-34/App/commit/9d007d2c4db19231539ed02e7cbbc578d79fab78))
+* improve posts keys to be more unique ([0faace6](https://github.com/Rule-34/App/commit/0faace6f20ca78f02678822d2bb553441036f6c9))
+* re-add spacing to posts ([f152d1f](https://github.com/Rule-34/App/commit/f152d1f49b2e635fbf43aa752b78b764d843e86d))
+* replace data with idState mixin ([8827db2](https://github.com/Rule-34/App/commit/8827db28e771d2e773b686a37193172cbd7887e2))
+* **saved posts:** implement DomainSelector component ([204e77e](https://github.com/Rule-34/App/commit/204e77e7191a3cd97d60a5407fa1939177c554f3))
+* simplify saved posts structure ([d179e87](https://github.com/Rule-34/App/commit/d179e8756f9df4f3f6799ea02226f3a1cdc85aad))
+* sort Booru domain list ([a3410c4](https://github.com/Rule-34/App/commit/a3410c45919738274dfa56791cca95b42a2ff6be))
+* sort posts by date ([6869525](https://github.com/Rule-34/App/commit/6869525ed4d2c880dbc58fdd1b7333e8cc4331e2))
+
+
+### Bug Fixes
+
+* add missing accessibility attributes ([a726780](https://github.com/Rule-34/App/commit/a726780c14c65b9d015ef9ca588c541c6a84b376))
+* fix discrepancies ([1f6b88e](https://github.com/Rule-34/App/commit/1f6b88ed7d919b7f3a5b506180be46350dc9f204))
+* fix missing idState ([2948edd](https://github.com/Rule-34/App/commit/2948edded65a93851efce768ec9b26281b88e117))
+* fix removing wrong posts ([d95cfe7](https://github.com/Rule-34/App/commit/d95cfe7f0268b11048ce7d67699d387317888add))
+* fix tailwind breaking changes ([86d03db](https://github.com/Rule-34/App/commit/86d03db93d4b9a08a1ae075c4efd7c8273aa1549))
+* fix wrong usage of Date ([0ba2ef7](https://github.com/Rule-34/App/commit/0ba2ef76bc1810d04cf0f55f327572965fe386b2))
+* use viewOnly prop ([dcf7427](https://github.com/Rule-34/App/commit/dcf7427d59e562cc22e8a843d9fb8a344791b77c))
+
+
+* change the posts structure to be equal to saved posts structure ([b9b326c](https://github.com/Rule-34/App/commit/b9b326c02080be055bc01b65166f7af251edd9d4))
+* pass the entire data via props ([26b343d](https://github.com/Rule-34/App/commit/26b343d45c03bc0c48aff514cfbd1461ca97400b))
+
 ### [2.6.4](https://github.com/Rule-34/App/compare/v2.6.3...v2.6.4) (2021-05-27)
 
 ### [2.6.3](https://github.com/Rule-34/App/compare/v2.6.2...v2.6.3) (2021-05-20)
