@@ -57,11 +57,13 @@ export default {
         (POST) => POST.meta_data.booru_domain
       )
 
-      const UNIQUE_BOORU_DOMAIN_LIST = [...new Set(BOORU_DOMAIN_LIST)]
+      const UNIQUE_SORTED_BOORU_DOMAIN_LIST = [
+        ...new Set(BOORU_DOMAIN_LIST),
+      ].sort()
 
       const BOORU_GROUP = {
         name: 'Default',
-        domains: ['<All Boorus>', ...UNIQUE_BOORU_DOMAIN_LIST],
+        domains: ['<All Boorus>', ...UNIQUE_SORTED_BOORU_DOMAIN_LIST],
       }
 
       return [BOORU_GROUP]
