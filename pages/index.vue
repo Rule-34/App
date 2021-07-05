@@ -26,7 +26,7 @@
 
         <template v-else>
           <li class="my-3 text-center text-gray-300">
-            There are no more posts :(
+            There are no more posts available.
           </li>
         </template>
       </ul>
