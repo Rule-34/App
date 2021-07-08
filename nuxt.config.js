@@ -171,10 +171,16 @@ export default {
       background_color: TAILWIND_CONFIG.theme.extend.colors.darkGray[700],
       shortcuts: [
         {
-          name: 'Open Settings',
+          name: 'Settings',
           short_name: 'Settings',
-          description: 'Tweak your experience',
-          url: '/settings?utm_source=PWA',
+          description: 'Settings to tweak your experience.',
+          url: '/settings?utm_source=PWA&utm_medium=Shortcut',
+        },
+        {
+          name: 'Saved Posts',
+          short_name: 'Saved Posts',
+          description: 'Save posts for later.',
+          url: '/premium/saved-posts?utm_source=PWA&utm_medium=Shortcut',
         },
       ],
     },
