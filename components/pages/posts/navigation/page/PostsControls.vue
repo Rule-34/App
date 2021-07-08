@@ -1,7 +1,7 @@
 <template>
   <div>
+    <!-- Normal controls -->
     <template v-if="!getUserSettings.infiniteLoad.value">
-      <!-- Normal controls -->
       <div
         :class="{
           'fixed bottom-0 inset-x-0 z-10 max-w-3xl p-2 mx-auto sm:p-4 lg:p-6':
@@ -43,34 +43,28 @@
           </button>
         </div>
       </div>
+
+      <!-- Space below all posts -->
+      <template v-if="getUserSettings.hoverControls.value">
+        <div class="mt-6">&nbsp;</div>
+      </template>
     </template>
 
-    <template v-else>
-      <!-- Infinite loading -->
+    <!-- Infinite loading -->
+    <template v-else-if="getUserSettings.infiniteLoad.value">
       <div
-        class="py-12 mx-auto"
         v-intersect="{
           handler: InfiniteLoadHandler,
           options: {
             threshold: [0, 0.25, 0.5, 0.75, 1.0],
           },
         }"
+        class="py-12 mx-auto"
         @click="InfiniteLoadHandler"
       >
         <p class="text-center text-gray-300 animate-pulse">
           Stay here to load more posts...
         </p>
-      </div>
-
-      <!-- Space below all posts -->
-      <div
-        v-if="
-          !getUserSettings.infiniteLoad.value &&
-          getUserSettings.hoverControls.value
-        "
-        class="mb-2 sm:mb-4 lg:mb-6"
-      >
-        &nbsp;
       </div>
     </template>
   </div>
