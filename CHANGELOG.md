@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.1](https://github.com/Rule-34/App/compare/v2.7.0...v2.7.1) (2021-07-08)
+
+
+### Features
+
+* add "saved posts" shortcut ([ab278d7](https://github.com/Rule-34/App/commit/ab278d7335176ac2dc70da9ad507e90dc6bb85c9))
+
+
+### Bug Fixes
+
+* fix wrong spacing for "hover controls" ([398b358](https://github.com/Rule-34/App/commit/398b358678086c811a41e096d9f34c9621170561))
+
 ## [2.7.0](https://github.com/Rule-34/App/compare/v2.6.4...v2.7.0) (2021-07-05)
 
 
