@@ -1,6 +1,17 @@
 <template>
   <div
-    class="relative flex flex-col items-center justify-center max-w-3xl min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
+    class="
+      relative
+      flex flex-col
+      items-center
+      justify-center
+      max-w-3xl
+      min-h-screen
+      px-4
+      mx-auto
+      sm:px-6
+      lg:px-8
+    "
   >
     <main class="p-5 w-max material-container">
       <div class="flex flex-row space-x-10">
@@ -13,7 +24,15 @@
           <button
             title="Reset all settings"
             aria-label="Reset all settings"
-            class="px-2 py-1 text-xs rounded-full border-util link bg-darkGray-700"
+            class="
+              px-2
+              py-1
+              text-xs
+              rounded-full
+              border-util
+              link
+              bg-darkGray-700
+            "
             @click="removeLocalStorage"
           >
             Reset
@@ -31,14 +50,14 @@
                 >
                   <SettingNumber
                     :setting-name="settingName"
-                    :settingData="settingData"
+                    :setting-data="settingData"
                   />
                 </template>
 
                 <template v-else>
                   <SettingSwitch
                     :setting-name="settingName"
-                    :settingData="settingData"
+                    :setting-data="settingData"
                   />
                 </template>
               </li>
@@ -58,6 +77,19 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  head() {
+    return {
+      title: 'Settings',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'Settings to tweak your experience.',
+        },
+      ],
+    }
+  },
+
   computed: {
     ...mapGetters('user', ['getUserSettings']),
   },
@@ -70,19 +102,6 @@ export default {
 
       location.reload()
     },
-  },
-
-  head() {
-    return {
-      title: 'Settings',
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'Settings to tweak your experience.',
-        },
-      ],
-    }
   },
 }
 </script>
