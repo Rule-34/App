@@ -398,7 +398,14 @@ export const actions = {
       )
 
       // This is how a final booru object looks like
-      const POSTS = response.map((POST) => {
+      const POSTS = response.flatMap((POST) => {
+        // TODO: This should be handled by the API
+        // Remove element if it doesn't have an ID
+        if (!POST.id) {
+          console.debug('Post does not have an ID, removing it...')
+          return []
+        }
+
         return {
           id: `${ACTIVE_BOORU_DOMAIN}-${POST.id}`,
           data: POST,
