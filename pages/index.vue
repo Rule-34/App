@@ -5,8 +5,8 @@
     <!-- Top menu -->
     <nav class="flex flex-row items-center justify-between py-4">
       <DomainSelector
-        :activeDomain="getActiveBooru.domain"
-        :domainGroupList="booruGroupList"
+        :active-domain="getActiveBooru.domain"
+        :domain-group-list="booruGroupList"
         @domainChange="onDomainChange"
       />
 

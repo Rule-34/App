@@ -1,6 +1,17 @@
 <template>
   <div
-    class="relative flex flex-col items-center justify-center max-w-3xl min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
+    class="
+      relative
+      flex flex-col
+      items-center
+      justify-center
+      max-w-3xl
+      min-h-screen
+      px-4
+      mx-auto
+      sm:px-6
+      lg:px-8
+    "
   >
     <main class="p-5 material-container">
       <img
@@ -14,7 +25,19 @@
       <a
         href="https://akbal.dev/"
         target="_blank"
-        class="block px-3 py-1 mx-auto mt-5 mb-3 rounded-full link w-max bg-darkGray-700 border-util"
+        class="
+          block
+          px-3
+          py-1
+          mx-auto
+          mt-5
+          mb-3
+          rounded-full
+          link
+          w-max
+          bg-darkGray-700
+          border-util
+        "
       >
         Alejandro Akbal
       </a>
