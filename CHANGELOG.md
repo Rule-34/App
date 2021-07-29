@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.2](https://github.com/Rule-34/App/compare/v2.7.1...v2.7.2) (2021-07-29)
+
+
+### Bug Fixes
+
+* remove posts without ID ([63cef83](https://github.com/Rule-34/App/commit/63cef83a125469d60d2b58bc4696f42eaa7a5f66))
+
 ### [2.7.1](https://github.com/Rule-34/App/compare/v2.7.0...v2.7.1) (2021-07-08)
 
 
