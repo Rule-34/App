@@ -441,7 +441,15 @@ export const actions = {
         { root: true }
       )
 
-      return response
+      // This is how a final Booru Tag object looks like
+      const TAGS = response.map((TAG) => {
+        return {
+          name: TAG.name,
+          count: TAG.count,
+        }
+      })
+
+      return TAGS
 
       //
     } catch (error) {
