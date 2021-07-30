@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.3](https://github.com/Rule-34/App/compare/v2.7.2...v2.7.3) (2021-07-30)
+
+
+### Features
+
+* create id for searched tags ([a995d8e](https://github.com/Rule-34/App/commit/a995d8e9639d6ed9e37e8a88ff6e4f249176f2ef))
+* shape tag responses ([20e5f2e](https://github.com/Rule-34/App/commit/20e5f2e3c7575fad5f05237685cb6d6fe9d5edf5))
+
 ### [2.7.2](https://github.com/Rule-34/App/compare/v2.7.1...v2.7.2) (2021-07-29)
 
 
