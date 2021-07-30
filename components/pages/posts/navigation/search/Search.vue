@@ -122,7 +122,7 @@
                   <!-- Add tag to array of added tags -->
                   <button
                     v-for="tag in search.data"
-                    :key="tag.name"
+                    :key="tag.id"
                     type="button"
                     class="tag link group"
                     @click="addTagConsideringBanMode(tag.name)"

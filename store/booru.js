@@ -429,8 +429,10 @@ export const actions = {
     }
   },
 
-  async fetchTags({ dispatch, commit }, tag) {
+  async fetchTags({ getters, dispatch }, tag) {
     const url = await dispatch('createApiUrl', { mode: 'tags', tag })
+
+    const ACTIVE_BOORU_DOMAIN = getters.getActiveBooru.domain
 
     try {
       const response = await dispatch(
@@ -444,6 +446,7 @@ export const actions = {
       // This is how a final Booru Tag object looks like
       const TAGS = response.map((TAG) => {
         return {
+          id: `${ACTIVE_BOORU_DOMAIN}-${TAG.name}`,
           name: TAG.name,
           count: TAG.count,
         }
