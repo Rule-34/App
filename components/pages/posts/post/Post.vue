@@ -160,11 +160,11 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { ExternalLinkIcon, TagIcon, DownloadIcon } from 'vue-feather-icons'
+import { ExternalLinkIcon, TagIcon } from 'vue-feather-icons'
 import { Intersect } from 'vuetify/lib/directives/intersect'
 
 export default {
-  components: { ExternalLinkIcon, TagIcon, DownloadIcon },
+  components: { ExternalLinkIcon, TagIcon },
 
   directives: {
     Intersect,
