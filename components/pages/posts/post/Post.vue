@@ -46,9 +46,18 @@
     </template>
 
     <template v-else-if="isVideo">
-      <div class="relative">
+      <div
+        v-intersect="{
+          handler: VideoOutOfViewHandler,
+          options: {
+            threshold: [0],
+          },
+        }"
+        class="relative"
+      >
         <video
           :key="mediaResolutionChooser.url"
+          ref="videoElement"
           :alt="'Video ' + post.data.id"
           :poster="post.data.preview_file.url"
           preload="none"
@@ -152,9 +161,14 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { ExternalLinkIcon, TagIcon, DownloadIcon } from 'vue-feather-icons'
+import { Intersect } from 'vuetify/lib/directives/intersect'
 
 export default {
   components: { ExternalLinkIcon, TagIcon, DownloadIcon },
+
+  directives: {
+    Intersect,
+  },
 
   props: {
     post: {
@@ -368,6 +382,16 @@ export default {
       }
 
       // console.debug(event.target.src)
+    },
+
+    async VideoOutOfViewHandler() {
+      const isVideoPaused = this.$refs.videoElement.paused
+
+      if (!isVideoPaused) {
+        console.debug('Pausing video.')
+
+        await this.$refs.videoElement.pause()
+      }
     },
 
     addProxyToURL(url) {
