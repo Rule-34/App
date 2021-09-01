@@ -204,7 +204,7 @@ export default {
 
     // Workaround so we can use cancel on debounce
     // See https://github.com/vuejs/vue/issues/2870
-    debouncedFetchSearchDataFromApi: function () {
+    debouncedFetchSearchDataFromApi() {
       return debounce(this.fetchSearchDataFromApi, 350)
     },
   },
