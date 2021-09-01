@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.4](https://github.com/Rule-34/App/compare/v2.7.3...v2.7.4) (2021-09-01)
+
+
+### Features
+
+* stop videos when out of view ([6d5a4ec](https://github.com/Rule-34/App/commit/6d5a4ecf3ea0d7cce5e435fd50b56f818086dc39))
+
+
+### Bug Fixes
+
+* fix "<Add Booru>" option missing if user is not Premium ([fefbb0b](https://github.com/Rule-34/App/commit/fefbb0b6b3982ef8389fc922e73b42edd3491d2b))
+
 ### [2.7.3](https://github.com/Rule-34/App/compare/v2.7.2...v2.7.3) (2021-07-30)
 
 
