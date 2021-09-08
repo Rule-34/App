@@ -131,7 +131,7 @@ export default {
     return {
       sideNavLinks: [
         { title: 'Posts', url: '/' },
-        { title: 'Faq', url: '/faq' },
+        { title: 'F.A.Q', url: '/faq' },
         { title: 'Usage', url: '/usage' },
         { title: 'About', url: '/about' },
         { title: 'Settings', url: '/settings' },
