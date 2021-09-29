@@ -213,6 +213,8 @@ export default {
     sourceMapStyle: 'hidden-source-map',
 
     config: {
+      sampleRate: 0.7,
+
       release: PACKAGE_JSON.version,
 
       whitelistUrls: ['r34.app', 'akbal.dev'],
