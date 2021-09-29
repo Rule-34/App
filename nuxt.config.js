@@ -239,6 +239,9 @@ export default {
         'Background Sync is disabled',
         'ResizeObserver loop limit exceeded',
 
+        // Browser extensions
+        'instantSearchSDKJSBridgeClearHighlight',
+
         // Matomo
         "undefined is not an object (evaluating 'ao.sync.register')",
 
