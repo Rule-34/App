@@ -104,10 +104,11 @@ export default {
 
     async getSpecificPage() {
       const specificPage = Number.parseInt(
-        prompt('What page do you want to go to?')
+        prompt('What page do you want to go to?'),
+        10
       )
 
-      if (!specificPage) {
+      if (isNaN(specificPage)) {
         alert('Wrong input, only numbers please.')
         return
       }
