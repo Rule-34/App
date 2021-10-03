@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.5](https://github.com/Rule-34/App/compare/v2.7.4...v2.7.5) (2021-10-03)
+
+
+### Features
+
+* **Saved posts:** paginate posts ([a640763](https://github.com/Rule-34/App/commit/a6407637bca0db16d1a98786314d5f03dfcbf1d4))
+
+
+### Bug Fixes
+
+* **PostsControls:** fix "specific page" prompt not allowing the number "0" ([c27034c](https://github.com/Rule-34/App/commit/c27034cf98536786dde8588e05a7d6180ebbf74c))
+
 ### [2.7.4](https://github.com/Rule-34/App/compare/v2.7.3...v2.7.4) (2021-09-01)
 
 
