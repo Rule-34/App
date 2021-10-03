@@ -10,9 +10,9 @@
       />
     </nav>
 
-    <ul class="space-y-4">
-      <template v-if="savedPostsFromSelectedBooru.length">
-        <li v-for="POST in savedPostsFromSelectedBooru" :key="POST.id">
+    <ul class="pb-4 space-y-4">
+      <template v-if="paginatedSavedPosts.length">
+        <li v-for="POST in paginatedSavedPosts" :key="POST.id">
           <Post :post="POST" :view-only="true" />
         </li>
       </template>
@@ -23,11 +23,17 @@
         </li>
       </template>
     </ul>
+
+    <PostsControls />
   </main>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+
+function paginateArray(array, pageSize, pageNumber) {
+  return array.slice(pageNumber * pageSize, pageNumber * pageSize + pageSize)
+}
 
 export default {
   data() {
@@ -87,6 +93,20 @@ export default {
       const SORTED_SAVED_POSTS = this.sortPostsByDate(SAVED_POSTS)
 
       return SORTED_SAVED_POSTS
+    },
+
+    paginatedSavedPosts() {
+      const SAVED_POSTS = this.savedPostsFromSelectedBooru
+
+      const POSTS_PER_PAGE = 20
+
+      const PAGINATED_SAVED_POSTS = paginateArray(
+        SAVED_POSTS,
+        POSTS_PER_PAGE,
+        this.$route.query.page || 0
+      )
+
+      return PAGINATED_SAVED_POSTS
     },
   },
 
