@@ -244,7 +244,15 @@ export default {
         return false
       }
 
-      return this.post.data.source[0].startsWith('http', 'www')
+      let sourceUrl
+
+      try {
+        sourceUrl = new URL(this.post.data.source[0])
+      } catch {
+        return false
+      }
+
+      return sourceUrl.protocol === 'http:' || sourceUrl.protocol === 'https:'
     },
 
     sourceText() {
