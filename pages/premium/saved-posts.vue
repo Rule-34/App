@@ -57,7 +57,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('user', ['getSavedPosts']),
+    ...mapGetters('user', ['getSavedPosts', 'getUserSettings']),
 
     boorusThatHaveSavedPosts() {
       const BOORU_DOMAIN_LIST = this.getSavedPosts.map(
@@ -99,7 +99,7 @@ export default {
     paginatedSavedPosts() {
       const SAVED_POSTS = this.savedPostsFromSelectedBooru
 
-      const POSTS_PER_PAGE = 20
+      const POSTS_PER_PAGE = this.getUserSettings.postsPerPage.value
 
       const PAGINATED_SAVED_POSTS = paginateArray(
         SAVED_POSTS,
