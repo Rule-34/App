@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.6](https://github.com/Rule-34/App/compare/v2.7.5...v2.7.6) (2021-10-05)
+
+
+### Features
+
+* improve "saved posts" usability ([d15d7c7](https://github.com/Rule-34/App/commit/d15d7c7cd27736e710de4b4e2c53821f567973ad))
+* **saved posts:** use user settings for posts per page ([844acde](https://github.com/Rule-34/App/commit/844acde2056560158afb361645b5ad0fe5aa34d6))
+
+
+### Bug Fixes
+
+* **post:** improve URL detection ([c9461fb](https://github.com/Rule-34/App/commit/c9461fb9e978db41cde8875f32ecba49dea341e0))
+
 ### [2.7.5](https://github.com/Rule-34/App/compare/v2.7.4...v2.7.5) (2021-10-03)
 
 
