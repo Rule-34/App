@@ -28,7 +28,7 @@
             type="button"
             @click="getSpecificPage"
           >
-            {{ getPageID }}
+            {{ currentPage }}
           </button>
 
           <!-- Next page -->
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 // Third party
 import { Intersect } from 'vuetify/lib/directives/intersect'
@@ -86,23 +86,27 @@ export default {
 
   mixins: [KeyboardNavigationMixin],
 
+  props: {
+    currentPage: {
+      type: Number,
+      required: true,
+    },
+  },
+
   computed: {
-    ...mapGetters('booru', ['getPageID']),
     ...mapGetters('user', ['getUserSettings']),
   },
 
   methods: {
-    ...mapActions('booru', ['pidManager']),
-
-    async getNextPage() {
-      await this.pidManager({ operation: 'add' })
+    getNextPage() {
+      this.$emit('setPage', this.currentPage + 1)
     },
 
-    async getPrevPage() {
-      await this.pidManager({ operation: 'subtract' })
+    getPrevPage() {
+      this.$emit('setPage', this.currentPage - 1)
     },
 
-    async getSpecificPage() {
+    getSpecificPage() {
       const specificPage = Number.parseInt(
         prompt('What page do you want to go to?'),
         10
@@ -113,7 +117,7 @@ export default {
         return
       }
 
-      await this.pidManager({ operation: 'set', value: specificPage })
+      this.$emit('setPage', specificPage)
     },
 
     InfiniteLoadHandler(entries, observer) {
@@ -147,7 +151,7 @@ export default {
 
           console.debug('Loading more posts...')
 
-          await this.pidManager({ operation: 'add' })
+          await this.getNextPage()
         }, timeoutDelay)
       })
     },

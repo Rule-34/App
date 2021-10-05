@@ -31,7 +31,7 @@
         </template>
       </ul>
 
-      <PostsControls />
+      <PostsControls :current-page="getPageID" @setPage="onPageChange" />
     </main>
   </div>
 </template>
@@ -51,6 +51,7 @@ export default {
       'getDefaultBooruList',
       'getPremiumBooruList',
       'getPosts',
+      'getPageID',
     ]),
     ...mapGetters('premium', ['isUserPremium']),
 
@@ -93,7 +94,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('booru', ['activeBooruManager']),
+    ...mapActions('booru', ['activeBooruManager', 'pidManager']),
 
     async onDomainChange(domain) {
       if (domain === '<Add Booru>') {
@@ -102,6 +103,10 @@ export default {
       }
 
       await this.activeBooruManager({ operation: 'set', value: domain })
+    },
+
+    async onPageChange(page) {
+      await this.pidManager({ operation: 'set', value: page })
     },
   },
 }
