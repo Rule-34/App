@@ -24,7 +24,7 @@
       </template>
     </ul>
 
-    <PostsControls />
+    <PostsControls :current-page="currentPage" @setPage="onPageChange" />
   </main>
 </template>
 
@@ -39,6 +39,7 @@ export default {
   data() {
     return {
       selectedBooru: '<All Boorus>',
+      currentPage: 0,
     }
   },
 
@@ -103,7 +104,7 @@ export default {
       const PAGINATED_SAVED_POSTS = paginateArray(
         SAVED_POSTS,
         POSTS_PER_PAGE,
-        this.$route.query.page || 0
+        this.currentPage
       )
 
       return PAGINATED_SAVED_POSTS
@@ -113,6 +114,12 @@ export default {
   methods: {
     onDomainChange(DOMAIN) {
       this.selectedBooru = DOMAIN
+
+      this.currentPage = 0
+    },
+
+    onPageChange(page) {
+      this.currentPage = page
     },
 
     sortPostsByDate(POSTS) {
