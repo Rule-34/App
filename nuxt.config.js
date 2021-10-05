@@ -228,6 +228,7 @@ export default {
         // - Media -
         'AbortError',
         'Request aborted',
+        'webkitExitFullScreen',
 
         // - Plugins -
         'matomo',
@@ -246,6 +247,7 @@ export default {
 
         // Matomo
         "undefined is not an object (evaluating 'ao.sync.register')",
+        'ao.sync is undefined',
 
         // localForage
         'QuotaExceededError',
