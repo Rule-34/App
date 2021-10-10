@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.7](https://github.com/Rule-34/App/compare/v2.7.6...v2.7.7) (2021-10-10)
+
+
+### Features
+
+* add SEO routes ([40aaee5](https://github.com/Rule-34/App/commit/40aaee5f7207e9bf10e0f0a4b6cd0b96a88438f7))
+
 ### [2.7.6](https://github.com/Rule-34/App/compare/v2.7.5...v2.7.6) (2021-10-05)
 
 
