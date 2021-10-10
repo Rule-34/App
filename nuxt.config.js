@@ -269,9 +269,43 @@ export default {
 
     // Static HTML files
     routes: [
+      // Main
       { url: '/', priority: 1.0 },
-      { url: '/privacy-policy', priority: 0.6 },
-      { url: '/terms-of-service', priority: 0.6 },
+
+      // Misc
+      { url: '/privacy-policy', priority: 0.2 },
+      { url: '/terms-of-service', priority: 0.2 },
+
+      // SEO
+      { url: '/?domain=rule34.xxx&tags=pokemon', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=friday_night_funkin', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=fortnite', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=brawl_stars', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=naruto', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=animated', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=naruto', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=furry', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=samsung', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=sex', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=star_wars', priority: 0.8 },
+      { url: '/?domain=rule34.paheal.net&tags=Damon_Salvatore', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=gay', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=comic', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=my_hero_academia', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=genshin_impact', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=among_us', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=zootopia', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=sakura_haruno', priority: 0.8 },
+      {
+        url: "/?domain=rule34.xxx&tags=five_nights_at_freddy's",
+        priority: 0.8,
+      },
+      { url: '/?domain=rule34.xxx&tags=ankha', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=deltarune', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=animal_crossing', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=spider-man_(series)', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=roblox', priority: 0.8 },
+      { url: '/?domain=rule34.xxx&tags=apex_legends', priority: 0.8 },
     ],
   },
 
