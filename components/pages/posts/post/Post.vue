@@ -3,9 +3,9 @@
     <!-- Media -->
     <template v-if="error.show">
       <Error
-        :show-action="false"
-        :render-borders="false"
         :error-data="error.message"
+        :render-borders="false"
+        :show-action="false"
       />
     </template>
 
@@ -13,33 +13,39 @@
       <!-- Fix for weird space below button -->
       <div class="flex overflow-hidden">
         <button
-          type="button"
-          aria-label="Toggle tags panel"
           :aria-expanded="isActive"
+          aria-label="Toggle tags panel"
           class="relative w-full h-auto pointer-events-auto group"
+          type="button"
           @click="toggleTags"
           @keydown.enter="toggleTags"
         >
           <img
             :key="mediaResolutionChooser.url"
-            :src="mediaResolutionChooser.url"
-            :height="mediaResolutionChooser.height"
-            :width="mediaResolutionChooser.width"
             :alt="'Image ' + post.data.id"
-            loading="lazy"
-            decoding="async"
-            referrerpolicy="no-referrer"
-            class="w-full h-auto transition-opacity duration-700 opacity-0"
             :class="{
               'opacity-100': media.hasLoaded,
             }"
-            @load="media.hasLoaded = true"
+            :height="mediaResolutionChooser.height"
+            :src="mediaResolutionChooser.url"
+            :width="mediaResolutionChooser.width"
+            class="w-full h-auto transition-opacity duration-700 opacity-0"
+            decoding="async"
+            loading="lazy"
+            referrerpolicy="no-referrer"
             @error="retryToLoadManager"
+            @load="media.hasLoaded = true"
           />
 
           <!-- Fix for focus ring not applying on other elements -->
           <div
-            class="absolute inset-0 pointer-events-none  ring-inset group-focus:focus-util"
+            class="
+              absolute
+              inset-0
+              pointer-events-none
+              ring-inset
+              group-focus:focus-util
+            "
           ></div>
         </button>
       </div>
@@ -60,11 +66,11 @@
           ref="videoElement"
           :alt="'Video ' + post.data.id"
           :poster="post.data.preview_file.url"
-          preload="none"
+          class="w-full h-auto"
           controls
           loop
           playsinline
-          class="w-full h-auto"
+          preload="none"
         >
           <source
             :src="mediaResolutionChooser.url"
@@ -77,15 +83,32 @@
         <div class="absolute inset-y-0 right-0 p-4 pointer-events-none">
           <div class="flex flex-col items-center justify-center w-full h-full">
             <button
-              type="button"
-              aria-label="Toggle tags panel"
               :aria-expanded="isActive"
-              class="p-1 bg-black border border-transparent rounded-lg pointer-events-auto  bg-opacity-40 group focus:focus-util"
+              aria-label="Toggle tags panel"
+              class="
+                p-1
+                bg-black
+                border border-transparent
+                rounded-lg
+                pointer-events-auto
+                bg-opacity-40
+                group
+                focus:focus-util
+              "
+              type="button"
               @click="toggleTags"
               @keydown.enter="toggleTags"
             >
               <TagIcon
-                class="w-5 h-5 text-gray-200 transition-colors duration-300  icon group-hover:text-white"
+                class="
+                  w-5
+                  h-5
+                  text-gray-200
+                  transition-colors
+                  duration-300
+                  icon
+                  group-hover:text-white
+                "
               />
             </button>
           </div>
@@ -117,8 +140,8 @@
                 <button
                   v-for="tag in post.data.tags"
                   :key="tag"
-                  type="button"
                   class="tag link"
+                  type="button"
                   @click="fetchSpecificTag(tag)"
                 >
                   {{ tag }}
@@ -159,7 +182,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { ExternalLinkIcon, TagIcon } from 'vue-feather-icons'
 import { Intersect } from 'vuetify/lib/directives/intersect'
 
