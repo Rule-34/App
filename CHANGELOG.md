@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.8](https://github.com/Rule-34/App/compare/v2.7.7...v2.7.8) (2021-10-17)
+
+
+### Features
+
+* generate route with default url state ([b83fefa](https://github.com/Rule-34/App/commit/b83fefadbedac36c2925c73bcc3916d75b5cc368))
+* **posts tag:** use links instead of buttons ([833d9d0](https://github.com/Rule-34/App/commit/833d9d0cd171fd6f53297c0a9937550cf63fe3ec))
+* **router helper:** add method to generate route with active data as default ([579380f](https://github.com/Rule-34/App/commit/579380f2b035b9663413fb81ca0144f431c4b6a1))
+
+
+### Bug Fixes
+
+* use correct url ([635dd1a](https://github.com/Rule-34/App/commit/635dd1a0f89714132960947706327c9db993e4d4))
+* use request data instead of vuex data ([8b0a1ae](https://github.com/Rule-34/App/commit/8b0a1aec8acd91a6819e73a43198b1f600fc1ac0))
+* use root getter when available ([4fd5c18](https://github.com/Rule-34/App/commit/4fd5c185d394042f98cc8a14cb883114103a4ad3))
+* use title as key ([41c4de2](https://github.com/Rule-34/App/commit/41c4de2642375e6d3573e0bbbfe14443723a42a8))
+* verify variable type ([4a79c63](https://github.com/Rule-34/App/commit/4a79c63f30659195fe1b36f7db8bfff92168f581))
+
 ### [2.7.7](https://github.com/Rule-34/App/compare/v2.7.6...v2.7.7) (2021-10-10)
 
 
