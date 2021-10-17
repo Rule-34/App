@@ -130,7 +130,6 @@ export default {
   },
 
   methods: {
-    ...mapActions('booru', ['tagsManager']),
     ...mapActions('user', ['customTagCollectionsManager']),
 
     toggleTagCollections() {

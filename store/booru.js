@@ -1,8 +1,9 @@
 import {
+  booruTypeList,
   defaultBooruList,
   findBoorusWithValueByKey,
-  booruTypeList,
 } from '~/assets/lib/rule-34-shared-resources/dist/util/BooruUtils.js'
+import { RouterHelper } from '~/assets/js/RouterHelper'
 
 export const state = () => ({
   history: {
@@ -91,7 +92,7 @@ export const mutations = {
 }
 
 export const actions = {
-  activeBooruManager(context, { operation, value }) {
+  async activeBooruManager(context, { operation, value }) {
     const { dispatch, commit, getters } = context
 
     switch (operation) {
@@ -102,46 +103,14 @@ export const actions = {
           getters.getBooruList
         )[0]
 
-        const booruType = findBoorusWithValueByKey(
-          booru.type,
-          'type',
-          booruTypeList
-        )[0]
-
         commit('setLastDomainUsed', booru.domain)
 
-        dispatch(
-          'url/pushRouteQueries',
-          {
-            domain: booru.domain,
-            page: booruType.initialPageID,
-            tags: [],
-          },
-          { root: true }
+        const ROUTE = RouterHelper.generatePostsRouteWithDefaults(
+          context,
+          booru.domain
         )
-        break
-      }
 
-      case 'reset': {
-        const booru = getters.getDefaultBooruList[0]
-
-        const booruType = findBoorusWithValueByKey(
-          booru.type,
-          'type',
-          booruTypeList
-        )[0]
-
-        commit('setLastDomainUsed', booru.domain)
-
-        dispatch(
-          'url/pushRouteQueries',
-          {
-            domain: booru.domain,
-            page: booruType.initialPageID,
-            tags: [],
-          },
-          { root: true }
-        )
+        await dispatch('url/pushRoute', ROUTE, { root: true })
         break
       }
 
@@ -169,48 +138,19 @@ export const actions = {
   },
 
   async pidManager(context, { operation, value }) {
-    const { getters, dispatch } = context
+    const { dispatch } = context
 
     switch (operation) {
-      case 'add':
-        await dispatch(
-          'url/pushRouteQueries',
-          {
-            page: getters.getPageID + 1,
-          },
-          { root: true }
+      case 'set': {
+        const ROUTE = RouterHelper.generatePostsRouteWithActiveDefaults(
+          context,
+          undefined,
+          value
         )
-        break
 
-      case 'subtract':
-        await dispatch(
-          'url/pushRouteQueries',
-          {
-            page: getters.getPageID - 1,
-          },
-          { root: true }
-        )
+        await dispatch('url/pushRoute', ROUTE, { root: true })
         break
-
-      case 'set':
-        await dispatch(
-          'url/pushRouteQueries',
-          {
-            page: value,
-          },
-          { root: true }
-        )
-        break
-
-      case 'reset':
-        await dispatch(
-          'url/pushRouteQueries',
-          {
-            page: getters.getActiveBooruType.initialPageID,
-          },
-          { root: true }
-        )
-        break
+      }
 
       default:
         throw new Error('No operation specified')
@@ -224,61 +164,20 @@ export const actions = {
    * @param {string[]} options.value
    */
   async tagsManager(context, { operation, value }) {
-    const { getters, dispatch } = context
+    const { dispatch } = context
 
     switch (operation) {
       case 'set': {
-        await dispatch(
-          'url/pushRouteQueries',
-          {
-            page: getters.getActiveBooruType.initialPageID,
-            tags: value,
-          },
-          { root: true }
+        const ROUTE = RouterHelper.generatePostsRouteWithDefaults(
+          context,
+          undefined,
+          undefined,
+          value
         )
+
+        await dispatch('url/pushRoute', ROUTE, { root: true })
         break
       }
-
-      case 'merge': {
-        const uniqueMergedTags = [...new Set([...getters.getTags, ...value])]
-
-        await dispatch(
-          'url/pushRouteQueries',
-          {
-            page: getters.getActiveBooruType.initialPageID,
-            tags: uniqueMergedTags,
-          },
-          { root: true }
-        )
-        break
-      }
-
-      case 'remove': {
-        const tagsWithoutValues = getters.getTags.filter(
-          (tag) => !value.includes(tag)
-        )
-
-        await dispatch(
-          'url/pushRouteQueries',
-          {
-            page: getters.getActiveBooruType.initialPageID,
-            tags: tagsWithoutValues,
-          },
-          { root: true }
-        )
-        break
-      }
-
-      case 'reset':
-        await dispatch(
-          'url/pushRouteQueries',
-          {
-            page: getters.getActiveBooruType.initialPageID,
-            tags: [],
-          },
-          { root: true }
-        )
-        break
 
       default:
         throw new Error('No operation specified')

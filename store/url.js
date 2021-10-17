@@ -1,5 +1,3 @@
-import { RouterHelper } from '~/assets/js/RouterHelper'
-
 export const getters = {
   urlDomain(state, getters, rootState, rootGetters) {
     const { domain } = rootState.route.query
@@ -21,14 +19,7 @@ export const getters = {
 }
 
 export const actions = {
-  async pushRouteQueries(context, { domain, page, tags }) {
-    const ROUTE = RouterHelper.generatePostsRouteWithDefaults(
-      context,
-      domain,
-      page,
-      tags
-    )
-
-    await this.$router.push(ROUTE)
+  async pushRoute(context, route) {
+    await this.$router.push(route)
   },
 }
