@@ -47,6 +47,32 @@ export default {
 
   middleware: 'posts',
 
+  head() {
+    const head = {
+      meta: [
+        {
+          hid: 'referrer',
+          name: 'referrer',
+          content: 'no-referrer',
+        },
+      ],
+    }
+
+    const tags = this.getTags.join(', ')
+
+    if (tags) {
+      head.title = tags
+
+      head.meta.push({
+        hid: 'description',
+        name: 'description',
+        content: `Rule 34 Hentai porn of ${tags} on ${this.getActiveBooru.domain}.`,
+      })
+    }
+
+    return head
+  },
+
   computed: {
     ...mapGetters('booru', [
       'getActiveBooru',
@@ -54,6 +80,7 @@ export default {
       'getPremiumBooruList',
       'getPosts',
       'getPageID',
+      'getTags',
     ]),
     ...mapGetters('premium', ['isUserPremium']),
 
