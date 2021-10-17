@@ -45,7 +45,7 @@ import FetchPostsMixin from '~/components/pages/posts/post/FetchPostsMixin.js'
 export default {
   mixins: [FetchPostsMixin],
 
-  middleware: 'posts',
+  middleware: 'FixPostsRoute',
 
   head() {
     const head = {
