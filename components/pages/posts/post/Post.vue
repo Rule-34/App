@@ -148,9 +148,12 @@
                     <NuxtLink
                       :key="tag"
                       :to="
-                        generatePostsRoute(getActiveBooru.domain, undefined, [
-                          tag,
-                        ])
+                        generatePostsRouteWithDefaults(
+                          $nuxt.$store,
+                          undefined,
+                          undefined,
+                          [tag]
+                        )
                       "
                       class="tag link"
                     >
@@ -319,7 +322,7 @@ export default {
   },
 
   methods: {
-    generatePostsRoute: RouterHelper.generatePostsRoute,
+    generatePostsRouteWithDefaults: RouterHelper.generatePostsRouteWithDefaults,
 
     toggleTags() {
       this.isActive = !this.isActive

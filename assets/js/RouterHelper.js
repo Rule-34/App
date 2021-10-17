@@ -25,4 +25,22 @@ export class RouterHelper {
 
     return route
   }
+
+  /**
+   * @param {Store<*> | boolean | ((typedArray: (Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array), index: number, value: number) => number) | ((credential: Credential) => Promise<Credential>) | ((typedArray: (BigInt64Array | BigUint64Array), index: number, value: bigint) => bigint)} store
+   * @param {string} [domain]
+   * @param {number} [page]
+   * @param {string[]} [tags]
+   */
+  static generatePostsRouteWithDefaults(store, domain, page, tags) {
+    if (domain == null) {
+      domain = store.getters['booru/getActiveBooru'].domain
+    }
+
+    if (page == null) {
+      page = store.getters['booru/getActiveBooruType'].initialPageID
+    }
+
+    return RouterHelper.generatePostsRoute(domain, page, tags)
+  }
 }
