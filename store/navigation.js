@@ -26,10 +26,6 @@ export const mutations = {
   setSearchIsActive(state, value) {
     state.search.isActive = value
   },
-
-  setSearchTagCollectionsIsActive(state, value) {
-    state.search.tagCollections.isActive = value
-  },
 }
 
 export const actions = {
