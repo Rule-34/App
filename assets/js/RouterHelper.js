@@ -45,4 +45,28 @@ export class RouterHelper {
 
     return RouterHelper.generatePostsRoute(domain, page, tags)
   }
+
+  /**
+   * @param {Store<*> | boolean | ((typedArray: (Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array), index: number, value: number) => number) | ((credential: Credential) => Promise<Credential>) | ((typedArray: (BigInt64Array | BigUint64Array), index: number, value: bigint) => bigint)} store
+   * @param {string} [domain]
+   * @param {number} [page]
+   * @param {string[]} [tags]
+   */
+  static generatePostsRouteWithActiveDefaults(store, domain, page, tags) {
+    const STORE_GETTER = store.rootGetters ?? store.getters
+
+    if (domain == null) {
+      domain = STORE_GETTER['booru/getActiveBooru'].domain
+    }
+
+    if (page == null) {
+      page = STORE_GETTER['booru/getPageID']
+    }
+
+    if (tags == null) {
+      tags = STORE_GETTER['booru/getTags']
+    }
+
+    return RouterHelper.generatePostsRoute(domain, page, tags)
+  }
 }
