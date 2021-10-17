@@ -10,11 +10,11 @@ export class RouterHelper {
       query: {},
     }
 
-    if (domain !== undefined) {
+    if (domain != null) {
       route.query.domain = domain
     }
 
-    if (page !== undefined) {
+    if (page != null) {
       route.query.page = page
     }
 
