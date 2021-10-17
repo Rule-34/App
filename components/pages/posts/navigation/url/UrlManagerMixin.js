@@ -1,5 +1,5 @@
-import { mapGetters, mapActions } from 'vuex'
-import { isEqual, debounce } from 'lodash-es'
+import { mapActions, mapGetters } from 'vuex'
+import { debounce } from 'lodash-es'
 
 export default {
   head() {
@@ -40,17 +40,10 @@ export default {
   },
 
   computed: {
-  },
-
-  async mounted() {
-    if (this.urlDomain === undefined || this.urlPage === undefined) {
-      await this.setInitialUrlState()
-    }
     ...mapGetters('booru', ['getActiveBooru', 'getTags']),
   },
 
   methods: {
-    ...mapActions('url', ['setInitialUrlState']),
     ...mapActions('booru', ['fetchPosts']),
 
     debouncedFetchPosts: debounce(
