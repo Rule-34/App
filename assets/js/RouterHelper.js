@@ -33,12 +33,14 @@ export class RouterHelper {
    * @param {string[]} [tags]
    */
   static generatePostsRouteWithDefaults(store, domain, page, tags) {
+    const STORE_GETTER = store.rootGetters ?? store.getters
+
     if (domain == null) {
-      domain = store.getters['booru/getActiveBooru'].domain
+      domain = STORE_GETTER['booru/getActiveBooru'].domain
     }
 
     if (page == null) {
-      page = store.getters['booru/getActiveBooruType'].initialPageID
+      page = STORE_GETTER['booru/getActiveBooruType'].initialPageID
     }
 
     return RouterHelper.generatePostsRoute(domain, page, tags)
