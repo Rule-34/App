@@ -13,7 +13,7 @@ export default {
       ],
     }
 
-    const tags = this.urlTags?.split(',').join(', ')
+    const tags = this.getTags.join(', ')
 
     if (tags) {
       head.title = tags
@@ -21,7 +21,7 @@ export default {
       head.meta.push({
         hid: 'description',
         name: 'description',
-        content: `Rule 34 Hentai porn of ${tags} on ${this.urlDomain}.`,
+        content: `Rule 34 Hentai porn of ${tags} on ${this.getActiveBooru.domain}.`,
       })
     }
 
@@ -40,13 +40,13 @@ export default {
   },
 
   computed: {
-    ...mapGetters('url', ['urlDomain', 'urlPage', 'urlTags']),
   },
 
   async mounted() {
     if (this.urlDomain === undefined || this.urlPage === undefined) {
       await this.setInitialUrlState()
     }
+    ...mapGetters('booru', ['getActiveBooru', 'getTags']),
   },
 
   methods: {
