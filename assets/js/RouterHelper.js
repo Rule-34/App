@@ -15,11 +15,11 @@ export class RouterHelper {
     }
 
     if (page != null) {
-      route.query.page = page
+      route.query.page = page.toString()
     }
 
     // Fix: separate tags by commas instead of repeating `tags`, like so: `&tags=example1&tags=example2`
-    if (tags.length) {
+    if (tags != null && Array.isArray(tags) && tags.length) {
       route.query.tags = tags.join(',')
     }
 
