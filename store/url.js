@@ -22,32 +22,13 @@ export const getters = {
 
 export const actions = {
   async pushRouteQueries(context, { domain, page, tags }) {
-    const { rootGetters } = context
+    const ROUTE = RouterHelper.generatePostsRouteWithDefaults(
+      context,
+      domain,
+      page,
+      tags
+    )
 
-    const shouldReplaceHistory =
-      domain === undefined && page === undefined && tags === undefined
-
-    // Get applied domain or default domain
-    if (domain === undefined) {
-      domain = rootGetters['booru/getActiveBooru'].domain
-    }
-
-    // Get applied page or default page
-    if (page === undefined) {
-      page = rootGetters['booru/getPageID']
-    }
-
-    // Get applied tags
-    if (tags === undefined) {
-      tags = rootGetters['booru/getTags']
-    }
-
-    const ROUTE = RouterHelper.generatePostsRoute(domain, page, tags)
-
-    if (shouldReplaceHistory) {
-      await this.$router.replace(ROUTE)
-    } else {
-      await this.$router.push(ROUTE)
-    }
+    await this.$router.push(ROUTE)
   },
 }
