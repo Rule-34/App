@@ -33,7 +33,7 @@
       <nav class="flex flex-col h-full p-3 bg-darkGray-700">
         <!-- Navbar Links -->
         <ul class="flex-auto space-y-2 text-center sm:text-left">
-          <li v-for="link in sideNavLinks" :key="link.url">
+          <li v-for="link in sideNavLinks" :key="link.title">
             <NuxtLink
               class="relative block transition-transform duration-300 transform link hover:translate-x-1"
               :to="link.url"
