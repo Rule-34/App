@@ -1,6 +1,6 @@
 import { RouterHelper } from '~/assets/js/RouterHelper'
 
-function isUrlStateNotCorrect(context) {
+function isRouteNotCorrect(context) {
   const URL_DOMAIN = context.store.getters['url/urlDomain']
   const URL_PAGE = context.store.getters['url/urlPage']
 
@@ -21,8 +21,8 @@ function generateCorrectRoute(context) {
 }
 
 export default function (context) {
-  if (isUrlStateNotCorrect(context)) {
-    console.info('Middleware fixed route')
+  if (isRouteNotCorrect(context)) {
+    console.info('Redirecting to correct route')
 
     const ROUTE = generateCorrectRoute(context)
 
