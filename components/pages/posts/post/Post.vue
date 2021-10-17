@@ -137,15 +137,27 @@
 
               <!-- Tags -->
               <div class="min-w-full tag-container">
-                <button
-                  v-for="tag in post.data.tags"
-                  :key="tag"
-                  class="tag link"
-                  type="button"
-                  @click="fetchSpecificTag(tag)"
-                >
-                  {{ tag }}
-                </button>
+                <template v-for="tag in post.data.tags">
+                  <template v-if="viewOnly">
+                    <span :key="tag" class="tag link">
+                      {{ tag }}
+                    </span>
+                  </template>
+
+                  <template v-else>
+                    <NuxtLink
+                      :key="tag"
+                      :to="
+                        generatePostsRoute(getActiveBooru.domain, undefined, [
+                          tag,
+                        ])
+                      "
+                      class="tag link"
+                    >
+                      {{ tag }}
+                    </NuxtLink>
+                  </template>
+                </template>
               </div>
             </div>
           </TransitionCollapse>
@@ -182,9 +194,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { ExternalLinkIcon, TagIcon } from 'vue-feather-icons'
 import { Intersect } from 'vuetify/lib/directives/intersect'
+import { RouterHelper } from '~/assets/js/RouterHelper'
 
 export default {
   components: { ExternalLinkIcon, TagIcon },
@@ -232,6 +245,7 @@ export default {
 
   computed: {
     ...mapGetters('user', ['getUserSettings']),
+    ...mapGetters('booru', ['getActiveBooru']),
 
     // #region Post media
     isImage() {
@@ -305,7 +319,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('booru', ['tagsManager']),
+    generatePostsRoute: RouterHelper.generatePostsRoute,
 
     toggleTags() {
       this.isActive = !this.isActive
@@ -440,20 +454,6 @@ export default {
       return currentURL
         .toString()
         .replace(currentURL.hostname, currentURL.hostname + '/')
-    },
-    // #endregion
-
-    // #region Post tags
-    fetchSpecificTag(tag) {
-      if (this.viewOnly) {
-        console.info('View only')
-        return
-      }
-
-      this.tagsManager({
-        operation: 'set',
-        value: [tag],
-      })
     },
     // #endregion
   },
