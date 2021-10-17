@@ -21,14 +21,6 @@ export const getters = {
 }
 
 export const actions = {
-  async setInitialUrlState(context) {
-    const { dispatch } = context
-
-    console.debug('Setting initial URL state')
-
-    await dispatch('pushRouteQueries', {})
-  },
-
   async pushRouteQueries(context, { domain, page, tags }) {
     const { rootGetters } = context
 

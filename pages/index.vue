@@ -37,13 +37,15 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 // Mixins
 import UrlManagerMixin from '~/components/pages/posts/navigation/url/UrlManagerMixin.js'
 
 export default {
   mixins: [UrlManagerMixin],
+
+  middleware: 'posts',
 
   computed: {
     ...mapGetters('booru', [
