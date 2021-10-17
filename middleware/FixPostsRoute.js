@@ -1,16 +1,18 @@
 import { RouterHelper } from '~/assets/js/RouterHelper'
 
 function isRouteNotCorrect(context) {
-  const URL_DOMAIN = context.store.getters['url/urlDomain']
-  const URL_PAGE = context.store.getters['url/urlPage']
+  // Fix: we use the query's data since Vuex has not been updated yet with the request data.
+  const URL_DOMAIN = context.query.domain
+  const URL_PAGE = context.query.domain
 
   return URL_DOMAIN === undefined || URL_PAGE === undefined
 }
 
 function generateCorrectRoute(context) {
-  const URL_DOMAIN = context.store.getters['url/urlDomain']
-  const URL_PAGE = context.store.getters['url/urlPage']
-  const URL_TAGS = context.store.getters['url/urlTags']
+  // Fix: we use the query's data since Vuex has not been updated yet with the request data.
+  const URL_DOMAIN = context.query.domain
+  const URL_PAGE = context.query.page
+  const URL_TAGS = context.query.tags
 
   return RouterHelper.generatePostsRouteWithDefaults(
     context.store,
