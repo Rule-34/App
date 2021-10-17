@@ -40,10 +40,10 @@
 import { mapActions, mapGetters } from 'vuex'
 
 // Mixins
-import UrlManagerMixin from '~/components/pages/posts/navigation/url/UrlManagerMixin.js'
+import FetchPostsMixin from '~/components/pages/posts/post/FetchPostsMixin.js'
 
 export default {
-  mixins: [UrlManagerMixin],
+  mixins: [FetchPostsMixin],
 
   middleware: 'posts',
 
