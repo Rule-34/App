@@ -125,12 +125,16 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { RouterHelper } from '~/assets/js/RouterHelper'
 
 export default {
   data() {
     return {
       sideNavLinks: [
-        { title: 'Posts', url: '/' },
+        {
+          title: 'Posts',
+          url: RouterHelper.generatePostsRouteWithDefaults(this.$nuxt.$store),
+        },
         { title: 'Faq', url: '/faq' },
         { title: 'Usage', url: '/usage' },
         { title: 'About', url: '/about' },
