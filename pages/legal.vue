@@ -2,12 +2,12 @@
   <main class="max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
     <div class="space-y-4">
       <!-- Separator -->
-      <ContentSeparator title="Disclaimer" />
+      <ContentSeparator title="Disclaimers" />
 
       <!-- Remove media -->
       <ContentContainer
         title="Media content disclaimer"
-        text="If you're the owner of a site where we get the media content and would like to cease this actions, please contact us or leave a GitHub issue with proof that you're the owner of that site and a message regarding the cease to actions.
+        text="If you're the owner of a site where we get the media content and would like to cease this actions, please contact us with proof that you're the owner of that site and a message regarding the cease to actions.
           
       Keep in mind that all the content we get is from public released APIs from the site itself."
         icon="bg-svg-info"
@@ -20,7 +20,7 @@
       />
 
       <!-- Separator -->
-      <ContentSeparator title="Privacy policy" />
+      <ContentSeparator title="Legal" />
 
       <!-- Generated terms of service -->
       <ContentContainer
