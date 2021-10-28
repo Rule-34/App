@@ -66,7 +66,7 @@ export default {
       head.meta.push({
         hid: 'description',
         name: 'description',
-        content: `Rule 34 Hentai porn of ${tags} on ${this.getActiveBooru.domain}.`,
+        content: `Browse Rule 34 ${tags} hentai porn from ${this.getActiveBooru.domain}.`,
       })
     }
 
