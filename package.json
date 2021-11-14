@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "nuxt",
     "start": "nuxt start",
+    "build": "npm run generate",
     "generate": "nuxt generate --modern",
     "analyze": "nuxt build --analyze",
     "release": "standard-version",
