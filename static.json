@@ -1,0 +1,10 @@
+{
+  "root": "dist/",
+  "canonical_host": "r34.app",
+  "clean_urls": true,
+  "routes": {
+    "/**": "index.html"
+  },
+  "error_page": "404.html",
+  "https_only": true
+}
