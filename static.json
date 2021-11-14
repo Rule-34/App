@@ -1,6 +1,6 @@
 {
   "root": "dist/",
-  "canonical_host": "r34.app",
+  "canonical_host": "${APP_DOMAIN}",
   "clean_urls": true,
   "routes": {
     "/**": "index.html"
