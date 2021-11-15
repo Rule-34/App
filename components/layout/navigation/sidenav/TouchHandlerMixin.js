@@ -3,6 +3,7 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters('navigation', ['isSideNavActive', 'isSearchActive']),
+    ...mapGetters('user', ['getUserSettings']),
   },
 
   methods: {
@@ -12,6 +13,11 @@ export default {
     ]),
 
     touchHandler(direction, event) {
+      if (!this.getUserSettings.touchGestures.value) {
+        console.debug('`touchGestures` setting is disabled, skipping...')
+        return
+      }
+
       const touchThreshold = screen.availWidth * 0.25
       // console.debug(touchThreshold, event)
 

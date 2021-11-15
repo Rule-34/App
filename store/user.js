@@ -170,6 +170,14 @@ export const state = () => ({
   },
 
   settings: {
+    touchGestures: {
+      name: 'Touch gestures',
+      description:
+        'Swiping `left-to-right` will open the navigation menu, and `right-to-left` will open the search menu.',
+      value: true,
+      defaultValue: true,
+    },
+
     hoverControls: {
       name: 'Hover controls',
       description: 'Page controls will be fixed over the content.',
