@@ -6,8 +6,8 @@
       <ContentSeparator title="Navigation" />
 
       <ContentContainer
-        title="Back"
         text="The `back` button on your browser/device is respected and allows you to go back to a past domain, page or tag."
+        title="Back"
       />
 
       <ContentContainer
@@ -19,21 +19,23 @@
         title="Keyboard page controls"
         text="Keyboard's `right` and `left` arrows will navigate pages similar to clicking the page controls buttons."
         img="/img/usage_examples/keyboard-controls"
+        text="Keyboard's `right` and `left` arrows will navigate pages similar to clicking the page controls buttons."
+        title="Keyboard page controls"
       />
 
       <!-- General Usage -->
       <ContentSeparator title="Search" />
 
       <ContentContainer
-        title="Trash button"
-        text="Deletes all added tags."
         img="/img/usage_examples/search-delete"
+        text="Deletes all added tags."
+        title="Trash button"
       />
 
       <ContentContainer
-        title="Filter button"
-        text="Toggling the filter will ban from appearing the next added tags."
         img="/img/usage_examples/search-filter"
+        text="Toggling the filter will ban from appearing the next added tags."
+        title="Filter button"
       />
 
       <!-- User Settings -->
@@ -43,9 +45,9 @@
       <ContentContainer
         v-for="setting in getUserSettings"
         :key="setting.name"
-        :title="setting.name"
-        :text="setting.description"
         :img="setting.image"
+        :text="setting.description"
+        :title="setting.name"
       />
     </div>
   </main>
