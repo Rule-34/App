@@ -14,7 +14,7 @@
     "generate": "nuxt generate --modern",
     "analyze": "nuxt build --analyze",
     "release": "standard-version",
-    "release:publish": "git push --follow-tags origin master"
+    "release:publish": "git push --follow-tags origin main"
   },
   "dependencies": {
     "@nuxtjs/auth-next": "5.0.0-1624817847.21691f1",
