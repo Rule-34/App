@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.9](https://github.com/Rule-34/App/compare/v2.7.8...v2.7.9) (2021-11-15)
+
+
+### Features
+
+* create setting to disable touch gestures ([e21135b](https://github.com/Rule-34/App/commit/e21135bbdeee98e9e8587019cf256b62052b7570))
+
 ### [2.7.8](https://github.com/Rule-34/App/compare/v2.7.7...v2.7.8) (2021-10-17)
 
 
