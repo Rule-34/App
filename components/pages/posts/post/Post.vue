@@ -138,10 +138,15 @@
               <!-- Tags -->
               <div class="min-w-full tag-container">
                 <template v-for="tag in post.data.tags">
-                  <template v-if="viewOnly">
-                    <span :key="tag" class="tag link">
+                  <template v-if="eventOnly">
+                    <button
+                      :key="tag"
+                      class="tag link"
+                      type="button"
+                      @click="emitTagSelected(tag)"
+                    >
                       {{ tag }}
-                    </span>
+                    </button>
                   </template>
 
                   <template v-else>
@@ -215,7 +220,7 @@ export default {
       required: true,
     },
 
-    viewOnly: {
+    eventOnly: {
       type: Boolean,
       default: false,
     },
@@ -326,6 +331,10 @@ export default {
 
     toggleTags() {
       this.isActive = !this.isActive
+    },
+
+    emitTagSelected(tag) {
+      this.$emit('tag-selected', tag)
     },
 
     // #region Post media
