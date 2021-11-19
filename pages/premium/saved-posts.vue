@@ -1,5 +1,21 @@
 <template>
   <main class="flex flex-col max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
+    <portal to="side-nav-area">
+      <SearchToggler />
+    </portal>
+
+    <portal to="search">
+      <SearchWrapper>
+        <Search
+          :active-tags="searchActiveTags"
+          :search-results="searchResults"
+          @search="onSearch"
+          @reset-search-results="resetSearchResults"
+          @submit-active-tags="onSubmitActiveTags"
+        />
+      </SearchWrapper>
+    </portal>
+
     <ContentSeparator title="Saved posts" />
 
     <nav class="flex flex-row items-center justify-between py-4">
@@ -11,9 +27,13 @@
     </nav>
 
     <ul class="pb-4 space-y-4">
-      <template v-if="paginatedSavedPosts.length">
-        <li v-for="POST in paginatedSavedPosts" :key="POST.id">
-          <Post :post="POST" :view-only="true" />
+      <template v-if="processedSavedPosts.length">
+        <li v-for="POST in processedSavedPosts" :key="POST.id">
+          <Post
+            :event-only="true"
+            :post="POST"
+            @tag-selected="onPostTagSelected"
+          />
         </li>
       </template>
 
@@ -31,15 +51,15 @@
 <script>
 import { mapGetters } from 'vuex'
 
-function paginateArray(array, pageSize, pageNumber) {
-  return array.slice(pageNumber * pageSize, pageNumber * pageSize + pageSize)
-}
-
 export default {
   data() {
     return {
       selectedBooru: '<All Boorus>',
+
       currentPage: 0,
+
+      searchResults: [],
+      searchActiveTags: [],
     }
   },
 
@@ -77,34 +97,27 @@ export default {
     },
 
     savedPostsFromSelectedBooru() {
-      let SAVED_POSTS = null
-
       if (this.selectedBooru === '<All Boorus>') {
-        //
-        SAVED_POSTS = JSON.parse(JSON.stringify(this.getSavedPosts))
-      } else {
-        //
-        const FILTERED_SAVED_POSTS = this.getSavedPosts.filter(
-          (POST) => POST.meta_data.booru_domain === this.selectedBooru
-        )
-
-        SAVED_POSTS = FILTERED_SAVED_POSTS
+        return JSON.parse(JSON.stringify(this.getSavedPosts))
       }
 
-      const SORTED_SAVED_POSTS = this.sortPostsByDate(SAVED_POSTS)
-
-      return SORTED_SAVED_POSTS
+      return this.getSavedPosts.filter(
+        (POST) => POST.meta_data.booru_domain === this.selectedBooru
+      )
     },
 
-    paginatedSavedPosts() {
-      const SAVED_POSTS = this.savedPostsFromSelectedBooru
+    processedSavedPosts() {
+      const SAVED_POSTS_FROM_SELECTED_BOORU = this.savedPostsFromSelectedBooru
 
-      const POSTS_PER_PAGE = this.getUserSettings.postsPerPage.value
+      const SAVED_POSTS_FILTERED_BY_ACTIVE_TAGS =
+        this.filterPostsBySearchActiveTags(SAVED_POSTS_FROM_SELECTED_BOORU)
 
-      const PAGINATED_SAVED_POSTS = paginateArray(
-        SAVED_POSTS,
-        POSTS_PER_PAGE,
-        this.currentPage
+      const SAVED_POSTS_SORTED_BY_DATE = this.sortPostsByDate(
+        SAVED_POSTS_FILTERED_BY_ACTIVE_TAGS
+      )
+
+      const PAGINATED_SAVED_POSTS = this.paginatePosts(
+        SAVED_POSTS_SORTED_BY_DATE
       )
 
       return PAGINATED_SAVED_POSTS
@@ -112,26 +125,95 @@ export default {
   },
 
   methods: {
+    sortPostsByDate(POSTS) {
+      return POSTS.sort((POST_A, POST_B) => {
+        const POST_A_DATE_STRING = POST_A.meta_data.created_at
+        const POST_B_DATE_STRING = POST_B.meta_data.created_at
+
+        return new Date(POST_B_DATE_STRING) - new Date(POST_A_DATE_STRING)
+      })
+    },
+
+    filterPostsBySearchActiveTags(POSTS) {
+      if (this.searchActiveTags.length === 0) {
+        return POSTS
+      }
+
+      return POSTS.filter((POST) => {
+        return this.searchActiveTags.some((TAG) =>
+          POST.data.tags.includes(TAG.toLowerCase())
+        )
+      })
+    },
+
+    paginatePosts(POSTS) {
+      const POSTS_PER_PAGE = this.getUserSettings.postsPerPage.value
+
+      const CURRENT_PAGE = this.currentPage
+
+      return paginateArray(POSTS, POSTS_PER_PAGE, CURRENT_PAGE)
+    },
+
+    resetSearchResults() {
+      this.searchResults = []
+    },
+
+    resetActiveTags() {
+      this.searchActiveTags = []
+    },
+
+    resetCurrentPage() {
+      this.currentPage = 0
+    },
+
     onDomainChange(DOMAIN) {
       this.selectedBooru = DOMAIN
 
-      this.currentPage = 0
+      this.resetCurrentPage()
+
+      this.resetSearchResults()
+      this.resetActiveTags()
     },
 
     onPageChange(page) {
       this.currentPage = page
     },
 
-    sortPostsByDate(POSTS) {
-      const SORTED_POSTS = POSTS.sort((POST_A, POST_B) => {
-        const POST_A_DATE_STRING = POST_A.meta_data.created_at
-        const POST_B_DATE_STRING = POST_B.meta_data.created_at
+    onPostTagSelected(tag) {
+      this.onSubmitActiveTags([tag])
+    },
 
-        return new Date(POST_B_DATE_STRING) - new Date(POST_A_DATE_STRING)
+    onSearch(query) {
+      const UNIQUE_TAGS_FROM_SAVED_POSTS = [
+        ...new Set(
+          this.savedPostsFromSelectedBooru.map((POST) => POST.data.tags).flat()
+        ),
+      ]
+
+      const AVAILABLE_TAGS = UNIQUE_TAGS_FROM_SAVED_POSTS.map((TAG) => {
+        return {
+          id: TAG,
+          name: TAG,
+          count: 0,
+        }
       })
 
-      return SORTED_POSTS
+      const SEARCH_RESULTS = AVAILABLE_TAGS.filter((TAG) => {
+        return TAG.name.includes(query)
+      })
+
+      this.searchResults = SEARCH_RESULTS
+    },
+
+    onSubmitActiveTags(tags) {
+      this.searchActiveTags = tags
+
+      this.resetCurrentPage()
     },
   },
+}
+
+function paginateArray(array, pageSize, pageNumber) {
+  return array.slice(pageNumber * pageSize, pageNumber * pageSize + pageSize)
 }
 </script>
