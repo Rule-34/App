@@ -22,6 +22,11 @@
       <portal to="search">
         <SearchWrapper>
           <Search
+            :active-tags="getTags"
+            :search-results="searchResults"
+            @search="onSearch"
+            @reset-search-results="resetSearchResults"
+            @submit-active-tags="onSubmitActiveTags"
           />
         </SearchWrapper>
       </portal>
@@ -57,6 +62,12 @@ export default {
   mixins: [FetchPostsMixin],
 
   middleware: 'FixPostsRoute',
+
+  data() {
+    return {
+      searchResults: [],
+    }
+  },
 
   head() {
     const head = {
@@ -134,7 +145,12 @@ export default {
   },
 
   methods: {
-    ...mapActions('booru', ['activeBooruManager', 'pidManager']),
+    ...mapActions('booru', [
+      'activeBooruManager',
+      'pidManager',
+      'tagsManager',
+      'fetchTags',
+    ]),
 
     async onDomainChange(domain) {
       if (domain === '<Add Booru>') {
@@ -143,10 +159,32 @@ export default {
       }
 
       await this.activeBooruManager({ operation: 'set', value: domain })
+
+      this.resetSearchResults()
     },
 
     async onPageChange(page) {
       await this.pidManager({ operation: 'set', value: page })
+    },
+
+    async onSearch(query) {
+      const DATA = await this.fetchTags(query)
+
+      if (!DATA) {
+        console.debug('No tag data.')
+        await this.resetSearchResults()
+        return
+      }
+
+      this.searchResults = DATA
+    },
+
+    resetSearchResults() {
+      this.searchResults = []
+    },
+
+    async onSubmitActiveTags(tags) {
+      await this.tagsManager({ operation: 'set', value: tags })
     },
   },
 }

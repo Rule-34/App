@@ -16,11 +16,17 @@
         <!-- Content -->
         <form
           class="flex flex-col w-full h-full space-y-4 max-h-3/4"
-          @submit.prevent="addTagsToBooruState"
+          @submit.prevent="emitSubmitActiveTags"
         >
           <!-- Search bar -->
           <div
-            class="flex flex-row h-auto p-2 material-container focus-within:focus-util"
+            class="
+              flex flex-row
+              h-auto
+              p-2
+              material-container
+              focus-within:focus-util
+            "
           >
             <!-- Search Icon -->
             <SearchIcon class="w-6 h-6 icon" />
@@ -29,54 +35,82 @@
             <!-- Overflow Hidden is very important -->
             <!-- Input because v-model/:value doesn't work on mobile -->
             <input
-              class="flex-1 mx-2 overflow-hidden font-light text-gray-200 outline-none bg-darkGray-300"
-              type="search"
-              name="search-tags"
-              autofocus
-              aria-label="Search for tags"
-              placeholder="Search: e.g. mario"
               :value="search.query"
-              @input="inputHandler"
-              @keypress.enter.prevent="inputEnterHandler"
+              aria-label="Search for tags"
+              autofocus
+              class="
+                flex-1
+                mx-2
+                overflow-hidden
+                font-light
+                text-gray-200
+                outline-none
+                bg-darkGray-300
+              "
+              name="search-tags"
+              placeholder="Search: e.g. mario"
+              type="search"
+              @input="onSearchInput"
+              @keypress.enter.prevent="onSearchEnter"
             />
 
             <div class="flex space-x-1">
               <!-- Tag collections -->
               <button
-                type="button"
                 aria-label="Toggle Custom Tag Collections"
                 title="Custom Tag Collections"
+                type="button"
                 @click="toggleTagCollections"
               >
                 <TagIcon
-                  class="w-6 h-6 transition-colors duration-300 icon hover:text-gray-300"
+                  class="
+                    w-6
+                    h-6
+                    transition-colors
+                    duration-300
+                    icon
+                    hover:text-gray-300
+                  "
                 />
               </button>
 
-              <!-- Reset -->
               <button
+                aria-label="Reset active tags"
+                title="Reset active tags"
                 type="button"
-                aria-label="Reset tags"
-                title="Reset tags"
-                @click="resetTags"
+                @click="resetActiveTags"
               >
                 <TrashIcon
-                  class="w-6 h-6 transition-colors duration-300 icon hover:text-gray-300"
+                  class="
+                    w-6
+                    h-6
+                    transition-colors
+                    duration-300
+                    icon
+                    hover:text-gray-300
+                  "
                 />
               </button>
 
               <!-- Negative -->
               <button
-                type="button"
                 aria-label="Filter out content"
                 title="Filter out content"
+                type="button"
                 @click="toggleBanMode"
               >
                 <FilterIcon
                   :class="{
                     'text-red-500 hover:text-red-400': isBanModeEnabled,
                   }"
-                  class="w-6 h-6 transition-colors duration-300 icon hover:text-gray-300"
+                  class="
+                    w-6
+                    h-6
+                    transition-colors
+                    duration-300
+                    icon
+                    hover:text-gray-300
+                  "
                 />
               </button>
             </div>
@@ -84,29 +118,52 @@
 
           <!-- Search results -->
           <div
-            class="relative flex flex-col h-full p-2 space-y-2 material-container"
+            class="
+              relative
+              flex flex-col
+              h-full
+              p-2
+              space-y-2
+              material-container
+            "
           >
             <!-- If nothing searched -->
-            <template v-if="!search.data.length && !search.tags.length">
+            <template v-if="!searchResults.length && !search.activeTags.length">
               <h1
-                class="flex items-center justify-center flex-auto text-xl font-light tracking-wide text-gray-200"
+                class="
+                  flex
+                  items-center
+                  justify-center
+                  flex-auto
+                  text-xl
+                  font-light
+                  tracking-wide
+                  text-gray-200
+                "
               >
                 Search something!
               </h1>
             </template>
 
             <template v-else>
-              <!-- Added tags, click them to remove them -->
-              <template v-if="search.tags.length">
+              <!-- Active tags, click them to remove them -->
+              <template v-if="search.activeTags.length">
                 <div
-                  class="flex-initial overflow-y-scroll border-0 rounded tag-container border-darkGray-100"
+                  class="
+                    flex-initial
+                    overflow-y-scroll
+                    border-0
+                    rounded
+                    tag-container
+                    border-darkGray-100
+                  "
                 >
                   <button
-                    v-for="tag in search.tags"
+                    v-for="tag in search.activeTags"
                     :key="tag"
-                    type="button"
                     class="tag link"
-                    @click="removeTag(tag)"
+                    type="button"
+                    @click="removeFromActiveTags(tag)"
                   >
                     {{ tag }}
                   </button>
@@ -115,17 +172,24 @@
 
               <!-- Searched tags, click them to add them -->
 
-              <template v-if="search.data.length">
+              <template v-if="searchResults.length">
                 <div
-                  class="flex-auto overflow-y-scroll border-0 rounded border-darkGray-100 tag-container"
+                  class="
+                    flex-auto
+                    overflow-y-scroll
+                    border-0
+                    rounded
+                    border-darkGray-100
+                    tag-container
+                  "
                 >
                   <!-- Add tag to array of added tags -->
                   <button
-                    v-for="tag in search.data"
+                    v-for="tag in searchResults"
                     :key="tag.id"
-                    type="button"
                     class="tag link group"
-                    @click="addTagConsideringBanMode(tag.name)"
+                    type="button"
+                    @click="addToActiveTagConsideringBanMode(tag.name)"
                   >
                     <!-- Name of the tag -->
                     <span>
@@ -134,7 +198,12 @@
 
                     <!-- Number of posts with that tag -->
                     <span
-                      class="transition-colors duration-300 text-primary-600 group-hover:text-primary-500"
+                      class="
+                        transition-colors
+                        duration-300
+                        text-primary-600
+                        group-hover:text-primary-500
+                      "
                       >{{ `(${tag.count})` }}
                     </span>
                   </button>
@@ -145,7 +214,20 @@
             <!-- Submit -->
             <div class="absolute inset-x-0 bottom-0 flex">
               <button
-                class="w-full px-4 py-2 text-lg font-medium tracking-wide text-center text-black bg-gradient-to-r from-accent-400 to-primary-400 ring-inset focus:focus-util"
+                class="
+                  w-full
+                  px-4
+                  py-2
+                  text-lg
+                  font-medium
+                  tracking-wide
+                  text-center text-black
+                  bg-gradient-to-r
+                  from-accent-400
+                  to-primary-400
+                  ring-inset
+                  focus:focus-util
+                "
                 type="submit"
               >
                 Apply tags
@@ -159,17 +241,17 @@
     <transition name="page">
       <SearchTagCollections
         v-if="tagCollections.isActive"
-        :search-tags="search.tags"
+        :search-tags="search.activeTags"
+        @mergeToSearchTags="mergeWithActiveTags"
         @toggleTagCollections="toggleTagCollections"
-        @mergeToSearchTags="mergeSearchTags"
       />
     </transition>
   </aside>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import { TagIcon, SearchIcon, FilterIcon, TrashIcon } from 'vue-feather-icons'
+import { mapActions, mapGetters } from 'vuex'
+import { FilterIcon, SearchIcon, TagIcon, TrashIcon } from 'vue-feather-icons'
 import { debounce } from 'lodash-es'
 
 export default {
@@ -180,16 +262,23 @@ export default {
     TrashIcon,
   },
 
+  props: {
+    activeTags: {
+      type: Array,
+      default: () => [],
+    },
+    searchResults: {
+      type: Array,
+      default: () => [],
+    },
+  },
+
   data() {
     return {
       search: {
         query: '',
 
-        // Act as a buffer
-        tags: [],
-
-        // Searched data
-        data: [],
+        activeTags: [],
       },
 
       isBanModeEnabled: false,
@@ -200,22 +289,21 @@ export default {
 
   computed: {
     ...mapGetters('premium', ['isUserPremium']),
-    ...mapGetters('booru', ['getTags']),
 
     // Workaround so we can use cancel on debounce
     // See https://github.com/vuejs/vue/issues/2870
-    debouncedFetchSearchDataFromApi() {
-      return debounce(this.fetchSearchDataFromApi, 350)
+    debouncedEmitOnSearch() {
+      return debounce(this.emitOnSearch, 350)
     },
   },
 
   mounted() {
-    this.search.tags = this.getTags
+    // Set active tags from prop on mount
+    this.search.activeTags = this.activeTags
   },
 
   methods: {
     ...mapActions('navigation', ['searchNavigationManager']),
-    ...mapActions('booru', ['tagsManager', 'fetchTags']),
 
     // #region Navigation
     toggleSearchMenu() {
@@ -224,7 +312,7 @@ export default {
     // #endregion
 
     // #region Search bar
-    async inputHandler(event) {
+    async onSearchInput(event) {
       const inputData = event.target.value
 
       // Replace empty spaces with underscores
@@ -233,34 +321,26 @@ export default {
       this.search.query = replacedInputData
 
       if (this.search.query.length === 0) {
-        this.debouncedFetchSearchDataFromApi.cancel()
-        this.resetSearchData()
+        this.debouncedEmitOnSearch.cancel()
+        this.emitResetSearchResults()
         return
       }
 
-      await this.debouncedFetchSearchDataFromApi(this.search.query)
+      await this.debouncedEmitOnSearch(this.search.query)
     },
 
-    inputEnterHandler(tag) {
-      this.debouncedFetchSearchDataFromApi.cancel()
+    onSearchEnter(tag) {
+      this.debouncedEmitOnSearch.cancel()
 
-      this.mergeSearchTags([this.search.query])
+      this.mergeWithActiveTags([this.search.query])
     },
 
-    async fetchSearchDataFromApi(tags) {
-      const data = await this.fetchTags(tags)
-
-      if (!data) {
-        console.debug('No tag data.')
-        this.resetSearchData()
-        return
-      }
-
-      this.search.data = data
+    emitOnSearch() {
+      this.$emit('search', this.search.query)
     },
 
-    resetSearchData() {
-      this.search.data = []
+    emitResetSearchResults() {
+      this.$emit('reset-search-results')
     },
 
     toggleBanMode() {
@@ -278,29 +358,32 @@ export default {
     // #endregion
 
     // #region Search results
-    addTagConsideringBanMode(tag) {
+    addToActiveTagConsideringBanMode(tag) {
       const prefix = this.isBanModeEnabled ? '-' : ''
 
-      this.mergeSearchTags([prefix + tag])
+      this.mergeWithActiveTags([prefix + tag])
     },
 
-    removeTag(tagToRemove) {
-      this.search.tags = this.search.tags.filter((tag) => tag !== tagToRemove)
+    removeFromActiveTags(tagToRemove) {
+      this.search.activeTags = this.search.activeTags.filter(
+        (tag) => tag !== tagToRemove
+      )
     },
 
-    mergeSearchTags(tags) {
-      this.search.tags = [...new Set([...this.search.tags, ...tags])]
+    mergeWithActiveTags(tags) {
+      this.search.activeTags = [
+        ...new Set([...this.search.activeTags, ...tags]),
+      ]
     },
 
-    resetTags() {
-      this.search.tags = []
+    resetActiveTags() {
+      this.search.activeTags = []
     },
 
-    async addTagsToBooruState() {
-      await this.tagsManager({
-        operation: 'set',
-        value: this.search.tags,
-      })
+    emitSubmitActiveTags() {
+      this.$emit('submit-active-tags', this.search.activeTags)
+
+      this.toggleSearchMenu()
     },
     // #endregion
   },
