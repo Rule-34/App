@@ -1,10 +1,6 @@
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  data() {
-    return { isPostsPage: false }
-  },
-
   computed: {
     ...mapGetters('navigation', ['isSideNavActive', 'isSearchActive']),
   },
@@ -36,17 +32,6 @@ export default {
       // Close Search on route change
       if (this.isSearchActive)
         this.searchNavigationManager({ operation: 'set', value: false })
-
-      // Set different layout depending of the route
-      switch (this.$nuxt.$route.name) {
-        case 'index':
-          this.isPostsPage = true
-          break
-
-        default:
-          this.isPostsPage = false
-          break
-      }
     },
   },
 }
