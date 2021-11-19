@@ -15,6 +15,13 @@
 
     <!-- Content -->
     <main class="flex flex-col flex-auto min-h-full pb-4 space-y-4">
+      <portal to="search">
+        <SearchWrapper>
+          <Search
+          />
+        </SearchWrapper>
+      </portal>
+
       <ErrorManager />
 
       <ul class="flex-auto space-y-4">

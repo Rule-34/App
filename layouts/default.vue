@@ -12,9 +12,9 @@
       <SideNav v-if="isSideNavActive" />
     </transition>
 
-    <transition name="search">
-      <Search v-if="isSearchActive" />
-    </transition>
+    <portal-target name="search" />
+
+    <portal-target name="body" />
 
     <SupportPopUpManager />
 
@@ -52,7 +52,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('navigation', ['isSideNavActive', 'isSearchActive']),
+    ...mapGetters('navigation', ['isSideNavActive']),
     ...mapGetters('user', ['getUserSettings']),
   },
 }
@@ -84,23 +84,6 @@ console.info(
 /* Transition that is gonna be applied */
 .sidenav-enter-active,
 .sidenav-leave-active {
-  @apply transition-transform duration-300;
-}
-
-/* Initial state */
-.search-enter,
-.search-leave-to {
-  transform: translateX(100vw);
-}
-
-/* Toggled stated */
-.search-enter-to {
-  transform: translateX(0px);
-}
-
-/* Transition that is gonna be applied */
-.search-enter-active,
-.search-leave-active {
   @apply transition-transform duration-300;
 }
 </style>
