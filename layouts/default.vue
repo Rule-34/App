@@ -6,7 +6,7 @@
       right: (e) => touchHandler('right', e),
     }"
   >
-    <SideNavToggler :show-search="isPostsPage" />
+    <SideNavArea />
 
     <transition name="sidenav">
       <SideNav v-if="isSideNavActive" />
