@@ -105,6 +105,7 @@ export default {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
+    'portal-vue/nuxt',
     '@nuxtjs/pwa',
     '@nuxtjs/sentry',
     '@nuxtjs/sitemap',
