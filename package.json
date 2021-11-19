@@ -29,6 +29,7 @@
     "@tailwindcss/typography": "^0.4.1",
     "lodash-es": "^4.17.21",
     "nuxt": "^2.15.8",
+    "portal-vue": "^2.1.7",
     "vue-feather-icons": "^5.1.0",
     "vue-matomo": "^4.1.0",
     "vuetify": "^2.5.14",
