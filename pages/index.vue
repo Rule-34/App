@@ -15,6 +15,10 @@
 
     <!-- Content -->
     <main class="flex flex-col flex-auto min-h-full pb-4 space-y-4">
+      <portal to="side-nav-area">
+        <SearchToggler />
+      </portal>
+
       <portal to="search">
         <SearchWrapper>
           <Search
