@@ -14,23 +14,20 @@
 
 @layer components {
   /* #region Utils */
-
   .focus-util {
     /*
-    * NOT TO BE USED DIRECTLY AS CSS 
+    * NOT TO BE USED DIRECTLY AS CSS
     * IN CLASSES IT SHOULD BE USED AS `focus:focus-util`
     */
     @apply outline-none ring-4 ring-primary-400;
   }
 
   /*  */
-
   .border-util {
     @apply border rounded border-darkGray-100;
   }
 
   /*  */
-
   .link {
     @apply transition-colors duration-300 text-primary-500;
   }
@@ -44,11 +41,8 @@
   }
 
   /* #endregion */
-
   /* #region Components */
-
   /*  */
-
   .icon {
     stroke-width: 1.6;
     /* Align middle is necessary for some reason for mobile devices */
@@ -56,7 +50,6 @@
   }
 
   /*  */
-
   .material-container {
     @apply overflow-hidden rounded-lg bg-darkGray-300 border-util;
   }
@@ -64,21 +57,23 @@
   /* .material-container:focus-within {
     @apply focus-util;
   } */
-
   /*  */
-
   .tag-container {
     @apply flex flex-wrap items-start content-start gap-2 p-2 overflow-hidden bg-darkGray-500;
   }
 
   /*  */
-
   .tag {
     /*
-    * NOT TO BE USED DIRECTLY AS CSS 
+    * NOT TO BE USED DIRECTLY AS CSS
     * IN CLASSES IT SHOULD BE USED WITH `.link`
     */
     @apply px-1 overflow-hidden leading-normal border border-current rounded-none select-none;
+  }
+
+  /* Active tags */
+  .tag.nuxt-link-exact-active {
+    @apply text-primary-100 hover:text-primary-100 font-normal bg-primary-700 hover:bg-primary-600 border-primary-700 hover:border-primary-600;
   }
 
   /* #endregion */

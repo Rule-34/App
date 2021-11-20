@@ -161,7 +161,7 @@
                   <button
                     v-for="tag in search.activeTags"
                     :key="tag"
-                    class="tag link"
+                    class="tag link nuxt-link-exact-active"
                     type="button"
                     @click="removeFromActiveTags(tag)"
                   >
