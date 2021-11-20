@@ -28,7 +28,7 @@ export default {
             return
           }
 
-          if (this.isSearchActive && this.isPostsPage) {
+          if (this.isSearchActive) {
             this.searchNavigationManager({
               operation: 'set',
               value: false,
@@ -47,7 +47,7 @@ export default {
             return
           }
 
-          if (!this.isSideNavActive && this.isPostsPage) {
+          if (!this.isSideNavActive) {
             this.searchNavigationManager({
               operation: 'set',
               value: true,
