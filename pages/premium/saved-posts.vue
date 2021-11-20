@@ -44,7 +44,11 @@
       </template>
     </ul>
 
-    <PostsControls :current-page="currentPage" @setPage="onPageChange" />
+    <PostsControls
+      :current-page="currentPage"
+      :force-normal-controls="true"
+      @setPage="onPageChange"
+    />
   </main>
 </template>
 
