@@ -169,6 +169,9 @@ export default {
 
     resetCurrentPage() {
       this.currentPage = 0
+
+      // TODO: Scroll to top until we have page queries
+      this.scrollToTop()
     },
 
     onDomainChange(DOMAIN) {
@@ -182,6 +185,9 @@ export default {
 
     onPageChange(page) {
       this.currentPage = page
+
+      // TODO: Scroll to top until we have page queries
+      this.scrollToTop()
     },
 
     onPostTagSelected(tag) {
@@ -219,6 +225,11 @@ export default {
       this.searchActiveTags = tags
 
       this.resetCurrentPage()
+    },
+
+    // TODO: Scroll to top until we have page queries
+    scrollToTop() {
+      window.scrollTo(0, 0)
     },
   },
 }
