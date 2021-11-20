@@ -64,11 +64,20 @@
 
         <input
           v-model="formBooru.domain"
-          type="text"
+          class="
+            block
+            h-8
+            p-1
+            text-gray-300
+            outline-none
+            border-util
+            bg-darkGray-700
+            focus:focus-util
+          "
           name="domain"
-          class="block h-8 p-1 text-gray-300 outline-none border-util bg-darkGray-700 focus:focus-util"
-          required
           placeholder="example.com"
+          required
+          type="text"
         />
       </label>
 
@@ -78,8 +87,18 @@
 
         <select
           v-model="formBooru.type"
+          class="
+            block
+            h-8
+            p-1
+            text-gray-300
+            outline-none
+            bg-darkGray-700
+            border-util
+            w-max
+            focus:focus-util
+          "
           name="type"
-          class="block h-8 p-1 text-gray-300 outline-none bg-darkGray-700 border-util w-max focus:focus-util"
           required
         >
           <option
@@ -98,8 +117,16 @@
 
         <input
           v-model="formBooru.nsfw"
+          class="
+            self-center
+            flex-auto
+            block
+            p-1
+            outline-none
+            bg-darkGray-700
+            focus:focus-util
+          "
           name="nsfw"
-          class="self-center flex-auto block p-1 outline-none bg-darkGray-700 focus:focus-util"
           type="checkbox"
         />
       </label>
@@ -110,7 +137,16 @@
 
         <textarea
           v-model="formBooru.config"
-          class="block w-full p-1 text-gray-300 outline-none border-util bg-darkGray-700 focus:focus-util"
+          class="
+            block
+            w-full
+            p-1
+            text-gray-300
+            outline-none
+            border-util
+            bg-darkGray-700
+            focus:focus-util
+          "
           name="config"
           rows="3"
           spellcheck="false"
@@ -122,8 +158,18 @@
       </button> -->
 
       <button
+        class="
+          w-full
+          px-2
+          py-1
+          tracking-wide
+          rounded-full
+          bg-gradient-to-r
+          from-primary-400
+          to-accent-400
+          focus:focus-util
+        "
         type="submit"
-        class="w-full px-2 py-1 tracking-wide rounded-full bg-gradient-to-r from-primary-400 to-accent-400 focus:focus-util"
       >
         Add
       </button>
@@ -132,9 +178,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
-import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/dist/util/BooruUtils.js'
+import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils.js'
 
 export default {
   data() {

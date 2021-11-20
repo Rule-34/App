@@ -2,7 +2,7 @@ import {
   booruTypeList,
   defaultBooruList,
   findBoorusWithValueByKey,
-} from '~/assets/lib/rule-34-shared-resources/dist/util/BooruUtils.js'
+} from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils.js'
 import { RouterHelper } from '~/assets/js/RouterHelper'
 
 export const state = () => ({
