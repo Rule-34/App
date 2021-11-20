@@ -11,6 +11,19 @@ export const state = () => ({
 
     tagCollections: [
       {
+        name: 'Gay blocklist',
+        tags: [
+          'gay',
+          'gay_sex',
+          'solo_male',
+          'male_only',
+          'male_focus',
+          'male/male',
+          'male_penetrated',
+          'male_penetrating_male',
+        ],
+      },
+      {
         name: 'Furry blocklist',
         tags: [
           '-furry',
