@@ -263,7 +263,7 @@ export default {
   },
 
   props: {
-    activeTags: {
+    initialActiveTags: {
       type: Array,
       default: () => [],
     },
@@ -299,7 +299,7 @@ export default {
 
   mounted() {
     // Set active tags from prop on mount
-    this.search.activeTags = this.activeTags
+    this.search.activeTags = this.initialActiveTags
   },
 
   methods: {
