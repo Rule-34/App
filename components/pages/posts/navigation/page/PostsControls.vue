@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Normal controls -->
-    <template v-if="!getUserSettings.infiniteLoad.value">
+    <template v-if="!getUserSettings.infiniteLoad.value || forceNormalControls">
       <div
         :class="{
           'fixed bottom-0 inset-x-0 z-10 max-w-3xl p-2 mx-auto sm:p-4 lg:p-6':
@@ -11,10 +11,10 @@
         <div class="flex justify-around p-2 text-center material-container">
           <!-- Previous page -->
           <button
-            type="button"
+            aria-label="Load previous page"
             class="link"
             title="Load previous page"
-            aria-label="Load previous page"
+            type="button"
             @click="getPrevPage"
           >
             <span class="text-white">&larr;</span> Prev
@@ -22,9 +22,9 @@
 
           <!-- Get specific page -->
           <button
+            aria-label="Load specific page"
             class="link"
             title="Load specific page"
-            aria-label="Load specific page"
             type="button"
             @click="getSpecificPage"
           >
@@ -33,10 +33,10 @@
 
           <!-- Next page -->
           <button
-            type="button"
+            aria-label="Load next page"
             class="link"
             title="Load next page"
-            aria-label="Load next page"
+            type="button"
             @click="getNextPage"
           >
             Next <span class="text-white">&rarr;</span>
@@ -51,7 +51,7 @@
     </template>
 
     <!-- Infinite loading -->
-    <template v-else-if="getUserSettings.infiniteLoad.value">
+    <template v-else>
       <div
         v-intersect="{
           handler: InfiniteLoadHandler,
@@ -90,6 +90,11 @@ export default {
     currentPage: {
       type: Number,
       required: true,
+    },
+
+    forceNormalControls: {
+      type: Boolean,
+      default: false,
     },
   },
 
