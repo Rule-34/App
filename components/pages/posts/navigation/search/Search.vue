@@ -383,6 +383,8 @@ export default {
     emitSubmitActiveTags() {
       this.$emit('submit-active-tags', this.search.activeTags)
 
+      this.emitResetSearchResults()
+
       this.toggleSearchMenu()
     },
     // #endregion
