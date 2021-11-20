@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.8.2](https://github.com/Rule-34/App/compare/v2.8.1...v2.8.2) (2021-11-20)
+
+
+### Features
+
+* add more tags to default blocklists ([daba616](https://github.com/Rule-34/App/commit/daba616cc1ac938dd8f4924e884735b11ee3b188))
+* create Gay blocklist ([7f90b16](https://github.com/Rule-34/App/commit/7f90b16892a255d3fff60bbfb67a907f2b553edc))
+
 ### [2.8.1](https://github.com/Rule-34/App/compare/v2.8.0...v2.8.1) (2021-11-20)
 
 
