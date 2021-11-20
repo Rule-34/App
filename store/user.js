@@ -23,6 +23,7 @@ export const state = () => ({
           '-anthrofied',
           '-anthro_on_anthro',
           '-scaly',
+          '-scales',
           '-accipitrid',
           '-accipitriform',
           '-animal_genitalia',
@@ -33,7 +34,7 @@ export const state = () => ({
       },
       {
         name: 'Indecencies blocklist',
-        tags: ['-scat', '-diaper', '-shitpost', '-gore'],
+        tags: ['-shitting', '-scat', '-diaper', '-fart', '-shitpost', '-gore'],
       },
     ],
 
