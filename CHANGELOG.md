@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.8.1](https://github.com/Rule-34/App/compare/v2.8.0...v2.8.1) (2021-11-20)
+
+
+### Features
+
+* add prop for forcing normal controls ([04a485e](https://github.com/Rule-34/App/commit/04a485eeda2d3cbfe273fb6afc3ba16fb73fa124))
+* **saved posts:** scroll to top on common actions ([f4a6dd8](https://github.com/Rule-34/App/commit/f4a6dd854830ba1ff3e17fc98963635dab56fdfd))
+
+
+### Bug Fixes
+
+* **saved posts:** normalize search queries ([2a703cf](https://github.com/Rule-34/App/commit/2a703cf97136fd40eef4c076a3953878928545f1))
+
 ## [2.8.0](https://github.com/Rule-34/App/compare/v2.7.9...v2.8.0) (2021-11-20)
 
 
