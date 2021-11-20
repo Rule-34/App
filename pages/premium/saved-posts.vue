@@ -203,8 +203,13 @@ export default {
         }
       })
 
-      const SEARCH_RESULTS = AVAILABLE_TAGS.filter((TAG) => {
-        return TAG.name.includes(query)
+      // Normalize query
+      query = query.toLowerCase()
+
+      const SEARCH_RESULTS = AVAILABLE_TAGS.filter((tag) => {
+        const NORMALIZED_TAG = tag.name.toLowerCase()
+
+        return NORMALIZED_TAG.includes(query)
       })
 
       this.searchResults = SEARCH_RESULTS
