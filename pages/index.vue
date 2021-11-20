@@ -22,7 +22,7 @@
       <portal to="search">
         <SearchWrapper>
           <Search
-            :active-tags="getTags"
+            :initial-active-tags="getTags"
             :search-results="searchResults"
             @search="onSearch"
             @reset-search-results="resetSearchResults"

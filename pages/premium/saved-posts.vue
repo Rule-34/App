@@ -7,7 +7,7 @@
     <portal to="search">
       <SearchWrapper>
         <Search
-          :active-tags="searchActiveTags"
+          :initial-active-tags="searchActiveTags"
           :search-results="searchResults"
           @search="onSearch"
           @reset-search-results="resetSearchResults"
