@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.8.0](https://github.com/Rule-34/App/compare/v2.7.9...v2.8.0) (2021-11-20)
+
+
+### Features
+
+* change active tags color ([d479e85](https://github.com/Rule-34/App/commit/d479e85d6142ff06329665cbcf1942912379faec))
+* clear search results when applying tags ([55d16a8](https://github.com/Rule-34/App/commit/55d16a84e10b67faadd3fef2eacd539feb789f95))
+* create eventOnly prop setting ([c28e106](https://github.com/Rule-34/App/commit/c28e1069adf8bfbf02beb8ccb7e48c211329ec92))
+* **saved posts:** integrate search component ([f793624](https://github.com/Rule-34/App/commit/f793624b2703958085719b259da2cbb3b467a227))
+
+
+### Bug Fixes
+
+* remove no longer necessary check ([c430c3e](https://github.com/Rule-34/App/commit/c430c3e815079721acd66a33dfc31c4de187c9d3))
+* **saved posts:** fix filtering Posts by multiple tags ([14fb1c1](https://github.com/Rule-34/App/commit/14fb1c1277bbdc3fe939e602b82daeab95154620))
+
 ### [2.7.9](https://github.com/Rule-34/App/compare/v2.7.8...v2.7.9) (2021-11-15)
 
 
