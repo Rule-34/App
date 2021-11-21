@@ -51,7 +51,11 @@ export default {
 
     link: [
       // Font
-      { rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' },
+      {
+        rel: 'stylesheet',
+        type: 'text/css',
+        href: 'https://rsms.me/inter/inter.css',
+      },
     ],
 
     noscript: [{ innerHTML: 'This website requires JavaScript' }],
