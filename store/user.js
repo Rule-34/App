@@ -13,14 +13,14 @@ export const state = () => ({
       {
         name: 'Gay blocklist',
         tags: [
-          'gay',
-          'gay_sex',
-          'solo_male',
-          'male_only',
-          'male_focus',
-          'male/male',
-          'male_penetrated',
-          'male_penetrating_male',
+          '-gay',
+          '-gay_sex',
+          '-solo_male',
+          '-male_only',
+          '-male_focus',
+          '-male/male',
+          '-male_penetrated',
+          '-male_penetrating_male',
         ],
       },
       {
@@ -47,7 +47,7 @@ export const state = () => ({
       },
       {
         name: 'Indecencies blocklist',
-        tags: ['-shitting', '-scat', '-diaper', '-fart', '-shitpost', '-gore'],
+        tags: ['-scat', '-shitting', '-diaper', '-fart', '-shitpost', '-gore'],
       },
     ],
 
