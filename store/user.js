@@ -49,6 +49,18 @@ export const state = () => ({
         name: 'Indecencies blocklist',
         tags: ['-scat', '-shitting', '-diaper', '-fart', '-shitpost', '-gore'],
       },
+      {
+        name: 'Explicit rating',
+        tags: ['rating:explicit'],
+      },
+      {
+        name: 'Sort by order',
+        tags: ['sort:score'],
+      },
+      {
+        name: 'Order by score',
+        tags: ['sort:order'],
+      },
     ],
 
     savedPosts: [
