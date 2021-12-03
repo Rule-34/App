@@ -146,7 +146,7 @@ export default {
       return POSTS.filter((POST) => {
         // Filter that the post has to include every tag in the searchActiveTags array
         return this.searchActiveTags.every((TAG) =>
-          POST.data.tags.includes(TAG.toLowerCase())
+          POST.data.tags.includes(TAG)
         )
       })
     },
