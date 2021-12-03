@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.8.3](https://github.com/Rule-34/App/compare/v2.8.2...v2.8.3) (2021-12-03)
+
+
+### Features
+
+* **search:** add more default Tag Collections ([be17ab3](https://github.com/Rule-34/App/commit/be17ab38e4abacd078e252225a416adc5b2fc527))
+
+
+### Bug Fixes
+
+* add missing dashes on blocklist ([abd65ff](https://github.com/Rule-34/App/commit/abd65ffd052d8b035bce65a1378bbe448c1024b6))
+* add type to stylesheet link ([223f2b4](https://github.com/Rule-34/App/commit/223f2b4fd75829b542d39180bf2ede1214e6c798))
+* **Saved Posts search:** only show posts tagged with the exact tag results ([87260d6](https://github.com/Rule-34/App/commit/87260d64774f4db032e082c239eafdf2365b33d9))
+
 ### [2.8.2](https://github.com/Rule-34/App/compare/v2.8.1...v2.8.2) (2021-11-20)
 
 
