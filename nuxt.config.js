@@ -2,9 +2,11 @@ import PACKAGE_JSON from './package.json'
 import * as TAILWIND_CONFIG from './tailwind.config'
 
 export default {
-  target: 'static',
-
+  // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
+
+  // Target: https://go.nuxtjs.dev/config-target
+  target: 'static',
 
   generate: { fallback: true },
 
