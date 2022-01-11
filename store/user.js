@@ -1,13 +1,11 @@
+import { completeBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils.js'
+
+// Skip the 8 first Boorus as they are included in the default list
+const ADDITIONAL_DEFAULT_PREMIUM_BOORUS = completeBooruList.slice(7)
+
 export const state = () => ({
   custom: {
-    boorus: [
-      {
-        domain: 'xbooru.com',
-        type: 'gelbooru',
-        nsfw: true,
-        config: null,
-      },
-    ],
+    boorus: ADDITIONAL_DEFAULT_PREMIUM_BOORUS,
 
     tagCollections: [
       {
