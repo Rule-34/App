@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.8.4](https://github.com/Rule-34/App/compare/v2.8.3...v2.8.4) (2022-01-11)
+
+
+### Features
+
+* **Premium:** include all tested boorus by default ([3d68f55](https://github.com/Rule-34/App/commit/3d68f55e463799805b501362646be30c85ebe50b))
+
+
+### Bug Fixes
+
+* **default  tag collections:** fix wrong tag ([53cf6e7](https://github.com/Rule-34/App/commit/53cf6e742940a632442f7c9a20a175b6dd98a0e8))
+
 ### [2.8.3](https://github.com/Rule-34/App/compare/v2.8.2...v2.8.3) (2021-12-03)
 
 
