@@ -57,7 +57,7 @@ export const state = () => ({
       },
       {
         name: 'Order by score',
-        tags: ['sort:order'],
+        tags: ['order:score'],
       },
     ],
 
