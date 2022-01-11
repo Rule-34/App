@@ -35,10 +35,10 @@
             <check-icon class="w-6 h-6 icon text-accent-400" />
           </div>
           <NuxtLink
-            to="/premium/custom-boorus"
             class="ml-3 text-base font-medium leading-6 link"
+            to="/premium/custom-boorus"
           >
-            Add more Boorus
+            Use more Boorus
           </NuxtLink>
         </li>
 
@@ -48,8 +48,8 @@
             <check-icon class="w-6 h-6 icon text-accent-400" />
           </div>
           <NuxtLink
-            to="/premium/tag-collections"
             class="ml-3 text-base font-medium leading-6 link"
+            to="/premium/tag-collections"
           >
             Create collections of Tags
           </NuxtLink>
@@ -61,8 +61,8 @@
             <check-icon class="w-6 h-6 icon text-accent-400" />
           </div>
           <NuxtLink
-            to="/premium/saved-posts"
             class="ml-3 text-base font-medium leading-6 link"
+            to="/premium/saved-posts"
           >
             Save posts
           </NuxtLink>
@@ -75,7 +75,7 @@
           </div>
           <p class="ml-3 text-base font-medium leading-6 text-gray-300">
             Find sources with
-            <a href="https://saucenao.com/" target="_blank" class="link">
+            <a class="link" href="https://saucenao.com/" target="_blank">
               SauceNAO
             </a>
           </p>
@@ -94,9 +94,9 @@
 
       <div class="mt-8">
         <a
-          target="_blank"
-          href="https://gum.co/Rule34App"
           class="block w-full px-6 py-3 text-lg font-medium leading-6 text-center text-black transition border-0 rounded-lg bg-gradient-to-r from-accent-400 to-primary-400 focus:focus-util hover:text-gray-800"
+          href="https://gum.co/Rule34App"
+          target="_blank"
         >
           Subscribe
         </a>
@@ -106,11 +106,11 @@
 </template>
 
 <script>
-import { CheckIcon } from 'vue-feather-icons'
+import { CheckIcon } from "vue-feather-icons";
 
 export default {
   components: {
-    CheckIcon,
-  },
-}
+    CheckIcon
+  }
+};
 </script>
