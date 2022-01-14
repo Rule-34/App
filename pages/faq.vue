@@ -4,15 +4,27 @@
       <ContentSeparator title="Frequently Asked Questions" />
 
       <ContentContainer
-        title="Notice"
-        text="The `Frequently Asked Questions` page has been moved to the documentation subdomain."
-        icon="bg-svg-info"
         :links="[
           {
-            text: 'Frequently Asked Questions',
+            text: 'Documentation website',
             href: 'https://docs.r34.app/frequently-asked-questions',
           },
         ]"
+        icon="bg-svg-info"
+        text='You can find the "Frequently Asked Questions" in the documentation website.'
+        title="Notice"
+      />
+
+      <ContentContainer
+        :links="[
+          {
+            text: 'Status website',
+            href: 'https://redirect.r34.app/status',
+          },
+        ]"
+        icon="bg-svg-info"
+        text="Check the status of the App, API and documentation in the status website."
+        title="Status"
       />
     </div>
   </main>
@@ -22,15 +34,15 @@
 export default {
   head() {
     return {
-      title: 'Faq',
+      title: "Faq",
       meta: [
         {
-          hid: 'description',
-          name: 'description',
-          content: 'Frequently asked questions.',
-        },
-      ],
-    }
-  },
-}
+          hid: "description",
+          name: "description",
+          content: "Frequently asked questions."
+        }
+      ]
+    };
+  }
+};
 </script>
