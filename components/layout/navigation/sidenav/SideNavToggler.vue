@@ -8,13 +8,14 @@
       w-12
       h-12
       p-4
-      border-0 border-transparent
+      border-0
       rounded-full
       md:w-16 md:h-16
       bg-gradient-to-b
       from-primary-400
       to-accent-400
       focus:focus-util
+      shadow
     "
     title="Menu"
     type="menu"
