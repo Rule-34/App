@@ -2,6 +2,21 @@
   <div
     class="flex flex-col max-w-3xl min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
   >
+    <portal to="side-nav-area">
+    </portal>
+
+    <portal to="search">
+      <SearchWrapper>
+        <Search
+          :initial-active-tags="getTags"
+          :search-results="searchResults"
+          @search="onSearch"
+          @reset-search-results="resetSearchResults"
+          @submit-active-tags="onSubmitActiveTags"
+        />
+      </SearchWrapper>
+    </portal>
+
     <!-- Top menu -->
     <nav class="flex flex-row items-center justify-between py-4">
       <DomainSelector
@@ -10,33 +25,18 @@
         @domainChange="onDomainChange"
       />
 
-      <Notifications />
+      <Notifications/>
     </nav>
 
     <!-- Content -->
     <main class="flex flex-col flex-auto min-h-full pb-4 space-y-4">
-      <portal to="side-nav-area">
-        <SearchToggler />
-      </portal>
 
-      <portal to="search">
-        <SearchWrapper>
-          <Search
-            :initial-active-tags="getTags"
-            :search-results="searchResults"
-            @search="onSearch"
-            @reset-search-results="resetSearchResults"
-            @submit-active-tags="onSubmitActiveTags"
-          />
-        </SearchWrapper>
-      </portal>
-
-      <ErrorManager />
+      <ErrorManager/>
 
       <ul class="flex-auto space-y-4">
         <template v-if="getPosts.length">
           <li v-for="POST in getPosts" :key="POST.id">
-            <Post :post="POST" />
+            <Post :post="POST"/>
           </li>
         </template>
 
@@ -47,7 +47,7 @@
         </template>
       </ul>
 
-      <PostsControls :current-page="getPageID" @setPage="onPageChange" />
+      <PostsControls :current-page="getPageID" @setPage="onPageChange"/>
     </main>
   </div>
 </template>
@@ -72,6 +72,7 @@ export default {
   head() {
     const head = {
       meta: [
+        // Necessary so images can be loaded from other domains
         {
           hid: 'referrer',
           name: 'referrer',
@@ -88,7 +89,7 @@ export default {
       head.meta.push({
         hid: 'description',
         name: 'description',
-        content: `Browse Rule 34 ${tags} hentai porn from ${this.getActiveBooru.domain}.`,
+        content: `Browse Rule 34 ${ tags } hentai porn from ${ this.getActiveBooru.domain }.`,
       })
     }
 
