@@ -23,7 +23,23 @@
     @click="toggleSearch"
   >
     <!-- Search Icon -->
-    <SearchIcon class="icon" />
+    <SearchIcon class="icon"/>
+
+    <!-- Tag count badge -->
+    <template v-if="tagCount > 0">
+
+      <div class="absolute -top-2 -right-2">
+
+        <p
+          class="text-gray-200 text-sm font-medium bg-darkGray-700 border-[0.15rem] border-accent-500 rounded-full px-1.5">
+          {{ tagCount }}
+
+          <span class="sr-only">
+            tags active
+          </span>
+        </p>
+      </div>
+    </template>
   </button>
 </template>
 
@@ -36,6 +52,13 @@ export default {
 
   components: {
     SearchIcon,
+  },
+
+  props: {
+    tagCount: {
+      type: Number,
+      required: true
+    }
   },
 
   methods: {
