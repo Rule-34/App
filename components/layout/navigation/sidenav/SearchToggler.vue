@@ -2,6 +2,7 @@
   <button
     aria-label="Toggle the search menu"
     class="
+      relative
       flex
       items-center
       justify-center
@@ -15,6 +16,7 @@
       from-primary-400
       to-accent-400
       focus:focus-util
+      shadow
     "
     title="Search"
     type="menu"
