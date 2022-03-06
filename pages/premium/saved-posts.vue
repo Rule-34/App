@@ -1,7 +1,7 @@
 <template>
   <main class="flex flex-col max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
     <portal to="side-nav-area">
-      <SearchToggler />
+      <SearchToggler :tag-count="searchActiveTags.length"/>
     </portal>
 
     <portal to="search">
@@ -16,7 +16,7 @@
       </SearchWrapper>
     </portal>
 
-    <ContentSeparator title="Saved posts" />
+    <ContentSeparator title="Saved posts"/>
 
     <nav class="flex flex-row items-center justify-between py-4">
       <DomainSelector

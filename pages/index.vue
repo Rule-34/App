@@ -3,6 +3,7 @@
     class="flex flex-col max-w-3xl min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
   >
     <portal to="side-nav-area">
+      <SearchToggler :tag-count="getTags.length"/>
     </portal>
 
     <portal to="search">
