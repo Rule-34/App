@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.8.5](https://github.com/Rule-34/App/compare/v2.8.4...v2.8.5) (2022-03-06)
+
+
+### Features
+
+* **FAQ:** add link to status website ([578ba48](https://github.com/Rule-34/App/commit/578ba484c862fbe56da9e053b988940c4e1c283e))
+* **search menu toggler:** show tag count ([56a2297](https://github.com/Rule-34/App/commit/56a2297d19ab3a3d7716aed55e3fef83c05e2d99))
+
 ### [2.8.4](https://github.com/Rule-34/App/compare/v2.8.3...v2.8.4) (2022-01-11)
 
 
