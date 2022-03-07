@@ -46,7 +46,8 @@ Follow the Rule 34 App on **[Twitter](https://twitter.com/Rule34App)** for annou
 
 ### Discord
 
-Join the **[Discord](https://redirect.r34.app/discord)** community to keep up with the updates of the project and receive support.
+Join the **[Discord](https://redirect.r34.app/discord)** community to keep up with the updates of the project and
+receive support.
 
 ![Discord badge](https://img.shields.io/discord/656241666553806861?style=for-the-badge)
 
@@ -79,16 +80,27 @@ This App uses an [API](https://github.com/Rule-34/API) to communicate with all t
 - NodeJS >= 12
 - NPM
 
-### Build setup
+### Setup
+
+#### Git Submodules
+
+Use `git clone --recursively` because [this repository](https://github.com/Rule-34/Shared-Resources) is used to share
+some necessary resources.
+
+#### Environment variables
 
 ```bash
 # Modify .env file
 cp .env.example .env
+```
 
+#### NodeJS
+
+```bash
 # Install dependencies
 npm install
 
-# Serve with hot reload at localhost:3000
+# Serve with hot reload at localhost:8080
 npm run dev
 
 # Generate static project
