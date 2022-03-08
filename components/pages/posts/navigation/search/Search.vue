@@ -37,6 +37,7 @@
             <input
               :value="search.query"
               aria-label="Search for tags"
+              autocapitalize="none"
               autofocus
               class="
                 flex-1
