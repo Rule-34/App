@@ -29,7 +29,7 @@ export default {
     title: null,
 
     titleTemplate: (titleChunk) => {
-      return titleChunk ? `${titleChunk} | Rule 34 App` : 'Rule 34 App'
+      return titleChunk ? `${ titleChunk } | Rule 34 App` : 'Rule 34 App'
     },
 
     htmlAttrs: {
@@ -76,7 +76,7 @@ export default {
   loadingIndicator: {
     name: 'cube-grid',
     color: TAILWIND_CONFIG.theme.extend.colors.darkGray[700],
-    background: `linear-gradient(152deg, ${TAILWIND_CONFIG.theme.extend.colors.primary[400]} 38%, ${TAILWIND_CONFIG.theme.extend.colors.accent[400]} 90%)`,
+    background: `linear-gradient(152deg, ${ TAILWIND_CONFIG.theme.extend.colors.primary[400] } 38%, ${ TAILWIND_CONFIG.theme.extend.colors.accent[400] } 90%)`,
   },
 
   css: ['~/assets/css/main.css'],
@@ -148,13 +148,13 @@ export default {
         },
 
         endpoints: {
-          login: { url: `${process.env.API_URL}/auth/log-in`, method: 'post' },
+          login: { url: `${ process.env.API_URL }/auth/log-in`, method: 'post' },
           refresh: {
-            url: `${process.env.API_URL}/auth/refresh`,
+            url: `${ process.env.API_URL }/auth/refresh`,
             method: 'post',
           },
           logout: false,
-          user: { url: `${process.env.API_URL}/auth/profile`, method: 'get' },
+          user: { url: `${ process.env.API_URL }/auth/profile`, method: 'get' },
         },
       },
     },
