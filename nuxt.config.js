@@ -262,7 +262,9 @@ export default {
         // localForage
         'Database',
         'indexedDB',
+        'window.webkitStorageInfo',
         'QuotaExceededError',
+        'Transaction timed out due to inactivity',
 
         // Axios
         'timeout of 0ms exceeded',
