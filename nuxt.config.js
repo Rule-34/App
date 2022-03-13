@@ -231,7 +231,6 @@ export default {
 
       ignoreErrors: [
         // - Network -
-        // 'Fetch',
         'Request failed with status code',
         'Network Error',
 
@@ -239,6 +238,7 @@ export default {
         'AbortError',
         'Request aborted',
         'webkitExitFullScreen',
+        'Picture-in-Picture',
 
         // - Plugins -
         'matomo',
@@ -254,12 +254,14 @@ export default {
 
         // Browser extensions
         'instantSearchSDKJSBridgeClearHighlight',
+        'window.bannerNight',
 
         // Matomo
-        "undefined is not an object (evaluating 'ao.sync.register')",
-        'ao.sync is undefined',
+        'ao.sync',
 
         // localForage
+        'Database',
+        'indexedDB',
         'QuotaExceededError',
 
         // Axios
