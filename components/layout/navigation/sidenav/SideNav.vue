@@ -136,6 +136,7 @@ export default {
           url: RouterHelper.generatePostsRouteWithDefaults(this.$nuxt.$store),
         },
         { title: 'Faq', url: '/faq' },
+        { title: 'Partners', url: '/partners' },
         { title: 'Usage', url: '/usage' },
         { title: 'About', url: '/about' },
         { title: 'Settings', url: '/settings' },
