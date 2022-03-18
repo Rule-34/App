@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.9.1](https://github.com/Rule-34/App/compare/v2.9.0...v2.9.1) (2022-03-18)
+
+
+### Features
+
+* create method for calling the API with credentials ([704c174](https://github.com/Rule-34/App/commit/704c17493391c5b7072b038abbee9daa37d026d0))
+
 ## [2.9.0](https://github.com/Rule-34/App/compare/v2.8.5...v2.9.0) (2022-03-18)
 
 
