@@ -73,9 +73,6 @@ export default {
       const RESPONSE = await this.$axios.get(PROXIED_MEDIA_URL, {
         progress: true,
         responseType: 'blob',
-
-        // Don't send authorization headers
-        withCredentials: false
       })
 
       const RESPONSE_BLOB = RESPONSE.data
