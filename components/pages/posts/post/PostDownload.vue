@@ -67,11 +67,14 @@ export default {
 
       const PROXIED_MEDIA_URL = ProxyHelper.proxyUrl(this.mediaUrl);
 
-      const RESPONSE = await fetch(PROXIED_MEDIA_URL)
+      const RESPONSE = await this.$axios.get(PROXIED_MEDIA_URL, {
+        progress: true,
+        responseType: 'blob',
+      })
 
-      const RESPONSE_BLOB = await RESPONSE.blob()
+      const RESPONSE_BLOB = RESPONSE.data
 
-      const FILE_EXTENSION = RESPONSE.headers.get('content-type').split('/')[1]
+      const FILE_EXTENSION = RESPONSE.headers['content-type'].split('/')[1]
 
       const FILE_NAME = this.mediaName + '.' + FILE_EXTENSION
 
