@@ -335,10 +335,10 @@ export const actions = {
           url,
         },
         { root: true }
-      ).data
+      )
 
       // This is how a final Booru Tag object looks like
-      const TAGS = response.map((TAG) => {
+      const TAGS = response.data.map((TAG) => {
         return {
           id: `${ ACTIVE_BOORU_DOMAIN }-${ TAG.name }`,
           name: TAG.name,
