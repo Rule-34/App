@@ -132,8 +132,11 @@ export default {
         token: {
           type: 'Bearer',
           property: 'access_token',
+          // 30 minutes
+          maxAge: 1800,
           required: true,
-          maxAge: 1800, // 30 minutes
+
+          global: false,
         },
 
         refreshToken: {
@@ -159,14 +162,14 @@ export default {
       },
     },
 
+    watchLoggedIn: true,
+
     redirect: {
       login: '/premium',
       logout: '/premium',
       callback: false,
       home: false,
     },
-
-    watchLoggedIn: true,
 
     vuex: { namespace: 'authentication' },
   },
