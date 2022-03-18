@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.9.2](https://github.com/Rule-34/App/compare/v2.9.1...v2.9.2) (2022-03-18)
+
+
+### Bug Fixes
+
+* tags not working ([0ef7206](https://github.com/Rule-34/App/commit/0ef72063937e4a394b3c406ef8583aae565550f7))
+
 ### [2.9.1](https://github.com/Rule-34/App/compare/v2.9.0...v2.9.1) (2022-03-18)
 
 
