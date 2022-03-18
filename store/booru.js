@@ -1,8 +1,4 @@
-import {
-  booruTypeList,
-  defaultBooruList,
-  findBoorusWithValueByKey,
-} from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils.js'
+import { booruTypeList, defaultBooruList, findBoorusWithValueByKey, } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils.js'
 import { RouterHelper } from '~/assets/js/RouterHelper'
 
 export const state = () => ({
@@ -288,8 +284,7 @@ export const actions = {
     const ACTIVE_BOORU_DOMAIN = getters.getActiveBooru.domain
 
     try {
-      const response = await dispatch(
-        'simpleFetch',
+      const response = await dispatch('simpleApiFetch',
         {
           url,
         },
@@ -297,9 +292,9 @@ export const actions = {
       )
 
       // This is how a final booru object looks like
-      const POSTS = response.map((POST) => {
+      const POSTS = response.data.map((POST) => {
         return {
-          id: `${ACTIVE_BOORU_DOMAIN}-${POST.id}`,
+          id: `${ ACTIVE_BOORU_DOMAIN }-${ POST.id }`,
           data: POST,
           meta_data: {
             booru_domain: ACTIVE_BOORU_DOMAIN,
@@ -335,17 +330,17 @@ export const actions = {
 
     try {
       const response = await dispatch(
-        'simpleFetch',
+        'simpleApiFetch',
         {
           url,
         },
         { root: true }
-      )
+      ).data
 
       // This is how a final Booru Tag object looks like
       const TAGS = response.map((TAG) => {
         return {
-          id: `${ACTIVE_BOORU_DOMAIN}-${TAG.name}`,
+          id: `${ ACTIVE_BOORU_DOMAIN }-${ TAG.name }`,
           name: TAG.name,
           count: TAG.count,
         }
