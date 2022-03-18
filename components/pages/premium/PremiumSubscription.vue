@@ -74,10 +74,7 @@
             <check-icon class="w-6 h-6 icon text-accent-400" />
           </div>
           <p class="ml-3 text-base font-medium leading-6 text-gray-300">
-            Find sources with
-            <a class="link" href="https://saucenao.com/" target="_blank">
-              SauceNAO
-            </a>
+            Download Posts
           </p>
         </li>
 
@@ -87,7 +84,10 @@
             <check-icon class="w-6 h-6 icon text-accent-400" />
           </div>
           <p class="ml-3 text-base font-medium leading-6 text-gray-300">
-            Support the development
+            Find source with
+            <a class="link" href="https://saucenao.com/" target="_blank">
+              SauceNAO
+            </a>
           </p>
         </li>
       </ul>
