@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { DownloadIcon } from 'vue-feather-icons'
 import { ProxyHelper } from "~/assets/js/ProxyHelper";
 
@@ -46,6 +46,10 @@ export default {
   },
 
   methods: {
+    ...mapActions([
+      'errorManager'
+    ]),
+
     downloadBlobToDevice(blob, fileName) {
       const BLOB_OBJECT_URL = URL.createObjectURL(blob)
 
@@ -63,8 +67,7 @@ export default {
       URL.revokeObjectURL(BLOB_OBJECT_URL)
     },
 
-    async downloadMedia() {
-
+    async fetchUrlIntoBlob() {
       const PROXIED_MEDIA_URL = ProxyHelper.proxyUrl(this.mediaUrl);
 
       const RESPONSE = await this.$axios.get(PROXIED_MEDIA_URL, {
@@ -74,11 +77,28 @@ export default {
 
       const RESPONSE_BLOB = RESPONSE.data
 
-      const FILE_EXTENSION = RESPONSE.headers['content-type'].split('/')[1]
+      return { RESPONSE, RESPONSE_BLOB };
+    },
 
-      const FILE_NAME = this.mediaName + '.' + FILE_EXTENSION
+    async downloadMedia() {
+      try {
 
-      this.downloadBlobToDevice(RESPONSE_BLOB, FILE_NAME);
+        const { RESPONSE, RESPONSE_BLOB } = await this.fetchUrlIntoBlob();
+
+        const FILE_EXTENSION = RESPONSE.headers['content-type'].split('/')[1]
+
+        const FILE_NAME = this.mediaName + '.' + FILE_EXTENSION
+
+        this.downloadBlobToDevice(RESPONSE_BLOB, FILE_NAME);
+
+      } catch (error) {
+        
+        this.errorManager({
+          operation: 'set',
+          message: `Could not download post: "${ error.message }"`,
+        })
+      }
+
     },
   },
 }
