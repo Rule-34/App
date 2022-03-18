@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.9.0](https://github.com/Rule-34/App/compare/v2.8.5...v2.9.0) (2022-03-18)
+
+
+### Features
+
+* create "partners" page ([6b9ede3](https://github.com/Rule-34/App/commit/6b9ede316bc9bc611719d8b2e9d36a3d57019aa7))
+* download directly ([00a4875](https://github.com/Rule-34/App/commit/00a4875a8e8f3b5f2ebff08a15774404f34abca3))
+* **Post download:** manage errors ([52d3496](https://github.com/Rule-34/App/commit/52d3496c9f8dac88b53777021c9adeef5b37983a))
+* **Post download:** show progress ([2e2be99](https://github.com/Rule-34/App/commit/2e2be990969a45e58366b5eb540435646d301482))
+* **Posts:** create "Download" button ([57edf70](https://github.com/Rule-34/App/commit/57edf707eeecb271c63d55d62fdf8b805187575e))
+* **search:** disable auto capitalization ([0e853b7](https://github.com/Rule-34/App/commit/0e853b7e767228a8a0d451b32bb1ef1e9beb078f))
+
 ### [2.8.5](https://github.com/Rule-34/App/compare/v2.8.4...v2.8.5) (2022-03-06)
 
 
