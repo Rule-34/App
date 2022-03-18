@@ -206,6 +206,7 @@ import { mapGetters } from 'vuex'
 import { ExternalLinkIcon, TagIcon } from 'vue-feather-icons'
 import { Intersect } from 'vuetify/lib/directives/intersect'
 import { RouterHelper } from '~/assets/js/RouterHelper'
+import { ProxyHelper } from '~/assets/js/ProxyHelper'
 
 export default {
   components: { ExternalLinkIcon, TagIcon },
@@ -379,7 +380,7 @@ export default {
       else if (!this.media.retryLogic.tried.proxy) {
         console.info('Proxying media...')
 
-        event.target.src = this.addProxyToURL(this.mediaResolutionChooser.url)
+        event.target.src = ProxyHelper.proxyUrl(this.mediaResolutionChooser.url)
 
         if (this.isVideo) {
           console.info('Reloading data and playing video')
@@ -394,7 +395,7 @@ export default {
       else if (!this.media.retryLogic.tried.proxyWithExtraSlash) {
         console.info('Proxying media with extra slash...')
 
-        event.target.src = this.addProxyToURL(
+        event.target.src = ProxyHelper.proxyUrl(
           this.addExtraSlashToURL(this.mediaResolutionChooser.url)
         )
 
@@ -412,7 +413,7 @@ export default {
         this.media.retryLogic.count < this.getUserSettings.imgRetry.value
       ) {
         console.info(
-          `Retry number ${this.media.retryLogic.count} to load the media`
+          `Retry number ${ this.media.retryLogic.count } to load the media`
         )
 
         event.target.src = ''
@@ -449,10 +450,6 @@ export default {
 
         await this.$refs.videoElement.pause()
       }
-    },
-
-    addProxyToURL(url) {
-      return this.$config.PROXY_URL + encodeURIComponent(url)
     },
 
     addExtraSlashToURL(url) {
