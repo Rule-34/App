@@ -35,14 +35,19 @@ export const actions = {
       })
     }
 
-    const response = await this.$axios.$get(url, {
-      headers: {
-        'Authorization': this.$auth.strategy.token.get()
-      },
-      ...options
-    })
+    const response = await this.$axios.get(url, options)
 
     return response
+  },
+
+  async simpleApiFetch({ state, dispatch }, { url, options }) {
+    const AXIOS_OPTIONS = {
+      headers: {
+        'Authorization': this.$auth.strategy.token.get()
+      }
+    }
+
+    return await dispatch('simpleFetch', { url, options: { ...options, ...AXIOS_OPTIONS } })
   },
 
   errorManager({ commit, dispatch }, { operation, value, message }) {
