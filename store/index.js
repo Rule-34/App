@@ -35,7 +35,12 @@ export const actions = {
       })
     }
 
-    const response = await this.$axios.$get(url, options)
+    const response = await this.$axios.$get(url, {
+      headers: {
+        'Authorization': this.$auth.strategy.token.get()
+      },
+      ...options
+    })
 
     return response
   },
