@@ -125,13 +125,20 @@
             <div v-show="isActive">
               <!-- Action bar -->
               <div class="flex items-center bg-darkGray-100 justify-evenly">
-                <!-- Saucenao -->
+
+                <!-- Actions -->
                 <template v-if="!error.show">
+
+                  <!-- Saucenao -->
                   <template v-if="!isVideo">
-                    <PostSaucenao :media-url="mediaResolutionChooser.url" />
+                    <PostSaucenao :media-url="mediaResolutionChooser.url"/>
                   </template>
 
-                  <PostSavedPosts :post="post" />
+                  <!-- Download -->
+                  <PostDownload :media-name="post.id" :media-url="mediaResolutionChooser.url"/>
+
+                  <!-- Save post -->
+                  <PostSavedPosts :post="post"/>
                 </template>
               </div>
 
@@ -187,7 +194,7 @@
               </p>
 
               <!-- Icon -->
-              <ExternalLinkIcon class="w-5 h-5 icon" />
+              <ExternalLinkIcon class="w-5 h-5 icon"/>
             </a>
           </template>
 
