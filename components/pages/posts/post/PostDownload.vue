@@ -47,6 +47,7 @@ export default {
 
   methods: {
     ...mapActions([
+      'simpleFetch',
       'errorManager'
     ]),
 
@@ -70,10 +71,13 @@ export default {
     async fetchUrlIntoBlob() {
       const PROXIED_MEDIA_URL = ProxyHelper.proxyUrl(this.mediaUrl)
 
-      const RESPONSE = await this.$axios.get(PROXIED_MEDIA_URL, {
-        progress: true,
-        responseType: 'blob',
-      })
+      const RESPONSE = await this.simpleFetch({
+          url: PROXIED_MEDIA_URL,
+          options: {
+            responseType: 'blob',
+          }
+        }
+      )
 
       const RESPONSE_BLOB = RESPONSE.data
 
@@ -95,6 +99,7 @@ export default {
 
         this.errorManager({
           operation: 'set',
+          value: error,
           message: `Could not download post: "${ error.message }"`
         })
       }

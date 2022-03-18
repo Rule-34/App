@@ -52,7 +52,7 @@ export const actions = {
         { root: true }
       )
 
-      commit('setNotificationData', response)
+      commit('setNotificationData', response.data)
 
       //
     } catch (error) {
