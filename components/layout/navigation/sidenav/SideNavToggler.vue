@@ -21,14 +21,20 @@
     type="menu"
     @click="toggleSideNav"
   >
-    &nbsp;
+
+    <MenuIcon class="icon" />
   </button>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import { MenuIcon } from 'vue-feather-icons'
 
 export default {
+  components: {
+    MenuIcon
+  },
+
   methods: {
     ...mapActions('navigation', ['sideNavNavigationManager']),
 
