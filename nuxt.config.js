@@ -270,6 +270,8 @@ export default {
         // Axios
         'timeout of 0ms exceeded',
       ],
+
+      release: process.env.GIT_REV,
     },
   },
 
