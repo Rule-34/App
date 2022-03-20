@@ -197,9 +197,8 @@ export default {
       ],
     },
     meta: {
-      /* meta options */
-      ogHost: 'https://r34.app',
-      mobileAppIOS: true,
+      ogHost: `https://${ process.env.APP_DOMAIN }`,
+      mobileAppIOS: true
     },
     // Icon is automatically proccessed from static/icon.png
   },
@@ -276,7 +275,7 @@ export default {
   },
 
   sitemap: {
-    hostname: 'https://r34.app',
+    hostname: `https://${ process.env.APP_DOMAIN }`,
 
     defaults: {
       changefreq: 'daily',
