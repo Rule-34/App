@@ -1,4 +1,3 @@
-import PACKAGE_JSON from './package.json'
 import * as TAILWIND_CONFIG from './tailwind.config'
 
 export default {
@@ -222,15 +221,14 @@ export default {
     disableClientSide: false,
     disableServerSide: true,
 
+    // Publish options are set in `.sentryclirc` or as ENV variables
     publishRelease: true,
-    sourceMapStyle: 'hidden-source-map',
+    sourceMapStyle: 'source-map',
 
     config: {
-      sampleRate: 0.7,
+      sampleRate: 1,
 
-      release: PACKAGE_JSON.version,
-
-      whitelistUrls: ['r34.app', 'akbal.dev'],
+      allowUrls: [process.env.APP_DOMAIN],
 
       ignoreErrors: [
         // - Network -
