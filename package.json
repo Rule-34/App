@@ -43,6 +43,7 @@
     "@nuxt/types": "^2.15.8",
     "@nuxtjs/eslint-config": "^8.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
+    "@sentry/webpack-plugin": "^1.18.8",
     "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-nuxt": "^3.2.0",
