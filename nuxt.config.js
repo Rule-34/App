@@ -225,7 +225,7 @@ export default {
     sourceMapStyle: 'source-map',
 
     config: {
-      sampleRate: 1,
+      sampleRate: 0.5,
 
       allowUrls: [process.env.APP_DOMAIN],
 
