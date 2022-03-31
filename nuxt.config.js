@@ -229,6 +229,47 @@ export default {
 
       allowUrls: [process.env.APP_DOMAIN],
 
+      ignoreErrors: [
+        // - Network -
+        'Request failed with status code',
+        'Network Error',
+
+        // - Media -
+        'AbortError',
+        'Request aborted',
+        'webkitExitFullScreen',
+        'Picture-in-Picture',
+
+        // - Plugins -
+        'matomo',
+        'vue-matomo',
+
+        // - Misc -
+        'native code',
+        'extension',
+        'unknown module',
+        'NotAllowedError',
+        'Background Sync is disabled',
+        'ResizeObserver loop limit exceeded',
+
+        // Browser extensions
+        'instantSearchSDKJSBridgeClearHighlight',
+        'window.bannerNight',
+
+        // Matomo
+        'ao.sync',
+
+        // localForage
+        'Database',
+        'indexedDB',
+        'window.webkitStorageInfo',
+        'QuotaExceededError',
+        'Transaction timed out due to inactivity',
+
+        // Axios
+        'timeout of 0ms exceeded',
+      ],
+
       release: process.env.GIT_REV,
     },
   },
