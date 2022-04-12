@@ -3,7 +3,7 @@ import { RouterHelper } from '~/assets/js/RouterHelper'
 function isRouteNotCorrect(context) {
   // Fix: we use the query's data since Vuex has not been updated yet with the request data.
   const URL_DOMAIN = context.query.domain
-  const URL_PAGE = context.query.domain
+  const URL_PAGE = context.query.page
 
   return URL_DOMAIN == null || URL_PAGE == null
 }
