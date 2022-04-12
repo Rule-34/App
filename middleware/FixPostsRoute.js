@@ -5,7 +5,7 @@ function isRouteNotCorrect(context) {
   const URL_DOMAIN = context.query.domain
   const URL_PAGE = context.query.domain
 
-  return URL_DOMAIN === undefined || URL_PAGE === undefined
+  return URL_DOMAIN == null || URL_PAGE == null
 }
 
 function generateCorrectRoute(context) {

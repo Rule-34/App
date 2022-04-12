@@ -31,7 +31,7 @@ export const getters = {
     const domain = rootGetters['url/urlDomain']
 
     // Set default booru
-    if (domain === undefined) {
+    if (domain == null) {
       return findBoorusWithValueByKey(
         state.history.lastDomainUsed,
         'domain',
@@ -58,7 +58,7 @@ export const getters = {
     const pageID = rootGetters['url/urlPage']
 
     // Get default value
-    if (pageID === undefined) {
+    if (pageID == null) {
       return getters.getActiveBooruType.initialPageID
     }
 
@@ -69,7 +69,7 @@ export const getters = {
     const tags = rootGetters['url/urlTags']
 
     // Set default value
-    if (tags === undefined) {
+    if (tags == null) {
       return []
     }
 
