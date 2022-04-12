@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.9.4](https://github.com/Rule-34/App/compare/v2.9.3...v2.9.4) (2022-04-12)
+
+
+### Features
+
+* **Posts Controls:** add "minimumPage" prop and logic ([d4f3a00](https://github.com/Rule-34/App/commit/d4f3a00c35881afc0744bc3aae91e2c4df84f16e))
+
+
+### Bug Fixes
+
+* check for null or undefined ([a494777](https://github.com/Rule-34/App/commit/a494777e72254a1507eeba3ccaf099ae51d3495c))
+* use correct query ([ec4375b](https://github.com/Rule-34/App/commit/ec4375baf4f5a4ca39300e264adbf69f5b595627))
+
 ### [2.9.3](https://github.com/Rule-34/App/compare/v2.9.2...v2.9.3) (2022-03-20)
 
 
