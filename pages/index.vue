@@ -3,7 +3,7 @@
     class="flex flex-col max-w-3xl min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
   >
     <portal to="side-nav-area">
-      <SearchToggler :tag-count="getTags.length"/>
+      <SearchToggler :tag-count="getTags.length" />
     </portal>
 
     <portal to="search">
@@ -26,18 +26,18 @@
         @domainChange="onDomainChange"
       />
 
-      <Notifications/>
+      <Notifications />
     </nav>
 
     <!-- Content -->
     <main class="flex flex-col flex-auto min-h-full pb-4 space-y-4">
 
-      <ErrorManager/>
+      <ErrorManager />
 
       <ul class="flex-auto space-y-4">
         <template v-if="getPosts.length">
           <li v-for="POST in getPosts" :key="POST.id">
-            <Post :post="POST"/>
+            <Post :post="POST" />
           </li>
         </template>
 
@@ -48,7 +48,11 @@
         </template>
       </ul>
 
-      <PostsControls :current-page="getPageID" @setPage="onPageChange"/>
+      <PostsControls
+        :current-page="getPageID"
+        :minimum-page="getActiveBooruType.initialPageID"
+        @setPage="onPageChange"
+      />
     </main>
   </div>
 </template>
@@ -100,6 +104,7 @@ export default {
   computed: {
     ...mapGetters('booru', [
       'getActiveBooru',
+      'getActiveBooruType',
       'getDefaultBooruList',
       'getPremiumBooruList',
       'getPosts',
