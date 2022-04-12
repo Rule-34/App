@@ -17,7 +17,7 @@
     "release:publish": "git push --follow-tags origin main"
   },
   "dependencies": {
-    "@nuxtjs/auth-next": "5.0.0-1647967358.de1bb0f",
+    "@nuxtjs/auth-next": "5.0.0-1648802546.c9880dc",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/localforage": "^1.1.0",
     "@nuxtjs/pwa": "^3.3.5",
@@ -42,14 +42,14 @@
     "@babel/eslint-parser": "^7.17.0",
     "@nuxt/types": "^2.15.8",
     "@nuxtjs/eslint-config": "^8.0.0",
-    "@nuxtjs/eslint-module": "^3.0.2",
+    "@nuxtjs/eslint-module": "^3.1.0",
     "@sentry/webpack-plugin": "^1.18.8",
-    "eslint": "^8.12.0",
+    "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-nuxt": "^3.2.0",
-    "eslint-plugin-vue": "^8.5.0",
+    "eslint-plugin-vue": "^8.6.0",
     "postcss": "^8.4.12",
-    "prettier": "^2.6.1",
+    "prettier": "^2.6.2",
     "standard-version": "^9.3.2"
   }
 }
