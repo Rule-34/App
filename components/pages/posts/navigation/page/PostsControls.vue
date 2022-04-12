@@ -26,7 +26,7 @@
             class="link"
             title="Load specific page"
             type="button"
-            @click="getSpecificPage"
+            @click="setSpecificPage"
           >
             {{ currentPage }}
           </button>
@@ -92,6 +92,11 @@ export default {
       required: true,
     },
 
+    minimumPage: {
+      type: Number,
+      required: true,
+    },
+
     forceNormalControls: {
       type: Boolean,
       default: false,
@@ -104,14 +109,14 @@ export default {
 
   methods: {
     getNextPage() {
-      this.$emit('setPage', this.currentPage + 1)
+      this.setPage(this.currentPage + 1)
     },
 
     getPrevPage() {
-      this.$emit('setPage', this.currentPage - 1)
+      this.setPage(this.currentPage - 1)
     },
 
-    getSpecificPage() {
+    setSpecificPage() {
       const specificPage = Number.parseInt(
         prompt('What page do you want to go to?'),
         10
@@ -122,7 +127,19 @@ export default {
         return
       }
 
-      this.$emit('setPage', specificPage)
+      this.setPage(specificPage)
+    },
+
+    isBelowMinimumPage(page) {
+      return page < this.minimumPage
+    },
+
+    setPage(page) {
+      if (this.isBelowMinimumPage(page)) {
+        return
+      }
+
+      this.$emit('setPage', page)
     },
 
     InfiniteLoadHandler(entries, observer) {
