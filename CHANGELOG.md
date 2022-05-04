@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.9.5](https://github.com/Rule-34/App/compare/v2.9.4...v2.9.5) (2022-05-04)
+
+
+### Features
+
+* improve SEO ([77fd28d](https://github.com/Rule-34/App/commit/77fd28d65ee5ba22e6c744b0a3f069ecb09bdc33))
+
 ### [2.9.4](https://github.com/Rule-34/App/compare/v2.9.3...v2.9.4) (2022-04-12)
 
 
