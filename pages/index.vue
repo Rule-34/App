@@ -59,6 +59,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { capitalize } from 'lodash-es'
 
 // Mixins
 import FetchPostsMixin from '~/components/pages/posts/post/FetchPostsMixin.js'
@@ -86,15 +87,17 @@ export default {
       ],
     }
 
-    const tags = this.getTags.join(', ')
+    let tags = this.getTags.join(', ')
+
+    tags = capitalize(tags)
 
     if (tags) {
-      head.title = tags
+      head.title = tags + ' Hentai Porn'
 
       head.meta.push({
         hid: 'description',
         name: 'description',
-        content: `Browse Rule 34 ${ tags } hentai porn from ${ this.getActiveBooru.domain }.`,
+        content: `Browse popular Rule 34 ${ tags } Hentai Porn for free.`,
       })
     }
 

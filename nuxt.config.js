@@ -28,7 +28,7 @@ export default {
     title: null,
 
     titleTemplate: (titleChunk) => {
-      return titleChunk ? `${ titleChunk } | Rule 34 App` : 'Rule 34 App'
+      return titleChunk ? `${ titleChunk } | Rule 34 App` : 'Rule 34 App – Popular Hentai Porn'
     },
 
     htmlAttrs: {
@@ -42,7 +42,8 @@ export default {
         hid: 'description',
         name: 'description',
         content:
-          'Browse the most popular Rule 34 Hentai porn with the Rule 34 App.',
+          'Browse popular Rule 34 Hentai Porn for free without ads.' +
+          ' We have Anime, Pokemon, Fortnite, Naruto, FNF, FNAF, CountryHumans, Brawl Stars, Gay, Video…'
       },
       {
         name: 'monetization',
