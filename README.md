@@ -1,12 +1,6 @@
 # Rule 34 App
 
-A Progressive Web App to browse the most popular Rule 34 Hentai Porn.
-
-[![Netlify Status](https://api.netlify.com/api/v1/badges/703629e2-193f-4bb0-9349-f02a22d50ed1/deploy-status)](https://app.netlify.com/sites/rule34-app/deploys)
-
-## Screenshots
-
-![Posts](https://i.imgur.com/uOiZbXw_d.png?maxwidth=400&fidelity=high) ![Search](https://i.imgur.com/DmsT5TA_d.png?maxwidth=400&fidelity=high)
+A Progressive Web App to browse popular Rule 34 Hentai Porn for free without ads.
 
 ## Usage
 
@@ -14,6 +8,10 @@ Use the following link to use it on any device that has a _modern_ internet brow
 _This includes Android, iOS and most consoles like the PS4 And Xbox One._
 
 **[✨ https://r34.app ✨](https://r34.app/?utm_source=Reddit&utm_medium=New_Post)**
+
+## Screenshots
+
+![Posts](https://i.imgur.com/uOiZbXw_d.png?maxwidth=400&fidelity=high) ![Search](https://i.imgur.com/DmsT5TA_d.png?maxwidth=400&fidelity=high)
 
 ## Information
 
