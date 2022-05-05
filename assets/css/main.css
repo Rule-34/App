@@ -79,6 +79,30 @@
   /* #endregion */
 }
 
+/* ===== CSS that will not be purged ===== */
+
+/* #region Toast theme */
+
+.toasted-container {
+  @apply gap-3 bg-black backdrop-blur sm:bg-transparent sm:backdrop-filter-none bg-opacity-75;
+}
+
+.toasted-custom-theme {
+  @apply text-white bg-darkGray-300 border-2 border-b-4 sm:border-2 border-darkGray-100 border-b-accent-300 sm:gap-2;
+
+  @apply px-4 py-2 sm:rounded-lg !important;
+}
+
+.toasted-custom-theme .error {
+  @apply border-red-500 !important;
+}
+
+.toasted-custom-action {
+  @apply bg-darkGray-100 border-0 rounded-full m-0 px-2 py-1 focus:focus-util !important;
+}
+
+/* #endregion */
+
 /* #region Transitions and animations */
 
 .nuxt-link-exact-active {

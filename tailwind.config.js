@@ -2,7 +2,12 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 const defaultColors = require('tailwindcss/colors')
 
 module.exports = {
-  safelist: ['nuxt-link-exact-active'],
+  safelist: [
+    'nuxt-link-exact-active',
+    'toasted-container',
+    'toasted-custom-theme',
+    'toasted-custom-action',
+  ],
 
   theme: {
     extend: {
@@ -25,7 +30,7 @@ module.exports = {
 
           700: 'hsl(0, 0%, 7%)', // Background
         },
-        
+
         ...defaultColors,
       },
 
