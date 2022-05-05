@@ -1,6 +1,6 @@
 # Rule 34 App
 
-A Progressive Web App to browse popular Rule 34 Hentai Porn for free without ads.
+A Progressive Web App to browse popular Rule 34 Hentai Porn for free. Without ads.
 
 ## Usage
 
