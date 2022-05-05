@@ -25,8 +25,6 @@ module.exports = {
 
           700: 'hsl(0, 0%, 7%)', // Background
         },
-
-        ...defaultColors,
       },
 
       maxHeight: {

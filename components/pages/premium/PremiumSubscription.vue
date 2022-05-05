@@ -31,7 +31,7 @@
       <ul>
         <!--  -->
         <li class="flex items-start">
-          <div class="flex-shrink-0">
+          <div class="shrink-0">
             <check-icon class="w-6 h-6 icon text-accent-400" />
           </div>
           <NuxtLink
@@ -44,7 +44,7 @@
 
         <!--  -->
         <li class="flex items-start mt-4">
-          <div class="flex-shrink-0">
+          <div class="shrink-0">
             <check-icon class="w-6 h-6 icon text-accent-400" />
           </div>
           <NuxtLink
@@ -57,7 +57,7 @@
 
         <!--  -->
         <li class="flex items-start mt-4">
-          <div class="flex-shrink-0">
+          <div class="shrink-0">
             <check-icon class="w-6 h-6 icon text-accent-400" />
           </div>
           <NuxtLink
@@ -70,7 +70,7 @@
 
         <!--  -->
         <li class="flex items-start mt-4">
-          <div class="flex-shrink-0">
+          <div class="shrink-0">
             <check-icon class="w-6 h-6 icon text-accent-400" />
           </div>
           <p class="ml-3 text-base font-medium leading-6 text-gray-300">
@@ -80,7 +80,7 @@
 
         <!--  -->
         <li class="flex items-start mt-4">
-          <div class="flex-shrink-0">
+          <div class="shrink-0">
             <check-icon class="w-6 h-6 icon text-accent-400" />
           </div>
           <p class="ml-3 text-base font-medium leading-6 text-gray-300">

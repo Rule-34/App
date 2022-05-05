@@ -3,7 +3,7 @@
     <!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
     <button
       type="button"
-      class="relative inline-flex flex-shrink-0 w-16 h-6 transition-colors duration-200 border-2 rounded-full cursor-pointer border-darkGray-100 focus:focus-util"
+      class="relative inline-flex shrink-0 w-16 h-6 transition-colors duration-200 border-2 rounded-full cursor-pointer border-darkGray-100 focus:focus-util"
       :class="[settingData.value ? 'bg-primary-500' : 'bg-darkGray-700']"
       :aria-pressed="settingData.value"
       :aria-labelledby="settingName"
@@ -24,7 +24,7 @@
       ></span>
     </button>
 
-    <span class="ml-3" :id="settingName">
+    <span :id="settingName" class="ml-3">
       <span class="text-sm text-gray-300">
         {{ settingData.name }}
       </span>

@@ -12,7 +12,7 @@
         <input
           id="license-key"
           v-model="login.password"
-          class="flex-grow block w-10/12 p-2 text-sm font-light text-gray-300 outline-none appearance-none focus:focus-util material-container bg-darkGray-700 border-darkGray-100"
+          class="grow block w-10/12 p-2 text-sm font-light text-gray-300 outline-none appearance-none focus:focus-util material-container bg-darkGray-700 border-darkGray-100"
           placeholder="XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX"
           type="text"
           name="license-key"
