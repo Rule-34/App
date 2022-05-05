@@ -42,7 +42,7 @@ export default {
         hid: 'description',
         name: 'description',
         content:
-          'Browse popular Rule 34 Hentai Porn for free without ads.' +
+          'Browse popular Rule 34 Hentai Porn for free. Without ads.' +
           ' We have Anime, Pokemon, Fortnite, Naruto, FNF, FNAF, CountryHumans, Brawl Stars, Gay, Video…'
       },
       {

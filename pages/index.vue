@@ -94,7 +94,7 @@ export default {
       head.meta.push({
         hid: 'description',
         name: 'description',
-        content: `Browse popular Rule 34 ${ tags } Hentai Porn for free.`,
+        content: `Browse popular Rule 34 ${ tags } Hentai Porn for free. Without ads.`,
       })
     }
 
