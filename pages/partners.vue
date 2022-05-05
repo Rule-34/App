@@ -1,7 +1,7 @@
 <template>
   <main class="max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
     <div class="space-y-4">
-      <ContentSeparator text="Friends of the Rule 34 App" title="Partners"/>
+      <ContentSeparator text="Friends of the Rule 34 App" title="Partners" />
 
       <ContentContainer
         :links="[

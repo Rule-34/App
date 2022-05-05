@@ -311,15 +311,8 @@ export const actions = {
 
       //
     } catch (error) {
-      dispatch(
-        'errorManager',
-        {
-          operation: 'set',
-          value: error,
-          message: 'Could not fetch posts.',
-        },
-        { root: true }
-      )
+
+      this.$toast.error(`Could not fetch posts: "${ error.message }"`)
     }
   },
 
@@ -350,15 +343,8 @@ export const actions = {
 
       //
     } catch (error) {
-      dispatch(
-        'errorManager',
-        {
-          operation: 'set',
-          value: error,
-          message: 'Could not fetch search tags.',
-        },
-        { root: true }
-      )
+      
+      this.$toast.error(`Could not search tags: "${ error.message }"`)
     }
   },
 }

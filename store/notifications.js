@@ -56,15 +56,8 @@ export const actions = {
 
       //
     } catch (error) {
-      dispatch(
-        'errorManager',
-        {
-          operation: 'set',
-          value: error,
-          message: 'Could not fetch notifications.',
-        },
-        { root: true }
-      )
+
+      this.$toast.error('Could not fetch notifications', { duration: 3500 })
     }
   },
 }
