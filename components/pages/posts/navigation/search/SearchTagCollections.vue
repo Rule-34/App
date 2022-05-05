@@ -31,8 +31,8 @@
       >
         <div class="text-center">
           <h3
-            class="text-lg font-medium leading-6 text-accent-400"
             id="tag-collections-title"
+            class="text-lg font-medium leading-6 text-accent-400"
           >
             Tag Collections
           </h3>
@@ -48,9 +48,9 @@
               <!--  -->
 
               <li
-                class="px-2 py-1 text-left border-util focus-within:focus-util group"
                 v-for="(tagCollection, index) in getTagCollections"
                 :key="tagCollection.name"
+                class="px-2 py-1 text-left border-util focus-within:focus-util group"
               >
                 <!--  -->
 
@@ -66,7 +66,7 @@
                   </span>
 
                   <span
-                    class="flex-shrink-0 text-primary-500 group-hover:text-primary-400"
+                    class="shrink-0 text-primary-500 group-hover:text-primary-400"
                   >
                     {{ tagCollection.tags.length }}
 
@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { TagIcon } from 'vue-feather-icons'
 
 export default {

@@ -54,7 +54,7 @@
 
         <!-- Custom Tag Collections  -->
         <div class="flex flex-row items-center p-4 material-container">
-          <div class="flex-grow">
+          <div class="grow">
             <h1 class="text-lg font-medium text-gray-200">Tag Collections</h1>
             <p class="text-gray-300">Manage your collections of tags</p>
           </div>
@@ -69,7 +69,7 @@
 
         <!-- Saved Posts  -->
         <div class="flex flex-row items-center p-4 material-container">
-          <div class="flex-grow">
+          <div class="grow">
             <h1 class="text-lg font-medium text-gray-200">Saved Posts</h1>
             <p class="text-gray-300">Manage your saved posts</p>
           </div>
@@ -83,7 +83,7 @@
         </div>
 
         <!-- Spacer -->
-        <div class="flex-grow" />
+        <div class="grow" />
 
         <!-- Notice -->
         <p class="text-sm text-center text-gray-300">
