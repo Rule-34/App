@@ -7,7 +7,7 @@ export class SeoHelper {
   static tagArrayToTitle(tags) {
 
     if (!tags) {
-      return undefined;
+      return null;
     }
 
     const CAPITALIZED_TAGS = tags
@@ -18,6 +18,11 @@ export class SeoHelper {
   }
 
   static normalizeStringForTitle(title) {
+
+    if (!title) {
+      return null;
+    }
+
     title = title.trim()
 
     // Replace underscores with spaces
