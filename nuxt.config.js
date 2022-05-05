@@ -115,6 +115,7 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/sentry',
     '@nuxtjs/sitemap',
+    '@nuxtjs/toast'
   ],
 
   axios: {
@@ -294,6 +295,27 @@ export default {
       { url: '/terms-of-service', priority: 0.2 },
     ],
   },
+
+  toast: {
+    position: 'top-right',
+
+    duration: 5000,
+
+    keepOnHover: true,
+
+    action: {
+      text: 'Close',
+
+
+      onClick: (e, toastObject) => {
+        toastObject.goAway(0);
+      }
+    },
+
+
+    closeOnSwipe: true,
+  },
+
 
   build: {
     extractCSS: true,
