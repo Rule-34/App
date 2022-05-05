@@ -57,10 +57,10 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { capitalize } from 'lodash-es'
 
 // Mixins
 import FetchPostsMixin from '~/components/pages/posts/post/FetchPostsMixin.js'
+import { SeoHelper } from "~/assets/js/SeoHelper";
 
 export default {
   mixins: [FetchPostsMixin],
@@ -85,9 +85,8 @@ export default {
       ],
     }
 
-    let tags = this.getTags.join(', ')
-
-    tags = capitalize(tags)
+    // Join array of tags into a comma separated string
+    const tags = SeoHelper.tagArrayToTitle(this.getTags)
 
     if (tags) {
       head.title = tags + ' Hentai Porn'
