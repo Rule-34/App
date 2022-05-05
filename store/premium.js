@@ -33,15 +33,8 @@ export const actions = {
 
       //
     } catch (error) {
-      dispatch(
-        'errorManager',
-        {
-          operation: 'set',
-          value: error,
-          message: 'Could not authenticate.',
-        },
-        { root: true }
-      )
+
+      this.$toast.error(`Could not authenticate: "${ error.message }"`)
     }
   },
 }

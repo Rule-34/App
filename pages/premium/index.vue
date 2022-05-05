@@ -98,8 +98,6 @@
     <template v-else>
       <div class="flex flex-col flex-auto w-full justify-evenly">
         <!-- Log In -->
-        <ErrorManager />
-
         <PremiumLogin />
 
         <!-- Separator -->

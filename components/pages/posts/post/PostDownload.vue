@@ -47,8 +47,7 @@ export default {
 
   methods: {
     ...mapActions([
-      'simpleFetch',
-      'errorManager'
+      'simpleFetch'
     ]),
 
     downloadBlobToDevice(blob, fileName) {
@@ -97,11 +96,7 @@ export default {
 
       } catch (error) {
 
-        this.errorManager({
-          operation: 'set',
-          value: error,
-          message: `Could not download post: "${ error.message }"`
-        })
+        this.$toast.error(`Could not download post: "${ error.message }"`)
       }
 
     }
