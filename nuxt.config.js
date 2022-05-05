@@ -306,12 +306,14 @@ export default {
     action: {
       text: 'Close',
 
+      class: 'toasted-custom-action',
 
       onClick: (e, toastObject) => {
         toastObject.goAway(0);
       }
     },
 
+    theme: 'toasted-custom-theme',
 
     closeOnSwipe: true,
   },
