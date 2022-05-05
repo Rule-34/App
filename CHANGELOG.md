@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.10.1](https://github.com/Rule-34/App/compare/v2.9.4...v2.10.1) (2022-05-05)
+
+
+### Features
+
+* configure nuxt toast ([4be2078](https://github.com/Rule-34/App/commit/4be20780d801e83caffd0aad52a28b96d0491bab))
+* create theme for nuxt toast ([84dcb94](https://github.com/Rule-34/App/commit/84dcb949707e525d88077476abd0f499d2afcf43))
+* improve SEO ([77fd28d](https://github.com/Rule-34/App/commit/77fd28d65ee5ba22e6c744b0a3f069ecb09bdc33))
+* improve tags in title ([bba6e5d](https://github.com/Rule-34/App/commit/bba6e5df96527120efd8984cfdaa13c276af9a12))
+
+
+### Bug Fixes
+
+* breaking changes from deps ([658484b](https://github.com/Rule-34/App/commit/658484b211a79dd9bad36743e52d051404e6d597))
+* **Tailwind:** revert back code as its needed ([a90d6a9](https://github.com/Rule-34/App/commit/a90d6a9eb4cf7d42d9184bcb46ab5e63fbc3e2b9))
+
 ## [2.10.0](https://github.com/Rule-34/App/compare/v2.9.4...v2.10.0) (2022-05-05)
 
 
