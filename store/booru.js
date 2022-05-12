@@ -99,6 +99,19 @@ export const actions = {
           getters.getBooruList
         )[0]
 
+        if (booru == null) {
+          this.$sentry.captureException(
+            new Error(`Could not find booru with domain: ${ value }`),
+            {
+              extra: {
+                domain: value,
+                booruList: getters.getBooruList,
+              },
+            }
+          )
+          return
+        }
+
         commit('setLastDomainUsed', booru.domain)
 
         const ROUTE = RouterHelper.generatePostsRouteWithDefaults(
@@ -343,7 +356,7 @@ export const actions = {
 
       //
     } catch (error) {
-      
+
       this.$toast.error(`Could not search tags: "${ error.message }"`)
     }
   },
