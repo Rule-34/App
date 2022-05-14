@@ -62,6 +62,11 @@ export default {
 
   methods: {
     emitDomainChange(event) {
+      if (!event.target.value) {
+        console.debug('No domain selected')
+        return
+      }
+
       const DOMAIN = event.target.value
 
       this.$emit('domainChange', DOMAIN)
