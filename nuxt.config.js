@@ -227,7 +227,7 @@ export default {
     sourceMapStyle: 'source-map',
 
     config: {
-      sampleRate: 0.5,
+      sampleRate: process.env.SENTRY_SAMPLE_RATE || 1,
 
       allowUrls: [process.env.APP_DOMAIN],
 
@@ -272,6 +272,7 @@ export default {
         'timeout of 0ms exceeded',
       ],
 
+      // Dokku automatic env variable
       release: process.env.GIT_REV,
     },
   },
