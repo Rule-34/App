@@ -6,6 +6,18 @@
       <ContentContainer
         :links="[
           {
+            text: 'hentaiporn.app',
+            href: 'https://hentaiporn.app/?utm_source=Rule34App&utm_medium=Partners',
+          },
+        ]"
+        icon="bg-svg-star"
+        text="Sister site of the Rule 34 App, high quality hentai."
+        title="HentaiPorn App"
+      />
+
+      <ContentContainer
+        :links="[
+          {
             text: 'theporndude.com',
             href: 'https://theporndude.com',
           },
