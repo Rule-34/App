@@ -88,7 +88,7 @@
         <!-- Notice -->
         <p class="text-sm text-center text-gray-300">
           Manage your subscription on
-          <a href="https://gumroad.com/library" target="_blank" class="link">
+          <a href="https://gumroad.com/library" target="_blank" rel="noopener nofollow" class="link">
             Gumroad</a
           >.
         </p>

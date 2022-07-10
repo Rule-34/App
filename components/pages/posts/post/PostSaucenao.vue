@@ -4,6 +4,7 @@
       <a
         :href="`https://saucenao.com/search.php?url=${mediaUrl}`"
         target="_blank"
+        rel="noopener nofollow"
         class="flex items-center gap-2 my-2 link"
       >
         <span class="sr-only"> Search source of the post via SauceNAO </span>

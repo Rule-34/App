@@ -188,6 +188,7 @@
               :href="post.data.source[0]"
               class="inline-flex gap-2 link"
               target="_blank"
+              rel="noopener nofollow"
             >
               <p class="link">
                 {{ sourceText }}
