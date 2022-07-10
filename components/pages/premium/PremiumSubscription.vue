@@ -85,8 +85,12 @@
           </div>
           <p class="ml-3 text-base font-medium leading-6 text-gray-300">
             Find source with
-            <a class="link" href="https://saucenao.com/" target="_blank">
-              SauceNAO
+            <a
+              class="link"
+              href="https://saucenao.com/"
+              target="_blank"
+              rel="noopener nofollow">
+                SauceNAO
             </a>
           </p>
         </li>
@@ -97,6 +101,7 @@
           class="block w-full px-6 py-3 text-lg font-medium leading-6 text-center text-black transition border-0 rounded-lg bg-gradient-to-r from-accent-400 to-primary-400 focus:focus-util hover:text-gray-800"
           href="https://gum.co/Rule34App"
           target="_blank"
+          rel="noopener nofollow"
         >
           Subscribe
         </a>

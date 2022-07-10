@@ -65,6 +65,8 @@
             <a
               class="flex transition-transform duration-300 transform link hover:scale-110"
               href="https://redirect.r34.app/discord"
+              target="_blank"
+              rel="noopener nofollow"
             >
               <svg
                 class="w-6 h-6 mr-1 icon"
@@ -95,6 +97,8 @@
             <a
               class="flex transition-transform duration-300 transform link hover:scale-110"
               href="https://redirect.r34.app/twitter"
+              target="_blank"
+              rel="noopener nofollow"
             >
               <svg
                 class="w-6 h-6 mr-1 icon"
