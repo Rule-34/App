@@ -67,6 +67,10 @@
       </div>
     </main>
 
+    <span class='block text-xs text-gray-300 py-4'>
+      v{{ app_version }}
+    </span>
+
     <footer class="absolute inset-x-0 bottom-0 p-2 text-center">
       <NuxtLink to="/usage" class="text-sm link"> What does X do? </NuxtLink>
     </footer>
@@ -75,6 +79,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { version } from '~/package.json'
 
 export default {
   head() {
@@ -88,6 +93,10 @@ export default {
         },
       ],
     }
+  },
+
+  data() {
+    return { app_version: version }
   },
 
   computed: {
