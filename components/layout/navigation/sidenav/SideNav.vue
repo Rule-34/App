@@ -26,7 +26,7 @@
           class="absolute bottom-0 left-0 p-3 transition-colors duration-300 link"
         >
           <h1 class="text-lg font-semibold">Rule 34 App</h1>
-          <h3>Browse the most popular Boorus</h3>
+          <h3>Browse popular Hentai</h3>
         </div>
       </div>
 
