@@ -11,7 +11,7 @@
           },
         ]"
         icon="bg-svg-star"
-        text="Sister site of the Rule 34 App, high quality hentai."
+        text="Sister site of the Rule 34 App, has the best high quality Hentai."
         title="HentaiPorn App"
       />
 
