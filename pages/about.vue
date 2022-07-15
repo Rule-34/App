@@ -16,6 +16,18 @@
         You can find more info in the documentation website."
         title="Description"
       />
+
+      <ContentContainer
+        :links="[
+          {
+            text: 'Go to the Rule 34 App\'s Hentai',
+            href: '/',
+          },
+        ]"
+        icon='bg-svg-info'
+        text='This page is ranking first in search engines for some reason, if you are looking for the Hentai, click the link below.'
+        title='🔥 Hentai 🔥'
+      />
     </div>
   </main>
 </template>
