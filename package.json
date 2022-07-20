@@ -13,6 +13,7 @@
     "build": "npm run generate",
     "generate": "nuxt generate --modern",
     "analyze": "nuxt build --analyze",
+    "test": "jest",
     "release": "standard-version",
     "release:publish": "git push --follow-tags origin main"
   },
@@ -42,6 +43,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.18.9",
     "@nuxt/types": "^2.15.8",
+    "@nuxt/test-utils": "^0.2.2",
     "@nuxtjs/eslint-config": "^10.0.0",
     "@nuxtjs/eslint-module": "^3.1.0",
     "@sentry/webpack-plugin": "^1.18.9",
@@ -49,6 +51,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-nuxt": "^3.2.0",
     "eslint-plugin-vue": "^9.2.0",
+    "jest": "^28.1.3",
     "postcss": "^8.4.14",
     "prettier": "^2.7.1",
     "standard-version": "^9.5.0"
