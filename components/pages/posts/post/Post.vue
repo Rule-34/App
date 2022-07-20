@@ -118,7 +118,7 @@
 
     <figcaption class="flex flex-wrap overflow-hidden text-sm">
       <!-- Action bar & Tags -->
-      <template v-if="post.data.tags.length">
+      <template>
         <div class="w-full overflow-hidden">
           <TransitionCollapse>
             <!-- Workaround for content not jumping is having a div before -->
@@ -131,20 +131,147 @@
 
                   <!-- Saucenao -->
                   <template v-if="!isVideo">
-                    <PostSaucenao :media-url="mediaResolutionChooser.url"/>
+                    <PostSaucenao :media-url="mediaResolutionChooser.url" />
                   </template>
 
                   <!-- Download -->
-                  <PostDownload :media-name="post.id" :media-url="mediaResolutionChooser.url"/>
+                  <PostDownload :media-name="post.id" :media-url="mediaResolutionChooser.url" />
 
                   <!-- Save post -->
-                  <PostSavedPosts :post="post"/>
+                  <PostSavedPosts :post="post" />
                 </template>
               </div>
 
               <!-- Tags -->
               <div class="min-w-full tag-container">
-                <template v-for="tag in post.data.tags">
+                <!-- -->
+
+                <!-- Character tags -->
+                <template v-for="tag in post.data.tags.character">
+                  <template v-if="eventOnly">
+                    <button
+                      :key="tag"
+                      class="tag link"
+                      type="button"
+                      @click="emitTagSelected(tag)"
+                    >
+                      {{ tag }}
+                    </button>
+                  </template>
+
+                  <template v-else>
+                    <NuxtLink
+                      :key="tag"
+                      :to="
+                        generatePostsRouteWithDefaults(
+                          $nuxt.$store,
+                          undefined,
+                          undefined,
+                          [tag]
+                        )
+                      "
+                      class="tag link"
+                    >
+                      {{ tag }}
+                    </NuxtLink>
+                  </template>
+                </template>
+
+                <!-- Copyright tags -->
+                <template v-for="tag in post.data.tags.copyright">
+                  <template v-if="eventOnly">
+                    <button
+                      :key="tag"
+                      class="tag link"
+                      type="button"
+                      @click="emitTagSelected(tag)"
+                    >
+                      {{ tag }}
+                    </button>
+                  </template>
+
+                  <template v-else>
+                    <NuxtLink
+                      :key="tag"
+                      :to="
+                        generatePostsRouteWithDefaults(
+                          $nuxt.$store,
+                          undefined,
+                          undefined,
+                          [tag]
+                        )
+                      "
+                      class="tag link"
+                    >
+                      {{ tag }}
+                    </NuxtLink>
+                  </template>
+                </template>
+
+                <!-- Artist tags -->
+                <template v-for="tag in post.data.tags.artist">
+                  <template v-if="eventOnly">
+                    <button
+                      :key="tag"
+                      class="tag link"
+                      type="button"
+                      @click="emitTagSelected(tag)"
+                    >
+                      {{ tag }}
+                    </button>
+                  </template>
+
+                  <template v-else>
+                    <NuxtLink
+                      :key="tag"
+                      :to="
+                        generatePostsRouteWithDefaults(
+                          $nuxt.$store,
+                          undefined,
+                          undefined,
+                          [tag]
+                        )
+                      "
+                      class="tag link"
+                    >
+                      {{ tag }}
+                    </NuxtLink>
+                  </template>
+                </template>
+
+                <!-- General tags -->
+                <template v-for="tag in post.data.tags.general">
+                  <template v-if="eventOnly">
+                    <button
+                      :key="tag"
+                      class="tag link"
+                      type="button"
+                      @click="emitTagSelected(tag)"
+                    >
+                      {{ tag }}
+                    </button>
+                  </template>
+
+                  <template v-else>
+                    <NuxtLink
+                      :key="tag"
+                      :to="
+                        generatePostsRouteWithDefaults(
+                          $nuxt.$store,
+                          undefined,
+                          undefined,
+                          [tag]
+                        )
+                      "
+                      class="tag link"
+                    >
+                      {{ tag }}
+                    </NuxtLink>
+                  </template>
+                </template>
+
+                <!-- Meta tags -->
+                <template v-for="tag in post.data.tags.meta">
                   <template v-if="eventOnly">
                     <button
                       :key="tag"
@@ -180,22 +307,22 @@
       </template>
 
       <!-- Source -->
-      <template v-if="post.data.source.length">
+      <template v-if="post.data.sources.length">
         <div class="w-full p-1 text-center">
           <template v-if="isUrl">
             <!-- If text is an Url then make it linkable -->
             <a
-              :href="post.data.source[0]"
+              :href="post.data.sources[0]"
               class="inline-flex gap-2 link"
-              target="_blank"
               rel="noopener nofollow"
+              target="_blank"
             >
               <p class="link">
                 {{ sourceText }}
               </p>
 
               <!-- Icon -->
-              <ExternalLinkIcon class="w-5 h-5 icon"/>
+              <ExternalLinkIcon class="w-5 h-5 icon" />
             </a>
           </template>
 
@@ -220,19 +347,19 @@ export default {
   components: { ExternalLinkIcon, TagIcon },
 
   directives: {
-    Intersect,
+    Intersect
   },
 
   props: {
     post: {
       type: Object,
-      required: true,
+      required: true
     },
 
     eventOnly: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
 
   data() {
@@ -248,15 +375,15 @@ export default {
           tried: {
             extraSlash: false,
             proxy: false,
-            proxyWithExtraSlash: false,
-          },
-        },
+            proxyWithExtraSlash: false
+          }
+        }
       },
 
       error: {
         show: false,
-        message: 'An error ocurred.',
-      },
+        message: 'An error ocurred.'
+      }
     }
   },
 
@@ -294,14 +421,14 @@ export default {
 
     // #region Post media
     isUrl() {
-      if (!this.post.data.source.length) {
+      if (!this.post.data.sources.length) {
         return false
       }
 
       let sourceUrl
 
       try {
-        sourceUrl = new URL(this.post.data.source[0])
+        sourceUrl = new URL(this.post.data.sources[0])
       } catch {
         return false
       }
@@ -310,17 +437,17 @@ export default {
     },
 
     sourceText() {
-      if (!this.post.data.source.length) {
+      if (!this.post.data.sources.length) {
         return null
       }
 
       if (this.isUrl) {
-        return new URL(this.post.data.source[0]).hostname
+        return new URL(this.post.data.sources[0]).hostname
       }
 
       // Return the entire source as it's text
-      return this.post.data.source[0]
-    },
+      return this.post.data.sources[0]
+    }
     // #endregion
   },
 
@@ -471,8 +598,8 @@ export default {
       return currentURL
         .toString()
         .replace(currentURL.hostname, currentURL.hostname + '/')
-    },
+    }
     // #endregion
-  },
+  }
 }
 </script>
