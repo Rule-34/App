@@ -1,4 +1,6 @@
 export const state = () => ({
+  version: 0,
+
   statistics: {
     timesTheAppHasBeenOpened: 0,
   },
@@ -26,10 +28,13 @@ export const actions = {
   async simpleApiFetch({ state, dispatch }, { url, options }) {
     const AXIOS_OPTIONS = {
       headers: {
-        'Authorization': this.$auth.strategy.token.get()
-      }
+        Authorization: this.$auth.strategy.token.get(),
+      },
     }
 
-    return await dispatch('simpleFetch', { url, options: { ...options, ...AXIOS_OPTIONS } })
+    return await dispatch('simpleFetch', {
+      url,
+      options: { ...options, ...AXIOS_OPTIONS },
+    })
   },
 }
