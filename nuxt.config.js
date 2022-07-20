@@ -28,7 +28,9 @@ export default {
     title: null,
 
     titleTemplate: (titleChunk) => {
-      return titleChunk ? `${ titleChunk } | Rule 34 App` : 'Rule 34 App – Popular Hentai Porn'
+      return titleChunk
+        ? `${titleChunk} | Rule 34 App`
+        : 'Rule 34 App – Popular Hentai Porn'
     },
 
     htmlAttrs: {
@@ -43,7 +45,7 @@ export default {
         name: 'description',
         content:
           'Browse popular Rule 34 Hentai Porn for free. Without ads.' +
-          ' We have Anime, Pokemon, Fortnite, Naruto, FNF, FNAF, CountryHumans, Brawl Stars, Gay, Video…'
+          ' We have Anime, Pokemon, Fortnite, Naruto, FNF, FNAF, CountryHumans, Brawl Stars, Gay, Video…',
       },
       {
         name: 'monetization',
@@ -76,7 +78,7 @@ export default {
   loadingIndicator: {
     name: 'cube-grid',
     color: TAILWIND_CONFIG.theme.extend.colors.darkGray[700],
-    background: `linear-gradient(152deg, ${ TAILWIND_CONFIG.theme.extend.colors.primary[400] } 38%, ${ TAILWIND_CONFIG.theme.extend.colors.accent[400] } 90%)`,
+    background: `linear-gradient(152deg, ${TAILWIND_CONFIG.theme.extend.colors.primary[400]} 38%, ${TAILWIND_CONFIG.theme.extend.colors.accent[400]} 90%)`,
   },
 
   css: ['~/assets/css/main.css'],
@@ -84,9 +86,10 @@ export default {
   components: [{ path: '~/components', pathPrefix: false }],
 
   plugins: [
-    { src: '~/plugins/vuex-router-sync.js', mode: 'client' },
-    { src: '~/plugins/vuex-persist.js', mode: 'client' },
     { src: '~/plugins/pwa-update.js', mode: 'client' },
+    { src: '~/plugins/vuex-persist.js', mode: 'client' },
+    { src: '~/plugins/migrate-state.js', mode: 'client' },
+    { src: '~/plugins/vuex-router-sync.js', mode: 'client' },
     { src: '~/plugins/vue-matomo.js', mode: 'client' },
   ],
 
@@ -115,7 +118,7 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/sentry',
     '@nuxtjs/sitemap',
-    '@nuxtjs/toast'
+    '@nuxtjs/toast',
   ],
 
   axios: {
@@ -152,13 +155,13 @@ export default {
         },
 
         endpoints: {
-          login: { url: `${ process.env.API_URL }/auth/log-in`, method: 'post' },
+          login: { url: `${process.env.API_URL}/auth/log-in`, method: 'post' },
           refresh: {
-            url: `${ process.env.API_URL }/auth/refresh`,
+            url: `${process.env.API_URL}/auth/refresh`,
             method: 'post',
           },
           logout: false,
-          user: { url: `${ process.env.API_URL }/auth/profile`, method: 'get' },
+          user: { url: `${process.env.API_URL}/auth/profile`, method: 'get' },
         },
       },
     },
@@ -199,8 +202,8 @@ export default {
       ],
     },
     meta: {
-      ogHost: `https://${ process.env.APP_DOMAIN }`,
-      mobileAppIOS: true
+      ogHost: `https://${process.env.APP_DOMAIN}`,
+      mobileAppIOS: true,
     },
     // Icon is automatically proccessed from static/icon.png
   },
@@ -278,7 +281,7 @@ export default {
   },
 
   sitemap: {
-    hostname: `https://${ process.env.APP_DOMAIN }`,
+    hostname: `https://${process.env.APP_DOMAIN}`,
 
     defaults: {
       changefreq: 'daily',
@@ -310,15 +313,14 @@ export default {
       class: 'toasted-custom-action',
 
       onClick: (e, toastObject) => {
-        toastObject.goAway(0);
-      }
+        toastObject.goAway(0)
+      },
     },
 
     theme: 'toasted-custom-theme',
 
     closeOnSwipe: true,
   },
-
 
   build: {
     extractCSS: true,
