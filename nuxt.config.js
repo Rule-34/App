@@ -10,7 +10,7 @@ export default {
   generate: { fallback: true },
 
   server: {
-    host: '0.0.0.0',
+    host: '0.0.0.0'
   },
 
   publicRuntimeConfig: {
@@ -21,7 +21,7 @@ export default {
     PROXY_URL: process.env.PROXY_URL,
 
     MATOMO_HOST: process.env.MATOMO_HOST,
-    MATOMO_SITE_ID: process.env.MATOMO_SITE_ID,
+    MATOMO_SITE_ID: process.env.MATOMO_SITE_ID
   },
 
   head: {
@@ -34,7 +34,7 @@ export default {
     },
 
     htmlAttrs: {
-      lang: 'en',
+      lang: 'en'
     },
 
     meta: [
@@ -45,12 +45,12 @@ export default {
         name: 'description',
         content:
           'Browse popular Rule 34 Hentai Porn for free. Without ads.' +
-          ' We have Anime, Pokemon, Fortnite, Naruto, FNF, FNAF, CountryHumans, Brawl Stars, Gay, Video…',
+          ' We have Anime, Pokemon, Fortnite, Naruto, FNF, FNAF, CountryHumans, Brawl Stars, Gay, Video…'
       },
       {
         name: 'monetization',
-        content: process.env.MONETIZATION_URI,
-      },
+        content: process.env.MONETIZATION_URI
+      }
     ],
 
     link: [
@@ -58,11 +58,11 @@ export default {
       {
         rel: 'stylesheet',
         type: 'text/css',
-        href: 'https://rsms.me/inter/inter.css',
-      },
+        href: 'https://rsms.me/inter/inter.css'
+      }
     ],
 
-    noscript: [{ innerHTML: 'This website requires JavaScript' }],
+    noscript: [{ innerHTML: 'This website requires JavaScript' }]
   },
 
   loading: {
@@ -72,13 +72,13 @@ export default {
     // height: '5px',
 
     throttle: 200,
-    continuous: true,
+    continuous: true
   },
 
   loadingIndicator: {
     name: 'cube-grid',
     color: TAILWIND_CONFIG.theme.extend.colors.darkGray[700],
-    background: `linear-gradient(152deg, ${TAILWIND_CONFIG.theme.extend.colors.primary[400]} 38%, ${TAILWIND_CONFIG.theme.extend.colors.accent[400]} 90%)`,
+    background: `linear-gradient(152deg, ${TAILWIND_CONFIG.theme.extend.colors.primary[400]} 38%, ${TAILWIND_CONFIG.theme.extend.colors.accent[400]} 90%)`
   },
 
   css: ['~/assets/css/main.css'],
@@ -90,42 +90,44 @@ export default {
     { src: '~/plugins/vuex-persist.js', mode: 'client' },
     { src: '~/plugins/migrate-state.js', mode: 'client' },
     { src: '~/plugins/vuex-router-sync.js', mode: 'client' },
-    { src: '~/plugins/vue-matomo.js', mode: 'client' },
+    { src: '~/plugins/vue-matomo.js', mode: 'client' }
   ],
 
   buildModules: [
-    // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
-    '@nuxtjs/tailwindcss',
-    //
-    '@nuxtjs/localforage',
+    // https://github.com/nuxt-community/localforage-module
+    '@nuxtjs/localforage'
   ],
 
   tailwindcss: {
     viewer: false,
 
-    cssPath: '~/assets/css/main.css',
+    configPath: 'tailwind.config.js',
+
+    cssPath: '~/assets/css/main.css'
   },
 
   localforage: {
     name: 'Rule34App',
-    storeName: 'localForage',
+    storeName: 'localForage'
   },
 
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
-    'portal-vue/nuxt',
     '@nuxtjs/pwa',
-    '@nuxtjs/sentry',
-    '@nuxtjs/sitemap',
+    'portal-vue/nuxt',
+    // https://github.com/nuxt-community/nuxt-tailwindcss
+    '@nuxtjs/tailwindcss',
     '@nuxtjs/toast',
+    '@nuxtjs/sentry',
+    '@nuxtjs/sitemap'
   ],
 
   axios: {
     progress: true,
 
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/',
+    baseURL: '/'
   },
 
   auth: {
@@ -140,30 +142,30 @@ export default {
           maxAge: 1800,
           required: true,
 
-          global: false,
+          global: false
         },
 
         refreshToken: {
           property: 'refresh_token',
           required: true,
-          maxAge: 60 * 60 * 24 * 15, // 15 days
+          maxAge: 60 * 60 * 24 * 15 // 15 days
         },
 
         user: {
           property: false,
-          autoFetch: true,
+          autoFetch: true
         },
 
         endpoints: {
           login: { url: `${process.env.API_URL}/auth/log-in`, method: 'post' },
           refresh: {
             url: `${process.env.API_URL}/auth/refresh`,
-            method: 'post',
+            method: 'post'
           },
           logout: false,
-          user: { url: `${process.env.API_URL}/auth/profile`, method: 'get' },
-        },
-      },
+          user: { url: `${process.env.API_URL}/auth/profile`, method: 'get' }
+        }
+      }
     },
 
     watchLoggedIn: true,
@@ -172,10 +174,10 @@ export default {
       login: '/premium',
       logout: '/premium',
       callback: false,
-      home: false,
+      home: false
     },
 
-    vuex: { namespace: 'authentication' },
+    vuex: { namespace: 'authentication' }
   },
 
   pwa: {
@@ -191,29 +193,29 @@ export default {
           name: 'Settings',
           short_name: 'Settings',
           description: 'Settings to tweak your experience.',
-          url: '/settings?utm_source=PWA&utm_medium=Shortcut',
+          url: '/settings?utm_source=PWA&utm_medium=Shortcut'
         },
         {
           name: 'Saved Posts',
           short_name: 'Saved Posts',
           description: 'Save posts for later.',
-          url: '/premium/saved-posts?utm_source=PWA&utm_medium=Shortcut',
-        },
-      ],
+          url: '/premium/saved-posts?utm_source=PWA&utm_medium=Shortcut'
+        }
+      ]
     },
     meta: {
       ogHost: `https://${process.env.APP_DOMAIN}`,
-      mobileAppIOS: true,
-    },
+      mobileAppIOS: true
+    }
     // Icon is automatically proccessed from static/icon.png
   },
 
   workbox: {
     runtimeCaching: [
       {
-        urlPattern: ['https://rsms.me/.*'],
-      },
-    ],
+        urlPattern: ['https://rsms.me/.*']
+      }
+    ]
   },
 
   sentry: {
@@ -272,12 +274,12 @@ export default {
         'Transaction timed out due to inactivity',
 
         // Axios
-        'timeout of 0ms exceeded',
+        'timeout of 0ms exceeded'
       ],
 
       // Dokku automatic env variable
-      release: process.env.GIT_REV,
-    },
+      release: process.env.GIT_REV
+    }
   },
 
   sitemap: {
@@ -286,7 +288,7 @@ export default {
     defaults: {
       changefreq: 'daily',
       priority: 0.8,
-      lastmod: new Date(),
+      lastmod: new Date()
     },
 
     // Static HTML files
@@ -296,8 +298,8 @@ export default {
 
       // Misc
       { url: '/privacy-policy', priority: 0.2 },
-      { url: '/terms-of-service', priority: 0.2 },
-    ],
+      { url: '/terms-of-service', priority: 0.2 }
+    ]
   },
 
   toast: {
@@ -314,17 +316,17 @@ export default {
 
       onClick: (e, toastObject) => {
         toastObject.goAway(0)
-      },
+      }
     },
 
     theme: 'toasted-custom-theme',
 
-    closeOnSwipe: true,
+    closeOnSwipe: true
   },
 
   build: {
-    extractCSS: true,
+    extractCSS: true
   },
 
-  telemetry: false,
+  telemetry: false
 }
