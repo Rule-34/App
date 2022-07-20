@@ -29,6 +29,8 @@ export default (context) => {
     asyncStorage: true,
 
     reducer: (state) => ({
+      version: state.version,
+
       statistics: state.statistics,
     }),
   }).plugin(store)
