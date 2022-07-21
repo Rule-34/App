@@ -18,8 +18,8 @@ export const state = () => ({
           '-male_focus',
           '-male/male',
           '-male_penetrated',
-          '-male_penetrating_male',
-        ],
+          '-male_penetrating_male'
+        ]
       },
       {
         name: 'Furry blocklist',
@@ -40,25 +40,25 @@ export const state = () => ({
           '-animal_genitalia',
           '-ferrettre',
           '-rodent',
-          '-equine',
-        ],
+          '-equine'
+        ]
       },
       {
         name: 'Indecencies blocklist',
-        tags: ['-scat', '-shitting', '-diaper', '-fart', '-shitpost', '-gore'],
+        tags: ['-scat', '-shitting', '-diaper', '-fart', '-shitpost', '-gore']
       },
       {
         name: 'Explicit rating',
-        tags: ['rating:explicit'],
+        tags: ['rating:explicit']
       },
       {
         name: 'Sort by order',
-        tags: ['sort:score'],
+        tags: ['sort:score']
       },
       {
         name: 'Order by score',
-        tags: ['order:score'],
-      },
+        tags: ['order:score']
+      }
     ],
 
     savedPosts: [
@@ -72,17 +72,17 @@ export const state = () => ({
           high_res_file: {
             url: 'https://safebooru.org/images/1/e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg',
             width: 1200,
-            height: 900,
+            height: 900
           },
           low_res_file: {
             url: 'https://safebooru.org/samples/1/sample_e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg',
             width: 850,
-            height: 638,
+            height: 638
           },
           preview_file: {
             url: 'https://safebooru.org/thumbnails/1/thumbnail_e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg',
             width: 150,
-            height: 112,
+            height: 112
           },
           tags: [
             '1girl',
@@ -110,19 +110,19 @@ export const state = () => ({
             'snow',
             'solo',
             'toggles',
-            'uniform',
+            'uniform'
           ],
           source: [],
           rating: 'safe',
-          media_type: 'image',
+          media_type: 'image'
         },
 
         meta_data: {
           booru_domain: 'rule34.xxx',
 
           // :')
-          created_at: new Date(1997, 8 - 1, 22, '21'),
-        },
+          created_at: new Date(1997, 8 - 1, 22, '21')
+        }
       },
 
       // 2nd default post
@@ -135,17 +135,17 @@ export const state = () => ({
           high_res_file: {
             url: 'https://img3.gelbooru.com/images/b0/b5/b0b53e29fdeb13285591a524f23972d4.gif',
             width: 533,
-            height: 800,
+            height: 800
           },
           low_res_file: {
             url: 'https://img3.gelbooru.com/images/b0/b5/b0b53e29fdeb13285591a524f23972d4.gif',
             width: 533,
-            height: 800,
+            height: 800
           },
           preview_file: {
             url: 'https://img3.gelbooru.com/thumbnails/b0/b5/thumbnail_b0b53e29fdeb13285591a524f23972d4.jpg',
             width: 166,
-            height: 250,
+            height: 250
           },
           tags: [
             '1girl',
@@ -176,21 +176,21 @@ export const state = () => ({
             'usagi-san',
             'white_background',
             'white_legwear',
-            'zettai_ryouiki',
+            'zettai_ryouiki'
           ],
           source: [],
           rating: 'safe',
-          media_type: 'image',
+          media_type: 'image'
         },
 
         meta_data: {
           booru_domain: 'gelbooru.com',
 
           // :')
-          created_at: new Date(2000, 1 - 1, 31, '0'),
-        },
-      },
-    ],
+          created_at: new Date(2000, 1 - 1, 31, '0')
+        }
+      }
+    ]
   },
 
   settings: {
@@ -199,7 +199,7 @@ export const state = () => ({
       description:
         'Swiping `left-to-right` will open the navigation menu, and `right-to-left` will open the search menu.',
       value: true,
-      defaultValue: true,
+      defaultValue: true
     },
 
     hoverControls: {
@@ -207,7 +207,7 @@ export const state = () => ({
       description: 'Page controls will be fixed over the content.',
       image: '/img/usage_examples/hover-controls',
       value: false,
-      defaultValue: false,
+      defaultValue: false
     },
 
     fullSizeImages: {
@@ -216,14 +216,14 @@ export const state = () => ({
         'Load full images instead of downscaled images, data intensive.',
       image: '/img/usage_examples/full-size-images',
       value: false,
-      defaultValue: false,
+      defaultValue: false
     },
 
     infiniteLoad: {
       name: 'Infinite loading',
       description: 'Load posts infinitely instead of using the page controls.',
       value: false,
-      defaultValue: false,
+      defaultValue: false
     },
 
     postsPerPage: {
@@ -231,23 +231,23 @@ export const state = () => ({
       description:
         'Number of posts to load per page, hard limit on most boorus is 100.',
       value: 20,
-      defaultValue: 20,
+      defaultValue: 20
     },
 
     score: {
       name: 'Minimum score',
       description: 'Required score for a post to show.',
       value: 0,
-      defaultValue: 0,
+      defaultValue: 0
     },
 
     imgRetry: {
       name: 'Image retry',
       description: 'Number of attempts to load an image.',
       value: 1,
-      defaultValue: 1,
-    },
-  },
+      defaultValue: 1
+    }
+  }
 })
 
 export const getters = {
@@ -265,7 +265,7 @@ export const getters = {
 
   getSavedPosts(state) {
     return state.custom.savedPosts
-  },
+  }
 }
 
 export const mutations = {
@@ -283,7 +283,7 @@ export const mutations = {
 
   setSavedPosts(state, value) {
     state.custom.savedPosts = Object.freeze(value)
-  },
+  }
 }
 
 export const actions = {
@@ -364,8 +364,10 @@ export const actions = {
   },
 
   addPostToSavedPosts({ getters, commit }, { post }) {
+    // TODO: improve clone
     const SAVED_POSTS = JSON.parse(JSON.stringify(getters.getSavedPosts))
 
+    // TODO: Improve Post creation so it does not rely so much in the API
     const NEW_POST_DATA = post
     NEW_POST_DATA.meta_data.created_at = new Date().toJSON()
 
@@ -384,5 +386,5 @@ export const actions = {
     })
 
     commit('setSavedPosts', FILTERED_SAVED_POSTS)
-  },
+  }
 }

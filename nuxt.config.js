@@ -112,9 +112,9 @@ export default {
   },
 
   modules: [
+    '@nuxtjs/pwa',
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
-    '@nuxtjs/pwa',
     'portal-vue/nuxt',
     // https://github.com/nuxt-community/nuxt-tailwindcss
     '@nuxtjs/tailwindcss',
