@@ -199,13 +199,14 @@
 
                     <!-- Number of posts with that tag -->
                     <span
+                      v-if="tag.count"
                       class="
                         transition-colors
                         duration-300
                         text-primary-600
                         group-hover:text-primary-500
                       "
-                      >{{ `(${tag.count})` }}
+                    >{{ `(${ tag.count })` }}
                     </span>
                   </button>
                 </div>
@@ -260,18 +261,18 @@ export default {
     TagIcon,
     SearchIcon,
     FilterIcon,
-    TrashIcon,
+    TrashIcon
   },
 
   props: {
     initialActiveTags: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     searchResults: {
       type: Array,
-      default: () => [],
-    },
+      default: () => []
+    }
   },
 
   data() {
@@ -279,12 +280,12 @@ export default {
       search: {
         query: '',
 
-        activeTags: [],
+        activeTags: []
       },
 
       isBanModeEnabled: false,
 
-      tagCollections: { isActive: false },
+      tagCollections: { isActive: false }
     }
   },
 
@@ -295,7 +296,7 @@ export default {
     // See https://github.com/vuejs/vue/issues/2870
     debouncedEmitOnSearch() {
       return debounce(this.emitOnSearch, 350)
-    },
+    }
   },
 
   mounted() {
@@ -373,7 +374,7 @@ export default {
 
     mergeWithActiveTags(tags) {
       this.search.activeTags = [
-        ...new Set([...this.search.activeTags, ...tags]),
+        ...new Set([...this.search.activeTags, ...tags])
       ]
     },
 
@@ -387,8 +388,8 @@ export default {
       this.emitResetSearchResults()
 
       this.toggleSearchMenu()
-    },
+    }
     // #endregion
-  },
+  }
 }
 </script>
