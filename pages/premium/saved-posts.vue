@@ -64,7 +64,7 @@ export default {
       currentPage: 0,
 
       searchResults: [],
-      searchActiveTags: [],
+      searchActiveTags: []
     }
   },
 
@@ -75,9 +75,9 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'Save posts for later.',
-        },
-      ],
+          content: 'Save posts for later.'
+        }
+      ]
     }
   },
 
@@ -90,12 +90,12 @@ export default {
       )
 
       const UNIQUE_SORTED_BOORU_DOMAIN_LIST = [
-        ...new Set(BOORU_DOMAIN_LIST),
+        ...new Set(BOORU_DOMAIN_LIST)
       ].sort()
 
       const BOORU_GROUP = {
         name: 'Default',
-        domains: ['<All Boorus>', ...UNIQUE_SORTED_BOORU_DOMAIN_LIST],
+        domains: ['<All Boorus>', ...UNIQUE_SORTED_BOORU_DOMAIN_LIST]
       }
 
       return [BOORU_GROUP]
@@ -126,7 +126,7 @@ export default {
       )
 
       return PAGINATED_SAVED_POSTS
-    },
+    }
   },
 
   methods: {
@@ -146,8 +146,20 @@ export default {
 
       return POSTS.filter((POST) => {
         // Filter that the post has to include every tag in the searchActiveTags array
-        return this.searchActiveTags.every((TAG) =>
-          POST.data.tags.includes(TAG)
+        return this.searchActiveTags.every((TAG) => {
+
+            let uniquePostTags = []
+
+            // Loop for every Tag array
+            Object.keys(POST.data.tags).forEach((TAG_KEY) => {
+
+              const TAGS = POST.data.tags[TAG_KEY]
+
+              uniquePostTags = [...new Set([...uniquePostTags, ...TAGS])]
+            })
+
+            return uniquePostTags.includes(TAG)
+          }
         )
       })
     },
@@ -198,15 +210,29 @@ export default {
     onSearch(query) {
       const UNIQUE_TAGS_FROM_SAVED_POSTS = [
         ...new Set(
-          this.savedPostsFromSelectedBooru.map((POST) => POST.data.tags).flat()
-        ),
+          this.savedPostsFromSelectedBooru.map((POST) => {
+
+            let postTags = []
+
+            // Loop for every Tag array
+            Object.keys(POST.data.tags).forEach((TAG_KEY) => {
+
+              const TAGS = POST.data.tags[TAG_KEY]
+
+              postTags = [...postTags, ...TAGS]
+            })
+
+            return postTags
+
+          }).flat()
+        )
       ]
 
       const AVAILABLE_TAGS = UNIQUE_TAGS_FROM_SAVED_POSTS.map((TAG) => {
         return {
           id: TAG,
           name: TAG,
-          count: 0,
+          count: null
         }
       })
 
@@ -231,8 +257,8 @@ export default {
     // TODO: Scroll to top until we have page queries
     scrollToTop() {
       window.scrollTo(0, 0)
-    },
-  },
+    }
+  }
 }
 
 function paginateArray(array, pageSize, pageNumber) {
