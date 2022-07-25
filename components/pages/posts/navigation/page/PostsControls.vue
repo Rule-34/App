@@ -81,7 +81,7 @@ import KeyboardNavigationMixin from '~/components/pages/posts/navigation/page/Ke
 
 export default {
   directives: {
-    Intersect,
+    Intersect
   },
 
   mixins: [KeyboardNavigationMixin],
@@ -89,22 +89,22 @@ export default {
   props: {
     currentPage: {
       type: Number,
-      required: true,
+      required: true
     },
 
     minimumPage: {
       type: Number,
-      required: true,
+      required: true
     },
 
     forceNormalControls: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
 
   computed: {
-    ...mapGetters('user', ['getUserSettings']),
+    ...mapGetters('user', ['getUserSettings'])
   },
 
   methods: {
@@ -146,7 +146,9 @@ export default {
       const elementAttribute = 'data-is-visible'
       const timeoutDelay = 1500
 
-      // console.log({ entries, observer })
+      if (!entries || !entries.length) {
+        return
+      }
 
       entries.forEach((entry) => {
         // console.debug(entry.intersectionRatio)
@@ -176,7 +178,7 @@ export default {
           await this.getNextPage()
         }, timeoutDelay)
       })
-    },
-  },
+    }
+  }
 }
 </script>
