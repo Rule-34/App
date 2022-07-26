@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.15.0](https://github.com/Rule-34/App/compare/v2.14.0...v2.15.0) (2022-07-26)
+
+
+### Features
+
+* remove service worker ([c5f9340](https://github.com/Rule-34/App/commit/c5f93405e83325ba6e7f7bb81922f3072e224aef))
+
 ## [2.14.0](https://github.com/Rule-34/App/compare/v2.13.0...v2.14.0) (2022-07-26)
 
 
