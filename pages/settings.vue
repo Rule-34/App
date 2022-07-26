@@ -22,7 +22,6 @@
           <h1 class="text-lg text-white">Settings</h1>
 
           <button
-            title="Reset all settings"
             aria-label="Reset all settings"
             class="
               px-2
@@ -33,6 +32,7 @@
               link
               bg-darkGray-700
             "
+            title="Reset all settings"
             @click="removeLocalStorage"
           >
             Reset
@@ -49,15 +49,15 @@
                   "
                 >
                   <SettingNumber
-                    :setting-name="settingName"
                     :setting-data="settingData"
+                    :setting-name="settingName"
                   />
                 </template>
 
                 <template v-else>
                   <SettingSwitch
-                    :setting-name="settingName"
                     :setting-data="settingData"
+                    :setting-name="settingName"
                   />
                 </template>
               </li>
@@ -67,12 +67,12 @@
       </div>
     </main>
 
-    <span class='block text-xs text-gray-300 py-4'>
+    <span class="block text-xs text-gray-300 py-4">
       v{{ app_version }}
     </span>
 
     <footer class="absolute inset-x-0 bottom-0 p-2 text-center">
-      <NuxtLink to="/usage" class="text-sm link"> What does X do? </NuxtLink>
+      <NuxtLink class="text-sm link" to="/usage"> What does X do?</NuxtLink>
     </footer>
   </div>
 </template>
@@ -89,9 +89,9 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'Settings to tweak your experience.',
-        },
-      ],
+          content: 'Settings to tweak your experience.'
+        }
+      ]
     }
   },
 
@@ -100,7 +100,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('user', ['getUserSettings']),
+    ...mapGetters('user', ['getUserSettings'])
   },
 
   methods: {
@@ -108,7 +108,7 @@ export default {
       localStorage.clear()
 
       location.reload()
-    },
-  },
+    }
+  }
 }
 </script>
