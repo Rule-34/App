@@ -86,7 +86,6 @@ export default {
   components: [{ path: '~/components', pathPrefix: false }],
 
   plugins: [
-    { src: '~/plugins/a.pwa-update.js', mode: 'client' },
     { src: '~/plugins/c.vuex-persist.js', mode: 'client' },
     { src: '~/plugins/e.vuex-router-sync.js', mode: 'client' },
     { src: '~/plugins/g.migrate-state.js', mode: 'client' },
@@ -173,6 +172,13 @@ export default {
   },
 
   pwa: {
+    // Icon is automatically proccessed from static/icon.png
+
+    meta: {
+      ogHost: `https://${process.env.APP_DOMAIN}`,
+      mobileAppIOS: true
+    },
+
     manifest: {
       name: 'Rule 34 App',
       short_name: 'Rule 34 App',
@@ -195,19 +201,8 @@ export default {
         }
       ]
     },
-    meta: {
-      ogHost: `https://${process.env.APP_DOMAIN}`,
-      mobileAppIOS: true
-    }
-    // Icon is automatically proccessed from static/icon.png
-  },
 
-  workbox: {
-    runtimeCaching: [
-      {
-        urlPattern: ['https://rsms.me/.*']
-      }
-    ]
+    workbox: false
   },
 
   sentry: {
