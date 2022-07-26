@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.13.0](https://github.com/Rule-34/App/compare/v2.11.0...v2.13.0) (2022-07-26)
+
+
+### Features
+
+* **About page:** add info about search engines ([d35ee30](https://github.com/Rule-34/App/commit/d35ee302b1a31882d78297bbe6ba86f456dd4c17))
+* create migration code ([921e199](https://github.com/Rule-34/App/commit/921e199927dc51674600280c4ec409ee43d446e8))
+* create migration Nuxt plugin ([7b1e76a](https://github.com/Rule-34/App/commit/7b1e76a8757bfb452d71da457b806ddd0f66262b))
+* **Post:** use new Post's data structure ([22a5d20](https://github.com/Rule-34/App/commit/22a5d20ccebba78f5c2290381a0312a1dfa80ae3))
+* **Search:** hide tag cpunt if no value is provided ([ff37975](https://github.com/Rule-34/App/commit/ff3797597fca562c4477e18f873ae41922515417))
+* **state:** introduce "version" variable ([84c2b9c](https://github.com/Rule-34/App/commit/84c2b9c4aa4176463f5dde6276af78381f3824f7))
+
+
+### Bug Fixes
+
+* disable migrations temporarily ([096491d](https://github.com/Rule-34/App/commit/096491d0032be9b1e0160e096fea96a60ee316d3))
+* **Infinite Load:** exit early if no entries ([3a8fc10](https://github.com/Rule-34/App/commit/3a8fc103ab2f82b8b26e5378c2d619c4970d9fe8))
+* **Saved posts:** use new tag structure ([8841aac](https://github.com/Rule-34/App/commit/8841aacd2580ace7cf7a57aa8265a621ccace8ae))
+* **Tailwind:** load as module ([58a54bc](https://github.com/Rule-34/App/commit/58a54bc29997ad7ff345164640bac534c0fe1c12))
+* try to reorder plugin load order ([8256fb2](https://github.com/Rule-34/App/commit/8256fb26915cc3968b220a8db865b063b4a0e7fd))
+
 ## [2.12.0](https://github.com/Rule-34/App/compare/v2.11.0...v2.12.0) (2022-07-25)
 
 
