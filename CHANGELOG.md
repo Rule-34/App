@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.16.0](https://github.com/Rule-34/App/compare/v2.15.0...v2.16.0) (2022-07-26)
+
+
+### Features
+
+* **Headers:** remove all cache from (index) HTML ([cb26e50](https://github.com/Rule-34/App/commit/cb26e505cf9af74baff1493ec934858ed632a770))
+
 ## [2.15.0](https://github.com/Rule-34/App/compare/v2.14.0...v2.15.0) (2022-07-26)
 
 
