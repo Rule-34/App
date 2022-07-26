@@ -93,10 +93,7 @@ export default {
     { src: '~/plugins/z.vue-matomo.js', mode: 'client' }
   ],
 
-  buildModules: [
-    // https://github.com/nuxt-community/localforage-module
-    '@nuxtjs/localforage'
-  ],
+  buildModules: [],
 
   tailwindcss: {
     viewer: false,
@@ -104,11 +101,6 @@ export default {
     configPath: 'tailwind.config.js',
 
     cssPath: '~/assets/css/main.css'
-  },
-
-  localforage: {
-    name: 'Rule34App',
-    storeName: 'localForage'
   },
 
   modules: [
@@ -265,13 +257,6 @@ export default {
 
         // Matomo
         'ao.sync',
-
-        // localForage
-        'Database',
-        'indexedDB',
-        'window.webkitStorageInfo',
-        'QuotaExceededError',
-        'Transaction timed out due to inactivity',
 
         // Axios
         'timeout of 0ms exceeded'
