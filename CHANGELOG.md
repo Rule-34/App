@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.14.0](https://github.com/Rule-34/App/compare/v2.13.0...v2.14.0) (2022-07-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* **Storage:** use localStorage instead of localForage
+
+### Features
+
+* improve migration "0" ([3ef0ade](https://github.com/Rule-34/App/commit/3ef0adec8f9f731dba613d74b29f3d0eaba3e290))
+
+
+* **Storage:** use localStorage instead of localForage ([fef5a2b](https://github.com/Rule-34/App/commit/fef5a2beeddb3971e07620f62fb59124e09be196))
+
 ## [2.13.0](https://github.com/Rule-34/App/compare/v2.11.0...v2.13.0) (2022-07-26)
 
 
