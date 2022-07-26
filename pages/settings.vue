@@ -107,8 +107,6 @@ export default {
     async removeLocalStorage() {
       localStorage.clear()
 
-      await this.$localForage.clear()
-
       location.reload()
     },
   },
