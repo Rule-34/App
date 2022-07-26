@@ -6,19 +6,21 @@
  * @returns {Object} migrated state
  */
 export function migrateState(state) {
-  const STATE_VERSION = state.version
+  const INITIAL_STATE_VERSION = state.version
 
-  switch (STATE_VERSION) {
+  switch (INITIAL_STATE_VERSION) {
     case 0:
       state = migrateVersion0State(state)
       break
 
     default:
       console.debug(
-        `No migration necessary for state version "${STATE_VERSION}"`
+        `No migration necessary for state version "${INITIAL_STATE_VERSION}"`
       )
       return state
   }
+
+  console.debug(`Migrated state to version "${state.version}"`)
 
   // Recursively migrate the state
   return migrateState(state)
@@ -32,21 +34,25 @@ function migrateVersion0State(state) {
   const posts = state.user.custom.savedPosts
 
   posts.map((post) => {
-    // Change tags structure from array to object
     const POST_TAGS = post.data.tags
 
-    post.data.tags = {
-      character: [],
-      copyright: [],
-      artist: [],
-      general: POST_TAGS,
-      meta: [],
+    // Convert array to object
+    if (Array.isArray(POST_TAGS)) {
+      post.data.tags = {
+        character: [],
+        copyright: [],
+        artist: [],
+        general: POST_TAGS,
+        meta: []
+      }
     }
 
     // Rename "source" to "sources"
-    post.data.sources = post.data.source
+    if ('source' in post.data) {
+      post.data.sources = post.data.source
 
-    delete post.data.source
+      delete post.data.source
+    }
 
     return post
   })
