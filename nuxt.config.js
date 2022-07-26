@@ -39,6 +39,9 @@ export default {
 
     meta: [
       { charset: 'utf-8' },
+      { 'http-equiv': 'Cache-Control', content: 'no-cache' },
+      { 'http-equiv': 'Pragma', content: 'no-cache' },
+      { 'http-equiv': 'Expires', content: '0' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
         hid: 'description',
