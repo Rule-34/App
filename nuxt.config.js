@@ -89,7 +89,7 @@ export default {
     { src: '~/plugins/a.pwa-update.js', mode: 'client' },
     { src: '~/plugins/c.vuex-persist.js', mode: 'client' },
     { src: '~/plugins/e.vuex-router-sync.js', mode: 'client' },
-    // { src: '~/plugins/g.migrate-state.js', mode: 'client' },
+    { src: '~/plugins/g.migrate-state.js', mode: 'client' },
     { src: '~/plugins/z.vue-matomo.js', mode: 'client' }
   ],
 
