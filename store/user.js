@@ -239,13 +239,6 @@ export const state = () => ({
       description: 'Required score for a post to show.',
       value: 0,
       defaultValue: 0
-    },
-
-    imgRetry: {
-      name: 'Image retry',
-      description: 'Number of attempts to load an image.',
-      value: 1,
-      defaultValue: 1
     }
   }
 })

@@ -545,7 +545,7 @@ export default {
 
       // Retry to load it
       else if (
-        this.media.retryLogic.count < this.getUserSettings.imgRetry.value
+        this.media.retryLogic.count < 1
       ) {
         console.info(
           `Retry number ${ this.media.retryLogic.count } to load the media`
