@@ -22,6 +22,7 @@
         >
           <img
             :key="mediaFile[0].url"
+            ref="imageElement"
             :alt="'Image ' + post.data.id"
             :class="{
               'opacity-100': media.hasLoaded,
@@ -458,6 +459,19 @@ export default {
     }
   },
 
+  beforeDestroy() {
+
+    // Cancel any pending HTTP requests
+    if (this.isImage) {
+      const imageElement = this.$refs['imageElement']
+
+      if (imageElement) {
+        // TODO: This trick only works in Chrome
+        imageElement.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
+        imageElement.onload = null
+        imageElement.onerror = null
+      }
+    }
   },
 
 
