@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.17.0](https://github.com/Rule-34/App/compare/v2.16.0...v2.17.0) (2022-07-29)
+
+
+### Features
+
+* **Post:** add empty files check ([cc50b9c](https://github.com/Rule-34/App/commit/cc50b9c3e3e857ff948ae4d32386db439dd9ae1b))
+* **Post:** cancel image HTTP request when unloading ([d30d5ec](https://github.com/Rule-34/App/commit/d30d5ec04a7ccba31a535998d2851aed21d90069))
+
 ## [2.16.0](https://github.com/Rule-34/App/compare/v2.15.0...v2.16.0) (2022-07-26)
 
 
