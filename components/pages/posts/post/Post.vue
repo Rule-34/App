@@ -21,14 +21,14 @@
           @keydown.enter="toggleTags"
         >
           <img
-            :key="mediaResolutionChooser.url"
+            :key="mediaFile[0].url"
             :alt="'Image ' + post.data.id"
             :class="{
               'opacity-100': media.hasLoaded,
             }"
-            :height="mediaResolutionChooser.height"
-            :src="mediaResolutionChooser.url"
-            :width="mediaResolutionChooser.width"
+            :height="mediaFile[0].height"
+            :src="mediaFile[0].url"
+            :width="mediaFile[0].width"
             class="w-full h-auto transition-opacity duration-700 opacity-0"
             decoding="async"
             loading="lazy"
@@ -62,10 +62,9 @@
         class="relative"
       >
         <video
-          :key="mediaResolutionChooser.url"
+          :key="mediaFile[0].url"
           ref="videoElement"
-          :alt="'Video ' + post.data.id"
-          :poster="post.data.preview_file.url"
+          :poster="mediaFile[1].url"
           class="w-full h-auto"
           controls
           loop
@@ -73,7 +72,7 @@
           preload="none"
         >
           <source
-            :src="mediaResolutionChooser.url"
+            :src="mediaFile[0].url"
             @error="retryToLoadManager"
           />
           Your browser does not support HTML5 video.
@@ -131,11 +130,11 @@
 
                   <!-- Saucenao -->
                   <template v-if="!isVideo">
-                    <PostSaucenao :media-url="mediaResolutionChooser.url" />
+                    <PostSaucenao :media-url="mediaFile[0].url" />
                   </template>
 
                   <!-- Download -->
-                  <PostDownload :media-name="post.id" :media-url="mediaResolutionChooser.url" />
+                  <PostDownload :media-name="post.id" :media-url="mediaFile[0].url" />
 
                   <!-- Save post -->
                   <PostSavedPosts :post="post" />
@@ -308,9 +307,12 @@
 
       <!-- Source -->
       <template v-if="post.data.sources.length">
+
+        <!-- -->
         <div class="w-full p-1 text-center">
-          <template v-if="isUrl">
-            <!-- If text is an Url then make it linkable -->
+
+          <!-- If text is an URL then make it a link -->
+          <template v-if="isSourceAnUrl">
             <a
               :href="post.data.sources[0]"
               class="inline-flex gap-2 link"
@@ -318,7 +320,7 @@
               target="_blank"
             >
               <p class="link">
-                {{ sourceText }}
+                {{ getHostnameFromUrl(post.data.sources[0]) }}
               </p>
 
               <!-- Icon -->
@@ -326,9 +328,11 @@
             </a>
           </template>
 
+          <!-- If the text is not a src then just show the text -->
           <template v-else>
-            <!-- If the text is not a url then just show the text -->
-            <p class="text-gray-200" title="Source">{{ sourceText }}</p>
+            <p class="text-gray-200" title="Source">
+              {{ post.data.sources[0] }}
+            </p>
           </template>
         </div>
       </template>
@@ -391,7 +395,6 @@ export default {
     ...mapGetters('user', ['getUserSettings']),
     ...mapGetters('booru', ['getActiveBooru']),
 
-    // #region Post media
     isImage() {
       return this.post.data.media_type === 'image'
     },
@@ -400,10 +403,26 @@ export default {
       return this.post.data.media_type === 'video'
     },
 
-    mediaResolutionChooser() {
-      // Always return high res file if its a video
+    isSourceAnUrl() {
+      if (!this.post.data.sources.length) {
+        return false
+      }
+
+      let source
+
+      try {
+        source = new URL(this.post.data.sources[0])
+      } catch {
+        return false
+      }
+
+      return source.protocol === 'http:' || source.protocol === 'https:'
+    },
+
+    mediaFile() {
+      // If it is a video
       if (this.isVideo && this.post.data.high_res_file) {
-        return this.post.data.high_res_file
+        return [this.post.data.high_res_file, this.post.data.preview_file]
       }
 
       // Return full image if its setting is enabled OR if low resolution file doesn't exist
@@ -411,47 +430,15 @@ export default {
         !this.post.data.low_res_file.url ||
         this.getUserSettings.fullSizeImages.value
       ) {
-        return this.post.data.high_res_file
+        return [this.post.data.high_res_file, null]
       }
 
       // Return low res file
-      return this.post.data.low_res_file
-    },
-    // #endregion
-
-    // #region Post media
-    isUrl() {
-      if (!this.post.data.sources.length) {
-        return false
-      }
-
-      let sourceUrl
-
-      try {
-        sourceUrl = new URL(this.post.data.sources[0])
-      } catch {
-        return false
-      }
-
-      return sourceUrl.protocol === 'http:' || sourceUrl.protocol === 'https:'
-    },
-
-    sourceText() {
-      if (!this.post.data.sources.length) {
-        return null
-      }
-
-      if (this.isUrl) {
-        return new URL(this.post.data.sources[0]).hostname
-      }
-
-      // Return the entire source as it's text
-      return this.post.data.sources[0]
+      return [this.post.data.low_res_file, null]
     }
-    // #endregion
   },
 
-  mounted() {
+  created() {
     if (!this.isVideo && !this.isImage) {
       const message = 'Unknown media type.'
 
@@ -462,8 +449,15 @@ export default {
     }
   },
 
+
   methods: {
     generatePostsRouteWithDefaults: RouterHelper.generatePostsRouteWithDefaults,
+
+    getHostnameFromUrl(url) {
+      const source = new URL(url)
+
+      return source.hostname
+    },
 
     toggleTags() {
       this.isActive = !this.isActive
@@ -473,9 +467,7 @@ export default {
       this.$emit('tag-selected', tag)
     },
 
-    // #region Post media
     async retryToLoadManager(event) {
-      // console.log('Media source: ', event.target.src)
 
       if (this.error.show) {
         const message = 'An error is set.'
@@ -499,7 +491,7 @@ export default {
         console.info('Adding extra slash...')
 
         event.target.src = this.addExtraSlashToURL(
-          this.mediaResolutionChooser.url
+          this.mediaFile[0].url
         )
 
         if (this.isVideo) {
@@ -515,7 +507,7 @@ export default {
       else if (!this.media.retryLogic.tried.proxy) {
         console.info('Proxying media...')
 
-        event.target.src = ProxyHelper.proxyUrl(this.mediaResolutionChooser.url)
+        event.target.src = ProxyHelper.proxyUrl(this.mediaFile[0].url)
 
         if (this.isVideo) {
           console.info('Reloading data and playing video')
@@ -531,7 +523,7 @@ export default {
         console.info('Proxying media with extra slash...')
 
         event.target.src = ProxyHelper.proxyUrl(
-          this.addExtraSlashToURL(this.mediaResolutionChooser.url)
+          this.addExtraSlashToURL(this.mediaFile[0].url)
         )
 
         if (this.isVideo) {
@@ -551,9 +543,9 @@ export default {
           `Retry number ${ this.media.retryLogic.count } to load the media`
         )
 
-        event.target.src = ''
+        event.target.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
 
-        event.target.src = this.mediaResolutionChooser.url
+        event.target.src = this.mediaFile[0].url
 
         if (this.isVideo) {
           console.info('Reloading data and playing video')
@@ -573,17 +565,19 @@ export default {
         this.error.message = message
         this.error.show = true
       }
-
-      // console.debug(event.target.src)
     },
 
     async VideoOutOfViewHandler() {
-      const isVideoPaused = this.$refs.videoElement.paused
+      const videoElement = this.$refs.videoElement
 
-      if (!isVideoPaused) {
+      if (!videoElement) {
+        return
+      }
+
+      if (!videoElement.paused) {
         console.debug('Pausing video.')
 
-        await this.$refs.videoElement.pause()
+        await videoElement.pause()
       }
     },
 
@@ -599,7 +593,6 @@ export default {
         .toString()
         .replace(currentURL.hostname, currentURL.hostname + '/')
     }
-    // #endregion
   }
 }
 </script>
