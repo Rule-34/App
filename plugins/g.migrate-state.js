@@ -1,5 +1,5 @@
+import { cloneDeep } from 'lodash-es'
 import { migrateState } from '~/assets/js/MigrateState'
-import { cloneDeep } from 'lodash-es' 
 
 export default (context) => {
   const { store } = context
