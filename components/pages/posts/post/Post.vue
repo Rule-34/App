@@ -447,6 +447,17 @@ export default {
       this.error.message = message
       this.error.show = true
     }
+
+    if (!this.post.data.high_res_file.url && !this.post.data.low_res_file.url) {
+      const message = 'No media available.'
+
+      console.warn(message)
+
+      this.error.message = message
+      this.error.show = true
+    }
+  },
+
   },
 
 
