@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.18.0](https://github.com/Rule-34/App/compare/v2.17.0...v2.18.0) (2022-08-01)
+
+
+### Features
+
+* add canonical tag ([9e81ba0](https://github.com/Rule-34/App/commit/9e81ba002cd968935ae47582c38f1563c93ba85a))
+
 ## [2.17.0](https://github.com/Rule-34/App/compare/v2.16.0...v2.17.0) (2022-07-29)
 
 
