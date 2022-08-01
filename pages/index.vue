@@ -60,7 +60,8 @@ import { mapActions, mapGetters } from 'vuex'
 
 // Mixins
 import FetchPostsMixin from '~/components/pages/posts/post/FetchPostsMixin.js'
-import { SeoHelper } from "~/assets/js/SeoHelper";
+import { RouterHelper } from '~/assets/js/RouterHelper'
+import { SeoHelper } from '~/assets/js/SeoHelper'
 
 export default {
   mixins: [FetchPostsMixin],
@@ -69,7 +70,7 @@ export default {
 
   data() {
     return {
-      searchResults: [],
+      searchResults: []
     }
   },
 
@@ -80,21 +81,33 @@ export default {
         {
           hid: 'referrer',
           name: 'referrer',
-          content: 'no-referrer',
-        },
+          content: 'no-referrer'
+        }
       ],
+      link: []
     }
 
     // Join array of tags into a comma separated string
     const tags = SeoHelper.tagArrayToTitle(this.getTags)
 
     if (tags) {
+      // Title
       head.title = tags + ' Hentai Porn'
 
+      // Description
       head.meta.push({
         hid: 'description',
         name: 'description',
-        content: `Browse popular ${ tags } Rule 34 Hentai Porn for free. Without ads.`,
+        content: `Browse popular ${ tags } Rule 34 Hentai Porn for free. Without ads.`
+      })
+
+      // Canonical
+      const CANONICAL_ROUTE = RouterHelper.generatePostsRouteWithDefaults(this.$nuxt.$store, undefined, undefined, this.getTags)
+
+      head.link.push({
+        hid: 'canonical',
+        name: 'canonical',
+        content: this.$router.resolve(CANONICAL_ROUTE).href
       })
     }
 
@@ -109,7 +122,7 @@ export default {
       'getPremiumBooruList',
       'getPosts',
       'getPageID',
-      'getTags',
+      'getTags'
     ]),
     ...mapGetters('premium', ['isUserPremium']),
 
@@ -123,7 +136,7 @@ export default {
 
       const DEFAULT_BOORU_GROUP = {
         name: 'Default',
-        domains: DOMAINS_FROM_DEFAULT_BOORU_LIST,
+        domains: DOMAINS_FROM_DEFAULT_BOORU_LIST
       }
 
       BOORU_GROUP_LIST.push(DEFAULT_BOORU_GROUP)
@@ -135,20 +148,20 @@ export default {
 
       const PREMIUM_BOORU_GROUP = {
         name: 'Custom',
-        domains: ['<Add Booru>'],
+        domains: ['<Add Booru>']
       }
 
       if (this.isUserPremium) {
         PREMIUM_BOORU_GROUP.domains = [
           ...DOMAINS_FROM_PREMIUM_BOORU_LIST,
-          ...PREMIUM_BOORU_GROUP.domains,
+          ...PREMIUM_BOORU_GROUP.domains
         ]
       }
 
       BOORU_GROUP_LIST.push(PREMIUM_BOORU_GROUP)
 
       return BOORU_GROUP_LIST
-    },
+    }
   },
 
   methods: {
@@ -156,7 +169,7 @@ export default {
       'activeBooruManager',
       'pidManager',
       'tagsManager',
-      'fetchTags',
+      'fetchTags'
     ]),
 
     async onDomainChange(domain) {
@@ -192,7 +205,7 @@ export default {
 
     async onSubmitActiveTags(tags) {
       await this.tagsManager({ operation: 'set', value: tags })
-    },
-  },
+    }
+  }
 }
 </script>
