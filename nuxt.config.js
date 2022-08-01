@@ -241,23 +241,33 @@ export default {
         'matomo',
         'vue-matomo',
 
+        // Matomo
+        'ao.sync',
+
+        // Axios
+        'timeout of 0ms exceeded',
+
+        // Browser
+        'ReportingObserver [deprecation]: Deprecation messages are stored',
+        'ReportingObserver [deprecation]: Element.createShadowRoot is deprecated',
+        'ReportingObserver [deprecation]: Synchronous XMLHttpRequest on the main thread',
+        'ReportingObserver [deprecation]: Custom cursors with size greater than 32x32 DIP intersecting native UI is deprecated',
+        'ReportingObserver [intervention]: Modified page load behavior on the page because the page was expected to take a long amount of time to load',
+        "ReportingObserver [deprecation]: 'Event.path' is deprecated and will be removed in M109",
+        "ReportingObserver [deprecation]: 'window.webkitStorageInfo' is deprecated.",
+        'ReportingObserver [deprecation]: chrome.loadTimes() is deprecated',
+
+        // Browser extensions
+        'instantSearchSDKJSBridgeClearHighlight',
+        'window.bannerNight',
+
         // - Misc -
         'native code',
         'extension',
         'unknown module',
         'NotAllowedError',
         'Background Sync is disabled',
-        'ResizeObserver loop limit exceeded',
-
-        // Browser extensions
-        'instantSearchSDKJSBridgeClearHighlight',
-        'window.bannerNight',
-
-        // Matomo
-        'ao.sync',
-
-        // Axios
-        'timeout of 0ms exceeded'
+        'ResizeObserver loop limit exceeded'
       ],
 
       // Dokku automatic env variable
