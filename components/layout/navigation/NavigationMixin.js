@@ -2,16 +2,17 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters('navigation', ['isSideNavActive', 'isSearchActive']),
+    ...mapGetters('navigation', ['isSideNavActive', 'isSearchActive'])
   },
 
   watch: {
-    $route() {
-      // console.log('route changed', this.$route)
-      // console.log(this.$nuxt.$route.name)
+    $route: {
+      immediate: true,
 
-      this.routeHandler()
-    },
+      handler(value, oldValue) {
+        this.routeHandler()
+      }
+    }
   },
 
   mounted() {
@@ -21,7 +22,7 @@ export default {
   methods: {
     ...mapActions('navigation', [
       'sideNavNavigationManager',
-      'searchNavigationManager',
+      'searchNavigationManager'
     ]),
 
     routeHandler() {
@@ -32,6 +33,6 @@ export default {
       // Close Search on route change
       if (this.isSearchActive)
         this.searchNavigationManager({ operation: 'set', value: false })
-    },
-  },
+    }
+  }
 }
