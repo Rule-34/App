@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.19.0](https://github.com/Rule-34/App/compare/v2.18.0...v2.19.0) (2022-09-24)
+
+
+### Features
+
+* **Premium pages:** add and organize info ([bbf608f](https://github.com/Rule-34/App/commit/bbf608f9454d720a40ba17b2d11f92940fc6c91a))
+
+
+### Bug Fixes
+
+* **About page:** use internal link instead of opening additional browser tab ([d49145b](https://github.com/Rule-34/App/commit/d49145bd5294d261edc60ba9d4648afc846af183))
+
 ## [2.18.0](https://github.com/Rule-34/App/compare/v2.17.0...v2.18.0) (2022-08-01)
 
 
