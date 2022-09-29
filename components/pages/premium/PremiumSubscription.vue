@@ -14,7 +14,7 @@
           class="flex items-start px-3 text-5xl leading-none tracking-tight text-gray-200"
         >
           <span class="mt-1 mr-2 text-3xl font-medium"> € </span>
-          <span class="font-extrabold"> 6,9 </span>
+          <span class="font-extrabold"> 5,9 </span>
         </span>
 
         <!-- Recurring -->
@@ -74,7 +74,7 @@
             <check-icon class="w-6 h-6 icon text-accent-400" />
           </div>
           <p class="ml-3 text-base font-medium leading-6 text-gray-300">
-            Download Posts
+            Download Posts automatically
           </p>
         </li>
 
