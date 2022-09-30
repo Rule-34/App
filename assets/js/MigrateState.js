@@ -1,5 +1,7 @@
 'use strict'
 
+import { cloneDeep } from 'lodash-es'
+
 /**
  * Migrate the state to new versions
  * @param {Object} state
@@ -68,7 +70,7 @@ function migrateVersion0State(state) {
 }
 
 export function createStateFromStore(store) {
-  return {
+  const STATE = {
     version: store.getters['getVersion'],
 
     user: {
@@ -79,6 +81,8 @@ export function createStateFromStore(store) {
       }
     }
   }
+
+  return cloneDeep(STATE)
 }
 
 export function restoreStateToStore(state, store) {
