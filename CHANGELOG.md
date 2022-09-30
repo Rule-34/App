@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.20.0](https://github.com/Rule-34/App/compare/v2.19.0...v2.20.0) (2022-09-30)
+
+
+### Features
+
+* **Premium logged-in page:** add link to backup ([7c2a942](https://github.com/Rule-34/App/commit/7c2a942da68239884968fae5cc86a6c00d317e5f))
+* **Premium page:** add info about backups ([93424bd](https://github.com/Rule-34/App/commit/93424bda0c83076a4ba60964ae8962e3a47264e3))
+* **Premium:** add ability to create and restore backups ([ec8c450](https://github.com/Rule-34/App/commit/ec8c450336b46c620c824013fb938a485827a8d4))
+* **VueX store:** add getters and setters ([c4e85fd](https://github.com/Rule-34/App/commit/c4e85fd447afa67f4bb791a7eeab8457e5ff8435))
+
+
+### Bug Fixes
+
+* **MigrateState:** add check ([5d62ee4](https://github.com/Rule-34/App/commit/5d62ee4929b732c20c45ff0b56dccfacff1bc64e))
+* **state builder:** clone object ([691adef](https://github.com/Rule-34/App/commit/691adef51e873745eb23f3dac2c5acdcb2eae624))
+
 ## [2.19.0](https://github.com/Rule-34/App/compare/v2.18.0...v2.19.0) (2022-09-24)
 
 
