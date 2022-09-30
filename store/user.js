@@ -252,11 +252,11 @@ export const getters = {
     return state.custom.boorus
   },
 
-  getTagCollections(state) {
+  getCustomTagCollections(state) {
     return state.custom.tagCollections
   },
 
-  getSavedPosts(state) {
+  getCustomSavedPosts(state) {
     return state.custom.savedPosts
   }
 }
@@ -274,7 +274,7 @@ export const mutations = {
     state.custom.tagCollections = Object.freeze(value)
   },
 
-  setSavedPosts(state, value) {
+  setCustomSavedPosts(state, value) {
     state.custom.savedPosts = Object.freeze(value)
   }
 }
@@ -321,27 +321,30 @@ export const actions = {
   customTagCollectionsManager({ getters, commit }, { operation, value }) {
     switch (operation) {
       case 'add': {
-        const doesTheTagCollectionAlreadyExist = getters.getTagCollections.some(
-          (tagCollection) => tagCollection.name === value.name
-        )
+        const doesTheTagCollectionAlreadyExist =
+          getters.getCustomTagCollections.some(
+            (tagCollection) => tagCollection.name === value.name
+          )
 
         if (doesTheTagCollectionAlreadyExist) {
           console.debug('A tag collection with this name already exists!')
           return
         }
 
-        const arrayWithTagCollection = [...getters.getTagCollections, value]
+        const arrayWithTagCollection = [
+          ...getters.getCustomTagCollections,
+          value
+        ]
 
         commit('setCustomTagCollections', arrayWithTagCollection)
         break
       }
 
       case 'remove': {
-        const arrayWithoutTagCollection = getters.getTagCollections.filter(
-          (tagCollection) => {
+        const arrayWithoutTagCollection =
+          getters.getCustomTagCollections.filter((tagCollection) => {
             return tagCollection.name !== value.name
-          }
-        )
+          })
 
         commit('setCustomTagCollections', arrayWithoutTagCollection)
         break
@@ -358,7 +361,7 @@ export const actions = {
 
   addPostToSavedPosts({ getters, commit }, { post }) {
     // TODO: improve clone
-    const SAVED_POSTS = JSON.parse(JSON.stringify(getters.getSavedPosts))
+    const SAVED_POSTS = JSON.parse(JSON.stringify(getters.getCustomSavedPosts))
 
     // TODO: Improve Post creation so it does not rely so much in the API
     const NEW_POST_DATA = post
@@ -367,17 +370,17 @@ export const actions = {
     // Add new Post
     SAVED_POSTS.push(NEW_POST_DATA)
 
-    commit('setSavedPosts', SAVED_POSTS)
+    commit('setCustomSavedPosts', SAVED_POSTS)
   },
 
   removePostFromSavedPosts({ getters, commit }, { postId }) {
-    const SAVED_POSTS = JSON.parse(JSON.stringify(getters.getSavedPosts))
+    const SAVED_POSTS = JSON.parse(JSON.stringify(getters.getCustomSavedPosts))
 
     // Remove post with the same ID
     const FILTERED_SAVED_POSTS = SAVED_POSTS.filter((SAVED_POST) => {
       return SAVED_POST.id !== postId
     })
 
-    commit('setSavedPosts', FILTERED_SAVED_POSTS)
+    commit('setCustomSavedPosts', FILTERED_SAVED_POSTS)
   }
 }
