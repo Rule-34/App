@@ -38,7 +38,7 @@
 
 <script>
 import { RotateCcwIcon, SaveIcon } from "vue-feather-icons";
-import { mapGetters, mapMutations } from "vuex";
+import { createStateFromStore, restoreStateToStore } from "~/assets/js/MigrateState";
 
 
 export default {
@@ -64,40 +64,7 @@ export default {
     };
   },
 
-  mounted() {
-
-    const CURRENT_URL = new URL(window.location.href);
-
-    if (CURRENT_URL.searchParams.get("success") !== "true") {
-      return;
-    }
-
-    this.$toast.error("Backup restored sucessfully");
-
-    // Remove all query parameters
-    this.$router.push({
-      query: {}
-    });
-  },
-
-  computed: {
-    ...mapGetters(["getVersion"]),
-
-    ...mapGetters("user", [
-      "getCustomBoorus",
-      "getTagCollections",
-      "getSavedPosts"
-    ])
-  },
-
   methods: {
-    ...mapMutations(["setVersion"]),
-
-    ...mapMutations("user", [
-      "setCustomBoorus",
-      "setCustomTagCollections",
-      "setSavedPosts"
-    ]),
 
     createBackup() {
 
@@ -117,7 +84,7 @@ export default {
         .replaceAll("/", "-")
         .replaceAll(":", "-");
 
-      const STATE = this.createState();
+      const STATE = createStateFromStore(this.$store);
 
 
       // Create JSON file
@@ -143,7 +110,7 @@ export default {
       LINK.remove();
       URL.revokeObjectURL(BLOB_OBJECT_URL);
 
-      this.$toast.error("Backup created sucessfully");
+      this.$toast.info("Backup created sucessfully");
     },
 
     async restoreBackup() {
@@ -157,37 +124,9 @@ export default {
 
       const RESTORED_STATE = JSON.parse(await FILE.text());
 
-      this.restoreState(RESTORED_STATE);
+      restoreStateToStore(RESTORED_STATE, this.$store);
 
-      const CURRENT_URL = new URL(window.location.href);
-
-      CURRENT_URL.searchParams.set("success", "true");
-
-      window.location.assign(CURRENT_URL.toString());
-    },
-
-
-    createState: function() {
-      return {
-        version: this.getVersion,
-
-        user: {
-          custom: {
-            boorus: this.getCustomBoorus,
-            tagCollections: this.getTagCollections,
-            savedPosts: this.getSavedPosts
-          }
-        }
-      };
-    },
-
-    restoreState: function(state) {
-      // TODO: Think about what happens when an old state version is restored
-      this.setVersion(state.version);
-
-      this.setCustomBoorus(state.user.custom.boorus);
-      this.setCustomTagCollections(state.user.custom.tagCollections);
-      this.setSavedPosts(state.user.custom.savedPosts);
+      this.$toast.info("Backup restored sucessfully");
     }
   }
 };

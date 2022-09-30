@@ -1,12 +1,15 @@
-import { cloneDeep } from 'lodash-es'
-import { migrateState } from '~/assets/js/MigrateState'
+import {
+  createStateFromStore,
+  migrateState,
+  restoreStateToStore
+} from '~/assets/js/MigrateState'
 
 export default (context) => {
   const { store } = context
 
-  const state = cloneDeep(store.state)
+  const STATE = createStateFromStore(store)
 
-  const migratedState = migrateState(state)
+  const MIGRATED_STATE = migrateState(STATE)
 
-  store.replaceState(migratedState)
+  restoreStateToStore(MIGRATED_STATE, store)
 }
