@@ -1,8 +1,8 @@
 import {
   createStateFromStore,
-  migrateState,
   restoreStateToStore
-} from '~/assets/js/MigrateState'
+} from '~/assets/js/StateHelper'
+import { migrateState } from '~/assets/js/MigrateState'
 
 export default (context) => {
   const { store } = context

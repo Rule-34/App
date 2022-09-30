@@ -38,7 +38,7 @@
 
 <script>
 import { RotateCcwIcon, SaveIcon } from "vue-feather-icons";
-import { createStateFromStore, restoreStateToStore } from "~/assets/js/MigrateState";
+import { createStateFromStore, restoreStateToStore } from "~/assets/js/StateHelper";
 
 
 export default {
