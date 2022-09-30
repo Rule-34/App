@@ -1,17 +1,17 @@
 <template>
   <div
-    class="fixed inset-0 z-30 overflow-y-auto"
     aria-labelledby="tag-collections-title"
-    role="dialog"
     aria-modal="true"
+    class="fixed inset-0 z-30 overflow-y-auto"
+    role="dialog"
   >
     <div
       class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0"
     >
       <!-- Background overlay -->
       <div
-        class="fixed inset-0 bg-black bg-opacity-75"
         aria-hidden="true"
+        class="fixed inset-0 bg-black bg-opacity-75"
         @click.self.stop="toggleTagCollections"
       >
         <!--  -->
@@ -19,8 +19,8 @@
 
       <!-- This element is to trick the browser into centering the modal contents. -->
       <span
-        class="hidden sm:inline-block sm:align-middle sm:h-screen"
         aria-hidden="true"
+        class="hidden sm:inline-block sm:align-middle sm:h-screen"
       >
         &#8203;
       </span>
@@ -44,19 +44,19 @@
           <ul class="space-y-3">
             <!--  -->
 
-            <template v-if="getTagCollections.length">
+            <template v-if="getCustomTagCollections.length">
               <!--  -->
 
               <li
-                v-for="(tagCollection, index) in getTagCollections"
+                v-for="(tagCollection, index) in getCustomTagCollections"
                 :key="tagCollection.name"
                 class="px-2 py-1 text-left border-util focus-within:focus-util group"
               >
                 <!--  -->
 
                 <button
-                  type="button"
                   class="flex justify-between w-full"
+                  type="button"
                   @click="addTagCollectionToTags(index)"
                 >
                   <span
@@ -82,7 +82,7 @@
                 error-data="No Tag Collections available"
               >
                 <template #customAction>
-                  <NuxtLink to="/premium" class="link"> Create some? </NuxtLink>
+                  <NuxtLink class="link" to="/premium"> Create some?</NuxtLink>
                 </template>
               </Error>
             </template>
@@ -90,7 +90,7 @@
         </div>
 
         <div class="space-y-1 text-sm">
-          <NuxtLink to="/premium" class="link">Create more</NuxtLink>
+          <NuxtLink class="link" to="/premium">Create more</NuxtLink>
 
           <p class="text-xs text-gray-300">Or</p>
 
@@ -108,65 +108,65 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import { TagIcon } from 'vue-feather-icons'
+import { mapActions, mapGetters } from "vuex";
+import { TagIcon } from "vue-feather-icons";
 
 export default {
   components: {
-    TagIcon,
+    TagIcon
   },
 
   props: {
     searchTags: {
       type: Array,
       default() {
-        return []
-      },
-    },
+        return [];
+      }
+    }
   },
 
   computed: {
-    ...mapGetters('user', ['getTagCollections']),
+    ...mapGetters("user", ["getCustomTagCollections"])
   },
 
   methods: {
-    ...mapActions('user', ['customTagCollectionsManager']),
+    ...mapActions("user", ["customTagCollectionsManager"]),
 
     toggleTagCollections() {
-      this.$emit('toggleTagCollections')
+      this.$emit("toggleTagCollections");
     },
 
     addTagCollectionToTags(tagCollectionIndex) {
       this.$emit(
-        'mergeToSearchTags',
-        this.getTagCollections[tagCollectionIndex].tags
-      )
+        "mergeToSearchTags",
+        this.getCustomTagCollections[tagCollectionIndex].tags
+      );
 
-      this.toggleTagCollections()
+      this.toggleTagCollections();
     },
 
     saveSearchTagsToTagCollection() {
       if (!this.searchTags.length) {
-        return
+        return;
       }
 
       const tagCollectionName = prompt(
-        'Choose a name for the new Tag Collection.'
-      )
+        "Choose a name for the new Tag Collection."
+      );
 
       if (!tagCollectionName) {
-        alert('Wrong input, only text please.')
-        return
+        alert("Wrong input, only text please.");
+        return;
       }
 
       this.customTagCollectionsManager({
-        operation: 'add',
+        operation: "add",
         value: {
           name: tagCollectionName,
-          tags: this.searchTags,
-        },
-      })
-    },
-  },
-}
+          tags: this.searchTags
+        }
+      });
+    }
+  }
+};
 </script>

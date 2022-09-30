@@ -7,7 +7,7 @@ export const state = () => ({
 })
 
 export const getters = {
-  getVersion() {
+  getVersion(state) {
     return state.version
   },
 
@@ -40,7 +40,7 @@ export const actions = {
       }
     }
 
-    return await dispatch('simpleFetch', {
+    return dispatch('simpleFetch', {
       url,
       options: { ...options, ...AXIOS_OPTIONS }
     })

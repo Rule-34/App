@@ -15,9 +15,9 @@
           </thead>
 
           <tbody class="text-gray-300 truncate">
-          <template v-if="getTagCollections.length">
+          <template v-if="getCustomTagCollections.length">
             <tr
-              v-for="tagCollection in getTagCollections"
+              v-for="tagCollection in getCustomTagCollections"
               :key="tagCollection.name"
             >
               <td @click="deleteTagCollection(tagCollection)">
@@ -28,7 +28,7 @@
                 class="text-sm"
                 @click="copyTagCollectionToFormCollection(tagCollection)"
               >
-                {{ tagCollection.tags.join(', ') }}
+                {{ tagCollection.tags.join(", ") }}
               </td>
             </tr>
           </template>
@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   data() {
@@ -109,52 +109,52 @@ export default {
         name: null,
         tags: null
       }
-    }
+    };
   },
 
   head() {
     return {
-      title: 'Tag Collections',
+      title: "Tag Collections",
       meta: [
         {
-          hid: 'description',
-          name: 'description',
-          content: 'Create collections of tags.'
+          hid: "description",
+          name: "description",
+          content: "Create collections of tags."
         }
       ]
-    }
+    };
   },
 
   computed: {
-    ...mapGetters('user', ['getTagCollections'])
+    ...mapGetters("user", ["getCustomTagCollections"])
   },
 
   methods: {
-    ...mapActions('user', ['customTagCollectionsManager']),
+    ...mapActions("user", ["customTagCollectionsManager"]),
 
     addTagCollection() {
       this.customTagCollectionsManager({
-        operation: 'add',
+        operation: "add",
         value: {
           name: this.formTagCollection.name,
-          tags: this.formTagCollection.tags.split(', ')
+          tags: this.formTagCollection.tags.split(", ")
         }
-      })
+      });
     },
 
     deleteTagCollection(tagCollection) {
       this.customTagCollectionsManager({
-        operation: 'remove',
+        operation: "remove",
         value: tagCollection
-      })
+      });
     },
 
     copyTagCollectionToFormCollection(tagCollection) {
       // Clone as a weird fix so Vuex does not crash
       this.formTagCollection = {
         name: tagCollection.name,
-        tags: tagCollection.tags.join(', ')
-      }
+        tags: tagCollection.tags.join(", ")
+      };
     }
   }
 }
