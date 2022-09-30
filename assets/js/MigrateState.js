@@ -8,6 +8,10 @@
 export function migrateState(state) {
   const INITIAL_STATE_VERSION = state.version
 
+  if (INITIAL_STATE_VERSION == null) {
+    throw new Error('Invalid initial state version')
+  }
+
   switch (INITIAL_STATE_VERSION) {
     case 0:
       state = migrateVersion0State(state)
