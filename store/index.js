@@ -2,20 +2,28 @@ export const state = () => ({
   version: 0,
 
   statistics: {
-    timesTheAppHasBeenOpened: 0,
-  },
+    timesTheAppHasBeenOpened: 0
+  }
 })
 
 export const getters = {
+  getVersion() {
+    return state.version
+  },
+
   getTimesTheAppHasBeenOpened(state) {
     return state.statistics.timesTheAppHasBeenOpened
-  },
+  }
 }
 
 export const mutations = {
+  setVersion(state, value) {
+    state.version = value
+  },
+
   setTimesTheAppHasBeenOpened(state, value) {
     state.statistics.timesTheAppHasBeenOpened = value
-  },
+  }
 }
 
 export const actions = {
@@ -28,13 +36,13 @@ export const actions = {
   async simpleApiFetch({ state, dispatch }, { url, options }) {
     const AXIOS_OPTIONS = {
       headers: {
-        Authorization: this.$auth.strategy.token.get(),
-      },
+        Authorization: this.$auth.strategy.token.get()
+      }
     }
 
     return await dispatch('simpleFetch', {
       url,
-      options: { ...options, ...AXIOS_OPTIONS },
+      options: { ...options, ...AXIOS_OPTIONS }
     })
-  },
+  }
 }
