@@ -29,8 +29,8 @@
 
           <!-- Log out -->
           <button
-            type="button"
             class="block ml-auto leading-none link"
+            type="button"
             @click="logOut"
           >
             Log out
@@ -48,7 +48,7 @@
             class="px-3 py-2 rounded-full link border-util bg-darkGray-700"
             to="/premium/custom-boorus"
           >
-            Modify
+            <ChevronRightIcon class="icon w-6 h-6 text-inherit" />
           </NuxtLink>
         </div>
 
@@ -63,7 +63,7 @@
             class="px-3 py-2 rounded-full link border-util bg-darkGray-700"
             to="/premium/tag-collections"
           >
-            Modify
+            <ChevronRightIcon class="icon w-6 h-6 text-inherit" />
           </NuxtLink>
         </div>
 
@@ -78,7 +78,22 @@
             class="px-3 py-2 rounded-full link border-util bg-darkGray-700"
             to="/premium/saved-posts"
           >
-            Modify
+            <ChevronRightIcon class="icon w-6 h-6 text-inherit" />
+          </NuxtLink>
+        </div>
+
+        <!-- Backup  -->
+        <div class="flex flex-row items-center p-4 material-container">
+          <div class="grow">
+            <h1 class="text-lg font-medium text-gray-200">Backup</h1>
+            <p class="text-gray-300">Save your App data</p>
+          </div>
+
+          <NuxtLink
+            class="px-3 py-2 rounded-full link border-util bg-darkGray-700"
+            to="/premium/backup"
+          >
+            <ChevronRightIcon class="icon w-6 h-6 text-inherit" />
           </NuxtLink>
         </div>
 
@@ -88,7 +103,7 @@
         <!-- Notice -->
         <p class="text-sm text-center text-gray-300">
           Manage your subscription on
-          <a href="https://gumroad.com/library" target="_blank" rel="noopener nofollow" class="link">
+          <a class="link" href="https://gumroad.com/library" rel="noopener nofollow" target="_blank">
             Gumroad</a
           >.
         </p>
@@ -110,32 +125,37 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { ChevronRightIcon } from "vue-feather-icons";
+import { mapGetters } from "vuex";
 
 export default {
+  components: {
+    ChevronRightIcon
+  },
+
   head() {
     return {
-      title: 'Premium',
+      title: "Premium",
       meta: [
         {
-          hid: 'description',
-          name: 'description',
-          content: 'Premium subscription.',
-        },
-      ],
-    }
+          hid: "description",
+          name: "description",
+          content: "Premium subscription."
+        }
+      ]
+    };
   },
 
   computed: {
-    ...mapGetters('premium', ['isUserPremium', 'getUserEmail']),
+    ...mapGetters("premium", ["isUserPremium", "getUserEmail"])
   },
 
   methods: {
     async logOut() {
-      await this.$auth.logout()
+      await this.$auth.logout();
 
-      location.reload()
-    },
-  },
-}
+      location.reload();
+    }
+  }
+};
 </script>
