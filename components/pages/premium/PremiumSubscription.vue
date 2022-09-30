@@ -38,8 +38,48 @@
             class="ml-3 text-base font-medium leading-6 link"
             to="/premium/custom-boorus"
           >
-            Use more Boorus
+            Use additional Boorus
           </NuxtLink>
+        </li>
+
+        <!--  -->
+        <li class="flex items-start mt-4">
+          <div class="shrink-0">
+            <check-icon class="w-6 h-6 icon text-accent-400" />
+          </div>
+          <NuxtLink
+            class="ml-3 text-base font-medium leading-6 link"
+            to="/premium/saved-posts"
+          >
+            Save Posts
+          </NuxtLink>
+        </li>
+
+        <!--  -->
+        <li class="flex items-start mt-4">
+          <div class="shrink-0">
+            <check-icon class="w-6 h-6 icon text-accent-400" />
+          </div>
+          <p class="ml-3 text-base font-medium leading-6 text-gray-300">
+            One-click Post download
+          </p>
+        </li>
+
+        <!--  -->
+        <li class="flex items-start mt-4">
+          <div class="shrink-0">
+            <check-icon class="w-6 h-6 icon text-accent-400" />
+          </div>
+          <p class="ml-3 text-base font-medium leading-6 text-gray-300">
+            Find Post source with
+            <a
+              class="link"
+              href="https://saucenao.com/"
+              rel="noopener nofollow"
+              target="_blank">
+              SauceNAO
+            </a>
+          </p>
         </li>
 
         <!--  -->
@@ -62,9 +102,9 @@
           </div>
           <NuxtLink
             class="ml-3 text-base font-medium leading-6 link"
-            to="/premium/saved-posts"
+            to="/premium/backup"
           >
-            Save posts
+            Create backups
           </NuxtLink>
         </li>
 
@@ -74,24 +114,7 @@
             <check-icon class="w-6 h-6 icon text-accent-400" />
           </div>
           <p class="ml-3 text-base font-medium leading-6 text-gray-300">
-            Download Posts automatically
-          </p>
-        </li>
-
-        <!--  -->
-        <li class="flex items-start mt-4">
-          <div class="shrink-0">
-            <check-icon class="w-6 h-6 icon text-accent-400" />
-          </div>
-          <p class="ml-3 text-base font-medium leading-6 text-gray-300">
-            Find source with
-            <a
-              class="link"
-              href="https://saucenao.com/"
-              target="_blank"
-              rel="noopener nofollow">
-                SauceNAO
-            </a>
+            No ads
           </p>
         </li>
       </ul>
@@ -100,8 +123,8 @@
         <a
           class="block w-full px-6 py-3 text-lg font-medium leading-6 text-center text-black transition border-0 rounded-lg bg-gradient-to-r from-accent-400 to-primary-400 focus:focus-util hover:text-gray-800"
           href="https://gum.co/Rule34App"
-          target="_blank"
           rel="noopener nofollow"
+          target="_blank"
         >
           Subscribe
         </a>
