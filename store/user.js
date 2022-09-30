@@ -1,4 +1,5 @@
 import { completeBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils.js'
+import { cloneDeep } from 'lodash-es'
 
 // Skip the 8 first Boorus as they are included in the default list
 const ADDITIONAL_DEFAULT_PREMIUM_BOORUS = completeBooruList.slice(7)
@@ -360,8 +361,7 @@ export const actions = {
   },
 
   addPostToSavedPosts({ getters, commit }, { post }) {
-    // TODO: improve clone
-    const SAVED_POSTS = JSON.parse(JSON.stringify(getters.getCustomSavedPosts))
+    const SAVED_POSTS = cloneDeep(getters.getCustomSavedPosts)
 
     // TODO: Improve Post creation so it does not rely so much in the API
     const NEW_POST_DATA = post
