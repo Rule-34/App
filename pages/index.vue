@@ -75,7 +75,7 @@ export default {
   },
 
   head() {
-    const head = {
+    const HEAD = {
       meta: [
         // Necessary so images can be loaded from other domains
         {
@@ -88,30 +88,85 @@ export default {
     }
 
     // Join array of tags into a comma separated string
-    const tags = SeoHelper.tagArrayToTitle(this.getTags)
+    const TAGS = SeoHelper.tagArrayToTitle(this.getTags)
 
-    if (tags) {
+    if (TAGS) {
       // Title
-      head.title = tags + ' Hentai Porn'
+      const TITLE = TAGS + ' Hentai Porn'
 
-      // Description
-      head.meta.push({
-        hid: 'description',
-        name: 'description',
-        content: `Browse popular ${ tags } Rule 34 Hentai Porn for free. Without ads.`
+      HEAD.title = TITLE
+
+      HEAD.meta.push({
+        hid: 'og:title',
+        name: 'og:title',
+        content: TITLE
       })
 
-      // Canonical
-      const CANONICAL_ROUTE = RouterHelper.generatePostsRouteWithDefaults(this.$nuxt.$store, undefined, undefined, this.getTags)
+      // Description
+      const DESCRIPTION = `Browse popular ${TAGS} Rule 34 Hentai Porn for free. Without ads.`
 
-      head.link.push({
-        hid: 'canonical',
-        name: 'canonical',
-        content: this.$router.resolve(CANONICAL_ROUTE).href
+      HEAD.meta.push({
+        hid: 'description',
+        name: 'description',
+        content: DESCRIPTION
+      })
+
+      HEAD.meta.push({
+        hid: 'og:description',
+        name: 'og:description',
+        content: DESCRIPTION
       })
     }
 
-    return head
+    // Canonical
+    const CANONICAL_ROUTE = RouterHelper.generatePostsRouteWithDefaults(
+      this.$nuxt.$store,
+      undefined,
+      undefined,
+      this.getTags
+    )
+
+    const RESOLVED_CANONICAL_ROUTE = this.$router.resolve(CANONICAL_ROUTE)
+
+    const ABSOLUTE_URL = new URL(
+      RESOLVED_CANONICAL_ROUTE.href,
+      window.location.origin
+    ).href
+
+    HEAD.link.push({
+      hid: 'canonical',
+      name: 'canonical',
+      content: RESOLVED_CANONICAL_ROUTE.href
+    })
+
+    // OG Image
+    HEAD.meta.push({
+      hid: 'og:image',
+      name: 'og:image',
+      content: `https://url-shot.api-point.cf/?width=1200&height=630&url=${encodeURI(
+        ABSOLUTE_URL
+      )}`
+    })
+
+    HEAD.meta.push({
+      hid: 'og:image:width',
+      name: 'og:image:width',
+      content: 1200
+    })
+
+    HEAD.meta.push({
+      hid: 'og:image:height',
+      name: 'og:image:height',
+      content: 630
+    })
+
+    HEAD.meta.push({
+      hid: 'og:image:type',
+      name: 'og:image:type',
+      content: 'image/png'
+    })
+
+    return HEAD
   },
 
   computed: {
