@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.21.0](https://github.com/Rule-34/App/compare/v2.20.0...v2.21.0) (2022-10-07)
+
+
+### Features
+
+* create a-b test ([c625e06](https://github.com/Rule-34/App/commit/c625e06a76449f2049d804b51d32193d5309c2c4))
+* **SEO:** show canonical route and use API for og image ([a554379](https://github.com/Rule-34/App/commit/a5543799fe67e87da98224a0dd60f6cf352d2571))
+
 ## [2.20.0](https://github.com/Rule-34/App/compare/v2.19.0...v2.20.0) (2022-09-30)
 
 
