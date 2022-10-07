@@ -14,7 +14,7 @@
           class="flex items-start px-3 text-5xl leading-none tracking-tight text-gray-200"
         >
           <span class="mt-1 mr-2 text-3xl font-medium"> € </span>
-          <span class="font-extrabold"> 5,9 </span>
+          <span class="font-extrabold"> {{ selectedPrice.price }} </span>
         </span>
 
         <!-- Recurring -->
@@ -121,8 +121,8 @@
 
       <div class="mt-8">
         <a
+          :href="selectedPrice.link"
           class="block w-full px-6 py-3 text-lg font-medium leading-6 text-center text-black transition border-0 rounded-lg bg-gradient-to-r from-accent-400 to-primary-400 focus:focus-util hover:text-gray-800"
-          href="https://gum.co/Rule34App"
           rel="noopener nofollow"
           target="_blank"
         >
@@ -135,10 +135,62 @@
 
 <script>
 import { CheckIcon } from "vue-feather-icons";
+import { useStorage } from "@vueuse/core";
+
+const PRICE_LIST = [
+  {
+    price: "3,99",
+    link: "https://gum.co/Rule34App/nj9uz8c"
+  },
+  {
+    price: "4,99",
+    link: "https://gum.co/Rule34App/ofgjphh"
+  },
+  {
+    price: "5,99",
+    link: "https://gum.co/Rule34App/a6gx7zl"
+  },
+  {
+    price: "6,99",
+    link: "https://gum.co/Rule34App/lk20010"
+  },
+  {
+    price: "7,99",
+    link: "https://gum.co/Rule34App/mxrudd0"
+  },
+  {
+    price: "9,99",
+    link: "https://gum.co/Rule34App/"
+  }
+];
+
+const PRICE_LIST_INDEX = useStorage("price-index-test", -1);
 
 export default {
+  name: "PremiumSubscription",
+
   components: {
     CheckIcon
+  },
+
+  computed: {
+    selectedPrice: function() {
+      if (PRICE_LIST_INDEX.value === -1) {
+        return PRICE_LIST[PRICE_LIST.length];
+      }
+
+      return PRICE_LIST[PRICE_LIST_INDEX.value];
+    }
+  },
+
+  created() {
+    if (PRICE_LIST_INDEX.value !== -1) {
+      return;
+    }
+
+    const RANDOM_INDEX = Math.floor(Math.random() * PRICE_LIST.length);
+
+    PRICE_LIST_INDEX.value = RANDOM_INDEX;
   }
 };
 </script>
