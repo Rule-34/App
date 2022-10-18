@@ -77,7 +77,7 @@ export const getters = {
       return []
     }
 
-    return tags.split('|')
+    return tags.split('|').map((tag) => decodeURI(tag))
   }
 }
 
