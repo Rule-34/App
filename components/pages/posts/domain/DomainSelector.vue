@@ -1,16 +1,16 @@
 <template>
   <div
-    class="relative flex items-center justify-center gap-2 rounded-full  material-container focus-within:focus-util"
+    class="material-container focus-within:focus-util relative flex items-center justify-center gap-2 rounded-full"
   >
     <!-- Cloud icon -->
     <div for="domain-selector" class="inline-flex items-center pl-2">
-      <CloudIcon class="w-4 h-4 icon text-primary-400" />
+      <CloudIcon class="icon h-4 w-4 text-primary-400" />
     </div>
 
     <!-- Selector -->
     <select
       aria-label="Change the domain where the content is pulled from"
-      class="inline-flex items-center font-light outline-none appearance-none  text-primary-400 bg-darkGray-300"
+      class="inline-flex appearance-none items-center bg-darkGray-300 font-light text-primary-400 outline-none"
       @change="emitDomainChange"
     >
       <template v-for="domainGroup in domainGroupList">
@@ -37,7 +37,7 @@
 
     <!-- Drop icon -->
     <div for="domain-selector" class="inline-flex items-center pr-2">
-      <ChevronDownIcon class="w-4 h-4 icon" />
+      <ChevronDownIcon class="icon h-4 w-4" />
     </div>
   </div>
 </template>
@@ -51,13 +51,13 @@ export default {
   props: {
     activeDomain: {
       type: String,
-      required: true,
+      required: true
     },
 
     domainGroupList: {
       type: Array,
-      required: true,
-    },
+      required: true
+    }
   },
 
   methods: {
@@ -70,7 +70,7 @@ export default {
       const DOMAIN = event.target.value
 
       this.$emit('domainChange', DOMAIN)
-    },
-  },
+    }
+  }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
-  <aside class="fixed z-40 flex w-full min-h-screen md:flex-row">
-    <div class="flex flex-col md:border-r bg-darkGray-300 border-darkGray-100">
+  <aside class="fixed z-40 flex min-h-screen w-full md:flex-row">
+    <div class="flex flex-col border-darkGray-100 bg-darkGray-300 md:border-r">
       <!-- Hero Image -->
       <div class="relative h-full overflow-hidden">
         <picture>
@@ -13,7 +13,7 @@
 
           <img
             alt="Rule 34 App Logo"
-            class="transition-transform duration-500 delay-300 transform hover:scale-150"
+            class="transform transition-transform delay-300 duration-500 hover:scale-150"
             height="512"
             loading="eager"
             src="~/assets/img/brand/icon.png"
@@ -23,20 +23,20 @@
 
         <!-- Text on image -->
         <div
-          class="absolute bottom-0 left-0 p-3 transition-colors duration-300 link"
+          class="link absolute bottom-0 left-0 p-3 transition-colors duration-300"
         >
           <h1 class="text-lg font-semibold">Rule 34 App</h1>
           <h3>Browse popular Hentai</h3>
         </div>
       </div>
 
-      <nav class="flex flex-col h-full p-3 bg-darkGray-700">
+      <nav class="flex h-full flex-col bg-darkGray-700 p-3">
         <!-- Navbar Links -->
         <ul class="flex-auto space-y-2 text-center sm:text-left">
           <li v-for="link in sideNavLinks" :key="link.title">
             <NuxtLink
               :to="link.url"
-              class="relative block transition-transform duration-300 transform link hover:translate-x-1"
+              class="link relative block transform transition-transform duration-300 hover:translate-x-1"
             >
               <span class="absolute inset-0 opacity-0" />
               <span class="relative"> {{ link.title }}</span>
@@ -46,12 +46,12 @@
           <!-- Premium -->
           <li>
             <NuxtLink
-              class="relative block transition-transform duration-300 transform link hover:translate-x-1"
+              class="link relative block transform transition-transform duration-300 hover:translate-x-1"
               to="/premium"
             >
               <span class="absolute inset-0 opacity-0" />
               <span
-                class="relative text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-accent-400 to-primary-400"
+                class="relative bg-gradient-to-r from-accent-400 to-primary-400 bg-clip-text text-lg font-semibold text-transparent"
               >
                 Premium
               </span>
@@ -63,13 +63,13 @@
           <!-- Discord -->
           <li>
             <a
-              class="flex transition-transform duration-300 transform link hover:scale-110"
+              class="link flex transform transition-transform duration-300 hover:scale-110"
               href="https://redirect.r34.app/discord"
               target="_blank"
               rel="noopener nofollow"
             >
               <svg
-                class="w-6 h-6 mr-1 icon"
+                class="icon mr-1 h-6 w-6"
                 fill="currentColor"
                 viewBox="0 0 24 24"
               >
@@ -85,7 +85,7 @@
           <!-- Legal -->
           <li>
             <NuxtLink
-              class="flex transition-transform duration-300 transform link hover:scale-110"
+              class="link flex transform transition-transform duration-300 hover:scale-110"
               to="/legal"
             >
               Legal
@@ -95,18 +95,19 @@
           <!-- Donate -->
           <li>
             <a
-              class="flex transition-transform duration-300 transform link hover:scale-110"
+              class="link flex transform transition-transform duration-300 hover:scale-110"
               href="https://redirect.r34.app/twitter"
               target="_blank"
               rel="noopener nofollow"
             >
               <svg
-                class="w-6 h-6 mr-1 icon"
+                class="icon mr-1 h-6 w-6"
                 fill="currentColor"
                 viewBox="0 0 24 24"
               >
                 <path
-                  d="M24 4.56c-.88.39-1.83.65-2.83.77a4.93 4.93 0 0 0 2.17-2.72c-.95.56-2 .97-3.13 1.2a4.92 4.92 0 0 0-8.4 4.48C7.74 8.1 4.1 6.13 1.68 3.15A4.93 4.93 0 0 0 3.2 9.72a4.9 4.9 0 0 1-2.23-.61A4.93 4.93 0 0 0 4.91 14c-.69.18-1.45.23-2.22.08a4.93 4.93 0 0 0 4.6 3.42A9.9 9.9 0 0 1 0 19.54a13.94 13.94 0 0 0 7.55 2.21c9.14 0 14.3-7.72 14-14.64.95-.7 1.79-1.57 2.45-2.55z" />
+                  d="M24 4.56c-.88.39-1.83.65-2.83.77a4.93 4.93 0 0 0 2.17-2.72c-.95.56-2 .97-3.13 1.2a4.92 4.92 0 0 0-8.4 4.48C7.74 8.1 4.1 6.13 1.68 3.15A4.93 4.93 0 0 0 3.2 9.72a4.9 4.9 0 0 1-2.23-.61A4.93 4.93 0 0 0 4.91 14c-.69.18-1.45.23-2.22.08a4.93 4.93 0 0 0 4.6 3.42A9.9 9.9 0 0 1 0 19.54a13.94 13.94 0 0 0 7.55 2.21c9.14 0 14.3-7.72 14-14.64.95-.7 1.79-1.57 2.45-2.55z"
+                />
               </svg>
 
               <span>Twitter</span>
@@ -118,7 +119,7 @@
 
     <!-- Space for clicking out of the menu -->
     <div
-      class="flex-1 hidden bg-black bg-opacity-75 md:block"
+      class="hidden flex-1 bg-black bg-opacity-75 md:block"
       @click="sideNavNavigationManager({ operation: 'toggle' })"
     >
       &nbsp;
@@ -136,19 +137,19 @@ export default {
       sideNavLinks: [
         {
           title: 'Posts',
-          url: RouterHelper.generatePostsRouteWithDefaults(this.$nuxt.$store),
+          url: RouterHelper.generatePostsRouteWithDefaults(this.$nuxt.$store)
         },
         { title: 'Faq', url: '/faq' },
         { title: 'Partners', url: '/partners' },
         { title: 'Usage', url: '/usage' },
         { title: 'About', url: '/about' },
-        { title: 'Settings', url: '/settings' },
-      ],
+        { title: 'Settings', url: '/settings' }
+      ]
     }
   },
 
   methods: {
-    ...mapActions('navigation', ['sideNavNavigationManager']),
-  },
+    ...mapActions('navigation', ['sideNavNavigationManager'])
+  }
 }
 </script>

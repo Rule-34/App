@@ -10,7 +10,7 @@ export default {
   fetchOnServer: false,
 
   watch: {
-    '$route.query': '$fetch',
+    '$route.query': '$fetch'
   },
 
   methods: {
@@ -22,6 +22,6 @@ export default {
       },
       1,
       { maxWait: 5 }
-    ),
-  },
+    )
+  }
 }

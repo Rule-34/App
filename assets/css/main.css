@@ -24,12 +24,12 @@
 
   /*  */
   .border-util {
-    @apply border rounded border-darkGray-100;
+    @apply rounded border border-darkGray-100;
   }
 
   /*  */
   .link {
-    @apply transition-colors duration-300 text-primary-500;
+    @apply text-primary-500 transition-colors duration-300;
   }
 
   .link:hover {
@@ -46,12 +46,12 @@
   .icon {
     stroke-width: 1.6;
     /* Align middle is necessary for some reason for mobile devices */
-    @apply overflow-visible text-white align-middle;
+    @apply overflow-visible align-middle text-white;
   }
 
   /*  */
   .material-container {
-    @apply overflow-hidden rounded-lg bg-darkGray-300 border-util;
+    @apply border-util overflow-hidden rounded-lg bg-darkGray-300;
   }
 
   /* .material-container:focus-within {
@@ -59,7 +59,7 @@
   } */
   /*  */
   .tag-container {
-    @apply flex flex-wrap items-start content-start gap-2 p-2 overflow-hidden bg-darkGray-500;
+    @apply flex flex-wrap content-start items-start gap-2 overflow-hidden bg-darkGray-500 p-2;
   }
 
   /*  */
@@ -68,12 +68,12 @@
     * NOT TO BE USED DIRECTLY AS CSS
     * IN CLASSES IT SHOULD BE USED WITH `.link`
     */
-    @apply px-1 overflow-hidden leading-normal border border-current rounded-none select-none;
+    @apply select-none overflow-hidden rounded-none border border-current px-1 leading-normal;
   }
 
   /* Active tags */
   .tag.nuxt-link-exact-active {
-    @apply text-primary-100 hover:text-primary-100 font-normal bg-primary-700 hover:bg-primary-600 border-primary-700 hover:border-primary-600;
+    @apply border-primary-700 bg-primary-700 font-normal text-primary-100 hover:border-primary-600 hover:bg-primary-600 hover:text-primary-100;
   }
 
   /* #endregion */
@@ -84,11 +84,11 @@
 /* #region Toast theme */
 
 .toasted-container {
-  @apply gap-3 bg-black backdrop-blur sm:bg-transparent sm:backdrop-filter-none bg-opacity-75;
+  @apply gap-3 bg-black bg-opacity-75 backdrop-blur sm:bg-transparent sm:backdrop-filter-none;
 }
 
 .toasted-custom-theme {
-  @apply text-white bg-darkGray-300 border-2 border-b-4 sm:border-2 border-darkGray-100 border-b-accent-300 sm:gap-2;
+  @apply border-2 border-b-4 border-darkGray-100 border-b-accent-300 bg-darkGray-300 text-white sm:gap-2 sm:border-2;
 
   @apply px-4 py-2 sm:rounded-lg !important;
 }
@@ -98,7 +98,7 @@
 }
 
 .toasted-custom-action {
-  @apply bg-darkGray-100 border-0 rounded-full m-0 px-2 py-1 focus:focus-util !important;
+  @apply focus:focus-util m-0 rounded-full border-0 bg-darkGray-100 px-2 py-1 !important;
 }
 
 /* #endregion */

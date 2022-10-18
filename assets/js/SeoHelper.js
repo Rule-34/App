@@ -1,26 +1,21 @@
-"use strict";
+'use strict'
 
-import { capitalize } from "lodash-es";
+import { capitalize } from 'lodash-es'
 
 export class SeoHelper {
-
   static tagArrayToTitle(tags) {
-
     if (!tags) {
-      return null;
+      return null
     }
 
-    const CAPITALIZED_TAGS = tags
-      .map(tag => capitalize(tag))
-      .join(", ");
+    const CAPITALIZED_TAGS = tags.map((tag) => capitalize(tag)).join(', ')
 
-    return this.normalizeStringForTitle(CAPITALIZED_TAGS);
+    return this.normalizeStringForTitle(CAPITALIZED_TAGS)
   }
 
   static normalizeStringForTitle(title) {
-
     if (!title) {
-      return null;
+      return null
     }
 
     title = title.trim()

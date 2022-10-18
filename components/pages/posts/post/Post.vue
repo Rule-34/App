@@ -15,7 +15,7 @@
         <button
           :aria-expanded="isActive"
           aria-label="Toggle tags panel"
-          class="relative w-full h-auto pointer-events-auto group"
+          class="group pointer-events-auto relative h-auto w-full"
           type="button"
           @click="toggleTags"
           @keydown.enter="toggleTags"
@@ -25,12 +25,12 @@
             ref="imageElement"
             :alt="'Image ' + post.data.id"
             :class="{
-              'opacity-100': media.hasLoaded,
+              'opacity-100': media.hasLoaded
             }"
             :height="mediaFile[0].height"
             :src="mediaFile[0].url"
             :width="mediaFile[0].width"
-            class="w-full h-auto transition-opacity duration-700 opacity-0"
+            class="h-auto w-full opacity-0 transition-opacity duration-700"
             decoding="async"
             loading="lazy"
             referrerpolicy="no-referrer"
@@ -40,13 +40,7 @@
 
           <!-- Fix for focus ring not applying on other elements -->
           <div
-            class="
-              absolute
-              inset-0
-              pointer-events-none
-              ring-inset
-              group-focus:focus-util
-            "
+            class="group-focus:focus-util pointer-events-none absolute inset-0 ring-inset"
           ></div>
         </button>
       </div>
@@ -57,8 +51,8 @@
         v-intersect="{
           handler: VideoOutOfViewHandler,
           options: {
-            threshold: [0],
-          },
+            threshold: [0]
+          }
         }"
         class="relative"
       >
@@ -66,49 +60,29 @@
           :key="mediaFile[0].url"
           ref="videoElement"
           :poster="mediaFile[1].url"
-          class="w-full h-auto"
+          class="h-auto w-full"
           controls
           loop
           playsinline
           preload="none"
         >
-          <source
-            :src="mediaFile[0].url"
-            @error="retryToLoadManager"
-          />
+          <source :src="mediaFile[0].url" @error="retryToLoadManager" />
           Your browser does not support HTML5 video.
         </video>
 
         <!-- Video tag button -->
-        <div class="absolute inset-y-0 right-0 p-4 pointer-events-none">
-          <div class="flex flex-col items-center justify-center w-full h-full">
+        <div class="pointer-events-none absolute inset-y-0 right-0 p-4">
+          <div class="flex h-full w-full flex-col items-center justify-center">
             <button
               :aria-expanded="isActive"
               aria-label="Toggle tags panel"
-              class="
-                p-1
-                bg-black
-                border border-transparent
-                rounded-lg
-                pointer-events-auto
-                bg-opacity-40
-                group
-                focus:focus-util
-              "
+              class="focus:focus-util group pointer-events-auto rounded-lg border border-transparent bg-black bg-opacity-40 p-1"
               type="button"
               @click="toggleTags"
               @keydown.enter="toggleTags"
             >
               <TagIcon
-                class="
-                  w-5
-                  h-5
-                  text-gray-200
-                  transition-colors
-                  duration-300
-                  icon
-                  group-hover:text-white
-                "
+                class="icon h-5 w-5 text-gray-200 transition-colors duration-300 group-hover:text-white"
               />
             </button>
           </div>
@@ -124,18 +98,19 @@
             <!-- Workaround for content not jumping is having a div before -->
             <div v-show="isActive">
               <!-- Action bar -->
-              <div class="flex items-center bg-darkGray-100 justify-evenly">
-
+              <div class="flex items-center justify-evenly bg-darkGray-100">
                 <!-- Actions -->
                 <template v-if="!error.show">
-
                   <!-- Saucenao -->
                   <template v-if="!isVideo">
                     <PostSaucenao :media-url="mediaFile[0].url" />
                   </template>
 
                   <!-- Download -->
-                  <PostDownload :media-name="post.id" :media-url="mediaFile[0].url" />
+                  <PostDownload
+                    :media-name="post.id"
+                    :media-url="mediaFile[0].url"
+                  />
 
                   <!-- Save post -->
                   <PostSavedPosts :post="post" />
@@ -143,7 +118,7 @@
               </div>
 
               <!-- Tags -->
-              <div class="min-w-full tag-container">
+              <div class="tag-container min-w-full">
                 <!-- -->
 
                 <!-- Character tags -->
@@ -308,15 +283,13 @@
 
       <!-- Source -->
       <template v-if="post.data.sources.length">
-
         <!-- -->
         <div class="w-full p-1 text-center">
-
           <!-- If text is an URL then make it a link -->
           <template v-if="isSourceAnUrl">
             <a
               :href="post.data.sources[0]"
-              class="inline-flex gap-2 link"
+              class="link inline-flex gap-2"
               rel="noopener nofollow"
               target="_blank"
             >
@@ -325,7 +298,7 @@
               </p>
 
               <!-- Icon -->
-              <ExternalLinkIcon class="w-5 h-5 icon" />
+              <ExternalLinkIcon class="icon h-5 w-5" />
             </a>
           </template>
 
@@ -460,20 +433,19 @@ export default {
   },
 
   beforeDestroy() {
-
     // Cancel any pending HTTP requests
     if (this.isImage) {
       const imageElement = this.$refs['imageElement']
 
       if (imageElement) {
         // TODO: This trick only works in Chrome
-        imageElement.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
+        imageElement.src =
+          'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
         imageElement.onload = null
         imageElement.onerror = null
       }
     }
   },
-
 
   methods: {
     generatePostsRouteWithDefaults: RouterHelper.generatePostsRouteWithDefaults,
@@ -493,7 +465,6 @@ export default {
     },
 
     async retryToLoadManager(event) {
-
       if (this.error.show) {
         const message = 'An error is set.'
 
@@ -515,9 +486,7 @@ export default {
       if (!this.media.retryLogic.tried.extraSlash) {
         console.info('Adding extra slash...')
 
-        event.target.src = this.addExtraSlashToURL(
-          this.mediaFile[0].url
-        )
+        event.target.src = this.addExtraSlashToURL(this.mediaFile[0].url)
 
         if (this.isVideo) {
           console.info('Reloading data and playing video')
@@ -561,14 +530,13 @@ export default {
       }
 
       // Retry to load it
-      else if (
-        this.media.retryLogic.count < 1
-      ) {
+      else if (this.media.retryLogic.count < 1) {
         console.info(
-          `Retry number ${ this.media.retryLogic.count } to load the media`
+          `Retry number ${this.media.retryLogic.count} to load the media`
         )
 
-        event.target.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
+        event.target.src =
+          'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
 
         event.target.src = this.mediaFile[0].url
 

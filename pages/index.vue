@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col max-w-3xl min-h-screen px-4 mx-auto sm:px-6 lg:px-8"
+    class="mx-auto flex min-h-screen max-w-3xl flex-col px-4 sm:px-6 lg:px-8"
   >
     <portal to="side-nav-area">
       <SearchToggler :tag-count="getTags.length" />
@@ -30,8 +30,7 @@
     </nav>
 
     <!-- Content -->
-    <main class="flex flex-col flex-auto min-h-full pb-4 space-y-4">
-
+    <main class="flex min-h-full flex-auto flex-col space-y-4 pb-4">
       <ul class="flex-auto space-y-4">
         <template v-if="getPosts.length">
           <li v-for="POST in getPosts" :key="POST.id">

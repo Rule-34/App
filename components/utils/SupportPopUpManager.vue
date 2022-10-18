@@ -11,7 +11,7 @@
       role="dialog"
       aria-modal="true"
     >
-      <div class="flex items-center justify-center min-h-screen text-center">
+      <div class="flex min-h-screen items-center justify-center text-center">
         <!-- Background overlay -->
         <div
           class="fixed inset-0 bg-black bg-opacity-75"
@@ -21,7 +21,7 @@
 
         <!-- Modal panel -->
         <div
-          class="inline-block px-2 overflow-hidden text-left align-middle transform sm:my-8 sm:max-w-xl sm:w-full sm:p-6"
+          class="inline-block transform overflow-hidden px-2 text-left align-middle sm:my-8 sm:w-full sm:max-w-xl sm:p-6"
         >
           <SupportPopUp />
         </div>
@@ -38,12 +38,12 @@ import fireAnalytics from '~/assets/js/analytics'
 export default {
   data() {
     return {
-      isActive: false,
+      isActive: false
     }
   },
 
   computed: {
-    ...mapGetters(['getTimesTheAppHasBeenOpened']),
+    ...mapGetters(['getTimesTheAppHasBeenOpened'])
   },
 
   mounted() {
@@ -64,7 +64,7 @@ export default {
 
     toggleSupportPopUp() {
       this.isActive = !this.isActive
-    },
-  },
+    }
+  }
 }
 </script>

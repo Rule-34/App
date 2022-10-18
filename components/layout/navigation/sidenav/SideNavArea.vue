@@ -1,6 +1,6 @@
 <template>
   <!-- Side Nav Toggler -->
-  <aside class="fixed z-50 navigation-toggler">
+  <aside class="navigation-toggler fixed z-50">
     <div class="flex flex-col items-center justify-center">
       <SideNavToggler />
 

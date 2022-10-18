@@ -4,8 +4,8 @@ export const state = () => ({
 
     data: undefined,
 
-    latestTitle: undefined, // This is saved to localStorage
-  },
+    latestTitle: undefined // This is saved to localStorage
+  }
 })
 
 export const getters = {
@@ -28,7 +28,7 @@ export const getters = {
 
     // Equal to 0 means they are identical
     return areTitlesEqual !== 0
-  },
+  }
 }
 
 export const mutations = {
@@ -38,7 +38,7 @@ export const mutations = {
 
   setLatestTitle(state, value) {
     state.notifications.latestTitle = value
-  },
+  }
 }
 
 export const actions = {
@@ -47,7 +47,7 @@ export const actions = {
       const response = await dispatch(
         'simpleFetch',
         {
-          url: state.notifications.url,
+          url: state.notifications.url
         },
         { root: true }
       )
@@ -56,8 +56,7 @@ export const actions = {
 
       //
     } catch (error) {
-
       this.$toast.error('Could not fetch notifications', { duration: 3500 })
     }
-  },
+  }
 }

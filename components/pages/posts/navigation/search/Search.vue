@@ -1,35 +1,29 @@
 <template>
   <aside
-    class="fixed z-20 w-full h-full bg-black bg-opacity-75"
+    class="fixed z-20 h-full w-full bg-black bg-opacity-75"
     @click.self.stop="toggleSearchMenu"
   >
     <!-- Constraint -->
     <div
-      class="h-full max-w-3xl px-4 mx-auto sm:px-6 lg:px-8"
+      class="mx-auto h-full max-w-3xl px-4 sm:px-6 lg:px-8"
       @click.self.stop="toggleSearchMenu"
     >
       <!-- Center content -->
       <div
-        class="flex flex-col items-center justify-center h-full"
+        class="flex h-full flex-col items-center justify-center"
         @click.self.stop="toggleSearchMenu"
       >
         <!-- Content -->
         <form
-          class="flex flex-col w-full h-full space-y-4 max-h-3/4"
+          class="flex h-full max-h-3/4 w-full flex-col space-y-4"
           @submit.prevent="emitSubmitActiveTags"
         >
           <!-- Search bar -->
           <div
-            class="
-              flex flex-row
-              h-auto
-              p-2
-              material-container
-              focus-within:focus-util
-            "
+            class="material-container focus-within:focus-util flex h-auto flex-row p-2"
           >
             <!-- Search Icon -->
-            <SearchIcon class="w-6 h-6 icon" />
+            <SearchIcon class="icon h-6 w-6" />
 
             <!-- Input form -->
             <!-- Overflow Hidden is very important -->
@@ -39,15 +33,7 @@
               aria-label="Search for tags"
               autocapitalize="none"
               autofocus
-              class="
-                flex-1
-                mx-2
-                overflow-hidden
-                font-light
-                text-gray-200
-                outline-none
-                bg-darkGray-300
-              "
+              class="mx-2 flex-1 overflow-hidden bg-darkGray-300 font-light text-gray-200 outline-none"
               name="search-tags"
               placeholder="Search: e.g. mario"
               type="search"
@@ -64,14 +50,7 @@
                 @click="toggleTagCollections"
               >
                 <TagIcon
-                  class="
-                    w-6
-                    h-6
-                    transition-colors
-                    duration-300
-                    icon
-                    hover:text-gray-300
-                  "
+                  class="icon h-6 w-6 transition-colors duration-300 hover:text-gray-300"
                 />
               </button>
 
@@ -82,14 +61,7 @@
                 @click="resetActiveTags"
               >
                 <TrashIcon
-                  class="
-                    w-6
-                    h-6
-                    transition-colors
-                    duration-300
-                    icon
-                    hover:text-gray-300
-                  "
+                  class="icon h-6 w-6 transition-colors duration-300 hover:text-gray-300"
                 />
               </button>
 
@@ -102,16 +74,9 @@
               >
                 <FilterIcon
                   :class="{
-                    'text-red-500 hover:text-red-400': isBanModeEnabled,
+                    'text-red-500 hover:text-red-400': isBanModeEnabled
                   }"
-                  class="
-                    w-6
-                    h-6
-                    transition-colors
-                    duration-300
-                    icon
-                    hover:text-gray-300
-                  "
+                  class="icon h-6 w-6 transition-colors duration-300 hover:text-gray-300"
                 />
               </button>
             </div>
@@ -119,28 +84,12 @@
 
           <!-- Search results -->
           <div
-            class="
-              relative
-              flex flex-col
-              h-full
-              p-2
-              space-y-2
-              material-container
-            "
+            class="material-container relative flex h-full flex-col space-y-2 p-2"
           >
             <!-- If nothing searched -->
             <template v-if="!searchResults.length && !search.activeTags.length">
               <h1
-                class="
-                  flex
-                  items-center
-                  justify-center
-                  flex-auto
-                  text-xl
-                  font-light
-                  tracking-wide
-                  text-gray-200
-                "
+                class="flex flex-auto items-center justify-center text-xl font-light tracking-wide text-gray-200"
               >
                 Search something!
               </h1>
@@ -150,14 +99,7 @@
               <!-- Active tags, click them to remove them -->
               <template v-if="search.activeTags.length">
                 <div
-                  class="
-                    flex-initial
-                    overflow-y-scroll
-                    border-0
-                    rounded
-                    tag-container
-                    border-darkGray-100
-                  "
+                  class="tag-container flex-initial overflow-y-scroll rounded border-0 border-darkGray-100"
                 >
                   <button
                     v-for="tag in search.activeTags"
@@ -175,14 +117,7 @@
 
               <template v-if="searchResults.length">
                 <div
-                  class="
-                    flex-auto
-                    overflow-y-scroll
-                    border-0
-                    rounded
-                    border-darkGray-100
-                    tag-container
-                  "
+                  class="tag-container flex-auto overflow-y-scroll rounded border-0 border-darkGray-100"
                 >
                   <!-- Add tag to array of added tags -->
                   <button
@@ -200,13 +135,8 @@
                     <!-- Number of posts with that tag -->
                     <span
                       v-if="tag.count"
-                      class="
-                        transition-colors
-                        duration-300
-                        text-primary-600
-                        group-hover:text-primary-500
-                      "
-                    >{{ `(${ tag.count })` }}
+                      class="text-primary-600 transition-colors duration-300 group-hover:text-primary-500"
+                      >{{ `(${tag.count})` }}
                     </span>
                   </button>
                 </div>
@@ -216,20 +146,7 @@
             <!-- Submit -->
             <div class="absolute inset-x-0 bottom-0 flex">
               <button
-                class="
-                  w-full
-                  px-4
-                  py-2
-                  text-lg
-                  font-medium
-                  tracking-wide
-                  text-center text-black
-                  bg-gradient-to-r
-                  from-accent-400
-                  to-primary-400
-                  ring-inset
-                  focus:focus-util
-                "
+                class="focus:focus-util w-full bg-gradient-to-r from-accent-400 to-primary-400 px-4 py-2 text-center text-lg font-medium tracking-wide text-black ring-inset"
                 type="submit"
               >
                 Apply tags

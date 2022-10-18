@@ -14,8 +14,8 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters('navigation', ['isSearchActive']),
-  },
+    ...mapGetters('navigation', ['isSearchActive'])
+  }
 }
 </script>
 

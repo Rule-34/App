@@ -5,21 +5,21 @@
         :href="`https://saucenao.com/search.php?url=${mediaUrl}`"
         target="_blank"
         rel="noopener nofollow"
-        class="flex items-center gap-2 my-2 link"
+        class="link my-2 flex items-center gap-2"
       >
         <span class="sr-only"> Search source of the post via SauceNAO </span>
 
-        <SearchIcon class="w-5 h-5 icon" />
+        <SearchIcon class="icon h-5 w-5" />
 
         SauceNAO
       </a>
     </template>
 
     <template v-else>
-      <NuxtLink to="/premium" class="flex items-center gap-2 my-2 link">
+      <NuxtLink to="/premium" class="link my-2 flex items-center gap-2">
         <span class="sr-only"> Search source of the post via SauceNAO </span>
 
-        <SearchIcon class="w-5 h-5 icon" />
+        <SearchIcon class="icon h-5 w-5" />
 
         SauceNAO
       </NuxtLink>
@@ -35,14 +35,14 @@ export default {
   props: {
     mediaUrl: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
 
   components: { SearchIcon },
 
   computed: {
-    ...mapGetters('premium', ['isUserPremium']),
-  },
+    ...mapGetters('premium', ['isUserPremium'])
+  }
 }
 </script>

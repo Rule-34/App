@@ -6,7 +6,7 @@
     role="dialog"
   >
     <div
-      class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0"
+      class="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0"
     >
       <!-- Background overlay -->
       <div
@@ -20,14 +20,14 @@
       <!-- This element is to trick the browser into centering the modal contents. -->
       <span
         aria-hidden="true"
-        class="hidden sm:inline-block sm:align-middle sm:h-screen"
+        class="hidden sm:inline-block sm:h-screen sm:align-middle"
       >
         &#8203;
       </span>
 
       <!-- Modal panel -->
       <div
-        class="inline-block w-full max-w-xl p-4 align-bottom transform material-container sm:align-middle"
+        class="material-container inline-block w-full max-w-xl transform p-4 align-bottom sm:align-middle"
       >
         <div class="text-center">
           <h3
@@ -50,17 +50,17 @@
               <li
                 v-for="(tagCollection, index) in getCustomTagCollections"
                 :key="tagCollection.name"
-                class="px-2 py-1 text-left border-util focus-within:focus-util group"
+                class="border-util focus-within:focus-util group px-2 py-1 text-left"
               >
                 <!--  -->
 
                 <button
-                  class="flex justify-between w-full"
+                  class="flex w-full justify-between"
                   type="button"
                   @click="addTagCollectionToTags(index)"
                 >
                   <span
-                    class="text-gray-300 truncate group-hover:text-gray-200"
+                    class="truncate text-gray-300 group-hover:text-gray-200"
                   >
                     {{ tagCollection.name }}
                   </span>
@@ -70,7 +70,7 @@
                   >
                     {{ tagCollection.tags.length }}
 
-                    <TagIcon class="inline w-5 h-5 icon" />
+                    <TagIcon class="icon inline h-5 w-5" />
                   </span>
                 </button>
               </li>
@@ -108,8 +108,8 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { TagIcon } from "vue-feather-icons";
+import { mapActions, mapGetters } from 'vuex'
+import { TagIcon } from 'vue-feather-icons'
 
 export default {
   components: {
@@ -120,53 +120,53 @@ export default {
     searchTags: {
       type: Array,
       default() {
-        return [];
+        return []
       }
     }
   },
 
   computed: {
-    ...mapGetters("user", ["getCustomTagCollections"])
+    ...mapGetters('user', ['getCustomTagCollections'])
   },
 
   methods: {
-    ...mapActions("user", ["customTagCollectionsManager"]),
+    ...mapActions('user', ['customTagCollectionsManager']),
 
     toggleTagCollections() {
-      this.$emit("toggleTagCollections");
+      this.$emit('toggleTagCollections')
     },
 
     addTagCollectionToTags(tagCollectionIndex) {
       this.$emit(
-        "mergeToSearchTags",
+        'mergeToSearchTags',
         this.getCustomTagCollections[tagCollectionIndex].tags
-      );
+      )
 
-      this.toggleTagCollections();
+      this.toggleTagCollections()
     },
 
     saveSearchTagsToTagCollection() {
       if (!this.searchTags.length) {
-        return;
+        return
       }
 
       const tagCollectionName = prompt(
-        "Choose a name for the new Tag Collection."
-      );
+        'Choose a name for the new Tag Collection.'
+      )
 
       if (!tagCollectionName) {
-        alert("Wrong input, only text please.");
-        return;
+        alert('Wrong input, only text please.')
+        return
       }
 
       this.customTagCollectionsManager({
-        operation: "add",
+        operation: 'add',
         value: {
           name: tagCollectionName,
           tags: this.searchTags
         }
-      });
+      })
     }
   }
-};
+}
 </script>

@@ -4,11 +4,11 @@
     <template v-if="!getUserSettings.infiniteLoad.value || forceNormalControls">
       <div
         :class="{
-          'fixed bottom-0 inset-x-0 z-10 max-w-3xl p-2 mx-auto sm:p-4 lg:p-6':
-            getUserSettings.hoverControls.value,
+          'fixed inset-x-0 bottom-0 z-10 mx-auto max-w-3xl p-2 sm:p-4 lg:p-6':
+            getUserSettings.hoverControls.value
         }"
       >
-        <div class="flex justify-around p-2 text-center material-container">
+        <div class="material-container flex justify-around p-2 text-center">
           <!-- Previous page -->
           <button
             aria-label="Load previous page"
@@ -56,13 +56,13 @@
         v-intersect="{
           handler: InfiniteLoadHandler,
           options: {
-            threshold: [0, 0.25, 0.5, 0.75, 1.0],
-          },
+            threshold: [0, 0.25, 0.5, 0.75, 1.0]
+          }
         }"
-        class="py-12 mx-auto"
+        class="mx-auto py-12"
         @click="InfiniteLoadHandler"
       >
-        <p class="text-center text-gray-300 animate-pulse">
+        <p class="animate-pulse text-center text-gray-300">
           Stay here to load more posts...
         </p>
       </div>

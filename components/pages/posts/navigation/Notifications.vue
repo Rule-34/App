@@ -3,7 +3,7 @@
     <!-- Button -->
     <button
       type="button"
-      class="flex p-1 rounded-full border-util focus:focus-util bg-darkGray-300"
+      class="border-util focus:focus-util flex rounded-full bg-darkGray-300 p-1"
       aria-label="Toggle notification menu"
       @click="toggleNotifications"
     >
@@ -11,12 +11,12 @@
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
         viewBox="0 0 24 24"
-        class="w-5 h-5 icon"
+        class="icon h-5 w-5"
       >
         <g fill="none">
           <!-- Notification bell -->
           <path
-            class="text-gray-300 fill-current icon"
+            class="icon fill-current text-gray-300"
             d="M15 19a3 3 0 11-6 0h6zm3.13-2H5.87C4.838 17 4 16.105 4 15c0-.348.085-.69.246-.992L6.388 10V8C6.388 4.686 8.9 2 12 2s5.611 2.686 5.611 6v2l2.142 4.008c.513.959.201 2.18-.696 2.728a1.778 1.778 0 01-.928.264z"
           />
 
@@ -24,7 +24,7 @@
           <g v-if="isThereANewNotification">
             <!-- Bell with a little cut -->
             <path
-              class="text-gray-300 fill-current icon"
+              class="icon fill-current text-gray-300"
               d="M12.338 2.01a6 6 0 005.274 7.977V10l2.141 4.008c.513.959.201 2.18-.696 2.728a1.778 1.778 0 01-.928.264H5.871C4.837 17 4 16.105 4 15c0-.348.085-.69.246-.992L6.388 10V8C6.388 4.686 8.9 2 12 2c.113 0 .226.004.338.01zM15 19a3 3 0 11-6 0h6z"
             />
             <!-- Notification dot -->
@@ -33,7 +33,7 @@
               cy="4.25"
               r="4"
               stroke="hsla(205, 78%, 62%, 0.3)"
-              class="fill-current icon text-primary-400"
+              class="icon fill-current text-primary-400"
             />
           </g>
         </g>
@@ -61,7 +61,7 @@
           >
             <div class="w-screen max-w-md">
               <div
-                class="flex flex-col h-full py-6 overflow-y-scroll bg-darkGray-700"
+                class="flex h-full flex-col overflow-y-scroll bg-darkGray-700 py-6"
               >
                 <div class="px-4 sm:px-6">
                   <div class="flex items-start justify-between">
@@ -71,15 +71,15 @@
                     >
                       Notifications
                     </h2>
-                    <div class="flex items-center ml-3 h-7">
+                    <div class="ml-3 flex h-7 items-center">
                       <button
-                        class="p-1 text-white rounded-full border-util bg-darkGray-300 focus:focus-util"
+                        class="border-util focus:focus-util rounded-full bg-darkGray-300 p-1 text-white"
                         @click="toggleNotifications"
                       >
                         <span class="sr-only">Close panel</span>
                         <!-- Heroicon name: outline/x -->
                         <svg
-                          class="w-6 h-6"
+                          class="h-6 w-6"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
@@ -97,7 +97,7 @@
                     </div>
                   </div>
                 </div>
-                <ul class="relative flex-1 px-4 mt-3 space-y-2 sm:px-6">
+                <ul class="relative mt-3 flex-1 space-y-2 px-4 sm:px-6">
                   <!-- Replace with your content -->
                   <template v-if="!getNotifications">
                     <ContentContainer
@@ -135,7 +135,7 @@ import fireAnalytics from '~/assets/js/analytics'
 export default {
   data() {
     return {
-      isActive: false,
+      isActive: false
     }
   },
 
@@ -143,8 +143,8 @@ export default {
     ...mapGetters('notifications', [
       'getNotifications',
       'hasNotificationsBeenFetched',
-      'isThereANewNotification',
-    ]),
+      'isThereANewNotification'
+    ])
   },
 
   mounted() {
@@ -168,8 +168,8 @@ export default {
 
         // fireAnalytics('notifications')
       }
-    },
-  },
+    }
+  }
 }
 </script>
 

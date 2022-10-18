@@ -1,27 +1,11 @@
 <template>
   <button
     aria-label="Toggle the menu"
-    class="
-      flex
-      items-center
-      justify-center
-      w-12
-      h-12
-      p-4
-      border-0
-      rounded-full
-      md:w-16 md:h-16
-      bg-gradient-to-b
-      from-primary-400
-      to-accent-400
-      focus:focus-util
-      shadow
-    "
+    class="focus:focus-util flex h-12 w-12 items-center justify-center rounded-full border-0 bg-gradient-to-b from-primary-400 to-accent-400 p-4 shadow md:h-16 md:w-16"
     title="Menu"
     type="menu"
     @click="toggleSideNav"
   >
-
     <MenuIcon class="icon" />
   </button>
 </template>
@@ -40,7 +24,7 @@ export default {
 
     toggleSideNav() {
       this.sideNavNavigationManager({ operation: 'toggle' })
-    },
-  },
+    }
+  }
 }
 </script>

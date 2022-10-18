@@ -6,7 +6,7 @@ module.exports = {
     'nuxt-link-exact-active',
     'toasted-container',
     'toasted-custom-theme',
-    'toasted-custom-action',
+    'toasted-custom-action'
   ],
 
   theme: {
@@ -28,10 +28,10 @@ module.exports = {
 
           500: 'hsl(209, 10%, 13%)',
 
-          700: 'hsl(0, 0%, 7%)', // Background
+          700: 'hsl(0, 0%, 7%)' // Background
         },
 
-        ...defaultColors,
+        ...defaultColors
       },
 
       maxHeight: {
@@ -39,7 +39,7 @@ module.exports = {
         '1/4': '25%',
         '2/5': '40%',
         '1/2': '50%',
-        '3/4': '75%',
+        '3/4': '75%'
       },
 
       minHeight: {
@@ -47,18 +47,18 @@ module.exports = {
         '1/4': '25%',
         '2/5': '40%',
         '1/2': '50%',
-        '3/4': '75%',
+        '3/4': '75%'
       },
 
       fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
-      },
-    },
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans]
+      }
+    }
   },
 
   plugins: [
     require('@tailwindcss/forms')({
-      strategy: 'class',
-    }),
-  ],
+      strategy: 'class'
+    })
+  ]
 }

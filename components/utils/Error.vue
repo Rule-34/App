@@ -1,11 +1,11 @@
 <template>
   <div
-    class="p-4 m-6 text-center text-gray-200"
+    class="m-6 p-4 text-center text-gray-200"
     :class="{ 'material-container': renderBorders }"
   >
     <!-- Header -->
     <h1
-      class="px-2 mx-auto text-2xl font-bold leading-normal tracking-wide border border-white w-max"
+      class="mx-auto w-max border border-white px-2 text-2xl font-bold leading-normal tracking-wide"
     >
       {{ errorTitle }}
     </h1>
@@ -32,29 +32,29 @@ export default {
   props: {
     errorTitle: {
       type: String,
-      default: 'Error',
+      default: 'Error'
     },
 
     errorData: {
       type: String,
-      default: 'Something went wrong',
+      default: 'Something went wrong'
     },
 
     showAction: {
       type: Boolean,
-      default: true,
+      default: true
     },
 
     renderBorders: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
 
   methods: {
     reload() {
       location.reload()
-    },
-  },
+    }
+  }
 }
 </script>

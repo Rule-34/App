@@ -8,13 +8,13 @@ export const getters = {
 
   getUserEmail(state, getters, rootState, rootGetters) {
     return rootState.authentication.user?.email
-  },
+  }
 }
 
 export const mutations = {
   setLicenseKey(state, value) {
     state.gumroad.product.license_key = value
-  },
+  }
 }
 
 export const actions = {
@@ -27,14 +27,13 @@ export const actions = {
       await this.$auth.loginWith('local', {
         data: {
           username: '_',
-          password,
-        },
+          password
+        }
       })
 
       //
     } catch (error) {
-
-      this.$toast.error(`Could not authenticate: "${ error.message }"`)
+      this.$toast.error(`Could not authenticate: "${error.message}"`)
     }
-  },
+  }
 }

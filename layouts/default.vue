@@ -3,7 +3,7 @@
   <div
     v-touch="{
       left: (e) => touchHandler('left', e),
-      right: (e) => touchHandler('right', e),
+      right: (e) => touchHandler('right', e)
     }"
   >
     <SideNavArea />
@@ -46,15 +46,15 @@ export default {
     return {
       // Define color theme based on settings
       bodyAttrs: {
-        class: 'bg-darkGray-700',
-      },
+        class: 'bg-darkGray-700'
+      }
     }
   },
 
   computed: {
     ...mapGetters('navigation', ['isSideNavActive']),
-    ...mapGetters('user', ['getUserSettings']),
-  },
+    ...mapGetters('user', ['getUserSettings'])
+  }
 }
 
 console.info(

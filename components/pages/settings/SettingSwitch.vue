@@ -3,14 +3,14 @@
     <!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
     <button
       type="button"
-      class="relative inline-flex shrink-0 w-16 h-6 transition-colors duration-200 border-2 rounded-full cursor-pointer border-darkGray-100 focus:focus-util"
+      class="focus:focus-util relative inline-flex h-6 w-16 shrink-0 cursor-pointer rounded-full border-2 border-darkGray-100 transition-colors duration-200"
       :class="[settingData.value ? 'bg-primary-500' : 'bg-darkGray-700']"
       :aria-pressed="settingData.value"
       :aria-labelledby="settingName"
       @click="
         setSettingValue({
           setting: settingName,
-          value: !settingData.value,
+          value: !settingData.value
         })
       "
     >
@@ -19,7 +19,7 @@
       <!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
       <span
         aria-hidden="true"
-        class="inline-block w-5 h-5 transition duration-200 transform bg-white rounded-full shadow pointer-events-none ring-0"
+        class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200"
         :class="[settingData.value ? 'translate-x-10' : 'translate-x-0']"
       ></span>
     </button>
@@ -41,12 +41,12 @@ export default {
 
     settingData: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
 
   methods: {
-    ...mapMutations('user', ['setSettingValue']),
-  },
+    ...mapMutations('user', ['setSettingValue'])
+  }
 }
 </script>

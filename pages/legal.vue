@@ -1,5 +1,5 @@
 <template>
-  <main class="max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
+  <main class="mx-auto min-h-screen max-w-3xl p-4 sm:p-6 lg:p-8">
     <div class="space-y-4">
       <!-- Separator -->
       <ContentSeparator title="Disclaimers" />
@@ -14,8 +14,8 @@
         :links="[
           {
             text: 'Github repository',
-            href: 'https://github.com/AlejandroAkbal/Rule-34-App',
-          },
+            href: 'https://github.com/AlejandroAkbal/Rule-34-App'
+          }
         ]"
       />
 
@@ -30,8 +30,8 @@
         :links="[
           {
             text: 'Terms of service',
-            href: '/terms-of-service',
-          },
+            href: '/terms-of-service'
+          }
         ]"
       />
 
@@ -43,8 +43,8 @@
         :links="[
           {
             text: 'Privacy policy',
-            href: '/privacy-policy',
-          },
+            href: '/privacy-policy'
+          }
         ]"
       />
 
@@ -56,8 +56,8 @@
         :links="[
           {
             text: 'Opt Out',
-            href: '/privacy-policy#opt-out',
-          },
+            href: '/privacy-policy#opt-out'
+          }
         ]"
       />
 
@@ -69,8 +69,8 @@
         :links="[
           {
             text: 'contact@r34.app',
-            href: 'mailto:contact@r34.app',
-          },
+            href: 'mailto:contact@r34.app'
+          }
         ]"
       />
 
@@ -93,10 +93,10 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'Legal information.',
-        },
-      ],
+          content: 'Legal information.'
+        }
+      ]
     }
-  },
+  }
 }
 </script>
