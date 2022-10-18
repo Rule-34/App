@@ -357,7 +357,7 @@ export const actions = {
       //
     } catch (error) {
 
-      this.$toast.error(`Could not search tags: "${ error.message }"`)
+      // this.$toast.error(`Could not search tags: "${ error.message }"`)
     }
   },
 }
