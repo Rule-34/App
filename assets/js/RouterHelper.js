@@ -7,7 +7,7 @@ export class RouterHelper {
   static generatePostsRoute(domain, page, tags) {
     const route = {
       path: '/',
-      query: {},
+      query: {}
     }
 
     if (domain != null) {
@@ -20,7 +20,7 @@ export class RouterHelper {
 
     // Fix: separate tags by commas instead of repeating `tags`, like so: `&tags=example1&tags=example2`
     if (tags != null && Array.isArray(tags) && tags.length) {
-      route.query.tags = tags.join(',')
+      route.query.tags = tags.join('|')
     }
 
     return route
