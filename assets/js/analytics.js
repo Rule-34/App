@@ -34,7 +34,7 @@ function settingsTracking(state) {
       trackEvent({
         category: 'Settings',
         action: 'Toggle',
-        name: difference[key],
+        name: difference[key]
       })
     )
   })
@@ -45,7 +45,7 @@ function notificationsTracking() {
     0,
     trackEvent({
       category: 'Notifications',
-      action: 'Open',
+      action: 'Open'
     })
   )
 }
@@ -56,7 +56,7 @@ function supportPopUpTracking() {
     trackEvent({
       category: 'PopUps',
       action: 'Show',
-      name: 'Support',
+      name: 'Support'
     })
   )
 }

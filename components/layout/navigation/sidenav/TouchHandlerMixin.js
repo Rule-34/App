@@ -3,13 +3,13 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters('navigation', ['isSideNavActive', 'isSearchActive']),
-    ...mapGetters('user', ['getUserSettings']),
+    ...mapGetters('user', ['getUserSettings'])
   },
 
   methods: {
     ...mapActions('navigation', [
       'sideNavNavigationManager',
-      'searchNavigationManager',
+      'searchNavigationManager'
     ]),
 
     touchHandler(direction, event) {
@@ -31,12 +31,12 @@ export default {
           if (this.isSearchActive) {
             this.searchNavigationManager({
               operation: 'set',
-              value: false,
+              value: false
             })
           } else {
             this.sideNavNavigationManager({
               operation: 'set',
-              value: true,
+              value: true
             })
           }
           break
@@ -50,16 +50,16 @@ export default {
           if (!this.isSideNavActive) {
             this.searchNavigationManager({
               operation: 'set',
-              value: true,
+              value: true
             })
           } else {
             this.sideNavNavigationManager({
               operation: 'set',
-              value: false,
+              value: false
             })
           }
           break
       }
-    },
-  },
+    }
+  }
 }

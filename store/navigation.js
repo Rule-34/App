@@ -1,11 +1,11 @@
 export const state = () => ({
   sideNav: {
-    isActive: false,
+    isActive: false
   },
 
   search: {
-    isActive: false,
-  },
+    isActive: false
+  }
 })
 
 export const getters = {
@@ -15,7 +15,7 @@ export const getters = {
 
   isSearchActive(state) {
     return state.search.isActive
-  },
+  }
 }
 
 export const mutations = {
@@ -25,7 +25,7 @@ export const mutations = {
 
   setSearchIsActive(state, value) {
     state.search.isActive = value
-  },
+  }
 }
 
 export const actions = {
@@ -57,5 +57,5 @@ export const actions = {
       default:
         throw new Error('No operation specified')
     }
-  },
+  }
 }

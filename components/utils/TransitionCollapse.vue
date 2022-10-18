@@ -33,8 +33,8 @@ export default {
         element.style.maxHeight = '0px'
         element.style.opacity = 0
       })
-    },
-  },
+    }
+  }
 }
 </script>
 

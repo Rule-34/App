@@ -1,51 +1,51 @@
 <template>
-  <main class="flex flex-col max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
+  <main class="mx-auto flex min-h-screen max-w-3xl flex-col p-4 sm:p-6 lg:p-8">
     <div>
       <!-- Booru list -->
-      <div class="px-2 py-1 overflow-x-scroll material-container">
+      <div class="material-container overflow-x-scroll px-2 py-1">
         <table
-          class="w-full text-left border-separate"
+          class="w-full border-separate text-left"
           style="border-spacing: 0.25em"
         >
           <thead>
-          <tr>
-            <th class="text-lg font-normal text-gray-200">Domain</th>
-            <th class="text-lg font-normal text-gray-200">Type</th>
-            <th class="text-lg font-normal text-gray-200">NSFW</th>
-            <th class="text-lg font-normal text-gray-200">Config</th>
-          </tr>
+            <tr>
+              <th class="text-lg font-normal text-gray-200">Domain</th>
+              <th class="text-lg font-normal text-gray-200">Type</th>
+              <th class="text-lg font-normal text-gray-200">NSFW</th>
+              <th class="text-lg font-normal text-gray-200">Config</th>
+            </tr>
           </thead>
 
           <tbody class="text-gray-300">
-          <template v-if="getCustomBoorus.length">
-            <tr v-for="booru in getCustomBoorus" :key="booru.domain">
-              <td @click="removeCustomBooru(booru)">
-                {{ booru.domain }}
-              </td>
+            <template v-if="getCustomBoorus.length">
+              <tr v-for="booru in getCustomBoorus" :key="booru.domain">
+                <td @click="removeCustomBooru(booru)">
+                  {{ booru.domain }}
+                </td>
 
-              <td @click="copyBooruToForm(booru)">
-                {{ booru.type }}
-              </td>
+                <td @click="copyBooruToForm(booru)">
+                  {{ booru.type }}
+                </td>
 
-              <td>{{ booru.nsfw }}</td>
+                <td>{{ booru.nsfw }}</td>
 
-              <td>{{ booru.config !== null }}</td>
-            </tr>
-          </template>
+                <td>{{ booru.config !== null }}</td>
+              </tr>
+            </template>
 
-          <!-- No boorus -->
-          <template v-else>
-            <tr>
-              <td class="text-center" colspan="999">
-                There are no custom boorus
-              </td>
-            </tr>
-          </template>
+            <!-- No boorus -->
+            <template v-else>
+              <tr>
+                <td class="text-center" colspan="999">
+                  There are no custom boorus
+                </td>
+              </tr>
+            </template>
           </tbody>
         </table>
       </div>
 
-      <p class="p-2 text-xs text-center text-gray-300">
+      <p class="p-2 text-center text-xs text-gray-300">
         Click on the `domain` to remove. Click on the `type` to copy
       </p>
     </div>
@@ -55,7 +55,7 @@
 
     <!-- Booru editor -->
     <form
-      class="flex flex-wrap gap-4 p-4 material-container"
+      class="material-container flex flex-wrap gap-4 p-4"
       @submit.prevent="addFormBooruToCustomBoorus"
     >
       <!-- Domain -->
@@ -64,16 +64,7 @@
 
         <input
           v-model="formBooru.domain"
-          class="
-            block
-            h-8
-            p-1
-            text-gray-300
-            outline-none
-            border-util
-            bg-darkGray-700
-            focus:focus-util
-          "
+          class="border-util focus:focus-util block h-8 bg-darkGray-700 p-1 text-gray-300 outline-none"
           name="domain"
           placeholder="example.com"
           required
@@ -82,7 +73,7 @@
 
         <p class="text-xs text-gray-300">
           Not the URL, the domain
-          <br>
+          <br />
           Use `example.com` not `http://example.com/index.php`
         </p>
       </label>
@@ -93,17 +84,7 @@
 
         <select
           v-model="formBooru.type"
-          class="
-            block
-            h-8
-            p-1
-            text-gray-300
-            outline-none
-            bg-darkGray-700
-            border-util
-            w-max
-            focus:focus-util
-          "
+          class="border-util focus:focus-util block h-8 w-max bg-darkGray-700 p-1 text-gray-300 outline-none"
           name="type"
           required
         >
@@ -123,15 +104,7 @@
 
         <input
           v-model="formBooru.nsfw"
-          class="
-            self-center
-            flex-auto
-            block
-            p-1
-            outline-none
-            bg-darkGray-700
-            focus:focus-util
-          "
+          class="focus:focus-util block flex-auto self-center bg-darkGray-700 p-1 outline-none"
           name="nsfw"
           type="checkbox"
         />
@@ -141,21 +114,12 @@
       <label class="flex-auto space-y-1">
         <p class="text-gray-200">
           Configuration
-          <span class="italic text-sm">(Optional)</span>
+          <span class="text-sm italic">(Optional)</span>
         </p>
 
         <textarea
           v-model="formBooru.config"
-          class="
-            block
-            w-full
-            p-1
-            text-gray-300
-            outline-none
-            border-util
-            bg-darkGray-700
-            focus:focus-util
-          "
+          class="border-util focus:focus-util block w-full bg-darkGray-700 p-1 text-gray-300 outline-none"
           name="config"
           rows="3"
           spellcheck="false"
@@ -167,17 +131,7 @@
       </button> -->
 
       <button
-        class="
-          w-full
-          px-2
-          py-1
-          tracking-wide
-          rounded-full
-          bg-gradient-to-r
-          from-primary-400
-          to-accent-400
-          focus:focus-util
-        "
+        class="focus:focus-util w-full rounded-full bg-gradient-to-r from-primary-400 to-accent-400 px-2 py-1 tracking-wide"
         type="submit"
       >
         Add

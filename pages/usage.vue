@@ -1,5 +1,5 @@
 <template>
-  <main class="max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
+  <main class="mx-auto min-h-screen max-w-3xl p-4 sm:p-6 lg:p-8">
     <div class="space-y-4">
       <!-- Navigation -->
 
@@ -57,14 +57,14 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'How to use some features.',
-        },
-      ],
+          content: 'How to use some features.'
+        }
+      ]
     }
   },
 
   computed: {
-    ...mapGetters('user', ['getUserSettings']),
-  },
+    ...mapGetters('user', ['getUserSettings'])
+  }
 }
 </script>

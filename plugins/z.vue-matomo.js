@@ -20,7 +20,7 @@ export default (context) => {
     enableHeartBeatTimer: true,
     heartBeatTimerInterval: 30,
 
-    debug: $config.NODE_ENV === 'development',
+    debug: $config.NODE_ENV === 'development'
 
     // preInitActions: [],
   })

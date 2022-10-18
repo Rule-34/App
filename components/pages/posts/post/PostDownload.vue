@@ -1,19 +1,20 @@
 <template>
   <div>
     <template v-if="isUserPremium">
-
-      <button class="flex items-center gap-2 my-2 link" type="button" @click="downloadMedia">
-
-        <DownloadIcon class="w-5 h-5 icon" />
+      <button
+        class="link my-2 flex items-center gap-2"
+        type="button"
+        @click="downloadMedia"
+      >
+        <DownloadIcon class="icon h-5 w-5" />
 
         Download
       </button>
     </template>
 
     <template v-else>
-      <NuxtLink class="flex items-center gap-2 my-2 link" to="/premium">
-
-        <DownloadIcon class="w-5 h-5 icon" />
+      <NuxtLink class="link my-2 flex items-center gap-2" to="/premium">
+        <DownloadIcon class="icon h-5 w-5" />
 
         Download
       </NuxtLink>
@@ -27,7 +28,6 @@ import { DownloadIcon } from 'vue-feather-icons'
 import { ProxyHelper } from '~/assets/js/ProxyHelper'
 
 export default {
-
   components: { DownloadIcon },
 
   props: {
@@ -46,9 +46,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'simpleFetch'
-    ]),
+    ...mapActions(['simpleFetch']),
 
     downloadBlobToDevice(blob, fileName) {
       const BLOB_OBJECT_URL = URL.createObjectURL(blob)
@@ -71,12 +69,11 @@ export default {
       const PROXIED_MEDIA_URL = ProxyHelper.proxyUrl(this.mediaUrl)
 
       const RESPONSE = await this.simpleFetch({
-          url: PROXIED_MEDIA_URL,
-          options: {
-            responseType: 'blob',
-          }
+        url: PROXIED_MEDIA_URL,
+        options: {
+          responseType: 'blob'
         }
-      )
+      })
 
       const RESPONSE_BLOB = RESPONSE.data
 
@@ -85,7 +82,6 @@ export default {
 
     async downloadMedia() {
       try {
-
         const { RESPONSE, RESPONSE_BLOB } = await this.fetchUrlIntoBlob()
 
         const FILE_EXTENSION = RESPONSE.headers['content-type'].split('/')[1]
@@ -93,12 +89,9 @@ export default {
         const FILE_NAME = this.mediaName + '.' + FILE_EXTENSION
 
         this.downloadBlobToDevice(RESPONSE_BLOB, FILE_NAME)
-
       } catch (error) {
-
-        this.$toast.error(`Could not download post: "${ error.message }"`)
+        this.$toast.error(`Could not download post: "${error.message}"`)
       }
-
     }
   }
 }

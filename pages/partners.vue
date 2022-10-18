@@ -1,5 +1,5 @@
 <template>
-  <main class="max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
+  <main class="mx-auto min-h-screen max-w-3xl p-4 sm:p-6 lg:p-8">
     <div class="space-y-4">
       <ContentSeparator text="Friends of the Rule 34 App" title="Partners" />
 
@@ -7,8 +7,8 @@
         :links="[
           {
             text: 'hentaiporn.app',
-            href: 'https://hentaiporn.app/?utm_source=Rule34App&utm_medium=Partners',
-          },
+            href: 'https://hentaiporn.app/?utm_source=Rule34App&utm_medium=Partners'
+          }
         ]"
         icon="bg-svg-star"
         text="Sister site of the Rule 34 App, has the best high quality Hentai."
@@ -19,8 +19,8 @@
         :links="[
           {
             text: 'theporndude.com',
-            href: 'https://theporndude.com',
-          },
+            href: 'https://theporndude.com'
+          }
         ]"
         icon="bg-svg-star"
         text="The Porn Dude lists the world's best porn sites."
@@ -34,15 +34,15 @@
 export default {
   head() {
     return {
-      title: "Partners",
+      title: 'Partners',
       meta: [
         {
-          hid: "description",
-          name: "description",
-          content: "Friends of the Rule 34 App."
+          hid: 'description',
+          name: 'description',
+          content: 'Friends of the Rule 34 App.'
         }
       ]
-    };
+    }
   }
-};
+}
 </script>

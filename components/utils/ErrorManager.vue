@@ -7,7 +7,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['getErrors']),
-  },
+    ...mapGetters(['getErrors'])
+  }
 }
 </script>

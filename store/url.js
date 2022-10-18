@@ -15,11 +15,11 @@ export const getters = {
     const { tags } = rootState.route.query
 
     return tags
-  },
+  }
 }
 
 export const actions = {
   async pushRoute(context, route) {
     await this.$router.push(route)
-  },
+  }
 }

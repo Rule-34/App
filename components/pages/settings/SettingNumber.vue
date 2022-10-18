@@ -6,11 +6,11 @@
         :value="settingData.value"
         type="number"
         min="0"
-        class="w-16 px-2 text-gray-200 border-2 rounded-full bg-darkGray-700 border-darkGray-100 focus:focus-util"
+        class="focus:focus-util w-16 rounded-full border-2 border-darkGray-100 bg-darkGray-700 px-2 text-gray-200"
         @change="
           setSettingValue({
             setting: settingName,
-            value: parseInt($event.target.value, 10),
+            value: parseInt($event.target.value, 10)
           })
         "
       />
@@ -31,12 +31,12 @@ export default {
 
     settingData: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
 
   methods: {
-    ...mapMutations('user', ['setSettingValue']),
-  },
+    ...mapMutations('user', ['setSettingValue'])
+  }
 }
 </script>

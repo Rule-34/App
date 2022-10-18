@@ -16,7 +16,7 @@ export default {
 
           break
       }
-    },
+    }
   },
 
   mounted() {
@@ -27,5 +27,5 @@ export default {
   destroyed() {
     // Navigation with keyboard
     document.removeEventListener('keyup', this.keyboardPageHandler)
-  },
+  }
 }

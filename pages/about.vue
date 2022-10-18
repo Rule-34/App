@@ -1,5 +1,5 @@
 <template>
-  <main class="max-w-3xl min-h-screen p-4 mx-auto sm:p-6 lg:p-8">
+  <main class="mx-auto min-h-screen max-w-3xl p-4 sm:p-6 lg:p-8">
     <div class="space-y-4">
       <ContentSeparator title="About" />
 
@@ -7,8 +7,8 @@
         :links="[
           {
             text: 'Documentation website',
-            href: 'https://docs.r34.app',
-          },
+            href: 'https://docs.r34.app'
+          }
         ]"
         icon="bg-svg-info"
         text="The Rule 34 App is a Progressive Web App to browse popular Rule 34 Hentai Porn for free. Without ads.
@@ -22,9 +22,8 @@
           {
             text: 'Go to the Rule 34 App\'s Hentai',
             href: generatePostsRouteWithDefaults(this.$nuxt.$store),
-            isInternal: true,
-
-          },
+            isInternal: true
+          }
         ]"
         icon="bg-svg-info"
         text="This page is ranking first in search engines for some reason, if you are looking for the Hentai, click the link below."
@@ -38,7 +37,6 @@
 import { RouterHelper } from '~/assets/js/RouterHelper'
 
 export default {
-
   methods: {
     generatePostsRouteWithDefaults: RouterHelper.generatePostsRouteWithDefaults
   },

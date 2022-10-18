@@ -8,5 +8,5 @@ export default {
 
   mounted() {
     fireAnalytics('settings', { state: this.getUserSettings })
-  },
+  }
 }

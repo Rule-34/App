@@ -7,9 +7,9 @@ Or even better, subscribe to unlock Premium features!"
     :links="[
       {
         href: 'https://redirect.r34.app/donations',
-        text: 'Donation',
+        text: 'Donation'
       },
-      { href: '/premium', text: 'Subscription', isInternal: true },
+      { href: '/premium', text: 'Subscription', isInternal: true }
     ]"
   />
 </template>
