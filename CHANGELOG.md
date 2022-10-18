@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.22.0](https://github.com/Rule-34/App/compare/v2.21.0...v2.22.0) (2022-10-18)
+
+
+### Features
+
+* change tag separator ([c6d3c1f](https://github.com/Rule-34/App/commit/c6d3c1ffb33ede320765213e411ed6641a318399))
+* encode url tags ([acd2c8d](https://github.com/Rule-34/App/commit/acd2c8de29b5596cb8c00f6ee1f02afd7a6df6ba))
+
 ## [2.21.0](https://github.com/Rule-34/App/compare/v2.20.0...v2.21.0) (2022-10-07)
 
 ### Features
