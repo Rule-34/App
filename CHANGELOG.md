@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.23.0](https://github.com/Rule-34/App/compare/v2.22.0...v2.23.0) (2022-10-19)
+
+
+### Bug Fixes
+
+* **App:** add loading state ([99baaf6](https://github.com/Rule-34/App/commit/99baaf6262726acc0c91b25fce62c0eaf8d38bfe))
+* **title:** replace first negative tag (minus) with empty string ([0078a6b](https://github.com/Rule-34/App/commit/0078a6bfcda53ea87a418d042cd1b760f7468477))
+
 ## [2.22.0](https://github.com/Rule-34/App/compare/v2.21.0...v2.22.0) (2022-10-18)
 
 
