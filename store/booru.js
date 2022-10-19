@@ -322,9 +322,9 @@ export const actions = {
       })
 
       if (mode === 'concat') {
-        dispatch('postsManager', { operation: 'concat', value: POSTS })
+        await dispatch('postsManager', { operation: 'concat', value: POSTS })
       } else {
-        dispatch('postsManager', { operation: 'set', value: POSTS })
+        await dispatch('postsManager', { operation: 'set', value: POSTS })
       }
 
       //
