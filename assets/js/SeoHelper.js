@@ -8,28 +8,32 @@ export class SeoHelper {
       return null
     }
 
-    const CAPITALIZED_TAGS = tags.map((tag) => capitalize(tag)).join(', ')
-
-    return this.normalizeStringForTitle(CAPITALIZED_TAGS)
+    return tags
+      .map((tag) => capitalize(tag))
+      .map((tag) => SeoHelper.normalizeStringForTitle(tag))
+      .join(', ')
   }
 
-  static normalizeStringForTitle(title) {
-    if (!title) {
+  static normalizeStringForTitle(string) {
+    if (!string) {
       return null
     }
 
-    title = title.trim()
+    string = string.trim()
+
+    // Delete first negative tag (minus)
+    string = string.startsWith('-') ? string.substr(1) : string
 
     // Replace underscores with spaces
-    title = title.replace(/_/g, ' ')
+    string = string.replace(/_/g, ' ')
 
-    // Replace parentheses with empty string
-    title = title.replace(/\(/g, '')
-    title = title.replace(/\)/g, '')
+    // Delete parentheses
+    string = string.replace(/\(/g, '')
+    string = string.replace(/\)/g, '')
 
-    // Replace colon with empty string
-    title = title.replace(/:/g, '')
+    // Delete colons
+    string = string.replace(/:/g, '')
 
-    return title
+    return string
   }
 }
