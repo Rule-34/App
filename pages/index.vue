@@ -44,12 +44,6 @@
             Loading…
           </li>
         </template>
-
-        <template v-else-if='!getPosts.length'>
-          <li class='my-3 text-center text-gray-300'>
-            There are no posts available.
-          </li>
-        </template>
       </ul>
 
       <PostsControls
