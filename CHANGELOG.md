@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.24.0](https://github.com/Rule-34/App/compare/v2.22.0...v2.24.0) (2022-10-28)
+
+
+### Bug Fixes
+
+* **App:** add loading state ([69cc23c](https://github.com/Rule-34/App/commit/69cc23c583f5cb173170bf0926d6a6fcb9cc7de2))
+* **Custom Boorus:** reset active booru on Booru deletion ([db871ba](https://github.com/Rule-34/App/commit/db871ba06306d4af79ea136ed4559959c14362f7))
+* **SEO:** use correct attribute names ([d550e71](https://github.com/Rule-34/App/commit/d550e71670d329f5e0223eb3532bbc6ae5acc94e))
+* **title:** replace first negative tag (minus) with empty string ([570087c](https://github.com/Rule-34/App/commit/570087c689f7cc28cb6e948be570da160fe55de4))
+
 ## [2.23.0](https://github.com/Rule-34/App/compare/v2.22.0...v2.23.0) (2022-10-19)
 
 
