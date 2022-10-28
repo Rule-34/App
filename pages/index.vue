@@ -135,14 +135,14 @@
 
       HEAD.link.push({
         hid: 'canonical',
-        name: 'canonical',
-        content: RESOLVED_CANONICAL_ROUTE.href
+        rel: 'canonical',
+        href: RESOLVED_CANONICAL_ROUTE.href
       })
 
       // OG Image
       HEAD.meta.push({
         hid: 'og:image',
-        name: 'og:image',
+        property: 'og:image',
         content: `https://url-shot.api-point.cf/?width=1200&height=630&url=${ encodeURI(
           ABSOLUTE_URL
         ) }`
@@ -150,19 +150,19 @@
 
       HEAD.meta.push({
         hid: 'og:image:width',
-        name: 'og:image:width',
+        property: 'og:image:width',
         content: 1200
       })
 
       HEAD.meta.push({
         hid: 'og:image:height',
-        name: 'og:image:height',
+        property: 'og:image:height',
         content: 630
       })
 
       HEAD.meta.push({
         hid: 'og:image:type',
-        name: 'og:image:type',
+        property: 'og:image:type',
         content: 'image/png'
       })
 
