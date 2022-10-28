@@ -127,6 +127,13 @@ export const actions = {
         break
       }
 
+      case 'reset': {
+        const firstBooru = getters.getDefaultBooruList[0]
+
+        commit('setLastDomainUsed', firstBooru.domain)
+        break
+      }
+
       default:
         throw new Error('No operation specified')
     }

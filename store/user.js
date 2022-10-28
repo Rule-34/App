@@ -1,5 +1,5 @@
-import { completeBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils.js'
 import { cloneDeep } from 'lodash-es'
+import { completeBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils.js'
 
 // Skip the 8 first Boorus as they are included in the default list
 const ADDITIONAL_DEFAULT_PREMIUM_BOORUS = completeBooruList.slice(7)
@@ -281,7 +281,7 @@ export const mutations = {
 }
 
 export const actions = {
-  customBoorusManager({ getters, commit }, { operation, value }) {
+  customBoorusManager({ getters, dispatch, commit }, { operation, value }) {
     switch (operation) {
       case 'add': {
         const doesTheBooruAlreadyExist = getters.getCustomBoorus.some(
@@ -307,12 +307,14 @@ export const actions = {
         )
 
         commit('setCustomBoorus', arrayWithoutBooru)
+
+        dispatch(
+          'booru/activeBooruManager',
+          { operation: 'reset' },
+          { root: true }
+        )
         break
       }
-
-      case 'reset':
-        commit('setCustomBoorus', [])
-        break
 
       default:
         throw new Error('No operation specified')
@@ -350,10 +352,6 @@ export const actions = {
         commit('setCustomTagCollections', arrayWithoutTagCollection)
         break
       }
-
-      case 'reset':
-        commit('setCustomTagCollections', [])
-        break
 
       default:
         throw new Error('No operation specified')
