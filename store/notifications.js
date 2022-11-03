@@ -56,7 +56,7 @@ export const actions = {
 
       //
     } catch (error) {
-      this.$toast.error('Could not fetch notifications', { duration: 3500 })
+      console.warn('Could not fetch notifications')
     }
   }
 }
