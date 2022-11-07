@@ -10,11 +10,9 @@
       <!-- Price -->
       <div class="mt-4 flex items-center justify-center">
         <!-- Currency and cost -->
-        <span
-          class="flex items-start px-3 text-5xl leading-none tracking-tight text-gray-200"
-        >
+        <span class="flex items-start px-3 text-5xl leading-none tracking-tight text-gray-200">
           <span class="mt-1 mr-2 text-3xl font-medium"> € </span>
-          <span class="font-extrabold"> {{ selectedPrice.price }} </span>
+          <span class="font-extrabold"> 4,9 </span>
         </span>
 
         <!-- Recurring -->
@@ -25,19 +23,14 @@
     </div>
 
     <!-- Description -->
-    <div
-      class="flex flex-col justify-between border-t border-darkGray-100 bg-darkGray-700 p-6"
-    >
+    <div class="flex flex-col justify-between border-t border-darkGray-100 bg-darkGray-700 p-6">
       <ul>
         <!--  -->
         <li class="flex items-start">
           <div class="shrink-0">
             <check-icon class="icon h-6 w-6 text-accent-400" />
           </div>
-          <NuxtLink
-            class="link ml-3 text-base font-medium leading-6"
-            to="/premium/custom-boorus"
-          >
+          <NuxtLink class="link ml-3 text-base font-medium leading-6" to="/premium/custom-boorus">
             Use additional Boorus
           </NuxtLink>
         </li>
@@ -47,10 +40,7 @@
           <div class="shrink-0">
             <check-icon class="icon h-6 w-6 text-accent-400" />
           </div>
-          <NuxtLink
-            class="link ml-3 text-base font-medium leading-6"
-            to="/premium/saved-posts"
-          >
+          <NuxtLink class="link ml-3 text-base font-medium leading-6" to="/premium/saved-posts">
             Save Posts
           </NuxtLink>
         </li>
@@ -72,12 +62,7 @@
           </div>
           <p class="ml-3 text-base font-medium leading-6 text-gray-300">
             Find Post source with
-            <a
-              class="link"
-              href="https://saucenao.com/"
-              rel="noopener nofollow"
-              target="_blank"
-            >
+            <a class="link" href="https://saucenao.com/" rel="noopener nofollow" target="_blank">
               SauceNAO
             </a>
           </p>
@@ -88,10 +73,7 @@
           <div class="shrink-0">
             <check-icon class="icon h-6 w-6 text-accent-400" />
           </div>
-          <NuxtLink
-            class="link ml-3 text-base font-medium leading-6"
-            to="/premium/tag-collections"
-          >
+          <NuxtLink class="link ml-3 text-base font-medium leading-6" to="/premium/tag-collections">
             Create collections of Tags
           </NuxtLink>
         </li>
@@ -101,10 +83,7 @@
           <div class="shrink-0">
             <check-icon class="icon h-6 w-6 text-accent-400" />
           </div>
-          <NuxtLink
-            class="link ml-3 text-base font-medium leading-6"
-            to="/premium/backup"
-          >
+          <NuxtLink class="link ml-3 text-base font-medium leading-6" to="/premium/backup">
             Create backups
           </NuxtLink>
         </li>
@@ -121,12 +100,8 @@
       </ul>
 
       <div class="mt-8">
-        <a
-          :href="selectedPrice.link"
-          class="focus:focus-util block w-full rounded-lg border-0 bg-gradient-to-r from-accent-400 to-primary-400 px-6 py-3 text-center text-lg font-medium leading-6 text-black transition hover:text-gray-800"
-          rel="noopener nofollow"
-          target="_blank"
-        >
+        <a class="block w-full px-6 py-3 text-lg font-medium leading-6 text-center text-black transition border-0 rounded-lg bg-gradient-to-r from-accent-400 to-primary-400 focus:focus-util hover:text-gray-800"
+          href="https://gum.co/Rule34App" rel="noopener nofollow" target="_blank">
           Subscribe
         </a>
       </div>
@@ -135,63 +110,11 @@
 </template>
 
 <script>
-import { CheckIcon } from 'vue-feather-icons'
-import { useStorage } from '@vueuse/core'
-
-const PRICE_LIST = [
-  {
-    price: '3,99',
-    link: 'https://gum.co/Rule34App/nj9uz8c'
-  },
-  {
-    price: '4,99',
-    link: 'https://gum.co/Rule34App/ofgjphh'
-  },
-  {
-    price: '5,99',
-    link: 'https://gum.co/Rule34App/a6gx7zl'
-  },
-  {
-    price: '6,99',
-    link: 'https://gum.co/Rule34App/lk20010'
-  },
-  {
-    price: '7,99',
-    link: 'https://gum.co/Rule34App/mxrudd0'
-  },
-  {
-    price: '9,99',
-    link: 'https://gum.co/Rule34App/'
-  }
-]
-
-const PRICE_LIST_INDEX = useStorage('price-index-test', -1)
+import { CheckIcon } from "vue-feather-icons";
 
 export default {
-  name: 'PremiumSubscription',
-
   components: {
     CheckIcon
-  },
-
-  computed: {
-    selectedPrice: function () {
-      if (PRICE_LIST_INDEX.value === -1) {
-        return PRICE_LIST[PRICE_LIST.length]
-      }
-
-      return PRICE_LIST[PRICE_LIST_INDEX.value]
-    }
-  },
-
-  created() {
-    if (PRICE_LIST_INDEX.value !== -1) {
-      return
-    }
-
-    const RANDOM_INDEX = Math.floor(Math.random() * PRICE_LIST.length)
-
-    PRICE_LIST_INDEX.value = RANDOM_INDEX
   }
 }
 </script>
