@@ -1,6 +1,6 @@
 export const state = () => ({
   notifications: {
-    url: 'https://gitcdn.xyz/cdn/AlejandroAkbal/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-notifications.json',
+    url: 'https://gist.githack.com/AlejandroAkbal/2fe43e0eee40be63d9b2a582b2793cf9/raw/app-notifications.json',
 
     data: undefined,
 
