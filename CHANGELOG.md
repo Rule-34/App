@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.25.0](https://github.com/Rule-34/App/compare/v2.24.0...v2.25.0) (2022-11-30)
+
+
+### Features
+
+* **Indecencies blocklist:** add more tags ([d16b5fe](https://github.com/Rule-34/App/commit/d16b5fe9e5b66485fe1b31c5ec22191d53752593))
+* **Premium:** trim license input ([50db341](https://github.com/Rule-34/App/commit/50db3410c0582de70e80ad8948c20ec43c8d8b6b))
+
 ## [2.24.0](https://github.com/Rule-34/App/compare/v2.22.0...v2.24.0) (2022-10-28)
 
 
