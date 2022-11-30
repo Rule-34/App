@@ -84,7 +84,7 @@ export default {
     background: `linear-gradient(152deg, ${TAILWIND_CONFIG.theme.extend.colors.primary[400]} 38%, ${TAILWIND_CONFIG.theme.extend.colors.accent[400]} 90%)`
   },
 
-  css: ['~/assets/css/main.css'],
+  css: ['@/assets/css/main.css'],
 
   components: [{ path: '~/components', pathPrefix: false }],
 
@@ -95,23 +95,13 @@ export default {
     { src: '~/plugins/z.vue-matomo.js', mode: 'client' }
   ],
 
-  buildModules: [],
-
-  tailwindcss: {
-    viewer: false,
-
-    configPath: 'tailwind.config.js',
-
-    cssPath: '~/assets/css/main.css'
-  },
+  buildModules: ['@nuxt/postcss8'],
 
   modules: [
     '@nuxtjs/pwa',
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
     'portal-vue/nuxt',
-    // https://github.com/nuxt-community/nuxt-tailwindcss
-    '@nuxtjs/tailwindcss',
     '@nuxtjs/toast',
     '@nuxtjs/sentry',
     '@nuxtjs/sitemap'
@@ -318,7 +308,12 @@ export default {
   },
 
   build: {
-    extractCSS: true
+    postcss: {
+      plugins: {
+        tailwindcss: {},
+        autoprefixer: {}
+      }
+    }
   },
 
   telemetry: false
