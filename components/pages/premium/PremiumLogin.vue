@@ -13,7 +13,7 @@
           id='license-key'
           v-model='login.password'
           autocomplete='current-password'
-          class='focus:focus-util material-container block w-10/12 grow appearance-none border-darkGray-100 bg-darkGray-700 p-2 text-sm font-light text-gray-300 outline-none'
+          class='focus-visible:focus-util material-container block w-10/12 grow appearance-none border-darkGray-100 bg-darkGray-700 p-2 text-sm font-light text-gray-300 outline-none'
           name='license-key'
           placeholder='XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX'
           required
@@ -22,7 +22,7 @@
 
         <!-- Action -->
         <button
-          class='focus:focus-util ml-1 appearance-none rounded-full border-0 bg-gradient-to-br from-primary-400 to-accent-400'
+          class='focus-visible:focus-util ml-1 appearance-none rounded-full border-0 bg-gradient-to-br from-primary-400 to-accent-400'
           type='submit'
         >
           <chevron-right-icon class='icon h-9 w-9' />

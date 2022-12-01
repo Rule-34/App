@@ -17,7 +17,7 @@
   .focus-util {
     /*
     * NOT TO BE USED DIRECTLY AS CSS
-    * IN CLASSES IT SHOULD BE USED AS `focus:focus-util`
+    * IN CLASSES IT SHOULD BE USED AS `focus-visible:focus-util`
     */
     @apply outline-none ring-4 ring-primary-400;
   }
@@ -54,9 +54,6 @@
     @apply border-util overflow-hidden rounded-lg bg-darkGray-300;
   }
 
-  /* .material-container:focus-within {
-    @apply focus-util;
-  } */
   /*  */
   .tag-container {
     @apply flex flex-wrap content-start items-start gap-2 overflow-hidden bg-darkGray-500 p-2;
@@ -98,7 +95,7 @@
 }
 
 .toasted-custom-action {
-  @apply focus:focus-util m-0 rounded-full border-0 bg-darkGray-100 px-2 py-1 !important;
+  @apply focus-visible:focus-util m-0 rounded-full border-0 bg-darkGray-100 px-2 py-1 !important;
 }
 
 /* #endregion */
