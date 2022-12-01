@@ -12,6 +12,7 @@
         <input
           id='license-key'
           v-model='login.password'
+          autocomplete='current-password'
           class='focus:focus-util material-container block w-10/12 grow appearance-none border-darkGray-100 bg-darkGray-700 p-2 text-sm font-light text-gray-300 outline-none'
           name='license-key'
           placeholder='XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX'
@@ -54,7 +55,7 @@
 
           this.login.password = this.login.password.trim()
         },
-        
+
         deep: true
       }
     },
