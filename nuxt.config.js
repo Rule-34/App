@@ -150,6 +150,9 @@ export default {
           logout: false,
           user: { url: `${process.env.API_URL}/auth/profile`, method: 'get' }
         }
+      },
+
+      google: {
       }
     },
 
@@ -204,6 +207,7 @@ export default {
           urlPattern: ['https://rsms.me/.*']
         }
       ]
+    }
   },
 
   sentry: {
