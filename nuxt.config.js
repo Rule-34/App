@@ -175,6 +175,7 @@ export default {
     manifest: {
       name: 'Rule 34 App',
       short_name: 'Rule 34 App',
+      description: 'Browse popular Rule 34 Hentai Porn for free. Without ads.',
       lang: 'en',
       start_url: '/?utm_source=PWA',
       theme_color: TAILWIND_CONFIG.theme.extend.colors.darkGray[700],
