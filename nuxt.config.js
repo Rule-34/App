@@ -193,7 +193,8 @@ export default {
           description: 'Save posts for later.',
           url: '/premium/saved-posts?utm_source=PWA&utm_medium=Shortcut'
         }
-      ]
+      ],
+      useWebmanifestExtension: true
     },
 
     workbox: false
