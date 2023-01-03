@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.26.0](https://github.com/Rule-34/App/compare/v2.25.0...v2.26.0) (2023-01-03)
+
+
+### Features
+
+* add autocomplete attribute to license key ([e76dbb3](https://github.com/Rule-34/App/commit/e76dbb3db9a3e2d0afa4e5c49db215667ac0852f))
+
 ## [2.25.0](https://github.com/Rule-34/App/compare/v2.24.0...v2.25.0) (2022-11-30)
 
 
