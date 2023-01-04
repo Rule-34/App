@@ -34,13 +34,27 @@
         <!-- Navbar Links -->
         <ul class="flex-auto space-y-2 text-center sm:text-left">
           <li v-for="link in sideNavLinks" :key="link.title">
-            <NuxtLink
-              :to="link.url"
-              class="link relative block transform transition-transform duration-300 hover:translate-x-1"
-            >
-              <span class="absolute inset-0 opacity-0" />
-              <span class="relative"> {{ link.title }}</span>
-            </NuxtLink>
+            <template v-if="link.isInternal">
+              <NuxtLink
+                :to="link.url"
+                class="link relative block transform transition-transform duration-300 hover:translate-x-1"
+              >
+                <span class="absolute inset-0 opacity-0" />
+                <span class="relative"> {{ link.title }}</span>
+              </NuxtLink>
+            </template>
+
+            <template v-else>
+              <a
+                :href="link.url"
+                target="_blank"
+                rel="noopener nofollow"
+                class="link relative block transform transition-transform duration-300 hover:translate-x-1"
+              >
+                <span class="absolute inset-0 opacity-0" />
+                <span class="relative"> {{ link.title }}</span>
+              </a>
+            </template>
           </li>
 
           <!-- Premium -->
@@ -137,13 +151,34 @@ export default {
       sideNavLinks: [
         {
           title: 'Posts',
-          url: RouterHelper.generatePostsRouteWithDefaults(this.$nuxt.$store)
+          url: RouterHelper.generatePostsRouteWithDefaults(this.$nuxt.$store),
+          isInternal: true
         },
-        { title: 'Faq', url: '/faq' },
-        { title: 'Partners', url: '/partners' },
-        { title: 'Usage', url: '/usage' },
-        { title: 'About', url: '/about' },
-        { title: 'Settings', url: '/settings' }
+        {
+          title: 'Faq',
+          url: 'https://docs.r34.app/frequently-asked-questions',
+          isInternal: false
+        },
+        {
+          title: 'Partners',
+          url: '/partners',
+          isInternal: true
+        },
+        {
+          title: 'Usage',
+          url: '/usage',
+          isInternal: true
+        },
+        {
+          title: 'About',
+          url: '/about',
+          isInternal: true
+        },
+        {
+          title: 'Settings',
+          url: '/settings',
+          isInternal: true
+        }
       ]
     }
   },
