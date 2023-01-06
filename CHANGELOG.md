@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.28.0](https://github.com/Rule-34/App/compare/v2.27.0...v2.28.0) (2023-01-06)
+
+
+### Features
+
+* **media proxy:** check if user is premium ([867519d](https://github.com/Rule-34/App/commit/867519dcad52f958da7a021bc717a42d3f929d5a))
+* **Premium page:** add proxy ([85a226f](https://github.com/Rule-34/App/commit/85a226f89cf474294877385bed37a732edc8fbf4))
+
 ## [2.27.0](https://github.com/Rule-34/App/compare/v2.26.0...v2.27.0) (2023-01-04)
 
 
