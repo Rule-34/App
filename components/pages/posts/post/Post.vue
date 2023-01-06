@@ -368,6 +368,7 @@
     computed: {
       ...mapGetters('user', ['getUserSettings']),
       ...mapGetters('booru', ['getActiveBooru']),
+      ...mapGetters('premium', ['isUserPremium']),
 
       isImage() {
         return this.post.data.media_type === 'image'
@@ -498,7 +499,7 @@
         }
 
         // Proxy URL
-        else if (!this.media.retryLogic.tried.proxy) {
+        else if (this.isUserPremium && !this.media.retryLogic.tried.proxy) {
           console.info('Proxying media...')
 
           event.target.src = ProxyHelper.proxyUrl(this.mediaFile[0].url)
@@ -513,7 +514,7 @@
         }
 
         // Proxy URL with extra slash
-        else if (!this.media.retryLogic.tried.proxyWithExtraSlash) {
+        else if (this.isUserPremium && !this.media.retryLogic.tried.proxyWithExtraSlash) {
           console.info('Proxying media with extra slash...')
 
           event.target.src = ProxyHelper.proxyUrl(
