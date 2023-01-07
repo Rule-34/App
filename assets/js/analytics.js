@@ -50,17 +50,6 @@ function notificationsTracking() {
   )
 }
 
-function supportPopUpTracking() {
-  SendTimed(
-    0,
-    trackEvent({
-      category: 'PopUps',
-      action: 'Show',
-      name: 'Support'
-    })
-  )
-}
-
 /* -------- Analytics -------- */
 export default function fireAnalytics(mode, { state, domain } = {}) {
   let result
@@ -72,10 +61,6 @@ export default function fireAnalytics(mode, { state, domain } = {}) {
 
     case 'notifications':
       result = notificationsTracking()
-      break
-
-    case 'supportPopUp':
-      result = supportPopUpTracking()
       break
 
     default:

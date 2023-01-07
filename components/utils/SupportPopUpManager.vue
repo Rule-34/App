@@ -33,8 +33,6 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 
-import fireAnalytics from '~/assets/js/analytics'
-
 export default {
   data() {
     return {
@@ -55,8 +53,6 @@ export default {
     }
 
     this.isActive = true
-
-    fireAnalytics('supportPopUp')
   },
 
   methods: {
