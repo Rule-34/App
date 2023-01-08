@@ -1,18 +1,24 @@
-export default async (context) => {
-  const workbox = await window.$workbox
-
-  if (!workbox) {
-    console.debug("Workbox couldn't be loaded.")
+/**
+ * @see https://github.com/nuxt-community/pwa-module/issues/239#issuecomment-1105120333
+ */
+export default async function checkForUpdate(context, err, firstTime = true) {
+  if (!('serviceWorker' in navigator)) {
+    console.debug('Service worker not supported')
     return
   }
 
-  workbox.addEventListener('installed', (event) => {
-    if (!event.isUpdate) {
-      console.debug('The PWA is on the latest version.')
-      return
-    }
+  const registration = await navigator.serviceWorker.getRegistration()
 
-    console.debug('There is an update for the PWA, reloading...')
-    location.reload()
-  })
+  if (registration) {
+    registration.update()
+
+    if (firstTime) {
+      registration.addEventListener('updatefound', () => {
+        window.location.reload()
+      })
+    }
+  }
+
+  // Check again in 5 seconds
+  setTimeout(() => checkForUpdate(context, err, false), 5000)
 }
