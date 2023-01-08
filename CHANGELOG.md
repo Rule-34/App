@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.29.0](https://github.com/Rule-34/App/compare/v2.28.0...v2.29.0) (2023-01-08)
+
+
+### Features
+
+* improve SW update ([9f20597](https://github.com/Rule-34/App/commit/9f20597bc17317cddacc85b5d823b69efbb50d95))
+
 ## [2.28.0](https://github.com/Rule-34/App/compare/v2.27.0...v2.28.0) (2023-01-06)
 
 
