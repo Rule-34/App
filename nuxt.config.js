@@ -180,10 +180,15 @@ export default {
       name: 'Rule 34 App',
       short_name: 'Rule 34 App',
       description: 'Browse popular Rule 34 Hentai Porn for free. Without ads.',
+
+      scope: '/',
       lang: 'en',
-      start_url: '/?utm_source=PWA',
+
+      start_url: '/?utm_source=pwa',
+
       theme_color: TAILWIND_CONFIG.theme.extend.colors.darkGray[700],
       background_color: TAILWIND_CONFIG.theme.extend.colors.darkGray[700],
+
       shortcuts: [
         {
           name: 'Settings',
@@ -198,6 +203,7 @@ export default {
           url: '/premium/saved-posts?utm_source=PWA&utm_medium=Shortcut'
         }
       ],
+
       useWebmanifestExtension: true
     },
 
