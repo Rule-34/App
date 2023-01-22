@@ -40,8 +40,8 @@
           <div class='shrink-0'>
             <check-icon class='icon h-6 w-6 text-accent-400' />
           </div>
-          <NuxtLink class='link ml-3 text-base font-medium leading-6' to='/premium/saved-posts'>
-            Save Posts
+          <NuxtLink class='link ml-3 text-base font-medium leading-6' to='/premium/tag-collections'>
+            Create collections of Tags
           </NuxtLink>
         </li>
 
@@ -50,9 +50,9 @@
           <div class='shrink-0'>
             <check-icon class='icon h-6 w-6 text-accent-400' />
           </div>
-          <p class='ml-3 text-base font-medium leading-6 text-gray-300'>
-            One-click Post download
-          </p>
+          <NuxtLink class='link ml-3 text-base font-medium leading-6' to='/premium/saved-posts'>
+            Save Posts
+          </NuxtLink>
         </li>
 
         <!--  -->
@@ -73,9 +73,9 @@
           <div class='shrink-0'>
             <check-icon class='icon h-6 w-6 text-accent-400' />
           </div>
-          <NuxtLink class='link ml-3 text-base font-medium leading-6' to='/premium/tag-collections'>
-            Create collections of Tags
-          </NuxtLink>
+          <p class='ml-3 text-base font-medium leading-6 text-gray-300'>
+            One-click Post download
+          </p>
         </li>
 
         <!--  -->
@@ -93,11 +93,11 @@
           <div class='shrink-0'>
             <check-icon class='icon h-6 w-6 text-accent-400' />
           </div>
-          <a href='https://docs.r34.app/frequently-asked-questions#60cb54d0bdca4953bc2caf934d4df12b' target='_blank' rel='noopener' class='link ml-3 text-base font-medium leading-6'>
+          <a class='link ml-3 text-base font-medium leading-6' href='https://docs.r34.app/frequently-asked-questions#60cb54d0bdca4953bc2caf934d4df12b' rel='noopener'
+             target='_blank'>
             Bypass website blocks
           </a>
         </li>
-      </ul>
 
         <!--  -->
         <li class='mt-4 flex items-start'>
