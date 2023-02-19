@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.30.0](https://github.com/Rule-34/App/compare/v2.29.0...v2.30.0) (2023-02-19)
+
+
+### Features
+
+* add link to Premium features docs ([bc8b644](https://github.com/Rule-34/App/commit/bc8b644f9809af9dd573510126ebeaa2b5490815))
+* **Media error:** add link to frequently asked questions ([9b0ce9a](https://github.com/Rule-34/App/commit/9b0ce9a3d514c57cf8e78c4604d137dc64f314f3))
+* **Post fetching:** add action to error toast ([88bd3f4](https://github.com/Rule-34/App/commit/88bd3f49b22fe1514f01a3bfb19f498ebfb1a023))
+
+
+### Bug Fixes
+
+* **infinite load:** don't load more posts if there are none ([b14401f](https://github.com/Rule-34/App/commit/b14401f6f42de295363642dc80b05ccbb522372c))
+* **toast:** style correctly ([5b2de9d](https://github.com/Rule-34/App/commit/5b2de9d6e6c8e8bd29c22e4e2c9a47e0669ef3e4))
+* **webmanifest:** add scope ([8123a7d](https://github.com/Rule-34/App/commit/8123a7dd40f58fa3adb24c3abb1a6a8eaffb30fe))
+
 ## [2.29.0](https://github.com/Rule-34/App/compare/v2.28.0...v2.29.0) (2023-01-08)
 
 
