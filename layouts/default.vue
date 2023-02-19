@@ -8,13 +8,13 @@
   >
     <SideNavArea />
 
-    <transition name="sidenav">
-      <SideNav v-if="isSideNavActive" />
+    <transition name='sidenav'>
+      <SideNav v-if='isSideNavActive' />
     </transition>
 
-    <portal-target name="search" />
+    <portal-target name='search' />
 
-    <portal-target name="body" />
+    <portal-target name='body' />
 
     <SupportPopUpManager />
 
@@ -29,7 +29,6 @@ import { mapGetters } from 'vuex'
 // Third party
 import { Touch } from 'vuetify/lib/directives/touch'
 
-import GlobalStartUpMixin from '~/components/utils/GlobalStartUpMixin.js'
 import NavigationMixin from '~/components/layout/navigation/NavigationMixin.js'
 import TouchHandlerMixin from '~/components/layout/navigation/sidenav/TouchHandlerMixin.js'
 
@@ -40,7 +39,7 @@ export default {
    * Warning:
    * Some methods and variables are set by Mixins
    */
-  mixins: [GlobalStartUpMixin, NavigationMixin, TouchHandlerMixin],
+  mixins: [NavigationMixin, TouchHandlerMixin],
 
   head() {
     return {
@@ -67,7 +66,7 @@ console.info(
 )
 </script>
 
-<style lang="postcss">
+<style lang='postcss'>
 /* Transition */
 
 /* Initial state */
