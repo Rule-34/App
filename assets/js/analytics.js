@@ -1,10 +1,10 @@
 // Send tags in an interval of .5 seconds to not flood the analytics server
 function SendTimed(index, passedCallback) {
-  setTimeout(passedCallback, 500 * index)
+	setTimeout(passedCallback, 500 * index)
 }
 
 function trackEvent({ category, action, name, value }) {
-  console.debug(`
+	console.debug(`
   ---- Tracking event ----
   Category: ${category}
   Action: ${action}
@@ -12,60 +12,31 @@ function trackEvent({ category, action, name, value }) {
   Value: ${value}
   `)
 
-  window._paq.push(['trackEvent', category, action, name, value])
-}
-
-function settingsTracking(state) {
-  // Compare default settings to user settings to see if theres a difference
-  const difference = Object.keys(state).filter(
-    (key) => state[key].value !== state[key].defaultValue
-  )
-
-  if (!difference.length) {
-    // console.debug('No setting difference')
-    return
-  }
-
-  Object.keys(difference).forEach((key, index) => {
-    // console.log(key, difference[key])
-
-    SendTimed(
-      index,
-      trackEvent({
-        category: 'Settings',
-        action: 'Toggle',
-        name: difference[key]
-      })
-    )
-  })
+	window._paq.push(['trackEvent', category, action, name, value])
 }
 
 function notificationsTracking() {
-  SendTimed(
-    0,
-    trackEvent({
-      category: 'Notifications',
-      action: 'Open'
-    })
-  )
+	SendTimed(
+		0,
+		trackEvent({
+			category: 'Notifications',
+			action: 'Open'
+		})
+	)
 }
 
 /* -------- Analytics -------- */
 export default function fireAnalytics(mode, { state, domain } = {}) {
-  let result
+	let result
 
-  switch (mode) {
-    case 'settings':
-      result = settingsTracking(state)
-      break
+	switch (mode) {
+		case 'notifications':
+			result = notificationsTracking()
+			break
 
-    case 'notifications':
-      result = notificationsTracking()
-      break
+		default:
+			throw new Error('No mode specified')
+	}
 
-    default:
-      throw new Error('No mode specified')
-  }
-
-  return result
+	return result
 }
