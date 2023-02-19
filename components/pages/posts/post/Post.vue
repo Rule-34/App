@@ -5,8 +5,13 @@
       <Error
         :error-data='error.message'
         :render-borders='false'
-        :show-action='false'
-      />
+      >
+
+        <template #customAction>
+          <a class='link' href='https://www.rule34.app/frequently-asked-questions#74cfdf0316b04111b0c65b7f8502dfda' rel='noopener' target='_blank'>Learn
+            more</a>
+        </template>
+      </Error>
     </template>
 
     <template v-else-if='isImage'>
@@ -67,7 +72,7 @@
           preload='none'
         >
           <source :src='mediaFile[0].url' @error='retryToLoadManager' />
-          Your browser does not support HTML5 video.
+          Your browser does not support HTML5 video
         </video>
 
         <!-- Video tag button -->
@@ -315,278 +320,278 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-  import { ExternalLinkIcon, TagIcon } from 'vue-feather-icons'
-  import { Intersect } from 'vuetify/lib/directives/intersect'
-  import { RouterHelper } from '~/assets/js/RouterHelper'
-  import { ProxyHelper } from '~/assets/js/ProxyHelper'
+import { mapGetters } from 'vuex'
+import { ExternalLinkIcon, TagIcon } from 'vue-feather-icons'
+import { Intersect } from 'vuetify/lib/directives/intersect'
+import { RouterHelper } from '~/assets/js/RouterHelper'
+import { ProxyHelper } from '~/assets/js/ProxyHelper'
 
-  export default {
-    components: { ExternalLinkIcon, TagIcon },
+export default {
+  components: { ExternalLinkIcon, TagIcon },
 
-    directives: {
-      Intersect
+  directives: {
+    Intersect
+  },
+
+  props: {
+    post: {
+      type: Object,
+      required: true
     },
 
-    props: {
-      post: {
-        type: Object,
-        required: true
-      },
+    eventOnly: {
+      type: Boolean,
+      default: false
+    }
+  },
 
-      eventOnly: {
-        type: Boolean,
-        default: false
-      }
-    },
+  data() {
+    return {
+      isActive: false,
 
-    data() {
-      return {
-        isActive: false,
+      media: {
+        hasLoaded: false,
 
-        media: {
-          hasLoaded: false,
+        retryLogic: {
+          count: 0,
 
-          retryLogic: {
-            count: 0,
-
-            tried: {
-              extraSlash: false,
-              proxy: false,
-              proxyWithExtraSlash: false
-            }
+          tried: {
+            extraSlash: false,
+            proxy: false,
+            proxyWithExtraSlash: false
           }
-        },
-
-        error: {
-          show: false,
-          message: 'An error ocurred.'
-        }
-      }
-    },
-
-    computed: {
-      ...mapGetters('user', ['getUserSettings']),
-      ...mapGetters('booru', ['getActiveBooru']),
-      ...mapGetters('premium', ['isUserPremium']),
-
-      isImage() {
-        return this.post.data.media_type === 'image'
-      },
-
-      isVideo() {
-        return this.post.data.media_type === 'video'
-      },
-
-      isSourceAnUrl() {
-        if (!this.post.data.sources.length) {
-          return false
-        }
-
-        let source
-
-        try {
-          source = new URL(this.post.data.sources[0])
-        } catch {
-          return false
-        }
-
-        return source.protocol === 'http:' || source.protocol === 'https:'
-      },
-
-      mediaFile() {
-        // If it is a video
-        if (this.isVideo && this.post.data.high_res_file) {
-          return [this.post.data.high_res_file, this.post.data.preview_file]
-        }
-
-        // Return full image if its setting is enabled OR if low resolution file doesn't exist
-        if (
-          !this.post.data.low_res_file.url ||
-          this.getUserSettings.fullSizeImages.value
-        ) {
-          return [this.post.data.high_res_file, null]
-        }
-
-        // Return low res file
-        return [this.post.data.low_res_file, null]
-      }
-    },
-
-    created() {
-      if (!this.isVideo && !this.isImage) {
-        const message = 'Unknown media type.'
-
-        console.warn(message)
-
-        this.error.message = message
-        this.error.show = true
-      }
-
-      if (!this.post.data.high_res_file.url && !this.post.data.low_res_file.url) {
-        const message = 'No media available.'
-
-        console.warn(message)
-
-        this.error.message = message
-        this.error.show = true
-      }
-    },
-
-    beforeDestroy() {
-      // Cancel any pending HTTP requests
-      if (this.isImage) {
-        const imageElement = this.$refs['imageElement']
-
-        if (imageElement) {
-          // TODO: This trick only works in Chrome
-          imageElement.src =
-            'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
-          imageElement.onload = null
-          imageElement.onerror = null
-        }
-      }
-    },
-
-    methods: {
-      generatePostsRouteWithDefaults: RouterHelper.generatePostsRouteWithDefaults,
-
-      getHostnameFromUrl(url) {
-        const source = new URL(url)
-
-        return source.hostname
-      },
-
-      toggleTags() {
-        this.isActive = !this.isActive
-      },
-
-      emitTagSelected(tag) {
-        this.$emit('tag-selected', tag)
-      },
-
-      async retryToLoadManager(event) {
-        if (this.error.show) {
-          const message = 'An error is set.'
-
-          console.warn(message)
-          return
-        }
-
-        if (this.$nuxt.isOffline) {
-          const message = 'Browser is offline.'
-
-          console.warn(message)
-
-          this.error.message = message
-          this.error.show = true
-          return
-        }
-
-        // Add extra slash to URL
-        if (!this.media.retryLogic.tried.extraSlash) {
-          console.info('Adding extra slash...')
-
-          event.target.src = this.addExtraSlashToURL(this.mediaFile[0].url)
-
-          if (this.isVideo) {
-            console.info('Reloading data and playing video')
-            event.target.parentElement.load()
-            await event.target.parentElement.play()
-          }
-
-          this.media.retryLogic.tried.extraSlash = true
-        }
-
-        // Proxy URL
-        else if (this.isUserPremium && !this.media.retryLogic.tried.proxy) {
-          console.info('Proxying media...')
-
-          event.target.src = ProxyHelper.proxyUrl(this.mediaFile[0].url)
-
-          if (this.isVideo) {
-            console.info('Reloading data and playing video')
-            event.target.parentElement.load()
-            await event.target.parentElement.play()
-          }
-
-          this.media.retryLogic.tried.proxy = true
-        }
-
-        // Proxy URL with extra slash
-        else if (this.isUserPremium && !this.media.retryLogic.tried.proxyWithExtraSlash) {
-          console.info('Proxying media with extra slash...')
-
-          event.target.src = ProxyHelper.proxyUrl(
-            this.addExtraSlashToURL(this.mediaFile[0].url)
-          )
-
-          if (this.isVideo) {
-            console.info('Reloading data and playing video')
-            event.target.parentElement.load()
-            await event.target.parentElement.play()
-          }
-
-          this.media.retryLogic.tried.proxyWithExtraSlash = true
-        }
-
-        // Retry to load it
-        else if (this.media.retryLogic.count < 1) {
-          console.info(
-            `Retry number ${ this.media.retryLogic.count } to load the media`
-          )
-
-          event.target.src =
-            'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
-
-          event.target.src = this.mediaFile[0].url
-
-          if (this.isVideo) {
-            console.info('Reloading data and playing video')
-            event.target.parentElement.load()
-            await event.target.parentElement.play()
-          }
-
-          this.media.retryLogic.count++
-        }
-
-        // At last, show error
-        else {
-          const message = 'Can not load media.'
-
-          console.warn(message)
-
-          this.error.message = message
-          this.error.show = true
         }
       },
 
-      async VideoOutOfViewHandler() {
-        const videoElement = this.$refs.videoElement
-
-        if (!videoElement) {
-          return
-        }
-
-        if (!videoElement.paused) {
-          console.debug('Pausing video.')
-
-          await videoElement.pause()
-        }
-      },
-
-      addExtraSlashToURL(url) {
-        const currentURL = new URL(url)
-
-        /* console.log({
-          original: currentURL.toString(),
-          modified: currentURLWithExtraSlash,
-        }) */
-
-        return currentURL
-          .toString()
-          .replace(currentURL.hostname, currentURL.hostname + '/')
+      error: {
+        show: false,
+        message: 'An error ocurred'
       }
     }
+  },
+
+  computed: {
+    ...mapGetters('user', ['getUserSettings']),
+    ...mapGetters('booru', ['getActiveBooru']),
+    ...mapGetters('premium', ['isUserPremium']),
+
+    isImage() {
+      return this.post.data.media_type === 'image'
+    },
+
+    isVideo() {
+      return this.post.data.media_type === 'video'
+    },
+
+    isSourceAnUrl() {
+      if (!this.post.data.sources.length) {
+        return false
+      }
+
+      let source
+
+      try {
+        source = new URL(this.post.data.sources[0])
+      } catch {
+        return false
+      }
+
+      return source.protocol === 'http:' || source.protocol === 'https:'
+    },
+
+    mediaFile() {
+      // If it is a video
+      if (this.isVideo && this.post.data.high_res_file) {
+        return [this.post.data.high_res_file, this.post.data.preview_file]
+      }
+
+      // Return full image if its setting is enabled OR if low resolution file doesn't exist
+      if (
+        !this.post.data.low_res_file.url ||
+        this.getUserSettings.fullSizeImages.value
+      ) {
+        return [this.post.data.high_res_file, null]
+      }
+
+      // Return low res file
+      return [this.post.data.low_res_file, null]
+    }
+  },
+
+  created() {
+    if (!this.isVideo && !this.isImage) {
+      const message = 'Unknown media type'
+
+      console.warn(message)
+
+      this.error.message = message
+      this.error.show = true
+    }
+
+    if (!this.post.data.high_res_file.url && !this.post.data.low_res_file.url) {
+      const message = 'No media available'
+
+      console.warn(message)
+
+      this.error.message = message
+      this.error.show = true
+    }
+  },
+
+  beforeDestroy() {
+    // Cancel any pending HTTP requests
+    if (this.isImage) {
+      const imageElement = this.$refs['imageElement']
+
+      if (imageElement) {
+        // TODO: This trick only works in Chrome
+        imageElement.src =
+          'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
+        imageElement.onload = null
+        imageElement.onerror = null
+      }
+    }
+  },
+
+  methods: {
+    generatePostsRouteWithDefaults: RouterHelper.generatePostsRouteWithDefaults,
+
+    getHostnameFromUrl(url) {
+      const source = new URL(url)
+
+      return source.hostname
+    },
+
+    toggleTags() {
+      this.isActive = !this.isActive
+    },
+
+    emitTagSelected(tag) {
+      this.$emit('tag-selected', tag)
+    },
+
+    async retryToLoadManager(event) {
+      if (this.error.show) {
+        const message = 'An error is set'
+
+        console.warn(message)
+        return
+      }
+
+      if (this.$nuxt.isOffline) {
+        const message = 'Browser is offline'
+
+        console.warn(message)
+
+        this.error.message = message
+        this.error.show = true
+        return
+      }
+
+      // Add extra slash to URL
+      if (!this.media.retryLogic.tried.extraSlash) {
+        console.info('Adding extra slash...')
+
+        event.target.src = this.addExtraSlashToURL(this.mediaFile[0].url)
+
+        if (this.isVideo) {
+          console.info('Reloading data and playing video')
+          event.target.parentElement.load()
+          await event.target.parentElement.play()
+        }
+
+        this.media.retryLogic.tried.extraSlash = true
+      }
+
+      // Proxy URL
+      else if (this.isUserPremium && !this.media.retryLogic.tried.proxy) {
+        console.info('Proxying media...')
+
+        event.target.src = ProxyHelper.proxyUrl(this.mediaFile[0].url)
+
+        if (this.isVideo) {
+          console.info('Reloading data and playing video')
+          event.target.parentElement.load()
+          await event.target.parentElement.play()
+        }
+
+        this.media.retryLogic.tried.proxy = true
+      }
+
+      // Proxy URL with extra slash
+      else if (this.isUserPremium && !this.media.retryLogic.tried.proxyWithExtraSlash) {
+        console.info('Proxying media with extra slash...')
+
+        event.target.src = ProxyHelper.proxyUrl(
+          this.addExtraSlashToURL(this.mediaFile[0].url)
+        )
+
+        if (this.isVideo) {
+          console.info('Reloading data and playing video')
+          event.target.parentElement.load()
+          await event.target.parentElement.play()
+        }
+
+        this.media.retryLogic.tried.proxyWithExtraSlash = true
+      }
+
+      // Retry to load it
+      else if (this.media.retryLogic.count < 1) {
+        console.info(
+          `Retry number ${ this.media.retryLogic.count } to load the media`
+        )
+
+        event.target.src =
+          'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
+
+        event.target.src = this.mediaFile[0].url
+
+        if (this.isVideo) {
+          console.info('Reloading data and playing video')
+          event.target.parentElement.load()
+          await event.target.parentElement.play()
+        }
+
+        this.media.retryLogic.count++
+      }
+
+      // At last, show error
+      else {
+        const message = 'Can not load media'
+
+        console.warn(message)
+
+        this.error.message = message
+        this.error.show = true
+      }
+    },
+
+    async VideoOutOfViewHandler() {
+      const videoElement = this.$refs.videoElement
+
+      if (!videoElement) {
+        return
+      }
+
+      if (!videoElement.paused) {
+        console.debug('Pausing video')
+
+        await videoElement.pause()
+      }
+    },
+
+    addExtraSlashToURL(url) {
+      const currentURL = new URL(url)
+
+      /* console.log({
+        original: currentURL.toString(),
+        modified: currentURLWithExtraSlash,
+      }) */
+
+      return currentURL
+        .toString()
+        .replace(currentURL.hostname, currentURL.hostname + '/')
+    }
   }
+}
 </script>
