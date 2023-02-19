@@ -85,17 +85,17 @@
 }
 
 .toasted-custom-theme {
-  @apply border-2 border-b-4 border-darkGray-100 border-b-accent-300 bg-darkGray-300 text-white sm:gap-2 sm:border-2;
+  @apply border-2 border-b-4 border-darkGray-100 border-b-accent-300 bg-darkGray-300 text-white sm:gap-2 sm:border-2 !important;
 
   @apply px-4 py-2 sm:rounded-lg !important;
 }
 
-.toasted-custom-theme .error {
-  @apply border-red-500 !important;
-}
+/*.toasted-custom-theme.error {*/
+/*  @apply border-red-500 !important;*/
+/*}*/
 
-.toasted-custom-action {
-  @apply focus-visible:focus-util m-0 rounded-full border-0 bg-darkGray-100 px-2 py-1 !important;
+.toasted-custom-theme .action {
+  @apply text-center focus-visible:focus-util m-0 rounded-full border-0 bg-darkGray-100 px-2 py-1 !important;
 }
 
 /* #endregion */
