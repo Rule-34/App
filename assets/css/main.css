@@ -81,7 +81,7 @@
 /* #region Toast theme */
 
 .toasted-container {
-  @apply gap-3 bg-black bg-opacity-75 backdrop-blur sm:bg-transparent sm:backdrop-filter-none;
+  @apply gap-3;
 }
 
 .toasted-custom-theme {
