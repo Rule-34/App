@@ -1,68 +1,68 @@
 <template>
   <div>
     <!-- Normal controls -->
-    <template v-if="!getUserSettings.infiniteLoad.value || forceNormalControls">
+    <template v-if='!getUserSettings.infiniteLoad.value || forceNormalControls'>
       <div
         :class="{
           'fixed inset-x-0 bottom-0 z-10 mx-auto max-w-3xl p-2 sm:p-4 lg:p-6':
             getUserSettings.hoverControls.value
         }"
       >
-        <div class="material-container flex justify-around p-2 text-center">
+        <div class='material-container flex justify-around p-2 text-center'>
           <!-- Previous page -->
           <button
-            aria-label="Load previous page"
-            class="link"
-            title="Load previous page"
-            type="button"
-            @click="getPrevPage"
+            aria-label='Load previous page'
+            class='link'
+            title='Load previous page'
+            type='button'
+            @click='getPrevPage'
           >
-            <span class="text-white">&larr;</span> Prev
+            <span class='text-white'>&larr;</span> Prev
           </button>
 
           <!-- Get specific page -->
           <button
-            aria-label="Load specific page"
-            class="link"
-            title="Load specific page"
-            type="button"
-            @click="setSpecificPage"
+            aria-label='Load specific page'
+            class='link'
+            title='Load specific page'
+            type='button'
+            @click='setSpecificPage'
           >
             {{ currentPage }}
           </button>
 
           <!-- Next page -->
           <button
-            aria-label="Load next page"
-            class="link"
-            title="Load next page"
-            type="button"
-            @click="getNextPage"
+            aria-label='Load next page'
+            class='link'
+            title='Load next page'
+            type='button'
+            @click='getNextPage'
           >
-            Next <span class="text-white">&rarr;</span>
+            Next <span class='text-white'>&rarr;</span>
           </button>
         </div>
       </div>
 
       <!-- Space below all posts -->
-      <template v-if="getUserSettings.hoverControls.value">
-        <div class="mt-6">&nbsp;</div>
+      <template v-if='getUserSettings.hoverControls.value'>
+        <div class='mt-6'>&nbsp;</div>
       </template>
     </template>
 
     <!-- Infinite loading -->
     <template v-else>
       <div
-        v-intersect="{
+        v-intersect='{
           handler: InfiniteLoadHandler,
           options: {
             threshold: [0, 0.25, 0.5, 0.75, 1.0]
           }
-        }"
-        class="mx-auto py-12"
-        @click="InfiniteLoadHandler"
+        }'
+        class='mx-auto py-12'
+        @click='InfiniteLoadHandler'
       >
-        <p class="animate-pulse text-center text-gray-300">
+        <p class='animate-pulse text-center text-gray-300'>
           Stay here to load more posts...
         </p>
       </div>
@@ -104,7 +104,8 @@ export default {
   },
 
   computed: {
-    ...mapGetters('user', ['getUserSettings'])
+    ...mapGetters('user', ['getUserSettings']),
+    ...mapGetters('booru', ['getPosts'])
   },
 
   methods: {
@@ -143,6 +144,12 @@ export default {
     },
 
     InfiniteLoadHandler(entries, observer) {
+
+      // Prevent loading more posts if there are no posts
+      if (!this.getPosts.length) {
+        return
+      }
+
       const elementAttribute = 'data-is-visible'
       const timeoutDelay = 1500
 
