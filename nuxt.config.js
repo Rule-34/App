@@ -87,7 +87,7 @@ export default {
 	components: [{ path: '~/components', pathPrefix: false }],
 
 	plugins: [
-		{ src: '~/plugins/a.pwa-update.js', mode: 'client' },
+		// { src: '~/plugins/a.pwa-update.js', mode: 'client' },
 		{ src: '~/plugins/c.vuex-persist.js', mode: 'client' },
 		{ src: '~/plugins/e.vuex-router-sync.js', mode: 'client' },
 		{ src: '~/plugins/g.migrate-state.js', mode: 'client' },
