@@ -21,7 +21,7 @@
     "@nuxtjs/auth-next": "5.0.0-1667386184.dfbbb54",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/pwa": "^3.3.5",
-    "@nuxtjs/sentry": "^6.0.3",
+    "@nuxtjs/sentry": "^7.1.4",
     "@nuxtjs/sitemap": "^2.4.0",
     "@nuxtjs/toast": "^3.3.1",
     "@vueuse/core": "^5.3.0",
