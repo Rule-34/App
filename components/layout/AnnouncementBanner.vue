@@ -1,6 +1,6 @@
 <template>
 	<div
-		v-if="show"
+		v-if="isShown"
 		class="relative isolate flex items-center gap-x-6 overflow-hidden bg-black py-2.5 px-6 sm:px-3.5 sm:before:flex-1"
 	>
 		<!-- Background -->
@@ -55,7 +55,7 @@
 			<button
 				class="-m-3 p-3 focus-visible:outline-offset-[-4px]"
 				type="button"
-				@click="show = false"
+				@click="isShown = false"
 			>
 				<span class="sr-only">Dismiss</span>
 				<XIcon
@@ -70,6 +70,8 @@
 <script>
 import { XIcon } from 'vue-feather-icons'
 
+const localStorageKey = 'hp-banner'
+
 export default {
 	components: {
 		XIcon
@@ -77,7 +79,12 @@ export default {
 
 	data() {
 		return {
-			show: true
+			isShown: localStorage.getItem(localStorageKey) !== 'false'
+		}
+	},
+	watch: {
+		isShown(value) {
+			localStorage.setItem(localStorageKey, value)
 		}
 	}
 }
