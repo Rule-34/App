@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.31.0](https://github.com/Rule-34/App/compare/v2.30.0...v2.31.0) (2023-03-19)
+
+
+### Features
+
+* add sister site banner ([57dca7f](https://github.com/Rule-34/App/commit/57dca7f0527ef0ac18b2fa5d8bd71c68ccb5e6aa))
+* save that banner was closed ([b48dc53](https://github.com/Rule-34/App/commit/b48dc53fe417bfb44aca0d158b4b77c92842273e))
+
+
+### Bug Fixes
+
+* **pwa:** await registration update ([b192887](https://github.com/Rule-34/App/commit/b1928878449eaf26312f7fc8de0184c556e0adf4))
+
 ## [2.30.0](https://github.com/Rule-34/App/compare/v2.29.0...v2.30.0) (2023-02-19)
 
 
