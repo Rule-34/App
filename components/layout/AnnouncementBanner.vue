@@ -55,7 +55,7 @@
 			<button
 				class="-m-3 p-3 focus-visible:outline-offset-[-4px]"
 				type="button"
-				@click="isShown = false"
+				@click="deleteSelf"
 			>
 				<span class="sr-only">Dismiss</span>
 				<XIcon
@@ -69,6 +69,7 @@
 
 <script>
 import { XIcon } from 'vue-feather-icons'
+import { mapGetters } from 'vuex'
 
 const localStorageKey = 'hp-banner'
 
@@ -77,14 +78,22 @@ export default {
 		XIcon
 	},
 
-	data() {
-		return {
-			isShown: localStorage.getItem(localStorageKey) !== 'false'
+	methods: {
+		deleteSelf() {
+			// Destroy the vue listeners, etc
+			this.$destroy()
+
+			// Remove the element from the DOM
+			this.$el.parentNode.removeChild(this.$el)
 		}
 	},
-	watch: {
-		isShown(value) {
-			localStorage.setItem(localStorageKey, value)
+
+	computed: {
+		...mapGetters(['getTimesTheAppHasBeenOpened']),
+
+		// Only show the banner the first time && if the app has been opened 7 times
+		isShown() {
+			return this.getTimesTheAppHasBeenOpened === 1 || this.getTimesTheAppHasBeenOpened % 7 === 0
 		}
 	}
 }
