@@ -131,7 +131,7 @@ export default {
 		HEAD.link.push({
 			hid: 'canonical',
 			rel: 'canonical',
-			href: RESOLVED_CANONICAL_ROUTE.href
+			href: ABSOLUTE_URL
 		})
 
 		// OG Image
