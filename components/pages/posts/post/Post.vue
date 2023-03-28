@@ -257,12 +257,12 @@
 			<!-- Source -->
 			<template v-if="post.data.sources.length">
 				<!-- -->
-				<div class="w-full p-1 text-center">
+				<div class="w-full text-center">
 					<!-- If text is an URL then make it a link -->
 					<template v-if="isSourceAnUrl">
 						<a
 							:href="post.data.sources[0]"
-							class="link inline-flex gap-2"
+							class="link inline-flex gap-2 px-1 py-1.5"
 							rel="noopener nofollow"
 							target="_blank"
 						>
@@ -278,7 +278,7 @@
 					<!-- If the text is not a src then just show the text -->
 					<template v-else>
 						<p
-							class="text-gray-200"
+							class="p-1 text-gray-200"
 							title="Source"
 						>
 							{{ post.data.sources[0] }}
