@@ -1,6 +1,6 @@
 <template>
 	<figure class="material-container">
-		<!-- Media -->
+		<!-- Error -->
 		<template v-if="error.show">
 			<Error
 				:error-data="error.message"
@@ -18,6 +18,7 @@
 			</Error>
 		</template>
 
+		<!-- Media -->
 		<template v-else-if="isImage">
 			<!-- Fix for weird space below button -->
 			<div class="flex overflow-hidden">
@@ -53,6 +54,7 @@
 			</div>
 		</template>
 
+		<!-- Media -->
 		<template v-else-if="isVideo">
 			<div
 				v-intersect="{
