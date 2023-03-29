@@ -31,12 +31,22 @@
 		<main class="flex min-h-full flex-auto flex-col space-y-4 pb-4">
 			<ul class="flex-auto space-y-4">
 				<template v-if="getPosts.length">
-					<li
-						v-for="POST in getPosts"
-						:key="POST.id"
-					>
-						<Post :post="POST" />
-					</li>
+					<!--          -->
+
+					<template v-for="(POST, index) in getPosts">
+						<!--            -->
+
+						<li :key="POST.id">
+							<Post :post="POST" />
+						</li>
+
+						<!-- Every 5 posts -->
+						<template v-if="!isUserPremium && index !== 0 && index % 5 === 0">
+							<li>
+								<Advertisement />
+							</li>
+						</template>
+					</template>
 				</template>
 
 				<template v-else-if="$fetchState.pending">
