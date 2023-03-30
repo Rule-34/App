@@ -30,12 +30,12 @@
 const ADVERTISEMENTS = [
 	// Premium
 	{
-		media: '',
+		media: '/img/advertisement/R34_App_Premium.jpg',
 		link: '/premium'
 	},
 	// HentaiPorn
 	{
-		media: '',
+		media: '/img/advertisement/HentaiPorn.jpg',
 		link: 'https://hentaiporn.app/?utm_source=R34App&utm_medium=Advertisement'
 	}
 ]
