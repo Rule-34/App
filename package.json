@@ -21,7 +21,7 @@
     "@nuxtjs/auth-next": "5.0.0-1667386184.dfbbb54",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/pwa": "^3.3.5",
-    "@nuxtjs/sentry": "^7.1.9",
+    "@nuxtjs/sentry": "^7.1.10",
     "@nuxtjs/sitemap": "^2.4.0",
     "@nuxtjs/toast": "^3.3.1",
     "lodash-es": "^4.17.21",
@@ -46,15 +46,15 @@
     "@sentry/webpack-plugin": "^1.20.0",
     "@tailwindcss/forms": "^0.5.3",
     "autoprefixer": "^10.4.14",
-    "eslint": "^8.36.0",
+    "eslint": "^8.37.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-vue": "^9.10.0",
     "jest": "^29.5.0",
     "postcss": "^8.4.21",
     "prettier": "^2.8.7",
-    "prettier-plugin-tailwindcss": "^0.2.5",
+    "prettier-plugin-tailwindcss": "^0.2.6",
     "standard-version": "^9.5.0",
-    "tailwindcss": "^3.2.7"
+    "tailwindcss": "^3.3.0"
   }
 }
