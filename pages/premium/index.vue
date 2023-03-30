@@ -112,23 +112,24 @@
 		</template>
 
 		<template v-else>
-			<div class="flex w-full flex-auto flex-col justify-evenly gap-4">
-				<!-- Log In -->
-				<PremiumLogin />
+			<div class="flex w-full flex-auto flex-col justify-evenly gap-6">
+				<div class="flex flex-col justify-evenly gap-3">
+					<PremiumSubscription />
+
+					<a
+						class="link text-center"
+						href="https://www.rule34.app/premium"
+						rel="noopener"
+						target="_blank"
+					>
+						Learn more about Premium features
+					</a>
+				</div>
 
 				<!-- Separator -->
 				<p class="text-center text-gray-300">Or</p>
 
-				<PremiumSubscription />
-
-				<a
-					class="link text-center"
-					href="https://www.rule34.app/premium"
-					rel="noopener"
-					target="_blank"
-				>
-					Learn more about Premium features
-				</a>
+				<PremiumLogin />
 			</div>
 		</template>
 	</main>
