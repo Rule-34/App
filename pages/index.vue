@@ -42,7 +42,7 @@
 
 						<!-- Every 5 posts -->
 						<template v-if="!isUserPremium && index !== 0 && index % 5 === 0">
-							<li>
+							<li :key="`${POST.id}-advertisement`">
 								<Advertisement />
 							</li>
 						</template>
