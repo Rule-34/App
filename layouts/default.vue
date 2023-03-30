@@ -6,7 +6,7 @@
 			right: (e) => touchHandler('right', e)
 		}"
 	>
-		<AnnouncementBanner />
+		<!--		<AnnouncementBanner />-->
 
 		<SideNavArea />
 
