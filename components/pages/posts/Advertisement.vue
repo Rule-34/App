@@ -1,5 +1,5 @@
 <template>
-	<figure class="material-container advertisement">
+	<figure class="material-container advertisement ad ads">
 		<!-- -->
 
 		<!-- Media -->
