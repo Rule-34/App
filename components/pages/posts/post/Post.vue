@@ -106,7 +106,7 @@
 				<div class="w-full overflow-hidden">
 					<TransitionCollapse>
 						<!-- Workaround for content not jumping is having a div before -->
-						<div v-show="isActive">
+						<div v-if="isActive">
 							<!-- Action bar -->
 							<div class="flex items-center justify-evenly bg-darkGray-100">
 								<!-- Actions -->
