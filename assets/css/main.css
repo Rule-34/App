@@ -65,7 +65,7 @@
     * NOT TO BE USED DIRECTLY AS CSS
     * IN CLASSES IT SHOULD BE USED WITH `.link`
     */
-    @apply select-none overflow-hidden rounded-none border border-current px-1 leading-normal;
+    @apply select-none overflow-hidden rounded-none px-1.5 py-0.5 text-gray-300 leading-normal bg-darkGray-300 rounded-lg;
   }
 
   /* Active tags */

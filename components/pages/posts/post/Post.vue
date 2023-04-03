@@ -131,122 +131,38 @@
 							<div class="tag-container min-w-full">
 								<!-- -->
 
-								<!-- Character tags -->
-								<template v-for="tag in post.data.tags.character">
+								<!-- Tags -->
+								<template v-for="tag in tagsAsSingleArray">
+									<!--                  -->
+
 									<template v-if="eventOnly">
 										<button
-											:key="tag"
+											:key="tag.name"
+											:class="{
+												'bg-amber-900': tag.type === 'artist',
+												'bg-green-900': tag.type === 'copyright',
+												'bg-emerald-900': tag.type === 'character'
+											}"
 											class="tag link"
 											type="button"
-											@click="emitTagSelected(tag)"
+											@click="emitTagSelected(tag.name)"
 										>
-											{{ tag }}
+											{{ tag.name }}
 										</button>
 									</template>
 
 									<template v-else>
 										<NuxtLink
-											:key="tag"
-											:to="generatePostsRouteWithDefaults($nuxt.$store, undefined, undefined, [tag])"
+											:key="tag.name"
+											:class="{
+												'bg-amber-900': tag.type === 'artist',
+												'bg-green-900': tag.type === 'copyright',
+												'bg-emerald-900': tag.type === 'character'
+											}"
+											:to="generatePostsRouteWithDefaults($nuxt.$store, undefined, undefined, [tag.name])"
 											class="tag link"
 										>
-											{{ tag }}
-										</NuxtLink>
-									</template>
-								</template>
-
-								<!-- Copyright tags -->
-								<template v-for="tag in post.data.tags.copyright">
-									<template v-if="eventOnly">
-										<button
-											:key="tag"
-											class="tag link"
-											type="button"
-											@click="emitTagSelected(tag)"
-										>
-											{{ tag }}
-										</button>
-									</template>
-
-									<template v-else>
-										<NuxtLink
-											:key="tag"
-											:to="generatePostsRouteWithDefaults($nuxt.$store, undefined, undefined, [tag])"
-											class="tag link"
-										>
-											{{ tag }}
-										</NuxtLink>
-									</template>
-								</template>
-
-								<!-- Artist tags -->
-								<template v-for="tag in post.data.tags.artist">
-									<template v-if="eventOnly">
-										<button
-											:key="tag"
-											class="tag link"
-											type="button"
-											@click="emitTagSelected(tag)"
-										>
-											{{ tag }}
-										</button>
-									</template>
-
-									<template v-else>
-										<NuxtLink
-											:key="tag"
-											:to="generatePostsRouteWithDefaults($nuxt.$store, undefined, undefined, [tag])"
-											class="tag link"
-										>
-											{{ tag }}
-										</NuxtLink>
-									</template>
-								</template>
-
-								<!-- General tags -->
-								<template v-for="tag in post.data.tags.general">
-									<template v-if="eventOnly">
-										<button
-											:key="tag"
-											class="tag link"
-											type="button"
-											@click="emitTagSelected(tag)"
-										>
-											{{ tag }}
-										</button>
-									</template>
-
-									<template v-else>
-										<NuxtLink
-											:key="tag"
-											:to="generatePostsRouteWithDefaults($nuxt.$store, undefined, undefined, [tag])"
-											class="tag link"
-										>
-											{{ tag }}
-										</NuxtLink>
-									</template>
-								</template>
-
-								<!-- Meta tags -->
-								<template v-for="tag in post.data.tags.meta">
-									<template v-if="eventOnly">
-										<button
-											:key="tag"
-											class="tag link"
-											type="button"
-											@click="emitTagSelected(tag)"
-										>
-											{{ tag }}
-										</button>
-									</template>
-
-									<template v-else>
-										<NuxtLink
-											:key="tag"
-											:to="generatePostsRouteWithDefaults($nuxt.$store, undefined, undefined, [tag])"
-											class="tag link"
-										>
-											{{ tag }}
+											{{ tag.name }}
 										</NuxtLink>
 									</template>
 								</template>
@@ -385,6 +301,23 @@ export default {
 
 			// Return low res file
 			return [this.post.data.low_res_file, null]
+		},
+
+		/**
+		 * Take in an object of tags like { character: ['tag1', 'tag2'], artist: ['tag3', 'tag4'] }
+		 * and return an array of tags like [{ name: 'tag1', type: 'character' }, { name: 'tag2', type: 'character' }, { name: 'tag3', type: 'artist' }, { name: 'tag4', type: 'artist' }]
+		 * @returns {Array<{ name: string, type: string }>}
+		 */
+		tagsAsSingleArray() {
+			const tags = []
+
+			for (const [type, tagsArray] of Object.entries(this.post.data.tags)) {
+				for (const tag of tagsArray) {
+					tags.push({ name: tag, type })
+				}
+			}
+
+			return tags
 		}
 	},
 
