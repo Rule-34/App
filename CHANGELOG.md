@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.32.0](https://github.com/Rule-34/App/compare/v2.31.0...v2.32.0) (2023-04-03)
+
+
+### Features
+
+* **Banner:** only show every 7 app opens ([c4e13dd](https://github.com/Rule-34/App/commit/c4e13ddfdd8327a11da90524fd498381799c443b))
+* color Tags based on type and improve style ([31d5d5d](https://github.com/Rule-34/App/commit/31d5d5dd1c3896e40566afe0194dba161b66cf78))
+* create advertisements ([8a56df5](https://github.com/Rule-34/App/commit/8a56df556386b0178a4a2479515adce478ec1d63))
+* export ads ([df313fa](https://github.com/Rule-34/App/commit/df313fa7fa4a3aadf5c17370944e8101dbbc229f))
+* **Premium:** add info about PPP discount & improve accessibility ([cf323d7](https://github.com/Rule-34/App/commit/cf323d7e7cedfeecc7871461a17c05e5e3bb7895))
+* use ads ([124db88](https://github.com/Rule-34/App/commit/124db8855cdd9e06294549bd8f87656511ec19c1))
+
+
+### Bug Fixes
+
+* **canonical meta:** use absolute url ([d626fed](https://github.com/Rule-34/App/commit/d626fedc9bf706286ecfce2c8994b7390862954e))
+* **Post Source:** add more padding to link ([11721e1](https://github.com/Rule-34/App/commit/11721e152797a1d047ae77aa36026f5ffaa8c2ba))
+* use key for random Advertisement ([bc5d7d8](https://github.com/Rule-34/App/commit/bc5d7d8d8b6c6ca1af7004446e1039d64076ee19))
+
 ## [2.31.0](https://github.com/Rule-34/App/compare/v2.30.0...v2.31.0) (2023-03-19)
 
 
