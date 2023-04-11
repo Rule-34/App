@@ -49,7 +49,9 @@
 						threshold: [0]
 					}
 				}"
+				:height="mediaSrcHeight"
 				:poster="mediaPosterSrc"
+				:width="mediaSrcWidth"
 				class="h-auto w-full"
 				controls
 				loop
