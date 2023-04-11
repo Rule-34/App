@@ -120,8 +120,9 @@
 										<!-- Number of posts with that tag -->
 										<span
 											v-if="tag.count"
-											class="text-gray-400 transition-colors duration-300 group-hover:text-primary-600"
-											>{{ `(${tag.count})` }}
+											class="uppercase text-gray-400 transition-colors duration-300 group-hover:text-primary-600"
+										>
+											{{ `(${abbreviateNumber(tag.count, 0)})` }}
 										</span>
 									</button>
 								</div>
@@ -157,6 +158,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import { FilterIcon, SearchIcon, TagIcon, TrashIcon } from 'vue-feather-icons'
 import { debounce } from 'lodash-es'
+import { abbreviateNumber } from 'js-abbreviation-number'
 
 export default {
 	components: {
@@ -207,6 +209,7 @@ export default {
 	},
 
 	methods: {
+		abbreviateNumber,
 		...mapActions('navigation', ['searchNavigationManager']),
 
 		// #region Navigation
