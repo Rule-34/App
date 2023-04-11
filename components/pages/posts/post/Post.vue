@@ -1,25 +1,7 @@
 <template>
 	<figure class="material-container">
-		<!-- Error -->
-		<template v-if="error.show">
-			<Error
-				:error-data="error.message"
-				:render-borders="false"
-			>
-				<template #customAction>
-					<a
-						class="link"
-						href="https://www.rule34.app/frequently-asked-questions#74cfdf0316b04111b0c65b7f8502dfda"
-						rel="noopener"
-						target="_blank"
-						>Learn more</a
-					>
-				</template>
-			</Error>
-		</template>
-
 		<!-- Media -->
-		<template v-else-if="isImage">
+		<template v-if="isImage">
 			<!-- Fix for weird space below button -->
 			<div class="flex overflow-hidden">
 				<button
@@ -30,22 +12,13 @@
 					@click="toggleTags"
 					@keydown.enter="toggleTags"
 				>
-					<img
-						:key="mediaFile[0].url"
-						ref="imageElement"
-						:alt="'Image ' + post.data.id"
-						:class="{
-							'opacity-100': media.hasLoaded
-						}"
-						:height="mediaFile[0].height"
-						:src="mediaFile[0].url"
-						:width="mediaFile[0].width"
-						class="h-auto w-full opacity-0 transition-opacity duration-700"
-						decoding="async"
-						loading="lazy"
-						referrerpolicy="no-referrer"
-						@error="retryToLoadManager"
-						@load="media.hasLoaded = true"
+					<!-- Image -->
+					<PostMedia
+						:mediaAlt="mediaFile.alt"
+						:mediaSrc="mediaFile.file"
+						:mediaSrcHeight="mediaFile.height"
+						:mediaSrcWidth="mediaFile.width"
+						:mediaType="post.data.media_type"
 					/>
 
 					<!-- Fix for focus ring not applying on other elements -->
@@ -56,31 +29,16 @@
 
 		<!-- Media -->
 		<template v-else-if="isVideo">
-			<div
-				v-intersect="{
-					handler: VideoOutOfViewHandler,
-					options: {
-						threshold: [0]
-					}
-				}"
-				class="relative"
-			>
-				<video
-					:key="mediaFile[0].url"
-					ref="videoElement"
-					:poster="mediaFile[1].url"
-					class="h-auto w-full"
-					controls
-					loop
-					playsinline
-					preload="none"
-				>
-					<source
-						:src="mediaFile[0].url"
-						@error="retryToLoadManager"
-					/>
-					Your browser does not support HTML5 video
-				</video>
+			<div class="relative">
+				<!-- Video -->
+				<PostMedia
+					:mediaAlt="mediaFile.alt"
+					:mediaPosterSrc="mediaFile.posterFile"
+					:mediaSrc="mediaFile.file"
+					:mediaSrcHeight="mediaFile.height"
+					:mediaSrcWidth="mediaFile.width"
+					:mediaType="post.data.media_type"
+				/>
 
 				<!-- Video tag button -->
 				<div class="pointer-events-none absolute inset-y-0 right-0 p-4">
@@ -110,21 +68,19 @@
 							<!-- Action bar -->
 							<div class="flex items-center justify-evenly bg-darkGray-100">
 								<!-- Actions -->
-								<template v-if="!error.show">
-									<!-- Saucenao -->
-									<template v-if="!isVideo">
-										<PostSaucenao :media-url="mediaFile[0].url" />
-									</template>
-
-									<!-- Download -->
-									<PostDownload
-										:media-name="post.id"
-										:media-url="mediaFile[0].url"
-									/>
-
-									<!-- Save post -->
-									<PostSavedPosts :post="post" />
+								<!-- Saucenao -->
+								<template v-if="!isVideo">
+									<PostSaucenao :media-url="mediaFile.file" />
 								</template>
+
+								<!-- Download -->
+								<PostDownload
+									:media-name="post.id"
+									:media-url="mediaFile.file"
+								/>
+
+								<!-- Save post -->
+								<PostSavedPosts :post="post" />
 							</div>
 
 							<!-- Tags -->
@@ -211,16 +167,11 @@
 <script>
 import { mapGetters } from 'vuex'
 import { ExternalLinkIcon, TagIcon } from 'vue-feather-icons'
-import { Intersect } from 'vuetify/lib/directives/intersect'
 import { RouterHelper } from '~/assets/js/RouterHelper'
-import { ProxyHelper } from '~/assets/js/ProxyHelper'
+import PostMedia from '~/components/pages/posts/post/PostMedia.vue'
 
 export default {
-	components: { ExternalLinkIcon, TagIcon },
-
-	directives: {
-		Intersect
-	},
+	components: { PostMedia, ExternalLinkIcon, TagIcon },
 
 	props: {
 		post: {
@@ -236,33 +187,12 @@ export default {
 
 	data() {
 		return {
-			isActive: false,
-
-			media: {
-				hasLoaded: false,
-
-				retryLogic: {
-					count: 0,
-
-					tried: {
-						extraSlash: false,
-						proxy: false,
-						proxyWithExtraSlash: false
-					}
-				}
-			},
-
-			error: {
-				show: false,
-				message: 'An error ocurred'
-			}
+			isActive: false
 		}
 	},
 
 	computed: {
 		...mapGetters('user', ['getUserSettings']),
-		...mapGetters('booru', ['getActiveBooru']),
-		...mapGetters('premium', ['isUserPremium']),
 
 		isImage() {
 			return this.post.data.media_type === 'image'
@@ -289,18 +219,42 @@ export default {
 		},
 
 		mediaFile() {
-			// If it is a video
-			if (this.isVideo && this.post.data.high_res_file) {
-				return [this.post.data.high_res_file, this.post.data.preview_file]
+			const data = {
+				file: null,
+				width: null,
+				height: null,
+				posterFile: null,
+				alt: 'Post with tags: ' + this.tagsAsSingleArray.map((tag) => tag.name).join(', ')
 			}
 
-			// Return full image if its setting is enabled OR if low resolution file doesn't exist
-			if (!this.post.data.low_res_file.url || this.getUserSettings.fullSizeImages.value) {
-				return [this.post.data.high_res_file, null]
+			switch (true) {
+				case this.isImage: {
+					// Return full image if its setting is enabled OR if low resolution file doesn't exist
+					if (!this.post.data.low_res_file.url || this.getUserSettings.fullSizeImages.value) {
+						data.file = this.post.data.high_res_file.url
+						data.width = this.post.data.high_res_file.width
+						data.height = this.post.data.high_res_file.height
+					} else {
+						// Return low res file
+						data.file = this.post.data.low_res_file.url
+						data.width = this.post.data.low_res_file.width
+						data.height = this.post.data.low_res_file.height
+					}
+
+					break
+				}
+
+				case this.isVideo: {
+					data.file = this.post.data.high_res_file.url
+					data.width = this.post.data.high_res_file.width
+					data.height = this.post.data.high_res_file.height
+
+					data.posterFile = this.post.data.preview_file.url
+					break
+				}
 			}
 
-			// Return low res file
-			return [this.post.data.low_res_file, null]
+			return data
 		},
 
 		/**
@@ -321,40 +275,6 @@ export default {
 		}
 	},
 
-	created() {
-		if (!this.isVideo && !this.isImage) {
-			const message = 'Unknown media type'
-
-			console.warn(message)
-
-			this.error.message = message
-			this.error.show = true
-		}
-
-		if (!this.post.data.high_res_file.url && !this.post.data.low_res_file.url) {
-			const message = 'No media available'
-
-			console.warn(message)
-
-			this.error.message = message
-			this.error.show = true
-		}
-	},
-
-	beforeDestroy() {
-		// Cancel any pending HTTP requests
-		if (this.isImage) {
-			const imageElement = this.$refs['imageElement']
-
-			if (imageElement) {
-				// TODO: This trick only works in Chrome
-				imageElement.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
-				imageElement.onload = null
-				imageElement.onerror = null
-			}
-		}
-	},
-
 	methods: {
 		generatePostsRouteWithDefaults: RouterHelper.generatePostsRouteWithDefaults,
 
@@ -370,122 +290,6 @@ export default {
 
 		emitTagSelected(tag) {
 			this.$emit('tag-selected', tag)
-		},
-
-		async retryToLoadManager(event) {
-			if (this.error.show) {
-				const message = 'An error is set'
-
-				console.warn(message)
-				return
-			}
-
-			if (this.$nuxt.isOffline) {
-				const message = 'Browser is offline'
-
-				console.warn(message)
-
-				this.error.message = message
-				this.error.show = true
-				return
-			}
-
-			// Add extra slash to URL
-			if (!this.media.retryLogic.tried.extraSlash) {
-				console.info('Adding extra slash...')
-
-				event.target.src = this.addExtraSlashToURL(this.mediaFile[0].url)
-
-				if (this.isVideo) {
-					console.info('Reloading data and playing video')
-					event.target.parentElement.load()
-					await event.target.parentElement.play()
-				}
-
-				this.media.retryLogic.tried.extraSlash = true
-			}
-
-			// Proxy URL
-			else if (this.isUserPremium && !this.media.retryLogic.tried.proxy) {
-				console.info('Proxying media...')
-
-				event.target.src = ProxyHelper.proxyUrl(this.mediaFile[0].url)
-
-				if (this.isVideo) {
-					console.info('Reloading data and playing video')
-					event.target.parentElement.load()
-					await event.target.parentElement.play()
-				}
-
-				this.media.retryLogic.tried.proxy = true
-			}
-
-			// Proxy URL with extra slash
-			else if (this.isUserPremium && !this.media.retryLogic.tried.proxyWithExtraSlash) {
-				console.info('Proxying media with extra slash...')
-
-				event.target.src = ProxyHelper.proxyUrl(this.addExtraSlashToURL(this.mediaFile[0].url))
-
-				if (this.isVideo) {
-					console.info('Reloading data and playing video')
-					event.target.parentElement.load()
-					await event.target.parentElement.play()
-				}
-
-				this.media.retryLogic.tried.proxyWithExtraSlash = true
-			}
-
-			// Retry to load it
-			else if (this.media.retryLogic.count < 1) {
-				console.info(`Retry number ${this.media.retryLogic.count} to load the media`)
-
-				event.target.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
-
-				event.target.src = this.mediaFile[0].url
-
-				if (this.isVideo) {
-					console.info('Reloading data and playing video')
-					event.target.parentElement.load()
-					await event.target.parentElement.play()
-				}
-
-				this.media.retryLogic.count++
-			}
-
-			// At last, show error
-			else {
-				const message = 'Can not load media'
-
-				console.warn(message)
-
-				this.error.message = message
-				this.error.show = true
-			}
-		},
-
-		async VideoOutOfViewHandler() {
-			const videoElement = this.$refs.videoElement
-
-			if (!videoElement) {
-				return
-			}
-
-			if (!videoElement.paused) {
-				console.debug('Pausing video')
-
-				await videoElement.pause()
-			}
-		},
-
-		addExtraSlashToURL(url) {
-			const currentURL = new URL(url)
-
-			/* console.log({
-        original: currentURL.toString(),
-        modified: currentURLWithExtraSlash,
-      }) */
-
-			return currentURL.toString().replace(currentURL.hostname, currentURL.hostname + '/')
 		}
 	}
 }

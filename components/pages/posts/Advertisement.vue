@@ -8,9 +8,12 @@
 			rel="noopener nofollow"
 			target="_blank"
 		>
-			<img
-				:src="advertisement.media"
-				alt="Advertisement"
+			<PostMedia
+				:media-src="advertisement.media"
+				:media-src-height="advertisement.mediaHeight"
+				:media-src-width="advertisement.mediaWidth"
+				:media-type="advertisement.mediaType"
+				media-alt="Advertisement"
 			/>
 		</a>
 
@@ -31,11 +34,17 @@ const ADVERTISEMENTS = [
 	// Premium
 	{
 		media: '/img/advertisement/R34_App_Premium.jpg',
+		mediaWidth: 1280,
+		mediaHeight: 1280,
+		mediaType: 'image',
 		link: '/premium'
 	},
 	// HentaiPorn
 	{
 		media: '/img/advertisement/HentaiPorn.jpg',
+		mediaWidth: 1280,
+		mediaHeight: 1280,
+		mediaType: 'image',
 		link: 'https://hentaiporn.app/?utm_source=R34App&utm_medium=Advertisement'
 	}
 ]
