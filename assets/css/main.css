@@ -56,7 +56,7 @@
 
   /*  */
   .tag-container {
-    @apply flex flex-wrap content-start items-start gap-2 overflow-hidden bg-darkGray-500 p-2;
+    @apply flex flex-wrap content-start items-start gap-2 overflow-hidden bg-darkGray-700 p-2;
   }
 
   /*  */
@@ -65,7 +65,7 @@
     * NOT TO BE USED DIRECTLY AS CSS
     * IN CLASSES IT SHOULD BE USED WITH `.link`
     */
-    @apply select-none overflow-hidden rounded-none px-1.5 py-0.5 text-gray-300 leading-normal bg-darkGray-300 rounded-lg;
+    @apply select-none overflow-hidden rounded-none px-1.5 py-0.5 text-gray-300 leading-normal bg-darkGray-100 rounded-lg;
   }
 
   /* Active tags */
