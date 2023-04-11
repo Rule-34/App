@@ -66,7 +66,7 @@
 						<!-- Workaround for content not jumping is having a div before -->
 						<div v-if="isActive">
 							<!-- Action bar -->
-							<div class="flex items-center justify-evenly bg-darkGray-100">
+							<div class="flex items-center justify-evenly bg-darkGray-500">
 								<!-- Actions -->
 								<!-- Saucenao -->
 								<template v-if="!isVideo">
@@ -131,7 +131,7 @@
 			<!-- Source -->
 			<template v-if="post.data.sources.length">
 				<!-- -->
-				<div class="w-full text-center">
+				<div class="w-full bg-darkGray-500 text-center">
 					<!-- If text is an URL then make it a link -->
 					<template v-if="isSourceAnUrl">
 						<a

@@ -77,7 +77,7 @@
 					</div>
 
 					<!-- Search results -->
-					<div class="material-container relative flex h-full flex-col space-y-2 p-2">
+					<div class="material-container relative flex h-full flex-col space-y-2 bg-darkGray-700 p-2">
 						<!-- If nothing searched -->
 						<template v-if="!searchResults.length && !search.activeTags.length">
 							<h1 class="flex flex-auto items-center justify-center text-xl font-light tracking-wide text-gray-200">
@@ -103,7 +103,7 @@
 
 							<!-- Searched tags, click them to add them -->
 							<template v-if="searchResults.length">
-								<div class="tag-container flex-auto overflow-y-scroll rounded border-0 border-darkGray-100">
+								<div class="tag-container flex-auto overflow-y-scroll rounded border-0">
 									<!-- Add tag to array of added tags -->
 									<button
 										v-for="tag in searchResults"
