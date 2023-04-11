@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.33.0](https://github.com/Rule-34/App/compare/v2.32.0...v2.33.0) (2023-04-11)
+
+
+### Features
+
+* filter out bad Posts ([709e5d7](https://github.com/Rule-34/App/commit/709e5d7f9b22c226ce75bc6049889fb26d46e982))
+* improve Tags style ([e4e2982](https://github.com/Rule-34/App/commit/e4e29826f987458ed015b1a824ac154de2b2903c))
+* **Search:** abbreviate post count ([d157570](https://github.com/Rule-34/App/commit/d1575704e42e26ad258787265a00bfa8665b67c0))
+* **Tags:** round more ([324fbdf](https://github.com/Rule-34/App/commit/324fbdf54865e2c3bfdd2a26a418dda8de8d260c))
+
+
+### Bug Fixes
+
+* **Post Media:** add width and height to videos ([6c3fb67](https://github.com/Rule-34/App/commit/6c3fb6788badbe9b5dd6e5df87b4ccdef9bf2b93))
+
 ## [2.32.0](https://github.com/Rule-34/App/compare/v2.31.0...v2.32.0) (2023-04-03)
 
 
