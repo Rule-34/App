@@ -111,7 +111,7 @@ export default {
 			})
 
 			// Description
-			const DESCRIPTION = `Browse popular ${TAGS} Rule 34 Hentai Porn for free. Without ads.`
+			const DESCRIPTION = `Browse popular ${TAGS} Rule 34 Hentai Porn for free.`
 
 			HEAD.meta.push({
 				hid: 'description',
