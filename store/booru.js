@@ -278,6 +278,19 @@ export const actions = {
 				{ root: true }
 			)
 
+			// Filter out posts
+			response.data = response.data.filter((post) => {
+				if (!post.high_res_file?.url) {
+					return false
+				}
+
+				if (post.media_type === 'unknown') {
+					return false
+				}
+
+				return true
+			})
+
 			// This is how a final booru object looks like
 			const POSTS = response.data.map((POST) => {
 				return {

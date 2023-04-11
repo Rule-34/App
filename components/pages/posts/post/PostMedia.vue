@@ -79,22 +79,6 @@ export default {
 		Intersect
 	},
 
-	created() {
-		if (!this.isVideo && !this.isImage) {
-			const message = 'Unknown media type'
-
-			this.error.message = message
-			this.error.show = true
-		}
-
-		if (!this.mediaSrc) {
-			const message = 'No media available'
-
-			this.error.message = message
-			this.error.show = true
-		}
-	},
-
 	props: {
 		mediaSrc: {
 			type: String,
