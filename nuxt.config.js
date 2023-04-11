@@ -45,7 +45,7 @@ export default {
 				hid: 'description',
 				name: 'description',
 				content:
-					'Browse popular Rule 34 Hentai Porn for free. Without ads.' +
+					'Browse popular Rule 34 Hentai Porn for free.' +
 					' We have Anime, Pokemon, Fortnite, Naruto, FNF, FNAF, CountryHumans, Brawl Stars, Gay, Video…'
 			},
 			{
@@ -176,7 +176,7 @@ export default {
 		manifest: {
 			name: 'Rule 34 App',
 			short_name: 'Rule 34 App',
-			description: 'Browse popular Rule 34 Hentai Porn for free. Without ads.',
+			description: 'Browse popular Rule 34 Hentai Porn for free.',
 
 			scope: '/',
 			lang: 'en',
