@@ -171,11 +171,6 @@ export default {
 					isInternal: true
 				},
 				{
-					title: 'About',
-					url: '/about',
-					isInternal: true
-				},
-				{
 					title: 'Settings',
 					url: '/settings',
 					isInternal: true
