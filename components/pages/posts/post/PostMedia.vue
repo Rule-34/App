@@ -23,17 +23,24 @@
 		<template v-else-if="isImage">
 			<img
 				ref="imageElement"
+				v-intersect="{
+					handler: mediaLoader,
+					options: {
+						rootMargin: '1250px'
+					}
+				}"
 				:alt="mediaAlt"
 				:class="{
 					'opacity-100': media.hasLoaded
 				}"
+				:data-src="mediaSrc"
 				:height="mediaSrcHeight"
-				:src="mediaSrc"
 				:width="mediaSrcWidth"
 				class="h-auto w-full opacity-0 transition-opacity duration-700"
 				decoding="async"
 				loading="lazy"
 				referrerpolicy="no-referrer"
+				src=""
 				@error="retryToLoadManager"
 				@load="media.hasLoaded = true"
 			/>
@@ -44,11 +51,12 @@
 			<video
 				ref="videoElement"
 				v-intersect="{
-					handler: VideoOutOfViewHandler,
+					handler: mediaLoader,
 					options: {
-						threshold: [0]
+						rootMargin: '1250px'
 					}
 				}"
+				:data-src="mediaSrc"
 				:height="mediaSrcHeight"
 				:poster="mediaPosterSrc"
 				:width="mediaSrcWidth"
@@ -57,12 +65,9 @@
 				loop
 				playsinline
 				preload="none"
-			>
-				<source
-					:src="mediaSrc"
-					@error="retryToLoadManager"
-				/>
-			</video>
+				src=""
+				@error="retryToLoadManager"
+			/>
 		</template>
 	</div>
 </template>
@@ -112,8 +117,6 @@ export default {
 				hasLoaded: false,
 
 				retryLogic: {
-					count: 0,
-
 					tried: {
 						extraSlash: false,
 						proxy: false,
@@ -141,22 +144,10 @@ export default {
 		}
 	},
 
-	beforeDestroy() {
-		// Cancel any pending HTTP requests
-		if (this.isImage) {
-			const imageElement = this.$refs['imageElement']
-
-			if (imageElement) {
-				// TODO: This trick only works in Chrome
-				imageElement.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
-				imageElement.onload = null
-				imageElement.onerror = null
-			}
-		}
-	},
-
 	methods: {
 		async retryToLoadManager(event) {
+			// TODO: Support videos
+
 			if (this.error.show) {
 				return
 			}
@@ -167,17 +158,21 @@ export default {
 				return
 			}
 
+			// Check if src is empty
+			if (event.target.src === '') {
+				return
+			}
+
+			console.log(event.target.src)
+
 			// Add extra slash to URL
 			if (!this.media.retryLogic.tried.extraSlash) {
 				console.info('Adding extra slash...')
 
-				event.target.src = this.addExtraSlashToURL(this.mediaSrc)
+				const newSrc = this.addExtraSlashToURL(this.mediaSrc)
 
-				if (this.isVideo) {
-					console.info('Reloading data and playing video')
-					event.target.parentElement.load()
-					await event.target.parentElement.play()
-				}
+				event.target.setAttribute('data-src', newSrc)
+				event.target.src = newSrc
 
 				this.media.retryLogic.tried.extraSlash = true
 			}
@@ -186,13 +181,10 @@ export default {
 			else if (this.isUserPremium && !this.media.retryLogic.tried.proxy) {
 				console.info('Proxying media...')
 
-				event.target.src = ProxyHelper.proxyUrl(this.mediaSrc)
+				const newSrc = ProxyHelper.proxyUrl(this.mediaSrc)
 
-				if (this.isVideo) {
-					console.info('Reloading data and playing video')
-					event.target.parentElement.load()
-					await event.target.parentElement.play()
-				}
+				event.target.setAttribute('data-src', newSrc)
+				event.target.src = newSrc
 
 				this.media.retryLogic.tried.proxy = true
 			}
@@ -201,32 +193,12 @@ export default {
 			else if (this.isUserPremium && !this.media.retryLogic.tried.proxyWithExtraSlash) {
 				console.info('Proxying media with extra slash...')
 
-				event.target.src = ProxyHelper.proxyUrl(this.addExtraSlashToURL(this.mediaSrc))
+				const newSrc = ProxyHelper.proxyUrl(this.addExtraSlashToURL(this.mediaSrc))
 
-				if (this.isVideo) {
-					console.info('Reloading data and playing video')
-					event.target.parentElement.load()
-					await event.target.parentElement.play()
-				}
+				event.target.setAttribute('data-src', newSrc)
+				event.target.src = newSrc
 
 				this.media.retryLogic.tried.proxyWithExtraSlash = true
-			}
-
-			// Retry to load it
-			else if (this.media.retryLogic.count < 1) {
-				console.info(`Retry number ${this.media.retryLogic.count} to load the media`)
-
-				event.target.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
-
-				event.target.src = this.mediaSrc
-
-				if (this.isVideo) {
-					console.info('Reloading data and playing video')
-					event.target.parentElement.load()
-					await event.target.parentElement.play()
-				}
-
-				this.media.retryLogic.count++
 			}
 
 			// At last, show error
@@ -236,17 +208,27 @@ export default {
 			}
 		},
 
-		async VideoOutOfViewHandler() {
-			const videoElement = this.$refs.videoElement
-
-			if (!videoElement) {
+		/**
+		 * Sets the media src from data-src attribute
+		 */
+		mediaLoader(entries, observer) {
+			if (!entries || !entries.length) {
 				return
 			}
 
-			if (!videoElement.paused) {
-				console.debug('Pausing video')
+			// Smallest image possible - https://stackoverflow.com/a/36610159/11398632
+			const smallestImage =
+				'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII='
+			const smallestVideo = 'data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28ybXA0MQAAAAhmcmVlAAABZAAAACR0eXBlbWFw'
 
-				await videoElement.pause()
+			const smallestMedia = this.isImage ? smallestImage : smallestVideo
+
+			for (const entry of entries) {
+				const mediaElement = entry.target
+
+				const newSrc = entry.isIntersecting ? mediaElement.getAttribute('data-src') : smallestMedia
+
+				mediaElement.src = newSrc
 			}
 		},
 
