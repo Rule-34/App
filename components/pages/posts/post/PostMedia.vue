@@ -35,6 +35,7 @@
 				}"
 				:data-src="mediaSrc"
 				:height="mediaSrcHeight"
+				:style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
 				:width="mediaSrcWidth"
 				class="h-auto w-full opacity-0 transition-opacity duration-700"
 				decoding="async"
@@ -59,6 +60,7 @@
 				:data-src="mediaSrc"
 				:height="mediaSrcHeight"
 				:poster="mediaPosterSrc"
+				:style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
 				:width="mediaSrcWidth"
 				class="h-auto w-full"
 				controls
