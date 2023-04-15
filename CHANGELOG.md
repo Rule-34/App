@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.34.0](https://github.com/Rule-34/App/compare/v2.33.0...v2.34.0) (2023-04-15)
+
+
+### Features
+
+* create scroll to top button ([5cad8d0](https://github.com/Rule-34/App/commit/5cad8d0860cc46b20c9cea1c9d8f429127c7f566))
+* **Partners page:** add Kurosearch ([a2a9896](https://github.com/Rule-34/App/commit/a2a9896415f0b533105fdd28b1e6baa4ffeca65d))
+* **Posts:** unload posts when out of view ([713a7e0](https://github.com/Rule-34/App/commit/713a7e0cfb09d82f622ac8acd57b1224f2e0a43c))
+* use infinite pagination ([e3eefcb](https://github.com/Rule-34/App/commit/e3eefcb4b8c546bd38dfe70861b6538af463fd7f))
+
+
+### Bug Fixes
+
+* **Index:** don't fetch more pages if already fetching ([525918f](https://github.com/Rule-34/App/commit/525918f8d66fe01c7046277110f0d1cf5baa7bf1))
+* **Post Media:** add default base for URLs ([1faab8e](https://github.com/Rule-34/App/commit/1faab8efa155113473383f3b54321e16cdcf1792))
+* **Post Media:** do not load media until viewed ([bcaa4b0](https://github.com/Rule-34/App/commit/bcaa4b0117ce59f78f7bd22a4fef0a21e8a9e210))
+* **Post:** add real small video ([9632722](https://github.com/Rule-34/App/commit/9632722461e5b2306715647720e970a948d9da1a))
+* **Post:** use aspect ratio ([a02739d](https://github.com/Rule-34/App/commit/a02739d3a67cab8eb6aefcd4d8985570a522663b))
+
 ## [2.33.0](https://github.com/Rule-34/App/compare/v2.32.0...v2.33.0) (2023-04-11)
 
 
