@@ -231,6 +231,11 @@ export default {
 		},
 
 		async onPageChange(page) {
+			if (this.$fetchState.pending) {
+				console.debug('Already fetching posts.')
+				return
+			}
+
 			await this.pidManager({ operation: 'set', value: page })
 		},
 
