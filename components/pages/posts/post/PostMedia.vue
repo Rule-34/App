@@ -235,7 +235,7 @@ export default {
 		},
 
 		addExtraSlashToURL(url) {
-			const currentURL = new URL(url)
+			const currentURL = new URL(url, window.location.origin)
 
 			/* console.log({
         original: currentURL.toString(),
