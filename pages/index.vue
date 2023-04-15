@@ -55,6 +55,7 @@
 			</ul>
 
 			<PostsControls
+				v-if="getPosts.length"
 				:current-page="getPageID"
 				:minimum-page="getActiveBooruType.initialPageID"
 				@setPage="onPageChange"
