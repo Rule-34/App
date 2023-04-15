@@ -163,8 +163,6 @@ export default {
 				return
 			}
 
-			console.log(event.target.src)
-
 			// Add extra slash to URL
 			if (!this.media.retryLogic.tried.extraSlash) {
 				console.info('Adding extra slash...')

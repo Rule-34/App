@@ -128,9 +128,18 @@ export const actions = {
 				break
 
 			case 'concat': {
-				const uniqueMergedPosts = [...new Set([...state.posts.data, ...value])]
+				// Merge and remove duplicates using the `id` property
+				const posts = []
+				const keys = new Set()
 
-				commit('setPostsData', uniqueMergedPosts)
+				for (const post of [...state.posts.data, ...value]) {
+					if (!keys.has(post.id)) {
+						keys.add(post.id)
+						posts.push(post)
+					}
+				}
+
+				commit('setPostsData', posts)
 				break
 			}
 
@@ -263,7 +272,7 @@ export const actions = {
 		return urlToFetch.toString()
 	},
 
-	async fetchPosts({ getters, dispatch }, mode) {
+	async fetchPosts({ getters, dispatch }, mode = 'set') {
 		// Tip: Actions that return a value have to be awaited
 		const url = await dispatch('createApiUrl', { mode: 'posts' })
 

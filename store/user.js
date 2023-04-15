@@ -214,25 +214,10 @@ export const state = () => ({
 			defaultValue: true
 		},
 
-		hoverControls: {
-			name: 'Hover controls',
-			description: 'Page controls will be fixed over the content.',
-			image: '/img/usage_examples/hover-controls',
-			value: false,
-			defaultValue: false
-		},
-
 		fullSizeImages: {
 			name: 'Full size images',
 			description: 'Load full images instead of downscaled images, data intensive.',
 			image: '/img/usage_examples/full-size-images',
-			value: false,
-			defaultValue: false
-		},
-
-		infiniteLoad: {
-			name: 'Infinite loading',
-			description: 'Load posts infinitely instead of using the page controls.',
 			value: false,
 			defaultValue: false
 		},
