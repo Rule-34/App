@@ -368,7 +368,7 @@ export const actions = {
 	},
 
 	removePostFromSavedPosts({ getters, commit }, { postId }) {
-		const SAVED_POSTS = JSON.parse(JSON.stringify(getters.getCustomSavedPosts))
+		const SAVED_POSTS = cloneDeep(getters.getCustomSavedPosts)
 
 		// Remove post with the same ID
 		const FILTERED_SAVED_POSTS = SAVED_POSTS.filter((SAVED_POST) => {
