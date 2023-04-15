@@ -41,7 +41,6 @@
 				decoding="async"
 				loading="lazy"
 				referrerpolicy="no-referrer"
-				src=""
 				@error="retryToLoadManager"
 				@load="media.hasLoaded = true"
 			/>
@@ -67,7 +66,6 @@
 				loop
 				playsinline
 				preload="none"
-				src=""
 				@error="retryToLoadManager"
 			/>
 		</template>
