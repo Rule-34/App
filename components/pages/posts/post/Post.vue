@@ -60,71 +60,66 @@
 
 		<figcaption class="flex flex-wrap overflow-hidden text-sm">
 			<!-- Action bar & Tags -->
-			<template>
+			<template v-if="isActive">
 				<div class="w-full overflow-hidden">
-					<TransitionCollapse>
-						<!-- Workaround for content not jumping is having a div before -->
-						<div v-if="isActive">
-							<!-- Action bar -->
-							<div class="flex items-center justify-evenly bg-darkGray-500">
-								<!-- Actions -->
-								<!-- Saucenao -->
-								<template v-if="!isVideo">
-									<PostSaucenao :media-url="mediaFile.file" />
-								</template>
+					<!-- Action bar -->
+					<div class="flex items-center justify-evenly bg-darkGray-500">
+						<!-- Actions -->
+						<!-- Saucenao -->
+						<template v-if="!isVideo">
+							<PostSaucenao :media-url="mediaFile.file" />
+						</template>
 
-								<!-- Download -->
-								<PostDownload
-									:media-name="post.id"
-									:media-url="mediaFile.file"
-								/>
+						<!-- Download -->
+						<PostDownload
+							:media-name="post.id"
+							:media-url="mediaFile.file"
+						/>
 
-								<!-- Save post -->
-								<PostSavedPosts :post="post" />
-							</div>
+						<!-- Save post -->
+						<PostSavedPosts :post="post" />
+					</div>
 
-							<!-- Tags -->
-							<div class="tag-container min-w-full">
-								<!-- -->
+					<!-- Tags -->
+					<div class="tag-container min-w-full">
+						<!-- -->
 
-								<!-- Tags -->
-								<template v-for="tag in tagsAsSingleArray">
-									<!--                  -->
+						<!-- Tags -->
+						<template v-for="tag in tagsAsSingleArray">
+							<!--                  -->
 
-									<template v-if="eventOnly">
-										<button
-											:key="tag.name"
-											:class="{
-												'bg-amber-900': tag.type === 'artist',
-												'bg-green-900': tag.type === 'copyright',
-												'bg-emerald-900': tag.type === 'character'
-											}"
-											class="tag link"
-											type="button"
-											@click="emitTagSelected(tag.name)"
-										>
-											{{ tag.name }}
-										</button>
-									</template>
+							<template v-if="eventOnly">
+								<button
+									:key="tag.name"
+									:class="{
+										'bg-amber-900': tag.type === 'artist',
+										'bg-green-900': tag.type === 'copyright',
+										'bg-emerald-900': tag.type === 'character'
+									}"
+									class="tag link"
+									type="button"
+									@click="emitTagSelected(tag.name)"
+								>
+									{{ tag.name }}
+								</button>
+							</template>
 
-									<template v-else>
-										<NuxtLink
-											:key="tag.name"
-											:class="{
-												'bg-amber-900': tag.type === 'artist',
-												'bg-green-900': tag.type === 'copyright',
-												'bg-emerald-900': tag.type === 'character'
-											}"
-											:to="generatePostsRouteWithDefaults($nuxt.$store, undefined, undefined, [tag.name])"
-											class="tag link"
-										>
-											{{ tag.name }}
-										</NuxtLink>
-									</template>
-								</template>
-							</div>
-						</div>
-					</TransitionCollapse>
+							<template v-else>
+								<NuxtLink
+									:key="tag.name"
+									:class="{
+										'bg-amber-900': tag.type === 'artist',
+										'bg-green-900': tag.type === 'copyright',
+										'bg-emerald-900': tag.type === 'character'
+									}"
+									:to="generatePostsRouteWithDefaults($nuxt.$store, undefined, undefined, [tag.name])"
+									class="tag link"
+								>
+									{{ tag.name }}
+								</NuxtLink>
+							</template>
+						</template>
+					</div>
 				</div>
 			</template>
 
