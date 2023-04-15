@@ -16,6 +16,10 @@
 			</SearchWrapper>
 		</portal>
 
+		<portal to="body">
+			<ScrollTopButton />
+		</portal>
+
 		<ContentSeparator title="Saved posts" />
 
 		<nav class="flex flex-row items-center justify-between py-4">

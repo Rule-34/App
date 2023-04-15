@@ -16,6 +16,10 @@
 			</SearchWrapper>
 		</portal>
 
+		<portal to="body">
+			<ScrollTopButton />
+		</portal>
+
 		<!-- Top menu -->
 		<nav class="flex flex-row items-center justify-between py-4">
 			<DomainSelector
