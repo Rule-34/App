@@ -232,8 +232,8 @@ export default {
 					} else {
 						// Return low res file
 						data.file = this.post.data.low_res_file.url
-						data.width = this.post.data.low_res_file.width
-						data.height = this.post.data.low_res_file.height
+						data.width = this.post.data.low_res_file.width ?? this.post.data.high_res_file.width
+						data.height = this.post.data.low_res_file.height ?? this.post.data.high_res_file.height
 					}
 
 					break
