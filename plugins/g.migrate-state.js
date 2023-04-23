@@ -1,15 +1,14 @@
-import {
-  createStateFromStore,
-  restoreStateToStore
-} from '~/assets/js/StateHelper'
-import { migrateState } from '~/assets/js/MigrateState'
+import { createStateFromStore, restoreStateToStore } from '~/assets/js/StateHelper'
+import { cleanState, migrateState } from '~/assets/js/MigrateState'
 
 export default (context) => {
-  const { store } = context
+	const { store } = context
 
-  const STATE = createStateFromStore(store)
+	let state = createStateFromStore(store)
 
-  const MIGRATED_STATE = migrateState(STATE)
+	state = migrateState(state)
 
-  restoreStateToStore(MIGRATED_STATE, store)
+	state = cleanState(state)
+
+	restoreStateToStore(state, store)
 }

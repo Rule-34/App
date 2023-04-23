@@ -3,41 +3,44 @@
 import { cloneDeep } from 'lodash-es'
 
 export function createStateFromStore(store) {
-  const STATE = {
-    version: store.getters['getVersion'],
+	const STATE = {
+		version: store.getters.getVersion,
 
-    user: {
-      custom: {
-        boorus: store.getters['user/getCustomBoorus'],
-        tagCollections: store.getters['user/getCustomTagCollections'],
-        savedPosts: store.getters['user/getCustomSavedPosts']
-      }
-    }
-  }
+		user: {
+			custom: {
+				boorus: store.getters['user/getCustomBoorus'],
+				tagCollections: store.getters['user/getCustomTagCollections'],
+				savedPosts: store.getters['user/getCustomSavedPosts']
+			},
 
-  return cloneDeep(STATE)
+			settings: store.getters['user/getUserSettings']
+		}
+	}
+
+	return cloneDeep(STATE)
 }
 
 export function restoreStateToStore(state, store) {
-  if (!state.version) {
-    throw new Error('Invalid state')
-  }
+	if (!state.version) {
+		throw new Error('Invalid state')
+	}
 
-  // TODO: Think about what happens when an old state version is restored
-  store.commit('setVersion', state.version)
+	// TODO: Think about what happens when an old state version is restored
+	store.commit('setVersion', state.version)
 
-  if (state.user.custom.boorus) {
-    store.commit('user/setCustomBoorus', state.user.custom.boorus)
-  }
+	if (state.user.custom.boorus) {
+		store.commit('user/setCustomBoorus', state.user.custom.boorus)
+	}
 
-  if (state.user.custom.tagCollections) {
-    store.commit(
-      'user/setCustomTagCollections',
-      state.user.custom.tagCollections
-    )
-  }
+	if (state.user.custom.tagCollections) {
+		store.commit('user/setCustomTagCollections', state.user.custom.tagCollections)
+	}
 
-  if (state.user.custom.savedPosts) {
-    store.commit('user/setCustomSavedPosts', state.user.custom.savedPosts)
-  }
+	if (state.user.custom.savedPosts) {
+		store.commit('user/setCustomSavedPosts', state.user.custom.savedPosts)
+	}
+
+	if (state.user.settings) {
+		store.commit('user/setSettings', state.user.settings)
+	}
 }
