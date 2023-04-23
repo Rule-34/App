@@ -257,6 +257,10 @@ export const getters = {
 }
 
 export const mutations = {
+	setSettings(state, value) {
+		state.settings = value
+	},
+
 	setSettingValue(state, { setting, value }) {
 		state.settings[setting].value = value
 	},
