@@ -155,7 +155,7 @@ export const actions = {
 			case 'set': {
 				const ROUTE = RouterHelper.generatePostsRouteWithActiveDefaults(context, undefined, value)
 
-				await dispatch('url/pushRoute', ROUTE, { root: true })
+				await dispatch('url/replaceRoute', ROUTE, { root: true })
 				break
 			}
 

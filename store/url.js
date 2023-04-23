@@ -1,25 +1,29 @@
 export const getters = {
-  urlDomain(state, getters, rootState, rootGetters) {
-    const { domain } = rootState.route.query
+	urlDomain(state, getters, rootState, rootGetters) {
+		const { domain } = rootState.route.query
 
-    return domain
-  },
+		return domain
+	},
 
-  urlPage(state, getters, rootState, rootGetters) {
-    const { page } = rootState.route.query
+	urlPage(state, getters, rootState, rootGetters) {
+		const { page } = rootState.route.query
 
-    return page
-  },
+		return page
+	},
 
-  urlTags(state, getters, rootState, rootGetters) {
-    const { tags } = rootState.route.query
+	urlTags(state, getters, rootState, rootGetters) {
+		const { tags } = rootState.route.query
 
-    return tags
-  }
+		return tags
+	}
 }
 
 export const actions = {
-  async pushRoute(context, route) {
-    await this.$router.push(route)
-  }
+	async pushRoute(context, route) {
+		await this.$router.push(route)
+	},
+
+	async replaceRoute(context, route) {
+		await this.$router.replace(route)
+	}
 }
