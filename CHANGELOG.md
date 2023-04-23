@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.35.0](https://github.com/Rule-34/App/compare/v2.34.0...v2.35.0) (2023-04-23)
+
+
+### Features
+
+* **State migration:** clean removed settings ([88eae3c](https://github.com/Rule-34/App/commit/88eae3c0b570973c9a85359731b61bfe868eb185))
+
+
+### Bug Fixes
+
+* **API fetch:** replace state for posts ([e5a9221](https://github.com/Rule-34/App/commit/e5a9221996221ae8467d838235c6cc29cd0c3de6))
+* **Post:** fall back to width & height of large file ([b523ad9](https://github.com/Rule-34/App/commit/b523ad98b46763c4b77a7199502f2fe9b846c03c))
+
 ## [2.34.0](https://github.com/Rule-34/App/compare/v2.33.0...v2.34.0) (2023-04-15)
 
 
