@@ -287,30 +287,31 @@ export const actions = {
 				{ root: true }
 			)
 
-			// Filter out posts
-			response.data = response.data.filter((post) => {
-				if (!post.high_res_file?.url) {
-					return false
-				}
-
-				if (post.media_type === 'unknown') {
-					return false
-				}
-
-				return true
-			})
-
-			// This is how a final booru object looks like
-			const POSTS = response.data.map((POST) => {
-				return {
-					id: `${ACTIVE_BOORU_DOMAIN}-${POST.id}`,
-					data: POST,
-					meta_data: {
-						booru_domain: ACTIVE_BOORU_DOMAIN,
-						created_at: null
+			const POSTS = response.data.data
+				// Filter out posts that don't have a file or media type
+				.filter((post) => {
+					if (!post.high_res_file?.url) {
+						return false
 					}
-				}
-			})
+
+					if (post.media_type === 'unknown') {
+						return false
+					}
+
+					return true
+				})
+
+				// This is how a final booru object looks like
+				.map((POST) => {
+					return {
+						id: `${ACTIVE_BOORU_DOMAIN}-${POST.id}`,
+						data: POST,
+						meta_data: {
+							booru_domain: ACTIVE_BOORU_DOMAIN,
+							created_at: null
+						}
+					}
+				})
 
 			if (mode === 'concat') {
 				await dispatch('postsManager', { operation: 'concat', value: POSTS })
@@ -344,7 +345,7 @@ export const actions = {
 			)
 
 			// This is how a final Booru Tag object looks like
-			const TAGS = response.data.map((TAG) => {
+			const TAGS = response.data.data.map((TAG) => {
 				return {
 					id: `${ACTIVE_BOORU_DOMAIN}-${TAG.name}`,
 					name: TAG.name,
