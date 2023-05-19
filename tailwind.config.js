@@ -2,71 +2,59 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 const defaultColors = require('tailwindcss/colors')
 
 module.exports = {
-  safelist: [
-    'nuxt-link-exact-active',
-    'toasted-container',
-    'toasted-custom-theme',
-    'toasted-custom-action'
-  ],
+	content: [
+		'./components/**/*.{js,vue,ts}',
+		'./layouts/**/*.vue',
+		'./pages/**/*.vue',
+		'./plugins/**/*.{js,ts}',
+		'./nuxt.config.{js,ts}',
+		'./app.vue'
+	],
 
-  content: [
-    './components/**/*.{js,vue,ts}',
-    './layouts/**/*.vue',
-    './pages/**/*.vue',
-    './plugins/**/*.{js,ts}',
-    './nuxt.config.{js,ts}'
-  ],
+	theme: {
+		extend: {
+			colors: {
+				primary: defaultColors.sky,
 
-  theme: {
-    extend: {
-      colors: {
-        primary: defaultColors.sky,
+				accent: defaultColors.violet,
 
-        accent: defaultColors.violet,
+				/**
+				 * Used for the background
+				 */
+				base: {
+					// TODO: remember that borders, and backgrounds use 20% opacity: border-base-0/20
+					// TODO: E.g: border-base-0/20 & bg-base-0/20
+					// TODO: Maybe create a specific attribute?
+					0: defaultColors.white,
 
-        // --- Default colors for text --- \\
-        // Icons: black or white
-        // Text: text-gray-200 | text-gray-800
-        // Muted: text-gray-300 | text-gray-700
+					...defaultColors.gray,
 
-        darkGray: {
-          100: ' hsl(209, 15%, 20%)', // Borders
+					1000: defaultColors.black
+				},
 
-          300: ' hsl(209, 15%, 9%)', // Elevation
+				/**
+				 * Used for text and icons on the background
+				 */
+				'base-content': {
+					highlight: defaultColors.gray[200],
 
-          500: 'hsl(209, 10%, 13%)',
+					DEFAULT: defaultColors.gray[400],
 
-          700: 'hsl(0, 0%, 7%)' // Background
-        },
+					hover: defaultColors.white
+				}
+			},
 
-        ...defaultColors
-      },
+			fontFamily: {
+				sans: ['Inter var', ...defaultTheme.fontFamily.sans]
+			}
+		}
+	},
 
-      maxHeight: {
-        0: '0px',
-        '1/4': '25%',
-        '2/5': '40%',
-        '1/2': '50%',
-        '3/4': '75%'
-      },
+	plugins: [
+		require('@tailwindcss/forms')({
+			strategy: 'class'
+		}),
 
-      minHeight: {
-        0: '0px',
-        '1/4': '25%',
-        '2/5': '40%',
-        '1/2': '50%',
-        '3/4': '75%'
-      },
-
-      fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans]
-      }
-    }
-  },
-
-  plugins: [
-    require('@tailwindcss/forms')({
-      strategy: 'class'
-    })
-  ]
+		require('@headlessui/tailwindcss')
+	]
 }
