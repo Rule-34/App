@@ -1,5 +1,7 @@
 'use strict'
 
+const config = useRuntimeConfig()
+
 export class ProxyHelper {
   /**
    * @param {string} url
@@ -7,6 +9,6 @@ export class ProxyHelper {
    * @return string
    */
   static proxyUrl(url) {
-    return window.$nuxt.$config.PROXY_URL + encodeURIComponent(url)
+    return config.public.PROXY_URL + encodeURIComponent(url)
   }
 }
