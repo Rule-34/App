@@ -1,60 +1,54 @@
-<template>
-	<!-- Apply touch for showing menu and search -->
-	<div
-		v-touch="{
-			left: (e) => touchHandler('left', e),
-			right: (e) => touchHandler('right', e)
-		}"
-	>
-		<!--		<AnnouncementBanner />-->
+<script setup>
+import { Touch } from 'vuetify/directives'
+import Toasts from '~/components/layout/Toasts.vue'
 
-		<SideNavArea />
+const vTouch = Touch
 
-		<transition name="sidenav">
-			<SideNav v-if="isSideNavActive" />
-		</transition>
+const appStatistics = useAppStatistics()
 
-		<portal-target name="search" />
+const userSettings = useUserSettings()
+const { value: isMenuActive, toggle: toggleMenu } = useMenu()
+const { value: isSearchMenuActive, toggle: toggleSearchMenu } = useSearchMenu()
 
-		<portal-target name="body" />
+function touchHandler(direction, event) {
+	if (!userSettings.navigationTouchGestures) {
+		console.debug('Gestures setting is disabled, skipping...')
+		return
+	}
 
-		<SupportPopUpManager />
+	const touchThreshold = screen.availWidth * 0.25
+	// console.debug(touchThreshold, event)
 
-		<!-- Layout content -->
-		<Nuxt />
-	</div>
-</template>
-
-<script>
-import { mapGetters } from 'vuex'
-
-// Third party
-import { Touch } from 'vuetify/lib/directives/touch'
-
-import NavigationMixin from '~/components/layout/navigation/NavigationMixin.js'
-import TouchHandlerMixin from '~/components/layout/navigation/sidenav/TouchHandlerMixin.js'
-
-export default {
-	directives: { Touch },
-
-	/**
-	 * Warning:
-	 * Some methods and variables are set by Mixins
-	 */
-	mixins: [NavigationMixin, TouchHandlerMixin],
-
-	head() {
-		return {
-			// Define color theme based on settings
-			bodyAttrs: {
-				class: 'bg-darkGray-700'
+	switch (direction) {
+		case 'right':
+			if (event.touchstartX > touchThreshold) {
+				console.debug('Insufficient touch threshold')
+				return
 			}
-		}
-	},
 
-	computed: {
-		...mapGetters('navigation', ['isSideNavActive']),
-		...mapGetters('user', ['getUserSettings'])
+			if (isSearchMenuActive) {
+				toggleSearchMenu(false)
+
+				//
+			} else {
+				toggleMenu(true)
+			}
+			break
+
+		case 'left':
+			if (event.touchstartX < screen.availWidth - touchThreshold) {
+				console.debug('Insufficient touch threshold')
+				return
+			}
+
+			if (!isSearchMenuActive) {
+				toggleSearchMenu(true)
+
+				//
+			} else {
+				toggleMenu(false)
+			}
+			break
 	}
 }
 
@@ -68,23 +62,23 @@ console.info(
 )
 </script>
 
-<style lang="postcss">
-/* Transition */
+<template>
+	<!--  TODO: Fix not working when z-10 is used -->
+	<div
+		v-touch="{
+			left: (e) => touchHandler('left', e),
+			right: (e) => touchHandler('right', e)
+		}"
+	>
+		<!-- Notifications -->
+		<Toasts />
 
-/* Initial state */
-.sidenav-enter,
-.sidenav-leave-to {
-	transform: translateX(-100vw);
-}
+		<Sidebar />
 
-/* Toggled stated */
-.sidenav-enter-to {
-	transform: translateX(0px);
-}
+		<Navbar />
 
-/* Transition that is gonna be applied */
-.sidenav-enter-active,
-.sidenav-leave-active {
-	@apply transition-transform duration-300;
-}
-</style>
+		<!-- Layout content -->
+		<!-- TODO: Create container component: https://tailwindui.com/components/application-ui/layout/containers -->
+		<slot />
+	</div>
+</template>

@@ -45,19 +45,16 @@
 	</main>
 </template>
 
-<script>
-export default {
-	head() {
-		return {
-			title: 'Partners',
-			meta: [
-				{
-					hid: 'description',
-					name: 'description',
-					content: 'Friends of the Rule 34 App.'
-				}
-			]
-		}
+<script setup>
+useHead(() => {
+	return {
+		title: 'Partners',
+		meta: [
+			{
+				name: 'description',
+				content: 'Friends of the Rule 34 App.'
+			}
+		]
 	}
-}
+})
 </script>

@@ -1,98 +1,71 @@
-<template>
-  <div>
-    <template v-if="isUserPremium">
-      <button
-        class="link my-2 flex items-center gap-2"
-        type="button"
-        @click="downloadMedia"
-      >
-        <DownloadIcon class="icon h-5 w-5" />
+<script setup>
+  import { ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
+  import { ProxyHelper } from 'assets/js/ProxyHelper'
 
-        Download
-      </button>
-    </template>
-
-    <template v-else>
-      <NuxtLink class="link my-2 flex items-center gap-2" to="/premium">
-        <DownloadIcon class="icon h-5 w-5" />
-
-        Download
-      </NuxtLink>
-    </template>
-  </div>
-</template>
-
-<script>
-import { mapActions, mapGetters } from 'vuex'
-import { DownloadIcon } from 'vue-feather-icons'
-import { ProxyHelper } from '~/assets/js/ProxyHelper'
-
-export default {
-  components: { DownloadIcon },
-
-  props: {
+  const props = defineProps({
     mediaName: {
       type: String,
       required: true
     },
+
     mediaUrl: {
       type: String,
       required: true
     }
-  },
+  })
 
-  computed: {
-    ...mapGetters('premium', ['isUserPremium'])
-  },
+  const { isPremium } = useUserData()
 
-  methods: {
-    ...mapActions(['simpleFetch']),
-
-    downloadBlobToDevice(blob, fileName) {
-      const BLOB_OBJECT_URL = URL.createObjectURL(blob)
-
-      const LINK = document.createElement('a')
-
-      LINK.href = BLOB_OBJECT_URL
-      LINK.target = '_blank'
-      LINK.download = fileName
-      LINK.style.display = 'none'
-
-      document.body.appendChild(LINK)
-      LINK.click()
-      document.body.removeChild(LINK)
-
-      URL.revokeObjectURL(BLOB_OBJECT_URL)
-    },
-
-    async fetchUrlIntoBlob() {
-      const PROXIED_MEDIA_URL = ProxyHelper.proxyUrl(this.mediaUrl)
-
-      const RESPONSE = await this.simpleFetch({
-        url: PROXIED_MEDIA_URL,
-        options: {
-          responseType: 'blob'
-        }
-      })
-
-      const RESPONSE_BLOB = RESPONSE.data
-
-      return { RESPONSE, RESPONSE_BLOB }
-    },
-
-    async downloadMedia() {
-      try {
-        const { RESPONSE, RESPONSE_BLOB } = await this.fetchUrlIntoBlob()
-
-        const FILE_EXTENSION = RESPONSE.headers['content-type'].split('/')[1]
-
-        const FILE_NAME = this.mediaName + '.' + FILE_EXTENSION
-
-        this.downloadBlobToDevice(RESPONSE_BLOB, FILE_NAME)
-      } catch (error) {
-        this.$toast.error(`Could not download post: "${error.message}"`)
-      }
+  async function downloadMedia() {
+    if (!isPremium.value) {
+      // TODO: Toast
+      // return
     }
+
+    const proxiedUrl = ProxyHelper.proxyUrl(props.mediaUrl)
+
+    const response = await $fetch.raw(proxiedUrl, {
+      responseType: 'blob',
+
+      onResponseError(context) {
+        // TODO: Toast
+        throw new Error(context.error)
+      }
+    })
+
+    const FILE_EXTENSION = response.headers.get('content-type').split('/')[1]
+
+    const FILE_NAME = props.mediaName + '.' + FILE_EXTENSION
+
+    downloadBlobToDevice(response._data, FILE_NAME)
   }
-}
+
+  function downloadBlobToDevice(blob, fileName) {
+    const BLOB_OBJECT_URL = URL.createObjectURL(blob)
+
+    const LINK = document.createElement('a')
+
+    LINK.href = BLOB_OBJECT_URL
+    LINK.target = '_blank'
+    LINK.download = fileName
+    LINK.style.display = 'none'
+
+    document.body.appendChild(LINK)
+    LINK.click()
+    document.body.removeChild(LINK)
+
+    URL.revokeObjectURL(BLOB_OBJECT_URL)
+  }
 </script>
+
+<template>
+  <button
+    class="hover:hover-bg-util focus-visible:focus-util group rounded-md px-1.5 py-1"
+    type="button"
+    @click="downloadMedia"
+  >
+    <span class="sr-only"> Download post </span>
+
+    <ArrowDownTrayIcon class="group-hover:hover-text-util h-5 w-5 text-base-content" />
+  </button>
+</template>

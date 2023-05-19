@@ -1,53 +1,45 @@
-<template>
-	<transition name="page">
-		<button
-			v-if="visible"
-			aria-label="Go to the top of the page"
-			class="border-util focus-visible:focus-util fixed bottom-6 right-6 z-10 rounded-full bg-darkGray-500 p-3 shadow-xl"
-			type="button"
-			@click="scrollToTop"
-		>
-			<ArrowUpIcon class="icon h-6 w-6" />
-		</button>
-	</transition>
-</template>
+<script setup>
+  import { computed } from 'vue'
+  import { useScroll } from '@vueuse/core'
+  import { ArrowUpIcon } from '@heroicons/vue/24/solid'
 
-<script>
-import { ArrowUpIcon } from 'vue-feather-icons'
+  const { y } = useScroll(document, {
+    behavior: 'smooth'
+  })
 
-export default {
-	components: {
-		ArrowUpIcon
-	},
+  const shouldShowScrollTopButton = computed(() => y.value > 250)
 
-	data() {
-		return {
-			visible: false,
-			previousY: 0
-		}
-	},
-
-	mounted() {
-		document.addEventListener('scroll', this.onScroll, { passive: true })
-	},
-
-	beforeDestroy() {
-		document.removeEventListener('scroll', this.onScroll)
-	},
-
-	methods: {
-		onScroll() {
-			const currentY = window.scrollY
-
-			this.visible =
-				(currentY < this.previousY && currentY > 0) || window.innerHeight + currentY >= document.body.scrollHeight
-
-			this.previousY = currentY
-		},
-
-		scrollToTop() {
-			window.scrollTo(0, 0)
-		}
-	}
-}
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
 </script>
+
+<template>
+  <Teleport to="body">
+    <transition
+      enter-active-class="transition ease-out duration-150"
+      enter-from-class="transform opacity-0 scale-95"
+      enter-to-class="transform opacity-100 scale-100"
+      leave-active-class="transition ease-in duration-150"
+      leave-from-class="transform opacity-100 scale-100"
+      leave-to-class="transform opacity-0 scale-95"
+    >
+      <button
+        v-show="shouldShowScrollTopButton"
+        class="hover:hover-text-util hover:hover-bg-util fixed bottom-4 right-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-base-1000/60 text-base-content-highlight shadow-lg ring-2 ring-base-0/20 backdrop-blur"
+        type="button"
+        @click="scrollToTop"
+      >
+        <span class="sr-only"> Scroll to top </span>
+
+        <ArrowUpIcon
+          aria-hidden="true"
+          class="h-6 w-6"
+        />
+      </button>
+    </transition>
+  </Teleport>
+</template>
