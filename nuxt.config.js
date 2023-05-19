@@ -1,48 +1,27 @@
+import { defineNuxtConfig } from 'nuxt/config'
 import * as TAILWIND_CONFIG from './tailwind.config'
 
-export default {
-	// Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
+export default defineNuxtConfig({
 	ssr: false,
 
-	// Target: https://go.nuxtjs.dev/config-target
-	target: 'static',
+	runtimeConfig: {
+		public: {
+			NODE_ENV: process.env.NODE_ENV,
 
-	generate: { fallback: true },
+			API_URL: process.env.API_URL,
 
-	server: {
-		host: '0.0.0.0'
+			PROXY_URL: process.env.PROXY_URL,
+
+			MATOMO_HOST: process.env.MATOMO_HOST,
+			MATOMO_SITE_ID: process.env.MATOMO_SITE_ID
+		}
 	},
 
-	publicRuntimeConfig: {
-		NODE_ENV: process.env.NODE_ENV,
-
-		API_URL: process.env.API_URL,
-
-		PROXY_URL: process.env.PROXY_URL,
-
-		MATOMO_HOST: process.env.MATOMO_HOST,
-		MATOMO_SITE_ID: process.env.MATOMO_SITE_ID
-	},
-
-	head: {
-		title: null,
-
-		titleTemplate: (titleChunk) => {
-			return titleChunk ? `${titleChunk} | Rule 34 App` : 'Rule 34 App – Popular Hentai Porn'
-		},
-
-		htmlAttrs: {
-			lang: 'en'
-		},
-
+	meta: {
 		meta: [
 			{ charset: 'utf-8' },
-			{ 'http-equiv': 'Cache-Control', content: 'no-cache' },
-			{ 'http-equiv': 'Pragma', content: 'no-cache' },
-			{ 'http-equiv': 'Expires', content: '0' },
 			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
 			{
-				hid: 'description',
 				name: 'description',
 				content:
 					'Browse popular Rule 34 Hentai Porn for free.' +
@@ -66,52 +45,14 @@ export default {
 		noscript: [{ innerHTML: 'This website requires JavaScript' }]
 	},
 
-	loading: {
-		color: TAILWIND_CONFIG.theme.extend.colors.primary[400],
-		failedColor: TAILWIND_CONFIG.theme.extend.colors.red[400],
-
-		// height: '5px',
-
-		throttle: 200,
-		continuous: true
-	},
-
-	loadingIndicator: {
-		name: 'cube-grid',
-		color: TAILWIND_CONFIG.theme.extend.colors.darkGray[700],
-		background: `linear-gradient(152deg, ${TAILWIND_CONFIG.theme.extend.colors.primary[400]} 38%, ${TAILWIND_CONFIG.theme.extend.colors.accent[400]} 90%)`
-	},
-
-	css: ['@/assets/css/main.css'],
+	css: ['~/assets/css/main.css'],
 
 	components: [{ path: '~/components', pathPrefix: false }],
 
-	plugins: [
-		// { src: '~/plugins/a.pwa-update.js', mode: 'client' },
-		{ src: '~/plugins/c.vuex-persist.js', mode: 'client' },
-		{ src: '~/plugins/e.vuex-router-sync.js', mode: 'client' },
-		{ src: '~/plugins/g.migrate-state.js', mode: 'client' },
-		{ src: '~/plugins/z.vue-matomo.js', mode: 'client' }
-	],
-
-	buildModules: [],
-
 	modules: [
-		'@nuxtjs/pwa',
-		'@nuxtjs/axios',
-		'@nuxtjs/auth-next',
-		'portal-vue/nuxt',
-		'@nuxtjs/toast',
-		'@nuxtjs/sentry',
-		'@nuxtjs/sitemap'
+		'@vite-pwa/nuxt'
+		// '@nuxtjs/sentry',
 	],
-
-	axios: {
-		progress: true,
-
-		// Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-		baseURL: '/'
-	},
 
 	auth: {
 		strategies: {
@@ -171,49 +112,38 @@ export default {
 		meta: {
 			ogHost: `https://${process.env.APP_DOMAIN}`,
 			mobileAppIOS: true
-		},
-
-		manifest: {
-			name: 'Rule 34 App',
-			short_name: 'Rule 34 App',
-			description: 'Browse popular Rule 34 Hentai Porn for free.',
-
-			scope: '/',
-			lang: 'en',
-
-			start_url: '/?utm_source=pwa',
-
-			theme_color: TAILWIND_CONFIG.theme.extend.colors.darkGray[700],
-			background_color: TAILWIND_CONFIG.theme.extend.colors.darkGray[700],
-
-			shortcuts: [
-				{
-					name: 'Settings',
-					short_name: 'Settings',
-					description: 'Settings to tweak your experience.',
-					url: '/settings?utm_source=PWA&utm_medium=Shortcut'
-				},
-				{
-					name: 'Saved Posts',
-					short_name: 'Saved Posts',
-					description: 'Save posts for later.',
-					url: '/premium/saved-posts?utm_source=PWA&utm_medium=Shortcut'
-				}
-			],
-
-			useWebmanifestExtension: true
-		},
-
-		workbox: {
-			// auto update service worker
-			// https://pwa.nuxtjs.org/workbox#autoupdate
-
-			runtimeCaching: [
-				{
-					urlPattern: ['https://rsms.me/.*']
-				}
-			]
 		}
+
+		// manifest: {
+		// 	name: 'Rule 34 App',
+		// 	short_name: 'Rule 34 App',
+		// 	description: 'Browse popular Rule 34 Hentai Porn for free.',
+		//
+		// 	scope: '/',
+		// 	lang: 'en',
+		//
+		// 	start_url: '/?utm_source=pwa',
+		//
+		// 	theme_color: TAILWIND_CONFIG.theme.colors.gray[700],
+		// 	background_color: TAILWIND_CONFIG.theme.colors.gray[700],
+		//
+		// 	shortcuts: [
+		// 		{
+		// 			name: 'Settings',
+		// 			short_name: 'Settings',
+		// 			description: 'Settings to tweak your experience.',
+		// 			url: '/settings?utm_source=PWA&utm_medium=Shortcut'
+		// 		},
+		// 		{
+		// 			name: 'Saved Posts',
+		// 			short_name: 'Saved Posts',
+		// 			description: 'Save posts for later.',
+		// 			url: '/premium/saved-posts?utm_source=PWA&utm_medium=Shortcut'
+		// 		}
+		// 	],
+		//
+		// 	useWebmanifestExtension: true
+		// },
 	},
 
 	sentry: {
@@ -283,26 +213,6 @@ export default {
 		}
 	},
 
-	sitemap: {
-		hostname: `https://${process.env.APP_DOMAIN}`,
-
-		defaults: {
-			changefreq: 'daily',
-			priority: 0.8,
-			lastmod: new Date()
-		},
-
-		// Static HTML files
-		routes: [
-			// Main
-			{ url: '/', priority: 1.0 },
-
-			// Misc
-			{ url: '/privacy-policy', priority: 0.2 },
-			{ url: '/terms-of-service', priority: 0.2 }
-		]
-	},
-
 	toast: {
 		position: 'top-right',
 
@@ -325,16 +235,22 @@ export default {
 		closeOnSwipe: true
 	},
 
-	build: {
-		postcss: {
-			postcssOptions: {
-				plugins: {
-					tailwindcss: {},
-					autoprefixer: {}
-				}
-			}
+	postcss: {
+		plugins: {
+			tailwindcss: {},
+			autoprefixer: {}
 		}
 	},
 
+	build: {
+		// FIX: https://nuxt.com/docs/guide/concepts/esm#troubleshooting-esm-issues
+		transpile: []
+	},
+
+	// FIX(Sentry): https://github.com/nuxt/bridge/issues/25#issuecomment-1097946846
+	// alias: {
+	// 	tslib: 'tslib/tslib.es6.js'
+	// },
+
 	telemetry: false
-}
+})
