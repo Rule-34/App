@@ -1,93 +1,105 @@
-<template>
-  <div
-    class="relative mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-4 sm:px-6 lg:px-8"
-  >
-    <main class="material-container w-max p-5">
-      <div class="flex flex-row space-x-10">
-        <!-- Reset -->
-        <div
-          class="flex flex-auto flex-col items-center justify-center space-y-2"
-        >
-          <h1 class="text-lg text-white">Settings</h1>
+<script setup>
+  import { version } from '~/package.json'
+  import { useUserSettings } from '~/composables/useUserSettings'
+  import { ExclamationTriangleIcon } from '@heroicons/vue/20/solid'
 
-          <button
-            aria-label="Reset all settings"
-            class="border-util link rounded-full bg-darkGray-700 px-2 py-1 text-xs"
-            title="Reset all settings"
-            @click="removeLocalStorage"
-          >
-            Reset
-          </button>
-        </div>
-
-        <div class="flex flex-auto items-center justify-center">
-          <ul class="space-y-3">
-            <template v-for="(settingData, settingName) in getUserSettings">
-              <li :key="settingName">
-                <template
-                  v-if="
-                    settingData && Number.isInteger(settingData.defaultValue)
-                  "
-                >
-                  <SettingNumber
-                    :setting-data="settingData"
-                    :setting-name="settingName"
-                  />
-                </template>
-
-                <template v-else>
-                  <SettingSwitch
-                    :setting-data="settingData"
-                    :setting-name="settingName"
-                  />
-                </template>
-              </li>
-            </template>
-          </ul>
-        </div>
-      </div>
-    </main>
-
-    <span class="block py-4 text-xs text-gray-300"> v{{ app_version }} </span>
-
-    <footer class="absolute inset-x-0 bottom-0 p-2 text-center">
-      <NuxtLink class="link text-sm" to="/usage"> What does X do?</NuxtLink>
-    </footer>
-  </div>
-</template>
-
-<script>
-import { mapGetters } from 'vuex'
-import { version } from '~/package.json'
-
-export default {
-  head() {
+  useHead(() => {
     return {
       title: 'Settings',
       meta: [
         {
-          hid: 'description',
           name: 'description',
-          content: 'Settings to tweak your experience.'
+          content: 'Configure how the Rule 34 App works'
         }
       ]
     }
-  },
+  })
 
-  data() {
-    return { app_version: version }
-  },
+  const appVersion = version
 
-  computed: {
-    ...mapGetters('user', ['getUserSettings'])
-  },
+  const userSettings = useUserSettings()
 
-  methods: {
-    async removeLocalStorage() {
-      localStorage.clear()
-
-      location.reload()
+  function removeAllData() {
+    if (!confirm('Are you sure you want to reset all data?')) {
+      return
     }
+
+    localStorage.clear()
+
+    location.reload()
   }
-}
 </script>
+
+<template>
+  <div class="mx-auto min-h-screen max-w-3xl p-4 sm:p-6 lg:p-8">
+    <main class="space-y-12">
+      <!-- Header -->
+      <ContentSeparator
+        class="w-full"
+        text="Configure how the Rule 34 App works"
+        title="Settings"
+      />
+
+      <!-- Settings -->
+      <section>
+        <ol class="space-y-8">
+          <!-- navigationTouchGestures -->
+          <li>
+            <SettingSwitch v-model="userSettings.navigationTouchGestures">
+              <template #name> Touch gestures</template>
+
+              <template #description> Show menu on left-to-right swipe, and search on right-to-left</template>
+            </SettingSwitch>
+          </li>
+
+          <!-- postFullSizeImages -->
+          <li>
+            <SettingSwitch v-model="userSettings.postFullSizeImages">
+              <template #name> Full size images</template>
+
+              <template #description> Load full size images on posts, very data intensive</template>
+            </SettingSwitch>
+          </li>
+
+          <!-- postsPerPage -->
+          <li>
+            <SettingNumber
+              v-model.number="userSettings.postsPerPage"
+              :max="100"
+              :min="1"
+            >
+              <template #name> Posts per page</template>
+
+              <template #description> How many posts to load per page</template>
+            </SettingNumber>
+          </li>
+        </ol>
+      </section>
+
+      <!-- Reset -->
+      <section class="flex flex-row items-center justify-between gap-2 pt-24">
+        <label for="reset">
+          <span class="font-medium leading-8 text-base-content-highlight">
+            Reset
+            <ExclamationTriangleIcon class="inline-block h-4 w-4" />
+          </span>
+
+          <span class="block text-sm"> Resets settings, saved posts, and all other app data. </span>
+        </label>
+
+        <button
+          id="reset"
+          class="hover:hover-bg-util focus-visible:focus-util rounded-lg border-2 border-base-0/20 px-3 py-1.5 text-sm font-medium text-base-content-highlight transition-colors focus-visible:ring-inset"
+          type="button"
+          @click="removeAllData"
+        >
+          Reset
+        </button>
+      </section>
+    </main>
+
+    <footer class="absolute inset-x-0 bottom-0">
+      <span class="block p-2 text-center text-sm text-gray-300"> v{{ appVersion }} </span>
+    </footer>
+  </div>
+</template>
