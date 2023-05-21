@@ -1,13 +1,12 @@
 <script setup>
   import DomainSelector from '~/pages/DomainSelector.vue'
   import { useBooruList } from '~/composables/useBooruList'
-  import { ArrowPathIcon } from '@heroicons/vue/24/solid'
+  import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
   import { useStorage } from '@vueuse/core'
 
-  const config = useRuntimeConfig()
   const router = useRouter()
   const route = useRoute()
-
+  const config = useRuntimeConfig()
   const userSettings = useUserSettings()
 
   const { isPremium } = useUserData()
@@ -45,10 +44,10 @@
   }
 
   const {
-    data: posts,
-    pending,
-    error,
-    refresh
+    data: initialPosts,
+    pending: pendingInitialPosts,
+    error: errorInitialPosts,
+    refresh: refreshInitialPosts
   } = await useAsyncData(
     'posts',
     () => {
@@ -58,7 +57,7 @@
         params: {
           baseEndpoint: selectedBooru.value.domain,
 
-          limit: userSettings.postsPerPage.value,
+          limit: userSettings.postsPerPage,
           pageID: selectedBooru.value.type.initialPageID,
           tags: [], // TODO
           score: '>=0' // TODO
@@ -97,12 +96,14 @@
     }
   )
 
+  const { posts, loadNextPosts, isThereNextPosts } = usePosts(initialPosts)
+
   // TODO: Virtualize posts
   // TODO: Restore popstate data
   watch(selectedBooru, async () => {
-    await refresh()
+    await refreshInitialPosts()
 
-    if (error.value) {
+    if (errorInitialPosts.value) {
       return
     }
 
@@ -134,10 +135,10 @@
         />
       </section>
 
-      <section class="mt-4">
+      <section class="my-4">
         <!-- Pending -->
         <div
-          v-if="pending"
+          v-if="pendingInitialPosts"
           class="flex h-80 w-full animate-pulse flex-col items-center justify-center gap-4 text-lg"
         >
           <ArrowPathIcon class="h-12 w-12 animate-spin" />
@@ -145,12 +146,36 @@
           Loading posts&hellip;
         </div>
 
+        <!-- Error -->
+        <div
+          v-else-if="errorInitialPosts"
+          class="flex h-80 w-full flex-col items-center justify-center gap-4 text-lg"
+        >
+          <ExclamationCircleIcon class="h-12 w-12" />
+
+          Failed to load posts
+
+          <span class="text-base">{{ errorInitialPosts }}</span>
+        </div>
+
+        <!-- No results -->
+        <div
+          v-else-if="!posts.length"
+          class="flex h-80 w-full flex-col items-center justify-center gap-4 text-lg"
+        >
+          <QuestionMarkCircleIcon class="h-12 w-12" />
+
+          No results
+
+          <span class="text-base"> Try changing the domain or the tags </span>
+        </div>
+
         <ol
-          v-else-if="posts && posts.data.length"
+          v-else
           class="space-y-4"
         >
           <template
-            v-for="(post, index) in posts.data"
+            v-for="(post, index) in posts"
             :key="`${selectedBooru.domain}-${post.id}`"
           >
             <!-- Post -->
@@ -167,6 +192,11 @@
                 <Advertisement />
               </li>
             </template>
+          </template>
+
+          <!-- Load more -->
+          <template v-if="isThereNextPosts">
+            <PostsPagination @load-next-page="loadNextPosts" />
           </template>
         </ol>
       </section>
