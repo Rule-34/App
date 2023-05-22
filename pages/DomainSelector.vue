@@ -127,7 +127,7 @@
                 <!-- Checked -->
                 <span
                   v-if="selected"
-                  :class="[active ? 'text-base-content-highlight' : 'text-base-content-highlight']"
+                  class="text-base-content-highlight"
                 >
                   <CheckIcon
                     aria-hidden="true"
