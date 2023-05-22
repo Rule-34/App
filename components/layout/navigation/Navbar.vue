@@ -1,5 +1,5 @@
 <script setup>
-  import { Bars3Icon, BellIcon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+  import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
   import { StarIcon } from '@heroicons/vue/24/solid'
 
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
@@ -67,21 +67,10 @@
         </div>
 
         <!-- Actions -->
-        <div class="absolute inset-y-0 right-0 flex items-center pr-2">
-          <!-- Search -->
-          <button
-            class="focus-visible:focus-util hover:hover-bg-util rounded-lg px-2 py-1.5"
-            type="button"
-            @click="toggleSearchMenu()"
-          >
-            <span class="sr-only">Search posts</span>
-
-            <MagnifyingGlassIcon
-              aria-hidden="true"
-              class="hover:hover-text-util h-6 w-6 text-base-content-highlight"
-            />
-          </button>
-
+        <div
+          id="navbar-actions"
+          class="absolute inset-y-0 right-0 flex flex-row-reverse items-center pr-2"
+        >
           <!-- Notifications -->
           <button
             class="focus-visible:focus-util hover:hover-bg-util rounded-lg px-2 py-1.5"
