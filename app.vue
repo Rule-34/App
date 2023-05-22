@@ -18,8 +18,8 @@
 <template>
   <NuxtLayout>
     <NuxtLoadingIndicator
-      height="5"
-      throttle="250"
+      :height="5"
+      :throttle="250"
     />
 
     <NuxtPage />
