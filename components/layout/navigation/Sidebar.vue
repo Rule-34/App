@@ -82,6 +82,7 @@
             leave-to="-translate-x-full"
           >
             <DialogPanel class="relative mr-16 flex w-full max-w-xs flex-1">
+              <!-- Close button -->
               <TransitionChild
                 as="template"
                 enter="ease-in-out duration-300"

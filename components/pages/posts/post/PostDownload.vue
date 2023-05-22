@@ -19,7 +19,9 @@
 
   async function downloadMedia() {
     if (!isPremium.value) {
-      toast.error('You have found a Premium feature! Subscribe to use it.')
+      toast.error(
+        '[Premium feature] automatically download media with the correct name & extension: rule34.xxx-123.png'
+      )
       return
     }
 
