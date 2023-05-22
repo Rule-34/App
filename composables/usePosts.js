@@ -1,5 +1,6 @@
 import { computed, ref } from 'vue'
 import { useUserSettings } from '~/composables/useUserSettings'
+import { toast } from 'vue-sonner'
 
 const userSettings = useUserSettings()
 
@@ -80,7 +81,7 @@ export function usePosts(initialPostsPage) {
       //
       .catch((error) => {
         console.error(error)
-        // TODO: Toast
+        toast.error(`Failed to load next posts: "${error.message}"`)
       })
 
     loadedPostsPages.value.push(postsPage)

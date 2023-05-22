@@ -52,6 +52,9 @@ dependencies:
   vue-matomo:
     specifier: ^4.2.0
     version: 4.2.0
+  vue-sonner:
+    specifier: ^0.3.2
+    version: 0.3.2
   vue-tippy:
     specifier: ^6.2.0
     version: 6.2.0(vue@3.3.4)
@@ -9093,6 +9096,10 @@ packages:
     dependencies:
       '@vue/devtools-api': 6.5.0
       vue: 3.3.4
+    dev: false
+
+  /vue-sonner@0.3.2:
+    resolution: {integrity: sha512-T0QZhtG1r9r5Ohu3xLqwUdgCHfurZwtHTEb/nTmRs/IPWEEscC/c2/ZjLhhtJ9ldz/lrAsutt5xfRghaLz1njw==}
     dev: false
 
   /vue-tippy@6.2.0(vue@3.3.4):
