@@ -1,6 +1,7 @@
 <script setup>
   import { ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
   import { ProxyHelper } from 'assets/js/ProxyHelper'
+  import { toast } from 'vue-sonner'
 
   const props = defineProps({
     mediaName: {
@@ -18,8 +19,8 @@
 
   async function downloadMedia() {
     if (!isPremium.value) {
-      // TODO: Toast
-      // return
+      toast.error('You have found a Premium feature! Subscribe to use it.')
+      return
     }
 
     const proxiedUrl = ProxyHelper.proxyUrl(props.mediaUrl)
@@ -28,8 +29,8 @@
       responseType: 'blob',
 
       onResponseError(context) {
-        // TODO: Toast
-        throw new Error(context.error)
+        toast.error(`Failed to download media: ${context.error.message}`)
+        throw context.error
       }
     })
 
