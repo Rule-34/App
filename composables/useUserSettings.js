@@ -12,7 +12,7 @@ const postsPerPage = useStorage('settings-postsPerPage', 35, localStorage, {
   writeDefaults: false
 })
 
-export const useUserSettings = () => {
+export function useUserSettings() {
   return reactive({
     version,
 

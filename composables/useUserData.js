@@ -1,7 +1,7 @@
 // TODO: Run migrations on https://nuxt.com/docs/api/utils/on-nuxt-ready
 
-export const useUserData = () => {
-	return {
-		isPremium: false
-	}
+export function useUserData() {
+  return {
+    isPremium: false
+  }
 }
