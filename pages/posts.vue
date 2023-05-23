@@ -142,6 +142,50 @@
     await router.push(generatePostsRoute(selectedBooru.value.domain, undefined, selectedTags.value))
   }
 
+  useHead({
+    title: computed(() => {
+      let title = ''
+
+      if (selectedTags.value.length > 0) {
+        title += ` ${tagArrayToTitle(selectedTags.value)}`
+      }
+
+      title += ` hentai from ${selectedBooru.value.domain}`
+
+      title = title.trim()
+      title = capitalize(title)
+
+      return title
+    }),
+
+    meta: [
+      {
+        name: 'description',
+        content: computed(() => {
+          let description = 'Stream and download images, GIFs and videos'
+
+          if (selectedTags.value.length > 0) {
+            description += ` featuring ${tagArrayToTitle(selectedTags.value)}`
+          }
+
+          description += ' hentai'
+
+          if (selectedBooru.value.domain) {
+            description += ` from the ${selectedBooru.value.domain} website`
+          }
+
+          description += '. For free!'
+
+          return description
+        })
+      },
+      // Necessary so images can be loaded from other domains
+      {
+        name: 'referrer',
+        content: 'no-referrer'
+      }
+    ]
+  })
 </script>
 
 <template>
