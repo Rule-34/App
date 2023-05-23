@@ -134,7 +134,8 @@
 
 <template>
   <!-- Search -->
-  <teleport to="#navbar-actions">
+  <SafeTeleport to="#navbar-actions">
+    <!-- TODO: Add badge with tag/filter count -->
     <button
       class="focus-visible:focus-util hover:hover-bg-util rounded-lg px-2 py-1.5"
       type="button"
@@ -147,7 +148,7 @@
         class="hover:hover-text-util h-6 w-6 text-base-content-highlight"
       />
     </button>
-  </teleport>
+  </SafeTeleport>
 
   <!-- Search menu -->
   <SearchMenu

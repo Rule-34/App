@@ -31,11 +31,13 @@
     "tailwindcss": "^3.3.2",
     "tippy.js": "^6.3.7",
     "vue-matomo": "^4.2.0",
+    "vue-safe-teleport": "^0.1.2",
     "vue-sonner": "^0.3.2",
     "vue-tippy": "^6.2.0",
     "vuetify": "^3.3.0"
   },
   "devDependencies": {
+    "@types/lodash-es": "^4.17.7",
     "autoprefixer": "^10.4.14",
     "jest": "^29.5.0",
     "postcss": "^8.4.23",
