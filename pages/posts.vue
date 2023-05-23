@@ -130,6 +130,18 @@
     await router.push(generatePostsRoute(selectedBooru.value.domain, undefined, selectedTags.value))
   }
 
+  async function onPostClickTag(tag: string) {
+    selectedTags.value = [new Tag({ name: tag })]
+
+    await refreshInitialPosts()
+
+    if (errorInitialPosts.value) {
+      return
+    }
+
+    await router.push(generatePostsRoute(selectedBooru.value.domain, undefined, selectedTags.value))
+  }
+
 </script>
 
 <template>
