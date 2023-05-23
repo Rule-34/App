@@ -5,8 +5,8 @@ const timesTheAppHasBeenOpened = useStorage('statistics-timesTheAppHasBeenOpened
 // Add one to the timesTheAppHasBeenOpened
 timesTheAppHasBeenOpened.value++
 
-export const useAppStatistics = () => {
-	return reactive({
-		timesTheAppHasBeenOpened
-	})
+export function useAppStatistics() {
+  return reactive({
+    timesTheAppHasBeenOpened
+  })
 }

@@ -283,7 +283,7 @@ defaultBooruList.forEach((booru) => {
 
 // Object.freeze(defaultBooruList)
 
-export const useBooruList = () => {
+export function useBooruList() {
   const mergedBooruList = computed(() => {
     const booruList = [...defaultBooruList, ...userBooruList.value]
 

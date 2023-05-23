@@ -33,7 +33,7 @@ export function usePosts(initialPostsPage) {
     if (!mergedPostsPages.value.length) {
       return []
     }
-    const uniquePosts = []
+    let uniquePosts = []
     const uniquePostsKeys = new Set()
 
     // Remove duplicates
@@ -47,7 +47,7 @@ export function usePosts(initialPostsPage) {
     }
 
     // Filter posts
-    uniquePosts.filter((post) => {
+    uniquePosts = uniquePosts.filter((post) => {
       // Remove posts without a media file
       if (!post.high_res_file?.url) {
         return false
