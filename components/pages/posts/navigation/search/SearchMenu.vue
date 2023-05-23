@@ -12,7 +12,7 @@
     TransitionRoot
   } from '@headlessui/vue'
   import { XMarkIcon } from '@heroicons/vue/24/outline'
-  import { CheckIcon, ChevronUpDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
+  import { CheckIcon, ChevronUpDownIcon, MagnifyingGlassIcon, NoSymbolIcon, PlusIcon } from '@heroicons/vue/20/solid'
   import { watchDebounced } from '@vueuse/core'
   import { abbreviateNumber } from 'js-abbreviation-number'
 
@@ -49,6 +49,29 @@
       count: null
     }
   })
+
+  function removeTagFromSelectedTags(index: number) {
+    selectedTags.value.splice(index, 1)
+  }
+
+  function isTagExcluded(tag: string) {
+    return tag.startsWith('-')
+  }
+
+  function toggleSelectedTagAsExcluded(index: number) {
+    const tag = selectedTags.value[index]
+
+    // Change the tag name to include a minus sign if it's not already there
+    switch (isTagExcluded(tag.name)) {
+      case true:
+        tag.name = tag.name.substring(1)
+        break
+
+      case false:
+        tag.name = `-${tag.name}`
+        break
+    }
+  }
 
   function onSearchChange(tag: string) {
     tag = tag.trim()
@@ -141,7 +164,7 @@
                   Search
                 </ComboboxLabel>
 
-                <div class="group relative mt-6">
+                <div class="group relative mt-2">
                   <!-- Icon -->
                   <div class="group pointer-events-none absolute inset-y-0 left-0 flex items-center rounded-l-md px-2">
                     <MagnifyingGlassIcon
@@ -153,7 +176,7 @@
                   <!-- Input -->
                   <ComboboxInput
                     :displayValue="(tag) => tag.name"
-                    class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util w-full rounded-lg border-0 bg-base-1000 px-9 py-2 text-base-content-highlight shadow-sm ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
+                    class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util w-full rounded-full border-0 bg-base-1000 px-9 py-2 text-base-content-highlight shadow-sm ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
                     @change="searchQuery = $event.target.value"
                   />
 
@@ -242,18 +265,75 @@
               </Combobox>
 
               <!-- Filters -->
+
               <!-- Tags -->
-              <div class="flex-1"></div>
+              <section class="flex-1">
+                <div v-if="selectedTags.length">
+                  <!--                  <p class="block text-lg font-medium text-gray-300">Selected</p>-->
+
+                  <!-- Selected tags -->
+                  <ol class="flex flex-wrap gap-4 rounded-md">
+                    <!-- -->
+
+                    <li
+                      v-for="(tag, index) in selectedTags"
+                      :key="tag.name"
+                      class="group flex items-center overflow-hidden rounded-md align-middle"
+                    >
+                      <!-- Main -->
+                      <button
+                        :class="{
+                          'line-through': isTagExcluded(tag.name)
+                        }"
+                        class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util group inline-flex items-center rounded-l-full py-1 pl-2 pr-1.5 ring-1 ring-inset ring-base-0/20"
+                        type="button"
+                        @click="removeTagFromSelectedTags(index)"
+                      >
+                        <span class="group-hover:hover-text-util text-sm font-medium">
+                          {{ isTagExcluded(tag.name) ? tag.name.substring(1) : tag.name }}
+                        </span>
+                      </button>
+
+                      <!-- Exclude button -->
+                      <button
+                        class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util group inline-flex h-full items-center rounded-r-full py-1 pl-1 pr-2 ring-1 ring-inset ring-base-0/20"
+                        type="button"
+                        @click="toggleSelectedTagAsExcluded(index)"
+                      >
+                        <PlusIcon
+                          v-if="!isTagExcluded(tag.name)"
+                          aria-hidden="true"
+                          class="h-4 w-4"
+                        />
+
+                        <NoSymbolIcon
+                          v-else
+                          aria-hidden="true"
+                          class="h-4 w-4"
+                        />
+                      </button>
+                    </li>
+                  </ol>
+                </div>
+              </section>
 
               <!-- Footer -->
-              <div class="flex p-1">
-                <button
-                  class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util mx-auto inline-flex w-full items-center justify-center rounded-lg px-3 py-1 text-base ring-1 ring-base-0/20"
-                  type="submit"
+              <footer class="flex flex-col gap-6">
+                <p
+                  v-if="selectedTags.length"
+                  class="mt-4 text-xs text-gray-400"
                 >
-                  Apply search
+                  Tip: click on a tag name to remove it, or exclude it from results by clicking the plus icon
+                </p>
+
+                <button
+                  class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util mx-auto inline-flex w-full items-center justify-center rounded-md px-3 py-1 text-base ring-1 ring-base-0/20"
+                  type="submit"
+                  @click="onSubmitted"
+                >
+                  Search
                 </button>
-              </div>
+              </footer>
             </div>
           </DialogPanel>
         </TransitionChild>
