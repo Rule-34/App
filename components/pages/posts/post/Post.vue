@@ -17,7 +17,7 @@
     }
   })
 
-  const emit = defineEmits(['clickTag'])
+  const emit = defineEmits(['click-tag'])
 
   const userSettings = useUserSettings()
 
@@ -159,6 +159,7 @@
             }"
             class="focus-visible:focus-util group inline-flex items-center rounded-full px-2 py-1 ring-1 ring-inset ring-base-0/20"
             type="button"
+            @click="emit('click-tag', tag.name)"
           >
             <span class="group-hover:hover-text-util text-xs font-medium">
               {{ tag.name }}
