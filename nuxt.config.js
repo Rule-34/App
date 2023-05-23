@@ -12,36 +12,10 @@ export default defineNuxtConfig({
       PROXY_URL: process.env.PROXY_URL,
 
       MATOMO_HOST: process.env.MATOMO_HOST,
-      MATOMO_SITE_ID: process.env.MATOMO_SITE_ID
+      MATOMO_SITE_ID: process.env.MATOMO_SITE_ID,
+
+      MONETIZATION_URI: process.env.MONETIZATION_URI
     }
-  },
-
-  meta: {
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      {
-        name: 'description',
-        content:
-          'Browse popular Rule 34 Hentai Porn for free.' +
-          ' We have Anime, Pokemon, Fortnite, Naruto, FNF, FNAF, CountryHumans, Brawl Stars, Gay, Video…'
-      },
-      {
-        name: 'monetization',
-        content: process.env.MONETIZATION_URI
-      }
-    ],
-
-    link: [
-      // Font
-      {
-        rel: 'stylesheet',
-        type: 'text/css',
-        href: 'https://rsms.me/inter/inter.css'
-      }
-    ],
-
-    noscript: [{ innerHTML: 'This website requires JavaScript' }]
   },
 
   css: ['~/assets/css/main.css'],
