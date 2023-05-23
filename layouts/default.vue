@@ -9,6 +9,14 @@
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
   const { value: isSearchMenuActive, toggle: toggleSearchMenu } = useSearchMenu()
 
+  const router = useRouter()
+
+  // Close menus on route change
+  router.afterEach(() => {
+    toggleMenu(false)
+    toggleSearchMenu(false)
+  })
+
   function touchHandler(direction, event) {
     if (!userSettings.navigationTouchGestures) {
       console.debug('Gestures setting is disabled, skipping...')
