@@ -1,10 +1,13 @@
-<script setup>
-  import DomainSelector from '~/pages/DomainSelector.vue'
+<script lang="ts" setup>
   import { useBooruList } from '~/composables/useBooruList'
   import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
-  import { useStorage } from '@vueuse/core'
   import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
   import { toast } from 'vue-sonner'
+  import Tag from 'assets/js/tag.dto'
+  import { Ref } from 'vue'
+  import { generatePostsRoute } from 'assets/js/RouterHelper'
+  import { tagArrayToTitle } from 'assets/js/SeoHelper'
+  import { capitalize } from 'lodash-es'
 
   const router = useRouter()
   const route = useRoute()
@@ -15,26 +18,7 @@
   const { isPremium } = useUserData()
   const { booruList } = useBooruList()
 
-  useHead({
-    title: 'TODO',
-
-    meta: [
-      {
-        name: 'description',
-        content: 'TODO'
-      },
-      // Necessary so images can be loaded from other domains
-      {
-        name: 'referrer',
-        content: 'no-referrer'
-      }
-    ]
-  })
-
-  // TODO: Refactor
-  const selectedBooru = useStorage('user-selectedBooru', booruList.value[0], localStorage, {
-    writeDefaults: false
-  })
+  const { selectedBooru } = useSelectedBooru()
 
   // Restore selected booru from query
   if (route.query.booru) {
@@ -55,46 +39,28 @@
     () => {
       const apiUrl = config.public.API_URL + '/booru/' + selectedBooru.value.type.type + '/posts'
 
+      const tags = selectedTags.value.map((tag) => tag.name).join('|')
+
       return $fetch(apiUrl, {
         params: {
           baseEndpoint: selectedBooru.value.domain,
 
           limit: userSettings.postsPerPage,
+
           pageID: selectedBooru.value.type.initialPageID,
-          tags: [], // TODO
+
+          tags: tags.length > 0 ? tags : undefined,
+
+          // Filters
+          rating: undefined,
+          sort: undefined,
           score: '>=0' // TODO
-        },
-
-        onResponse(context) {
-          //
         }
-
-        // onResponseError(context) {
-        //   toast.error(`Failed to load initial posts: "${context.error.message}"`)
-        // }
       })
     },
     {
       lazy: true,
-      server: false,
-
-      transform: (posts) => {
-        posts.data = posts.data.filter((post) => {
-          // Remove posts without a media file
-          if (!post.high_res_file?.url) {
-            return false
-          }
-
-          // Remove posts without a media type
-          if (post.media_type === 'unknown') {
-            return false
-          }
-
-          return true
-        })
-
-        return posts
-      }
+      server: false
     }
   )
 
@@ -103,46 +69,35 @@
   // TODO: Virtualize posts
   // TODO: Restore popstate data
   watch(selectedBooru, async () => {
+    // Reset unnecessary data
+    selectedTags.value = []
+
     await refreshInitialPosts()
 
     if (errorInitialPosts.value) {
       return
     }
 
-    router.push(
-      {
-        query: {
-          booru: selectedBooru.value.domain
-        }
-      },
-      {
-        posts
-      }
-    )
+    await router.push(generatePostsRoute(selectedBooru.value.domain, undefined, selectedTags.value))
   })
 
-  const selectedTags = ref([])
+  const selectedTags: Ref<Tag[]> = ref([])
 
   // Restore selected tags from query
   if (route.query.tags) {
-    const tags = route.query.tags
+    const tags = (route.query.tags as string)
       // Split by pipe
       .split('|')
 
       // Transform to objects
-      .map((tag) => {
-        return {
-          name: tag,
-          count: null
-        }
-      })
+      .map((tag) => new Tag({ name: tag }))
 
     selectedTags.value = tags
   }
 
-  const tagResults = ref([])
+  const tagResults: Ref<Tag[]> = ref([])
 
-  async function searchTag(tag) {
+  async function onSearchTag(tag: string) {
     const apiUrl = config.public.API_URL + '/booru/' + selectedBooru.value.type.type + '/tags'
 
     const response = await $fetch(apiUrl, {
@@ -150,6 +105,7 @@
         baseEndpoint: selectedBooru.value.domain,
 
         tag,
+        order: 'count',
         limit: 20
       },
 
@@ -160,6 +116,20 @@
 
     tagResults.value = response.data
   }
+
+  async function onSearchSubmit({ tags, filters }) {
+    selectedTags.value = tags
+
+    await refreshInitialPosts()
+    // TODO: Reset values
+
+    if (errorInitialPosts.value) {
+      return
+    }
+
+    await router.push(generatePostsRoute(selectedBooru.value.domain, undefined, selectedTags.value))
+  }
+
 </script>
 
 <template>
@@ -183,8 +153,8 @@
   <SearchMenu
     :initial-selected-tags="selectedTags"
     :tag-results="tagResults"
-    @submit="'TODO'"
-    @search-tag="searchTag"
+    @submit="onSearchSubmit"
+    @search-tag="onSearchTag"
   />
 
   <Teleport to="body">
@@ -246,9 +216,11 @@
         >
           <!-- Post -->
           <li>
+            <!-- TODO: Highlight active tags -->
             <Post
               :post="post"
               :post-name="`${selectedBooru.domain}-${post.id}`"
+              @click-tag="onPostClickTag"
             />
           </li>
 
