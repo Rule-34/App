@@ -219,7 +219,8 @@
     <ScrollTopButton />
   </Teleport>
 
-  <main class="mx-auto flex min-h-screen max-w-3xl flex-col px-4 sm:px-6 lg:px-8">
+  <!-- Container -->
+  <main class="container mx-auto flex-1 px-4 sm:px-6 lg:px-8">
     <section>
       <DomainSelector
         v-model="selectedBooru"

@@ -76,12 +76,12 @@
       left: (e) => touchHandler('left', e),
       right: (e) => touchHandler('right', e)
     }"
-    class="relative isolate"
+    class="relative isolate flex h-full flex-col"
   >
     <!-- Background -->
     <div
       aria-hidden="true"
-      class="absolute inset-x-0 -z-10 flex transform-gpu justify-center overflow-hidden blur-2xl md:blur-3xl"
+      class="absolute inset-x-0 -z-10 flex transform-gpu justify-center overflow-hidden blur-xl md:blur-3xl"
     >
       <div
         class="-mr-3 -mt-3 aspect-[1108/632] w-full flex-none bg-gradient-to-l from-primary-300 to-accent-700 opacity-25"
@@ -111,7 +111,7 @@
     <Navbar />
 
     <!-- Layout content -->
-    <!-- TODO: Create container component: https://tailwindui.com/components/application-ui/layout/containers -->
+    <!-- Use `flex-1` to take all remaining space -->
     <slot />
   </div>
 </template>
