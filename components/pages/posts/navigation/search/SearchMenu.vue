@@ -44,6 +44,11 @@
       return null
     }
 
+    // If the tag is already in tagResults, return null
+    if (props.tagResults.some((tagResult) => tagResult.name === tag)) {
+      return null
+    }
+
     return {
       name: tag,
       count: null
@@ -150,129 +155,139 @@
 
             <!-- Sidebar -->
             <div class="flex grow flex-col gap-y-6 overflow-y-auto bg-base-1000 px-6 pb-6 pt-12 ring-1 ring-base-0/10">
-              <!-- Content -->
+              <!-- -->
 
-              <!-- Combobox -->
-              <Combobox
-                v-model="selectedTags"
-                by="name"
-                multiple
-              >
-                <ComboboxLabel
-                  class="block text-center text-3xl font-semibold tracking-wide text-base-content-highlight"
+              <!-- Search -->
+              <section>
+                <Combobox
+                  v-model="selectedTags"
+                  by="name"
+                  multiple
                 >
-                  Search
-                </ComboboxLabel>
-
-                <div class="group relative mt-2">
-                  <!-- Icon -->
-                  <div class="group pointer-events-none absolute inset-y-0 left-0 flex items-center rounded-l-md px-2">
-                    <MagnifyingGlassIcon
-                      aria-hidden="true"
-                      class="h-5 w-5 text-base-content group-hover:text-base-content-hover"
-                    />
-                  </div>
-
-                  <!-- Input -->
-                  <ComboboxInput
-                    :displayValue="(tag) => tag.name"
-                    class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util w-full rounded-full border-0 bg-base-1000 px-9 py-2 text-base-content-highlight shadow-sm ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
-                    @change="searchQuery = $event.target.value"
-                  />
-
-                  <!-- Button -->
-                  <ComboboxButton class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2">
-                    <ChevronUpDownIcon
-                      aria-hidden="true"
-                      class="h-5 w-5 text-base-content group-hover:text-base-content-hover"
-                    />
-                  </ComboboxButton>
-
-                  <!-- Options -->
-                  <ComboboxOptions
-                    v-if="tagResults.length > 0"
-                    class="absolute z-10 mt-2 max-h-72 w-full overflow-auto rounded-md bg-base-1000 py-1 text-base shadow-lg ring-1 ring-base-0/20 sm:text-sm"
+                  <ComboboxLabel
+                    class="block text-center text-3xl font-semibold tracking-wide text-base-content-highlight"
                   >
-                    <ComboboxOption
-                      v-for="tag in tagResults"
-                      :key="tag.name"
-                      v-slot="{ active, selected }"
-                      :value="tag"
+                    Search
+                  </ComboboxLabel>
+
+                  <div class="group relative mt-4">
+                    <!-- Icon -->
+                    <div
+                      class="group pointer-events-none absolute inset-y-0 left-0 flex items-center rounded-l-md px-2"
                     >
-                      <div
-                        :class="[
-                          'relative cursor-default select-none py-2 pl-8 pr-12',
-                          active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content'
-                        ]"
+                      <MagnifyingGlassIcon
+                        aria-hidden="true"
+                        class="h-5 w-5 text-base-content group-hover:text-base-content-hover"
+                      />
+                    </div>
+
+                    <!-- Input -->
+                    <ComboboxInput
+                      :displayValue="(tag) => tag.name"
+                      class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util w-full rounded-full border-0 bg-base-1000 px-9 py-2 text-base-content-highlight shadow-sm ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
+                      @change="searchQuery = $event.target.value"
+                    />
+
+                    <!-- Button -->
+                    <ComboboxButton class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2">
+                      <ChevronUpDownIcon
+                        aria-hidden="true"
+                        class="h-5 w-5 text-base-content group-hover:text-base-content-hover"
+                      />
+                    </ComboboxButton>
+
+                    <!-- Options -->
+                    <ComboboxOptions
+                      v-if="tagResults.length > 0"
+                      class="absolute z-10 mt-2 max-h-72 w-full overflow-auto rounded-md bg-base-1000 py-1 text-base shadow-lg ring-1 ring-base-0/20 sm:text-sm"
+                    >
+                      <ComboboxOption
+                        v-for="tag in tagResults"
+                        :key="tag.name"
+                        v-slot="{ active, selected }"
+                        :value="tag"
                       >
-                        <!-- Check icon -->
-                        <span
-                          v-if="selected"
-                          class="absolute inset-y-0 left-0 flex items-center pl-1.5 text-base-content-highlight"
+                        <div
+                          :class="[
+                            'relative cursor-default select-none py-2 pl-8 pr-12',
+                            active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content'
+                          ]"
                         >
-                          <CheckIcon
-                            aria-hidden="true"
-                            class="h-5 w-5"
-                          />
-                        </span>
-
-                        <!-- Tag -->
-                        <span :class="['block truncate', selected && 'font-semibold']">
-                          {{ tag.name }}
-                        </span>
-
-                        <!-- Tag count -->
-                        <div class="absolute inset-y-0 right-0 flex items-center gap-2 pr-4">
+                          <!-- Check icon -->
                           <span
-                            v-if="tag.count"
-                            class="text-base-content-highlight"
+                            v-if="selected"
+                            class="absolute inset-y-0 left-0 flex items-center pl-1.5 text-base-content-highlight"
                           >
-                            {{ abbreviateNumber(tag.count, 0) }}
+                            <CheckIcon
+                              aria-hidden="true"
+                              class="h-5 w-5"
+                            />
+                          </span>
+
+                          <!-- Tag -->
+                          <span :class="['block truncate', selected && 'font-semibold']">
+                            {{ tag.name }}
+                          </span>
+
+                          <!-- Tag count -->
+                          <div class="absolute inset-y-0 right-0 flex items-center gap-2 pr-4">
+                            <span
+                              v-if="tag.count"
+                              class="text-base-content-highlight"
+                            >
+                              {{ abbreviateNumber(tag.count, 0) }}
+                            </span>
+                          </div>
+                        </div>
+                      </ComboboxOption>
+
+                      <!-- Custom -->
+                      <ComboboxOption
+                        v-if="customTagFromQuery"
+                        v-slot="{ active, selected }"
+                        :value="customTagFromQuery"
+                      >
+                        <div
+                          :class="[
+                            'relative cursor-default select-none py-2 pl-8 pr-12',
+                            active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content'
+                          ]"
+                        >
+                          <span :class="['block truncate', selected && 'font-semibold']">
+                            Add "{{ customTagFromQuery.name }}" as a custom tag
+                          </span>
+
+                          <span
+                            v-if="selected"
+                            class="absolute inset-y-0 left-0 flex items-center pl-1.5 text-base-content-highlight"
+                          >
+                            <CheckIcon
+                              aria-hidden="true"
+                              class="h-5 w-5"
+                            />
                           </span>
                         </div>
-                      </div>
-                    </ComboboxOption>
-
-                    <!-- Custom -->
-                    <ComboboxOption
-                      v-if="customTagFromQuery"
-                      v-slot="{ active, selected }"
-                      :value="customTagFromQuery"
-                    >
-                      <div
-                        :class="[
-                          'relative cursor-default select-none py-2 pl-8 pr-12',
-                          active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content'
-                        ]"
-                      >
-                        <span :class="['block truncate', selected && 'font-semibold']">
-                          Add "{{ customTagFromQuery.name }}" as a custom tag
-                        </span>
-
-                        <span
-                          v-if="selected"
-                          class="absolute inset-y-0 left-0 flex items-center pl-1.5 text-base-content-highlight"
-                        >
-                          <CheckIcon
-                            aria-hidden="true"
-                            class="h-5 w-5"
-                          />
-                        </span>
-                      </div>
-                    </ComboboxOption>
-                  </ComboboxOptions>
-                </div>
-              </Combobox>
+                      </ComboboxOption>
+                    </ComboboxOptions>
+                  </div>
+                </Combobox>
+              </section>
 
               <!-- Filters -->
+              <section>
+                <!-- TODO: Tag Collections -->
+                <!-- TODO: Sort filter -->
+                <!-- TODO: Score filter -->
+                <!-- TODO: Rating filter -->
+              </section>
 
               <!-- Tags -->
-              <section class="flex-1">
+              <section class="flex-1 overflow-y-auto">
                 <div v-if="selectedTags.length">
                   <!--                  <p class="block text-lg font-medium text-gray-300">Selected</p>-->
 
                   <!-- Selected tags -->
-                  <ol class="flex flex-wrap gap-4 rounded-md">
+                  <ol class="flex flex-wrap gap-2 rounded-md">
                     <!-- -->
 
                     <li
@@ -285,7 +300,7 @@
                         :class="{
                           'line-through': isTagExcluded(tag.name)
                         }"
-                        class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util group inline-flex items-center rounded-l-full py-1 pl-2 pr-1.5 ring-1 ring-inset ring-base-0/20"
+                        class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util group inline-flex items-center rounded-l-full border border-r-0 border-base-0/20 py-1 pl-2.5 pr-1.5 focus-visible:ring-inset"
                         type="button"
                         @click="removeTagFromSelectedTags(index)"
                       >
@@ -296,7 +311,7 @@
 
                       <!-- Exclude button -->
                       <button
-                        class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util group inline-flex h-full items-center rounded-r-full py-1 pl-1 pr-2 ring-1 ring-inset ring-base-0/20"
+                        class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util group inline-flex h-full items-center rounded-r-full border border-base-0/20 py-1 pl-1.5 pr-2.5 focus-visible:ring-inset"
                         type="button"
                         @click="toggleSelectedTagAsExcluded(index)"
                       >
