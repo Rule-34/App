@@ -76,7 +76,30 @@
       left: (e) => touchHandler('left', e),
       right: (e) => touchHandler('right', e)
     }"
+    class="relative isolate"
   >
+    <!-- Background -->
+    <div
+      aria-hidden="true"
+      class="absolute inset-x-0 -z-10 flex transform-gpu justify-center overflow-hidden blur-2xl md:blur-3xl"
+    >
+      <div
+        class="-mr-3 -mt-3 aspect-[1108/632] w-full flex-none bg-gradient-to-l from-primary-300 to-accent-700 opacity-25"
+        style="
+          clip-path: polygon(
+            100% 0%,
+            100% 82.2%,
+            92.5% 84.9%,
+            75.7% 64%,
+            70.64% 73.45%,
+            56.7% 36.26%,
+            46.53% 47.55%,
+            0% 0%
+          );
+        "
+      />
+    </div>
+
     <Toaster
       close-button
       position="top-center"
