@@ -52,3 +52,9 @@
     <NuxtPage />
   </NuxtLayout>
 </template>
+
+<style>
+  #__nuxt {
+    @apply h-full;
+  }
+</style>

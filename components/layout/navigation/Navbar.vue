@@ -7,11 +7,18 @@
 
 <template>
   <nav class="bg-gray-1000 border-b border-b-base-0/20">
-    <!-- TODO: Select container in tailwindui -->
-    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+    <!-- -->
+
+    <!-- Container -->
+    <div class="container mx-auto sm:px-6 lg:px-8">
+      <!-- -->
+
+      <!-- Navbar -->
       <div class="relative flex h-14 items-center justify-between">
-        <!-- Menu button -->
-        <div class="absolute inset-y-0 left-0 flex items-center">
+        <!-- -->
+
+        <!-- Right side: Menu button -->
+        <div class="absolute inset-y-0 left-0 flex items-center pl-2">
           <button
             class="hover:hover-text-util focus-visible:focus-util hover:hover-bg-util inline-flex items-center justify-center rounded-md p-2 text-base-content-highlight focus-visible:ring-inset"
             type="button"
@@ -33,14 +40,14 @@
           </button>
         </div>
 
-        <!-- Logo -->
+        <!-- Center: Logo -->
         <div class="flex flex-1 items-center justify-center">
           <div class="group flex-shrink-0">
             <StarIcon class="flip-vertical-fwd h-6 w-6 text-base-content-highlight" />
           </div>
         </div>
 
-        <!-- Actions -->
+        <!-- Right side: Actions -->
         <TeleportTarget
           id="navbar-actions"
           class="absolute inset-y-0 right-0 flex flex-row-reverse items-center pr-2"

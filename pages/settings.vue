@@ -31,17 +31,17 @@
 </script>
 
 <template>
-  <div class="mx-auto min-h-screen max-w-3xl p-4 sm:p-6 lg:p-8">
-    <main class="space-y-12">
+  <main class="container mx-auto flex-1 px-4 sm:px-6 lg:px-8">
+    <div class="relative flex h-full flex-col space-y-12">
       <!-- Header -->
       <ContentSeparator
-        class="w-full"
+        class="mt-4"
         text="Configure how the Rule 34 App works"
         title="Settings"
       />
 
       <!-- Settings -->
-      <section>
+      <section class="flex-auto">
         <ol class="space-y-8">
           <!-- navigationTouchGestures -->
           <li>
@@ -77,7 +77,7 @@
       </section>
 
       <!-- Reset -->
-      <section class="flex flex-row items-center justify-between gap-2 pt-24">
+      <section class="flex flex-row items-center justify-between gap-2">
         <label for="reset">
           <span class="font-medium leading-8 text-base-content-highlight">
             Reset
@@ -96,10 +96,10 @@
           Reset
         </button>
       </section>
-    </main>
 
-    <footer class="absolute inset-x-0 bottom-0">
-      <span class="block p-2 text-center text-sm text-gray-300"> v{{ appVersion }} </span>
-    </footer>
-  </div>
+      <footer>
+        <span class="block p-4 text-center text-sm text-base-content-highlight"> v{{ appVersion }} </span>
+      </footer>
+    </div>
+  </main>
 </template>
