@@ -198,7 +198,6 @@
 
                     <!-- Options -->
                     <ComboboxOptions
-                      v-if="tagResults.length > 0"
                       class="absolute z-10 mt-2 max-h-72 w-full overflow-auto rounded-md bg-base-1000 py-1 text-base shadow-lg ring-1 ring-base-0/20 sm:text-sm"
                     >
                       <ComboboxOption

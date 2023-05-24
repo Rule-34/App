@@ -110,7 +110,12 @@
       },
 
       onResponseError(context) {
-        toast.error(`Failed to load tags: "${context.error.message}"`)
+        if (context.response.status === 404) {
+          tagResults.value = []
+          return
+        }
+
+        toast.error(`Failed to load tags: "${context.response.statusText}"`)
       }
     })
 

@@ -38,7 +38,6 @@
   const triedToLoadWithProxy = ref(false)
 
   function onMediaError(event: Event) {
-    console.log('onMediaError', event)
     if (hasError.value) {
       return
     }
