@@ -11,7 +11,7 @@
     TransitionChild,
     TransitionRoot
   } from '@headlessui/vue'
-  import { XMarkIcon } from '@heroicons/vue/24/outline'
+  import { Bars3BottomRightIcon, EyeIcon, StarIcon, XMarkIcon } from '@heroicons/vue/24/outline'
   import { CheckIcon, ChevronUpDownIcon, MagnifyingGlassIcon, NoSymbolIcon, PlusIcon } from '@heroicons/vue/20/solid'
   import { watchDebounced } from '@vueuse/core'
   import { abbreviateNumber } from 'js-abbreviation-number'
@@ -38,11 +38,14 @@
   watchDebounced(searchQuery, (value) => onSearchChange(value), { debounce: 350 })
 
   const customTagFromQuery = computed(() => {
-    const tag = searchQuery.value.trim()
+    let tag = searchQuery.value.trim()
 
     if (!tag || tag === '') {
       return null
     }
+
+    // Replace empty spaces with underscores
+    tag = tag.replace(/\s+/g, '_')
 
     // If the tag is already in tagResults, return null
     if (props.tagResults.some((tagResult) => tagResult.name === tag)) {
@@ -89,8 +92,54 @@
   }
 
   function onSubmitted() {
-    emit('submit', { tags: selectedTags.value, filters: {} })
+    emit('submit', {
+      tags: selectedTags.value,
+      filters: {
+        sort: selectedSortingOption.value.value,
+        rating: selectedRatingOption.value.value,
+        score: selectedScoreOption.value.value
+      }
+    })
   }
+
+  // Sorting
+  const sortingOptions = [
+    { title: 'Sort', value: null },
+    { title: 'Score', value: 'score' },
+    { title: 'Created', value: 'id' }
+  ]
+
+  const selectedSortingOption = ref(sortingOptions[0])
+
+  // Rating
+  const ratingOptions = [
+    { title: 'Rating', value: null },
+    { title: 'Safe', value: 'safe' },
+    { title: 'General', value: 'general' },
+    { title: 'Sensitive', value: 'sensitive' },
+    { title: 'Questionable', value: 'questionable' },
+    { title: 'Explicit', value: 'explicit' }
+  ]
+
+  const selectedRatingOption = ref(ratingOptions[0])
+
+  // Score
+  const scoreOptions = [
+    { title: 'Score', value: null },
+    { title: '>= 0', value: '>=0' },
+    { title: '>= 10', value: '>=10' },
+    { title: '>= 25', value: '>=25' },
+    { title: '>= 50', value: '>=50' },
+
+    { title: '>= 100', value: '>=100' },
+    { title: '>= 250', value: '>=200' },
+    { title: '>= 500', value: '>=500' },
+    { title: '>= 750', value: '>=700' },
+
+    { title: '>= 1000', value: '>=1000' }
+  ]
+
+  const selectedScoreOption = ref(scoreOptions[0])
 </script>
 
 <template>
@@ -157,8 +206,8 @@
             <div class="flex grow flex-col gap-y-6 overflow-y-auto bg-base-1000 px-6 pb-6 pt-12 ring-1 ring-base-0/10">
               <!-- -->
 
-              <!-- Search -->
               <section>
+                <!-- Search -->
                 <Combobox
                   v-model="selectedTags"
                   by="name"
@@ -184,7 +233,7 @@
                     <!-- Input -->
                     <ComboboxInput
                       :displayValue="(tag) => tag.name"
-                      class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util w-full rounded-full border-0 bg-base-1000 px-9 py-2 text-base-content-highlight shadow-sm ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
+                      class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util w-full rounded-full border-0 bg-base-1000 px-9 py-2 text-base-content-highlight shadow-sm ring-1 ring-inset ring-base-0/20 sm:text-sm"
                       @change="searchQuery = $event.target.value"
                     />
 
@@ -207,10 +256,8 @@
                         :value="tag"
                       >
                         <div
-                          :class="[
-                            'relative cursor-default select-none py-2 pl-8 pr-12',
-                            active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content'
-                          ]"
+                          :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                          class="relative cursor-default select-none py-2 pl-8 pr-12"
                         >
                           <!-- Check icon -->
                           <span
@@ -230,15 +277,14 @@
 
                           <!-- Tag count -->
                           <div class="absolute inset-y-0 right-0 flex items-center gap-2 pr-4">
-                            <span
-                              v-if="tag.count"
-                              class="text-base-content-highlight"
-                            >
+                            <span v-if="tag.count">
                               {{ abbreviateNumber(tag.count, 0) }}
                             </span>
                           </div>
                         </div>
                       </ComboboxOption>
+
+                      <!-- TODO: History based -->
 
                       <!-- Custom -->
                       <ComboboxOption
@@ -247,13 +293,11 @@
                         :value="customTagFromQuery"
                       >
                         <div
-                          :class="[
-                            'relative cursor-default select-none py-2 pl-8 pr-12',
-                            active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content'
-                          ]"
+                          :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                          class="relative cursor-default select-none py-2 pl-8"
                         >
                           <span :class="['block truncate', selected && 'font-semibold']">
-                            Add "{{ customTagFromQuery.name }}" as a custom tag
+                            Create “{{ customTagFromQuery.name }}” tag
                           </span>
 
                           <span
@@ -270,23 +314,41 @@
                     </ComboboxOptions>
                   </div>
                 </Combobox>
-              </section>
 
-              <!-- Filters -->
-              <section>
-                <!-- TODO: Tag Collections -->
-                <!-- TODO: Sort filter -->
-                <!-- TODO: Score filter -->
-                <!-- TODO: Rating filter -->
+                <!-- Filters -->
+                <section class="-mr-6 mt-6 flex gap-4 overflow-x-auto py-1 pl-2">
+                  <!-- TODO: Tag Collections -->
+
+                  <!-- Sort Filter -->
+                  <SearchSelect
+                    v-model="selectedSortingOption"
+                    :icon="Bars3BottomRightIcon"
+                    :options="sortingOptions"
+                  />
+
+                  <!-- Rating filter -->
+                  <SearchSelect
+                    v-model="selectedRatingOption"
+                    :icon="EyeIcon"
+                    :options="ratingOptions"
+                  />
+
+                  <!-- Score filter -->
+                  <SearchSelect
+                    v-model="selectedScoreOption"
+                    :icon="StarIcon"
+                    :options="scoreOptions"
+                  />
+                </section>
               </section>
 
               <!-- Tags -->
               <section class="flex-1 overflow-y-auto">
                 <div v-if="selectedTags.length">
-                  <!--                  <p class="block text-lg font-medium text-gray-300">Selected</p>-->
+                  <p class="block text-lg font-medium text-base-content">Selected tags</p>
 
                   <!-- Selected tags -->
-                  <ol class="flex flex-wrap gap-2 rounded-md">
+                  <ol class="mt-2 flex flex-wrap gap-2.5 rounded-md">
                     <!-- -->
 
                     <li
