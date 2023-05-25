@@ -184,6 +184,8 @@
           return description
         })
       },
+      // TODO: Canonical
+
       // Necessary so images can be loaded from other domains
       {
         name: 'referrer',

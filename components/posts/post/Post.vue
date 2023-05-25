@@ -3,7 +3,7 @@
   import { ChevronDownIcon, HeartIcon } from '@heroicons/vue/24/outline'
   import { HeartIcon as SolidHeartIcon } from '@heroicons/vue/24/solid'
   import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
-  import PostDownload from '~/components/pages/posts/post/PostDownload.vue'
+  import PostDownload from '~/components/posts/post/PostDownload.vue'
 
   const props = defineProps({
     postName: {
