@@ -1,7 +1,7 @@
 <script setup>
   import { useUserSettings } from '~/composables/useUserSettings'
-  import { ChevronDownIcon, HeartIcon } from '@heroicons/vue/24/outline'
-  import { HeartIcon as SolidHeartIcon } from '@heroicons/vue/24/solid'
+  import { BookmarkIcon, ChevronDownIcon } from '@heroicons/vue/24/outline'
+  import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/vue/24/solid'
   import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
   import PostDownload from '~/components/posts/post/PostDownload.vue'
 
@@ -109,11 +109,12 @@
         >
           <span class="sr-only"> Save post </span>
 
-          <SolidHeartIcon
+          <!-- TODO -->
+          <SolidBookmarkIcon
             v-if="false"
             class="group-hover:hover-text-util h-5 w-5 text-primary-600"
           />
-          <HeartIcon
+          <BookmarkIcon
             v-else
             class="group-hover:hover-text-util h-5 w-5 text-base-content"
           />
