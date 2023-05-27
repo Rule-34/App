@@ -2,10 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Improved defaults */
 @layer base {
-  /* html {
-  scroll-behavior: smooth;
-    } */
+
+  html {
+    @apply bg-base-1000 text-base-content;
+
+    /*scroll-behavior: smooth;*/
+  }
+
+  /* https://www.joshwcomeau.com/css/custom-css-reset/#five-font-smoothing-6 */
+  body {
+    @apply font-sans antialiased;
+  }
+
+  /* https://www.joshwcomeau.com/css/custom-css-reset/#nine-root-stacking-context-10 */
+  #__nuxt {
+    @apply isolate;
+  }
+
+  /* https://www.joshwcomeau.com/css/custom-css-reset/#three-percentage-based-heights-4 */
+  html, body, #__nuxt {
+    @apply h-full;
+  }
+
+  /* Fix for elements jumping around with overflow-auto */
+  * {
+    scrollbar-gutter: stable;
+  }
 }
 
 @layer components {
