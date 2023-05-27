@@ -3,12 +3,7 @@
 
   useHead({
     htmlAttrs: {
-      lang: 'en',
-      class: 'h-full bg-base-1000 text-base-content'
-    },
-
-    bodyAttrs: {
-      class: 'h-full'
+      lang: 'en'
     },
 
     titleTemplate: (titleChunk) => {
@@ -52,9 +47,3 @@
     <NuxtPage />
   </NuxtLayout>
 </template>
-
-<style>
-  #__nuxt {
-    @apply h-full;
-  }
-</style>
