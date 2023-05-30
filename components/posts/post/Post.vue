@@ -1,9 +1,7 @@
 <script setup>
   import { useUserSettings } from '~/composables/useUserSettings'
-  import { BookmarkIcon, ChevronDownIcon } from '@heroicons/vue/24/outline'
-  import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/vue/24/solid'
+  import { ChevronDownIcon } from '@heroicons/vue/24/outline'
   import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
-  import PostDownload from '~/components/posts/post/PostDownload.vue'
 
   const props = defineProps({
     postName: {
@@ -102,26 +100,11 @@
       as="figcaption"
     >
       <!-- Actions -->
-      <div class="flex items-center bg-base-950 p-2">
-        <button
-          class="hover:hover-bg-util focus-visible:focus-util group rounded-md px-1.5 py-1"
-          type="button"
-        >
-          <span class="sr-only"> Save post </span>
-
-          <!-- TODO -->
-          <SolidBookmarkIcon
-            v-if="false"
-            class="group-hover:hover-text-util h-5 w-5 text-primary-600"
-          />
-          <BookmarkIcon
-            v-else
-            class="group-hover:hover-text-util h-5 w-5 text-base-content"
-          />
-        </button>
+      <div class="flex items-center p-2">
+        <PostSave :post="post" />
 
         <PostDownload
-          :mediaName="props.postName"
+          :mediaName="postName"
           :mediaUrl="mediaFile.file"
         />
 
