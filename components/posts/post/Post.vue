@@ -77,12 +77,6 @@
 
     return tags
   })
-
-  function getHostnameFromUrl(url) {
-    const source = new URL(url)
-
-    return source.hostname
-  }
 </script>
 
 <template>
@@ -106,6 +100,12 @@
         <PostDownload
           :mediaName="postName"
           :mediaUrl="mediaFile.file"
+        />
+
+        <PostSource
+          v-if="post.media_type === 'image'"
+          :post-file-url="mediaFile.file"
+          :post-sources="post.sources"
         />
 
         <DisclosureButton
