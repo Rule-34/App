@@ -18,7 +18,7 @@
 
   /* https://www.joshwcomeau.com/css/custom-css-reset/#nine-root-stacking-context-10 */
   #__nuxt {
-    @apply isolate;
+    /*@apply isolate;*/
   }
 
   /* https://www.joshwcomeau.com/css/custom-css-reset/#three-percentage-based-heights-4 */
