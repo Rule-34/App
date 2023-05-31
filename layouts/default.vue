@@ -1,11 +1,8 @@
 <script setup>
-  import { Touch } from 'vuetify/directives'
-
-  const vTouch = Touch
-
   const appStatistics = useAppStatistics()
 
   const userSettings = useUserSettings()
+
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
   const { value: isSearchMenuActive, toggle: toggleSearchMenu } = useSearchMenu()
 
@@ -24,7 +21,7 @@
     }
 
     const touchThreshold = screen.availWidth * 0.25
-    // console.debug(touchThreshold, event)
+    console.debug(touchThreshold, event)
 
     switch (direction) {
       case 'right':
@@ -33,7 +30,7 @@
           return
         }
 
-        if (isSearchMenuActive) {
+        if (isSearchMenuActive.value) {
           toggleSearchMenu(false)
 
           //
@@ -48,7 +45,7 @@
           return
         }
 
-        if (!isSearchMenuActive) {
+        if (!isSearchMenuActive.value) {
           toggleSearchMenu(true)
 
           //
@@ -70,14 +67,12 @@
 </script>
 
 <template>
-  <!--  TODO: Fix not working when z-10 is used -->
-  <div
-    v-touch="{
-      left: (e) => touchHandler('left', e),
-      right: (e) => touchHandler('right', e)
-    }"
-    class="relative isolate flex h-full flex-col"
-  >
+  <!-- TODO: Restore gestures -->
+  <!--    v-touch="{-->
+  <!--      left: (e) => touchHandler('left', e),-->
+  <!--      right: (e) => touchHandler('right', e)-->
+  <!--    }"-->
+  <div class="relative flex h-full flex-col">
     <!-- Background -->
     <div
       aria-hidden="true"
