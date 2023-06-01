@@ -1,7 +1,11 @@
 import Tag from 'assets/js/tag.dto'
 import { RouteLocationRaw } from 'vue-router'
 
-export function generatePostsRoute(domain?: string, page?: number, tags?: Tag[]) {
+export function generatePostsRoute(
+  domain: string | undefined | null,
+  page: number | undefined | null,
+  tags: Tag[] | undefined | null
+) {
   const route: RouteLocationRaw = {
     path: '/posts',
     query: {}
