@@ -29,6 +29,7 @@
     "lodash-es": "^4.17.21",
     "notiwind": "^2.0.1",
     "nuxt": "^3.5.2",
+    "qs": "^6.11.2",
     "tailwindcss": "^3.3.2",
     "tippy.js": "^6.3.7",
     "vue-matomo": "^4.2.0",
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.7",
+    "@types/qs": "^6.9.7",
     "autoprefixer": "^10.4.14",
     "jest": "^29.5.0",
     "postcss": "^8.4.24",
