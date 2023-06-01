@@ -18,19 +18,61 @@
   const { isPremium } = useUserData()
   const { booruList } = useBooruList()
 
-  const { selectedBooru } = useSelectedBooru()
+  const { selectedDomainFromStorage } = useSelectedDomainFromStorage()
 
-  // Restore selected booru from query
-  if (route.query.booru) {
-    const booru = booruList.value.find((booru) => booru.domain === route.query.booru)
+  const selectedBooru = computed(() => {
+    let domain: string | undefined = undefined
 
-    if (booru) {
-      selectedBooru.value = booru
+    // Restore booru from query
+    if (route.query.domain) {
+      domain = route.query.domain as string
     }
-  }
+
+    // Restore booru from storage
+    if (!domain) {
+      domain = selectedDomainFromStorage.value
+    }
+
+    // Fallback to first booru
+    if (!domain) {
+      domain = booruList.value[0].domain
+    }
+
+    const booru = booruList.value.find((booru) => booru.domain === domain)
+
+    if (!booru) {
+      toast.error(`Booru "${domain}" not found`)
+      throw new Error(`Booru "${domain}" not found`)
+    }
+
+    // Save selected booru to storage
+    selectedDomainFromStorage.value = booru.domain
+
+    return booru
+  })
+
+  const selectedTags = computed(() => {
+    const tags = route.query.tags as string
+
+    if (!tags) {
+      return []
+    }
+
+    return tags.split('|').map((tag) => new Tag({ name: tag }))
+  })
+
+  const selectedPage = computed(() => {
+    const page = route.query.page as string
+
+    if (!page) {
+      return selectedBooru.value.type.initialPageID
+    }
+
+    return parseInt(page)
+  })
 
   const {
-    data: initialPosts,
+    data: initialPostPages,
     pending: pendingInitialPosts,
     error: errorInitialPosts,
     refresh: refreshInitialPosts
@@ -47,7 +89,7 @@
 
           limit: userSettings.postsPerPage,
 
-          pageID: selectedBooru.value.type.initialPageID,
+          pageID: selectedPage.value,
 
           tags: tags.length > 0 ? tags : undefined,
 
@@ -55,44 +97,60 @@
           rating: undefined,
           sort: undefined,
           score: '>=0' // TODO
-        }
+        },
+
+        retry: 0
       })
     },
+
     {
       lazy: true,
-      server: false
+      server: false,
+
+      transform: (data) => {
+        return [data]
+      }
     }
   )
-
-  const { posts, loadNextPosts, isThereNextPosts } = usePosts(initialPosts)
-
   // TODO: Virtualize posts
   // TODO: Restore popstate data
-  watch(selectedBooru, async () => {
-    // Reset unnecessary data
-    selectedTags.value = []
+  const { posts, loadNextPostPage, isThereNextPostPage } = usePosts(initialPostPages)
 
-    await refreshInitialPosts()
-
-    if (errorInitialPosts.value) {
-      return
+  /**
+   * `undefined` values mean that they will be replaced by default values
+   */
+  async function reflectChangesInUrl({
+    domain = undefined,
+    page = undefined,
+    tags = undefined,
+    filters = undefined,
+    replace = false
+  }: {
+    domain?: string | undefined | null
+    page?: number | undefined | null
+    tags?: Tag[] | undefined | null
+    filters?: Object | undefined | null
+    replace?: boolean | undefined | null
+  }) {
+    if (domain === undefined) {
+      domain = selectedBooru.value.domain
     }
 
-    await router.push(generatePostsRoute(selectedBooru.value.domain, undefined, selectedTags.value))
-  })
+    if (page === undefined) {
+      page = selectedBooru.value.type.initialPageID
+    }
 
-  const selectedTags: Ref<Tag[]> = ref([])
+    if (tags === undefined) {
+      tags = selectedTags.value
+    }
 
-  // Restore selected tags from query
-  if (route.query.tags) {
-    const tags = (route.query.tags as string)
-      // Split by pipe
-      .split('|')
+    const route = generatePostsRoute(domain, page, tags)
 
-      // Transform to objects
-      .map((tag) => new Tag({ name: tag }))
-
-    selectedTags.value = tags
+    if (replace) {
+      await router.replace(route)
+    } else {
+      await router.push(route)
+    }
   }
 
   const tagResults: Ref<Tag[]> = ref([])
@@ -122,29 +180,29 @@
     tagResults.value = response.data
   }
 
-  async function onSearchSubmit({ tags, filters }) {
-    selectedTags.value = tags
+  async function onDomainChange(booru) {
+    await reflectChangesInUrl({ domain: booru.domain, page: null, tags: null, filters: null })
 
     await refreshInitialPosts()
-    // TODO: Reset values
+  }
 
-    if (errorInitialPosts.value) {
-      return
-    }
+  async function onSearchSubmit({ tags, filters }) {
+    await reflectChangesInUrl({ page: null, tags, filters })
 
-    await router.push(generatePostsRoute(selectedBooru.value.domain, undefined, selectedTags.value))
+    await refreshInitialPosts()
   }
 
   async function onPostClickTag(tag: string) {
-    selectedTags.value = [new Tag({ name: tag })]
+    await reflectChangesInUrl({ page: null, tags: [new Tag({ name: tag })], filters: null })
 
     await refreshInitialPosts()
+  }
 
-    if (errorInitialPosts.value) {
-      return
-    }
+  async function onLoadNextPostPage() {
+    // TODO: Improve this
+    await reflectChangesInUrl({ page: selectedPage.value + 1 })
 
-    await router.push(generatePostsRoute(selectedBooru.value.domain, undefined, selectedTags.value))
+    await loadNextPostPage()
   }
 
   useHead({
@@ -230,9 +288,10 @@
   <main class="container mx-auto flex-1 px-4 sm:px-6 lg:px-8">
     <section>
       <DomainSelector
-        v-model="selectedBooru"
         :boorus="booruList"
+        :model-value="selectedBooru"
         class="mt-4"
+        @update:model-value="onDomainChange"
       />
     </section>
 
@@ -298,8 +357,8 @@
         </template>
 
         <!-- Load more -->
-        <template v-if="isThereNextPosts">
-          <PostsPagination @load-next-page="loadNextPosts" />
+        <template v-if="isThereNextPostPage">
+          <PostsPagination @load-next-page="onLoadNextPostPage" />
         </template>
       </ol>
     </section>
