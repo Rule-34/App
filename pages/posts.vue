@@ -213,7 +213,7 @@
         title += ` ${tagArrayToTitle(selectedTags.value)}`
       }
 
-      title += ` hentai from ${selectedBooru.value.domain}`
+      title += ` porn from ${selectedBooru.value.domain}`
 
       title = title.trim()
       title = capitalize(title)
@@ -225,19 +225,15 @@
       {
         name: 'description',
         content: computed(() => {
-          let description = 'Stream and download images, GIFs and videos'
+          let description = 'Stream and download porn images, GIFs and videos'
 
           if (selectedTags.value.length > 0) {
             description += ` featuring ${tagArrayToTitle(selectedTags.value)}`
           }
 
-          description += ' hentai'
+          description += ` from the ${selectedBooru.value.domain} website`
 
-          if (selectedBooru.value.domain) {
-            description += ` from the ${selectedBooru.value.domain} website`
-          }
-
-          description += '. For free!'
+          description += '. Fast and free anime hentai with the Rule 34 App.'
 
           return description
         })
