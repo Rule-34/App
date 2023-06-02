@@ -1,60 +1,63 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 const defaultColors = require('tailwindcss/colors')
+const { tailwindcssOriginSafelist } = require('@headlessui-float/vue')
 
 module.exports = {
-	content: [
-		'./components/**/*.{js,vue,ts}',
-		'./layouts/**/*.vue',
-		'./pages/**/*.vue',
-		'./plugins/**/*.{js,ts}',
-		'./nuxt.config.{js,ts}',
-		'./app.vue'
-	],
+  content: [
+    './components/**/*.{js,vue,ts}',
+    './layouts/**/*.vue',
+    './pages/**/*.vue',
+    './plugins/**/*.{js,ts}',
+    './nuxt.config.{js,ts}',
+    './app.vue'
+  ],
 
-	theme: {
-		extend: {
-			colors: {
-				primary: defaultColors.sky,
+  safelist: [...tailwindcssOriginSafelist],
 
-				accent: defaultColors.violet,
+  theme: {
+    extend: {
+      colors: {
+        primary: defaultColors.sky,
 
-				/**
-				 * Used for the background
-				 */
-				base: {
-					// TODO: remember that borders, and backgrounds use 20% opacity: border-base-0/20
-					// TODO: E.g: border-base-0/20 & bg-base-0/20
-					// TODO: Maybe create a specific attribute?
-					0: defaultColors.white,
+        accent: defaultColors.violet,
 
-					...defaultColors.gray,
+        /**
+         * Used for the background
+         */
+        base: {
+          // TODO: remember that borders, and backgrounds use 20% opacity: border-base-0/20
+          // TODO: E.g: border-base-0/20 & bg-base-0/20
+          // TODO: Maybe create a specific attribute?
+          0: defaultColors.white,
 
-					1000: defaultColors.black
-				},
+          ...defaultColors.gray,
 
-				/**
-				 * Used for text and icons on the background
-				 */
-				'base-content': {
-					highlight: defaultColors.gray[200],
+          1000: defaultColors.black
+        },
 
-					DEFAULT: defaultColors.gray[400],
+        /**
+         * Used for text and icons on the background
+         */
+        'base-content': {
+          highlight: defaultColors.gray[200],
 
-					hover: defaultColors.white
-				}
-			},
+          DEFAULT: defaultColors.gray[400],
 
-			fontFamily: {
-				sans: ['Inter var', ...defaultTheme.fontFamily.sans]
-			}
-		}
-	},
+          hover: defaultColors.white
+        }
+      },
 
-	plugins: [
-		require('@tailwindcss/forms')({
-			strategy: 'class'
-		}),
+      fontFamily: {
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans]
+      }
+    }
+  },
 
-		require('@headlessui/tailwindcss')
-	]
+  plugins: [
+    require('@tailwindcss/forms')({
+      strategy: 'class'
+    }),
+
+    require('@headlessui/tailwindcss')
+  ]
 }
