@@ -238,12 +238,22 @@
           return description
         })
       },
-      // TODO: Canonical
 
       // Necessary so images can be loaded from other domains
       {
         name: 'referrer',
         content: 'no-referrer'
+      }
+    ],
+
+    link: [
+      {
+        rel: 'canonical',
+        href: computed(() => {
+          const rawRoute = generatePostsRoute(selectedBooru.value.domain, selectedPage.value, selectedTags.value)
+
+          return 'https://' + config.public.APP_DOMAIN + router.resolve(rawRoute).href
+        })
       }
     ]
   })

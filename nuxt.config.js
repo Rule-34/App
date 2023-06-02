@@ -7,6 +7,8 @@ export default defineNuxtConfig({
     public: {
       NODE_ENV: process.env.NODE_ENV,
 
+      APP_DOMAIN: process.env.APP_DOMAIN,
+
       API_URL: process.env.API_URL,
 
       PROXY_URL: process.env.PROXY_URL,
