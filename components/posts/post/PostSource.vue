@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { LinkIcon } from '@heroicons/vue/24/outline'
   import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+  import { Float } from '@headlessui-float/vue'
   import { toast } from 'vue-sonner'
 
   const props = defineProps({
@@ -13,11 +14,6 @@
       type: String,
       required: true
     }
-  })
-
-  let [trigger, container] = usePopper({
-    placement: 'bottom-start',
-    strategy: 'fixed'
   })
 
   const { isPremium } = useUserData()
@@ -95,11 +91,19 @@
     as="div"
     class="relative inline-block text-left"
   >
-    <div>
-      <MenuButton
-        ref="trigger"
-        class="hover:hover-bg-util focus-visible:focus-util group flex items-center rounded-md px-1.5 py-1"
-      >
+    <Float
+      :offset="6"
+      enter="transition ease-out duration-100"
+      enter-from="transform opacity-0 scale-95"
+      enter-to="transform opacity-100 scale-100"
+      leave="transition ease-in duration-75"
+      leave-from="transform opacity-100 scale-100"
+      leave-to="transform opacity-0 scale-95"
+      placement="bottom-start"
+      portal
+      tailwindcss-origin-class
+    >
+      <MenuButton class="hover:hover-bg-util focus-visible:focus-util group flex items-center rounded-md px-1.5 py-1">
         <span class="sr-only"> Open post source options </span>
 
         <LinkIcon
@@ -107,76 +111,28 @@
           class="group-hover:hover-text-util h-5 w-5 text-base-content"
         />
       </MenuButton>
-    </div>
 
-    <div ref="container">
-      <transition
-        enter-active-class="transition ease-out duration-100"
-        enter-from-class="transform opacity-0 scale-95"
-        enter-to-class="transform opacity-100 scale-100"
-        leave-active-class="transition ease-in duration-75"
-        leave-from-class="transform opacity-100 scale-100"
-        leave-to-class="transform opacity-0 scale-95"
+      <MenuItems
+        class="w-56 divide-y divide-base-0/20 rounded-md bg-base-1000 shadow-lg ring-1 ring-base-0/20 focus:outline-none"
       >
-        <MenuItems
-          class="absolute left-0 z-50 mt-4 w-56 origin-top-right divide-y divide-base-0/20 rounded-md bg-base-1000 shadow-lg ring-1 ring-base-0/20 focus:outline-none"
+        <div
+          v-if="postSources.length"
+          class="py-1"
         >
-          <div
-            v-if="postSources.length"
-            class="py-1"
+          <MenuItem
+            v-for="source of postSources"
+            :key="source"
+            v-slot="{ active }"
           >
-            <MenuItem
-              v-for="source of postSources"
-              :key="source"
-              v-slot="{ active }"
-            >
-              <template v-if="isSourceAnUrl(source)">
-                <NuxtLink
-                  :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-                  :href="source"
-                  class="group flex w-full items-center px-4 py-2 text-sm"
-                  target="_blank"
-                >
-                  <img
-                    :src="`https://www.google.com/s2/favicons?domain=${getHostnameFromUrl(source)}&sz=128`"
-                    alt="Favicon"
-                    class="mr-3 h-5 w-5 flex-shrink-0 rounded"
-                    height="128"
-                    loading="lazy"
-                    width="128"
-                  />
-
-                  <span class="truncate">
-                    {{ getFriendlyStringFromHostname(getHostnameFromUrl(source)) }}
-                  </span>
-                </NuxtLink>
-              </template>
-
-              <template v-else>
-                {{ source }}
-              </template>
-            </MenuItem>
-          </div>
-
-          <!-- Anime services -->
-          <div class="py-1">
-            <!-- SauceNAO -->
-            <MenuItem
-              v-for="service in imageAnimeRelatedServiceOptions"
-              v-slot="{ active }"
-              :disabled="!isPremium"
-            >
-              <button
-                :class="[
-                  active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content',
-                  !isPremium ? 'cursor-not-allowed opacity-50' : ''
-                ]"
+            <template v-if="isSourceAnUrl(source)">
+              <NuxtLink
+                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                :href="source"
                 class="group flex w-full items-center px-4 py-2 text-sm"
-                type="button"
-                @click="openSourceFinder(service.link)"
+                target="_blank"
               >
                 <img
-                  :src="`https://www.google.com/s2/favicons?domain=${getHostnameFromUrl(service.link)}&sz=128`"
+                  :src="`https://www.google.com/s2/favicons?domain=${getHostnameFromUrl(source)}&sz=128`"
                   alt="Favicon"
                   class="mr-3 h-5 w-5 flex-shrink-0 rounded"
                   height="128"
@@ -184,43 +140,80 @@
                   width="128"
                 />
 
-                {{ service.title }}
-              </button>
-            </MenuItem>
-          </div>
+                <span class="truncate">
+                  {{ getFriendlyStringFromHostname(getHostnameFromUrl(source)) }}
+                </span>
+              </NuxtLink>
+            </template>
 
-          <!--General services -->
-          <div class="py-1">
-            <!-- SauceNAO -->
-            <MenuItem
-              v-for="service in imageRelatedServiceOptions"
-              v-slot="{ active }"
-              :disabled="!isPremium"
+            <template v-else>
+              {{ source }}
+            </template>
+          </MenuItem>
+        </div>
+
+        <!-- Anime services -->
+        <div class="py-1">
+          <!-- SauceNAO -->
+          <MenuItem
+            v-for="service in imageAnimeRelatedServiceOptions"
+            v-slot="{ active }"
+            :disabled="!isPremium"
+          >
+            <button
+              :class="[
+                active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content',
+                !isPremium ? 'cursor-not-allowed opacity-50' : ''
+              ]"
+              class="group flex w-full items-center px-4 py-2 text-sm"
+              type="button"
+              @click="openSourceFinder(service.link)"
             >
-              <button
-                :class="[
-                  active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content',
-                  !isPremium ? 'cursor-not-allowed opacity-50' : ''
-                ]"
-                class="group flex w-full items-center px-4 py-2 text-sm"
-                type="button"
-                @click="openSourceFinder(service.link)"
-              >
-                <img
-                  :src="`https://www.google.com/s2/favicons?domain=${getHostnameFromUrl(service.link)}&sz=128`"
-                  alt="Favicon"
-                  class="mr-3 h-5 w-5 flex-shrink-0 rounded"
-                  height="128"
-                  loading="lazy"
-                  width="128"
-                />
+              <img
+                :src="`https://www.google.com/s2/favicons?domain=${getHostnameFromUrl(service.link)}&sz=128`"
+                alt="Favicon"
+                class="mr-3 h-5 w-5 flex-shrink-0 rounded"
+                height="128"
+                loading="lazy"
+                width="128"
+              />
 
-                {{ service.title }}
-              </button>
-            </MenuItem>
-          </div>
-        </MenuItems>
-      </transition>
-    </div>
+              {{ service.title }}
+            </button>
+          </MenuItem>
+        </div>
+
+        <!--General services -->
+        <div class="py-1">
+          <!-- SauceNAO -->
+          <MenuItem
+            v-for="service in imageRelatedServiceOptions"
+            v-slot="{ active }"
+            :disabled="!isPremium"
+          >
+            <button
+              :class="[
+                active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content',
+                !isPremium ? 'cursor-not-allowed opacity-50' : ''
+              ]"
+              class="group flex w-full items-center px-4 py-2 text-sm"
+              type="button"
+              @click="openSourceFinder(service.link)"
+            >
+              <img
+                :src="`https://www.google.com/s2/favicons?domain=${getHostnameFromUrl(service.link)}&sz=128`"
+                alt="Favicon"
+                class="mr-3 h-5 w-5 flex-shrink-0 rounded"
+                height="128"
+                loading="lazy"
+                width="128"
+              />
+
+              {{ service.title }}
+            </button>
+          </MenuItem>
+        </div>
+      </MenuItems>
+    </Float>
   </Menu>
 </template>
