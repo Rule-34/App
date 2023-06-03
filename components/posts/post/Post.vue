@@ -83,6 +83,7 @@
   <figure class="overflow-hidden rounded-md border border-base-0/20 shadow-lg">
     <PostMedia
       :mediaAlt="mediaFile.alt"
+      :mediaPosterSrc="mediaFile.posterFile"
       :mediaSrc="mediaFile.file"
       :mediaSrcHeight="mediaFile.height"
       :mediaSrcWidth="mediaFile.width"
