@@ -287,7 +287,7 @@
 
   <!-- Search menu -->
   <SearchMenuWrapper>
-    <SearchMenu
+    <LazySearchMenu
       :initial-selected-filters="selectedFilters"
       :initial-selected-tags="selectedTags"
       :tag-results="tagResults"
