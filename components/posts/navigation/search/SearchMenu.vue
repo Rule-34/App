@@ -21,7 +21,7 @@
     },
 
     initialSelectedFilters: {
-      type: Array,
+      type: Object,
       required: true
     },
 
