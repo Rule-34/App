@@ -1,5 +1,6 @@
 <script setup>
-  const appStatistics = useAppStatistics()
+
+const appStatistics = useAppStatistics()
 
   const userSettings = useUserSettings()
 
@@ -55,6 +56,8 @@
         break
     }
   }
+
+  // TODO: Log general errors to the user with a Toast
 
   console.info(
     '%cWe ❤︎ open source!',

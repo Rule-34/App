@@ -3,16 +3,10 @@
   import { useUserSettings } from '~/composables/useUserSettings'
   import { ExclamationTriangleIcon } from '@heroicons/vue/20/solid'
 
-  useHead(() => {
-    return {
-      title: 'Settings',
-      meta: [
-        {
-          name: 'description',
-          content: 'Configure how the Rule 34 App works'
-        }
-      ]
-    }
+  useSeoMeta({
+    title: 'Settings',
+
+    description: 'Options to configure how the Rule 34 App works.'
   })
 
   const appVersion = version

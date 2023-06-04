@@ -216,8 +216,8 @@
     await loadNextPostPage()
   }
 
-  useHead({
-    title: computed(() => {
+  useSeoMeta({
+    title: () => {
       let title = ''
 
       if (selectedTags.value.length > 0) {
@@ -230,41 +230,36 @@
       title = capitalize(title)
 
       return title
-    }),
+    },
 
-    meta: [
-      {
-        name: 'description',
-        content: computed(() => {
-          let description = 'Stream and download porn images, GIFs and videos'
+    description: () => {
+      let description = 'Stream and download porn images, GIFs and videos'
 
-          if (selectedTags.value.length > 0) {
-            description += ` featuring ${tagArrayToTitle(selectedTags.value)}`
-          }
-
-          description += ` from the ${selectedBooru.value.domain} website`
-
-          description += '. Fast and free anime hentai with the Rule 34 App.'
-
-          return description
-        })
-      },
-
-      // Necessary so images can be loaded from other domains
-      {
-        name: 'referrer',
-        content: 'no-referrer'
+      if (selectedTags.value.length > 0) {
+        description += ` featuring ${tagArrayToTitle(selectedTags.value)}`
       }
-    ],
 
+      description += ` from the ${selectedBooru.value.domain} website`
+
+      description += '. Fast and free anime hentai with the Rule 34 App.'
+
+      return description
+    },
+
+    referrer: 'no-referrer',
+
+    rating: 'adult'
+  })
+
+  useHead({
     link: [
       {
         rel: 'canonical',
-        href: computed(() => {
+        href: () => {
           const rawRoute = generatePostsRoute(selectedBooru.value.domain, selectedPage.value, selectedTags.value)
 
           return 'https://' + config.public.APP_DOMAIN + router.resolve(rawRoute).href
-        })
+        }
       }
     ]
   })

@@ -14,15 +14,25 @@
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
 
-      {
-        name: 'monetization',
-        content: config.public.MONETIZATION_URI
-      },
-
       // TODO: Improve description
       {
         name: 'description',
         content: 'Stream and download images, GIFs and videos hentai. For free!'
+      },
+
+      {
+        name: 'color-scheme',
+        content: 'dark'
+      },
+
+      {
+        name: 'theme-color',
+        content: '#000'
+      },
+
+      {
+        name: 'monetization',
+        content: config.public.MONETIZATION_URI
       }
     ],
 

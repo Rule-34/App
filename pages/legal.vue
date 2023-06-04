@@ -1,14 +1,8 @@
 <script setup>
-  useHead(() => {
-    return {
-      title: 'Legal',
-      meta: [
-        {
-          name: 'description',
-          content: 'Legal information.'
-        }
-      ]
-    }
+  useSeoMeta({
+    title: 'Legal',
+
+    description: 'Legal information about the Rule 34 App'
   })
 </script>
 
