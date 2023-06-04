@@ -21,21 +21,14 @@
   const { selectedDomainFromStorage } = useSelectedDomainFromStorage()
 
   const selectedBooru = computed(() => {
-    let domain: string | undefined = undefined
+    let domain =
+      route.query.domain ??
+      // Restore Booru from storage
+      selectedDomainFromStorage.value
 
-    // Restore booru from query
-    if (route.query.domain) {
-      domain = route.query.domain as string
-    }
-
-    // Restore booru from storage
+    // Fallback to first Booru
     if (!domain) {
-      domain = selectedDomainFromStorage.value
-    }
-
-    // Fallback to first booru
-    if (!domain) {
-      domain = booruList.value[0].domain
+      return booruList.value[0]
     }
 
     const booru = booruList.value.find((booru) => booru.domain === domain)
@@ -62,13 +55,27 @@
   })
 
   const selectedPage = computed(() => {
-    const page = route.query.page as string
+    const page = parseInt(route.query.page as string)
 
     if (!page) {
       return selectedBooru.value.type.initialPageID
     }
 
-    return parseInt(page)
+    if (page < 0) {
+      throw new Error('Page cannot be lower than 0')
+    }
+
+    return page
+  })
+
+  const selectedFilters = computed(() => {
+    // TODO: Validate
+
+    return {
+      rating: route.query.filter?.rating ?? undefined,
+      sort: route.query.filter?.sort ?? undefined,
+      score: route.query.filter?.score ?? undefined
+    }
   })
 
   const {
@@ -94,9 +101,9 @@
           tags: tags.length > 0 ? tags : undefined,
 
           // Filters
-          rating: undefined,
-          sort: undefined,
-          score: '>=0' // TODO
+          rating: selectedFilters.value.rating,
+          order: selectedFilters.value.sort,
+          score: selectedFilters.value.score
         },
 
         retry: 0
@@ -144,7 +151,11 @@
       tags = selectedTags.value
     }
 
-    const route = generatePostsRoute(domain, page, tags)
+    if (filters === undefined) {
+      filters = selectedFilters.value
+    }
+
+    const route = generatePostsRoute(domain, page, tags, filters)
 
     if (replace) {
       await router.replace(route)
@@ -270,20 +281,20 @@
     >
       <span class="sr-only">Search posts</span>
 
-      <MagnifyingGlassIcon
-        aria-hidden="true"
-        class="hover:hover-text-util h-6 w-6 text-base-content-highlight"
-      />
+      <MagnifyingGlassIcon class="hover:hover-text-util h-6 w-6 text-base-content-highlight" />
     </button>
   </SafeTeleport>
 
   <!-- Search menu -->
-  <SearchMenu
-    :initial-selected-tags="selectedTags"
-    :tag-results="tagResults"
-    @submit="onSearchSubmit"
-    @search-tag="onSearchTag"
-  />
+  <SearchMenuWrapper>
+    <SearchMenu
+      :initial-selected-filters="selectedFilters"
+      :initial-selected-tags="selectedTags"
+      :tag-results="tagResults"
+      @submit="onSearchSubmit"
+      @search-tag="onSearchTag"
+    />
+  </SearchMenuWrapper>
 
   <Teleport to="body">
     <!-- Scroll to top -->
@@ -340,6 +351,7 @@
         v-else
         class="space-y-4"
       >
+        <!-- TODO: Animate adding posts https://vuejs.org/guide/built-ins/transition-group.html#staggering-list-transitions -->
         <template
           v-for="(post, index) in posts"
           :key="`${selectedBooru.domain}-${post.id}`"
