@@ -47,15 +47,21 @@
 
 <template>
   <!-- Logo -->
-  <div class="flex shrink-0 flex-col items-center gap-y-2 pt-2">
-    <img
-      alt="Logo"
-      class="h-64 w-full"
-      height="512"
-      loading="eager"
-      src="~/assets/img/brand/icon.png"
-      width="512"
-    />
+  <div class="flex shrink-0 flex-col items-center justify-center gap-2 pt-2">
+    <!--    <img-->
+    <!--      alt="Logo"-->
+    <!--      class="h-64 w-full"-->
+    <!--      height="512"-->
+    <!--      loading="eager"-->
+    <!--      src="~/assets/img/brand/icon.png"-->
+    <!--      width="512"-->
+    <!--    />-->
+
+    <!--    <StarIcon class="h-16 w-16 text-base-content-highlight" />-->
+
+    <div class="h-64">
+      <!-- TODO: Logo -->
+    </div>
 
     <span class="text-2xl font-semibold text-base-content-highlight">Rule 34 App</span>
   </div>
