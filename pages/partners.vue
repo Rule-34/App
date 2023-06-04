@@ -1,3 +1,11 @@
+<script setup>
+  useSeoMeta({
+    title: 'Partners',
+
+    description: 'Friends of the Rule 34 App, and other cool sites.'
+  })
+</script>
+
 <template>
   <main class="container mx-auto flex-1 px-4 sm:px-6 lg:px-8">
     <div class="mt-4 space-y-4">
@@ -44,17 +52,3 @@
     </div>
   </main>
 </template>
-
-<script setup>
-  useHead(() => {
-    return {
-      title: 'Partners',
-      meta: [
-        {
-          name: 'description',
-          content: 'Friends of the Rule 34 App.'
-        }
-      ]
-    }
-  })
-</script>
