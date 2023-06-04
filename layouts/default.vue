@@ -101,7 +101,9 @@
       theme="dark"
     />
 
-    <Sidebar />
+    <SidebarWrapper>
+      <Sidebar />
+    </SidebarWrapper>
 
     <Navbar />
 
