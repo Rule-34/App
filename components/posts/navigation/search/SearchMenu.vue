@@ -134,9 +134,9 @@
     { title: '>= 50', value: '>=50' },
 
     { title: '>= 100', value: '>=100' },
-    { title: '>= 250', value: '>=200' },
+    { title: '>= 250', value: '>=250' },
     { title: '>= 500', value: '>=500' },
-    { title: '>= 750', value: '>=700' },
+    { title: '>= 750', value: '>=750' },
 
     { title: '>= 1000', value: '>=1000' }
   ]
