@@ -102,7 +102,7 @@
     />
 
     <SidebarWrapper>
-      <Sidebar />
+      <LazySidebar />
     </SidebarWrapper>
 
     <Navbar />
