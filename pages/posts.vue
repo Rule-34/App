@@ -270,13 +270,21 @@
   <SafeTeleport to="#navbar-actions">
     <!-- TODO: Add badge with tag/filter count -->
     <button
-      class="focus-visible:focus-util hover:hover-bg-util rounded-lg px-2 py-1.5"
+      class="focus-visible:focus-util hover:hover-bg-util relative rounded-lg px-2 py-1.5"
       type="button"
       @click="toggleSearchMenu()"
     >
       <span class="sr-only">Search posts</span>
 
       <MagnifyingGlassIcon class="hover:hover-text-util h-6 w-6 text-base-content-highlight" />
+
+      <!-- Highlighter -->
+      <span
+        v-if="selectedTags.length || Object.values(selectedFilters).some((value) => value !== undefined)"
+        class="absolute right-0 top-0 flex h-2 w-2"
+      >
+        <span class="relative inline-flex h-2 w-2 rounded-full bg-primary-600"></span>
+      </span>
     </button>
   </SafeTeleport>
 
