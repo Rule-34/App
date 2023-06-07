@@ -2,9 +2,10 @@ import Tag from 'assets/js/tag.dto'
 import { RouteLocationRaw } from 'vue-router'
 
 export function generatePostsRoute(
-  domain: string | undefined | null,
-  page: number | undefined | null,
-  tags: Tag[] | undefined | null
+  domain?: string | undefined | null,
+  page?: number | undefined | null,
+  tags?: Tag[] | undefined | null,
+  filters?: Object | undefined | null
 ) {
   const route: RouteLocationRaw = {
     path: '/posts',
@@ -21,6 +22,10 @@ export function generatePostsRoute(
 
   if (tags != null && Array.isArray(tags) && tags.length) {
     route.query.tags = tags.map((tag) => encodeURI(tag.name)).join('|')
+  }
+
+  if (filters != null) {
+    route.query.filter = filters
   }
 
   return route
