@@ -20,6 +20,7 @@
 
   const { selectedDomainFromStorage } = useSelectedDomainFromStorage()
 
+  // TODO: Validate query - https://nuxt.com/docs/getting-started/routing#route-validation
   const selectedBooru = computed(() => {
     let domain =
       route.query.domain ??
@@ -216,6 +217,22 @@
     await loadNextPostPage()
   }
 
+  const bodyTitle = computed(() => {
+    let title = ''
+
+    if (selectedTags.value.length > 0) {
+      title += ` Tagged with ` + tagArrayToTitle(selectedTags.value.slice(0, 2))
+
+      if (selectedTags.value.length > 2) {
+        title += ' and more…'
+      }
+    }
+
+    // TODO: Filters
+
+    return title.trim()
+  })
+
   useSeoMeta({
     title: () => {
       let title = ''
@@ -225,6 +242,8 @@
       }
 
       title += ` porn from ${selectedBooru.value.domain}`
+
+      // TODO: Filters
 
       title = title.trim()
       title = capitalize(title)
@@ -238,6 +257,8 @@
       if (selectedTags.value.length > 0) {
         description += ` featuring ${tagArrayToTitle(selectedTags.value)}`
       }
+
+      // TODO: Filters
 
       description += ` from the ${selectedBooru.value.domain} website`
 
@@ -317,71 +338,82 @@
 
     <section class="my-4">
       <!-- Pending -->
-      <div
-        v-if="pendingInitialPosts"
-        class="flex h-80 w-full animate-pulse flex-col items-center justify-center gap-4 text-lg"
-      >
-        <ArrowPathIcon class="h-12 w-12 animate-spin" />
+      <template v-if="pendingInitialPosts">
+        <!-- -->
 
-        Loading posts&hellip;
-      </div>
+        <div class="flex h-80 w-full animate-pulse flex-col items-center justify-center gap-4 text-lg">
+          <ArrowPathIcon class="h-12 w-12 animate-spin" />
+
+          <h1>Loading posts&hellip;</h1>
+        </div>
+      </template>
 
       <!-- Error -->
-      <div
-        v-else-if="errorInitialPosts"
-        class="flex h-80 w-full flex-col items-center justify-center gap-4 text-lg"
-      >
-        <ExclamationCircleIcon class="h-12 w-12" />
+      <template v-else-if="errorInitialPosts">
+        <!-- -->
 
-        Failed to load posts
+        <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-lg">
+          <ExclamationCircleIcon class="h-12 w-12" />
 
-        <span class="text-base">{{ errorInitialPosts }}</span>
-      </div>
+          <h1>Failed to load posts</h1>
+
+          <h2 class="text-base">{{ errorInitialPosts }}</h2>
+        </div>
+      </template>
 
       <!-- No results -->
-      <div
-        v-else-if="!posts.length"
-        class="flex h-80 w-full flex-col items-center justify-center gap-4 text-lg"
-      >
-        <QuestionMarkCircleIcon class="h-12 w-12" />
+      <template v-else-if="!posts.length">
+        <!-- -->
 
-        No results
+        <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-lg">
+          <QuestionMarkCircleIcon class="h-12 w-12" />
 
-        <span class="text-base"> Try changing the domain or the tags </span>
-      </div>
+          <h1>No results</h1>
 
-      <ol
-        v-else
-        class="space-y-4"
-      >
-        <!-- TODO: Animate adding posts https://vuejs.org/guide/built-ins/transition-group.html#staggering-list-transitions -->
-        <template
-          v-for="(post, index) in posts"
-          :key="`${selectedBooru.domain}-${post.id}`"
-        >
-          <!-- Post -->
-          <li>
-            <!-- TODO: Highlight active tags -->
-            <Post
-              :post="post"
-              :post-name="`${selectedBooru.domain}-${post.id}`"
-              @click-tag="onPostClickTag"
-            />
-          </li>
+          <h2 class="text-base">Try changing the domain or the tags</h2>
+        </div>
+      </template>
 
-          <!-- Advertisement -->
-          <template v-if="!isPremium && index !== 0 && index % 7 === 0">
-            <li :key="`${post.id}-advertisement`">
-              <Advertisement />
+      <template v-else>
+        <!-- -->
+
+        <h1 class="text-base font-medium">Posts</h1>
+
+        <h2 class="mb-3 text-sm">
+          <!-- TODO: Make tags and filters clickable so they open search menu -->
+          {{ bodyTitle }}
+        </h2>
+
+        <ol class="space-y-4">
+          <!-- TODO: Animate adding posts https://vuejs.org/guide/built-ins/transition-group.html#staggering-list-transitions -->
+          <template
+            v-for="(post, index) in posts"
+            :key="`${selectedBooru.domain}-${post.id}`"
+          >
+            <!-- Post -->
+            <li>
+              <!-- TODO: Highlight active tags -->
+              <Post
+                :post="post"
+                :post-name="`${selectedBooru.domain}-${post.id}`"
+                @click-tag="onPostClickTag"
+              />
             </li>
-          </template>
-        </template>
 
-        <!-- Load more -->
-        <template v-if="isThereNextPostPage">
-          <PostsPagination @load-next-page="onLoadNextPostPage" />
-        </template>
-      </ol>
+            <!-- Advertisement -->
+            <template v-if="!isPremium && index !== 0 && index % 7 === 0">
+              <li :key="`${post.id}-advertisement`">
+                <Advertisement />
+              </li>
+            </template>
+          </template>
+
+          <!-- Load more -->
+          <template v-if="isThereNextPostPage">
+            <PostsPagination @load-next-page="onLoadNextPostPage" />
+          </template>
+        </ol>
+      </template>
     </section>
   </main>
 </template>
