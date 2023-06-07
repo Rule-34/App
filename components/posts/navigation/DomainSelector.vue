@@ -43,10 +43,7 @@
 
         <!-- Chevron -->
         <span class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-          <ChevronUpDownIcon
-            aria-hidden="true"
-            class="h-5 w-5"
-          />
+          <ChevronUpDownIcon class="h-5 w-5" />
         </span>
       </ListboxButton>
 
@@ -65,7 +62,7 @@
               v-tooltip="
                 'A Booru is a type of website imageboard that specializes in parodies of anime, manga and video game related content'
               "
-              class="focus-visible:focus-util hover:hover-text-util ml-11 w-fit cursor-help underline decoration-dotted"
+              class="focus-visible:focus-util hover:hover-text-util ml-11 w-fit cursor-help underline decoration-dotted underline-offset-2"
               role="note"
               tabindex="0"
             >
@@ -76,7 +73,7 @@
               v-tooltip="
                 'Score is calculated based on various factors: quantity of posts, post moderation, tag system, content variety, load speed and API compatibility'
               "
-              class="focus-visible:focus-util hover:hover-text-util absolute inset-y-0 right-0 mr-4 cursor-help underline decoration-dotted"
+              class="focus-visible:focus-util hover:hover-text-util absolute inset-y-0 right-0 mr-4 cursor-help underline decoration-dotted underline-offset-2"
               role="note"
               tabindex="0"
             >
@@ -129,10 +126,7 @@
                   v-if="selected"
                   class="text-base-content-highlight"
                 >
-                  <CheckIcon
-                    aria-hidden="true"
-                    class="h-5 w-5"
-                  />
+                  <CheckIcon class="h-5 w-5" />
                 </span>
 
                 <!-- Score -->

@@ -35,10 +35,7 @@
       >
         <span class="sr-only"> Scroll to top </span>
 
-        <ArrowUpIcon
-          aria-hidden="true"
-          class="h-6 w-6"
-        />
+        <ArrowUpIcon class="h-6 w-6" />
       </button>
     </transition>
   </Teleport>
