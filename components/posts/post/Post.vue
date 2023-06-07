@@ -80,7 +80,7 @@
 </script>
 
 <template>
-  <figure class="overflow-hidden rounded-md border border-base-0/20 shadow-lg">
+  <figure class="overflow-hidden rounded-md border border-base-0/20">
     <PostMedia
       :mediaAlt="mediaFile.alt"
       :mediaPosterSrc="mediaFile.posterFile"

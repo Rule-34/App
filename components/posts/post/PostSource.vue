@@ -110,7 +110,7 @@
       </MenuButton>
 
       <MenuItems
-        class="w-56 divide-y divide-base-0/20 rounded-md bg-base-1000 shadow-lg ring-1 ring-base-0/20 focus:outline-none"
+        class="w-56 divide-y divide-base-0/20 rounded-md bg-base-1000 ring-1 ring-base-0/20 focus:outline-none"
       >
         <div
           v-if="postSources.length"

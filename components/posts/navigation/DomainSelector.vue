@@ -27,7 +27,7 @@
     <div class="relative">
       <!-- Select -->
       <ListboxButton
-        class="hover:hover-text-util focus-visible:focus-util hover:hover-bg-util relative w-56 cursor-default rounded-md py-1.5 pl-3 pr-10 text-left shadow-sm ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
+        class="hover:hover-text-util focus-visible:focus-util hover:hover-bg-util relative w-56 cursor-default rounded-md py-1.5 pl-3 pr-10 text-left ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
       >
         <span class="flex items-center">
           <img
@@ -54,7 +54,7 @@
         leave-to-class="opacity-0"
       >
         <ListboxOptions
-          class="absolute z-10 mt-2 max-h-[23rem] w-full max-w-sm overflow-auto rounded-md bg-base-1000 py-1 shadow-lg ring-1 ring-base-0/20 focus:outline-none sm:text-sm"
+          class="absolute z-10 mt-2 max-h-[23rem] w-full max-w-sm overflow-auto rounded-md bg-base-1000 py-1 ring-1 ring-base-0/20 focus:outline-none sm:text-sm"
         >
           <!-- Header -->
           <header class="relative border-b border-base-0/20 pb-1">
