@@ -7,12 +7,12 @@
     ComboboxOption,
     ComboboxOptions
   } from '@headlessui/vue'
-  import { Bars3BottomRightIcon, EyeIcon, StarIcon } from '@heroicons/vue/24/outline'
+  import { Bars3BottomRightIcon, EyeIcon, StarIcon, TagIcon } from '@heroicons/vue/24/outline'
   import { CheckIcon, ChevronUpDownIcon, MagnifyingGlassIcon, NoSymbolIcon, PlusIcon } from '@heroicons/vue/20/solid'
   import { watchDebounced } from '@vueuse/core'
   import { abbreviateNumber } from 'js-abbreviation-number'
 
-  const { value: isSearchMenuActive, toggle: toggleSearchMenu } = useSearchMenu()
+  const { isActive: isTagCollectionsActive, toggleIsActive: toggleTagCollections } = useTagCollections()
 
   const props = defineProps({
     initialSelectedTags: {
@@ -145,6 +145,17 @@
 </script>
 
 <template>
+  <TagCollectionsWrapper
+    :modelValue="isTagCollectionsActive"
+    @update:modelValue="toggleTagCollections"
+  >
+    <LazyTagCollections
+      :selected-tags="selectedTags"
+      @set-selected-tags="selectedTags = $event"
+    />
+  </TagCollectionsWrapper>
+
+  <!--  Search & Actions -->
   <section>
     <!-- Search -->
     <Combobox
@@ -165,7 +176,7 @@
         <!-- Input -->
         <ComboboxInput
           :displayValue="(tag) => tag.name"
-          class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util w-full rounded-full border-0 bg-base-1000 px-9 py-2 text-base-content-highlight shadow-sm ring-1 ring-inset ring-base-0/20 sm:text-sm"
+          class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util w-full rounded-full border-0 bg-base-1000 px-9 py-2 text-base-content-highlight ring-1 ring-inset ring-base-0/20 sm:text-sm"
           @change="searchQuery = $event.target.value"
         />
 
@@ -176,7 +187,7 @@
 
         <!-- Options -->
         <ComboboxOptions
-          class="absolute z-10 mt-2 max-h-72 w-full overflow-auto rounded-md bg-base-1000 py-1 text-base shadow-lg ring-1 ring-base-0/20 sm:text-sm"
+          class="absolute mt-2 max-h-72 w-full overflow-auto rounded-md bg-base-1000 py-1 text-base ring-1 ring-base-0/20 sm:text-sm"
         >
           <ComboboxOption
             v-for="tag in tagResults"
@@ -239,8 +250,21 @@
     </Combobox>
 
     <!-- Filters -->
-    <section class="-mr-6 mt-6 flex gap-4 overflow-x-auto py-1 pl-2">
-      <!-- TODO: Tag Collections -->
+    <section class="scrollbar-hide -mx-5 mt-8 flex gap-4 overflow-x-auto py-1 pr-3 before:w-1 after:w-1">
+      <!-- -->
+
+      <!-- Tag Collections Toggler -->
+      <div>
+        <button
+          class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util inline-flex items-center gap-x-1.5 rounded-md px-2 py-1 ring-1 ring-base-0/20"
+          type="button"
+          @click="toggleTagCollections(true)"
+        >
+          <TagIcon class="-ml-0.5 h-[1.15rem] w-[1.15rem]" />
+
+          <span class="whitespace-nowrap text-sm font-medium">Collections</span>
+        </button>
+      </div>
 
       <!-- Sort Filter -->
       <SearchSelect
@@ -262,6 +286,8 @@
         :icon="StarIcon"
         :options="scoreOptions"
       />
+
+      <!-- TODO: Clear all button -->
     </section>
   </section>
 

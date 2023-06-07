@@ -60,13 +60,23 @@
   .hover-bg-util {
     @apply hover:bg-base-0/20;
   }
+
+  /* https://github.com/reslear/tailwind-scrollbar-hide/blob/main/src/index.js */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 /**
   * Custom Tippy.js theme
   **/
 .tippy-box[data-theme~=custom] {
-  @apply bg-base-1000 border border-base-0/20 rounded-lg shadow-2xl px-1.5 py-1.5 text-base-content-highlight text-sm;
+  @apply bg-base-1000 border border-base-0/20 rounded-lg px-1.5 py-1.5 text-base-content-highlight text-sm;
 }
 
 .tippy-box[data-theme~=custom][data-placement^=top] > .tippy-arrow:before {

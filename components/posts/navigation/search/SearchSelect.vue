@@ -41,14 +41,15 @@
         tailwindcss-origin-class
       >
         <!-- Button -->
-        <div class="inline-flex divide-x divide-base-0/20 rounded-md shadow-sm ring-1 ring-base-0/20">
+        <div class="inline-flex divide-x divide-base-0/20 rounded-md ring-1 ring-base-0/20">
           <!-- Left side -->
-          <div class="inline-flex items-center gap-x-1.5 rounded-l-md px-2 py-1 text-base-content shadow-sm">
+          <div class="inline-flex items-center gap-x-1.5 rounded-l-md px-2 py-1 text-base-content">
             <component
               :is="icon"
               class="-ml-0.5 h-5 w-5"
             />
-            <p class="whitespace-nowrap text-sm font-medium">{{ modelValue.title }}</p>
+
+            <span class="whitespace-nowrap text-sm font-medium">{{ modelValue.title }}</span>
           </div>
 
           <!-- Right side -->
@@ -57,12 +58,13 @@
             class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util inline-flex items-center rounded-l-none rounded-r-md px-2 py-1"
           >
             <span class="sr-only">Change published status</span>
+
             <ChevronDownIcon class="-ml-0.5 h-5 w-5" />
           </ListboxButton>
         </div>
 
         <ListboxOptions
-          class="w-44 divide-y divide-base-0/20 overflow-hidden rounded-md bg-base-1000 shadow-lg ring-1 ring-inset ring-base-0/20 focus:outline-none"
+          class="w-44 divide-y divide-base-0/20 overflow-hidden rounded-md bg-base-1000 ring-1 ring-inset ring-base-0/20 focus:outline-none"
         >
           <ListboxOption
             v-for="option in options"

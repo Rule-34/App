@@ -29,7 +29,7 @@
     >
       <button
         v-show="shouldShowScrollTopButton"
-        class="hover:hover-text-util hover:hover-bg-util fixed bottom-4 right-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-base-1000/60 text-base-content-highlight shadow-lg ring-2 ring-base-0/20 backdrop-blur"
+        class="hover:hover-text-util hover:hover-bg-util fixed bottom-4 right-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-base-1000/60 text-base-content-highlight ring-2 ring-base-0/20 backdrop-blur"
         type="button"
         @click="scrollToTop"
       >

@@ -289,7 +289,6 @@
 <template>
   <!-- Search -->
   <SafeTeleport to="#navbar-actions">
-    <!-- TODO: Add badge with tag/filter count -->
     <button
       class="focus-visible:focus-util hover:hover-bg-util relative rounded-lg px-2 py-1.5"
       type="button"
