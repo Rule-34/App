@@ -1,76 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
 >
+  <!--  Important bits -->
   <url>
     <loc>https://r34.app/</loc>
     <lastmod>2023-05-09T21:12:59.916Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <url>
+    <loc>https://r34.app/posts</loc>
+    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!--  Pages -->
+  <url>
+    <loc>https://r34.app/legal</loc>
+    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://r34.app/partners</loc>
+    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://r34.app/premium</loc>
+    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://r34.app/settings</loc>
+    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://r34.app/usage</loc>
+    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://r34.app/premium/backup</loc>
+    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://r34.app/premium/custom-boorus</loc>
+    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://r34.app/premium/saved-posts</loc>
+    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://r34.app/premium/tag-collections</loc>
+    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!--  Misc -->
   <url>
     <loc>https://r34.app/privacy-policy</loc>
     <lastmod>2023-05-09T21:12:59.916Z</lastmod>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   <url>
     <loc>https://r34.app/terms-of-service</loc>
     <lastmod>2023-05-09T21:12:59.916Z</lastmod>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.2</priority>
-  </url>
-  <url>
-    <loc>https://r34.app/legal</loc>
-    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://r34.app/partners</loc>
-    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://r34.app/premium</loc>
-    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://r34.app/settings</loc>
-    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://r34.app/usage</loc>
-    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://r34.app/premium/backup</loc>
-    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://r34.app/premium/custom-boorus</loc>
-    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://r34.app/premium/saved-posts</loc>
-    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://r34.app/premium/tag-collections</loc>
-    <lastmod>2023-05-09T21:12:59.916Z</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
   </url>
 </urlset>
