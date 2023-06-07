@@ -39,11 +39,11 @@ module.exports = {
          * Used for text and icons on the background
          */
         'base-content': {
+          hover: defaultColors.white,
+
           highlight: defaultColors.gray[200],
 
-          DEFAULT: defaultColors.gray[400],
-
-          hover: defaultColors.white
+          DEFAULT: defaultColors.gray[400]
         }
       },
 
