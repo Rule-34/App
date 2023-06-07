@@ -28,13 +28,11 @@
 
             <Bars3Icon
               v-if="!isMenuActive"
-              aria-hidden="true"
               class="block h-6 w-6"
             />
 
             <XMarkIcon
               v-else
-              aria-hidden="true"
               class="block h-6 w-6"
             />
           </button>
@@ -60,10 +58,7 @@
           >
             <span class="sr-only">View notifications</span>
 
-            <BellIcon
-              aria-hidden="true"
-              class="hover:hover-text-util h-6 w-6 text-base-content-highlight"
-            />
+            <BellIcon class="hover:hover-text-util h-6 w-6 text-base-content-highlight" />
           </button>
         </TeleportTarget>
       </div>

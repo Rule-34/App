@@ -46,7 +46,6 @@
           <div class="inline-flex items-center gap-x-1.5 rounded-l-md px-2 py-1 text-base-content shadow-sm">
             <component
               :is="icon"
-              aria-hidden="true"
               class="-ml-0.5 h-5 w-5"
             />
             <p class="whitespace-nowrap text-sm font-medium">{{ modelValue.title }}</p>
@@ -58,10 +57,7 @@
             class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util inline-flex items-center rounded-l-none rounded-r-md px-2 py-1"
           >
             <span class="sr-only">Change published status</span>
-            <ChevronDownIcon
-              aria-hidden="true"
-              class="-ml-0.5 h-5 w-5"
-            />
+            <ChevronDownIcon class="-ml-0.5 h-5 w-5" />
           </ListboxButton>
         </div>
 
@@ -87,10 +83,7 @@
                     v-if="selected"
                     :class="active ? 'text-base-content-highlight' : 'text-base-content'"
                   >
-                    <CheckIcon
-                      aria-hidden="true"
-                      class="h-5 w-5"
-                    />
+                    <CheckIcon class="h-5 w-5" />
                   </span>
                 </div>
               </div>
