@@ -221,11 +221,7 @@
     let title = ''
 
     if (selectedTags.value.length > 0) {
-      title += ` Tagged with ` + tagArrayToTitle(selectedTags.value.slice(0, 2))
-
-      if (selectedTags.value.length > 2) {
-        title += ' and more…'
-      }
+      title += ` Tagged with ` + tagArrayToTitle(selectedTags.value)
     }
 
     // TODO: Filters
@@ -378,7 +374,7 @@
 
         <h1 class="text-base font-medium">Posts</h1>
 
-        <h2 class="mb-3 text-sm">
+        <h2 class="mb-3 truncate text-sm">
           <!-- TODO: Make tags and filters clickable so they open search menu -->
           {{ bodyTitle }}
         </h2>

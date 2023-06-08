@@ -5,13 +5,20 @@ export function tagArrayToTitle(tags: Tag[]) {
     return null
   }
 
-  return (
-    tags
-      .map((tag) => tag.name)
-      // .map((tag) => capitalize(tag))
-      .map((tag) => normalizeStringForTitle(tag))
-      .join(', ')
-  )
+  const cleanedTags = tags
+    //
+    .map((tag) => tag.name)
+    //
+    .map((tag) => normalizeStringForTitle(tag))
+
+  const tagsThatStartWithNothing = cleanedTags.filter((tag) => !tag.startsWith('-'))
+
+  const tagsThatStartWithMinus = cleanedTags
+    //
+    .filter((tag) => tag.startsWith('-'))
+    .map((tag) => tag.replace('-', ''))
+
+  return `${tagsThatStartWithNothing.join(', ')}, and without ${tagsThatStartWithMinus.join(', ')}`
 }
 
 export function normalizeStringForTitle(string: string) {
@@ -20,11 +27,6 @@ export function normalizeStringForTitle(string: string) {
   }
 
   string = string.trim()
-
-  // Delete negative tag
-  if (string.startsWith('-')) {
-    return null
-  }
 
   // Replace underscores with spaces
   string = string.replace(/_/g, ' ')
