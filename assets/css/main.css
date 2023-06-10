@@ -58,7 +58,7 @@
   * IN CLASSES IT SHOULD BE USED AS `hover:hover-bg-util`
    */
   .hover-bg-util {
-    @apply hover:bg-base-0/20;
+    @apply bg-base-0/20;
   }
 
   /* https://github.com/reslear/tailwind-scrollbar-hide/blob/main/src/index.js */
