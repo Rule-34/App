@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { DialogTitle } from '@headlessui/vue'
   import Tag from 'assets/js/tag.dto'
-  import { PlusIcon, TagIcon } from '@heroicons/vue/24/outline'
+  import { Cog6ToothIcon, PlusIcon, TagIcon } from '@heroicons/vue/24/outline'
   import { toast } from 'vue-sonner'
   import TagCollection from 'assets/js/tagCollection.dto'
 
@@ -57,34 +57,47 @@
 </script>
 
 <template>
-  <nav class="flex min-h-[35rem] flex-col gap-6">
+  <!-- TODO: Review padding on desktop -->
+
+  <nav class="relative flex max-h-[35rem] min-h-[35rem] w-full flex-col gap-6">
     <header>
       <DialogTitle
         as="h3"
-        class="text-lg font-medium leading-9 text-base-content-highlight"
+        class="text-lg font-medium leading-10 text-base-content-highlight"
       >
         Tag Collections
       </DialogTitle>
 
-      <h4 class="text-sm">List of tags that you can create for easier access</h4>
+      <h4 class="text-sm">List of tags that you can create for easy access</h4>
     </header>
 
+    <div class="absolute right-0 top-0.5">
+      <NuxtLink
+        class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util inline-flex w-full items-center gap-x-1.5 rounded-md p-1"
+        to="/premium/tag-collections"
+      >
+        <span class="sr-only"> Manage tag collections </span>
+
+        <Cog6ToothIcon class="h-6 w-6" />
+      </NuxtLink>
+    </div>
+
     <!-- Body -->
-    <section class="flex-auto">
-      <ol class="space-y-4 overflow-y-auto p-1">
+    <section class="flex-auto overflow-y-auto">
+      <ol class="space-y-4 p-1">
         <!-- -->
 
         <li v-for="tagCollection in tagCollections">
           <!-- -->
 
           <button
-            class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util inline-flex w-full items-center justify-between rounded-md px-2 py-1 ring-1 ring-base-0/20"
+            class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util inline-flex w-full items-center justify-between rounded-full px-4 py-1 ring-1 ring-base-0/20"
             type="button"
             @click="setTagCollectionAsSelected(tagCollection)"
           >
             <span>{{ tagCollection.name }}</span>
 
-            <div class="flex items-center justify-center gap-x-1">
+            <div class="flex items-center justify-center gap-x-1.5">
               <span>
                 {{ tagCollection.tags.length }}
               </span>
@@ -93,21 +106,21 @@
             </div>
           </button>
         </li>
+
+        <!-- Create from current selected tags -->
+        <!-- TODO: Improve design and cohesion -->
+        <li>
+          <button
+            class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util inline-flex w-full items-center justify-between rounded-full px-4 py-1 ring-1 ring-base-0/20"
+            type="button"
+            @click="createTagCollectionFromSelectedTags"
+          >
+            <span class="whitespace-nowrap">Create from current tags</span>
+
+            <PlusIcon class="h-5 w-5" />
+          </button>
+        </li>
       </ol>
     </section>
-
-    <footer class="">
-      <!-- -->
-
-      <button
-        class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util inline-flex items-center gap-x-1 rounded-md px-2 py-1 ring-1 ring-base-0/20"
-        type="button"
-        @click="createTagCollectionFromSelectedTags"
-      >
-        <PlusIcon class="-ml-0.5 h-5 w-5" />
-
-        <span class="whitespace-nowrap font-medium">Create from current tags</span>
-      </button>
-    </footer>
   </nav>
 </template>

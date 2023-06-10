@@ -151,7 +151,7 @@
           <!-- Add more button -->
           <div class="hover:hover-text-util group flex items-center px-3 py-2">
             <PlusIcon
-              class="group-hover:hover-text-util h-5 w-5 rounded-full p-0.5 text-base-content-highlight ring-1 ring-base-0/20"
+              class="group-hover:hover-text-util group-hover:hover-bg-util h-5 w-5 rounded p-0.5 ring-1 ring-base-0/20"
             />
 
             <NuxtLink
