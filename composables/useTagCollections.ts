@@ -1,6 +1,7 @@
 import { useStorage, useToggle } from '@vueuse/core'
+import TagCollection from 'assets/js/tagCollection.dto'
 
-const defaultTagCollections = [
+const defaultTagCollections: TagCollection[] = [
   {
     name: 'Gay Blocklist',
     tags: [
