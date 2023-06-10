@@ -11,27 +11,37 @@
   import { CheckIcon, ChevronUpDownIcon, MagnifyingGlassIcon, NoSymbolIcon, PlusIcon } from '@heroicons/vue/20/solid'
   import { watchDebounced } from '@vueuse/core'
   import { abbreviateNumber } from 'js-abbreviation-number'
+  import Tag from 'assets/js/tag.dto'
+  import { uniqBy } from 'lodash-es'
 
   const { isActive: isTagCollectionsActive, toggleIsActive: toggleTagCollections } = useTagCollections()
 
-  const props = defineProps({
-    initialSelectedTags: {
-      type: Array,
-      required: true
-    },
+  const props = defineProps<{
+    initialSelectedTags: Tag[]
 
     initialSelectedFilters: {
-      type: Object,
-      required: true
-    },
-
-    tagResults: {
-      type: Array,
-      required: true
+      sort: string
+      rating: string
+      score: string
     }
-  })
 
-  const emit = defineEmits(['search-tag', 'submit'])
+    tagResults: Tag[]
+  }>()
+
+  const emit = defineEmits<{
+    searchTag: [tag: string]
+
+    submit: [
+      payload: {
+        tags: Tag[]
+        filters: {
+          sort: string
+          rating: string
+          score: string
+        }
+      }
+    ]
+  }>()
 
   const selectedTags = ref(props.initialSelectedTags)
 
@@ -90,7 +100,17 @@
       return
     }
 
-    emit('search-tag', tag)
+    emit('searchTag', tag)
+  }
+
+  function onTagCollectionsSetSelectedTags(tags: Tag[]) {
+    toggleTagCollections(false)
+
+    const mergedTags = [...selectedTags.value, ...tags]
+
+    const uniqueMergedTags = uniqBy(mergedTags, 'name')
+
+    selectedTags.value = uniqueMergedTags
   }
 
   function onSubmitted() {
@@ -150,8 +170,8 @@
     @update:modelValue="toggleTagCollections"
   >
     <LazyTagCollections
-      :selected-tags="selectedTags"
-      @set-selected-tags="selectedTags = $event"
+      :selectedTags="selectedTags"
+      @updateSelectedTags="onTagCollectionsSetSelectedTags"
     />
   </TagCollectionsWrapper>
 
