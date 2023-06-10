@@ -1,5 +1,5 @@
 <script setup>
-  import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+  import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
   import { StarIcon } from '@heroicons/vue/24/solid'
 
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
@@ -50,16 +50,6 @@
           id="navbar-actions"
           class="absolute inset-y-0 right-0 flex flex-row-reverse items-center pr-2"
         >
-          <!-- Notifications -->
-          <button
-            class="focus-visible:focus-util hover:hover-bg-util rounded-lg px-2 py-1.5"
-            type="button"
-            @click="toggleNotificationsMenu()"
-          >
-            <span class="sr-only">View notifications</span>
-
-            <BellIcon class="hover:hover-text-util h-6 w-6 text-base-content-highlight" />
-          </button>
         </TeleportTarget>
       </div>
     </div>
