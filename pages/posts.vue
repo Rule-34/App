@@ -221,7 +221,7 @@
     let title = ''
 
     if (selectedTags.value.length > 0) {
-      title += ` Tagged with ` + tagArrayToTitle(selectedTags.value)
+      title += ` Tagged ` + tagArrayToTitle(selectedTags.value)
     }
 
     // TODO: Filters

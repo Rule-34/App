@@ -18,7 +18,21 @@ export function tagArrayToTitle(tags: Tag[]) {
     .filter((tag) => tag.startsWith('-'))
     .map((tag) => tag.replace('-', ''))
 
-  return `${tagsThatStartWithNothing.join(', ')}, and without ${tagsThatStartWithMinus.join(', ')}`
+  let title = ''
+
+  if (tagsThatStartWithNothing.length) {
+    title += `with ${tagsThatStartWithNothing.join(', ')}`
+  }
+
+  if (tagsThatStartWithNothing.length && tagsThatStartWithMinus.length) {
+    title += ', and'
+  }
+
+  if (tagsThatStartWithMinus.length) {
+    title += ` without ${tagsThatStartWithMinus.join(', ')}`
+  }
+
+  return title
 }
 
 export function normalizeStringForTitle(string: string) {
