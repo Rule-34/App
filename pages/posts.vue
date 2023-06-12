@@ -8,6 +8,8 @@
   import { generatePostsRoute } from 'assets/js/RouterHelper'
   import { tagArrayToTitle } from 'assets/js/SeoHelper'
   import { capitalize } from 'lodash-es'
+  import { useEventListener } from '@vueuse/core'
+  import { HistoryState } from 'vue-router'
 
   const router = useRouter()
   const route = useRoute()
@@ -129,16 +131,24 @@
    */
   async function reflectChangesInUrl({
     domain = undefined,
+
     page = undefined,
+
     tags = undefined,
+
     filters = undefined,
+
     replace = false
   }: {
-    domain?: string | undefined | null
-    page?: number | undefined | null
-    tags?: Tag[] | undefined | null
-    filters?: Object | undefined | null
-    replace?: boolean | undefined | null
+    domain?: string | null
+
+    page?: number | null
+
+    tags?: Tag[] | null
+
+    filters?: Object | null
+
+    replace?: boolean
   }) {
     if (domain === undefined) {
       domain = selectedBooru.value.domain
@@ -156,14 +166,51 @@
       filters = selectedFilters.value
     }
 
-    const route = generatePostsRoute(domain, page, tags, filters)
+    const postsRoute = generatePostsRoute(domain, page, tags, filters)
 
-    if (replace) {
-      await router.replace(route)
-    } else {
-      await router.push(route)
+    await navigateTo({ ...postsRoute }, { replace })
+  }
+
+  watch(() => initialPostPages.value, storePostPagesInHistory)
+
+  async function storePostPagesInHistory() {
+    // TODO: Refactor this and popstate to something similar to useRemember
+
+    // TODO: Should this execute when restoring value?
+
+    const state: HistoryState = {
+      initialPostPages: toRaw(initialPostPages.value)
+    }
+
+    const routeLocationRaw = router.resolve(router.currentRoute.value.fullPath)
+
+    const navigation = await router.replace({
+      ...routeLocationRaw,
+
+      state,
+
+      // Workaround to replace the current route
+      force: true
+    })
+
+    // Careful: fails silently if params are invalid
+    if (navigation instanceof Error) {
+      throw navigation
     }
   }
+
+  /**
+   * Restore state from History API
+   */
+  useEventListener(window, 'popstate', (event) => {
+    const state = event.state
+
+    if (state.initialPostPages === undefined) {
+      return
+    }
+
+    initialPostPages.value = state.initialPostPages
+  })
 
   const tagResults: Ref<Tag[]> = ref([])
 
