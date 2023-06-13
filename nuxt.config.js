@@ -1,9 +1,18 @@
 import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
+  // https://nuxt.com/docs/getting-started/deployment#static-hosting
   ssr: false,
 
+  nitro: {
+    prerender: {
+      crawlLinks: true
+    }
+  },
+
   runtimeConfig: {
+    MATOMO_API_KEY: process.env.MATOMO_API_KEY,
+
     public: {
       NODE_ENV: process.env.NODE_ENV,
 
@@ -27,7 +36,33 @@ export default defineNuxtConfig({
   modules: [
     // '@vite-pwa/nuxt'
     // '@nuxtjs/sentry',
+    'nuxt-simple-sitemap'
   ],
+
+  sitemap: {
+    siteUrl: `https://${process.env.APP_DOMAIN}`,
+
+    discoverImages: false,
+
+    sitemaps: {
+      pages: {
+        defaults: {
+          priority: 0.7,
+          changefreq: 'weekly'
+          // lastmod: new Date()
+        }
+      }
+    }
+  },
+
+  routeRules: {
+    '/posts': {
+      sitemap: {
+        priority: 1,
+        changefreq: 'always'
+      }
+    }
+  },
 
   auth: {
     strategies: {
