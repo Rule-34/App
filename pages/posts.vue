@@ -444,10 +444,10 @@
               />
             </li>
 
-            <!-- Advertisement -->
+            <!-- Promoted content -->
             <template v-if="!isPremium && index !== 0 && index % 7 === 0">
-              <li :key="`${post.id}-advertisement`">
-                <Advertisement />
+              <li :key="`${post.id}-promoted-content`">
+                <PromotedContent />
               </li>
             </template>
           </template>
