@@ -207,7 +207,7 @@
 
         <!-- Options -->
         <ComboboxOptions
-          class="absolute mt-2 max-h-72 w-full overflow-auto rounded-md bg-base-1000 py-1 text-base ring-1 ring-base-0/20 sm:text-sm"
+          class="absolute z-10 mt-2 max-h-72 w-full overflow-auto rounded-md bg-base-1000 py-1 text-base ring-1 ring-base-0/20 sm:text-sm"
         >
           <ComboboxOption
             v-for="tag in tagResults"
@@ -306,8 +306,6 @@
         :icon="StarIcon"
         :options="scoreOptions"
       />
-
-      <!-- TODO: Clear all button -->
     </section>
   </section>
 
@@ -319,6 +317,8 @@
       <!-- Selected tags -->
       <ol class="mt-2 flex flex-wrap gap-2.5 rounded-md">
         <!-- -->
+
+        <!-- TODO: Clear all button -->
 
         <li
           v-for="(tag, index) in selectedTags"
