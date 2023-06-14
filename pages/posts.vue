@@ -306,12 +306,13 @@
 
     _title = _title.replace(/Page \d+ of /, '')
 
-    _title = _title.replace(/posts /i, '')
+    _title = _title.replace(/posts/i, '')
 
     _title = _title.replace(/ porn/, '')
 
     _title = _title.replace(/, from .+$/, '')
 
+    _title = _title.trim()
     _title = capitalize(_title)
 
     return _title
