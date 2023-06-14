@@ -173,23 +173,24 @@
 
   watch(() => initialPostPages.value, storePostPagesInHistory)
 
+  // TODO: Should this execute when restoring value? NO
   async function storePostPagesInHistory() {
     // TODO: Refactor this and popstate to something similar to useRemember
 
-    // TODO: Should this execute when restoring value?
-
+    // TODO: Scroll position should be restored but it is not
     const state: HistoryState = {
       initialPostPages: toRaw(initialPostPages.value)
     }
 
     const routeLocationRaw = router.resolve(router.currentRoute.value.fullPath)
 
-    const navigation = await router.replace({
+    const navigation = await navigateTo({
       ...routeLocationRaw,
 
       state,
 
       // Workaround to replace the current route
+      replace: true,
       force: true
     })
 
@@ -258,7 +259,6 @@
   }
 
   async function onLoadNextPostPage() {
-    // TODO: Improve this
     await reflectChangesInUrl({ page: selectedPage.value + 1 })
 
     await loadNextPostPage()
@@ -380,7 +380,9 @@
 
     <section class="my-4">
       <!-- Pending -->
-      <template v-if="pendingInitialPosts">
+      <!-- FIX: Do not show when there is existing data because we would reset the scroll position -->
+      <!-- TODO: Fix it on the screen so it does not interrupt flow -->
+      <template v-if="pendingInitialPosts && !initialPostPages?.length">
         <!-- -->
 
         <div class="flex h-80 w-full animate-pulse flex-col items-center justify-center gap-4 text-lg">
