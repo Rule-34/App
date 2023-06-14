@@ -264,35 +264,61 @@
     await loadNextPostPage()
   }
 
-  const bodyTitle = computed(() => {
+  const title = computed(() => {
     let title = ''
 
-    if (selectedTags.value.length > 0) {
-      title += ` Tagged ` + tagArrayToTitle(selectedTags.value)
+    // Page
+    if (selectedPage.value !== selectedBooru.value.type.initialPageID) {
+      title += `Page ${selectedPage.value} of `
     }
 
-    // TODO: Filters
+    title += 'Posts'
 
-    return title.trim()
+    // Tags
+    if (selectedTags.value.length > 0) {
+      title += ` tagged ${tagArrayToTitle(selectedTags.value)} porn`
+    }
+
+    // Filters
+    if (selectedFilters.value.rating) {
+      title += `, rated ${selectedFilters.value.rating}`
+    }
+
+    if (selectedFilters.value.sort) {
+      title += `, sorted by ${selectedFilters.value.sort}`
+    }
+
+    if (selectedFilters.value.score) {
+      title += `, with a score of ${selectedFilters.value.score}`
+    }
+
+    // Domain
+    title += `, from ${selectedBooru.value.domain}`
+
+    title = title.trim()
+    title = capitalize(title)
+
+    return title
+  })
+
+  const titleForBody = computed(() => {
+    let _title = title.value
+
+    _title = _title.replace(/Page \d+ of /, '')
+
+    _title = _title.replace(/posts /i, '')
+
+    _title = _title.replace(/ porn/, '')
+
+    _title = _title.replace(/, from .+$/, '')
+
+    _title = capitalize(_title)
+
+    return _title
   })
 
   useSeoMeta({
-    title: () => {
-      let title = ''
-
-      if (selectedTags.value.length > 0) {
-        title += ` ${tagArrayToTitle(selectedTags.value)}`
-      }
-
-      title += ` porn from ${selectedBooru.value.domain}`
-
-      // TODO: Filters
-
-      title = title.trim()
-      title = capitalize(title)
-
-      return title
-    },
+    title,
 
     description: () => {
       let description = 'Stream and download porn images, GIFs and videos'
@@ -425,7 +451,8 @@
 
         <h2 class="mb-3 truncate text-sm">
           <!-- TODO: Make tags and filters clickable so they open search menu -->
-          {{ bodyTitle }}
+
+          {{ titleForBody }}
         </h2>
 
         <ol class="space-y-4">
