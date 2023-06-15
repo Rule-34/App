@@ -96,7 +96,10 @@
     >
       <!-- Actions -->
       <div class="flex items-center p-2">
-        <PostSave :post="post" />
+        <PostSave
+          :post="post"
+          :postId="postName"
+        />
 
         <PostDownload
           :mediaName="postName"
