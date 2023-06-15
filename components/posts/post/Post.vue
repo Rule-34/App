@@ -13,7 +13,7 @@
   }>()
 
   const emit = defineEmits<{
-    clickTag: [tag: Tag]
+    clickTag: [tag: string]
   }>()
 
   const userSettings = useUserSettings()
