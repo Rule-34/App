@@ -10,6 +10,7 @@
   import { capitalize } from 'lodash-es'
   import { useEventListener } from '@vueuse/core'
   import { HistoryState } from 'vue-router'
+  import { IPostPage } from 'assets/js/post'
 
   const router = useRouter()
   const route = useRoute()
@@ -93,7 +94,7 @@
 
       const tags = selectedTags.value.map((tag) => tag.name).join('|')
 
-      return $fetch(apiUrl, {
+      return $fetch<IPostPage>(apiUrl, {
         params: {
           baseEndpoint: selectedBooru.value.domain,
 

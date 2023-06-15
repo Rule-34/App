@@ -1,10 +1,11 @@
 import { computed } from 'vue'
 import { useUserSettings } from '~/composables/useUserSettings'
 import { toast } from 'vue-sonner'
+import { IPostPage } from 'assets/js/post'
 
 const userSettings = useUserSettings()
 
-export function usePosts(initialPostPages: Ref<unknown[] | null>) {
+export function usePosts(initialPostPages: Ref<IPostPage[] | null>) {
   //
 
   // Merge posts from all pages into a single array, removing duplicates and keeping the order
