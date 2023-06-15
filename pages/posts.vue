@@ -468,6 +468,7 @@
               <Post
                 :post="post"
                 :post-name="`${selectedBooru.domain}-${post.id}`"
+                :selected-tags="selectedTags"
                 @click-tag="onPostClickTag"
               />
             </li>

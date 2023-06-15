@@ -8,6 +8,8 @@
     postName: string
 
     post: Object
+
+    selectedTags: Tag[]
   }>()
 
   const emit = defineEmits<{
@@ -137,7 +139,12 @@
               'bg-green-400/20 text-green-400/90 ring-green-400/20 hover:bg-green-400/20': tag.type === 'copyright',
               'bg-emerald-400/20 text-emerald-400/90 ring-emerald-400/20 hover:bg-emerald-400/20':
                 tag.type === 'character',
-              'hover:hover-bg-util': tag.type === 'general' || tag.type === 'meta'
+              'hover:hover-bg-util': tag.type === 'general' || tag.type === 'meta',
+
+              // Mark tag as selected
+              'hover-bg-util hover-text-util !ring-base-0/20': selectedTags.some(
+                (selectedTag) => selectedTag.name === tag.name
+              )
             }"
             class="focus-visible:focus-util group inline-flex items-center rounded-full px-2 py-1 ring-1 ring-inset ring-base-0/20"
             type="button"
