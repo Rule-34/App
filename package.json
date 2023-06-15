@@ -25,6 +25,7 @@
     "@vite-pwa/nuxt": "^0.1.0",
     "@vueuse/components": "^10.1.2",
     "@vueuse/core": "^10.1.2",
+    "dexie": "^3.2.4",
     "js-abbreviation-number": "^1.4.0",
     "lodash-es": "^4.17.21",
     "notiwind": "^2.0.1",
