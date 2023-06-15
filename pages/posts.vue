@@ -253,7 +253,21 @@
   }
 
   async function onPostClickTag(tag: string) {
-    await reflectChangesInUrl({ page: null, tags: [new Tag({ name: tag })], filters: null })
+    let newTags = undefined
+
+    const filteredSelectedTags = selectedTags.value.filter((selectedTag) => selectedTag.name !== tag)
+
+    // If the tag was not found, add it
+    if (filteredSelectedTags.length === selectedTags.value.length) {
+      newTags = [...selectedTags.value, new Tag({ name: tag })]
+    }
+
+    // If the tag was found, remove it
+    else {
+      newTags = filteredSelectedTags
+    }
+
+    await reflectChangesInUrl({ page: null, tags: newTags, filters: null })
 
     await refreshInitialPosts()
   }
