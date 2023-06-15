@@ -34,6 +34,9 @@ dependencies:
   '@vueuse/core':
     specifier: ^10.1.2
     version: 10.1.2(vue@3.3.4)
+  '@vueuse/rxjs':
+    specifier: ^10.1.2
+    version: 10.1.2(rxjs@7.8.1)(vue@3.3.4)
   dexie:
     specifier: ^3.2.4
     version: 3.2.4
@@ -52,6 +55,9 @@ dependencies:
   qs:
     specifier: ^6.11.2
     version: 6.11.2
+  rxjs:
+    specifier: ^7.8.1
+    version: 7.8.1
   tailwindcss:
     specifier: ^3.3.2
     version: 3.3.2
@@ -2976,6 +2982,19 @@ packages:
 
   /@vueuse/metadata@9.13.0:
     resolution: {integrity: sha512-gdU7TKNAUVlXXLbaF+ZCfte8BjRJQWPCa2J55+7/h+yDtzw3vOoGQDRXzI6pyKyo6bXFT5/QoPE4hAknExjRLQ==}
+    dev: false
+
+  /@vueuse/rxjs@10.1.2(rxjs@7.8.1)(vue@3.3.4):
+    resolution: {integrity: sha512-uVynYKuk52nQbNND0kCac8te4yuVvWxdXOI6OrhgYN54OrpwmKiXzt3LNL+APYSjMGmsR99uOI7KDh49VDur4w==}
+    peerDependencies:
+      rxjs: '>=6.0.0'
+    dependencies:
+      '@vueuse/shared': 10.1.2(vue@3.3.4)
+      rxjs: 7.8.1
+      vue-demi: 0.14.5(vue@3.3.4)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
     dev: false
 
   /@vueuse/shared@10.1.2(vue@3.3.4):

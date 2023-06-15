@@ -2,16 +2,23 @@ import { Dexie } from 'dexie'
 import { IPost } from 'assets/js/post'
 import { BooruObj } from 'assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 
+// TODO: Delay all activity until website is idle
+
 // By defining the interface of table records,
 // you get better type safety and code completion
 export interface ISavedPost {
   id?: number // Primary key. Optional (autoincremented)
 
+  internal_id: string // Internal ID. Used to identify posts across domains
+
   original_domain: BooruObj['domain']
 
-  post_data: IPost
+  data: IPost
 
-  created_at?: Date // Optional. Automatically set when record is created
+  /**
+   * Unix timestamp
+   */
+  created_at?: number // Optional. Automatically set when record is created
 }
 
 export class SavedPostDatabase extends Dexie {
@@ -21,22 +28,23 @@ export class SavedPostDatabase extends Dexie {
     super('SavedPostDatabase')
 
     this.version(1).stores({
-      // Do not index 'post_data' because it's not searchable
-      posts: '++id, original_domain, created_at'
+      // Do not index 'data' because it's not searchable
+      posts: '++id, internal_id, original_domain, created_at'
     })
 
-    // Automatically set 'created_at'
     this.posts.hook('creating', (primKey, obj, transaction) => {
-      obj.created_at = new Date()
+      obj.created_at = Date.now()
     })
 
     // Populate with some default posts
     this.on('populate', async () => {
       await this.posts.bulkAdd([
         {
+          internal_id: 'safebooru.org-1',
+
           original_domain: 'safebooru.org',
 
-          post_data: {
+          data: {
             id: 1,
             score: null,
             high_res_file: {
@@ -103,9 +111,11 @@ export class SavedPostDatabase extends Dexie {
           }
         },
         {
+          internal_id: 'gelbooru.com-5',
+
           original_domain: 'gelbooru.com',
 
-          post_data: {
+          data: {
             id: 5,
             score: 48,
             high_res_file: {
