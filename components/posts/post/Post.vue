@@ -3,11 +3,12 @@
   import { ChevronDownIcon } from '@heroicons/vue/24/outline'
   import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
   import Tag from 'assets/js/tag.dto'
+  import { IPost } from 'assets/js/post'
 
   const props = defineProps<{
     postName: string
 
-    post: Object
+    post: IPost
 
     selectedTags: Tag[]
   }>()

@@ -2,13 +2,11 @@
   import { BookmarkIcon } from '@heroicons/vue/24/outline'
   import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/vue/24/solid'
   import { toast } from 'vue-sonner'
+  import { IPost } from 'assets/js/post'
 
-  const props = defineProps({
-    post: {
-      type: Object,
-      required: true
-    }
-  })
+  const props = defineProps<{
+    post: IPost
+  }>()
 
   const { isPremium } = useUserData()
 

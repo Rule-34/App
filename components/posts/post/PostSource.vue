@@ -3,18 +3,13 @@
   import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
   import { Float } from '@headlessui-float/vue'
   import { toast } from 'vue-sonner'
+  import { IPost } from 'assets/js/post'
 
-  const props = defineProps({
-    postSources: {
-      type: Array,
-      required: true
-    },
+  const props = defineProps<{
+    postSources: IPost['sources']
 
-    postFileUrl: {
-      type: String,
-      required: true
-    }
-  })
+    postFileUrl: string
+  }>()
 
   const { isPremium } = useUserData()
 
