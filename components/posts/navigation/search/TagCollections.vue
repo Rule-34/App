@@ -59,7 +59,7 @@
 <template>
   <!-- TODO: Review padding on desktop -->
 
-  <nav class="relative flex max-h-[35rem] min-h-[35rem] w-full flex-col gap-6">
+  <nav class="relative flex flex-col gap-6">
     <header>
       <DialogTitle
         as="h3"

@@ -42,10 +42,11 @@
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <DialogPanel
-              class="relative transform overflow-hidden rounded-lg bg-base-1000 p-4 text-left ring-1 ring-base-0/20 transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6"
+              class="relative w-full transform overflow-hidden rounded-lg bg-base-1000 p-4 text-left ring-1 ring-base-0/20 transition-all sm:my-8 sm:max-w-sm sm:p-6"
             >
-              <!-- TODO: Fix animation -->
-              <slot v-if="modelValue" />
+              <div class="max-h-[35rem] min-h-[35rem]">
+                <slot v-if="modelValue" />
+              </div>
             </DialogPanel>
           </TransitionChild>
         </div>
