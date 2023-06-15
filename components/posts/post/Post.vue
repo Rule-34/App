@@ -1,21 +1,18 @@
-<script setup>
+<script lang="ts" setup>
   import { useUserSettings } from '~/composables/useUserSettings'
   import { ChevronDownIcon } from '@heroicons/vue/24/outline'
   import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
+  import Tag from 'assets/js/tag.dto'
 
-  const props = defineProps({
-    postName: {
-      type: String,
-      required: true
-    },
+  const props = defineProps<{
+    postName: string
 
-    post: {
-      type: Object,
-      required: true
-    }
-  })
+    post: Object
+  }>()
 
-  const emit = defineEmits(['click-tag'])
+  const emit = defineEmits<{
+    clickTag: [tag: Tag]
+  }>()
 
   const userSettings = useUserSettings()
 
@@ -144,7 +141,7 @@
             }"
             class="focus-visible:focus-util group inline-flex items-center rounded-full px-2 py-1 ring-1 ring-inset ring-base-0/20"
             type="button"
-            @click="emit('click-tag', tag.name)"
+            @click="emit('clickTag', tag.name)"
           >
             <span class="group-hover:hover-text-util text-xs font-medium">
               {{ tag.name }}
