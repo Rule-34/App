@@ -395,7 +395,7 @@
   </Teleport>
 
   <!-- Container -->
-  <main class="container mx-auto flex-1 px-4 sm:px-6 lg:px-8">
+  <main class="mx-auto max-w-3xl flex-1 px-4 sm:px-6 lg:px-8">
     <section>
       <DomainSelector
         :boorus="booruList"
