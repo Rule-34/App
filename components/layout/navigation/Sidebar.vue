@@ -1,5 +1,6 @@
 <script setup>
   import {
+    ArrowDownTrayIcon,
     BuildingLibraryIcon,
     Cog6ToothIcon,
     HomeIcon,
@@ -14,33 +15,52 @@
   const navigation = [
     {
       name: 'Home',
+      icon: HomeIcon,
+
       href: '/',
-      icon: HomeIcon
+      isExternal: false
     },
     {
       name: 'Posts',
+      icon: PhotoIcon,
+
       href: '/posts',
-      icon: PhotoIcon
-    },
-    {
-      name: 'Partners',
-      href: '/partners',
-      icon: UserGroupIcon
+      isExternal: false
     },
     {
       name: 'FAQ',
+      icon: QuestionMarkCircleIcon,
+
       href: 'https://docs.r34.app/frequently-asked-questions',
-      icon: QuestionMarkCircleIcon
+      isExternal: true
+    },
+    {
+      name: 'Install App',
+      icon: ArrowDownTrayIcon,
+
+      href: 'https://www.installpwa.com/from/r34.app',
+      isExternal: true
+    },
+    {
+      name: 'Partners',
+      icon: UserGroupIcon,
+
+      href: '/partners',
+      isExternal: false
     },
     {
       name: 'Legal',
+      icon: BuildingLibraryIcon,
+
       href: '/legal',
-      icon: BuildingLibraryIcon
+      isExternal: false
     },
     {
       name: 'Settings',
+      icon: Cog6ToothIcon,
+
       href: '/settings',
-      icon: Cog6ToothIcon
+      isExternal: false
     }
   ]
 </script>
@@ -79,6 +99,7 @@
       >
         <NuxtLink
           :href="item.href"
+          :target="item.isExternal ? '_blank' : undefined"
           class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
           exactActiveClass="bg-base-0/20 text-base-content-highlight"
         >
