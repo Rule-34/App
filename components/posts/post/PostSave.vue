@@ -14,8 +14,6 @@
     post: IPost
   }>()
 
-  const { isPremium } = useUserData()
-
   const postCount = useObservable(
     //
     liveQuery(() =>
