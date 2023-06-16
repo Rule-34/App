@@ -495,12 +495,15 @@
               </li>
             </template>
           </template>
-
-          <!-- Load more -->
-          <template v-if="isThereNextPostPage">
-            <PostsPagination @load-next-page="onLoadNextPostPage" />
-          </template>
         </ol>
+
+        <!-- Load more -->
+        <template v-if="isThereNextPostPage">
+          <PostsPagination
+            class="mt-4"
+            @load-next-page="onLoadNextPostPage"
+          />
+        </template>
       </template>
     </section>
   </main>
