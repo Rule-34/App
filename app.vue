@@ -55,6 +55,11 @@
 
       // Font
       {
+        rel: 'preconnect',
+        href: 'https://rsms.me'
+      },
+
+      {
         rel: 'stylesheet',
         type: 'text/css',
         href: 'https://rsms.me/inter/inter.css'
