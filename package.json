@@ -5,13 +5,18 @@
   "description": "Browse the most popular Boorus in the Rule 34 App",
   "author": "Alejandro Akbal",
   "scripts": {
-    "analyze": "nuxt build --analyze",
-    "build": "nuxt generate",
     "dev": "nuxt dev",
+    "_": "",
+    "analyze": "nuxt build --analyze",
+    "generate-pwa-assets": "pwa-assets-generator",
+    "__": "",
+    "test": "jest",
+    "___": "",
     "release": "standard-version",
     "release:publish": "git push --follow-tags origin main",
-    "test": "jest",
-    "postinstall": "nuxt prepare"
+    "____": "",
+    "postinstall": "nuxt prepare",
+    "build": "nuxt generate"
   },
   "dependencies": {
     "@headlessui-float/vue": "^0.11.2",
@@ -44,6 +49,7 @@
     "@sidebase/nuxt-auth": "0.6.0-beta.2",
     "@types/lodash-es": "^4.17.7",
     "@types/qs": "^6.9.7",
+    "@vite-pwa/assets-generator": "^0.0.3",
     "autoprefixer": "^10.4.14",
     "jest": "^29.5.0",
     "nuxt-simple-sitemap": "^2.6.2",
