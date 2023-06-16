@@ -64,12 +64,14 @@
 </script>
 
 <template>
-  <NuxtLayout>
-    <NuxtLoadingIndicator
-      :height="5"
-      :throttle="250"
-    />
+  <VitePwaManifest />
 
+  <NuxtLoadingIndicator
+    :height="5"
+    :throttle="250"
+  />
+
+  <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
 </template>

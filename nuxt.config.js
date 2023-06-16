@@ -5,6 +5,12 @@ export default defineNuxtConfig({
   ssr: false,
 
   nitro: {
+    esbuild: {
+      options: {
+        target: 'esnext'
+      }
+    },
+
     prerender: {
       crawlLinks: true
     }
@@ -35,39 +41,12 @@ export default defineNuxtConfig({
 
   modules: [
     '@sidebase/nuxt-auth',
-    // '@vite-pwa/nuxt'
+    '@vite-pwa/nuxt',
     // '@nuxtjs/sentry',
     'nuxt-simple-sitemap'
   ],
 
-  sitemap: {
-    siteUrl: `https://${process.env.APP_DOMAIN}`,
-
-    discoverImages: false,
-
-    sitemaps: {
-      pages: {
-        defaults: {
-          priority: 0.7,
-          changefreq: 'weekly'
-          // lastmod: new Date()
-        }
-      }
-    }
-  },
-
-  routeRules: {
-    '/posts': {
-      sitemap: {
-        priority: 1,
-        changefreq: 'always'
-      }
-    }
-  },
-
-  /**
-   * @type {import('@sidebase/nuxt-auth/dist/module')}
-   */
+  /** @type {import('@sidebase/nuxt-auth')} */
   auth: {
     // TODO: Refresh token
 
@@ -110,46 +89,83 @@ export default defineNuxtConfig({
     }
   },
 
+  /** @type {import('@vite-pwa/nuxt').ModuleOptions} */
   pwa: {
-    // Icon is automatically proccessed from static/icon.png
+    // strategies: 'injectManifest',
+    strategies: 'generateSW',
 
-    meta: {
-      ogHost: `https://${process.env.APP_DOMAIN}`,
-      mobileAppIOS: true
+    registerType: 'autoUpdate',
+
+    manifest: {
+      name: 'Rule 34 App',
+      short_name: 'R34 App',
+
+      scope: '/',
+      lang: 'en',
+
+      start_url: '/?utm_source=pwa',
+
+      theme_color: '#000000',
+      background_color: '#000000',
+
+      icons: [
+        {
+          src: 'pwa-64x64.png',
+          sizes: '64x64',
+          type: 'image/png'
+        },
+        {
+          src: 'pwa-192x192.png',
+          sizes: '192x192',
+          type: 'image/png'
+        },
+        {
+          src: 'pwa-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'any'
+        },
+        {
+          src: 'maskable-icon-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'maskable'
+        }
+      ],
+
+      shortcuts: [
+        {
+          name: 'Settings',
+          url: '/settings?utm_source=pwa&utm_medium=shortcut'
+        },
+        {
+          name: 'Saved Posts',
+          url: '/premium/saved-posts?utm_source=pwa&utm_medium=shortcut'
+        }
+      ]
+    },
+
+    workbox: {
+      navigateFallback: '/',
+      globPatterns: ['**/*.{js,css,html,png,svg,ico}']
+    },
+
+    client: {
+      installPrompt: true
+      // you don't need to include this: only for testing purposes
+      // if enabling periodic sync for update use 1 hour or so (periodicSyncForUpdates: 3600)
+      // , periodicSyncForUpdates: 3600
+    },
+
+    devOptions: {
+      enabled: true,
+      suppressWarnings: true,
+      navigateFallbackAllowlist: [/^\/$/],
+      type: 'module'
     }
-
-    // manifest: {
-    // 	name: 'Rule 34 App',
-    // 	short_name: 'Rule 34 App',
-    // 	description: 'Browse popular Rule 34 Hentai Porn for free.',
-    //
-    // 	scope: '/',
-    // 	lang: 'en',
-    //
-    // 	start_url: '/?utm_source=pwa',
-    //
-    // 	theme_color: TAILWIND_CONFIG.theme.colors.gray[700],
-    // 	background_color: TAILWIND_CONFIG.theme.colors.gray[700],
-    //
-    // 	shortcuts: [
-    // 		{
-    // 			name: 'Settings',
-    // 			short_name: 'Settings',
-    // 			description: 'Settings to tweak your experience.',
-    // 			url: '/settings?utm_source=PWA&utm_medium=Shortcut'
-    // 		},
-    // 		{
-    // 			name: 'Saved Posts',
-    // 			short_name: 'Saved Posts',
-    // 			description: 'Save posts for later.',
-    // 			url: '/premium/saved-posts?utm_source=PWA&utm_medium=Shortcut'
-    // 		}
-    // 	],
-    //
-    // 	useWebmanifestExtension: true
-    // },
   },
 
+  /** @type {import('@nuxtjs/sentry')} */
   sentry: {
     dsn: process.env.SENTRY_DSN,
 
@@ -214,6 +230,32 @@ export default defineNuxtConfig({
 
       // Dokku automatic env variable
       release: process.env.GIT_REV
+    }
+  },
+
+  /** @type {import('nuxt-simple-sitemap').ModuleOptions} */
+  sitemap: {
+    siteUrl: `https://${process.env.APP_DOMAIN}`,
+
+    discoverImages: false,
+
+    sitemaps: {
+      pages: {
+        defaults: {
+          priority: 0.7,
+          changefreq: 'weekly'
+          // lastmod: new Date()
+        }
+      }
+    }
+  },
+
+  routeRules: {
+    '/posts': {
+      sitemap: {
+        priority: 1,
+        changefreq: 'always'
+      }
     }
   },
 
