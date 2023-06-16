@@ -50,8 +50,6 @@ export default defineNuxtConfig({
   auth: {
     // TODO: Refresh token
 
-    globalAppMiddleware: { isEnabled: true },
-
     baseURL: process.env.API_URL + '/auth',
 
     provider: {

@@ -1,5 +1,7 @@
 <script lang="ts" setup>
   definePageMeta({
+    middleware: 'auth',
+
     auth: {
       unauthenticatedOnly: true,
       navigateAuthenticatedTo: '/premium/profile'
