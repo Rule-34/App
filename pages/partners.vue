@@ -7,7 +7,7 @@
 </script>
 
 <template>
-  <main class="mx-auto max-w-3xl flex-1 px-4 sm:px-6 lg:px-8">
+  <main class="container mx-auto flex-1 px-4 sm:px-6 lg:px-8">
     <div class="mt-4 space-y-4">
       <ContentSeparator
         text="Friends of the Rule 34 App"
