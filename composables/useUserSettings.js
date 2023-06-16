@@ -8,7 +8,7 @@ const navigationTouchGestures = useStorage('settings-navigationTouchGestures', t
 const postFullSizeImages = useStorage('settings-postFullSizeImages', false, localStorage, {
   writeDefaults: false
 })
-const postsPerPage = useStorage('settings-postsPerPage', 35, localStorage, {
+const postsPerPage = useStorage('settings-postsPerPage', 30, localStorage, {
   writeDefaults: false
 })
 
