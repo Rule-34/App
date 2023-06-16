@@ -263,6 +263,11 @@ export default defineNuxtConfig({
     transpile: ['vue-sonner']
   },
 
+  sourcemap: {
+    server: true,
+    client: true
+  },
+
   postcss: {
     plugins: {
       tailwindcss: {},
