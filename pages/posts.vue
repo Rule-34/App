@@ -327,6 +327,11 @@
 
     _title = _title.replace(/, from .+$/, '')
 
+    // Edge case: ", sorted by" || ", rated" || ", with a score of"
+    if (_title.startsWith(', ')) {
+      _title = _title.slice(2)
+    }
+
     _title = _title.trim()
     _title = capitalize(_title)
 
