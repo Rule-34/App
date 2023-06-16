@@ -1,12 +1,12 @@
 <template>
 	<div
 		v-if="isShown"
-		class="relative isolate flex items-center gap-x-6 overflow-hidden bg-black py-2.5 px-6 sm:px-3.5 sm:before:flex-1"
+		class="relative isolate flex items-center gap-x-6 overflow-hidden bg-black px-6 py-2.5 sm:px-3.5 sm:before:flex-1"
 	>
 		<!-- Background -->
 		<svg
-			aria-hidden="true"
-			class="absolute top-1/2 left-[max(-7rem,calc(50%-52rem))] -z-10 w-[36.0625rem] -translate-y-1/2 transform-gpu blur-2xl"
+
+			class="absolute left-[max(-7rem,calc(50%-52rem))] top-1/2 -z-10 w-[36.0625rem] -translate-y-1/2 transform-gpu blur-2xl"
 			viewBox="0 0 577 310"
 		>
 			<path
@@ -33,8 +33,8 @@
 			</defs>
 		</svg>
 		<svg
-			aria-hidden="true"
-			class="absolute top-1/2 left-[max(45rem,calc(50%+8rem))] -z-10 w-[36.0625rem] -translate-y-1/2 transform-gpu blur-2xl"
+
+			class="absolute left-[max(45rem,calc(50%+8rem))] top-1/2 -z-10 w-[36.0625rem] -translate-y-1/2 transform-gpu blur-2xl"
 			viewBox="0 0 577 310"
 		>
 			<use href="#a906133b-f855-4023-a54c-38d70c72fe9c" />
@@ -42,13 +42,13 @@
 
 		<!-- Banner -->
 		<p class="text-sm leading-6 text-gray-100">
-			<a
-				href="https://hentaiporn.app/?utm_source=Rule34App&utm_medium=Banner"
+			<NuxtLink
 				rel="noopener"
 				target="_blank"
+				href="https://hentaiporn.app/?utm_source=Rule34App&utm_medium=Banner"
 			>
 				<strong class="font-semibold">New sister website:</strong> 120K+ high-quality Hentai images & videos,
-				lightning-fast, new content every 5 mins&nbsp;<span aria-hidden="true">&rarr;</span></a
+				lightning-fast, new content every 5 mins&nbsp;<span >&rarr;</span></NuxtLink
 			>
 		</p>
 		<div class="flex flex-1 justify-end">
@@ -59,7 +59,7 @@
 			>
 				<span class="sr-only">Dismiss</span>
 				<XIcon
-					aria-hidden="true"
+
 					class="icon h-5 w-5 text-gray-100"
 				/>
 			</button>

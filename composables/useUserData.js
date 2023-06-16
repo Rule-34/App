@@ -2,6 +2,7 @@
 
 export function useUserData() {
   return {
-    isPremium: false
+    // isPremium: ref(false)
+    isPremium: ref(true)
   }
 }

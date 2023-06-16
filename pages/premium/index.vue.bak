@@ -7,7 +7,7 @@
 					<!-- Icon and email -->
 					<div class="truncate py-1">
 						<!-- Icon -->
-						<span class="border-util inline-flex h-10 w-10 items-center justify-center rounded-full bg-darkGray-700">
+						<span class="border-util inline-flex h-10 w-10 items-center justify-center rounded-full bg-base-1000">
 							<span class="font-medium leading-none text-white">
 								{{ getUserEmail.charAt(0).toUpperCase() }}
 							</span>
@@ -41,8 +41,8 @@
 					</div>
 
 					<NuxtLink
-						class="link border-util rounded-full bg-darkGray-700 px-3 py-2"
-						to="/premium/custom-boorus"
+						class="link border-util rounded-full bg-base-1000 px-3 py-2"
+						href="/premium/custom-boorus"
 					>
 						<ChevronRightIcon class="icon h-6 w-6 text-inherit" />
 					</NuxtLink>
@@ -56,8 +56,8 @@
 					</div>
 
 					<NuxtLink
-						class="link border-util rounded-full bg-darkGray-700 px-3 py-2"
-						to="/premium/tag-collections"
+						class="link border-util rounded-full bg-base-1000 px-3 py-2"
+						href="/premium/tag-collections"
 					>
 						<ChevronRightIcon class="icon h-6 w-6 text-inherit" />
 					</NuxtLink>
@@ -71,8 +71,8 @@
 					</div>
 
 					<NuxtLink
-						class="link border-util rounded-full bg-darkGray-700 px-3 py-2"
-						to="/premium/saved-posts"
+						class="link border-util rounded-full bg-base-1000 px-3 py-2"
+						href="/premium/saved-posts"
 					>
 						<ChevronRightIcon class="icon h-6 w-6 text-inherit" />
 					</NuxtLink>
@@ -86,8 +86,8 @@
 					</div>
 
 					<NuxtLink
-						class="link border-util rounded-full bg-darkGray-700 px-3 py-2"
-						to="/premium/backup"
+						class="link border-util rounded-full bg-base-1000 px-3 py-2"
+						href="/premium/backup"
 					>
 						<ChevronRightIcon class="icon h-6 w-6 text-inherit" />
 					</NuxtLink>
@@ -99,14 +99,15 @@
 				<!-- Notice -->
 				<p class="text-center text-sm text-gray-300">
 					Manage your subscription on
-					<a
+					<NuxtLink
 						class="link"
-						href="https://gumroad.com/library"
 						rel="noopener nofollow"
 						target="_blank"
+						href="https://gumroad.com/library"
 					>
-						Gumroad</a
-					>.
+						Gumroad
+					</NuxtLink>
+					.
 				</p>
 			</div>
 		</template>
@@ -116,14 +117,14 @@
 				<div class="flex flex-col justify-evenly gap-3">
 					<PremiumSubscription />
 
-					<a
+					<NuxtLink
 						class="link text-center"
-						href="https://www.rule34.app/premium"
 						rel="noopener"
 						target="_blank"
+						href="https://www.rule34.app/premium"
 					>
 						Learn more about Premium features
-					</a>
+					</NuxtLink>
 				</div>
 
 				<!-- Separator -->
@@ -149,7 +150,6 @@ export default {
 			title: 'Premium',
 			meta: [
 				{
-					hid: 'description',
 					name: 'description',
 					content: 'Premium subscription.'
 				}

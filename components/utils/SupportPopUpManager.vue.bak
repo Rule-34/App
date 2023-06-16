@@ -1,5 +1,5 @@
 <template>
-  <!-- 
+  <!--
     This should use Vue 3's teleport feature
     https://v3.vuejs.org/guide/teleport.html
   -->
@@ -15,7 +15,7 @@
         <!-- Background overlay -->
         <div
           class="fixed inset-0 bg-black bg-opacity-75"
-          aria-hidden="true"
+
           @click.self.stop="toggleSupportPopUp"
         ></div>
 
