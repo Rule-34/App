@@ -13,12 +13,18 @@
 
   const userSettings = useUserSettings()
 
-  function removeAllData() {
+  async function removeAllData() {
     if (!confirm('Are you sure you want to reset all data?')) {
       return
     }
 
     localStorage.clear()
+
+    const indexedDBDatabaseNames = await indexedDB.databases()
+
+    for (const { name } of indexedDBDatabaseNames) {
+      indexedDB.deleteDatabase(name)
+    }
 
     location.reload()
   }
