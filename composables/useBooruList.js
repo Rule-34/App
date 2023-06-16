@@ -289,7 +289,7 @@ export function useBooruList() {
 
     // Disable boorus from index 7 if user is not Premium
     booruList.forEach((booru, index) => {
-      if (index >= 7 && !isPremium) {
+      if (index >= 7 && !isPremium.value) {
         booru.disabled = true
       }
     })

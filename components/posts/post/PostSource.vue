@@ -70,7 +70,7 @@
   }
 
   function openSourceFinder(url: string) {
-    if (!isPremium) {
+    if (!isPremium.value) {
       toast.error(
         '[Premium feature] Find the source of this post with SauceNAO, IQDB, Google, Yandex, Bing, and many more!'
       )
