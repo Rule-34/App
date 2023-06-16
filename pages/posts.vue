@@ -94,6 +94,7 @@
 
       const tags = selectedTags.value.map((tag) => tag.name).join('|')
 
+      // TODO: Use auth token
       return $fetch<IPostPage>(apiUrl, {
         params: {
           baseEndpoint: selectedBooru.value.domain,
