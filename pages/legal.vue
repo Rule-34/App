@@ -43,7 +43,7 @@
             href: '/privacy-policy#opt-out'
           }
         ]"
-        text="Self hosted Matomo analytics are used, configured to NOT gather or store any personal info
+        text="Self hosted Matomo analytics are used, configured to NOT gather, or store, any personal info
 
 				 Feel free to opt out on the next link"
         title="Analytics"
