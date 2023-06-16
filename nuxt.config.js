@@ -34,6 +34,7 @@ export default defineNuxtConfig({
   components: [{ path: '~/components', pathPrefix: false }],
 
   modules: [
+    '@sidebase/nuxt-auth',
     // '@vite-pwa/nuxt'
     // '@nuxtjs/sentry',
     'nuxt-simple-sitemap'
@@ -64,56 +65,49 @@ export default defineNuxtConfig({
     }
   },
 
+  /**
+   * @type {import('@sidebase/nuxt-auth/dist/module')}
+   */
   auth: {
-    strategies: {
-      local: {
-        scheme: 'refresh',
+    // TODO: Refresh token
 
-        token: {
-          type: 'Bearer',
-          property: 'access_token',
-          // 30 minutes
-          maxAge: 1800,
-          required: true,
+    globalAppMiddleware: { isEnabled: true },
 
-          global: false
-        },
+    baseURL: process.env.API_URL + '/auth',
 
-        refreshToken: {
-          property: 'refresh_token',
-          required: true,
-          maxAge: 60 * 60 * 24 * 15 // 15 days
-        },
+    provider: {
+      type: 'local',
 
-        user: {
-          property: false,
-          autoFetch: true
-        },
+      endpoints: {
+        signIn: { path: '/log-in', method: 'post' },
+        signOut: null,
+        signUp: null,
 
-        endpoints: {
-          login: { url: `${process.env.API_URL}/auth/log-in`, method: 'post' },
-          refresh: {
-            url: `${process.env.API_URL}/auth/refresh`,
-            method: 'post'
-          },
-          logout: false,
-          user: { url: `${process.env.API_URL}/auth/profile`, method: 'get' }
-        }
+        getSession: { path: '/profile', method: 'get' }
       },
 
-      google: {}
-    },
+      pages: {
+        login: '/premium/sign-in'
+      },
 
-    watchLoggedIn: true,
+      token: {
+        signInResponseTokenPointer: '/access_token',
 
-    redirect: {
-      login: '/premium',
-      logout: '/premium',
-      callback: false,
-      home: false
-    },
+        type: 'Bearer',
 
-    vuex: { namespace: 'authentication' }
+        maxAgeInSeconds: 1800 // 30 minutes
+      },
+
+      sessionDataType: {
+        email: 'string',
+
+        is_subscription_valid: 'boolean',
+
+        license_uses: 'number',
+
+        sale_timestamp: 'string'
+      }
+    }
   },
 
   pwa: {

@@ -19,7 +19,6 @@
     "@headlessui/vue": "^1.7.14",
     "@heroicons/vue": "^2.0.18",
     "@nuxtjs/sentry": "^7.3.0",
-    "@sidebase/nuxt-auth": "0.6.0-beta.2",
     "@tailwindcss/forms": "^0.5.3",
     "@tanstack/vue-virtual": "3.0.0-beta.54",
     "@vite-pwa/nuxt": "^0.1.0",
@@ -42,6 +41,7 @@
     "vuetify": "^3.3.4"
   },
   "devDependencies": {
+    "@sidebase/nuxt-auth": "0.6.0-beta.2",
     "@types/lodash-es": "^4.17.7",
     "@types/qs": "^6.9.7",
     "autoprefixer": "^10.4.14",
