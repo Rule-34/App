@@ -26,19 +26,19 @@
 		</div>
 
 		<!-- Description -->
-		<div class="flex flex-col justify-between border-t border-darkGray-100 bg-darkGray-700 p-6">
+		<div class="flex flex-col justify-between border-t bg-base-900 bg-base-1000 p-6">
 			<ul>
 				<!--  -->
 				<li class="flex items-start">
 					<div class="shrink-0">
 						<check-icon
-							aria-hidden="true"
+
 							class="icon h-6 w-6 text-accent-400"
 						/>
 					</div>
 					<NuxtLink
 						class="link ml-3 text-base font-medium leading-6"
-						to="/premium/custom-boorus"
+						href="/premium/custom-boorus"
 					>
 						Use additional Boorus
 					</NuxtLink>
@@ -48,13 +48,13 @@
 				<li class="mt-4 flex items-start">
 					<div class="shrink-0">
 						<check-icon
-							aria-hidden="true"
+
 							class="icon h-6 w-6 text-accent-400"
 						/>
 					</div>
 					<NuxtLink
 						class="link ml-3 text-base font-medium leading-6"
-						to="/premium/tag-collections"
+						href="/premium/tag-collections"
 					>
 						Create collections of Tags
 					</NuxtLink>
@@ -64,13 +64,13 @@
 				<li class="mt-4 flex items-start">
 					<div class="shrink-0">
 						<check-icon
-							aria-hidden="true"
+
 							class="icon h-6 w-6 text-accent-400"
 						/>
 					</div>
 					<NuxtLink
 						class="link ml-3 text-base font-medium leading-6"
-						to="/premium/saved-posts"
+						href="/premium/saved-posts"
 					>
 						Save Posts
 					</NuxtLink>
@@ -80,7 +80,7 @@
 				<li class="mt-4 flex items-start">
 					<div class="shrink-0">
 						<check-icon
-							aria-hidden="true"
+
 							class="icon h-6 w-6 text-accent-400"
 						/>
 					</div>
@@ -101,7 +101,7 @@
 				<li class="mt-4 flex items-start">
 					<div class="shrink-0">
 						<check-icon
-							aria-hidden="true"
+
 							class="icon h-6 w-6 text-accent-400"
 						/>
 					</div>
@@ -112,13 +112,13 @@
 				<li class="mt-4 flex items-start">
 					<div class="shrink-0">
 						<check-icon
-							aria-hidden="true"
+
 							class="icon h-6 w-6 text-accent-400"
 						/>
 					</div>
 					<NuxtLink
 						class="link ml-3 text-base font-medium leading-6"
-						to="/premium/backup"
+						href="/premium/backup"
 					>
 						Create backups
 					</NuxtLink>
@@ -128,7 +128,7 @@
 				<li class="mt-4 flex items-start">
 					<div class="shrink-0">
 						<check-icon
-							aria-hidden="true"
+
 							class="icon h-6 w-6 text-accent-400"
 						/>
 					</div>
@@ -146,7 +146,7 @@
 				<li class="mt-4 flex items-start">
 					<div class="shrink-0">
 						<check-icon
-							aria-hidden="true"
+
 							class="icon h-6 w-6 text-accent-400"
 						/>
 					</div>

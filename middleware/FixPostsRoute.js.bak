@@ -1,4 +1,4 @@
-import { RouterHelper } from '~/assets/js/RouterHelper'
+import { RouterHelper } from 'assets/js/RouterHelper'
 
 function isRouteIncorrect(context) {
   // Fix: we use the query's data since Vuex has not been updated yet with the request data.
@@ -14,15 +14,10 @@ function generateCorrectRoute(context) {
   const URL_PAGE = context.query.page
   const URL_TAGS = context.query.tags
 
-  return RouterHelper.generatePostsRouteWithDefaults(
-    context.store,
-    URL_DOMAIN,
-    URL_PAGE,
-    URL_TAGS
-  )
+  return RouterHelper.generatePostsRouteWithDefaults(context.store, URL_DOMAIN, URL_PAGE, URL_TAGS)
 }
 
-export default function (context) {
+export default defineNuxtRouteMiddleware((to, from) => {
   if (isRouteIncorrect(context)) {
     console.info('Redirecting to correct route')
 
@@ -30,4 +25,6 @@ export default function (context) {
 
     return context.redirect(422, undefined, ROUTE.query)
   }
-}
+})
+
+// TODO: Migrate usages

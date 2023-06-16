@@ -479,7 +479,7 @@
           >
             <!-- Post -->
             <li>
-              <!-- TODO: Highlight active tags -->
+              <!-- TODO: Fix content jumping -->
               <Post
                 :post="post"
                 :post-name="`${selectedBooru.domain}-${post.id}`"
