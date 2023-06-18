@@ -375,6 +375,8 @@
       }
     ]
   })
+
+  // TODO: Create schema.org breadcrumb for posts page
 </script>
 
 <template>
