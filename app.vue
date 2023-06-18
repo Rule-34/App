@@ -66,6 +66,24 @@
       }
     ]
   })
+
+  useSchemaOrg([
+    defineOrganization({
+      name: 'Rule 34 App',
+      logo: '/icon.svg',
+      sameAs: [
+        'https://rule34.app',
+        'https://twitter.com/Rule34App',
+        'https://redirect.r34.app/twitter',
+        'https://redirect.r34.app/discord',
+        'https://redirect.r34.app/github'
+      ]
+    }),
+    defineWebSite({
+      name: 'Rule 34 App'
+    }),
+    defineWebPage()
+  ])
 </script>
 
 <template>

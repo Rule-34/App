@@ -41,8 +41,13 @@ export default defineNuxtConfig({
 
   modules: [
     '@sidebase/nuxt-auth',
-    '@vite-pwa/nuxt',
+
     // '@nuxtjs/sentry',
+
+    'nuxt-schema-org',
+
+    '@vite-pwa/nuxt',
+
     'nuxt-simple-sitemap'
   ],
 
@@ -85,6 +90,11 @@ export default defineNuxtConfig({
         sale_timestamp: 'string'
       }
     }
+  },
+
+  /** @type {import('nuxt-schema-org').ModuleOptions} */
+  schemaOrg: {
+    host: `https://${process.env.APP_DOMAIN}`
   },
 
   /** @type {import('@vite-pwa/nuxt').ModuleOptions} */
@@ -155,8 +165,10 @@ export default defineNuxtConfig({
       // , periodicSyncForUpdates: 3600
     },
 
+    selfDestroying: true,
+
     devOptions: {
-      enabled: false,
+      enabled: true,
       suppressWarnings: true,
       navigateFallbackAllowlist: [/^\/$/],
       type: 'module'
