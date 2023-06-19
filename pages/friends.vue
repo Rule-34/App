@@ -18,7 +18,7 @@
         :links="[
           {
             text: 'hentaiporn.app',
-            href: 'https://hentaiporn.app/?utm_source=Rule34App&utm_medium=Friends'
+            href: 'https://hentaiporn.app/?utm_source=r34.app&utm_medium=friends'
           }
         ]"
         icon="bg-svg-star"
@@ -30,7 +30,7 @@
         :links="[
           {
             text: 'kurosearch.com',
-            href: 'https://kurosearch.com/?utm_source=Rule34App&utm_medium=Friends'
+            href: 'https://kurosearch.com/?utm_source=r34.app&utm_medium=friends'
           }
         ]"
         icon="bg-svg-star"

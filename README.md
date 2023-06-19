@@ -7,7 +7,7 @@ A Progressive Web App to browse popular Rule 34 Hentai Porn for free.
 Use the following link to use it on any device that has a _modern_ internet browser.
 _This includes Android, iOS and most consoles like the PS4 And Xbox One._
 
-**[✨ https://r34.app ✨](https://r34.app/?utm_source=Reddit&utm_medium=New_Post)**
+**[✨ https://r34.app ✨](https://r34.app/?utm_source=github&utm_medium=readme)**
 
 ## Screenshots
 
