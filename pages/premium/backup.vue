@@ -111,11 +111,10 @@
 </script>
 
 <template>
-  <main class="container relative mx-auto max-w-3xl flex-1 px-4 sm:px-6 lg:px-8">
+  <main class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
     <!-- -->
 
-    <!-- Header -->
-    <PageHeader class="mt-4">
+    <PageHeader>
       <template #title>Backup & Restore</template>
       <template #text>
         <div class="text-sm">
