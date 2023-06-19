@@ -1,6 +1,5 @@
 <script setup>
   useSeoMeta({
-    title: 'Partners',
 
     description: 'Friends of the Rule 34 App, and other cool sites.'
   })
