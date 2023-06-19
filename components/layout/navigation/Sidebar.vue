@@ -42,10 +42,10 @@
       isExternal: true
     },
     {
-      name: 'Partners',
+      name: 'Friends',
       icon: UserGroupIcon,
 
-      href: '/partners',
+      href: '/friends',
       isExternal: false
     },
     {
