@@ -18,6 +18,12 @@
     { title: 'Support the development', hasAdditionalInfo: false }
   ]
 
+  useSeoMeta({
+    title: 'Premium',
+
+    description: 'Enhance your experience with the Premium subscription'
+  })
+
   definePageMeta({
     middleware: 'auth',
 
