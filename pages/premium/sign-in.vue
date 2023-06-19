@@ -1,14 +1,36 @@
 <script lang="ts" setup>
-  const { status, data, signIn, signOut } = useAuth()
+  import { toast } from 'vue-sonner'
+
+  const { signIn } = useAuth()
+
+  const formData = ref({
+    password: ''
+  })
 
   async function onSubmit(event: Event) {
-    const password = (event.target as HTMLFormElement).elements.namedItem('password')?.value
+    const password = formData.value.password
 
     if (!password) {
       return
     }
 
-    await signIn('credentials', { username: '_', password })
+    const signInResult = await signIn('credentials', { username: '_', password, redirect: false })
+      //
+      .catch((error) => ({ error, url: undefined }))
+
+    const signInError = signInResult?.error
+
+    if (signInError) {
+      if (signInError.status === 401) {
+        toast.error('Invalid license key, check it and try again')
+        return
+      }
+
+      toast.error(signInError.message)
+      return
+    }
+
+    await navigateTo('/premium')
   }
 
   useSeoMeta({
@@ -72,6 +94,7 @@
             <div class="mt-2">
               <input
                 id="license"
+                v-model.trim="formData.password"
                 autocomplete="current-password"
                 class="focus-visible:focus-util block w-full rounded-md border-0 bg-base-0/5 py-1.5 text-base-content-highlight shadow-sm ring-1 ring-inset ring-base-0/10 focus-visible:ring-inset sm:text-sm sm:leading-6"
                 name="password"
