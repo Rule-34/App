@@ -59,7 +59,9 @@
         <img
           alt="Logo"
           class="mx-auto h-10 w-auto"
+          height="16"
           src="/logo.svg"
+          width="16"
         />
 
         <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-base-content-highlight">
