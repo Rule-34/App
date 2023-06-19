@@ -53,11 +53,5 @@ module.exports = {
     }
   },
 
-  plugins: [
-    require('@tailwindcss/forms')({
-      strategy: 'class'
-    }),
-
-    require('@headlessui/tailwindcss')
-  ]
+  plugins: [require('@tailwindcss/forms'), require('@headlessui/tailwindcss')]
 }
