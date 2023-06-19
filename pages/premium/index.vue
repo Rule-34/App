@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { CheckIcon } from '@heroicons/vue/20/solid'
   import { InformationCircleIcon } from '@heroicons/vue/24/outline'
+  import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
   import { completeBooruList } from 'assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 
   const mainFeatures = [
@@ -28,9 +29,20 @@
 </script>
 
 <template>
-  <main class="flex-1">
-    <!-- TODO: Sign in -->
+  <!-- Sign in -->
+  <!-- TODO: Make more obvious? -->
+  <SafeTeleport to="#navbar-actions">
+    <NuxtLink
+      class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util relative rounded-lg px-2 py-1.5"
+      href="/premium/sign-in"
+    >
+      <span class="sr-only">Sign in</span>
 
+      <ArrowRightOnRectangleIcon class="h-6 w-6 text-base-content-highlight" />
+    </NuxtLink>
+  </SafeTeleport>
+
+  <main class="flex-1">
     <!-- Pricing -->
     <section class="isolate overflow-hidden">
       <div class="flow-root overflow-hidden py-16 sm:pt-32 lg:pb-0">
