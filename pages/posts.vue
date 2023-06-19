@@ -383,7 +383,7 @@
   <!-- Search -->
   <SafeTeleport to="#navbar-actions">
     <button
-      class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util relative rounded-lg px-2 py-1.5"
+      class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
       type="button"
       @click="toggleSearchMenu()"
     >

@@ -34,12 +34,14 @@
   })
 </script>
 
+<!-- TODO: Normalize design -->
+
 <template>
   <!-- Sign in -->
   <!-- TODO: Make more obvious? -->
   <SafeTeleport to="#navbar-actions">
     <NuxtLink
-      class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util relative rounded-lg px-2 py-1.5"
+      class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
       href="/premium/sign-in"
     >
       <span class="sr-only">Sign in</span>
