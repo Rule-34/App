@@ -52,24 +52,26 @@
     </button>
   </SafeTeleport>
 
-  <main class="container relative mx-auto max-w-3xl flex-1 px-4 sm:px-6 lg:px-8">
+  <main class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
     <!-- -->
 
     <!-- Status -->
     <!-- TODO: Add thank you note -->
-    <section class="mt-4">
-      <h1 class="text-2xl font-bold leading-10 tracking-tight text-base-content-highlight">Premium profile</h1>
 
-      <h2 class="truncate">
-        Signed in as
+    <PageHeader>
+      <template #title>Premium profile</template>
+      <template #text>
+        <p class="truncate">
+          Signed in as
 
-        <span
-          class="inline-flex items-center rounded-md bg-primary-400/10 px-2 py-1 text-sm font-medium text-primary-400 ring-1 ring-inset ring-primary-400/20"
-        >
-          {{ data.email }}
-        </span>
-      </h2>
-    </section>
+          <span
+            class="inline-flex items-center rounded-md bg-primary-400/10 px-2 py-1 text-sm font-medium text-primary-400 ring-1 ring-inset ring-primary-400/20"
+          >
+            {{ data.email }}
+          </span>
+        </p>
+      </template>
+    </PageHeader>
 
     <!-- Links -->
     <section>
@@ -82,9 +84,9 @@
           :href="link.href"
           class="hover:hover-bg-util focus-visible:focus-util block w-full rounded-md border border-base-0/20 px-4 py-3"
         >
-          <h3 class="text-lg font-bold tracking-tight text-base-content-highlight">
+          <h2 class="text-lg font-bold tracking-tight text-base-content-highlight">
             {{ link.name }}
-          </h3>
+          </h2>
 
           <p class="text-sm">
             {{ link.description }}

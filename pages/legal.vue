@@ -7,10 +7,12 @@
 </script>
 
 <template>
-  <main class="container mx-auto max-w-3xl flex-1 px-4 sm:px-6 lg:px-8">
-    <div class="mt-4 space-y-4">
-      <ContentSeparator title="Legal" />
+  <main class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
+    <PageHeader>
+      <template #title>Legal</template>
+    </PageHeader>
 
+    <div class="mt-7 space-y-6">
       <!-- Generated terms of service -->
       <ContentContainer
         :links="[
@@ -60,12 +62,16 @@
         text="Reach me to discuss questions, suggestions, requests, comments, or any other concern"
         title="Contact"
       />
+    </div>
 
-      <ContentSeparator
-        class="pt-4"
-        title="Disclaimer"
-      />
+    <PageHeader
+      as="h2"
+      class="mt-14"
+    >
+      <template #title>Miscelaneous</template>
+    </PageHeader>
 
+    <div class="mt-7 space-y-6">
       <!-- Remove media -->
       <ContentContainer
         :links="[

@@ -54,7 +54,7 @@
     <!-- Pricing -->
     <section class="isolate overflow-hidden">
       <div class="flow-root overflow-hidden py-16 sm:pt-32 lg:pb-0">
-        <div class="container mx-auto max-w-3xl flex-1 px-4 sm:px-6 lg:px-8">
+        <div class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
           <!-- Header -->
           <div class="relative z-10">
             <!-- Title -->
