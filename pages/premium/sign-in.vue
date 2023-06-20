@@ -56,17 +56,9 @@
     <!-- Sign in -->
     <section class="-mt-12 flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
-          alt="Logo"
-          class="mx-auto h-10 w-auto"
-          height="16"
-          src="/logo.svg"
-          width="16"
-        />
-
-        <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-base-content-highlight">
-          Sign in
-        </h2>
+        <PageHeader class="text-center">
+          <template #title>Sign in</template>
+        </PageHeader>
       </div>
 
       <div class="mt-24 sm:mx-auto sm:w-full sm:max-w-sm">

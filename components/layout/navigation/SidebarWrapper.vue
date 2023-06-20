@@ -64,7 +64,7 @@
               </TransitionChild>
 
               <!-- Sidebar -->
-              <div class="flex grow flex-col gap-y-6 overflow-y-auto bg-base-1000 px-6 ring-1 ring-base-0/10">
+              <div class="flex grow flex-col overflow-y-auto bg-base-1000 px-6 ring-1 ring-base-0/10">
                 <slot v-if="isMenuActive" />
               </div>
             </DialogPanel>
