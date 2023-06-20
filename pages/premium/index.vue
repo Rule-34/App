@@ -34,8 +34,6 @@
   })
 </script>
 
-<!-- TODO: Normalize design -->
-
 <template>
   <!-- Sign in -->
   <!-- TODO: Make more obvious? -->
@@ -69,11 +67,11 @@
           </div>
 
           <!-- Body -->
-          <div class="relative mx-auto mt-10 grid max-w-md grid-cols-1 gap-y-8 lg:mx-0 lg:-mb-14 lg:max-w-none">
+          <div class="relative mx-auto mt-10 grid max-w-md grid-cols-1 gap-y-8 lg:mx-0 lg:max-w-none">
             <!-- Background -->
             <svg
               aria-hidden="true"
-              class="absolute -bottom-48 left-1/2 h-[64rem] -translate-x-1/2 translate-y-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] lg:-top-48 lg:bottom-auto lg:translate-y-0"
+              class="absolute -bottom-48 left-1/2 h-[64rem] -translate-x-1/2 translate-y-1/2 [mask-image:radial-gradient(closest-side,white,transparent)]"
               viewBox="0 0 1208 1024"
             >
               <ellipse
@@ -94,21 +92,15 @@
               </defs>
             </svg>
 
-            <!-- Tier background -->
-            <div
-              aria-hidden="true"
-              class="hidden lg:absolute lg:inset-x-px lg:bottom-0 lg:top-4 lg:block lg:rounded-t-2xl lg:bg-gray-800/80 lg:ring-1 lg:ring-white/10"
-            />
-
             <!-- Tier -->
-            <div class="relative rounded-2xl bg-gray-800/80 ring-1 ring-white/10 lg:bg-transparent lg:pb-14 lg:ring-0">
+            <div class="relative rounded-2xl bg-base-1000/70 ring-1 ring-base-0/10 backdrop-blur">
               <div class="p-8 lg:pt-12 xl:p-10 xl:pt-14">
                 <!-- -->
 
                 <div>
                   <h2 class="text-2xl font-bold tracking-wide text-base-content-highlight">Premium</h2>
 
-                  <p class="mt-2 whitespace-pre-line text-sm leading-7">
+                  <p class="mt-2 text-sm leading-7">
                     Get access to {{ mainFeatures.length }} exclusive features, including
                     {{ completeBooruList.length }} additional Boorus!
                   </p>
@@ -163,7 +155,7 @@
                     ✨ Up to
 
                     <span
-                      class="inline-flex items-center gap-x-1.5 rounded-full bg-primary-700 px-2 py-0.5 font-medium leading-normal text-primary-200"
+                      class="inline-flex items-center gap-x-1.5 rounded-full bg-primary-400/20 px-2 py-0.5 font-medium leading-normal text-primary-400"
                     >
                       60% Off
                     </span>

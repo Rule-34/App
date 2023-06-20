@@ -364,7 +364,7 @@
   <footer class="flex flex-col gap-6">
     <p
       v-if="selectedTags.length"
-      class="mt-4 text-xs text-gray-400"
+      class="mt-4 text-xs"
     >
       Tip: click on a tag name to remove it, or exclude it from results by clicking the plus icon
     </p>
