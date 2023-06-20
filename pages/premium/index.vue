@@ -29,7 +29,7 @@
 
     auth: {
       unauthenticatedOnly: true,
-      navigateAuthenticatedTo: '/premium/profile'
+      navigateAuthenticatedTo: '/premium/dashboard'
     }
   })
 </script>

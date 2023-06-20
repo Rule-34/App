@@ -32,7 +32,7 @@
   }
 
   useSeoMeta({
-    title: 'Premium profile'
+    title: 'Premium dashboard'
   })
 
   definePageMeta({ middleware: 'auth' })
@@ -59,7 +59,7 @@
     <!-- TODO: Add thank you note -->
 
     <PageHeader>
-      <template #title>Premium profile</template>
+      <template #title>Premium dashboard</template>
       <template #text>
         <p class="truncate">
           Signed in as
