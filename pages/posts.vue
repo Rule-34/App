@@ -11,6 +11,7 @@
   import { useEventListener } from '@vueuse/core'
   import { HistoryState } from 'vue-router'
   import { IPostPage } from 'assets/js/post'
+  import type { Domain } from 'assets/js/domain'
 
   const router = useRouter()
   const route = useRoute()
@@ -242,8 +243,8 @@
     tagResults.value = response.data
   }
 
-  async function onDomainChange(booru) {
-    await reflectChangesInUrl({ domain: booru.domain, page: null, tags: null, filters: null })
+  async function onDomainChange(domain: Domain) {
+    await reflectChangesInUrl({ domain: domain.domain, page: null, tags: null, filters: null })
 
     await refreshInitialPosts()
   }

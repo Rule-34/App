@@ -1,17 +1,25 @@
-<script setup>
+<script lang="ts" setup>
   import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/vue'
   import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
   import { PlusIcon } from '@heroicons/vue/24/solid'
+  import type { Domain } from 'assets/js/domain'
 
-  const props = defineProps({
-    boorus: {
-      type: Array,
-      required: true
-    },
+  interface DomainSelectorProps {
+    boorus: Domain[]
+    modelValue?: Domain
+  }
 
+  const props = withDefaults(defineProps<DomainSelectorProps>(), {
     modelValue: {
-      type: Object,
-      required: true
+      domain: 'r34.app',
+
+      type: null,
+
+      description: {
+        score: 0
+      },
+
+      disabled: false
     }
   })
 
@@ -20,7 +28,7 @@
 
 <template>
   <Listbox
-    :modelValue="modelValue"
+    :modelValue="props.modelValue"
     as="template"
     @update:modelValue="emit('update:modelValue', $event)"
   >
@@ -31,14 +39,14 @@
       >
         <span class="flex items-center">
           <img
-            :src="`https://www.google.com/s2/favicons?domain=${modelValue.domain}&sz=128`"
+            :src="`https://www.google.com/s2/favicons?domain=${props.modelValue.domain}&sz=128`"
             alt="Favicon"
             class="h-5 w-5 flex-shrink-0 rounded"
             height="128"
             loading="eager"
             width="128"
           />
-          <span class="ml-3 block truncate">{{ modelValue.domain }}</span>
+          <span class="ml-3 block truncate">{{ props.modelValue.domain }}</span>
         </span>
 
         <!-- Chevron -->
@@ -83,7 +91,7 @@
 
           <!-- Options -->
           <ListboxOption
-            v-for="booru in boorus"
+            v-for="booru in props.boorus"
             :key="booru.domain"
             v-slot="{ active, selected }"
             :disabled="booru.disabled"
