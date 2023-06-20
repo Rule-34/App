@@ -1,5 +1,6 @@
 import { booruTypeList, completeBooruList } from 'assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 import { useStorage } from '@vueuse/core'
+import type { Domain } from 'assets/js/domain'
 
 const { isPremium } = useUserData()
 
@@ -7,7 +8,7 @@ const userBooruList = useStorage('user-booruList', [], localStorage, {
   writeDefaults: false
 })
 
-const defaultBooruList = [
+const defaultBooruList: Domain[] = [
   {
     // rule34.xxx
     domain: completeBooruList[0].domain,
