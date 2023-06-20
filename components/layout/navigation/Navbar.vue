@@ -1,6 +1,5 @@
 <script setup>
   import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
-  import { StarIcon } from '@heroicons/vue/24/solid'
 
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
 </script>
@@ -41,7 +40,14 @@
         <!-- Center: Logo -->
         <div class="flex flex-1 items-center justify-center">
           <div class="group flex-shrink-0">
-            <StarIcon class="flip-vertical-fwd h-6 w-6 text-base-content-highlight" />
+            <img
+              alt="Icon"
+              class="flip-vertical-fwd h-6 w-6 text-base-content-highlight"
+              height="16"
+              loading="eager"
+              src="/icon.svg"
+              width="16"
+            />
           </div>
         </div>
 

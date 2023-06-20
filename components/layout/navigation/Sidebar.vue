@@ -67,16 +67,17 @@
 
 <template>
   <!-- Logo -->
-  <div class="flex shrink-0 flex-col items-center justify-center gap-2 pt-2">
-    <!-- TODO: Add Logo -->
+  <div class="my-6 flex shrink-0 flex-col items-center justify-center gap-2">
     <img
       alt="Logo"
-      class="h-48 w-full"
+      class="h-24 w-full"
       height="16"
       loading="eager"
-      src="/logo.svg"
+      src="/icon.svg"
       width="16"
     />
+
+    <span class="text-2xl font-bold text-base-content-highlight">Rule 34 App</span>
   </div>
 
   <!-- Content -->
