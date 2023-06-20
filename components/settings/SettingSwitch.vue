@@ -35,7 +35,7 @@
 
     <Switch
       :modelValue="modelValue"
-      class="focus-visible:focus-util relative inline-flex h-6 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent ring-2 ring-base-0/20 transition-colors duration-200 ease-in-out ui-checked:bg-primary-700 ui-not-checked:bg-base-1000"
+      class="focus-visible:focus-util relative inline-flex h-6 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent ring-1 ring-base-0/20 transition-colors duration-200 ease-in-out ui-checked:bg-primary-700 ui-not-checked:bg-base-1000"
       @update:modelValue="emit('update:modelValue', $event)"
     >
       <span

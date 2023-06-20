@@ -5,7 +5,7 @@
 </script>
 
 <template>
-  <nav class="bg-gray-1000 border-b border-b-base-0/20">
+  <nav class="border-b border-b-base-0/20 bg-transparent">
     <!-- -->
 
     <!-- Container -->
