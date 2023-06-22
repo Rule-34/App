@@ -1,0 +1,57 @@
+<script lang="ts" setup>
+  import { ShareIcon } from '@heroicons/vue/24/outline'
+
+  interface ShareButtonProps {
+    title: string
+    text: string
+    url: string
+  }
+
+  const props = defineProps<ShareButtonProps>()
+
+  async function share() {
+    if (!window.navigator.share) {
+      console.debug('Share is not supported on this browser')
+      return
+    }
+
+    let text =
+      //
+      props.title +
+      '\n' +
+      //
+      props.url +
+      '\n\n' +
+      //
+      props.text +
+      '\n\n'
+
+    // Should look like this:
+    /**
+     *  <title>
+     *  <url>
+     *
+     *  <text>
+     *
+     *  <url>
+     */
+
+    await window.navigator.share({
+      title: props.title,
+      text: text,
+      url: props.url
+    })
+  }
+</script>
+
+<template>
+  <button
+    class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util rounded-md p-3"
+    type="button"
+    @click="share"
+  >
+    <span class="sr-only"> Share page</span>
+
+    <ShareIcon class="h-5 w-5" />
+  </button>
+</template>

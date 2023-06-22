@@ -364,15 +364,22 @@
     rating: 'adult'
   })
 
+  const canonicalUrl = computed(() => {
+    const rawRoute = generatePostsRoute(
+      selectedBooru.value.domain,
+      selectedPage.value,
+      selectedTags.value,
+      selectedFilters.value
+    )
+
+    return 'https://' + config.public.APP_DOMAIN + router.resolve(rawRoute).href
+  })
+
   useHead({
     link: [
       {
         rel: 'canonical',
-        href: () => {
-          const rawRoute = generatePostsRoute(selectedBooru.value.domain, selectedPage.value, selectedTags.value)
-
-          return 'https://' + config.public.APP_DOMAIN + router.resolve(rawRoute).href
-        }
+        href: canonicalUrl
       }
     ]
   })
@@ -420,14 +427,36 @@
 
   <!-- Container -->
   <main class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
-    <section>
+    <section class="mb-4">
       <DomainSelector
         :boorus="booruList"
         :model-value="selectedBooru"
-        class="mt-4"
         @update:model-value="onDomainChange"
       />
     </section>
+
+    <div class="flex">
+      <PageHeader class="flex-1">
+        <template #title>Posts</template>
+        <template
+          v-if="titleForBody"
+          #text
+        >
+          <h2 class="truncate text-sm">
+            <!-- TODO: Make tags and filters clickable so they open search menu -->
+
+            {{ titleForBody }}
+          </h2>
+        </template>
+      </PageHeader>
+
+      <ShareButton
+        :title="title"
+        :url="canonicalUrl"
+        class="my-auto"
+        text=""
+      />
+    </div>
 
     <section class="my-4">
       <!-- Pending -->
@@ -471,14 +500,6 @@
 
       <template v-else>
         <!-- -->
-
-        <h1 class="text-base font-medium">Posts</h1>
-
-        <h2 class="mb-3 truncate text-sm">
-          <!-- TODO: Make tags and filters clickable so they open search menu -->
-
-          {{ titleForBody }}
-        </h2>
 
         <ol class="space-y-4">
           <!-- TODO: Animate adding posts https://vuejs.org/guide/built-ins/transition-group.html#staggering-list-transitions -->
