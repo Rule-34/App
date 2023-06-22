@@ -110,7 +110,7 @@
                 <div class="mt-4 flow-root sm:mt-8">
                   <ol
                     id="premium-features"
-                    class="space-y-1 divide-y divide-base-0/5"
+                    class="space-y-1"
                     role="list"
                   >
                     <li
