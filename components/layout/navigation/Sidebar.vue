@@ -70,7 +70,7 @@
   <div class="my-6 flex shrink-0 flex-col items-center justify-center gap-2">
     <img
       alt="Logo"
-      class="h-24 w-full"
+      class="h-24 w-full opacity-95"
       height="16"
       loading="eager"
       src="/icon.svg"
