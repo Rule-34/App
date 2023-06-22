@@ -21,6 +21,11 @@
       },
 
       {
+        name: 'rating',
+        content: 'adult'
+      },
+
+      {
         name: 'color-scheme',
         content: 'dark'
       },
