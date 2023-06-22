@@ -47,7 +47,7 @@ async function getPopularSiteSearchKeywordsFromMatomoApi() {
   const date = 'lastMonth'
 
   const response = await fetch(
-    `${baseUrl}?module=API&method=Actions.getSiteSearchKeywords&idSite=${siteId}&period=${period}&date=${date}&format=JSON&token_auth=${apiToken}`
+    `${baseUrl}?module=API&method=Actions.getSiteSearchKeywords&idSite=${siteId}&period=${period}&date=${date}&format=JSON&filter_limit=-1&token_auth=${apiToken}`
   )
 
   if (!response.ok) {
