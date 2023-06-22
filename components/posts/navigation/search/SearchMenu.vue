@@ -47,17 +47,26 @@
 
   const searchQuery = ref('')
 
+  // Change event
+  function onComboboxInputChange(event: InputEvent) {
+    let value = (event.target as HTMLInputElement).value
+
+    value = value.trim()
+
+    // Replace empty spaces with underscores
+    value = value.replace(/\s/g, '_')
+
+    searchQuery.value = value
+  }
+
   watchDebounced(searchQuery, (value) => onSearchChange(value), { debounce: 350 })
 
   const customTagFromQuery = computed(() => {
-    let tag = searchQuery.value.trim()
+    let tag = searchQuery.value
 
     if (!tag || tag === '') {
       return null
     }
-
-    // Replace empty spaces with underscores
-    tag = tag.replace(/\s+/g, '_')
 
     // If the tag is already in tagResults, return null
     if (props.tagResults.some((tagResult) => tagResult.name === tag)) {
@@ -195,9 +204,8 @@
 
         <!-- Input -->
         <ComboboxInput
-          :displayValue="(tag) => tag.name"
           class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util w-full rounded-full border-0 bg-base-1000 px-9 py-2 text-base-content-highlight ring-1 ring-inset ring-base-0/20 sm:text-sm"
-          @change="searchQuery = $event.target.value"
+          @change="onComboboxInputChange"
         />
 
         <!-- Button -->
