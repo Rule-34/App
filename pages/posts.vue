@@ -359,9 +359,7 @@
       return description
     },
 
-    referrer: 'no-referrer',
-
-    rating: 'adult'
+    referrer: 'no-referrer'
   })
 
   const canonicalUrl = computed(() => {
