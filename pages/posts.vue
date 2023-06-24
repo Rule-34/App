@@ -515,14 +515,17 @@
       <template v-else>
         <!-- -->
 
-        <ol class="space-y-4">
+        <ol
+          class="space-y-4"
+          data-testid="posts-list"
+        >
           <!-- TODO: Animate adding posts https://vuejs.org/guide/built-ins/transition-group.html#staggering-list-transitions -->
           <template
             v-for="(post, index) in posts"
             :key="`${selectedBooru.domain}-${post.id}`"
           >
             <!-- Post -->
-            <li>
+            <li :data-testid="`post-${selectedBooru.domain}-${post.id}`">
               <!-- TODO: Fix content jumping -->
               <Post
                 :post="post"
