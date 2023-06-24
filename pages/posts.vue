@@ -66,10 +66,6 @@
       return selectedBooru.value.type.initialPageID
     }
 
-    if (page < 0) {
-      throw new Error('Page cannot be lower than 0')
-    }
-
     return page
   })
 
@@ -380,6 +376,26 @@
         href: canonicalUrl
       }
     ]
+  })
+
+  definePageMeta({
+    validate: async (route) => {
+      const page = route.query.page as string | undefined
+
+      if (page !== undefined) {
+        const parsedPage = parseInt(page)
+
+        if (Number.isNaN(parsedPage) || parsedPage < 0) {
+          return false
+        }
+      }
+
+      // Validate `domain` query
+      // Validate `tags` query
+      // Validate `filters` query
+
+      return true
+    }
   })
 
   // TODO: Create schema.org breadcrumb for posts page
