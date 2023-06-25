@@ -6,22 +6,10 @@
 
   interface DomainSelectorProps {
     boorus: Domain[]
-    modelValue?: Domain
+    modelValue: Domain
   }
 
-  const props = withDefaults(defineProps<DomainSelectorProps>(), {
-    modelValue: {
-      domain: 'r34.app',
-
-      type: null,
-
-      description: {
-        score: 0
-      },
-
-      disabled: false
-    }
-  })
+  const props = defineProps<DomainSelectorProps>()
 
   const emit = defineEmits(['update:modelValue'])
 </script>
