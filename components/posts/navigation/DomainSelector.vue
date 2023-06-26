@@ -20,7 +20,10 @@
     as="template"
     @update:modelValue="emit('update:modelValue', $event)"
   >
-    <div class="relative">
+    <div
+      class="relative"
+      data-testid="domain-selector"
+    >
       <!-- Select -->
       <ListboxButton
         class="hover:hover-text-util focus-visible:focus-util hover:hover-bg-util relative w-56 cursor-default rounded-md py-1.5 pl-3 pr-10 text-left ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
@@ -34,6 +37,9 @@
             loading="eager"
             width="128"
           />
+
+          <span class="sr-only"> Website to browse: </span>
+
           <span class="ml-3 block truncate">{{ props.modelValue.domain }}</span>
         </span>
 
