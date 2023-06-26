@@ -3738,3 +3738,12 @@ export const mockPostsPage1 = {
     next: 'http://192.168.1.65:8080/booru/gelbooru/posts?baseEndpoint=safebooru.org&pageID=2&limit=30'
   }
 }
+
+export const mockPostsPageHalf1And2 = {
+  ...mockPostsPage0,
+  data: [
+    //
+    ...mockPostsPage0.data.slice(0, 15),
+    ...mockPostsPage1.data.slice(0, 15)
+  ]
+}
