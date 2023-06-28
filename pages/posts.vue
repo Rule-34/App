@@ -482,7 +482,7 @@
         <div class="flex h-80 w-full animate-pulse flex-col items-center justify-center gap-4 text-lg">
           <ArrowPathIcon class="h-12 w-12 animate-spin" />
 
-          <h1>Loading posts&hellip;</h1>
+          <h3>Loading posts&hellip;</h3>
         </div>
       </template>
 
@@ -493,9 +493,9 @@
         <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-lg">
           <ExclamationCircleIcon class="h-12 w-12" />
 
-          <h1>Failed to load posts</h1>
+          <h3>Failed to load posts</h3>
 
-          <h2 class="text-base">{{ errorInitialPosts }}</h2>
+          <span class="text-base">{{ errorInitialPosts }}</span>
         </div>
       </template>
 
@@ -506,9 +506,9 @@
         <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-lg">
           <QuestionMarkCircleIcon class="h-12 w-12" />
 
-          <h1>No results</h1>
+          <h3>No results</h3>
 
-          <h2 class="text-base">Try changing the domain or the tags</h2>
+          <span class="text-base">Try changing the domain or the tags</span>
         </div>
       </template>
 
