@@ -20,11 +20,8 @@ describe('/', async () => {
       // Arrange
       const page = await createPage('/posts')
 
-      // Act
-      await page.waitForSelector('h1')
-
       // Assert DOM
-      expect(await page.textContent('h1')).toBe('Posts')
+      expect(await page.locator('h1').innerText()).toBe('Posts')
     })
 
     it.skip('renders a loader', async () => {
@@ -52,17 +49,21 @@ describe('/', async () => {
       )
 
       // Act
-      await page.goto(url('/posts?domain=safebooru.org'))
+      await Promise.all([
+        page.goto(url('/posts?domain=safebooru.org')),
+        page.waitForResponse('**/posts?baseEndpoint=*')
+      ])
 
-      // Wait for posts to be rendered
-      await page.waitForResponse('**/posts?baseEndpoint=*')
+      const postsListElement = page.getByTestId('posts-list')
+
+      const postsInList = await postsListElement.locator('li')
 
       // Assert DOM
       // Expect 30 posts to be rendered + 4 ads
-      expect(await page.$$('ol > li')).toHaveLength(34)
+      expect(await postsInList.count()).toBe(34)
 
       // Post
-      const firstPost = page.locator('ol > li:first-child')
+      const firstPost = postsInList.first()
 
       // Image
       const firstPostImage = await firstPost.locator('img')
@@ -105,21 +106,22 @@ describe('/', async () => {
       )
 
       // Act
-      await page.goto(url('/posts?domain=safebooru.org'))
-
-      // Wait for posts to be loaded
-      await page.waitForResponse('**/posts?baseEndpoint=*')
+      await Promise.all([
+        page.goto(url('/posts?domain=safebooru.org')),
+        page.waitForResponse('**/posts?baseEndpoint=*')
+      ])
 
       // Scroll to bottom
       await page.getByTestId('load-next-page').scrollIntoViewIfNeeded()
 
-      await page.waitForURL('**/posts?domain=safebooru.org&page=1')
-
-      await page.waitForResponse('**/posts?baseEndpoint=*')
+      await Promise.all([
+        page.waitForResponse('**/posts?baseEndpoint=*'),
+        page.waitForURL('**/posts?domain=safebooru.org&page=1')
+      ])
 
       // Assert DOM
       // Expect 60 posts to be rendered + 8 ads
-      expect(await page.$$('ol > li')).toHaveLength(68)
+      expect(await page.getByTestId('posts-list').locator('li').count()).toBe(68)
     })
 
     it('de-duplicates posts', async () => {
@@ -158,14 +160,12 @@ describe('/', async () => {
 
       const postsListElement = page.getByTestId('posts-list')
 
-      await postsListElement.waitFor()
-
       await page.getByTestId('load-next-page').scrollIntoViewIfNeeded()
 
       await page.waitForResponse('**/posts?baseEndpoint=*')
 
       // Expect 45 posts to be rendered + 6 ads
-      expect(await page.$$('ol > li')).toHaveLength(51)
+      expect(await postsListElement.locator('li').count()).toBe(51)
     })
 
     it('loads tags from Post', async () => {
@@ -201,12 +201,9 @@ describe('/', async () => {
 
       const postsListElement = page.getByTestId('posts-list')
 
-      // Wait for posts to be loaded
-      await postsListElement.waitFor()
-
-      // Expect first post to have same id as mockPostsPage0
       const firstPost = postsListElement.locator('li').first()
 
+      // Expect first post to have same id as mockPostsPage0
       expect(
         //
         await firstPost.getAttribute('data-testid')
@@ -218,9 +215,10 @@ describe('/', async () => {
       // Click on a Post's tag button named "1girl"
       await firstPost.getByRole('button', { name: /1girl/i }).click()
 
-      // await page.waitForURL('**/posts?domain=safebooru.org&tags=1girl')
-
-      // await page.waitForResponse('**/posts?baseEndpoint=*')
+      await Promise.all([
+        page.waitForURL('**/posts?domain=safebooru.org&tags=1girl')
+        // page.waitForResponse('**/posts?baseEndpoint=*')
+      ])
 
       // Expect first post to have same id as mockPostsPage1
       expect(
@@ -268,15 +266,12 @@ describe('/', async () => {
 
         const postsListElement = page.getByTestId('posts-list')
 
-        // Wait for posts to be loaded
-        await postsListElement.waitFor()
-
         // Scroll 200 px
         await page.mouse.wheel(0, 200)
 
-        // Expect first post to have same id as mockPostsPage0
         const firstPost = postsListElement.locator('li').first()
 
+        // Expect first post to have same id as mockPostsPage0
         expect(
           //
           await firstPost.getAttribute('data-testid')
@@ -369,7 +364,10 @@ describe('/', async () => {
         .getByRole('option', { name: /safebooru/i })
         .click()
 
-      await page.waitForURL('**/posts?domain=safebooru.org')
+      await Promise.all([
+        page.waitForURL('**/posts?domain=safebooru.org')
+        // page.waitForResponse('**/posts?baseEndpoint=*')
+      ])
 
       // Assert
       // Expect domain to be safebooru.org
