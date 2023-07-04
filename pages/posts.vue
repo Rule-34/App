@@ -395,7 +395,8 @@
       // Validate `filters` query
 
       return true
-    }
+    },
+    middleware: ['restore-last-session']
   })
 
   // TODO: Create schema.org breadcrumb for posts page
@@ -435,6 +436,8 @@
   </SearchMenuWrapper>
 
   <Teleport to="body">
+    <RestoreLastSessionPopup />
+
     <!-- Scroll to top -->
     <ScrollTopButton />
   </Teleport>
