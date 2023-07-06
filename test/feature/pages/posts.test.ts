@@ -391,4 +391,16 @@ describe('/', async () => {
       // TODO
     })
   })
+
+  describe('Restore last session', async () => {
+    it.skip('renders', async () => {
+      // TODO: Visit a tag page
+      // TODO: Visit default page with full reload
+      // TODO: Check modal is rendered
+    })
+
+    it.skip('restores last session', async () => {
+      // TODO
+    })
+  })
 })

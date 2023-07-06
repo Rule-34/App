@@ -83,7 +83,7 @@
           <ExclamationTriangleIcon class="inline-block h-4 w-4" />
         </span>
 
-        <span class="block text-sm"> Resets settings, saved posts, and all other app data. </span>
+        <span class="block text-sm"> Clear settings, saved posts, and all other app data. </span>
       </label>
 
       <button
