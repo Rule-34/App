@@ -1,11 +1,29 @@
+import { useRestoreLastSessionPopup } from '~/composables/useRestoreLastSessionPopup'
+
+let hasAppBooted = false
+
 export default defineNuxtRouteMiddleware((to, from) => {
-  const userSettings = useUserSettings()
+  const { lastPostsPage, toggleMenu } = useRestoreLastSessionPopup()
+
+  // Show menu on first app boot
+  // And skip if going to the same page
+  if (!hasAppBooted && to.fullPath !== lastPostsPage.value) {
+    hasAppBooted = true
+
+    toggleMenu(true)
+    return
+  }
 
   if (to.name !== 'posts') {
     return
   }
 
+  // Skip if same route
+  if (to.fullPath === from.fullPath) {
+    return
+  }
+
   // TODO: Skip if to has default values
 
-  userSettings.lastPostsPage = to.fullPath
+  lastPostsPage.value = to.fullPath
 })

@@ -40,9 +40,18 @@
   /*
   * NOT TO BE USED DIRECTLY AS CSS
   * IN CLASSES IT SHOULD BE USED AS `focus-visible:focus-util`
+  * TODO: @deprecated
   */
   .focus-util {
     @apply outline-none ring-2 ring-base-content-highlight;
+  }
+
+  /*
+  * NOT TO BE USED DIRECTLY AS CSS
+  * IN CLASSES IT SHOULD BE USED AS `focus-visible:focus-outline-util`
+  */
+  .focus-outline-util {
+    @apply outline outline-2 outline-offset-2 outline-base-content-highlight;
   }
 
   /*
