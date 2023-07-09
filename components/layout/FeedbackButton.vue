@@ -1,11 +1,8 @@
 <script lang="ts" setup>
   import { PencilSquareIcon, XMarkIcon } from '@heroicons/vue/24/outline'
-  import { useStorage } from '@vueuse/core'
   import { toast } from 'vue-sonner'
 
-  const feedbackButtonClosedCount = useStorage('feedback-button-closed-count', 0, localStorage, {
-    writeDefaults: false
-  })
+  const { feedbackButtonClosedCount } = useAppStatistics()
 
   const isOpen = ref(false)
 
