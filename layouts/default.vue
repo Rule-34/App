@@ -1,5 +1,5 @@
 <script setup>
-  const appStatistics = useAppStatistics()
+  useAppStatistics()
 
   const userSettings = useUserSettings()
 
