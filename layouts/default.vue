@@ -1,6 +1,5 @@
 <script setup>
-
-const appStatistics = useAppStatistics()
+  const appStatistics = useAppStatistics()
 
   const userSettings = useUserSettings()
 
@@ -103,6 +102,8 @@ const appStatistics = useAppStatistics()
       position="top-center"
       theme="dark"
     />
+
+    <FeedbackButton />
 
     <SidebarWrapper>
       <LazySidebar />
