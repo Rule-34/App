@@ -103,8 +103,6 @@
       theme="dark"
     />
 
-    <FeedbackButton />
-
     <SidebarWrapper>
       <LazySidebar />
     </SidebarWrapper>
