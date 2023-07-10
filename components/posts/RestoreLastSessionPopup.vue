@@ -3,13 +3,34 @@
   import { toast } from 'vue-sonner'
   import qs from 'qs'
   import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+  import { useInterval } from '@vueuse/core'
 
   const router = useRouter()
 
   const { isPremium } = useUserData()
   const { lastPostsPage, isMenuActive, toggleMenu } = useRestoreLastSessionPopup()
 
-  const bodyText = computed(() => {
+  const { counter, pause, resume } = useInterval(1000, { controls: true })
+
+  const counterPercentage = computed(() => {
+    const maxTime = 10
+
+    if (counter.value >= maxTime) {
+      return 100
+    }
+
+    return Math.round((counter.value / maxTime) * 100)
+  })
+
+  // Close the popup after 10 seconds
+  watch(counter, () => {
+    if (counterPercentage.value === 100) {
+      pause()
+      toggleMenu(false)
+    }
+  })
+
+  const description = computed(() => {
     if (!lastPostsPage.value) {
       return null
     }
@@ -102,6 +123,8 @@
           >
             <DialogPanel
               class="relative transform overflow-hidden rounded-lg bg-base-1000 px-4 pb-4 pt-5 text-left shadow-xl ring-1 ring-base-0/10 transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6"
+              @mouseout="resume"
+              @mouseover="pause"
             >
               <!-- TODO: Add dismiss button -->
               <!-- TODO: Add dismiss forever button in dropdown -->
@@ -114,7 +137,7 @@
                 </DialogTitle>
 
                 <div class="mt-1 text-sm">
-                  {{ bodyText }}
+                  {{ description }}
                 </div>
               </div>
 
@@ -126,6 +149,16 @@
                 >
                   Continue
                 </button>
+              </div>
+
+              <!-- Progress -->
+              <div class="absolute inset-x-0 bottom-0 h-0.5 w-full rounded-full bg-base-950">
+                <span class="sr-only"> Percentage of time left until the popup closes </span>
+
+                <div
+                  :style="{ width: `${counterPercentage}%` }"
+                  class="h-0.5 rounded-full bg-base-0/20 transition-all duration-300 ease-in-out"
+                />
               </div>
             </DialogPanel>
           </TransitionChild>
