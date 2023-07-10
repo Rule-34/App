@@ -30,6 +30,21 @@
         </TransitionChild>
 
         <div class="fixed inset-0 flex">
+          <!-- Feedback -->
+          <!-- TODO: Fix leave transition -->
+          <TransitionChild
+            as="template"
+            enter="transform transition ease-in-out duration-300"
+            enter-from="translate-x-full"
+            enter-to="translate-x-0"
+            leave="transform transition ease-in-out duration-0"
+            leave-from="translate-x-0"
+            leave-to="translate-x-full"
+          >
+            <FeedbackButton />
+          </TransitionChild>
+
+          <!-- Dialog -->
           <TransitionChild
             as="template"
             enter="transition ease-in-out duration-300 transform"
