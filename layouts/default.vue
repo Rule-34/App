@@ -1,10 +1,8 @@
 <script setup>
   useAppStatistics()
 
-  const userSettings = useUserSettings()
-
-  const { value: isMenuActive, toggle: toggleMenu } = useMenu()
-  const { value: isSearchMenuActive, toggle: toggleSearchMenu } = useSearchMenu()
+  const { toggle: toggleMenu } = useMenu()
+  const { toggle: toggleSearchMenu } = useSearchMenu()
 
   const router = useRouter()
 
@@ -13,48 +11,6 @@
     toggleMenu(false)
     toggleSearchMenu(false)
   })
-
-  function touchHandler(direction, event) {
-    if (!userSettings.navigationTouchGestures) {
-      console.debug('Gestures setting is disabled, skipping...')
-      return
-    }
-
-    const touchThreshold = screen.availWidth * 0.25
-    console.debug(touchThreshold, event)
-
-    switch (direction) {
-      case 'right':
-        if (event.touchstartX > touchThreshold) {
-          console.debug('Insufficient touch threshold')
-          return
-        }
-
-        if (isSearchMenuActive.value) {
-          toggleSearchMenu(false)
-
-          //
-        } else {
-          toggleMenu(true)
-        }
-        break
-
-      case 'left':
-        if (event.touchstartX < screen.availWidth - touchThreshold) {
-          console.debug('Insufficient touch threshold')
-          return
-        }
-
-        if (!isSearchMenuActive.value) {
-          toggleSearchMenu(true)
-
-          //
-        } else {
-          toggleMenu(false)
-        }
-        break
-    }
-  }
 
   // TODO: Log general errors to the user with a Toast
 
@@ -68,12 +24,8 @@
   )
 </script>
 
+<!-- TODO: Restore gestures -->
 <template>
-  <!-- TODO: Restore gestures -->
-  <!--    v-touch="{-->
-  <!--      left: (e) => touchHandler('left', e),-->
-  <!--      right: (e) => touchHandler('right', e)-->
-  <!--    }"-->
   <div class="relative flex h-full flex-col">
     <!-- Background -->
     <div
@@ -97,11 +49,13 @@
       />
     </div>
 
-    <Toaster
-      close-button
-      position="top-center"
-      theme="dark"
-    />
+    <ClientOnly>
+      <Toaster
+        close-button
+        position="top-center"
+        theme="dark"
+      />
+    </ClientOnly>
 
     <SidebarWrapper>
       <LazySidebar />

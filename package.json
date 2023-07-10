@@ -32,7 +32,6 @@
     "dexie": "^3.2.4",
     "js-abbreviation-number": "^1.4.0",
     "lodash-es": "^4.17.21",
-    "notiwind": "^2.0.2",
     "nuxt": "^3.6.2",
     "nuxt-simple-sitemap": "^2.7.0",
     "qs": "^6.11.2",

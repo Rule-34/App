@@ -10,7 +10,9 @@ export default defineNuxtRouteMiddleware((to, from) => {
   if (!hasAppBooted && to.fullPath !== lastPostsPage.value) {
     hasAppBooted = true
 
-    toggleMenu(true)
+    onNuxtReady(() => {
+      toggleMenu(true)
+    })
     return
   }
 
@@ -23,6 +25,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     return
   }
 
+  // TODO: Skip if only has booru
   // TODO: Skip if to has default values
 
   lastPostsPage.value = to.fullPath
