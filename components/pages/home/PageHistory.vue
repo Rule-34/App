@@ -29,14 +29,9 @@
   }
 </script>
 
-<template v-if="pageHistory.length">
-  <PageHeader as="h3">
-    <template #title>History</template>
-    <template #text>Continue where you left off</template>
-  </PageHeader>
-
+<template>
   <ol
-    class="space-y-6 overflow-x-hidden py-2"
+    class="space-y-6 overflow-x-hidden"
     role="list"
   >
     <li
