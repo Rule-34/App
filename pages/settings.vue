@@ -88,7 +88,7 @@
 
       <button
         id="reset"
-        class="hover:hover-bg-util focus-visible:focus-util rounded-lg px-3 py-1.5 text-sm font-medium text-base-content-highlight ring-1 ring-base-0/20 transition-colors focus-visible:ring-inset"
+        class="hover:hover-bg-util focus-visible:focus-outline-util rounded-lg px-3 py-1.5 text-sm font-medium text-base-content-highlight ring-1 ring-base-0/20 transition-colors focus-visible:ring-inset"
         type="button"
         @click="removeAllData"
       >

@@ -39,7 +39,7 @@
   <!-- TODO: Make more obvious? -->
   <SafeTeleport to="#navbar-actions">
     <NuxtLink
-      class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
+      class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
       href="/premium/sign-in"
     >
       <span class="sr-only">Sign in</span>
@@ -128,7 +128,7 @@
                       <a
                         v-if="mainFeature.hasAdditionalInfo"
                         :href="`#${mainFeature.title}`"
-                        class="focus-visible:focus-util hover:hover-text-util text-base-content"
+                        class="focus-visible:focus-outline-util hover:hover-text-util text-base-content"
                       >
                         <span class="sr-only">Learn more about this feature</span>
 
@@ -165,7 +165,7 @@
 
                   <a
                     aria-describedby="premium-features"
-                    class="focus-visible:focus-util hover:hover-text-util rounded-md bg-primary-700 px-3 py-2 text-center text-sm font-semibold leading-6 text-base-content-highlight hover:bg-primary-600 focus-visible:ring-offset-2"
+                    class="focus-visible:focus-outline-util hover:hover-text-util rounded-md bg-primary-700 px-3 py-2 text-center text-sm font-semibold leading-6 text-base-content-highlight hover:bg-primary-600 focus-visible:ring-offset-2"
                     href="https://gum.co/Rule34App"
                   >
                     Subscribe

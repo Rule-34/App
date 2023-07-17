@@ -46,7 +46,7 @@
 
 <template>
   <button
-    class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util rounded-md p-3"
+    class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util rounded-md p-3"
     type="button"
     @click="share"
   >

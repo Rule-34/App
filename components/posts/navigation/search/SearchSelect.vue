@@ -55,7 +55,7 @@
           <!-- Right side -->
           <ListboxButton
             ref="trigger"
-            class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util inline-flex items-center rounded-l-none rounded-r-md px-2 py-1"
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util inline-flex items-center rounded-l-none rounded-r-md px-2 py-1"
           >
             <span class="sr-only">Change published status</span>
 

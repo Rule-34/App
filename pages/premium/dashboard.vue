@@ -42,7 +42,7 @@
   <!-- Sign out -->
   <SafeTeleport to="#navbar-actions">
     <button
-      class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
+      class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
       type="button"
       @click="signOut"
     >
@@ -82,7 +82,7 @@
           v-for="link in links"
           :key="link.name"
           :href="link.href"
-          class="hover:hover-bg-util focus-visible:focus-util block w-full rounded-md border border-base-0/20 px-4 py-3"
+          class="hover:hover-bg-util focus-visible:focus-outline-util block w-full rounded-md border border-base-0/20 px-4 py-3"
         >
           <h2 class="text-lg font-bold tracking-tight text-base-content-highlight">
             {{ link.name }}
@@ -98,7 +98,7 @@
     <!-- Manage subscription -->
     <section class="absolute inset-x-0 bottom-0 w-full p-4 text-center">
       <NuxtLink
-        class="hover:hover-text-util focus-visible:focus-util underline"
+        class="hover:hover-text-util focus-visible:focus-outline-util underline"
         href="https://app.gumroad.com/library?query=Rule+34+App"
         target="_blank"
       >

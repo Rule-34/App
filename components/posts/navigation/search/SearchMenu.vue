@@ -204,7 +204,7 @@
 
         <!-- Input -->
         <ComboboxInput
-          class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util w-full rounded-full border-0 bg-base-1000 px-9 py-2 text-base-content-highlight ring-1 ring-inset ring-base-0/20 sm:text-sm"
+          class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util w-full rounded-full border-0 bg-base-1000 px-9 py-2 text-base-content-highlight ring-1 ring-inset ring-base-0/20 sm:text-sm"
           @change="onComboboxInputChange"
         />
 
@@ -284,7 +284,7 @@
       <!-- Tag Collections Toggler -->
       <div>
         <button
-          class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util inline-flex items-center gap-x-1.5 rounded-md px-2 py-1 ring-1 ring-base-0/20"
+          class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util inline-flex items-center gap-x-1.5 rounded-md px-2 py-1 ring-1 ring-base-0/20"
           type="button"
           @click="toggleTagCollections(true)"
         >
@@ -338,7 +338,7 @@
             :class="{
               'line-through': isTagExcluded(tag.name)
             }"
-            class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util group inline-flex items-center rounded-l-full border border-r-0 border-base-0/20 py-1 pl-2.5 pr-1.5 focus-visible:ring-inset"
+            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util group inline-flex items-center rounded-l-full border border-r-0 border-base-0/20 py-1 pl-2.5 pr-1.5 focus-visible:ring-inset"
             type="button"
             @click="removeTagFromSelectedTags(index)"
           >
@@ -349,7 +349,7 @@
 
           <!-- Exclude button -->
           <button
-            class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util group inline-flex h-full items-center rounded-r-full border border-base-0/20 py-1 pl-1.5 pr-2.5 focus-visible:ring-inset"
+            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util group inline-flex h-full items-center rounded-r-full border border-base-0/20 py-1 pl-1.5 pr-2.5 focus-visible:ring-inset"
             type="button"
             @click="toggleSelectedTagAsExcluded(index)"
           >
@@ -378,7 +378,7 @@
     </p>
 
     <button
-      class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util mx-auto inline-flex w-full items-center justify-center rounded-md px-3 py-1 text-base ring-1 ring-base-0/20"
+      class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto inline-flex w-full items-center justify-center rounded-md px-3 py-1 text-base ring-1 ring-base-0/20"
       type="submit"
       @click="onSubmitted"
     >

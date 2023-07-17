@@ -64,7 +64,7 @@
 
         <input
           v-model='formBooru.domain'
-          class='border-util focus-visible:focus-util block h-8 bg-base-1000 p-1 text-gray-300 outline-none'
+          class='border-util focus-visible:focus-outline-util block h-8 bg-base-1000 p-1 text-gray-300 outline-none'
           name='domain'
           placeholder='example.com'
           required
@@ -84,7 +84,7 @@
 
         <select
           v-model='formBooru.type'
-          class='border-util focus-visible:focus-util block h-8 w-max bg-base-1000 p-1 text-gray-300 outline-none'
+          class='border-util focus-visible:focus-outline-util block h-8 w-max bg-base-1000 p-1 text-gray-300 outline-none'
           name='type'
           required
         >
@@ -104,7 +104,7 @@
 
         <input
           v-model='formBooru.nsfw'
-          class='focus-visible:focus-util block flex-auto self-center bg-base-1000 p-1 outline-none'
+          class='focus-visible:focus-outline-util block flex-auto self-center bg-base-1000 p-1 outline-none'
           name='nsfw'
           type='checkbox'
         />
@@ -119,7 +119,7 @@
 
         <textarea
           v-model='formBooru.config'
-          class='border-util focus-visible:focus-util block w-full bg-base-1000 p-1 text-gray-300 outline-none'
+          class='border-util focus-visible:focus-outline-util block w-full bg-base-1000 p-1 text-gray-300 outline-none'
           name='config'
           rows='3'
           spellcheck='false'
@@ -131,7 +131,7 @@
       </button> -->
 
       <button
-        class='focus-visible:focus-util w-full rounded-full bg-gradient-to-r from-primary-400 to-accent-400 px-2 py-1 tracking-wide'
+        class='focus-visible:focus-outline-util w-full rounded-full bg-gradient-to-r from-primary-400 to-accent-400 px-2 py-1 tracking-wide'
         type='submit'
       >
         Add

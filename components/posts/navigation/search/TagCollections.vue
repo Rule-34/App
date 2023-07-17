@@ -73,7 +73,7 @@
 
     <div class="absolute right-0 top-0.5">
       <NuxtLink
-        class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util inline-flex w-full items-center gap-x-1.5 rounded-md p-1"
+        class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util inline-flex w-full items-center gap-x-1.5 rounded-md p-1"
         to="/premium/tag-collections"
       >
         <span class="sr-only"> Manage tag collections </span>
@@ -91,7 +91,7 @@
           <!-- -->
 
           <button
-            class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util inline-flex w-full items-center justify-between rounded-full px-4 py-1 ring-1 ring-base-0/20"
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util inline-flex w-full items-center justify-between rounded-full px-4 py-1 ring-1 ring-base-0/20"
             type="button"
             @click="setTagCollectionAsSelected(tagCollection)"
           >
@@ -111,7 +111,7 @@
         <!-- TODO: Improve design and cohesion -->
         <li>
           <button
-            class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util inline-flex w-full items-center justify-between rounded-full px-4 py-1 ring-1 ring-base-0/20"
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util inline-flex w-full items-center justify-between rounded-full px-4 py-1 ring-1 ring-base-0/20"
             type="button"
             @click="createTagCollectionFromSelectedTags"
           >

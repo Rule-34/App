@@ -40,7 +40,7 @@
       >
         <NuxtLink
           :href="link.href"
-          class="hover:hover-text-util focus-visible:focus-util text-sm text-base-content underline"
+          class="hover:hover-text-util focus-visible:focus-outline-util text-sm text-base-content underline"
         >
           {{ link.text }}
         </NuxtLink>
