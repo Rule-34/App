@@ -64,7 +64,7 @@
 
         <input
           v-model='formTagCollection.name'
-          class='border-util focus-visible:focus-util block bg-base-1000 p-1 text-gray-300 outline-none'
+          class='border-util focus-visible:focus-outline-util block bg-base-1000 p-1 text-gray-300 outline-none'
           name='tagCollectionName'
           required
           type='text'
@@ -77,7 +77,7 @@
 
         <textarea
           v-model='formTagCollection.tags'
-          class='border-util focus-visible:focus-util block w-full bg-base-1000 p-1 text-gray-300 outline-none'
+          class='border-util focus-visible:focus-outline-util block w-full bg-base-1000 p-1 text-gray-300 outline-none'
           name='tagCollectionTags'
           required
           rows='3'
@@ -90,7 +90,7 @@
       </label>
 
       <button
-        class='focus-visible:focus-util w-full rounded-full bg-gradient-to-r from-primary-400 to-accent-400 px-2 py-1 tracking-wide'
+        class='focus-visible:focus-outline-util w-full rounded-full bg-gradient-to-r from-primary-400 to-accent-400 px-2 py-1 tracking-wide'
         type='submit'
       >
         Add

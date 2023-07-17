@@ -28,7 +28,7 @@
     <!-- Media -->
     <NuxtLink
       :href="promo.link"
-      class="focus-visible:focus-util focus-visible:ring-inset"
+      class="focus-visible:focus-outline-util focus-visible:ring-inset"
       target="_blank"
     >
       <PostMedia
@@ -43,7 +43,7 @@
     <!-- Body -->
     <figcaption class="whitespace-normal px-1 py-3 text-center text-sm">
       <NuxtLink
-        class="hover:hover-text-util focus-visible:focus-util underline"
+        class="hover:hover-text-util focus-visible:focus-outline-util underline"
         href="/premium"
         >Get Premium<!----></NuxtLink
       ><!---->: No promos + exclusive features!

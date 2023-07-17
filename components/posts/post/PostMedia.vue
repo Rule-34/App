@@ -79,7 +79,7 @@
           </span>
 
           <button
-            class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util mx-auto inline-flex items-center justify-center rounded-md px-2 py-1 text-sm ring-1 ring-base-0/20"
+            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto inline-flex items-center justify-center rounded-md px-2 py-1 text-sm ring-1 ring-base-0/20"
             type="button"
             @click="manuallyReloadMedia"
           >
@@ -88,7 +88,7 @@
         </div>
 
         <NuxtLink
-          class="hover:hover-text-util focus-visible:focus-util justify-self-end text-sm text-base-content underline"
+          class="hover:hover-text-util focus-visible:focus-outline-util justify-self-end text-sm text-base-content underline"
           href="https://www.rule34.app/frequently-asked-questions#74cfdf0316b04111b0c65b7f8502dfda"
           target="_blank"
         >

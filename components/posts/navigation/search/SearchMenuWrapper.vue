@@ -52,7 +52,7 @@
             >
               <div class="absolute right-full top-0 flex w-16 justify-center pt-5">
                 <button
-                  class="focus-visible:focus-util hover:hover-bg-util -m-2.5 rounded-md p-2.5"
+                  class="focus-visible:focus-outline-util hover:hover-bg-util -m-2.5 rounded-md p-2.5"
                   type="button"
                   @click="toggleSearchMenu(false)"
                 >

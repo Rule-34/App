@@ -409,7 +409,7 @@
   <!-- Search -->
   <SafeTeleport to="#navbar-actions">
     <button
-      class="focus-visible:focus-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
+      class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
       type="button"
       @click="toggleSearchMenu()"
     >

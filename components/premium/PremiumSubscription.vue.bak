@@ -156,7 +156,7 @@
 
 			<div class="mt-8">
 				<a
-					class="focus-visible:focus-util block w-full rounded-lg border-0 bg-gradient-to-r from-accent-400 to-primary-400 px-6 py-3 text-center text-lg font-medium leading-6 text-black transition hover:text-gray-800"
+					class="focus-visible:focus-outline-util block w-full rounded-lg border-0 bg-gradient-to-r from-accent-400 to-primary-400 px-6 py-3 text-center text-lg font-medium leading-6 text-black transition hover:text-gray-800"
 					href="https://gum.co/Rule34App"
 					rel="noopener nofollow"
 					target="_blank"

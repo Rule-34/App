@@ -94,7 +94,7 @@
         <NuxtLink
           :href="item.href"
           :target="item.isExternal ? '_blank' : undefined"
-          class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
+          class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
           exactActiveClass="bg-base-0/20 text-base-content-highlight"
         >
           <component
@@ -108,7 +108,7 @@
       <!-- Premium -->
       <li class="-mx-2 space-y-1">
         <NuxtLink
-          class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 underline decoration-primary-500 decoration-2 underline-offset-8"
+          class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 underline decoration-primary-500 decoration-2 underline-offset-8"
           exactActiveClass="bg-base-0/20 text-base-content-highlight"
           href="/premium"
         >
@@ -125,7 +125,7 @@
         <div class="flex justify-around pb-3">
           <!-- Twitter -->
           <NuxtLink
-            class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
             href="https://redirect.r34.app/twitter"
             target="_blank"
           >
@@ -144,7 +144,7 @@
 
           <!-- Discord -->
           <NuxtLink
-            class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
             href="https://redirect.r34.app/discord"
             target="_blank"
           >

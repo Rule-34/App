@@ -63,7 +63,7 @@
 
 <template>
   <button
-    class="hover:hover-bg-util focus-visible:focus-util group rounded-md px-1.5 py-1"
+    class="hover:hover-bg-util focus-visible:focus-outline-util group rounded-md px-1.5 py-1"
     type="button"
     @click="downloadMedia"
   >

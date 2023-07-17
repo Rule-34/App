@@ -19,7 +19,7 @@
         <!-- Right side: Menu button -->
         <div class="absolute inset-y-0 left-0 flex items-center pl-2">
           <button
-            class="hover:hover-text-util focus-visible:focus-util hover:hover-bg-util inline-flex items-center justify-center rounded-md p-2 text-base-content-highlight focus-visible:ring-inset"
+            class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util inline-flex items-center justify-center rounded-md p-2 text-base-content-highlight focus-visible:ring-inset"
             type="button"
             @click="toggleMenu()"
           >

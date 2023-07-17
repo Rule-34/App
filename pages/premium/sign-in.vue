@@ -77,7 +77,7 @@
               </label>
               <div class="text-sm">
                 <NuxtLink
-                  class="hover:hover-text-util focus-visible:focus-util font-semibold"
+                  class="hover:hover-text-util focus-visible:focus-outline-util font-semibold"
                   href="https://app.gumroad.com/library?query=Rule+34+App"
                   target="_blank"
                 >
@@ -91,7 +91,7 @@
                 id="license"
                 v-model.trim="formData.password"
                 autocomplete="current-password"
-                class="focus-visible:focus-util block w-full rounded-md border-0 bg-base-0/5 py-1.5 text-base-content-highlight shadow-sm ring-1 ring-inset ring-base-0/10 focus-visible:ring-inset sm:text-sm sm:leading-6"
+                class="focus-visible:focus-outline-util block w-full rounded-md border-0 bg-base-0/5 py-1.5 text-base-content-highlight shadow-sm ring-1 ring-inset ring-base-0/10 focus-visible:ring-inset sm:text-sm sm:leading-6"
                 name="password"
                 required
                 type="password"
@@ -101,7 +101,7 @@
 
           <div>
             <button
-              class="focus-visible:focus-util hover:hover-text-util flex w-full justify-center rounded-md bg-primary-500 px-3 py-1.5 text-sm font-semibold leading-6 text-base-content-highlight shadow-sm hover:bg-primary-400"
+              class="focus-visible:focus-outline-util hover:hover-text-util flex w-full justify-center rounded-md bg-primary-500 px-3 py-1.5 text-sm font-semibold leading-6 text-base-content-highlight shadow-sm hover:bg-primary-400"
               type="submit"
             >
               Sign in
@@ -115,7 +115,7 @@
           {{ ' ' }}
 
           <NuxtLink
-            class="focus-visible:focus-util font-semibold leading-6 text-primary-400 hover:text-primary-300"
+            class="focus-visible:focus-outline-util font-semibold leading-6 text-primary-400 hover:text-primary-300"
             href="/premium"
           >
             Subscribe now

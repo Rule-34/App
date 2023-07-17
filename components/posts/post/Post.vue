@@ -113,7 +113,7 @@
         />
 
         <DisclosureButton
-          class="hover:hover-bg-util focus-visible:focus-util group ml-auto flex items-center gap-1 rounded-md px-1.5 py-1"
+          class="hover:hover-bg-util focus-visible:focus-outline-util group ml-auto flex items-center gap-1 rounded-md px-1.5 py-1"
           type="button"
         >
           <span class="group-hover:hover-text-util text-sm text-base-content"> Tags </span>
@@ -150,7 +150,7 @@
                 (selectedTag) => selectedTag.name === tag.name
               )
             }"
-            class="focus-visible:focus-util group inline-flex items-center rounded-full px-2 py-1 ring-1 ring-inset ring-base-0/20"
+            class="focus-visible:focus-outline-util group inline-flex items-center rounded-full px-2 py-1 ring-1 ring-inset ring-base-0/20"
             type="button"
             @click="emit('clickTag', tag.name)"
           >

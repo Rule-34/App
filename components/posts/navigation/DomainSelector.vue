@@ -26,7 +26,7 @@
     >
       <!-- Select -->
       <ListboxButton
-        class="hover:hover-text-util focus-visible:focus-util hover:hover-bg-util relative w-56 cursor-default rounded-md py-1.5 pl-3 pr-10 text-left ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
+        class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util relative w-56 cursor-default rounded-md py-1.5 pl-3 pr-10 text-left ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
       >
         <span class="flex items-center">
           <img
@@ -64,7 +64,7 @@
               v-tooltip="
                 'A Booru is a type of website imageboard that specializes in parodies of anime, manga and video game related content'
               "
-              class="focus-visible:focus-util hover:hover-text-util ml-11 w-fit cursor-help underline decoration-dotted underline-offset-2"
+              class="focus-visible:focus-outline-util hover:hover-text-util ml-11 w-fit cursor-help underline decoration-dotted underline-offset-2"
               role="note"
               tabindex="0"
             >
@@ -75,7 +75,7 @@
               v-tooltip="
                 'Score is calculated based on various factors: quantity of posts, post moderation, tag system, content variety, load speed and API compatibility'
               "
-              class="focus-visible:focus-util hover:hover-text-util absolute inset-y-0 right-0 mr-4 cursor-help underline decoration-dotted underline-offset-2"
+              class="focus-visible:focus-outline-util hover:hover-text-util absolute inset-y-0 right-0 mr-4 cursor-help underline decoration-dotted underline-offset-2"
               role="note"
               tabindex="0"
             >
@@ -157,7 +157,7 @@
             />
 
             <NuxtLink
-              class="focus-visible:focus-util ml-3"
+              class="focus-visible:focus-outline-util ml-3"
               href="/premium/boorus"
             >
               Add more Boorus

@@ -130,7 +130,7 @@
 
       <!-- Backup -->
       <button
-        class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util inline-flex min-w-[5rem] flex-col items-center gap-1.5 rounded-md p-2 ring-1 ring-base-0/20"
+        class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util inline-flex min-w-[5rem] flex-col items-center gap-1.5 rounded-md p-2 ring-1 ring-base-0/20"
         type="button"
         @click="createBackup"
       >
@@ -149,7 +149,7 @@
       />
 
       <button
-        class="focus-visible:focus-util hover:hover-text-util hover:hover-bg-util inline-flex min-w-[5rem] flex-col items-center gap-1.5 rounded-md p-2 ring-1 ring-base-0/20"
+        class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util inline-flex min-w-[5rem] flex-col items-center gap-1.5 rounded-md p-2 ring-1 ring-base-0/20"
         type="button"
         @click="$refs.fileInputElement.click()"
       >

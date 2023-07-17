@@ -98,7 +98,9 @@
       portal
       tailwindcss-origin-class
     >
-      <MenuButton class="hover:hover-bg-util focus-visible:focus-util group flex items-center rounded-md px-1.5 py-1">
+      <MenuButton
+        class="hover:hover-bg-util focus-visible:focus-outline-util group flex items-center rounded-md px-1.5 py-1"
+      >
         <span class="sr-only"> Open post source options </span>
 
         <LinkIcon class="group-hover:hover-text-util h-5 w-5 text-base-content" />
