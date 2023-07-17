@@ -21,6 +21,9 @@
   const userSettings = useUserSettings()
   const { isPremium } = useUserData()
   const { booruList } = useBooruList()
+  const { addListener } = usePageHistory()
+
+  addListener()
 
   const { selectedDomainFromStorage } = useSelectedDomainFromStorage()
 
@@ -71,6 +74,7 @@
 
   const selectedFilters = computed(() => {
     // TODO: Validate
+    // TODO: Default score to 0
 
     return {
       rating: route.query.filter?.rating ?? undefined,
@@ -395,8 +399,7 @@
       // Validate `filters` query
 
       return true
-    },
-    middleware: ['restore-last-session']
+    }
   })
 
   // TODO: Create schema.org breadcrumb for posts page
@@ -436,8 +439,6 @@
   </SearchMenuWrapper>
 
   <Teleport to="body">
-    <RestoreLastSessionPopup />
-
     <!-- Scroll to top -->
     <ScrollTopButton />
   </Teleport>

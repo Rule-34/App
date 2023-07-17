@@ -10,7 +10,7 @@
     { title: 'One-click post download', hasAdditionalInfo: true },
     { title: 'Post image source finder', hasAdditionalInfo: true },
     { title: 'Tag collections', hasAdditionalInfo: true },
-    { title: 'Restore last session', hasAdditionalInfo: true },
+    { title: 'Page history', hasAdditionalInfo: true },
     { title: 'Backup your data', hasAdditionalInfo: true },
     { title: 'Integrated proxy to bypass website blocks', hasAdditionalInfo: true },
     { title: 'Hide promoted content', hasAdditionalInfo: false },
