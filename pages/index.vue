@@ -172,13 +172,3 @@
     <!--  TODO: Footer link to social media -->
   </footer>
 </template>
-
-<style>
-  #navbar {
-    border-bottom: transparent;
-  }
-
-  #navbar-logo {
-    visibility: hidden;
-  }
-</style>
