@@ -14,7 +14,7 @@
 <template>
   <SwitchGroup
     as="div"
-    class="flex flex-row items-center justify-between gap-2"
+    class="flex flex-row items-center justify-between gap-4"
   >
     <span class="flex flex-grow flex-col">
       <SwitchLabel

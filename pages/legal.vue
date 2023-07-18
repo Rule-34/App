@@ -12,57 +12,65 @@
       <template #title>Legal</template>
     </PageHeader>
 
-    <div class="mt-7 space-y-6">
+    <ol class="mx-2 mt-4 space-y-4">
       <!-- Generated terms of service -->
-      <ContentContainer
-        :links="[
-          {
-            text: 'Terms of service',
-            href: '/terms-of-service'
-          }
-        ]"
-        text="You can find the Terms Of Service (TOS) in the next link"
-        title="Terms of service"
-      />
+      <li>
+        <ContentContainer
+          :links="[
+            {
+              text: 'Terms of service',
+              href: '/terms-of-service'
+            }
+          ]"
+          text="You can find the Terms Of Service (TOS) in the next link"
+          title="Terms of service"
+        />
+      </li>
 
       <!-- Generated terms of service -->
-      <ContentContainer
-        :links="[
-          {
-            text: 'Privacy policy',
-            href: '/privacy-policy'
-          }
-        ]"
-        text="You can find the Privacy policy in the next link"
-        title="Privacy policy"
-      />
+      <li>
+        <ContentContainer
+          :links="[
+            {
+              text: 'Privacy policy',
+              href: '/privacy-policy'
+            }
+          ]"
+          text="You can find the Privacy policy in the next link"
+          title="Privacy policy"
+        />
+      </li>
 
       <!-- Analytics -->
-      <ContentContainer
-        :links="[
-          {
-            text: 'Opt Out',
-            href: '/privacy-policy#opt-out'
-          }
-        ]"
-        text="Self hosted Matomo analytics are used, configured to NOT gather, or store, any personal info
+      <li>
+        <ContentContainer
+          :links="[
+            {
+              text: 'Opt Out',
+              href: '/privacy-policy#opt-out'
+            }
+          ]"
+          text="Self hosted Matomo analytics are used, configured to NOT gather, or store, any personal info
 
 				 Feel free to opt out on the next link"
-        title="Analytics"
-      />
+          title="Analytics"
+        />
+      </li>
 
       <!-- Contact -->
-      <ContentContainer
-        :links="[
-          {
-            text: 'contact@r34.app',
-            href: 'mailto:contact@r34.app'
-          }
-        ]"
-        text="Reach me to discuss questions, suggestions, requests, comments, or any other concern"
-        title="Contact"
-      />
-    </div>
+      <li>
+        <ContentContainer
+          :links="[
+            {
+              text: 'contact@r34.app',
+              href: 'mailto:contact@r34.app'
+            }
+          ]"
+          text="Reach me to discuss questions, suggestions, requests, comments, or any other concern"
+          title="Contact"
+        />
+      </li>
+    </ol>
 
     <PageHeader
       as="h2"
@@ -71,20 +79,22 @@
       <template #title>Miscelaneous</template>
     </PageHeader>
 
-    <div class="mt-7 space-y-6">
+    <ol class="mx-2 mt-4 space-y-4">
       <!-- Remove media -->
-      <ContentContainer
-        :links="[
-          {
-            text: 'Github repository',
-            href: 'https://github.com/AlejandroAkbal/Rule-34-App'
-          }
-        ]"
-        text="If you're the owner of a site where we get the media content and would like to cease these actions, please contact us with proof that you're the owner of that site and a message regarding the cease to actions
+      <li>
+        <ContentContainer
+          :links="[
+            {
+              text: 'Github repository',
+              href: 'https://github.com/AlejandroAkbal/Rule-34-App'
+            }
+          ]"
+          text="If you're the owner of a site where we get the media content and would like to cease these actions, please contact us with proof that you're the owner of that site and a message regarding the cease to actions
 
       Keep in mind that all the content we get is from public released APIs from the site itself"
-        title="Media content disclaimer"
-      />
-    </div>
+          title="Media content disclaimer"
+        />
+      </li>
+    </ol>
   </main>
 </template>
