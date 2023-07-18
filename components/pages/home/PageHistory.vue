@@ -11,7 +11,7 @@
         //
         .replace('/posts?', '')
         .split('&')
-        .join(', ')
+        .join('\n')
         // Query separator
         .replace(/=/g, ': ')
         // Tag separator
@@ -56,7 +56,7 @@
 
       <!-- Text -->
       <button
-        class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util flex-auto rounded-md px-1 py-0.5 text-left text-xs leading-5"
+        class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util flex-auto whitespace-pre-wrap rounded-md px-1 py-0.5 text-left text-xs leading-5"
         type="button"
         @click="onHistoryItemClick(historyItem.path)"
       >
