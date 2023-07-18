@@ -40,8 +40,8 @@
     </PageHeader>
 
     <!-- Settings -->
-    <section class="mt-7 flex-auto">
-      <ol class="space-y-6">
+    <section class="mx-2 mt-4 flex-auto">
+      <ol class="space-y-4">
         <!-- navigationTouchGestures -->
         <li>
           <SettingSwitch v-model="userSettings.navigationTouchGestures">
@@ -76,7 +76,7 @@
     </section>
 
     <!-- Reset -->
-    <section class="mt-24 flex flex-row items-center justify-between gap-2">
+    <section class="mx-2 mt-24 flex flex-row items-center justify-between gap-2">
       <label for="reset">
         <span class="font-medium leading-8 text-base-content-highlight">
           Reset
@@ -96,7 +96,7 @@
       </button>
     </section>
 
-    <footer>
+    <footer class="mt-2">
       <span class="block text-center text-sm text-base-content-highlight"> v{{ appVersion }} </span>
     </footer>
   </main>

@@ -21,7 +21,7 @@
   useSeoMeta({
     title: 'Premium',
 
-    description: 'Enhance your experience with the Premium subscription'
+    description: 'Enhance your experience'
   })
 
   definePageMeta({
@@ -62,7 +62,7 @@
 
             <p class="mx-auto mt-4 max-w-2xl text-center text-lg leading-8">
               <!-- TODO: Improve description -->
-              Enhance your experience with the Premium subscription
+              Enhance your experience
             </p>
           </div>
 
