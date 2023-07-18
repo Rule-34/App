@@ -217,6 +217,31 @@
         <ComboboxOptions
           class="absolute z-10 mt-2 max-h-72 w-full overflow-auto rounded-md bg-base-1000 py-1 text-base ring-1 ring-base-0/20 sm:text-sm"
         >
+          <!-- Custom option -->
+          <!-- TODO: History based -->
+          <ComboboxOption
+            v-if="customTagFromQuery"
+            v-slot="{ active, selected }"
+            :value="customTagFromQuery"
+          >
+            <div
+              :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+              class="relative cursor-default select-none py-2 pl-8"
+            >
+              <span :class="['block truncate', selected && 'font-semibold']">
+                Create “{{ customTagFromQuery.name }}” tag
+              </span>
+
+              <span
+                v-if="selected"
+                class="absolute inset-y-0 left-0 flex items-center pl-1.5 text-base-content-highlight"
+              >
+                <CheckIcon class="h-5 w-5" />
+              </span>
+            </div>
+          </ComboboxOption>
+
+          <!-- Options -->
           <ComboboxOption
             v-for="tag in tagResults"
             :key="tag.name"
@@ -246,31 +271,6 @@
                   {{ abbreviateNumber(tag.count, 0) }}
                 </span>
               </div>
-            </div>
-          </ComboboxOption>
-
-          <!-- TODO: History based -->
-
-          <!-- Custom -->
-          <ComboboxOption
-            v-if="customTagFromQuery"
-            v-slot="{ active, selected }"
-            :value="customTagFromQuery"
-          >
-            <div
-              :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-              class="relative cursor-default select-none py-2 pl-8"
-            >
-              <span :class="['block truncate', selected && 'font-semibold']">
-                Create “{{ customTagFromQuery.name }}” tag
-              </span>
-
-              <span
-                v-if="selected"
-                class="absolute inset-y-0 left-0 flex items-center pl-1.5 text-base-content-highlight"
-              >
-                <CheckIcon class="h-5 w-5" />
-              </span>
             </div>
           </ComboboxOption>
         </ComboboxOptions>
