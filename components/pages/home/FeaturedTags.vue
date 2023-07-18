@@ -68,7 +68,10 @@
 </script>
 
 <template>
-  <ol class="scrollbar-hide flex gap-x-4 overflow-x-auto">
+  <ol
+    class="scrollbar-hide flex gap-x-4 overflow-x-auto"
+    v-bind="$attrs"
+  >
     <li
       v-for="tag in featuredTags"
       :key="tag.name"
@@ -96,4 +99,6 @@
       </NuxtLink>
     </li>
   </ol>
+
+  <span class="mt-3 block text-right text-xs">You can scroll through the list →</span>
 </template>
