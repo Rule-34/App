@@ -16,7 +16,7 @@ const pageHistory = useStorage<PageHistory[]>('settings-pageHistory', [], localS
 export function usePageHistory() {
   /**
    * Saves the current route full path to the page history
-   * With a maximum of 20 pages
+   * With a maximum of 10 pages
    */
   function addListener() {
     useEventListener(document, 'visibilitychange', (event) => {
@@ -28,11 +28,17 @@ export function usePageHistory() {
         return
       }
 
+      if (route.fullPath === '/posts') {
+        return
+      }
+
+      // TODO: Skip if only domain is set
+
       if (pageHistory.value.length && pageHistory.value[pageHistory.value.length - 1].path === route.fullPath) {
         return
       }
 
-      if (pageHistory.value.length >= 20) {
+      if (pageHistory.value.length >= 10) {
         pageHistory.value.shift()
       }
 
