@@ -87,7 +87,7 @@
 <template>
   <main class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
     <!-- Header -->
-    <div class="-mt-4 text-center">
+    <div class="-mt-6 text-center">
       <h1
         class="flex justify-center gap-2 text-2xl font-bold uppercase leading-10 tracking-tight text-base-content-highlight"
       >
@@ -106,7 +106,7 @@
       </h1>
 
       <p class="mt-2">
-        Stream and download rule 34 hentai images, GIFs and videos from multiple Boorus in a mobile-first web app
+        Stream and download Rule 34 porn images, GIFs, and videos from multiple Boorus in a mobile-first web app
       </p>
     </div>
 
@@ -135,25 +135,25 @@
       </section>
 
       <!-- History -->
-      <section v-if="pageHistory.length">
+      <section v-if="false">
         <PageHeader as="h2">
           <template #title>History</template>
           <template #text>Continue where you left off</template>
         </PageHeader>
 
-        <PageHistory class="mt-4" />
+        <LazyPageHistory class="mt-4" />
       </section>
 
       <!-- Featured tags -->
       <section>
         <PageHeader as="h2">
-          <template #title>Featured tags</template>
+          <template #title>rule34.xxx</template>
         </PageHeader>
 
         <FeaturedTags class="-mx-4 px-4 py-2" />
       </section>
 
-      <!-- TODO: Trending tags -->
+      <!-- TODO: Top tags from last month -->
 
       <!-- News -->
       <section>
@@ -161,8 +161,7 @@
           <template #title>News & updates</template>
         </PageHeader>
 
-        <!-- TODO: Learn how to install the App on your device -->
-        <!-- TODO: Feedback form -->
+        <News class="mt-2 px-2" />
       </section>
     </div>
   </main>
