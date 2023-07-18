@@ -1,12 +1,16 @@
 <script setup>
   import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
 
+  const route = useRoute()
+
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
+
+  const isHomePage = computed(() => route.path === '/')
 </script>
 
 <template>
   <nav
-    id="navbar"
+    :class="[isHomePage ? 'border-b-transparent' : 'border-b-base-0/20']"
     class="border-b border-b-base-0/20 bg-transparent"
   >
     <!-- -->
@@ -41,11 +45,12 @@
         </div>
 
         <!-- Center: Logo -->
-        <div
-          id="navbar-logo"
-          class="flex flex-1 items-center justify-center"
-        >
-          <div class="group flex-shrink-0">
+        <div class="flex flex-1 items-center justify-center">
+          <NuxtLink
+            v-if="!isHomePage"
+            class="focus-visible:focus-outline-util hover:hover-bg-util flex-shrink-0"
+            to="/"
+          >
             <img
               alt="Icon"
               class="flip-vertical-fwd h-6 w-6 text-base-content-highlight"
@@ -54,7 +59,7 @@
               src="/icon.svg"
               width="16"
             />
-          </div>
+          </NuxtLink>
         </div>
 
         <!-- Right side: Actions -->
