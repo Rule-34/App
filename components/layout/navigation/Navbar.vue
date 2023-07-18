@@ -5,7 +5,10 @@
 </script>
 
 <template>
-  <nav class="border-b border-b-base-0/20 bg-transparent">
+  <nav
+    id="navbar"
+    class="border-b border-b-base-0/20 bg-transparent"
+  >
     <!-- -->
 
     <!-- Container -->
@@ -38,7 +41,10 @@
         </div>
 
         <!-- Center: Logo -->
-        <div class="flex flex-1 items-center justify-center">
+        <div
+          id="navbar-logo"
+          class="flex flex-1 items-center justify-center"
+        >
           <div class="group flex-shrink-0">
             <img
               alt="Icon"
