@@ -6,6 +6,7 @@
   const { pageHistory } = usePageHistory()
 
   function historyPathToTitle(path: string) {
+    // TODO: decodeURIComponent
     return (
       path
         //
