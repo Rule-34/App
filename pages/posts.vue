@@ -476,8 +476,8 @@ definePageMeta({
           v-if='titleForBody'
           #text
         >
-          <h2 class='truncate text-sm'>
-            <!-- TODO: Make tags and filters clickable so they open search menu -->
+          <h2 class='text-sm'>
+            <!-- TODO: Make tags and filters clickable so they open search menu, maybe reference the button, like a form does -->
 
             {{ titleForBody }}
           </h2>
