@@ -141,7 +141,7 @@ const tagsAsSingleArray = computed(() => {
           :key='tag.name'
         >
           <button
-            v-on-long-press.stop.prevent="() => emit('clickLongTag', tag.name)"
+            v-on-long-press.prevent.stop="() => emit('clickLongTag', tag.name)"
             :class="{
               'bg-primary-400/20 text-primary-400/90 ring-accent-400/20 hover:bg-primary-400/20': tag.type === 'artist',
               'bg-green-400/20 text-green-400/90 ring-green-400/20 hover:bg-green-400/20': tag.type === 'copyright',

@@ -135,13 +135,15 @@
       </section>
 
       <!-- History -->
-      <section v-if="false">
+      <section v-if="pageHistory.length">
         <PageHeader as="h2">
           <template #title>History</template>
           <template #text>Continue where you left off</template>
         </PageHeader>
 
-        <LazyPageHistory class="mt-4" />
+        <ShowMore :max-height-in-rem="12">
+          <LazyPageHistory class="mt-4" />
+        </ShowMore>
       </section>
 
       <!-- Featured tags -->
