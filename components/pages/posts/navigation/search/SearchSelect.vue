@@ -28,7 +28,7 @@
     as="div"
     @update:modelValue="emit('update:modelValue', $event)"
   >
-    <ListboxLabel class="sr-only">Change sort options</ListboxLabel>
+    <ListboxLabel class="sr-only">Change options</ListboxLabel>
 
     <div class="relative">
       <Float
