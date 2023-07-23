@@ -158,7 +158,7 @@
                 ]"
                 class="inline-flex items-center gap-x-1.5 rounded-full px-1.5 py-0.5 text-sm font-medium ring-1 ring-inset"
               >
-                {{ booru.description.score }}
+                {{ booru.description.score.toFixed(1) }}
               </span>
             </div>
           </li>

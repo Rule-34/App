@@ -23,9 +23,9 @@ const defaultBooruList: Domain[] = [
       load_speed: 4,
       api_compatibility: 4,
 
-      score: null,
+      score: 4.0,
 
-      note: null
+      note: undefined
     },
     disabled: false
   },
@@ -41,9 +41,9 @@ const defaultBooruList: Domain[] = [
       load_speed: 2,
       api_compatibility: 2,
 
-      score: null,
+      score: 2.8,
 
-      note: null
+      note: undefined
     },
     disabled: false
   },
@@ -59,9 +59,9 @@ const defaultBooruList: Domain[] = [
       load_speed: 4,
       api_compatibility: 5,
 
-      score: null,
+      score: 4.5,
 
-      note: null
+      note: undefined
     },
     disabled: false
   },
@@ -77,7 +77,7 @@ const defaultBooruList: Domain[] = [
       load_speed: 4,
       api_compatibility: 3,
 
-      score: null,
+      score: 3.7,
 
       note: 'Only safe content'
     },
@@ -95,9 +95,9 @@ const defaultBooruList: Domain[] = [
       load_speed: 4,
       api_compatibility: 4,
 
-      score: null,
+      score: 4.3,
 
-      note: null
+      note: undefined
     },
     disabled: false
   },
@@ -113,7 +113,7 @@ const defaultBooruList: Domain[] = [
       load_speed: 4,
       api_compatibility: 5,
 
-      score: null,
+      score: 4.2,
 
       note: 'Only furry content'
     },
@@ -131,7 +131,7 @@ const defaultBooruList: Domain[] = [
       load_speed: 4,
       api_compatibility: 5,
 
-      score: null,
+      score: 4.0,
 
       note: 'Only safe furry content'
     },
@@ -150,9 +150,9 @@ const defaultBooruList: Domain[] = [
       load_speed: 4,
       api_compatibility: 4,
 
-      score: null,
+      score: 3.5,
 
-      note: null
+      note: undefined
     },
     disabled: false
   },
@@ -168,9 +168,9 @@ const defaultBooruList: Domain[] = [
       load_speed: 4,
       api_compatibility: 4,
 
-      score: null,
+      score: 3.2,
 
-      note: null
+      note: undefined
     },
     disabled: false
   },
@@ -186,9 +186,9 @@ const defaultBooruList: Domain[] = [
       load_speed: 4,
       api_compatibility: 2,
 
-      score: null,
+      score: 3.0,
 
-      note: null
+      note: undefined
     },
     disabled: false
   },
@@ -204,7 +204,7 @@ const defaultBooruList: Domain[] = [
       load_speed: 4,
       api_compatibility: 4,
 
-      score: null,
+      score: 3.8,
 
       note: 'Only lolicon content'
     },
@@ -222,7 +222,7 @@ const defaultBooruList: Domain[] = [
       load_speed: 3,
       api_compatibility: 4,
 
-      score: null,
+      score: 3.7,
 
       note: 'Only lolicon content'
     },
@@ -240,7 +240,7 @@ const defaultBooruList: Domain[] = [
       load_speed: 3,
       api_compatibility: 2,
 
-      score: null,
+      score: 3.0,
 
       note: 'Only real life content'
     },
@@ -248,39 +248,39 @@ const defaultBooruList: Domain[] = [
   }
 ]
 
-defaultBooruList.forEach((booru) => {
-  let totalScore = 0
-
-  switch (true) {
-    case booru.description.posts_count <= 100_000:
-      totalScore += 1
-      break
-
-    case booru.description.posts_count > 100_000 && booru.description.posts_count <= 300_000:
-      totalScore += 2
-      break
-
-    case booru.description.posts_count > 300_000 && booru.description.posts_count <= 600_000:
-      totalScore += 3
-      break
-
-    case booru.description.posts_count > 600_000 && booru.description.posts_count <= 1_000_000:
-      totalScore += 4
-      break
-
-    case booru.description.posts_count > 1_000_000:
-      totalScore += 5
-      break
-  }
-
-  totalScore += booru.description.tag_system
-  totalScore += booru.description.post_moderation
-  totalScore += booru.description.content_variety
-  totalScore += booru.description.load_speed
-  totalScore += booru.description.api_compatibility
-
-  booru.description.score = (totalScore / 6).toFixed(1)
-})
+// defaultBooruList.forEach((booru) => {
+//   let totalScore = 0
+//
+//   switch (true) {
+//     case booru.description.posts_count <= 100_000:
+//       totalScore += 1
+//       break
+//
+//     case booru.description.posts_count > 100_000 && booru.description.posts_count <= 300_000:
+//       totalScore += 2
+//       break
+//
+//     case booru.description.posts_count > 300_000 && booru.description.posts_count <= 600_000:
+//       totalScore += 3
+//       break
+//
+//     case booru.description.posts_count > 600_000 && booru.description.posts_count <= 1_000_000:
+//       totalScore += 4
+//       break
+//
+//     case booru.description.posts_count > 1_000_000:
+//       totalScore += 5
+//       break
+//   }
+//
+//   totalScore += booru.description.tag_system
+//   totalScore += booru.description.post_moderation
+//   totalScore += booru.description.content_variety
+//   totalScore += booru.description.load_speed
+//   totalScore += booru.description.api_compatibility
+//
+//   booru.description.score = (totalScore / 6).toFixed(1)
+// })
 
 // Object.freeze(defaultBooruList)
 
