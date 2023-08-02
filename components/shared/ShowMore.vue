@@ -48,6 +48,7 @@
   <div
     v-if="isContentTallerThanMaxHeight"
     class="flex justify-center pt-4"
+    :class="$attrs.class"
   >
     <button
       class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-md bg-base-1000/60 px-2 py-1 text-sm ring-1 ring-base-0/20"

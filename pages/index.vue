@@ -93,6 +93,7 @@
   const featuredDomains = [
     {
       domain: 'rule34.xxx',
+      path: '/posts?domain=rule34.xxx',
       tags: [
         {
           name: 'Top posts',
@@ -187,6 +188,7 @@
 
     {
       domain: 'gelbooru.com',
+      path: '/posts?domain=gelbooru.com',
       tags: [
         {
           name: 'Top posts',
@@ -228,6 +230,7 @@
 
     {
       domain: 'e621.net',
+      path: '/posts?domain=e621.net',
       tags: [
         {
           name: 'Top posts',
@@ -264,6 +267,7 @@
 
     {
       domain: 'realbooru.com',
+      path: '/posts?domain=realbooru.com',
       tags: [
         {
           name: 'Top posts',
@@ -376,7 +380,7 @@
       </h1>
 
       <p class="mt-2">
-        Stream and download Rule 34 porn images, GIFs, and videos from multiple Boorus in a mobile-first web app
+        Stream and download Rule 34 porn videos, GIFs, and images from multiple Boorus in a mobile-first web app
       </p>
     </div>
 
@@ -411,8 +415,11 @@
           <template #text>Continue where you left off</template>
         </PageHeader>
 
-        <ShowMore :max-height-in-rem="12">
-          <LazyPageHistory class="mt-4" />
+        <ShowMore
+          class="bg-base-1000"
+          :max-height-in-rem="12"
+        >
+          <LazyPageHistory class="mt-4 sm:pr-4" />
         </ShowMore>
       </section>
 
@@ -424,10 +431,13 @@
         </PageHeader>
 
         <!-- TODO: Figure out a way for negative margin to work inside an overflow-hidden -->
-        <ShowMore :max-height-in-rem="28">
-          <ol class="mt-4 space-y-4">
-            <li v-for="featuredDomain in featuredDomains">
-              <div class="flex items-center gap-2 px-2">
+        <ol class="mt-4 space-y-4">
+          <li v-for="featuredDomain in featuredDomains">
+            <div class="flex items-center pr-2">
+              <NuxtLink
+                :href="featuredDomain.path"
+                class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util flex items-center gap-2 rounded-md px-2"
+              >
                 <img
                   :src="`https://www.google.com/s2/favicons?domain=${featuredDomain.domain}&sz=128`"
                   alt="Favicon"
@@ -441,15 +451,17 @@
                   :title="featuredDomain.domain"
                   as="h3"
                 />
-              </div>
+              </NuxtLink>
 
-              <FeaturedTags
-                :tags="featuredDomain.tags"
-                class="-mx-4 px-4 py-2"
-              />
-            </li>
-          </ol>
-        </ShowMore>
+              <span class="ml-auto block text-xs">Scroll →</span>
+            </div>
+
+            <FeaturedTags
+              :tags="featuredDomain.tags"
+              class="-mx-4 px-4 py-2"
+            />
+          </li>
+        </ol>
       </section>
 
       <!-- TODO: Top tags from last month -->

@@ -42,6 +42,12 @@
       return
     }
 
+    // TODO: Retry with extra /
+    // TODO: Retry with other file extensions, e.g. .jpeg to .gif (as seen in realbooru)
+    // TODO: https://github.com/mikf/gallery-dl/issues/2530
+    // TODO: https://github.com/Bionus/imgbrd-grabber/issues/2692#issuecomment-1141236485
+    // TODO: https://realbooru.com/index.php?page=forum&s=view&id=6522&pid=105
+
     if (!triedToLoadWithProxy.value) {
       triedToLoadWithProxy.value = true
 
@@ -64,6 +70,8 @@
     localSrc.value = ''
     localSrc.value = props.mediaSrc
   }
+
+  // TODO: Stop video when it's out of view
 </script>
 
 <template>

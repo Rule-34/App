@@ -6,17 +6,29 @@
   const { pageHistory } = usePageHistory()
 
   function historyPathToTitle(path: string) {
-    // TODO: decodeURIComponent
+    path = decodeURIComponent(path)
+
     return (
       path
         //
         .replace('/posts?', '')
         .split('&')
-        .join('\n')
+        .map(
+          (_query) =>
+            _query
+              // Capitalize first character
+              .charAt(0)
+              .toUpperCase() +
+            _query
+              .slice(1)
+
+              // Replace first '=' with ': '
+              .replace(/=/, ': ')
+        )
         // Query separator
-        .replace(/=/g, ': ')
-        // Tag separator
-        .replace(/%7C/g, ', ')
+        .join('\n')
+        // Separate tags
+        .replace(/\|/g, ', ')
     )
   }
 
