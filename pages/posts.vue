@@ -464,6 +464,8 @@
         :model-value="selectedBooru"
         @update:model-value="onDomainChange"
       />
+
+      <!-- TODO> Move filters here -->
     </section>
 
     <div class="flex">

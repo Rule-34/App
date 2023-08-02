@@ -51,7 +51,7 @@
   <main class="flex-1">
     <!-- Pricing -->
     <section class="isolate overflow-hidden">
-      <div class="flow-root overflow-hidden py-16 sm:pt-32 lg:pb-0">
+      <div class="flow-root overflow-hidden py-6 sm:py-16 lg:pb-0">
         <div class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
           <!-- Header -->
           <div class="relative z-10">
@@ -67,7 +67,7 @@
           </div>
 
           <!-- Body -->
-          <div class="relative mx-auto mt-10 grid max-w-md grid-cols-1 gap-y-8 lg:mx-0 lg:max-w-none">
+          <div class="relative mx-auto my-10 grid max-w-md grid-cols-1 gap-y-8 lg:mx-0 lg:max-w-none">
             <!-- Background -->
             <svg
               aria-hidden="true"
@@ -94,7 +94,7 @@
 
             <!-- Tier -->
             <div class="relative rounded-2xl bg-base-1000/70 ring-1 ring-base-0/10 backdrop-blur">
-              <div class="p-8 lg:pt-12 xl:p-10 xl:pt-14">
+              <div class="p-8 lg:pt-12 xl:p-10">
                 <!-- -->
 
                 <div>
