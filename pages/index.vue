@@ -3,6 +3,7 @@
   import { Ref } from 'vue'
   import Tag from 'assets/js/tag.dto'
   import { useBooruList } from '~/composables/useBooruList'
+  import type { Domain } from 'assets/js/domain'
 
   const config = useRuntimeConfig()
 
@@ -11,7 +12,13 @@
   const { booruList } = useBooruList()
   const { selectedDomainFromStorage } = useSelectedDomainFromStorage()
 
-  const selectedBooru = computed(() => {
+  const selectedBooru = ref<Domain>(getDefaultBooru())
+
+  watch(selectedBooru, (booru) => {
+    selectedDomainFromStorage.value = booru.domain
+  })
+
+  function getDefaultBooru() {
     let domain = selectedDomainFromStorage.value
 
     // Fallback to first Booru
@@ -26,11 +33,12 @@
       throw new Error(`Booru "${domain}" not found`)
     }
 
-    // Save selected booru to storage
-    selectedDomainFromStorage.value = booru.domain
-
     return booru
-  })
+  }
+
+  function onDomainChange(domain: Domain) {
+    selectedBooru.value = domain
+  }
 
   const searchTagResults: Ref<Tag[]> = ref([])
 
@@ -40,7 +48,6 @@
     const response = await $fetch(apiUrl, {
       params: {
         baseEndpoint: selectedBooru.value.domain,
-
         tag,
         order: 'count',
         limit: 20
@@ -82,6 +89,269 @@
       }
     ]
   })
+
+  const featuredDomains = [
+    {
+      domain: 'rule34.xxx',
+      tags: [
+        {
+          name: 'Top posts',
+          path: '/posts?domain=rule34.xxx&filter%5Bsort%5D=score',
+          images: [
+            '/img/featured/rule34.xxx/top-1.jpg',
+            '/img/featured/rule34.xxx/top-2.jpg',
+            '/img/featured/rule34.xxx/top-3.jpg',
+            '/img/featured/rule34.xxx/top-4.jpg'
+          ]
+        },
+        {
+          name: 'Popular posts',
+          path: '/posts?domain=rule34.xxx&filter%5Bscore%5D=>%3D50',
+          images: [
+            '/img/featured/rule34.xxx/top-5.jpg',
+            '/img/featured/rule34.xxx/top-6.jpg',
+            '/img/featured/rule34.xxx/top-7.jpg',
+            '/img/featured/rule34.xxx/top-8.jpeg'
+          ]
+        },
+        {
+          name: 'Overwatch',
+          path: '/posts?domain=rule34.xxx&tags=overwatch',
+          images: [
+            '/img/featured/rule34.xxx/overwatch-1.jpeg',
+            '/img/featured/rule34.xxx/overwatch-2.jpeg',
+            '/img/featured/rule34.xxx/overwatch-3.jpeg',
+            '/img/featured/rule34.xxx/overwatch-4.jpeg',
+            '/img/featured/rule34.xxx/overwatch-5.jpeg',
+            '/img/featured/rule34.xxx/overwatch-6.jpeg',
+            '/img/featured/rule34.xxx/overwatch-7.jpeg'
+          ]
+        },
+        {
+          name: 'Genshin Impact',
+          path: '/posts?domain=rule34.xxx&tags=genshin_impact',
+          images: ['/img/featured/rule34.xxx/genshin_impact.jpg']
+        },
+        {
+          name: 'Brawl Stars',
+          path: '/posts?domain=rule34.xxx&tags=brawl_stars',
+          images: ['/img/featured/rule34.xxx/brawl_stars.jpeg']
+        },
+        {
+          name: 'Friday Night Funkin',
+          path: '/posts?domain=rule34.xxx&tags=friday_night_funkin',
+          images: ['/img/featured/rule34.xxx/friday_night_funkin.jpg']
+        },
+        {
+          name: 'Atomic Heart',
+          path: '/posts?domain=rule34.xxx&tags=atomic_heart',
+          images: ['/img/featured/rule34.xxx/atomic_heart.jpg']
+        },
+        {
+          name: 'Minecraft',
+          path: '/posts?domain=rule34.xxx&tags=minecraft',
+          images: ['/img/featured/rule34.xxx/minecraft.jpg']
+        },
+        {
+          name: 'Murder Drones',
+          path: '/posts?domain=rule34.xxx&tags=murder_drones',
+          images: ['/img/featured/rule34.xxx/murder_drones.jpg']
+        },
+        {
+          name: 'CountryHumans',
+          path: '/posts?domain=rule34.xxx&tags=countryhumans',
+          images: ['/img/featured/rule34.xxx/countryhumans.jpg']
+        },
+        {
+          name: 'Honkai: Star Rail',
+          path: '/posts?domain=rule34.xxx&tags=honkai:_star_rail',
+          images: ['/img/featured/rule34.xxx/honkai_star_rail.jpg']
+        },
+        {
+          name: "Five Nights at Freddy's",
+          path: "/posts?domain=rule34.xxx&tags=five_nights_at_freddy's",
+          images: ['/img/featured/rule34.xxx/five_nights_at_freddys.jpg']
+        },
+        {
+          name: 'Roblox',
+          path: '/posts?domain=rule34.xxx&tags=roblox',
+          images: ['/img/featured/rule34.xxx/roblox.jpg']
+        },
+        {
+          name: 'Undertale',
+          path: '/posts?domain=rule34.xxx&tags=undertale',
+          images: ['/img/featured/rule34.xxx/undertale.jpeg']
+        }
+      ]
+    },
+
+    {
+      domain: 'gelbooru.com',
+      tags: [
+        {
+          name: 'Top posts',
+          path: '/posts?domain=gelbooru.com&filter%5Bsort%5D=score',
+          images: [
+            '/img/featured/gelbooru.com/top-1.jpeg',
+            '/img/featured/gelbooru.com/top-2.jpeg',
+            '/img/featured/gelbooru.com/top-3.jpeg',
+            '/img/featured/gelbooru.com/top-4.jpeg'
+          ]
+        },
+        {
+          name: 'Popular posts',
+          path: '/posts?domain=gelbooru.com&filter%5Bscore%5D=>%3D50',
+          images: [
+            '/img/featured/gelbooru.com/top-5.jpeg',
+            '/img/featured/gelbooru.com/top-6.jpeg',
+            '/img/featured/gelbooru.com/top-7.jpeg',
+            '/img/featured/gelbooru.com/top-8.jpeg'
+          ]
+        },
+        {
+          name: 'Pokemon',
+          path: '/posts?domain=gelbooru.com&tags=pokemon',
+          images: ['/img/featured/gelbooru.com/pokemon.jpeg']
+        },
+        {
+          name: '3D',
+          path: '/posts?domain=gelbooru.com&tags=3d',
+          images: ['/img/featured/gelbooru.com/3d.jpeg']
+        },
+        {
+          name: 'Furry',
+          path: '/posts?domain=gelbooru.com&tags=furry',
+          images: ['/img/featured/gelbooru.com/furry.jpeg']
+        }
+      ]
+    },
+
+    {
+      domain: 'e621.net',
+      tags: [
+        {
+          name: 'Top posts',
+          path: '/posts?domain=e621.net&filter%5Bsort%5D=score',
+          images: [
+            '/img/featured/e621.net/top-1.jpeg',
+            '/img/featured/e621.net/top-2.jpeg',
+            '/img/featured/e621.net/top-3.jpeg',
+            '/img/featured/e621.net/top-4.jpeg'
+          ]
+        },
+        {
+          name: 'Popular posts',
+          path: '/posts?domain=e621.net&filter%5Bscore%5D=>%3D50',
+          images: [
+            '/img/featured/e621.net/top-5.jpeg',
+            '/img/featured/e621.net/top-6.jpeg',
+            '/img/featured/e621.net/top-7.jpeg',
+            '/img/featured/e621.net/top-8.jpeg'
+          ]
+        },
+        {
+          name: 'Gay',
+          path: '/posts?domain=e621.net&tags=gay',
+          images: ['/img/featured/e621.net/gay.jpeg']
+        },
+        {
+          name: 'Pokemon',
+          path: '/posts?domain=e621.net&tags=pokemon',
+          images: ['/img/featured/e621.net/pokemon.jpeg']
+        }
+      ]
+    },
+
+    {
+      domain: 'realbooru.com',
+      tags: [
+        {
+          name: 'Top posts',
+          path: '/posts?domain=realbooru.com&filter%5Bsort%5D=score',
+          images: [
+            '/img/featured/realbooru.com/top-1.jpeg',
+            '/img/featured/realbooru.com/top-2.jpeg',
+            '/img/featured/realbooru.com/top-3.jpeg',
+            '/img/featured/realbooru.com/top-4.jpeg'
+          ]
+        },
+        {
+          name: 'Popular posts',
+          path: '/posts?domain=realbooru.com&filter%5Bscore%5D=>%3D50',
+          images: [
+            '/img/featured/realbooru.com/top-5.jpeg',
+            '/img/featured/realbooru.com/top-6.jpeg',
+            '/img/featured/realbooru.com/top-7.jpeg',
+            '/img/featured/realbooru.com/top-8.jpeg'
+          ]
+        },
+        {
+          name: 'Cosplay',
+          path: '/posts?domain=realbooru.com&tags=cosplay',
+          images: [
+            '/img/featured/realbooru.com/cosplay-1.jpeg',
+            '/img/featured/realbooru.com/cosplay-2.jpeg',
+            '/img/featured/realbooru.com/cosplay-3.jpeg',
+            '/img/featured/realbooru.com/cosplay-4.jpeg',
+            '/img/featured/realbooru.com/cosplay-5.jpeg',
+            '/img/featured/realbooru.com/cosplay-6.jpeg'
+          ]
+        },
+        {
+          name: 'Goth',
+          path: '/posts?domain=realbooru.com&tags=goth',
+          images: [
+            '/img/featured/realbooru.com/goth-1.jpeg',
+            '/img/featured/realbooru.com/goth-2.jpeg',
+            '/img/featured/realbooru.com/goth-3.jpeg',
+            '/img/featured/realbooru.com/goth-4.jpeg',
+            '/img/featured/realbooru.com/goth-5.jpeg',
+            '/img/featured/realbooru.com/goth-6.jpeg',
+            '/img/featured/realbooru.com/goth-7.jpeg'
+          ]
+        },
+        {
+          name: 'Asian',
+          path: '/posts?domain=realbooru.com&tags=asian',
+          images: [
+            '/img/featured/realbooru.com/asian-1.jpeg',
+            '/img/featured/realbooru.com/asian-2.jpeg',
+            '/img/featured/realbooru.com/asian-3.jpeg',
+            '/img/featured/realbooru.com/asian-4.jpeg',
+            '/img/featured/realbooru.com/asian-5.jpeg',
+            '/img/featured/realbooru.com/asian-6.jpeg',
+            '/img/featured/realbooru.com/asian-7.jpeg'
+          ]
+        },
+        {
+          name: 'Teen (+18)',
+          path: '/posts?domain=realbooru.com&tags=teen',
+          images: [
+            '/img/featured/realbooru.com/teen-1.jpeg',
+            '/img/featured/realbooru.com/teen-2.jpeg',
+            '/img/featured/realbooru.com/teen-3.jpeg',
+            '/img/featured/realbooru.com/teen-4.jpeg',
+            '/img/featured/realbooru.com/teen-5.jpeg',
+            '/img/featured/realbooru.com/teen-6.jpeg',
+            '/img/featured/realbooru.com/teen-7.jpeg'
+          ]
+        },
+        {
+          name: 'Transgender',
+          path: '/posts?domain=realbooru.com&tags=transgender',
+          images: [
+            '/img/featured/realbooru.com/transgender-1.jpeg',
+            '/img/featured/realbooru.com/transgender-2.jpeg',
+            '/img/featured/realbooru.com/transgender-3.jpeg',
+            '/img/featured/realbooru.com/transgender-4.jpeg',
+            '/img/featured/realbooru.com/transgender-5.jpeg',
+            '/img/featured/realbooru.com/transgender-6.jpeg',
+            '/img/featured/realbooru.com/transgender-7.jpeg'
+          ]
+        }
+      ]
+    }
+  ]
 </script>
 
 <template>
@@ -149,10 +419,37 @@
       <!-- Featured tags -->
       <section>
         <PageHeader as="h2">
-          <template #title>rule34.xxx</template>
+          <template #title> Featured</template>
+          <template #text>Booru tags & filters</template>
         </PageHeader>
 
-        <FeaturedTags class="-mx-4 px-4 py-2" />
+        <!-- TODO: Figure out a way for negative margin to work inside an overflow-hidden -->
+        <ShowMore :max-height-in-rem="28">
+          <ol class="mt-4 space-y-4">
+            <li v-for="featuredDomain in featuredDomains">
+              <div class="flex items-center gap-2 px-2">
+                <img
+                  :src="`https://www.google.com/s2/favicons?domain=${featuredDomain.domain}&sz=128`"
+                  alt="Favicon"
+                  class="h-5 w-5 rounded"
+                  height="128"
+                  loading="lazy"
+                  width="128"
+                />
+
+                <ContentContainer
+                  :title="featuredDomain.domain"
+                  as="h3"
+                />
+              </div>
+
+              <FeaturedTags
+                :tags="featuredDomain.tags"
+                class="-mx-4 px-4 py-2"
+              />
+            </li>
+          </ol>
+        </ShowMore>
       </section>
 
       <!-- TODO: Top tags from last month -->
