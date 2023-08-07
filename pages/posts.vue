@@ -514,7 +514,7 @@
 
           <h3>Failed to load posts</h3>
 
-          <span class="text-base">{{ errorInitialPosts }}</span>
+          <span class="w-full overflow-x-auto text-base">{{ errorInitialPosts }}</span>
         </div>
       </template>
 
