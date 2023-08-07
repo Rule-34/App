@@ -415,10 +415,7 @@
           <template #text>Continue where you left off</template>
         </PageHeader>
 
-        <ShowMore
-          class="bg-base-1000"
-          :max-height-in-rem="12"
-        >
+        <ShowMore :max-height-in-rem="12">
           <LazyPageHistory class="mt-4 sm:pr-4" />
         </ShowMore>
       </section>
