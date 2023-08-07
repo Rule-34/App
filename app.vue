@@ -73,6 +73,10 @@
   })
 
   useSchemaOrg([
+    defineWebSite({
+      name: 'Rule 34 App'
+    }),
+    defineWebPage(),
     defineOrganization({
       name: 'Rule 34 App',
       logo: '/icon.svg',
@@ -83,11 +87,7 @@
         'https://redirect.r34.app/discord',
         'https://redirect.r34.app/github'
       ]
-    }),
-    defineWebSite({
-      name: 'Rule 34 App'
-    }),
-    defineWebPage()
+    })
   ])
 </script>
 
