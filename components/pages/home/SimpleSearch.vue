@@ -17,6 +17,8 @@
 
   const selectedTag = ref<Tag | undefined>()
 
+  watch(selectedTag, () => onSubmitted())
+
   const searchQuery = ref('')
 
   // Change event
