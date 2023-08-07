@@ -4,11 +4,17 @@ const timesTheAppHasBeenOpened = useStorage('statistics-appOpenedCount', 0, loca
   writeDefaults: false
 })
 
+const tutorialLongClickTag = useStorage('tutorial-longClickTag', false, localStorage, {
+  writeDefaults: false
+})
+
 // Add one to the timesTheAppHasBeenOpened
 timesTheAppHasBeenOpened.value++
 
 export function useAppStatistics() {
   return {
-    timesTheAppHasBeenOpened
+    timesTheAppHasBeenOpened,
+
+    tutorialLongClickTag
   }
 }
