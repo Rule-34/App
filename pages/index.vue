@@ -70,6 +70,7 @@
     navigateTo({
       path: '/posts',
       query: {
+        domain: selectedBooru.value.domain,
         tags: tag
       }
     })

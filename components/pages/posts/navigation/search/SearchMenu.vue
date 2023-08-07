@@ -12,7 +12,7 @@
   import { watchDebounced } from '@vueuse/core'
   import { abbreviateNumber } from 'js-abbreviation-number'
   import Tag from 'assets/js/tag.dto'
-  import { uniqBy } from 'lodash-es'
+  import { cloneDeep, uniqBy } from 'lodash-es'
 
   const { isActive: isTagCollectionsActive, toggleIsActive: toggleTagCollections } = useTagCollections()
 
@@ -43,7 +43,8 @@
     ]
   }>()
 
-  const selectedTags = ref(props.initialSelectedTags)
+  // TODO: Investigate why a cloneDeep is needed here
+  const selectedTags = ref(cloneDeep(props.initialSelectedTags))
 
   const searchQuery = ref('')
 
