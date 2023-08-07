@@ -27,35 +27,37 @@
 </script>
 
 <template>
-  <!--  TODO: Animate max height -->
-  <div
-    :style="{ maxHeight: shouldBeExpanded ? `${props.maxHeightInRem}rem` : 'none' }"
-    class="relative overflow-y-hidden"
-  >
-    <!-- Overlay-->
+  <div>
+    <!--  TODO: Animate max height -->
     <div
-      v-if="shouldBeExpanded"
-      class="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-base-1000 via-transparent"
-    />
-
-    <!-- Content -->
-    <div ref="contentRef">
-      <slot />
-    </div>
-  </div>
-
-  <!-- Show more/less button -->
-  <div
-    v-if="isContentTallerThanMaxHeight"
-    class="flex justify-center pt-4"
-    :class="$attrs.class"
-  >
-    <button
-      class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-md bg-base-1000/60 px-2 py-1 text-sm ring-1 ring-base-0/20"
-      type="button"
-      @click="toggleExpanded()"
+      ref="contentRef"
+      :style="{ maxHeight: shouldBeExpanded ? `${props.maxHeightInRem}rem` : 'none' }"
+      class="relative overflow-y-hidden"
     >
-      {{ isExpanded ? 'Show less' : 'Show more' }}
-    </button>
+      <!-- Content -->
+      <slot />
+
+      <!-- Overlay-->
+      <!--  TODO: Fix problem with overflow, as it doesnt take full width -->
+      <div
+        v-if="shouldBeExpanded"
+        class="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-base-1000 via-transparent"
+      />
+    </div>
+
+    <!-- Show more/less button -->
+    <!--  TODO: Remove sm:mr when problem with overflow is fixed -->
+    <div
+      v-if="isContentTallerThanMaxHeight"
+      class="flex justify-center bg-base-1000 pt-4 sm:mr-3.5"
+    >
+      <button
+        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-md bg-base-1000/60 px-2 py-1 text-sm ring-1 ring-base-0/20"
+        type="button"
+        @click="toggleExpanded()"
+      >
+        {{ isExpanded ? 'Show less' : 'Show more' }}
+      </button>
+    </div>
   </div>
 </template>
