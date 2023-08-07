@@ -20,6 +20,8 @@ export default defineNuxtConfig({
     MATOMO_API_KEY: process.env.MATOMO_API_KEY,
 
     public: {
+      siteUrl: `https://${process.env.APP_DOMAIN}`,
+
       NODE_ENV: process.env.NODE_ENV,
 
       APP_DOMAIN: process.env.APP_DOMAIN,
@@ -90,11 +92,6 @@ export default defineNuxtConfig({
         sale_timestamp: 'string'
       }
     }
-  },
-
-  /** @type {import('nuxt-schema-org').ModuleOptions} */
-  schemaOrg: {
-    host: `https://${process.env.APP_DOMAIN}`
   },
 
   /** @type {import('@vite-pwa/nuxt').ModuleOptions} */
@@ -241,10 +238,6 @@ export default defineNuxtConfig({
       // Dokku automatic env variable
       release: process.env.GIT_REV
     }
-  },
-
-  site: {
-    url: `https://${process.env.APP_DOMAIN}`
   },
 
   /** @type {import('nuxt-simple-sitemap').ModuleOptions} */
