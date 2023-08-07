@@ -243,11 +243,15 @@ export default defineNuxtConfig({
     }
   },
 
+  site: {
+    url: `https://${process.env.APP_DOMAIN}`
+  },
+
   /** @type {import('nuxt-simple-sitemap').ModuleOptions} */
   sitemap: {
-    siteUrl: `https://${process.env.APP_DOMAIN}`,
-
     discoverImages: false,
+
+    credits: false,
 
     sitemaps: {
       pages: {
