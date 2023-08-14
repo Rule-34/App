@@ -22,7 +22,6 @@
               href: 'https://hentaiporn.app/?utm_source=r34.app&utm_medium=friends'
             }
           ]"
-          icon="bg-svg-star"
           text="Sister site of the Rule 34 App, has the best high-quality hentai videos and images."
           title="HentaiPorn App"
         />
@@ -36,7 +35,6 @@
               href: 'https://kurosearch.com/?utm_source=r34.app&utm_medium=friends'
             }
           ]"
-          icon="bg-svg-star"
           text="Dear friend of the Rule 34 App, has a slick interface and a lot of content."
           title="Kurosearch"
         />
@@ -50,7 +48,6 @@
               href: 'https://theporndude.com'
             }
           ]"
-          icon="bg-svg-star"
           text="The Porn Dude lists the world's best porn sites."
           title="ThePornDude"
         />
