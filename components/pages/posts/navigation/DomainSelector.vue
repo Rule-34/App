@@ -23,6 +23,7 @@
     as="template"
     @update:modelValue="emit('update:modelValue', $event)"
   >
+    <!-- TODO: Fix width -->
     <Float
       :offset="16"
       as="div"
@@ -73,7 +74,7 @@
         class="max-h-[23rem] w-full max-w-sm overflow-auto rounded-md bg-base-1000 py-1 ring-1 ring-base-0/20 focus:outline-none sm:text-sm"
       >
         <!-- Header -->
-        <header class="relative border-b border-base-0/20 pb-1">
+        <header class="relative pb-1.5">
           <h2
             v-tooltip="
               'A Booru is a type of website imageboard that specializes in parodies of anime, manga and video game related content'
@@ -165,10 +166,8 @@
         </ListboxOption>
 
         <!-- Add more button -->
-        <div class="hover:hover-text-util group flex items-center px-3 py-2">
-          <PlusIcon
-            class="group-hover:hover-text-util group-hover:hover-bg-util h-5 w-5 rounded p-0.5 ring-1 ring-base-0/20"
-          />
+        <div class="hover:hover-text-util hover:hover-bg-util group flex items-center px-3 py-2">
+          <PlusIcon class="group-hover:hover-text-util h-5 w-5 rounded" />
 
           <NuxtLink
             class="focus-visible:focus-outline-util ml-3"

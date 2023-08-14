@@ -26,7 +26,7 @@
 
     <input
       :value="modelValue"
-      class="focus-visible:focus-outline-util h-6 w-12 rounded-full border-none bg-inherit px-2 text-center text-base-content-highlight ring-1 ring-base-0/20"
+      class="focus-visible:focus-outline-util hover:hover-bg-util h-6 w-12 rounded-full border-none bg-inherit px-2 text-center text-base-content-highlight ring-1 ring-base-0/20"
       min="0"
       type="number"
       v-bind="$attrs"

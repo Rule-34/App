@@ -67,13 +67,13 @@
               >
                 <div class="absolute left-full top-0 flex w-16 justify-center pt-5">
                   <button
-                    class="focus-visible:focus-outline-util hover:hover-bg-util -m-2.5 rounded-md p-2.5"
+                    class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util -m-2.5 rounded-md p-2.5"
                     type="button"
                     @click="toggleMenu(false)"
                   >
                     <span class="sr-only">Close menu</span>
 
-                    <XMarkIcon class="hover:hover-text-util h-6 w-6 text-base-content-highlight" />
+                    <XMarkIcon class="h-6 w-6" />
                   </button>
                 </div>
               </TransitionChild>
