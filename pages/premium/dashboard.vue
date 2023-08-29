@@ -17,7 +17,7 @@
     {
       name: 'Additional Boorus',
       description: 'Browse posts from other Boorus',
-      href: '/premium/additional-boorus'
+      href: '/premium/booru'
     },
     {
       name: 'Backup',
