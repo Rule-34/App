@@ -15,24 +15,25 @@ useSortable(sortableElement, booruList, {
 	animation: 150,
 
 	onUpdate: (e: any) => {
-		console.log(
-			'before',
-			booruList.value.map((v) => v.domain)
-		)
 
 		nextTick(() => {
 			moveArrayElement(booruList.value, e.oldIndex, e.newIndex)
-
-			console.log(
-				'after',
-				booruList.value.map((v) => v.domain)
-			)
 		})
 	}
 })
 
 const dialogOpen = ref(false)
-const dialogMode = ref<'create' | 'update'>('create')
+
+type dialogModes = 'create' | 'update'
+
+const dialogEditIndex: Ref<number | null> = ref(null)
+const dialogMode: ComputedRef<dialogModes> = computed(() => {
+	if (dialogEditIndex.value !== null) {
+		return 'update'
+	}
+
+	return 'create'
+})
 
 const currentBooru: Ref<{
 	domain: string | undefined
@@ -56,7 +57,7 @@ function openCreateBooruDialog() {
 		type: undefined
 	}
 
-	dialogMode.value = 'create'
+	dialogEditIndex.value = null
 	dialogOpen.value = true
 }
 
@@ -68,11 +69,21 @@ function openEditBooru(index: number) {
 		type: booru.type.type
 	}
 
+	dialogEditIndex.value = index
 	dialogOpen.value = true
-	dialogMode.value = 'update'
+}
+
+function onFormSubmit() {
+	if (dialogMode.value === 'create') {
+		createBooru()
+	} else {
+		editBooru()
+	}
 }
 
 function createBooru() {
+
+	// Validations
 	if (!currentBooru.value.domain || !currentBooru.value.type) {
 		toast.error('Please fill out all fields')
 		return
@@ -85,12 +96,12 @@ function createBooru() {
 		return
 	}
 
+	// TODO: Validate with Domain object
+
 	if (booruList.value.find((booruFromList) => booruFromList.domain === currentBooru.value.domain)) {
 		toast.error('Booru already exists')
 		return
 	}
-
-	// TODO: Validate with Domain object
 
 	booruList.value.push({
 		domain: currentBooru.value.domain,
@@ -102,7 +113,35 @@ function createBooru() {
 }
 
 function editBooru() {
-// TODO
+
+	// Validations
+	if (!currentBooru.value.domain || !currentBooru.value.type) {
+		toast.error('Please fill out all fields')
+		return
+	}
+
+	const booruType = booruTypeList.find((booruType) => booruType.type === currentBooru.value.type)
+
+	if (!booruType) {
+		toast.error('Invalid Booru type')
+		return
+	}
+
+	// TODO: Validate with Domain object
+
+	booruList.value[dialogEditIndex.value!] = {
+		domain: currentBooru.value.domain,
+		type: booruType,
+		isPremium: true
+	}
+
+	dialogOpen.value = false
+}
+
+function deleteBooru() {
+	booruList.value.splice(dialogEditIndex.value!, 1)
+
+	dialogOpen.value = false
 }
 
 useSeoMeta({
@@ -212,7 +251,7 @@ useSeoMeta({
 			<form
 				id='booru-create-form'
 				class='space-y-6 pb-5 pt-6'
-				@submit.prevent='createBooru'
+				@submit.prevent='onFormSubmit'
 			>
 				<!-- Domain -->
 				<div>
@@ -286,7 +325,14 @@ useSeoMeta({
 		</div>
 
 		<template #actions>
-			<!-- TODO: Delete button -->
+			<button
+				v-if='dialogMode === "update"'
+				class='focus-visible:focus-outline-util mr-auto hover:hover-bg-util hover:hover-text-util inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium ring-1 ring-base-0/20'
+				type='button'
+				@click='deleteBooru'
+			>
+				Delete
+			</button>
 
 			<button
 				class='focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium ring-1 ring-base-0/20'
@@ -300,7 +346,7 @@ useSeoMeta({
 				form='booru-create-form'
 				type='submit'
 			>
-				Add
+				{{ dialogMode === 'create' ? 'Add' : 'Save' }}
 			</button>
 		</template>
 	</Slideover>
