@@ -288,7 +288,7 @@ useSeoMeta({
 				<!-- Booru Type -->
 				<div>
 					<label
-						class='block text-sm font-medium leading-8 text-base-content-highlight'
+						class='block font-medium leading-8 text-base-content-highlight'
 						for='type'
 					>
 						Type

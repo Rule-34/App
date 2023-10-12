@@ -3,17 +3,8 @@ import TagCollection from 'assets/js/tagCollection.dto'
 
 const defaultTagCollections: TagCollection[] = [
   {
-    name: 'Gay Blocklist',
-    tags: [
-      '-gay',
-      '-gay_sex',
-      '-solo_male',
-      '-male_only',
-      '-male_focus',
-      '-male/male',
-      '-male_penetrated',
-      '-male_penetrating_male'
-    ]
+    name: 'Indecencies Blocklist',
+    tags: ['-scat', '-shitting', '-diaper', '-pee', '-peeing', '-peeing_self', '-fart', '-shitpost', '-gore', '-vore']
   },
   {
     name: 'Furry Blocklist',
@@ -38,8 +29,17 @@ const defaultTagCollections: TagCollection[] = [
     ]
   },
   {
-    name: 'Indecencies Blocklist',
-    tags: ['-scat', '-shitting', '-diaper', '-pee', '-peeing', '-peeing_self', '-fart', '-shitpost', '-gore', '-vore']
+    name: 'Gay Blocklist',
+    tags: [
+      '-gay',
+      '-gay_sex',
+      '-solo_male',
+      '-male_only',
+      '-male_focus',
+      '-male/male',
+      '-male_penetrated',
+      '-male_penetrating_male'
+    ]
   },
   {
     name: 'AI Blocklist',
@@ -58,6 +58,10 @@ export function useTagCollections() {
     isActive: value,
     toggleIsActive: toggle,
 
-    tagCollections
+    tagCollections,
+
+    resetTagCollections() {
+      tagCollections.value = defaultTagCollections
+    }
   }
 }
