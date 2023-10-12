@@ -51,7 +51,6 @@ function createBackup() {
 		.replaceAll('/', '-')
 		.replaceAll(':', '-')
 
-	// TODO: Do versioning, or maybe not?
 	const STATE: IBackupState = {
 		version: 1,
 
