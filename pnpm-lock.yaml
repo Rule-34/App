@@ -61,9 +61,6 @@ dependencies:
   tailwindcss:
     specifier: ^3.3.3
     version: 3.3.3
-  tippy.js:
-    specifier: ^6.3.7
-    version: 6.3.7
   vue-matomo:
     specifier: ^4.2.0
     version: 4.2.0
@@ -73,9 +70,6 @@ dependencies:
   vue-sonner:
     specifier: ^0.4.4
     version: 0.4.4
-  vue-tippy:
-    specifier: ^6.3.1
-    version: 6.3.1(vue@3.3.4)
 
 devDependencies:
   '@nuxt/test-utils':
@@ -2791,10 +2785,6 @@ packages:
       '@parcel/watcher-win32-arm64': 2.3.0
       '@parcel/watcher-win32-ia32': 2.3.0
       '@parcel/watcher-win32-x64': 2.3.0
-    dev: false
-
-  /@popperjs/core@2.11.8:
-    resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
     dev: false
 
   /@rollup/plugin-alias@5.0.0(rollup@3.29.4):
@@ -9581,12 +9571,6 @@ packages:
     engines: {node: '>=14.0.0'}
     dev: true
 
-  /tippy.js@6.3.7:
-    resolution: {integrity: sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ==}
-    dependencies:
-      '@popperjs/core': 2.11.8
-    dev: false
-
   /tmpl@1.0.5:
     resolution: {integrity: sha512-3f0uOEAQwIqGuWW2MVzYg8fV/QNnc/IpuJNG837rLuczAaLVHslWHZQj4IGiEl5Hs3kkbhwL9Ab7Hrsmuj+Smw==}
     dev: true
@@ -10347,15 +10331,6 @@ packages:
 
   /vue-sonner@0.4.4:
     resolution: {integrity: sha512-Cu8IqjpZF+B7KWu0FHkNTWpTuufn92S0s2c3YuCUG4dL4KNWvAv0Ox+TPWN525gJ1mijG2UUIccEx0lVNga58A==}
-    dev: false
-
-  /vue-tippy@6.3.1(vue@3.3.4):
-    resolution: {integrity: sha512-U2jpGwmwg+u/a36/XDnGlOF+W944xHGlVELsrTNWmZ0nUi2E/VW0c/buBkzntFUwRh6BHwFWcKL8BHcyG2mogQ==}
-    peerDependencies:
-      vue: ^3.2.0
-    dependencies:
-      tippy.js: 6.3.7
-      vue: 3.3.4
     dev: false
 
   /vue@3.3.4:

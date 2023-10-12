@@ -42,11 +42,9 @@
     "rxjs": "^7.8.1",
     "sortablejs": "^1.15.0",
     "tailwindcss": "^3.3.3",
-    "tippy.js": "^6.3.7",
     "vue-matomo": "^4.2.0",
     "vue-safe-teleport": "^0.1.2",
-    "vue-sonner": "^0.4.4",
-    "vue-tippy": "^6.3.1"
+    "vue-sonner": "^0.4.4"
   },
   "devDependencies": {
     "@nuxt/test-utils": "^3.7.4",
