@@ -82,7 +82,7 @@ const emit = defineEmits<{
 								>
 									<!-- Header -->
 									<div
-										v-if='$slots.title && $slots.description'
+										v-if='$slots.title || $slots.description'
 										class='h-0 flex-1 overflow-y-auto'
 									>
 										<div class='px-4 py-6 sm:px-6'>
