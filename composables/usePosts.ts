@@ -3,6 +3,8 @@ import { useUserSettings } from '~/composables/useUserSettings'
 import { toast } from 'vue-sonner'
 import { IPostPage } from 'assets/js/post'
 
+const { token: authToken } = useAuth()
+
 const userSettings = useUserSettings()
 
 export function usePosts(initialPostPages: Ref<IPostPage[] | null>) {
@@ -92,11 +94,15 @@ export function usePosts(initialPostPages: Ref<IPostPage[] | null>) {
       console.debug('There is no next page')
     }
 
-    const postsPage = await $fetch(links.next)
+    const postsPage = await $fetch(links.next, {
+      headers: {
+        'Authorization': authToken.value
+      }
+    })
       //
       .catch((error) => {
         console.error(error)
-        toast.error(`Failed to load next posts: "${error.message}"`)
+        toast.error(`Failed to load next posts: "${ error.message }"`)
       })
 
     initialPostPages.value.push(postsPage)
