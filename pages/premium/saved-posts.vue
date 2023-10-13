@@ -1,104 +1,136 @@
-<script lang="ts" setup>
-  import { db } from '~/store/SavedPosts'
-  import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
-  import { useObservable } from '@vueuse/rxjs'
-  import { liveQuery } from 'dexie'
-  import { useBooruList } from '~/composables/useBooruList'
+<script lang='ts' setup>
+import { db } from '~/store/SavedPosts'
+import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
+import { useObservable } from '@vueuse/rxjs'
+import { liveQuery } from 'dexie'
+import { useBooruList } from '~/composables/useBooruList'
+import type { Domain } from 'assets/js/domain'
+import { booruTypeList } from 'assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 
-  const posts = await db.posts.toArray()
 
-  const { booruList: _availableBooruList } = useBooruList()
+const { booruList: _availableBooruList } = useBooruList()
 
-  const _booruDomainsInDb = useObservable(
+const _booruDomainsInDb = useObservable(
+  //
+  liveQuery(() =>
     //
-    liveQuery(() =>
-      //
-      db.posts.orderBy('original_domain').uniqueKeys()
-    ) as any,
+    db.posts.orderBy('original_domain').uniqueKeys()
+  ) as any,
+  {
+    initialValue: []
+  }
+) as Readonly<globalThis.Ref<unknown[]>>
+
+const booruList = computed(() => {
+  const _booruList: Domain[] = [
     {
-      initialValue: []
+      domain: 'r34.app',
+      type: booruTypeList[0],
+      isPremium: false
     }
-  ) as Readonly<globalThis.Ref<unknown[]>>
+  ]
 
-  const booruList = computed(() => {
-    return _booruDomainsInDb.value.map((domainInDb) => {
-      const booru = _availableBooruList.value.find((availableBooru) => availableBooru.domain === domainInDb)
+  _booruDomainsInDb.value.forEach((domainInDb) => {
+    const booru = _availableBooruList.value.find((availableBooru) => availableBooru.domain === domainInDb)
 
-      if (!booru) {
-        throw new Error(`Booru with domain "${domainInDb}" not found`)
+    if (!booru) {
+      throw new Error(`Booru with domain "${ domainInDb }" not found`)
+    }
+
+    _booruList.push(booru)
+  })
+
+  return _booruList
+})
+
+const selectedBooru = ref(toRaw(booruList.value[0]))
+
+const selectedTags = ref<string[]>([])
+
+const posts = useObservable(
+  //
+  liveQuery(() => {
+      let posts = db.posts
+
+      if (selectedBooru.value.domain && selectedBooru.value.domain !== 'r34.app') {
+        posts = posts
+          .where('original_domain')
+          .equals(selectedBooru.value.domain)
       }
 
-      return booru
-    })
-  })
+      // Reverse order to show latest posts
+      posts = posts.reverse()
 
-  const selectedBooru = ref(undefined)
-
-  const selectedTags = ref<string[]>([])
-
-  function onDomainChange(domain: string) {
-    // TODO
+      return posts.toArray()
+    }
+  ) as any,
+  {
+    initialValue: []
   }
+) as Readonly<globalThis.Ref<unknown[]>>
 
-  function onPostClickTag(tag: string) {
-    // TODO
-  }
+function onDomainChange(booru: Domain) {
+  selectedBooru.value = booru
+}
 
-  useSeoMeta({
-    title: 'Saved posts'
-  })
+function onPostClickTag(tag: string) {
+  // TODO
+}
 
-  definePageMeta({ middleware: 'auth' })
+useSeoMeta({
+  title: 'Saved posts'
+})
+
+definePageMeta({ middleware: 'auth' })
 </script>
 
 <template>
-  <main class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
+  <main class='container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8'>
     <PageHeader>
       <template #title>Saved posts</template>
       <template #text>Save posts to your device and enjoy them later</template>
     </PageHeader>
 
     <section
-      v-if="booruList.length"
-      class="mt-4"
+      v-if='booruList.length'
+      class='mt-4'
     >
       <DomainSelector
-        :boorus="booruList"
-        :model-value="selectedBooru"
-        class="mt-4"
-        @update:model-value="onDomainChange"
+        :boorus='booruList'
+        :model-value='selectedBooru'
+        @update:model-value='onDomainChange'
       />
     </section>
 
-    <section class="my-4">
+    <section class='my-4'>
       <!-- No results -->
-      <template v-if="!posts.length">
+      <template v-if='!posts.length'>
         <!-- -->
 
-        <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-lg">
-          <QuestionMarkCircleIcon class="h-12 w-12" />
+        <div class='flex h-80 w-full flex-col items-center justify-center gap-4 text-lg'>
+          <QuestionMarkCircleIcon class='h-12 w-12' />
 
           <h1>No results</h1>
 
-          <h2 class="text-base">Try changing the domain or the tags</h2>
+          <h2 class='text-base'>Try changing the domain or the tags</h2>
         </div>
       </template>
 
       <template v-else>
         <!-- -->
 
-        <ol class="space-y-4">
+        <ol class='space-y-4'>
           <template
-            v-for="(post, index) in posts"
-            :key="post.id"
+            v-for='(post, index) in posts'
+            :key='post.id'
           >
             <!-- Post -->
             <li>
               <Post
-                :post="post.data"
-                :post-name="post.internal_id"
-                :selected-tags="selectedTags"
-                @click-tag="onPostClickTag"
+                :post='post.data'
+                :post-name='post.internal_id'
+                :selected-tags='selectedTags'
+                @click-tag='onPostClickTag'
               />
             </li>
           </template>
