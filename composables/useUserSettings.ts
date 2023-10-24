@@ -1,7 +1,5 @@
 import { useStorage } from '@vueuse/core'
 
-const version = useStorage('settings-version', 1, localStorage)
-
 const navigationTouchGestures = useStorage('settings-navigationTouchGestures', true, localStorage, {
   writeDefaults: false
 })
@@ -17,8 +15,6 @@ const lastPostsPage = useStorage<string | undefined>('settings-lastPostsPage', u
 
 export function useUserSettings() {
   return reactive({
-    version,
-
     navigationTouchGestures,
 
     postFullSizeImages,
