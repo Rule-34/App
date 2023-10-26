@@ -1,16 +1,17 @@
 <script lang='ts' setup>
-import { db } from '~/store/SavedPosts'
+import { db, ISavedPost } from '~/store/SavedPosts'
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
 import { useObservable } from '@vueuse/rxjs'
 import { liveQuery } from 'dexie'
 import { useBooruList } from '~/composables/useBooruList'
 import type { Domain } from 'assets/js/domain'
 import { booruTypeList } from 'assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+import Tag from 'assets/js/tag.dto'
 
 
 const { booruList: _availableBooruList } = useBooruList()
 
-const _booruDomainsInDb = useObservable(
+const booruNamesInDb = useObservable(
   //
   liveQuery(() =>
     //
@@ -19,7 +20,7 @@ const _booruDomainsInDb = useObservable(
   {
     initialValue: []
   }
-) as Readonly<globalThis.Ref<unknown[]>>
+) as Readonly<globalThis.Ref<ISavedPost['original_domain'][]>>
 
 const booruList = computed(() => {
   const _booruList: Domain[] = [
@@ -30,11 +31,11 @@ const booruList = computed(() => {
     }
   ]
 
-  _booruDomainsInDb.value.forEach((domainInDb) => {
-    const booru = _availableBooruList.value.find((availableBooru) => availableBooru.domain === domainInDb)
+  booruNamesInDb.value.forEach((booruNameInDb) => {
+    const booru = _availableBooruList.value.find((availableBooru) => availableBooru.domain === booruNameInDb)
 
     if (!booru) {
-      throw new Error(`Booru with domain "${ domainInDb }" not found`)
+      throw new Error(`Booru with domain "${ booruNameInDb }" not found`)
     }
 
     _booruList.push(booru)
@@ -45,32 +46,47 @@ const booruList = computed(() => {
 
 const selectedBooru = ref(toRaw(booruList.value[0]))
 
-const selectedTags = ref<string[]>([])
+const selectedTags = ref<Tag[]>([])
 
-const posts = useObservable(
+const postsInDb = useObservable(
   //
-  liveQuery(() => {
-      let posts = db.posts
-
-      if (selectedBooru.value.domain && selectedBooru.value.domain !== 'r34.app') {
-        posts = posts
-          .where('original_domain')
-          .equals(selectedBooru.value.domain)
-      }
-
-      // Reverse order to show latest posts
-      posts = posts.reverse()
-
-      return posts.toArray()
-    }
+  liveQuery(() =>
+    db.posts.toArray()
   ) as any,
   {
     initialValue: []
   }
-) as Readonly<globalThis.Ref<unknown[]>>
+) as Readonly<globalThis.Ref<ISavedPost[]>>
+
+const filteredPosts = computed(() => {
+  let posts = postsInDb.value
+
+  const currentDomain = selectedBooru.value.domain
+
+  // Return all posts if selected booru is r34.app
+  if (currentDomain && currentDomain === 'r34.app') {
+    return posts
+  }
+
+  posts = posts.filter((post) => {
+    if (currentDomain !== post.original_domain) {
+      return false
+    }
+
+    return true
+  })
+
+  // TODO: Look for a search library to filter by tags and options
+
+  posts = posts.toReversed()
+
+  return posts
+})
 
 function onDomainChange(booru: Domain) {
   selectedBooru.value = booru
+
+  // TODO: Save state in URL
 }
 
 function onPostClickTag(tag: string) {
@@ -104,7 +120,7 @@ definePageMeta({ middleware: 'auth' })
 
     <section class='my-4'>
       <!-- No results -->
-      <template v-if='!posts.length'>
+      <template v-if='!filteredPosts.length'>
         <!-- -->
 
         <div class='flex h-80 w-full flex-col items-center justify-center gap-4 text-lg'>
@@ -121,7 +137,7 @@ definePageMeta({ middleware: 'auth' })
 
         <ol class='space-y-4'>
           <template
-            v-for='(post, index) in posts'
+            v-for='(post, index) in filteredPosts'
             :key='post.id'
           >
             <!-- Post -->
