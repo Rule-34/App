@@ -2,20 +2,7 @@
 import { ArrowDownTrayIcon, ArrowUturnLeftIcon } from '@heroicons/vue/24/solid'
 import PageHeader from '~/components/layout/PageHeader.vue'
 import { toast } from 'vue-sonner'
-import type { ISavedPost } from '~/store/SavedPosts'
-import { db as postsDb } from '~/store/SavedPosts'
-import type { ITagCollection } from 'assets/js/tagCollection.dto'
-
-interface IBackupState {
-  version: number
-
-  saved_posts: ISavedPost[]
-  tag_collections: ITagCollection[]
-
-  settings: {
-    [key: string]: any
-  }
-}
+import { createBackupState, IBackupState, restoreBackupState } from 'assets/js/BackupHelper'
 
 const fileInputElement = ref<HTMLInputElement | null>(null)
 
@@ -39,10 +26,6 @@ function downloadBlob(blob: Blob, filename: string) {
 }
 
 async function createBackup() {
-  const savedPosts = await postsDb.posts.toArray()
-  const { tagCollections } = useTagCollections()
-  const userSettings = useUserSettings()
-
   const currentDateString = new Date()
     .toLocaleString([], {
       timeZone: 'UTC',
@@ -58,17 +41,9 @@ async function createBackup() {
     .replaceAll('/', '-')
     .replaceAll(':', '-')
 
-  // TODO: Only save data that is not defaulted
-  const STATE: IBackupState = {
-    version: 1,
+  const backupState = await createBackupState()
 
-    saved_posts: savedPosts,
-    tag_collections: tagCollections.value,
-
-    settings: userSettings
-  }
-
-  const blob = new Blob([JSON.stringify(STATE)], { type: 'application/json' })
+  const blob = new Blob([JSON.stringify(backupState)], { type: 'application/json' })
 
   const fileName = `R34App_${ currentDateString }_Backup.json`
 
@@ -88,23 +63,13 @@ async function restoreBackup() {
     return
   }
 
-  const backupData: IBackupState = JSON.parse(await file.text())
+  const backupState: IBackupState = JSON.parse(await file.text())
 
-  if (backupData.version !== 1) {
-    toast.error('Invalid backup file')
+  try {
+    await restoreBackupState(backupState)
+  } catch (error) {
+    toast.error(`Failed to restore backup: ${ error }`)
     return
-  }
-
-  if (backupData.saved_posts) {
-    // TODO
-  }
-
-  if (backupData.tag_collections) {
-    // TODO
-  }
-
-  if (backupData.settings) {
-    // TODO
   }
 
   toast.success('Backup restored')
