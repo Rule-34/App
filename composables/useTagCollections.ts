@@ -1,5 +1,6 @@
 import { useStorage, useToggle } from '@vueuse/core'
 import TagCollection from 'assets/js/tagCollection.dto'
+import { cloneDeep } from 'lodash-es'
 
 const defaultTagCollections: TagCollection[] = [
   {
@@ -47,7 +48,7 @@ const defaultTagCollections: TagCollection[] = [
   }
 ]
 
-const tagCollections = useStorage('user-tagCollections', defaultTagCollections, localStorage, {
+const tagCollections = useStorage('user-tagCollections', cloneDeep(defaultTagCollections), localStorage, {
   writeDefaults: false
 })
 
@@ -61,7 +62,7 @@ export function useTagCollections() {
     tagCollections,
 
     resetTagCollections() {
-      tagCollections.value = defaultTagCollections
+      tagCollections.value = cloneDeep(defaultTagCollections)
     }
   }
 }

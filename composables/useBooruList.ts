@@ -1,6 +1,7 @@
 import { booruTypeList, completeBooruList } from 'assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 import { useStorage } from '@vueuse/core'
 import type { Domain } from 'assets/js/domain'
+import { cloneDeep } from 'lodash-es'
 
 const defaultBooruList: Domain[] = [
   {
@@ -83,7 +84,7 @@ const defaultBooruList: Domain[] = [
   }
 ]
 
-const userBooruList = useStorage('user-booruList', defaultBooruList, localStorage, {
+const userBooruList = useStorage('user-booruList', cloneDeep(defaultBooruList), localStorage, {
   writeDefaults: false
 })
 
@@ -92,7 +93,7 @@ export function useBooruList() {
     booruList: userBooruList,
 
     resetBooruList() {
-      userBooruList.value = defaultBooruList
+      userBooruList.value = cloneDeep(defaultBooruList)
     }
   }
 }
