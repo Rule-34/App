@@ -142,8 +142,6 @@ function deleteItem() {
 useSeoMeta({
   title: 'Tag collections'
 })
-
-definePageMeta({ middleware: 'auth' })
 </script>
 
 <template>
