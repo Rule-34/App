@@ -140,7 +140,7 @@ function shouldBooruBeDisabled(booru: Domain) {
 
           <NuxtLink
             class='focus-visible:focus-outline-util ml-3'
-            href='/premium/booru'
+            href='/premium/additional-boorus'
           >
             Add more Boorus
           </NuxtLink>
