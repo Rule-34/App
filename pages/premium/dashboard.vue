@@ -17,7 +17,7 @@ const links = [
   {
     name: 'Additional Boorus',
     description: 'Browse posts from other Boorus',
-    href: '/premium/booru'
+    href: '/premium/additional-boorus'
   },
   {
     name: 'Backup & Restore',
