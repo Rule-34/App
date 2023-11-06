@@ -2,7 +2,7 @@
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/vue'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
 import { PlusIcon } from '@heroicons/vue/24/solid'
-import type { Domain } from 'assets/js/domain'
+import type { Domain } from '~/assets/js/domain'
 import { Float } from '@headlessui-float/vue'
 
 interface DomainSelectorProps {

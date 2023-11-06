@@ -3,7 +3,7 @@ import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOption
 import { CheckIcon, ChevronUpDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import { watchDebounced } from '@vueuse/core'
 import { abbreviateNumber } from 'js-abbreviation-number'
-import Tag from 'assets/js/tag.dto'
+import Tag from '~/assets/js/tag.dto'
 
 const props = defineProps<{
   tagResults: Tag[]

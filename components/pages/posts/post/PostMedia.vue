@@ -1,6 +1,6 @@
 <script lang='ts' setup>
 import { vIntersectionObserver } from '@vueuse/components'
-import { ProxyHelper } from 'assets/js/ProxyHelper'
+import { ProxyHelper } from '~/assets/js/ProxyHelper'
 
 const props = defineProps({
   mediaSrc: {

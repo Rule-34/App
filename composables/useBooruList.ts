@@ -1,6 +1,6 @@
-import { booruTypeList, completeBooruList } from 'assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+import { booruTypeList, completeBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 import { useStorage } from '@vueuse/core'
-import type { Domain } from 'assets/js/domain'
+import type { Domain } from '~/assets/js/domain'
 import { cloneDeep } from 'lodash-es'
 
 const defaultBooruList: Domain[] = [

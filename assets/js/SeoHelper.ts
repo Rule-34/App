@@ -1,4 +1,4 @@
-import Tag from 'assets/js/tag.dto'
+import Tag from '~/assets/js/tag.dto'
 
 export function tagArrayToTitle(tags: Tag[]) {
   if (!tags.length) {
@@ -21,7 +21,7 @@ export function tagArrayToTitle(tags: Tag[]) {
   let title = ''
 
   if (tagsThatStartWithNothing.length) {
-    title += `with ${tagsThatStartWithNothing.join(', ')}`
+    title += `with ${ tagsThatStartWithNothing.join(', ') }`
   }
 
   if (tagsThatStartWithNothing.length && tagsThatStartWithMinus.length) {
@@ -29,7 +29,7 @@ export function tagArrayToTitle(tags: Tag[]) {
   }
 
   if (tagsThatStartWithMinus.length) {
-    title += ` without ${tagsThatStartWithMinus.join(', ')}`
+    title += ` without ${ tagsThatStartWithMinus.join(', ') }`
   }
 
   return title
