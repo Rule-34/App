@@ -2,7 +2,7 @@
 import { CheckIcon, StarIcon } from '@heroicons/vue/20/solid'
 import { InformationCircleIcon } from '@heroicons/vue/24/outline'
 import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
-import { completeBooruList, defaultBooruList } from 'assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 
 const mainFeatures = [
   { title: 'Hide promoted content', additionalInfo: undefined },

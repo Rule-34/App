@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 import { useUserSettings } from '~/composables/useUserSettings'
 import { toast } from 'vue-sonner'
-import { IPostPage } from 'assets/js/post'
+import type { IPostPage } from '~/assets/js/post'
 
 const { token: authToken } = useAuth()
 

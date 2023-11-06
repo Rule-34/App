@@ -1,5 +1,5 @@
-import Tag from 'assets/js/tag.dto'
-import { RouteLocationRaw } from 'vue-router'
+import Tag from '~/assets/js/tag.dto'
+import type { RouteLocationRaw } from 'vue-router'
 
 export function generatePostsRoute(
   domain?: string | undefined | null,

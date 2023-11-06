@@ -1,4 +1,4 @@
-import { RouterHelper } from 'assets/js/RouterHelper'
+import { RouterHelper } from '~/assets/js/RouterHelper'
 
 function isRouteIncorrect(context) {
   // Fix: we use the query's data since Vuex has not been updated yet with the request data.

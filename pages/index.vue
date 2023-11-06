@@ -1,9 +1,9 @@
 <script lang='ts' setup>
 import { toast } from 'vue-sonner'
 import { Ref } from 'vue'
-import Tag from 'assets/js/tag.dto'
+import Tag from '~/assets/js/tag.dto'
 import { useBooruList } from '~/composables/useBooruList'
-import type { Domain } from 'assets/js/domain'
+import type { Domain } from '~/assets/js/domain'
 
 const config = useRuntimeConfig()
 const { token: authToken } = useAuth()

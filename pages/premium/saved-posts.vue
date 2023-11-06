@@ -4,9 +4,9 @@ import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
 import { useObservable } from '@vueuse/rxjs'
 import { liveQuery } from 'dexie'
 import { useBooruList } from '~/composables/useBooruList'
-import type { Domain } from 'assets/js/domain'
-import { booruTypeList } from 'assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-import Tag from 'assets/js/tag.dto'
+import type { Domain } from '~/assets/js/domain'
+import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+import Tag from '~/assets/js/tag.dto'
 
 
 const { booruList: _availableBooruList } = useBooruList()

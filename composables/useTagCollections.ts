@@ -1,5 +1,5 @@
 import { useStorage, useToggle } from '@vueuse/core'
-import TagCollection from 'assets/js/tagCollection.dto'
+import TagCollection from '~/assets/js/tagCollection.dto'
 import { cloneDeep } from 'lodash-es'
 
 const defaultTagCollections: TagCollection[] = [
