@@ -2,32 +2,16 @@
 import { vIntersectionObserver } from '@vueuse/components'
 import { ProxyHelper } from '~/assets/js/ProxyHelper'
 
-const props = defineProps({
-  mediaSrc: {
-    type: String,
-    required: true
-  },
-  mediaSrcHeight: {
-    type: Number,
-    required: true
-  },
-  mediaSrcWidth: {
-    type: Number,
-    required: true
-  },
-  mediaPosterSrc: {
-    type: String,
-    required: false
-  },
-  mediaType: {
-    type: String,
-    required: true
-  },
-  mediaAlt: {
-    type: String,
-    required: true
-  }
-})
+export interface PostMediaProps {
+  mediaSrc: string
+  mediaSrcHeight: number | null
+  mediaSrcWidth: number | null
+  mediaPosterSrc?: string
+  mediaType: 'image' | 'video'
+  mediaAlt: string
+}
+
+const props = defineProps<PostMediaProps>()
 
 const localSrc = ref(props.mediaSrc)
 
