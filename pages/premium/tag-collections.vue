@@ -5,7 +5,7 @@ import { moveArrayElement, useSortable } from '@vueuse/integrations/useSortable'
 import type { ComputedRef, Ref } from 'vue'
 import { toast } from 'vue-sonner'
 import { useTagCollections } from '~/composables/useTagCollections'
-import TagCollection, { ITagCollection } from 'assets/js/tagCollection.dto'
+import { type ITagCollection, TagCollection } from '~/assets/js/tagCollection.dto'
 
 const { tagCollections, resetTagCollections } = useTagCollections()
 

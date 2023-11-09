@@ -2,7 +2,7 @@
 import { ArrowDownTrayIcon, ArrowUturnLeftIcon } from '@heroicons/vue/24/solid'
 import PageHeader from '~/components/layout/PageHeader.vue'
 import { toast } from 'vue-sonner'
-import { createBackupState, IBackupState, restoreBackupState } from '~/assets/js/BackupHelper'
+import { createBackupState, type IBackupState, restoreBackupState } from '~/assets/js/BackupHelper'
 
 const fileInputElement = ref<HTMLInputElement | null>(null)
 
