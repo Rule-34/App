@@ -60,6 +60,7 @@ const mediaFile = computed(() => {
     }
 
     default:
+      // TODO: Handle unknown media type in PostMedia
       throw new Error('Unknown media type: ' + props.post.media_type)
   }
 
