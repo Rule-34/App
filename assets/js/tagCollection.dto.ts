@@ -9,7 +9,7 @@ export class TagCollectionDTO implements ITagCollection {
   tags: string[] = []
 }
 
-export default class TagCollection extends TagCollectionDTO {
+export class TagCollection extends TagCollectionDTO {
   constructor(dto: TagCollectionDTO) {
     super()
     Object.assign(this, dto)

@@ -1,5 +1,9 @@
-import { db as postsDb, ISavedPost } from '~/store/SavedPosts'
-import { ITagCollection } from 'assets/js/tagCollection.dto'
+import { db as postsDb, type ISavedPost } from '~/store/SavedPosts'
+import type { ITagCollection } from '~/assets/js/tagCollection.dto'
+import type { VuexUser } from '~/assets/js/oldLocalStorage.dto'
+import { union } from 'lodash-es'
+import type { Domain } from '~/assets/js/domain'
+import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 
 export interface IBackupState {
   version: number

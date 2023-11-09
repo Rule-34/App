@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-import { db, ISavedPost } from '~/store/SavedPosts'
+import { db, type ISavedPost } from '~/store/SavedPosts'
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
 import { useObservable } from '@vueuse/rxjs'
 import { liveQuery } from 'dexie'
