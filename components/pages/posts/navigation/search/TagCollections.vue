@@ -3,7 +3,7 @@ import { DialogTitle } from '@headlessui/vue'
 import Tag from '~/assets/js/tag.dto'
 import { Cog6ToothIcon, PlusIcon, TagIcon } from '@heroicons/vue/24/outline'
 import { toast } from 'vue-sonner'
-import TagCollection from '~/assets/js/tagCollection.dto'
+import { TagCollection } from '~/assets/js/tagCollection.dto'
 
 const props = defineProps<{
   selectedTags: Tag[]

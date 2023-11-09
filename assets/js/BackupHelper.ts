@@ -71,3 +71,57 @@ export async function restoreBackupState(backupState: IBackupState): Promise<voi
 
   }
 }
+
+export function doesHaveOldVersionState(): boolean {
+  if (localStorage.getItem('vuex-user'))
+    return true
+
+  return false
+}
+
+export function migrateOldVersionState(): void {
+  const { tagCollections } = useTagCollections()
+  const userSettings = useUserSettings()
+  const { booruList } = useBooruList()
+
+  if (!localStorage.getItem('vuex-user')) {
+    return
+  }
+
+  const vuexUser: VuexUser = JSON.parse(localStorage.getItem('vuex-user')!)
+
+  // Migrate settings
+  if (vuexUser.settings.touchGestures)
+    userSettings.navigationTouchGestures = vuexUser.settings.touchGestures.value
+
+  if (vuexUser.settings.fullSizeImages)
+    userSettings.postFullSizeImages = vuexUser.settings.fullSizeImages.value
+
+  if (vuexUser.settings.postsPerPage)
+    userSettings.postsPerPage = vuexUser.settings.postsPerPage.value
+
+  // Migrate tag collections
+  if (vuexUser.custom.tagCollections) {
+    tagCollections.value = union(tagCollections.value, vuexUser.custom.tagCollections)
+  }
+
+  // Migrate Boorus
+  const vuexUserBoorusMigrated = vuexUser.custom.boorus.map(booru => {
+    // TODO: Find defaults and return that
+
+    return {
+      domain: booru.domain,
+
+      type: booruTypeList.find(type => type.type === booru.type),
+
+      isPremium: true
+    }
+  }) as Domain[]
+
+  booruList.value = union(booruList.value, vuexUserBoorusMigrated)
+
+  // Migrate saved posts
+
+
+  localStorage.removeItem('vuex-user')
+}
