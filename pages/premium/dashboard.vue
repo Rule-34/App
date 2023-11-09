@@ -1,5 +1,6 @@
 <script lang='ts' setup>
 import { ArrowLeftOnRectangleIcon } from '@heroicons/vue/24/solid'
+import { doesHaveOldVersionState } from '~/assets/js/BackupHelper'
 
 const { data, signOut: _signOut } = useAuth()
 
@@ -25,6 +26,17 @@ const links = [
     href: '/premium/backup'
   }
 ]
+
+const doesHaveOldVersionStateData = doesHaveOldVersionState()
+
+if (doesHaveOldVersionStateData) {
+  links.unshift({
+    name: '⚠ Migrate old data ⚠',
+    description: 'Migrate your old saved posts, tag collections, etc',
+    href: '/premium/migrate-old-data'
+  })
+}
+
 
 function signOut() {
   _signOut()
