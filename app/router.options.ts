@@ -6,5 +6,15 @@ export default <RouterConfig>{
   // Fix router query parser - https://github.com/vuejs/vue-router/issues/1259#issuecomment-1571553624
   parseQuery: qs.parse,
 
-  stringifyQuery: qs.stringify
+  stringifyQuery: qs.stringify,
+
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return {
+        top: 0
+      }
+    }
+  }
 }
