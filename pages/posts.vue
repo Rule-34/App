@@ -179,19 +179,19 @@ async function reflectChangesInUrl({
 
   replace?: boolean
 }) {
-  if (domain == null) {
+  if (domain === undefined) {
     domain = selectedBooru.value.domain
   }
 
-  if (page == null) {
+  if (page === undefined) {
     page = selectedBooru.value.type.initialPageID
   }
 
-  if (tags == null) {
+  if (tags === undefined) {
     tags = selectedTags.value
   }
 
-  if (filters == null) {
+  if (filters === undefined) {
     filters = selectedFilters.value
   }
 
