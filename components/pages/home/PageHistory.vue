@@ -34,7 +34,9 @@ function historyPathToTitle(path: string) {
 
 function onHistoryItemClick(path: string) {
   if (!isPremium.value) {
-    toast.info('[Premium feature] Page history is only available for Premium users')
+    toast.info('Premium feature', {
+      description: 'Page history is only available for Premium users'
+    })
     return
   }
 
