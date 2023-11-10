@@ -1,56 +1,56 @@
-<script lang="ts" setup>
-  import { formatTimeAgo } from '@vueuse/core'
-  import { toast } from 'vue-sonner'
+<script lang='ts' setup>
+import { formatTimeAgo } from '@vueuse/core'
+import { toast } from 'vue-sonner'
 
-  const { isPremium } = useUserData()
-  const { pageHistory } = usePageHistory()
+const { isPremium } = useUserData()
+const { pageHistory } = usePageHistory()
 
-  function historyPathToTitle(path: string) {
-    path = decodeURIComponent(path)
+function historyPathToTitle(path: string) {
+  path = decodeURIComponent(path)
 
-    return (
-      path
-        //
-        .replace('/posts?', '')
-        .split('&')
-        .map(
-          (_query) =>
-            _query
-              // Capitalize first character
-              .charAt(0)
-              .toUpperCase() +
-            _query
-              .slice(1)
+  return (
+    path
+      //
+      .replace('/posts?', '')
+      .split('&')
+      .map(
+        (_query) =>
+          _query
+            // Capitalize first character
+            .charAt(0)
+            .toUpperCase() +
+          _query
+            .slice(1)
 
-              // Replace first '=' with ': '
-              .replace(/=/, ': ')
-        )
-        // Query separator
-        .join('\n')
-        // Separate tags
-        .replace(/\|/g, ', ')
-    )
+            // Replace first '=' with ': '
+            .replace(/=/, ': ')
+      )
+      // Query separator
+      .join('\n')
+      // Separate tags
+      .replace(/\|/g, ', ')
+  )
+}
+
+function onHistoryItemClick(path: string) {
+  if (!isPremium.value) {
+    toast.info('[Premium feature] Page history is only available for Premium users')
+    return
   }
 
-  function onHistoryItemClick(path: string) {
-    if (!isPremium.value) {
-      toast.error('[Premium feature] Page history is only available for Premium users')
-      return
-    }
-
-    navigateTo(path)
-  }
+  navigateTo(path)
+}
 </script>
 
 <template>
   <ol
-    class="space-y-6 overflow-x-hidden"
-    role="list"
+    class='space-y-6 overflow-x-hidden'
+    role='list'
   >
     <li
-      v-for="(historyItem, index) in pageHistory.slice().reverse()"
-      :key="index"
-      class="relative flex gap-x-4"
+      v-for='(historyItem, index) in pageHistory.slice().reverse()'
+      :key='index'
+      class='relative flex gap-x-4'
     >
       <!-- Left Axis -->
       <div
@@ -59,26 +59,26 @@
           'absolute left-0 top-0 flex w-6 justify-center'
         ]"
       >
-        <div class="w-px bg-base-0/20" />
+        <div class='w-px bg-base-0/20' />
       </div>
 
       <!-- Icon (dot) -->
-      <div class="relative flex h-6 w-6 flex-none items-center justify-center bg-base-1000">
-        <div class="h-1.5 w-1.5 rounded-full bg-base-0/10 ring-1 ring-base-0/20" />
+      <div class='relative flex h-6 w-6 flex-none items-center justify-center bg-base-1000'>
+        <div class='h-1.5 w-1.5 rounded-full bg-base-0/10 ring-1 ring-base-0/20' />
       </div>
 
       <!-- Text -->
       <button
-        class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util flex-auto whitespace-pre-wrap rounded-md px-1 py-0.5 text-left text-xs leading-5"
-        type="button"
-        @click="onHistoryItemClick(historyItem.path)"
+        class='focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util flex-auto whitespace-pre-wrap rounded-md px-1 py-0.5 text-left text-xs leading-5'
+        type='button'
+        @click='onHistoryItemClick(historyItem.path)'
       >
         {{ historyPathToTitle(historyItem.path) }}
       </button>
 
       <time
-        :datetime="historyItem.date"
-        class="flex-none py-0.5 text-xs leading-5"
+        :datetime='historyItem.date'
+        class='flex-none py-0.5 text-xs leading-5'
       >
         {{ formatTimeAgo(new Date(historyItem.date)) }}
       </time>
