@@ -18,6 +18,6 @@ function onIntersectionObserver([{ isIntersecting }]) {
     class='flex animate-pulse items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-base-content ring-1 ring-base-0/20'
     data-testid='load-next-page'
   >
-    Loading next page&hellip;
+    <slot />
   </div>
 </template>

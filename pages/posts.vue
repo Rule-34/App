@@ -71,7 +71,6 @@ const selectedPage = computed(() => {
 
 const selectedFilters = computed(() => {
   // TODO: Validate
-  // TODO: Default score to 0
 
   return {
     rating: route.query.filter?.rating ?? undefined,
@@ -155,7 +154,6 @@ const {
 })
 
 // TODO: Virtualize posts
-// TODO: Restore popstate data
 
 /**
  * `undefined` values mean that they will be replaced by default values
@@ -274,7 +272,12 @@ async function onPostClickLongTag(tag: string) {
 }
 
 async function onLoadNextPostPage() {
-  await reflectChangesInUrl({ page: selectedPage.value + 1 })
+  // Skip if already fetching
+  if (isFetching.value || isFetchingNextPage.value) {
+    return
+  }
+
+  await reflectChangesInUrl({ page: selectedPage.value + 1, replace: true })
 
   await fetchNextPage()
 }
@@ -455,7 +458,7 @@ definePageMeta({
         @update:model-value='onDomainChange'
       />
 
-      <!-- TODO> Move filters here -->
+      <!-- TODO: Move filters here -->
     </section>
 
     <div class='flex'>
@@ -483,8 +486,6 @@ definePageMeta({
 
     <section class='my-4'>
       <!-- Pending -->
-      <!-- FIX: Do not show when there is existing data because we would reset the scroll position -->
-      <!-- TODO: Fix it on the screen so it does not interrupt flow -->
       <template v-if='isPending'>
 
         <div class='flex h-80 w-full animate-pulse flex-col items-center justify-center gap-4 text-lg'>
@@ -552,15 +553,15 @@ definePageMeta({
           </template>
         </ol>
 
-        <!-- Load more -->
-        <!-- TODO: Loading more -->
-        <!-- TODO: No more results -->
-        <template v-if='hasNextPage && !isFetchingNextPage'>
-          <PostsPagination
-            class='mt-4'
-            @load-next-page='onLoadNextPostPage'
-          />
-        </template>
+        <!-- Next Pagination -->
+        <PostsPagination
+          class='mt-4'
+          @load-next-page='onLoadNextPostPage'
+        >
+          <span v-if='isFetchingNextPage'>Loading more&hellip;</span>
+          <span v-else-if='hasNextPage'>Load More</span>
+          <span v-else>Nothing more to load</span>
+        </PostsPagination>
       </template>
     </section>
   </main>
