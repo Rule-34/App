@@ -545,11 +545,12 @@ definePageMeta({
 
           <!-- TODO: Animate adding posts https://vuejs.org/guide/built-ins/transition-group.html#staggering-list-transitions -->
           <ol
-            v-for='(post, postIndex) in postsPage.data'
-            :key='`${selectedBooru.domain}-${post.id}`'
             class='space-y-4'
           >
-            <li>
+            <li
+              v-for='(post, postIndex) in postsPage.data'
+              :key='`post-${selectedBooru.domain}-${post.id}`'
+            >
               <Post
                 :post='post'
                 :post-name='`${selectedBooru.domain}-${post.id}`'
@@ -557,14 +558,12 @@ definePageMeta({
                 @click-tag='onPostClickTag'
                 @click-long-tag='onPostClickLongTag'
               />
-            </li>
 
-            <!-- Promoted content -->
-            <template v-if='!isPremium && postIndex !== 0 && postIndex % 7 === 0'>
-              <li :key='`${post.id}-promoted-content`'>
-                <PromotedContent />
-              </li>
-            </template>
+              <!-- Promoted content -->
+              <template v-if='!isPremium && postIndex !== 0 && postIndex % 7 === 0'>
+                <PromotedContent class='my-4' />
+              </template>
+            </li>
           </ol>
         </div>
 
