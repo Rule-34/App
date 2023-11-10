@@ -153,7 +153,7 @@ const {
   }
 })
 
-// TODO: Virtualize posts
+// TODO: Virtualize posts or use a clever maxPages combination and scroll to last page end
 
 /**
  * `undefined` values mean that they will be replaced by default values
@@ -476,6 +476,7 @@ definePageMeta({
         </template>
       </PageHeader>
 
+      <!-- TODO: strip page -->
       <ShareButton
         :title='title'
         :url='canonicalUrl'
@@ -519,22 +520,36 @@ definePageMeta({
         </div>
       </template>
 
-      <template v-else>
-        <!-- -->
+      <!-- Posts -->
+      <div
+        v-else
+        class='space-y-4'
+      >
 
-        <ol
-          v-for='postsPage in data.pages'
+        <!-- TODO: Previous page -->
+
+        <!-- Pages -->
+        <div
+          v-for='(postsPage, postsPageIndex) in data.pages'
           class='space-y-4'
           data-testid='posts-list'
         >
-          <!-- TODO: Animate adding posts https://vuejs.org/guide/built-ins/transition-group.html#staggering-list-transitions -->
-          <template
-            v-for='(post, index) in postsPage.data'
-            :key='`${selectedBooru.domain}-${post.id}`'
+
+          <!-- Page indicator -->
+          <div
+            v-if='postsPageIndex !== 0'
+            class='text-center text-sm'
           >
-            <!-- Post -->
-            <li :data-testid='`post-${selectedBooru.domain}-${post.id}`'>
-              <!-- TODO: Fix content jumping -->
+            &dharl; Page {{ postsPage.meta.current_page }} &dharr;
+          </div>
+
+          <!-- TODO: Animate adding posts https://vuejs.org/guide/built-ins/transition-group.html#staggering-list-transitions -->
+          <ol
+            v-for='(post, postIndex) in postsPage.data'
+            :key='`${selectedBooru.domain}-${post.id}`'
+            class='space-y-4'
+          >
+            <li>
               <Post
                 :post='post'
                 :post-name='`${selectedBooru.domain}-${post.id}`'
@@ -545,24 +560,23 @@ definePageMeta({
             </li>
 
             <!-- Promoted content -->
-            <template v-if='!isPremium && index !== 0 && index % 7 === 0'>
+            <template v-if='!isPremium && postIndex !== 0 && postIndex % 7 === 0'>
               <li :key='`${post.id}-promoted-content`'>
                 <PromotedContent />
               </li>
             </template>
-          </template>
-        </ol>
+          </ol>
+        </div>
 
         <!-- Next Pagination -->
         <PostsPagination
-          class='mt-4'
           @load-next-page='onLoadNextPostPage'
         >
           <span v-if='isFetchingNextPage'>Loading more&hellip;</span>
-          <span v-else-if='hasNextPage'>Load More</span>
+          <span v-else-if='hasNextPage'>Reach here to load more</span>
           <span v-else>Nothing more to load</span>
         </PostsPagination>
-      </template>
+      </div>
     </section>
   </main>
 </template>
