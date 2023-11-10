@@ -22,6 +22,7 @@
     "build": "nuxt generate"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^0.8.1",
     "@headlessui-float/vue": "^0.12.0",
     "@headlessui/tailwindcss": "^0.2.0",
     "@headlessui/vue": "^1.7.16",

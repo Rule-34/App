@@ -1,5 +1,3 @@
-import { defineNuxtConfig } from 'nuxt/config'
-
 export default defineNuxtConfig({
 	// https://nuxt.com/docs/getting-started/deployment#static-hosting
 	ssr: false,
@@ -52,7 +50,9 @@ export default defineNuxtConfig({
 
 		'@vite-pwa/nuxt',
 
-		'nuxt-simple-sitemap'
+		'nuxt-simple-sitemap',
+
+		'@formkit/auto-animate/nuxt'
 	],
 
 	/** @type {import('@sidebase/nuxt-auth')} */
