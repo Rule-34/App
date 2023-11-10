@@ -1,5 +1,6 @@
 import Tag from '~/assets/js/tag.dto'
 import type { RouteLocationRaw } from 'vue-router'
+import { isEmpty, isNil, omitBy } from 'lodash-es'
 
 export function generatePostsRoute(
   domain?: string | undefined | null,
@@ -24,9 +25,18 @@ export function generatePostsRoute(
     route.query.tags = tags.map((tag) => encodeURI(tag.name)).join('|')
   }
 
-  if (filters != null) {
+  // Check if object keys are not undefined
+  if (filters != null && !objectIsEmpty(filters)) {
     route.query.filter = filters
   }
 
   return route
+}
+
+function objectIsEmpty(obj: Object) {
+  return isEmpty(
+    omitBy(
+      obj,
+      isNil)
+  )
 }
