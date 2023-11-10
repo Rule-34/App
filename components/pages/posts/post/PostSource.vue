@@ -71,9 +71,9 @@ function getFriendlyStringFromHostname(hostname: string) {
 
 function openSourceFinder(url: string) {
   if (!isPremium.value) {
-    toast.info(
-      '[Premium feature] Find the source of this post with SauceNAO, IQDB, Google, Yandex, Bing, and many more!'
-    )
+    toast.info('Premium feature', {
+      description: 'Find the source of this post with SauceNAO, IQDB, Google, Yandex, Bing, and many more!'
+    })
     return
   }
 
@@ -152,12 +152,10 @@ function openSourceFinder(url: string) {
           <MenuItem
             v-for='service in imageAnimeRelatedServiceOptions'
             v-slot='{ active }'
-            :disabled='!isPremium'
           >
             <button
               :class="[
                 active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content',
-                !isPremium ? 'cursor-not-allowed opacity-50' : ''
               ]"
               class='group flex w-full items-center px-4 py-2 text-sm'
               type='button'
@@ -183,12 +181,10 @@ function openSourceFinder(url: string) {
           <MenuItem
             v-for='service in imageRelatedServiceOptions'
             v-slot='{ active }'
-            :disabled='!isPremium'
           >
             <button
               :class="[
                 active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content',
-                !isPremium ? 'cursor-not-allowed opacity-50' : ''
               ]"
               class='group flex w-full items-center px-4 py-2 text-sm'
               type='button'

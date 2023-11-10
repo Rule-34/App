@@ -57,6 +57,7 @@ function manuallyReloadMedia() {
 }
 
 // TODO: Check if this is needed when implementing virtual scrolling
+// TODO: Implement poor-man's virtual scrolling - https://github.com/Rule-34/App/blob/bf1ee57d78e32fed5825c6c465bcdfa8785108ee/components/pages/posts/post/PostMedia.vue#L219
 function onIntersectionObserver(entries: IntersectionObserverEntry[]) {
   const entry = entries[0]
 

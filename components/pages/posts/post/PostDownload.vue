@@ -19,9 +19,9 @@ const { isPremium } = useUserData()
 
 async function downloadMedia() {
   if (!isPremium.value) {
-    toast.info(
-      '[Premium feature] automatically download media with the correct name & extension: rule34.xxx-123.png'
-    )
+    toast.info('Premium feature', {
+      description: 'Automatically download media with the correct name & extension: rule34.xxx-123.png'
+    })
     return
   }
 

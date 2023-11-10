@@ -19,7 +19,9 @@ const { tagCollections } = useTagCollections()
 
 function setTagCollectionAsSelected(tagCollection: TagCollection) {
   if (!isPremium.value) {
-    toast.info('[Premium feature] You need to be a premium user to use this feature')
+    toast.info('Premium feature', {
+      description: 'You need to be a premium user to use this feature'
+    })
     return
   }
 
