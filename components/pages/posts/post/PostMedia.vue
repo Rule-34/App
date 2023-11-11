@@ -1,13 +1,16 @@
 <script lang='ts' setup>
 import { vIntersectionObserver } from '@vueuse/components'
 import { ProxyHelper } from '~/assets/js/ProxyHelper'
+import type { IPost } from 'assets/js/post'
+
+const { isPremium } = useUserData()
 
 export interface PostMediaProps {
-  mediaSrc: string
+  mediaSrc: string | null
   mediaSrcHeight: number | null
   mediaSrcWidth: number | null
-  mediaPosterSrc?: string
-  mediaType: 'image' | 'video'
+  mediaPosterSrc: string | null
+  mediaType: IPost['media_type']
   mediaAlt: string
 }
 
@@ -15,12 +18,17 @@ const props = defineProps<PostMediaProps>()
 
 const localSrc = ref(props.mediaSrc)
 
-const hasError = ref(false)
+const error = ref<Error | null>(null)
+const hasError = computed(() => error.value !== null)
 
 const isImage = computed(() => props.mediaType === 'image')
 const isVideo = computed(() => props.mediaType === 'video')
 
 const triedToLoadWithProxy = ref(false)
+
+if (props.mediaType === 'unknown') {
+  error.value = new Error('Unknown media type')
+}
 
 function onMediaError(event: Event) {
   if (hasError.value) {
@@ -33,7 +41,7 @@ function onMediaError(event: Event) {
   // TODO: https://github.com/Bionus/imgbrd-grabber/issues/2692#issuecomment-1141236485
   // TODO: https://realbooru.com/index.php?page=forum&s=view&id=6522&pid=105
 
-  if (!triedToLoadWithProxy.value) {
+  if (!triedToLoadWithProxy.value && isPremium.value) {
     triedToLoadWithProxy.value = true
 
     const proxySrc = ProxyHelper.proxyUrl(localSrc.value)
@@ -43,13 +51,13 @@ function onMediaError(event: Event) {
     return
   }
 
-  hasError.value = true
+  error.value = new Error('Error loading media')
 }
 
 function manuallyReloadMedia() {
   // Reset state
   triedToLoadWithProxy.value = false
-  hasError.value = false
+  error.value = null
 
   // Reload media
   localSrc.value = ''
@@ -80,15 +88,16 @@ function onIntersectionObserver(entries: IntersectionObserverEntry[]) {
   <div :style='`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`'>
     <!-- Error -->
     <template v-if='hasError'>
-      <div class='flex h-full flex-col items-center py-4'>
+      <div class='flex h-full flex-col items-center py-4 space-y-4'>
         <div class='flex flex-1 flex-col items-center justify-center gap-4'>
           <span
             class='rounded-md bg-gradient-to-l from-base-950 via-base-900 to-base-900 px-4 py-1.5 text-center text-base-content-highlight'
           >
-            Error loading media
+            {{ error?.message }}
           </span>
 
           <button
+            v-if='error?.message !== "Unknown media type"'
             class='focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto inline-flex items-center justify-center rounded-md px-2 py-1 text-sm ring-1 ring-base-0/20'
             type='button'
             @click='manuallyReloadMedia'
@@ -97,13 +106,38 @@ function onIntersectionObserver(entries: IntersectionObserverEntry[]) {
           </button>
         </div>
 
-        <NuxtLink
-          class='hover:hover-text-util focus-visible:focus-outline-util justify-self-end text-sm text-base-content underline'
-          href='https://www.rule34.app/frequently-asked-questions#74cfdf0316b04111b0c65b7f8502dfda'
-          target='_blank'
+        <!-- Premium promotion -->
+        <!-- TODO: Improve style -->
+        <div
+          v-if='!isPremium && error?.message !== "Unknown media type"'
+          class='text-xs text-base-content'
         >
-          Media not loading? Learn more
-        </NuxtLink>
+          <NuxtLink
+            class='hover:hover-text-util focus-visible:focus-outline-util  underline'
+            href='/premium'
+          >
+            <!-- @formatter:off -->
+            Get Premium</NuxtLink>
+
+          <span> to bypass website blocks</span>
+        </div>
+
+        <div
+          class='text-sm text-base-content'
+        >
+
+          <span>
+            Media not loading?
+          </span>
+
+          <NuxtLink
+            class='hover:hover-text-util focus-visible:focus-outline-util underline'
+            href='https://www.rule34.app/frequently-asked-questions#74cfdf0316b04111b0c65b7f8502dfda'
+            target='_blank'
+          >
+            Learn more
+          </NuxtLink>
+        </div>
       </div>
     </template>
 

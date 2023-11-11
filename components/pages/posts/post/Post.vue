@@ -5,6 +5,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 
 import { vOnLongPress } from '@vueuse/components'
 import Tag from '~/assets/js/tag.dto'
+import type { IPost } from '~/assets/js/post'
 import { toast } from 'vue-sonner'
 import { useAppStatistics } from '~/composables/useAppStatistics'
 
@@ -60,8 +61,9 @@ const mediaFile = computed(() => {
     }
 
     default:
-      // TODO: Handle unknown media type in PostMedia
-      throw new Error('Unknown media type: ' + props.post.media_type)
+      data.file = props.post.high_res_file.url
+      data.width = props.post.high_res_file.width
+      data.height = props.post.high_res_file.height
   }
 
   return data
@@ -117,11 +119,13 @@ function onClickLongTag(tag: Tag) {
       <!-- Actions -->
       <div class='flex items-center p-2'>
         <PostSave
+          v-if='mediaFile.file'
           :post='post'
           :postId='postName'
         />
 
         <PostDownload
+          v-if='mediaFile.file'
           :mediaName='postName'
           :mediaUrl='mediaFile.file'
         />
