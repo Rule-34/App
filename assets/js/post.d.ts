@@ -19,7 +19,7 @@ export interface IPost {
 
   rating: string
 
-  media_type: string
+  media_type: 'image' | 'video' | 'unknown'
 }
 
 export interface IPostHighResFile {
