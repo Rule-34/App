@@ -536,6 +536,7 @@ definePageMeta({
         >
 
           <!-- Page indicator -->
+          <!-- TODO: Make clickable and change page -->
           <div
             v-if='postsPageIndex !== 0'
             class='text-center text-sm'
