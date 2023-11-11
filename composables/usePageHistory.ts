@@ -32,11 +32,12 @@ export function usePageHistory() {
         return
       }
 
-      // TODO: Skip if only domain is set
-
+      // Skip if the last page is the same
       if (pageHistory.value.length && pageHistory.value[pageHistory.value.length - 1].path === route.fullPath) {
         return
       }
+
+      // TODO: Skip if only domain is set
 
       if (pageHistory.value.length >= 10) {
         pageHistory.value.shift()
