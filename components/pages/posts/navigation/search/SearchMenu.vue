@@ -348,12 +348,12 @@ const selectedScoreOption = ref(scoreOptions.find((option) => option.value === p
 						type='button'
 						@click='toggleSelectedTagAsExcluded(index)'
 					>
-						<PlusIcon
+						<NoSymbolIcon
 							v-if='!isTagExcluded(tag.name)'
 							class='h-4 w-4'
 						/>
 
-						<NoSymbolIcon
+						<PlusIcon
 							v-else
 							class='h-4 w-4'
 						/>
@@ -369,7 +369,11 @@ const selectedScoreOption = ref(scoreOptions.find((option) => option.value === p
 			v-if='selectedTags.length'
 			class='mt-4 text-xs'
 		>
-			Tip: click on a tag name to remove it, or exclude it from results by clicking the plus icon
+			Note:
+			<br />
+			To remove a tag, click on its name
+			<br />
+			To exclude search results with a specific tag, click the block icon next to it
 		</p>
 
 		<button
