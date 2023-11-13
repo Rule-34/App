@@ -349,3 +349,80 @@ export const migratedTagCollectionsMock = [
     ]
   }
 ]
+
+/**
+ * Manual migration of the following:
+ * @see oldLocalStorageVuexUserMock
+ * @see useBooruList
+ */
+export const migratedBooruListMock = [{
+  'domain': 'rule34.xxx',
+  'type': { 'type': 'rule34.xxx', 'initialPageID': 0, 'posts': true, 'singlePost': true, 'tags': true, 'random': false },
+  'config': null,
+  'isPremium': false
+}, {
+  'domain': 'rule34.paheal.net',
+  'type': { 'type': 'rule34.paheal.net', 'initialPageID': 0, 'posts': true, 'singlePost': true, 'tags': true, 'random': false },
+  'config': { 'options': { 'HTTPScheme': 'http' } },
+  'isPremium': false
+}, {
+  'domain': 'danbooru.donmai.us',
+  'type': { 'type': 'danbooru2', 'initialPageID': 1, 'posts': true, 'singlePost': true, 'tags': true, 'random': true },
+  'config': null,
+  'isPremium': false
+}, {
+  'domain': 'gelbooru.com',
+  'type': { 'type': 'gelbooru.com', 'initialPageID': 0, 'posts': true, 'singlePost': true, 'tags': true, 'random': false },
+  'config': null,
+  'isPremium': false
+}, {
+  'domain': 'safebooru.org',
+  'type': { 'type': 'gelbooru', 'initialPageID': 0, 'posts': true, 'singlePost': true, 'tags': true, 'random': false },
+  'config': null,
+  'isPremium': false
+}, {
+  'domain': 'e621.net',
+  'type': { 'type': 'e621.net', 'initialPageID': 1, 'posts': true, 'singlePost': true, 'tags': true, 'random': true },
+  'config': null,
+  'isPremium': false
+}, {
+  'domain': 'e926.net',
+  'type': { 'type': 'e621.net', 'initialPageID': 1, 'posts': true, 'singlePost': true, 'tags': true, 'random': true },
+  'config': null,
+  'isPremium': false
+}, {
+  'domain': 'xbooru.com',
+  'type': { 'type': 'gelbooru', 'initialPageID': 0, 'posts': true, 'singlePost': true, 'tags': true, 'random': false },
+  'config': null,
+  'isPremium': true
+}, {
+  'domain': 'hypnohub.net',
+  'type': { 'type': 'danbooru', 'initialPageID': 1, 'posts': true, 'singlePost': false, 'tags': true, 'random': true },
+  'config': null,
+  'isPremium': true
+}, {
+  'domain': 'yande.re',
+  'type': { 'type': 'danbooru', 'initialPageID': 1, 'posts': true, 'singlePost': false, 'tags': true, 'random': true },
+  'config': null,
+  'isPremium': true
+}, {
+  'domain': 'konachan.com',
+  'type': { 'type': 'danbooru', 'initialPageID': 1, 'posts': true, 'singlePost': false, 'tags': true, 'random': true },
+  'config': null,
+  'isPremium': true
+}, {
+  'domain': 'lolibooru.moe',
+  'type': { 'type': 'danbooru', 'initialPageID': 1, 'posts': true, 'singlePost': false, 'tags': true, 'random': true },
+  'config': null,
+  'isPremium': true
+}, {
+  'domain': 'booru.allthefallen.moe',
+  'type': { 'type': 'danbooru', 'initialPageID': 1, 'posts': true, 'singlePost': false, 'tags': true, 'random': true },
+  'config': null,
+  'isPremium': true
+}, {
+  'domain': 'realbooru.com',
+  'type': { 'type': 'gelbooru', 'initialPageID': 0, 'posts': true, 'singlePost': true, 'tags': true, 'random': false },
+  'config': null,
+  'isPremium': true
+}]
