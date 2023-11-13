@@ -200,7 +200,7 @@ async function reflectChangesInUrl({
   await navigateTo({ ...postsRoute }, { replace })
 }
 
-const tagResults: Ref<Tag[]> = ref([])
+const tagResults: Ref<Tag[]> = shallowRef([])
 
 async function onSearchTag(tag: string) {
   const apiUrl = config.public.API_URL + '/booru/' + selectedBooru.value.type.type + '/tags'
