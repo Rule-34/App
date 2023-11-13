@@ -1,4 +1,6 @@
 <script setup>
+  import { toast } from 'vue-sonner'
+
   useAppStatistics()
 
   const { toggle: toggleMenu } = useMenu()
@@ -12,7 +14,11 @@
     toggleSearchMenu(false)
   })
 
-  // TODO: Log general errors to the user with a Toast
+  // Show error toast on uncaught errors
+  // TODO: Verify it works
+  onErrorCaptured((error) => {
+    toast.error(error.message)
+  })
 
   console.info(
     '%cWe ❤︎ open source!',
