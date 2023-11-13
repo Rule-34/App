@@ -1,6 +1,8 @@
 export interface VuexUser {
-  custom: Custom
-  settings: Settings
+  user: {
+    custom: Custom
+    settings: Settings
+  }
 }
 
 interface Custom {
@@ -29,7 +31,7 @@ interface SavedPost {
 
 interface Data {
   id: number
-  score?: number
+  score: number | null
   high_res_file: HighResFile
   low_res_file: LowResFile
   preview_file: PreviewFile
