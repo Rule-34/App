@@ -10,11 +10,15 @@ const defaultBooruList: Domain[] = completeBooruList.map((booruObj, index) => {
     throw new Error(`Booru type not found: ${ booruObj.type }`)
 
   return {
-    ...booruObj,
+    domain: booruObj.domain,
+
     type: booruType,
+
+    config: booruObj.config,
+
     // The first 7 boorus are free
     isPremium: index > 6
-  }
+  } as Domain
 })
 
 const userBooruList = useStorage('user-booruList', cloneDeep(defaultBooruList), localStorage, {

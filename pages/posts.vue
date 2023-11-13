@@ -205,6 +205,7 @@ const tagResults: Ref<Tag[]> = ref([])
 async function onSearchTag(tag: string) {
   const apiUrl = config.public.API_URL + '/booru/' + selectedBooru.value.type.type + '/tags'
 
+  // TODO: Use Booru options
   const response = await $fetch(apiUrl, {
     params: {
       baseEndpoint: selectedBooru.value.domain,

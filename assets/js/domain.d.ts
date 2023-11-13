@@ -5,5 +5,7 @@ export interface Domain {
 
   type: BooruTypeObj
 
+  config: Record<string, unknown> | null
+
   isPremium: boolean
 }
