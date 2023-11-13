@@ -3,86 +3,19 @@ import { useStorage } from '@vueuse/core'
 import type { Domain } from '~/assets/js/domain'
 import { cloneDeep } from 'lodash-es'
 
-const defaultBooruList: Domain[] = [
-  {
-    // rule34.xxx
-    domain: completeBooruList[0].domain,
-    type: booruTypeList.find((booruType) => booruType.type === completeBooruList[0].type),
-    isPremium: false
-  },
-  {
-    // rule34.paheal.net
-    domain: completeBooruList[1].domain,
-    type: booruTypeList.find((booruType) => booruType.type === completeBooruList[1].type),
-    isPremium: false
-  },
-  {
-    // danbooru.donmai.us
-    domain: completeBooruList[2].domain,
-    type: booruTypeList.find((booruType) => booruType.type === completeBooruList[2].type),
-    isPremium: false
-  },
-  {
-    // safebooru.org
-    domain: completeBooruList[4].domain,
-    type: booruTypeList.find((booruType) => booruType.type === completeBooruList[4].type),
-    isPremium: false
-  },
-  {
-    // gelbooru.com
-    domain: completeBooruList[3].domain,
-    type: booruTypeList.find((booruType) => booruType.type === completeBooruList[3].type),
-    isPremium: false
-  },
-  {
-    // e621.net
-    domain: completeBooruList[5].domain,
-    type: booruTypeList.find((booruType) => booruType.type === completeBooruList[5].type),
-    isPremium: false
-  },
-  {
-    // e926.net
-    domain: completeBooruList[6].domain,
-    type: booruTypeList.find((booruType) => booruType.type === completeBooruList[6].type),
-    isPremium: false
-  },
-  {
-    // yande.re
-    domain: completeBooruList[9].domain,
-    type: booruTypeList.find((booruType) => booruType.type === completeBooruList[9].type),
-    isPremium: true
-  },
-  {
-    // konachan.com
-    domain: completeBooruList[10].domain,
-    type: booruTypeList.find((booruType) => booruType.type === completeBooruList[10].type),
-    isPremium: true
-  },
-  {
-    // xbooru.com
-    domain: completeBooruList[7].domain,
-    type: booruTypeList.find((booruType) => booruType.type === completeBooruList[7].type),
-    isPremium: true
-  },
-  {
-    // lolibooru.moe
-    domain: completeBooruList[11].domain,
-    type: booruTypeList.find((booruType) => booruType.type === completeBooruList[11].type),
-    isPremium: true
-  },
-  {
-    // booru.allthefallen.moe
-    domain: completeBooruList[12].domain,
-    type: booruTypeList.find((booruType) => booruType.type === completeBooruList[12].type),
-    isPremium: true
-  },
-  {
-    // realbooru.com
-    domain: completeBooruList[13].domain,
-    type: booruTypeList.find((booruType) => booruType.type === completeBooruList[13].type),
-    isPremium: true
+const defaultBooruList: Domain[] = completeBooruList.map((booruObj, index) => {
+  const booruType = booruTypeList.find((booruTypeObj) => booruTypeObj.type === booruObj.type)
+
+  if (!booruType)
+    throw new Error(`Booru type not found: ${ booruObj.type }`)
+
+  return {
+    ...booruObj,
+    type: booruType,
+    // The first 7 boorus are free
+    isPremium: index > 6
   }
-]
+})
 
 const userBooruList = useStorage('user-booruList', cloneDeep(defaultBooruList), localStorage, {
   writeDefaults: false
