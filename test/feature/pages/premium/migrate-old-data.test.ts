@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { createPage, setup } from '@nuxt/test-utils'
-import { migratedTagCollectionsMock, oldLocalStorageVuexUserMock } from './migrate-old-data.mock-data'
+import { migratedBooruListMock, migratedTagCollectionsMock, oldLocalStorageVuexUserMock } from './migrate-old-data.mock-data'
 
 oldLocalStorageVuexUserMock
 
@@ -70,7 +70,7 @@ describe('/premium/migrate-old-data', async () => {
 
     expect(migratedTagCollections).toEqual(migratedTagCollectionsMock)
 
-    expect(migratedBoorus).toEqual()
+    expect(migratedBoorus).toEqual(migratedBooruListMock)
 
     expect(isLocalStorageCleaned).toBe(true)
   })

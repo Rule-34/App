@@ -1,7 +1,7 @@
 import { db as postsDb, type ISavedPost } from '~/store/SavedPosts'
 import type { ITagCollection } from '~/assets/js/tagCollection.dto'
 import type { VuexUser } from '~/assets/js/oldLocalStorage.dto'
-import { cloneDeep, toLower, union } from 'lodash-es'
+import { cloneDeep, toLower, union, unionWith } from 'lodash-es'
 import type { Domain } from '~/assets/js/domain'
 import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 
@@ -97,7 +97,7 @@ export function migrateOldVersionState(): void {
 
   const vuexUser: VuexUser = JSON.parse(localStorage.getItem('vuex-user')!)
 
-  // Migrate settings
+  // === Migrate settings
   if (vuexUser.user.settings.touchGestures)
     userSettings.navigationTouchGestures = vuexUser.user.settings.touchGestures.value
 
@@ -107,27 +107,29 @@ export function migrateOldVersionState(): void {
   if (vuexUser.user.settings.postsPerPage)
     userSettings.postsPerPage = vuexUser.user.settings.postsPerPage.value
 
-  // Migrate tag collections
+  // === Migrate tag collections
   if (vuexUser.user.custom.tagCollections) {
     tagCollections.value = mergeBlocklists(tagCollections.value, vuexUser.user.custom.tagCollections)
   }
 
-  // Migrate Boorus
+  // === Migrate Boorus
   const vuexUserBoorusMigrated = vuexUser.user.custom.boorus.map(booru => {
-    // TODO: Find defaults and return that
-
     return {
       domain: booru.domain,
 
       type: booruTypeList.find(type => type.type === booru.type),
 
+      config: booru.config,
+
       isPremium: true
     }
   }) as Domain[]
 
-  booruList.value = union(booruList.value, vuexUserBoorusMigrated)
+  booruList.value = unionWith(booruList.value, vuexUserBoorusMigrated, (obj1, obj2) => {
+    return obj1.domain === obj2.domain
+  })
 
-  // Migrate saved posts
+  // === Migrate saved posts
 
 
   removeOldVersionState()
