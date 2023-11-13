@@ -51,6 +51,8 @@ describe('/premium/migrate-old-data', async () => {
       return JSON.parse(localStorage.getItem('user-booruList')!)
     })
 
+    // TODO: Test saved posts
+
     const isLocalStorageCleaned = await page.evaluate(() => {
       return localStorage.getItem('vuex-user') === null
     })

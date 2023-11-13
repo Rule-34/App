@@ -16,7 +16,7 @@ export interface PostMediaProps {
 
 const props = defineProps<PostMediaProps>()
 
-const localSrc = ref(props.mediaSrc)
+const localSrc = shallowRef(props.mediaSrc)
 
 const error = ref<Error | null>(null)
 const hasError = computed(() => error.value !== null)
@@ -24,7 +24,7 @@ const hasError = computed(() => error.value !== null)
 const isImage = computed(() => props.mediaType === 'image')
 const isVideo = computed(() => props.mediaType === 'video')
 
-const triedToLoadWithProxy = ref(false)
+const triedToLoadWithProxy = shallowRef(false)
 
 if (props.mediaType === 'unknown') {
   error.value = new Error('Unknown media type')

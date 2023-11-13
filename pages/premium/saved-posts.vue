@@ -44,7 +44,7 @@ const booruList = computed(() => {
   return _booruList
 })
 
-const selectedBooru = ref(toRaw(booruList.value[0]))
+const selectedBooru = shallowRef(toRaw(booruList.value[0]))
 
 const selectedTags = ref<Tag[]>([])
 
