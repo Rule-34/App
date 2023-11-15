@@ -3739,15 +3739,6 @@ export const mockPostsPage1 = {
   }
 }
 
-export const mockPostsPageHalf1And2 = {
-  ...mockPostsPage0,
-  data: [
-    //
-    ...mockPostsPage0.data.slice(0, 15),
-    ...mockPostsPage1.data.slice(0, 15)
-  ]
-}
-
 export const mockPostsPageWithoutResults = {
   data: [],
   meta: { items_count: 0, total_items: null, current_page: 0, total_pages: null, items_per_page: 30 },
@@ -3758,5 +3749,88 @@ export const mockPostsPageWithoutResults = {
     prev: null,
     next: 'http://192.168.1.65:8080/booru/gelbooru/posts?baseEndpoint=safebooru.org&pageID=1&limit=30'
   }
+}
 
+export const mockPostsPageWithUnknownMedia = {
+  data: [
+    {
+      id: 999,
+      score: 0,
+      high_res_file: {
+        url: 'https://example.local/images/999/b9def1a48b44e7c988f2b2e9bfb229b2906c4059.zip',
+        width: 2048,
+        height: 1261
+      },
+      low_res_file: {
+        url: 'https://example.local/samples/999/sample_b9def1a48b44e7c988f2b2e9bfb229b2906c4059.jpg',
+        width: 850,
+        height: 523
+      },
+      preview_file: {
+        url: 'https://example.local/thumbnails/999/thumbnail_b9def1a48b44e7c988f2b2e9bfb229b2906c4059.jpg',
+        width: 150,
+        height: 92
+      },
+      tags: {
+        artist: [],
+        character: [],
+        copyright: [],
+        general: ['1girl'],
+        meta: []
+      },
+      sources: [],
+      rating: 'questionable',
+      media_type: 'unknown'
+    }
+  ],
+  meta: { items_count: 1, total_items: null, current_page: 0, total_pages: null, items_per_page: 30 },
+  links: {
+    self: 'http://192.168.1.65:8080/booru/gelbooru/posts?baseEndpoint=safebooru.org&pageID=0&limit=30',
+    first: 'http://192.168.1.65:8080/booru/gelbooru/posts?baseEndpoint=safebooru.org&pageID=0&limit=30',
+    last: null,
+    prev: null,
+    next: 'http://192.168.1.65:8080/booru/gelbooru/posts?baseEndpoint=safebooru.org&pageID=1&limit=30'
+  }
+}
+
+export const mockPostsPageWithOfflineMedia = {
+  data: [
+    {
+      id: 999,
+      score: 0,
+      high_res_file: {
+        url: 'https://example.local/images/999/b9def1a48b44e7c988f2b2e9bfb229b2906c4059.png',
+        width: 2048,
+        height: 1261
+      },
+      low_res_file: {
+        url: 'https://example.local/samples/999/sample_b9def1a48b44e7c988f2b2e9bfb229b2906c4059.jpg',
+        width: 850,
+        height: 523
+      },
+      preview_file: {
+        url: 'https://example.local/thumbnails/999/thumbnail_b9def1a48b44e7c988f2b2e9bfb229b2906c4059.jpg',
+        width: 150,
+        height: 92
+      },
+      tags: {
+        artist: [],
+        character: [],
+        copyright: [],
+        general: ['1girl'],
+        meta: []
+      },
+      sources: [],
+      rating: 'questionable',
+      media_type: 'image'
+    }
+  ],
+  meta: { items_count: 1, total_items: null, current_page: 0, total_pages: null, items_per_page: 30 },
+  links: {
+    self: 'http://192.168.1.65:8080/booru/gelbooru/posts?baseEndpoint=safebooru.org&pageID=0&limit=30',
+    first: 'http://192.168.1.65:8080/booru/gelbooru/posts?baseEndpoint=safebooru.org&pageID=0&limit=30',
+    last: null,
+    prev: null,
+    next: 'http://192.168.1.65:8080/booru/gelbooru/posts?baseEndpoint=safebooru.org&pageID=1&limit=30'
+  }
 }
