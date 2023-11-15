@@ -169,9 +169,9 @@ describe('/', async () => {
       ])
 
       // Scroll to bottom
-      await page.getByTestId('load-next-page').scrollIntoViewIfNeeded()
-
       await Promise.all([
+        page.getByTestId('load-next-page').scrollIntoViewIfNeeded(),
+
         page.waitForResponse('**/posts?baseEndpoint=*'),
         page.waitForURL('**/posts?domain=safebooru.org&page=1')
       ])
@@ -363,12 +363,8 @@ describe('/', async () => {
       // Expect domain to be rule34.xxx
       const domainSelectorText = await page.getByTestId('domain-selector').getByRole('button').textContent()
 
-      if (!domainSelectorText) {
-        throw new Error('domainSelectorText is null')
-      }
-
       // Extract domain from button text "...: rule34.xxx"
-      expect(domainSelectorText.split(':')[1].trim()).toBe('rule34.xxx')
+      expect(domainSelectorText?.split(':')[1].trim()).toBe('rule34.xxx')
     })
 
     it('changes domain', async () => {
