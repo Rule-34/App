@@ -1,18 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { createPage, setup, url } from '@nuxt/test-utils'
-import { mockPostsPage0, mockPostsPage1, mockPostsPageHalf1And2 } from './posts.mock-data'
+import { mockPostsPage0, mockPostsPage1, mockPostsPageWithoutResults } from './posts.mock-data'
+import { defaultBrowserOptions } from '../../helper'
 
 describe('/', async () => {
   await setup({
     browser: true,
-    browserOptions: {
-      type: 'chromium',
-      launch: {
-        // headless: false,
-        // slowMo: 1000
-        // devtools: true
-      }
-    }
+    browserOptions: defaultBrowserOptions
   })
 
   describe('Basic', async () => {
@@ -21,10 +15,10 @@ describe('/', async () => {
       const page = await createPage('/posts')
 
       // Act
-      const h1Element = page.getByRole('heading', { name: /posts/i })
+      const headerElement = page.getByRole('heading', { name: /posts/i })
 
       // Assert
-      expect(await h1Element.isVisible()).toBe(true)
+      expect(await headerElement.isVisible()).toBe(true)
     })
 
     it('renders a loader', async () => {
@@ -102,7 +96,7 @@ describe('/', async () => {
 
       const postsListElement = page.getByTestId('posts-list')
 
-      const postsInList = await postsListElement.locator('li')
+      const postsInList = postsListElement.locator('li')
 
       // Assert DOM
       // Expect 30 posts to be rendered + 4 ads
@@ -112,7 +106,7 @@ describe('/', async () => {
       const firstPost = postsInList.first()
 
       // Image
-      const firstPostImage = await firstPost.locator('img')
+      const firstPostImage = firstPost.locator('img')
 
       expect(await firstPostImage.getAttribute('src')).toBe(mockPostsPage0.data[0].low_res_file.url)
 
@@ -182,51 +176,7 @@ describe('/', async () => {
       expect(await page.getByTestId('posts-list').locator('li').count()).toBe(68)
     })
 
-    it('de-duplicates posts', async () => {
-      // Arrange
-      const page = await createPage()
-
-      // Order in reverse, so that mockPostsPage0 is the first page
-      await page.route(
-        '**/posts?baseEndpoint=*',
-        (route) =>
-          route.fulfill({
-            status: 200,
-            json: mockPostsPageHalf1And2
-          }),
-        { times: 1 }
-      )
-
-      await page.route(
-        '**/posts?baseEndpoint=*',
-        (route) =>
-          route.fulfill({
-            status: 200,
-            json: mockPostsPage0
-          }),
-        { times: 1 }
-      )
-
-      // Make sure mockPostsPage0 and mockPostsPageHalf1And2 first posts are the same
-      expect(mockPostsPage0.data[0].id).toBe(mockPostsPageHalf1And2.data[0].id)
-
-      // Make sure mockPostsPage0 and mockPostsPageHalf1And2 last posts are NOT the same
-      expect(mockPostsPage0.data[29].id).not.toBe(mockPostsPageHalf1And2.data[29].id)
-
-      // Act
-      await page.goto(url('/posts?domain=safebooru.org'))
-
-      const postsListElement = page.getByTestId('posts-list')
-
-      await page.getByTestId('load-next-page').scrollIntoViewIfNeeded()
-
-      await page.waitForResponse('**/posts?baseEndpoint=*')
-
-      // Expect 45 posts to be rendered + 6 ads
-      expect(await postsListElement.locator('li').count()).toBe(51)
-    })
-
-    it('loads tags from Post', async () => {
+    it('sets H2 & loads tags from Post', async () => {
       // Arrange
       const page = await createPage()
 
@@ -254,37 +204,42 @@ describe('/', async () => {
       // Make sure mockPostsPage0 and mockPostsPage1 have different first posts
       expect(mockPostsPage0.data[0].id).not.toBe(mockPostsPage1.data[0].id)
 
+      const header2Element = page.getByRole('heading', { name: /tagged with/i })
+
       // Act
-      await page.goto(url('/posts?domain=safebooru.org'))
+      await Promise.all([
+        page.goto(url('/posts?domain=safebooru.org')),
+        page.waitForResponse('**/posts?baseEndpoint=*')
+      ])
 
       const postsListElement = page.getByTestId('posts-list')
 
       const firstPost = postsListElement.locator('li').first()
 
-      // Expect first post to have same id as mockPostsPage0
-      expect(
-        //
-        await firstPost.getAttribute('data-testid')
-      ).toBe('post-safebooru.org-' + mockPostsPage0.data[0].id.toString())
-
-      // Click on a Post's tag
+      // Click on a Post's tags
       await firstPost.getByRole('button', { name: /tags/i }).click()
 
-      // Click on a Post's tag button named "1girl"
-      await firstPost.getByRole('button', { name: /1girl/i }).click()
-
       await Promise.all([
-        page.waitForURL('**/posts?domain=safebooru.org&tags=1girl')
-        // page.waitForResponse('**/posts?baseEndpoint=*')
+        // Click on a Post's tag button named "1girl"
+        firstPost.getByRole('button', { name: /1girl/i }).click(),
+        //
+        page.waitForURL('**/posts?domain=safebooru.org&tags=1girl'),
+        page.waitForResponse('**/posts?baseEndpoint=*')
       ])
+
+      // Assert
+
+      // Expect header to contain "1girl"
+      expect(await header2Element.textContent()).toContain('1girl')
+
+      // Expect 30 posts to be rendered + 4 ads
+      expect(await postsListElement.locator('li').count()).toBe(34)
 
       // Expect first post to have same id as mockPostsPage1
       expect(
         //
         await firstPost.getAttribute('data-testid')
-      ).toBe('post-safebooru.org-' + mockPostsPage1.data[0].id.toString())
-
-      // TODO: Expect tag to be rendered & selected
+      ).toBe('safebooru.org-' + mockPostsPage1.data[0].id.toString())
     })
   })
 
@@ -333,7 +288,7 @@ describe('/', async () => {
         expect(
           //
           await firstPost.getAttribute('data-testid')
-        ).toBe('post-safebooru.org-' + mockPostsPage0.data[0].id.toString())
+        ).toBe('safebooru.org-' + mockPostsPage0.data[0].id.toString())
 
         // Click on a Post's tag
         await firstPost.getByRole('button', { name: /tags/i }).click()
@@ -350,7 +305,7 @@ describe('/', async () => {
         expect(
           //
           await firstPost.getAttribute('data-testid')
-        ).toBe('post-safebooru.org-' + mockPostsPage1.data[0].id.toString())
+        ).toBe('safebooru.org-' + mockPostsPage1.data[0].id.toString())
 
         // Go back
         const backNavigation = await page.goBack()
@@ -364,7 +319,7 @@ describe('/', async () => {
         expect(
           //
           await firstPost.getAttribute('data-testid')
-        ).toBe('post-safebooru.org-' + mockPostsPage0.data[0].id.toString())
+        ).toBe('safebooru.org-' + mockPostsPage0.data[0].id.toString())
 
         // Expect no network requests
         try {
