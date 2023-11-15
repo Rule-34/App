@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "saved_posts": [
+    {
+      "id": 1,
+      "internal_id": "safebooru.org-1",
+      "original_domain": "safebooru.org",
+      "created_at": 1700079669380,
+      "data": {
+        "id": 1,
+        "score": null,
+        "high_res_file": {
+          "url": "https://safebooru.org/images/1/e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg",
+          "width": 1200,
+          "height": 900
+        },
+        "low_res_file": {
+          "url": "https://safebooru.org/samples/1/sample_e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg",
+          "width": 850,
+          "height": 638
+        },
+        "preview_file": {
+          "url": "https://safebooru.org/thumbnails/1/thumbnail_e7b3dc281d431f7a9f4ab81986d2de9a20d36d2e.jpg",
+          "width": 150,
+          "height": 112
+        },
+        "tags": {
+          "artist": [],
+          "character": [],
+          "copyright": [],
+          "general": [
+            "1girl"
+          ],
+          "meta": []
+        },
+        "sources": [
+          "http://www.pixiv.net/artworks/7824792"
+        ],
+        "rating": "safe",
+        "media_type": "image"
+      }
+    }
+  ],
+  "tag_collections": [
+    {
+      "name": "Test collection",
+      "tags": [
+        "tag",
+        "tag2",
+        "tag3"
+      ]
+    }
+  ],
+  "settings": {
+    "navigationTouchGestures": false,
+    "postFullSizeImages": true,
+    "postsPerPage": 69
+  }
+}
