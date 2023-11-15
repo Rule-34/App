@@ -3747,3 +3747,16 @@ export const mockPostsPageHalf1And2 = {
     ...mockPostsPage1.data.slice(0, 15)
   ]
 }
+
+export const mockPostsPageWithoutResults = {
+  data: [],
+  meta: { items_count: 0, total_items: null, current_page: 0, total_pages: null, items_per_page: 30 },
+  links: {
+    self: 'http://192.168.1.65:8080/booru/gelbooru/posts?baseEndpoint=safebooru.org&pageID=0&limit=30',
+    first: 'http://192.168.1.65:8080/booru/gelbooru/posts?baseEndpoint=safebooru.org&pageID=0&limit=30',
+    last: null,
+    prev: null,
+    next: 'http://192.168.1.65:8080/booru/gelbooru/posts?baseEndpoint=safebooru.org&pageID=1&limit=30'
+  }
+
+}
