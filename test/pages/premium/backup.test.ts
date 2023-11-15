@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { createPage, setup } from '@nuxt/test-utils'
-import { defaultBrowserOptions } from '../../../helper'
+import { defaultBrowserOptions } from '../../helper'
 import path from 'path'
 
 describe('/premium/backup', async () => {
