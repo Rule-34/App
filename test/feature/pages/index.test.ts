@@ -6,6 +6,12 @@ describe('/', async () => {
     browser: true
   })
 
+  it('renders', async () => {
+    const page = await createPage('/')
+
+    await page.locator('h1', { hasText: 'App' }).isVisible()
+  })
+
   it('redirects to /posts with query params', async () => {
     // Arrange
     const page = await createPage('/?domain=safebooru.org&page=3&tags=cat|black_hair')
