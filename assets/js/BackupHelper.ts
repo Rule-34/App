@@ -57,24 +57,24 @@ export async function restoreBackupState(backupState: IBackupState): Promise<voi
   if (backupState.settings) {
     const userSettings = useUserSettings()
 
-    if (backupState.settings.navigationTouchGestures)
+    if (backupState.settings.navigationTouchGestures) {
       userSettings.navigationTouchGestures = backupState.settings.navigationTouchGestures
+    }
 
-    if (backupState.settings.postFullSizeImages)
+    if (backupState.settings.postFullSizeImages) {
       userSettings.postFullSizeImages = backupState.settings.postFullSizeImages
+    }
 
-    if (backupState.settings.postsPerPage)
+    if (backupState.settings.postsPerPage) {
       userSettings.postsPerPage = backupState.settings.postsPerPage
-
-    if (backupState.settings.lastPostsPage)
-      userSettings.lastPostsPage = backupState.settings.lastPostsPage
-
+    }
   }
 }
 
 export function doesHaveOldVersionState(): boolean {
-  if (localStorage.getItem('vuex-user'))
+  if (localStorage.getItem('vuex-user')) {
     return true
+  }
 
   return false
 }
@@ -104,8 +104,7 @@ export function migrateOldVersionState(): void {
   if (vuexUser.user.settings.fullSizeImages)
     userSettings.postFullSizeImages = vuexUser.user.settings.fullSizeImages.value
 
-  if (vuexUser.user.settings.postsPerPage)
-    userSettings.postsPerPage = vuexUser.user.settings.postsPerPage.value
+  if (vuexUser.user.settings.postsPerPage) userSettings.postsPerPage = vuexUser.user.settings.postsPerPage.value
 
   // === Migrate tag collections
   if (vuexUser.user.custom.tagCollections) {
@@ -113,11 +112,11 @@ export function migrateOldVersionState(): void {
   }
 
   // === Migrate Boorus
-  const vuexUserBoorusMigrated = vuexUser.user.custom.boorus.map(booru => {
+  const vuexUserBoorusMigrated = vuexUser.user.custom.boorus.map((booru) => {
     return {
       domain: booru.domain,
 
-      type: booruTypeList.find(type => type.type === booru.type),
+      type: booruTypeList.find((type) => type.type === booru.type),
 
       config: booru.config,
 
@@ -131,7 +130,6 @@ export function migrateOldVersionState(): void {
 
   // === Migrate saved posts
 
-
   removeOldVersionState()
 }
 
@@ -143,10 +141,7 @@ function mergeBlocklists(list1: ITagCollection[], list2: ITagCollection[]): ITag
   const mergedList: ITagCollection[] = cloneDeep(list1)
 
   list2.forEach((item2) => {
-
-    const existingItem = mergedList.find((item1) =>
-      toLower(item1.name) === toLower(item2.name)
-    )
+    const existingItem = mergedList.find((item1) => toLower(item1.name) === toLower(item2.name))
 
     // If an item with the same name exists, merge their tags
     if (existingItem) {

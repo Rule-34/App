@@ -9,17 +9,12 @@ const postFullSizeImages = useStorage('settings-postFullSizeImages', false, loca
 const postsPerPage = useStorage('settings-postsPerPage', 30, localStorage, {
   writeDefaults: false
 })
-const lastPostsPage = useStorage<string | undefined>('settings-lastPostsPage', undefined, localStorage, {
-  writeDefaults: false
-})
 
 export function useUserSettings() {
   return reactive({
     navigationTouchGestures,
 
     postFullSizeImages,
-    postsPerPage,
-
-    lastPostsPage
+    postsPerPage
   })
 }
