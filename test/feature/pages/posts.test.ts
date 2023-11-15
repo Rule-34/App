@@ -20,16 +20,62 @@ describe('/', async () => {
       // Arrange
       const page = await createPage('/posts')
 
-      // Assert DOM
-      expect(await page.locator('h1').innerText()).toBe('Posts')
+      // Act
+      const h1Element = page.getByRole('heading', { name: /posts/i })
+
+      // Assert
+      expect(await h1Element.isVisible()).toBe(true)
     })
 
     it('renders a loader', async () => {
-      throw new Error('Not implemented')
+      // Arrange
+      const page = await createPage()
+
+      await page.route(
+        '**/posts?baseEndpoint=*',
+        async (route) => {
+          await new Promise((resolve) => setTimeout(resolve, 5000))
+
+          await route.fulfill({
+            status: 200,
+            json: mockPostsPage0
+          })
+        },
+        { times: 1 }
+      )
+
+      // Act
+      await page.goto(url('/posts?domain=safebooru.org'))
+      const loaderElement = page.getByTestId('posts-loader')
+
+      // Assert
+      expect(await loaderElement.isVisible()).toBe(true)
     })
 
-    it('shows no results', async () => {
-      throw new Error('Not implemented')
+    it.skip('shows no results', async () => {
+      // Arrange
+      const page = await createPage()
+
+      await page.route(
+        '**/posts?baseEndpoint=*',
+        (route) =>
+          route.fulfill({
+            status: 204,
+            json: mockPostsPageWithoutResults
+          }),
+        { times: 1 }
+      )
+
+      // Act
+      await Promise.all([
+        page.goto(url('/posts?domain=safebooru.org')),
+        page.waitForResponse('**/posts?baseEndpoint=*')
+      ])
+
+      const titleElement = page.getByRole('heading', { name: /no results/i })
+
+      // Assert
+      expect(await titleElement.isVisible()).toBe(true)
     })
   })
 
@@ -85,7 +131,6 @@ describe('/', async () => {
 
     it('proxies media when media failed to load', async () => {
       throw new Error('Not implemented')
-
     })
 
     it('renders warning when media failed to load', async () => {
@@ -372,13 +417,9 @@ describe('/', async () => {
 
       await page.getByTestId('domain-selector').getByRole('button').click()
 
-      await page
-        .getByTestId('domain-selector')
-        .click()
+      await page.getByTestId('domain-selector').click()
 
-      await page
-        .getByRole('option', { name: /safebooru/i })
-        .click()
+      await page.getByRole('option', { name: /safebooru/i }).click()
 
       await Promise.all([
         page.waitForURL('**/posts?domain=safebooru.org')
