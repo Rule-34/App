@@ -1,10 +1,7 @@
 import type { TestOptions } from '@nuxt/test-utils'
 
 export const defaultBrowserOptions: TestOptions['browserOptions'] = {
-  type: 'chromium',
-  launch: {
-    headless: true
-  }
+  type: 'chromium'
 }
 
 /**
