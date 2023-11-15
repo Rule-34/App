@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { createPage, setup, url } from '@nuxt/test-utils'
-import { mockPostsPage0, mockPostsPage1, mockPostsPageWithoutResults } from './posts.mock-data'
+import {
+  mockPostsPage0,
+  mockPostsPage1,
+  mockPostsPageWithOfflineMedia,
+  mockPostsPageWithoutResults,
+  mockPostsPageWithUnknownMedia
+} from './posts.mock-data'
 import { debugBrowserOptions } from '../../helper'
 
 describe('/', async () => {
@@ -51,6 +57,7 @@ describe('/', async () => {
       expect(await loaderElement.isVisible()).toBe(true)
     })
 
+    // TODO: Implement 204 response in API first
     it.skip('shows no results', async () => {
       // Arrange
       const page = await createPage()
@@ -125,15 +132,85 @@ describe('/', async () => {
     })
 
     it('renders warning when unknown media is loaded', async () => {
-      throw new Error('Not implemented')
+      // Arrange
+      const page = await createPage()
+
+      await page.route(
+        '**/posts?baseEndpoint=*',
+        (route) =>
+          route.fulfill({
+            status: 200,
+            json: mockPostsPageWithUnknownMedia
+          }),
+        { times: 1 }
+      )
+
+      // Act
+      await Promise.all([
+        page.goto(url('/posts?domain=safebooru.org')),
+        page.waitForResponse('**/posts?baseEndpoint=*')
+      ])
+
+      // Assert
+
+      // Expect 1 post
+      expect(
+        //
+        await page.getByTestId('posts-list').locator('li').count()
+      ).toBe(1)
+
+      // Expect post to have warning
+      expect(
+        //
+        await page.getByTestId('posts-list').locator('li').first().textContent()
+      ).toContain('Unknown media')
     })
 
-    it('proxies media when media failed to load', async () => {
+    it.skip('proxies media when media failed to load', async () => {
       throw new Error('Not implemented')
     })
 
     it('renders warning when media failed to load', async () => {
-      throw new Error('Not implemented')
+      // Arrange
+      const page = await createPage()
+
+      await page.route(
+        '**/posts?baseEndpoint=*',
+        (route) =>
+          route.fulfill({
+            status: 200,
+            json: mockPostsPageWithOfflineMedia
+          }),
+        { times: 1 }
+      )
+
+      await page.route('**/example.local/**', (route) =>
+        route.fulfill({
+          status: 404
+        })
+      )
+
+      // Act
+      await Promise.all([
+        page.goto(url('/posts?domain=safebooru.org')),
+        page.waitForResponse('**/posts?baseEndpoint=*'),
+
+        await page.waitForRequest('**/example.local/**')
+      ])
+
+      // Assert
+
+      // Expect 1 post
+      expect(
+        //
+        await page.getByTestId('posts-list').locator('li').count()
+      ).toBe(1)
+
+      // Expect post to have warning
+      expect(
+        //
+        await page.getByTestId('posts-list').locator('li').first().textContent()
+      ).toContain('Error loading media')
     })
   })
 
@@ -320,7 +397,7 @@ describe('/', async () => {
         await firstPost.getAttribute('data-testid')
       ).toBe('safebooru.org-' + mockPostsPage1.data[0].id.toString())
 
-      // Go back
+      // === Go back === //
       await Promise.all([page.goBack(), page.waitForURL('**/posts?domain=safebooru.org')])
 
       // Expect first post to have same testId as mockPostsPage0
@@ -335,7 +412,7 @@ describe('/', async () => {
         await page.evaluate(() => window.scrollY)
       ).toBe(200)
 
-      // Go forward
+      // === Go forward === //
       await Promise.all([page.goForward(), page.waitForURL('**/posts?domain=safebooru.org&tags=1girl')])
 
       // Expect first post to have same testId as mockPostsPage1
