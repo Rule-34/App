@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { createPage, setup } from '@nuxt/test-utils'
-import { migratedBooruListMock, migratedTagCollectionsMock, oldLocalStorageVuexUserMock } from './migrate-old-data.mock-data'
+import {
+  migratedBooruListMock,
+  migratedTagCollectionsMock,
+  oldLocalStorageVuexUserMock
+} from './migrate-old-data.mock-data'
 
 oldLocalStorageVuexUserMock
 
@@ -17,7 +21,7 @@ describe('/premium/migrate-old-data', async () => {
     expect(await page.textContent('h1')).toBe('Migrate old data')
   })
 
-  it.only('migrates old data', async () => {
+  it('migrates old data', async () => {
     const page = await createPage('/premium/migrate-old-data')
 
     // === Arrange
@@ -31,9 +35,7 @@ describe('/premium/migrate-old-data', async () => {
 
     // === Act
 
-    await page
-      .getByRole('button', { name: /Migrate/i })
-      .click()
+    await page.getByRole('button', { name: /Migrate/i }).click()
 
     const migratedSettings = await page.evaluate(() => {
       return {
