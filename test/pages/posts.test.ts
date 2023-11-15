@@ -7,7 +7,7 @@ import {
   mockPostsPageWithoutResults,
   mockPostsPageWithUnknownMedia
 } from './posts.mock-data'
-import { debugBrowserOptions } from '../../helper'
+import { debugBrowserOptions } from '../helper'
 
 describe('/', async () => {
   await setup({
