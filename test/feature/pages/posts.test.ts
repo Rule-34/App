@@ -372,25 +372,18 @@ describe('/', async () => {
 
       await page.getByTestId('domain-selector').getByRole('button').click()
 
-      await page.getByTestId('domain-selector').click()
-
-      await page.getByRole('option', { name: /safebooru/i }).click()
-
       await Promise.all([
+        page.getByRole('option', { name: /safebooru/i }).click(),
+
         page.waitForURL('**/posts?domain=safebooru.org')
-        // page.waitForResponse('**/posts?baseEndpoint=*')
       ])
 
       // Assert
       // Expect domain to be safebooru.org
       const domainSelectorText = await page.getByTestId('domain-selector').getByRole('button').textContent()
 
-      if (!domainSelectorText) {
-        throw new Error('domainSelectorText is null')
-      }
-
       // Extract domain from button text "...: safebooru.org"
-      expect(domainSelectorText.split(':')[1].trim()).toBe('safebooru.org')
+      expect(domainSelectorText?.split(':')[1].trim()).toBe('safebooru.org')
     })
   })
 
