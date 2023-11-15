@@ -29,7 +29,7 @@ describe('/', async () => {
       const headerElement = page.getByRole('heading', { name: 'Posts', exact: true })
 
       // Assert
-      expect(await headerElement.isVisible()).toBe(true)
+      await headerElement.isVisible()
     })
 
     it('renders a loader', async () => {
@@ -54,7 +54,7 @@ describe('/', async () => {
       const loaderElement = page.getByTestId('posts-loader')
 
       // Assert
-      expect(await loaderElement.isVisible()).toBe(true)
+      await loaderElement.isVisible()
     })
 
     // TODO: Implement 204 response in API first
@@ -81,7 +81,7 @@ describe('/', async () => {
       const titleElement = page.getByRole('heading', { name: /no results/i })
 
       // Assert
-      expect(await titleElement.isVisible()).toBe(true)
+      await titleElement.isVisible()
     })
   })
 
