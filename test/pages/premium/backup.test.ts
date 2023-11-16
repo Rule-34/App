@@ -37,6 +37,8 @@ describe('/premium/backup', async () => {
 
     await fileChooser.setFiles(path.join(__dirname, 'backup.mock-data.json'))
 
+    // TODO: Verify if backup is restored or create feature tests
+
     // Wait for a toaster to appear
     await page.locator('ol[data-sonner-toaster] li', { hasText: 'Backup restored' }).isVisible()
   })
