@@ -14,7 +14,7 @@
     <Dialog
       as="div"
       class="relative z-30"
-      @close="toggleSearchMenu(false)"
+      @close="toggleSearchMenu"
     >
       <!-- Background -->
       <TransitionChild
