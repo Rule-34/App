@@ -130,12 +130,7 @@
         {
           name: 'Animated',
           path: '/posts?domain=rule34.xxx&tags=animated',
-          images: [
-            '/img/featured/rule34.xxx/animated-1.jpeg',
-            '/img/featured/rule34.xxx/animated-2.jpeg',
-            '/img/featured/rule34.xxx/animated-3.jpeg',
-            '/img/featured/rule34.xxx/animated-4.jpeg'
-          ]
+          images: ['/img/featured/rule34.xxx/animated.jpeg']
         },
         {
           name: 'Overwatch',
@@ -235,12 +230,7 @@
         {
           name: 'Animated',
           path: '/posts?domain=gelbooru.com&tags=animated',
-          images: [
-            '/img/featured/gelbooru.com/animated-1.jpeg',
-            '/img/featured/gelbooru.com/animated-2.jpeg',
-            '/img/featured/gelbooru.com/animated-3.jpeg',
-            '/img/featured/gelbooru.com/animated-4.jpeg'
-          ]
+          images: ['/img/featured/gelbooru.com/animated.jpeg']
         },
         {
           name: 'Pokemon',
@@ -287,12 +277,7 @@
         {
           name: 'Animated',
           path: '/posts?domain=e621.net&tags=animated',
-          images: [
-            '/img/featured/e621.net/animated-1.jpeg',
-            '/img/featured/e621.net/animated-2.jpeg',
-            '/img/featured/e621.net/animated-3.jpeg',
-            '/img/featured/e621.net/animated-4.jpeg'
-          ]
+          images: ['/img/featured/e621.net/animated.jpeg']
         },
         {
           name: 'Gay',
@@ -334,12 +319,7 @@
         {
           name: 'Animated',
           path: '/posts?domain=realbooru.com&tags=animated',
-          images: [
-            '/img/featured/realbooru.com/animated-1.jpeg',
-            '/img/featured/realbooru.com/animated-2.jpeg',
-            '/img/featured/realbooru.com/animated-3.jpeg',
-            '/img/featured/realbooru.com/animated-4.jpeg'
-          ]
+          images: ['/img/featured/realbooru.com/animated.jpeg']
         },
         {
           name: 'Cosplay',
@@ -508,6 +488,7 @@
                   width="128"
                 />
 
+                <!-- TODO: Add icon for top posts, animated, etc. -->
                 <ContentContainer
                   :title="featuredDomain.domain"
                   as="h3"
