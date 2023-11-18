@@ -118,6 +118,7 @@
     })
   }
 
+  // TODO: Should include page number in key, maybe an initial page number?
   const {
     data,
     error,
@@ -296,8 +297,7 @@
 
     // TODO: Figure out a better way to reload page
     await reflectChangesInUrl({ page })
-    await refetch()
-    window.scrollTo({ top: 0 })
+    window.location.reload()
   }
 
   const title = computed(() => {
