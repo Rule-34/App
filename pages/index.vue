@@ -393,7 +393,7 @@
 <template>
   <main class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
     <!-- Header -->
-    <div class="-mt-6 text-center">
+    <div class="-mt-3 text-center">
       <h1
         class="flex justify-center gap-2 text-2xl font-bold uppercase leading-10 tracking-tight text-base-content-highlight"
       >
@@ -411,7 +411,7 @@
         App
       </h1>
 
-      <p class="mt-2">
+      <p class="mt-4 leading-relaxed">
         Stream and download Rule 34 porn videos, GIFs, and images from multiple Boorus in a mobile-first web app
       </p>
     </div>
