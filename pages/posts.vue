@@ -118,31 +118,42 @@
     })
   }
 
-  const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, isPending, isError } =
-    useInfiniteQuery({
-      queryKey: ['posts', selectedBooru, selectedTags, selectedFilters],
-      queryFn: fetchPosts,
-      initialPageParam: '',
-      getNextPageParam: (lastPage, allPages, lastPageParam) => {
-        if (lastPage.links.next == null) {
-          return undefined
-        }
-
-        // Skip if items are less than the limit
-        if (lastPage.meta.items_count !== lastPage.meta.items_per_page) {
-          return undefined
-        }
-
-        return lastPage.links.next
-      },
-      getPreviousPageParam: (firstPage, allPages, firstPageParam) => {
-        if (firstPage.links.prev == null) {
-          return undefined
-        }
-
-        return firstPage.links.prev
+  const {
+    data,
+    error,
+    refetch,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+    isFetching,
+    isFetchingNextPage,
+    isPending,
+    isError
+  } = useInfiniteQuery({
+    queryKey: ['posts', selectedBooru, selectedTags, selectedFilters],
+    queryFn: fetchPosts,
+    initialPageParam: '',
+    getNextPageParam: (lastPage, allPages, lastPageParam) => {
+      if (lastPage.links.next == null) {
+        return undefined
       }
-    })
+
+      // Skip if items are less than the limit
+      if (lastPage.meta.items_count !== lastPage.meta.items_per_page) {
+        return undefined
+      }
+
+      return lastPage.links.next
+    },
+    getPreviousPageParam: (firstPage, allPages, firstPageParam) => {
+      if (firstPage.links.prev == null) {
+        return undefined
+      }
+
+      return firstPage.links.prev
+    }
+  })
 
   // TODO: Virtualize posts or use a clever maxPages combination and scroll to last page end
 
@@ -274,6 +285,21 @@
     await fetchNextPage()
   }
 
+  async function onPageIndicatorClick() {
+    const pagePrompt = prompt('What page number would you like to go to?', '10')
+    const page = parseInt(pagePrompt, 10)
+
+    if (isNaN(page)) {
+      toast.error('Invalid page number')
+      return
+    }
+
+    // TODO: Figure out a better way to reload page
+    await reflectChangesInUrl({ page })
+    await refetch()
+    window.scrollTo({ top: 0 })
+  }
+
   const title = computed(() => {
     let title = ''
 
@@ -314,6 +340,7 @@
   const titleForBody = computed(() => {
     let _title = title.value
 
+    // TODO: Show page number in body title
     _title = _title.replace(/Page \d+ of /, '')
 
     _title = _title.replace(/posts/i, '')
@@ -526,13 +553,14 @@
           data-testid="posts-list"
         >
           <!-- Page indicator -->
-          <!-- TODO: Make clickable and change page -->
-          <div
+          <button
             v-if="postsPageIndex !== 0"
-            class="text-center text-sm"
+            class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util mx-auto block rounded-md px-1.5 py-1 text-sm"
+            type="button"
+            @click="onPageIndicatorClick"
           >
             &dharl; Page {{ postsPage.meta.current_page }} &dharr;
-          </div>
+          </button>
 
           <!-- TODO: Animate adding posts https://vuejs.org/guide/built-ins/transition-group.html#staggering-list-transitions -->
           <ol class="space-y-4">
