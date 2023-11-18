@@ -1,22 +1,22 @@
 <script setup>
-import { vIntersectionObserver } from '@vueuse/components'
+  import { vIntersectionObserver } from '@vueuse/components'
 
-const emit = defineEmits(['loadNextPage'])
+  const emit = defineEmits(['loadNextPage'])
 
-function onIntersectionObserver([{ isIntersecting }]) {
-  if (!isIntersecting) {
-    return
+  function onIntersectionObserver([{ isIntersecting }]) {
+    if (!isIntersecting) {
+      return
+    }
+
+    emit('loadNextPage')
   }
-
-  emit('loadNextPage')
-}
 </script>
 
 <template>
   <div
-    v-intersection-observer="[onIntersectionObserver, { rootMargin: '650px' }]"
-    class='flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-base-content'
-    data-testid='load-next-page'
+    v-intersection-observer="[onIntersectionObserver, { rootMargin: '0px 0px 0px 0px', threshold: [1] }]"
+    class="flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-base-content"
+    data-testid="load-next-page"
   >
     <slot />
   </div>
