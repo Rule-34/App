@@ -30,9 +30,6 @@ export default defineNuxtConfig({
 
       PROXY_URL: process.env.PROXY_URL,
 
-      MATOMO_HOST: process.env.MATOMO_HOST,
-      MATOMO_SITE_ID: process.env.MATOMO_SITE_ID,
-
       MONETIZATION_URI: process.env.MONETIZATION_URI
     }
   },
@@ -241,10 +238,7 @@ export default defineNuxtConfig({
         'NotAllowedError',
         'Background Sync is disabled',
         'ResizeObserver loop limit exceeded'
-      ],
-
-      // Dokku automatic env variable
-      release: process.env.GIT_REV
+      ]
     }
   },
 

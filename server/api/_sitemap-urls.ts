@@ -39,10 +39,10 @@ interface MatomoErrorResponse {
 }
 
 async function getPopularSiteSearchKeywordsFromMatomoApi() {
-  const baseUrl = `https://${config.public.MATOMO_HOST}/`
+  const baseUrl = `https://matomo.akbal.dev/`
   const apiToken = config.MATOMO_API_KEY
 
-  const siteId = config.public.MATOMO_SITE_ID
+  const siteId = 1
   const period = 'month'
   const date = 'lastMonth'
 
