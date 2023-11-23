@@ -14,6 +14,12 @@
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
 
+      // TODO: Remove this when the app is ready
+      {
+        name: 'robots',
+        content: 'noindex'
+      },
+
       // TODO: Improve description
       {
         name: 'description',
