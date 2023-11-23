@@ -23,7 +23,8 @@
       // TODO: Improve description
       {
         name: 'description',
-        content: 'Stream and download images, GIFs and videos hentai. For free!'
+        content:
+          'Stream and download Rule 34 porn videos, GIFs, and images from multiple Boorus in a mobile-first web app'
       },
 
       {
