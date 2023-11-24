@@ -14,7 +14,7 @@ export function generatePostsRoute(
   }
 
   if (domain != null) {
-    route.query.domain = domain
+    route.path = `/posts/${domain}`
   }
 
   if (page != null) {
@@ -34,9 +34,5 @@ export function generatePostsRoute(
 }
 
 function objectIsEmpty(obj: Object) {
-  return isEmpty(
-    omitBy(
-      obj,
-      isNil)
-  )
+  return isEmpty(omitBy(obj, isNil))
 }

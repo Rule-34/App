@@ -3,7 +3,7 @@ export default defineNuxtConfig({
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
    */
   routeRules: {
-    '/posts': {
+    '/posts/*': {
       // Incremental Static Regeneration for 5 minutes
       isr: 60 * 5,
 

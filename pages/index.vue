@@ -85,7 +85,7 @@
   definePageMeta({
     middleware: [
       /**
-       * Redirect to /posts if query parameters [domain, page, tags] are set.
+       * Redirect to /posts/<domain> if query parameters [domain, page, tags] are set.
        */
       function (to, from) {
         if (!to) {
@@ -97,7 +97,11 @@
           return
         }
 
-        return navigateTo({ path: '/posts', query: to.query, hash: to.hash })
+        return navigateTo({
+          path: '/posts/' + to.query.domain,
+          query: to.query,
+          hash: to.hash
+        })
       }
     ]
   })
@@ -105,11 +109,11 @@
   const featuredDomains = [
     {
       domain: 'rule34.xxx',
-      path: '/posts?domain=rule34.xxx',
+      path: '/posts/rule34.xxx',
       tags: [
         {
           name: 'Top posts',
-          path: '/posts?domain=rule34.xxx&filter%5Bsort%5D=score',
+          path: '/posts/rule34.xxx?filter%5Bsort%5D=score',
           images: [
             '/img/featured/rule34.xxx/top-1.jpg',
             '/img/featured/rule34.xxx/top-2.jpg',
@@ -119,7 +123,7 @@
         },
         {
           name: 'Popular posts',
-          path: '/posts?domain=rule34.xxx&filter%5Bscore%5D=>%3D50',
+          path: '/posts/rule34.xxx?filter%5Bscore%5D=>%3D50',
           images: [
             '/img/featured/rule34.xxx/top-5.jpg',
             '/img/featured/rule34.xxx/top-6.jpg',
@@ -129,12 +133,12 @@
         },
         {
           name: 'Animated',
-          path: '/posts?domain=rule34.xxx&tags=animated',
+          path: '/posts/rule34.xxx?tags=animated',
           images: ['/img/featured/rule34.xxx/animated.jpeg']
         },
         {
           name: 'Overwatch',
-          path: '/posts?domain=rule34.xxx&tags=overwatch',
+          path: '/posts/rule34.xxx?tags=overwatch',
           images: [
             '/img/featured/rule34.xxx/overwatch-1.jpeg',
             '/img/featured/rule34.xxx/overwatch-2.jpeg',
@@ -147,57 +151,57 @@
         },
         {
           name: 'Genshin Impact',
-          path: '/posts?domain=rule34.xxx&tags=genshin_impact',
+          path: '/posts/rule34.xxx?tags=genshin_impact',
           images: ['/img/featured/rule34.xxx/genshin_impact.jpg']
         },
         {
           name: 'Brawl Stars',
-          path: '/posts?domain=rule34.xxx&tags=brawl_stars',
+          path: '/posts/rule34.xxx?tags=brawl_stars',
           images: ['/img/featured/rule34.xxx/brawl_stars.jpeg']
         },
         {
           name: 'Friday Night Funkin',
-          path: '/posts?domain=rule34.xxx&tags=friday_night_funkin',
+          path: '/posts/rule34.xxx?tags=friday_night_funkin',
           images: ['/img/featured/rule34.xxx/friday_night_funkin.jpg']
         },
         {
           name: 'Atomic Heart',
-          path: '/posts?domain=rule34.xxx&tags=atomic_heart',
+          path: '/posts/rule34.xxx?tags=atomic_heart',
           images: ['/img/featured/rule34.xxx/atomic_heart.jpg']
         },
         {
           name: 'Minecraft',
-          path: '/posts?domain=rule34.xxx&tags=minecraft',
+          path: '/posts/rule34.xxx?tags=minecraft',
           images: ['/img/featured/rule34.xxx/minecraft.jpg']
         },
         {
           name: 'Murder Drones',
-          path: '/posts?domain=rule34.xxx&tags=murder_drones',
+          path: '/posts/rule34.xxx?tags=murder_drones',
           images: ['/img/featured/rule34.xxx/murder_drones.jpg']
         },
         {
           name: 'CountryHumans',
-          path: '/posts?domain=rule34.xxx&tags=countryhumans',
+          path: '/posts/rule34.xxx?tags=countryhumans',
           images: ['/img/featured/rule34.xxx/countryhumans.jpg']
         },
         {
           name: 'Honkai: Star Rail',
-          path: '/posts?domain=rule34.xxx&tags=honkai:_star_rail',
+          path: '/posts/rule34.xxx?tags=honkai:_star_rail',
           images: ['/img/featured/rule34.xxx/honkai_star_rail.jpg']
         },
         {
           name: "Five Nights at Freddy's",
-          path: "/posts?domain=rule34.xxx&tags=five_nights_at_freddy's",
+          path: "/posts/rule34.xxx?tags=five_nights_at_freddy's",
           images: ['/img/featured/rule34.xxx/five_nights_at_freddys.jpg']
         },
         {
           name: 'Roblox',
-          path: '/posts?domain=rule34.xxx&tags=roblox',
+          path: '/posts/rule34.xxx?tags=roblox',
           images: ['/img/featured/rule34.xxx/roblox.jpg']
         },
         {
           name: 'Undertale',
-          path: '/posts?domain=rule34.xxx&tags=undertale',
+          path: '/posts/rule34.xxx?tags=undertale',
           images: ['/img/featured/rule34.xxx/undertale.jpeg']
         }
       ]
@@ -205,11 +209,11 @@
 
     {
       domain: 'gelbooru.com',
-      path: '/posts?domain=gelbooru.com',
+      path: '/posts/gelbooru.com',
       tags: [
         {
           name: 'Top posts',
-          path: '/posts?domain=gelbooru.com&filter%5Bsort%5D=score',
+          path: '/posts/gelbooru.com?filter%5Bsort%5D=score',
           images: [
             '/img/featured/gelbooru.com/top-1.jpeg',
             '/img/featured/gelbooru.com/top-2.jpeg',
@@ -219,7 +223,7 @@
         },
         {
           name: 'Popular posts',
-          path: '/posts?domain=gelbooru.com&filter%5Bscore%5D=>%3D50',
+          path: '/posts/gelbooru.com?filter%5Bscore%5D=>%3D50',
           images: [
             '/img/featured/gelbooru.com/top-5.jpeg',
             '/img/featured/gelbooru.com/top-6.jpeg',
@@ -229,22 +233,22 @@
         },
         {
           name: 'Animated',
-          path: '/posts?domain=gelbooru.com&tags=animated',
+          path: '/posts/gelbooru.com?tags=animated',
           images: ['/img/featured/gelbooru.com/animated.jpeg']
         },
         {
           name: 'Pokemon',
-          path: '/posts?domain=gelbooru.com&tags=pokemon',
+          path: '/posts/gelbooru.com?tags=pokemon',
           images: ['/img/featured/gelbooru.com/pokemon.jpeg']
         },
         {
           name: '3D',
-          path: '/posts?domain=gelbooru.com&tags=3d',
+          path: '/posts/gelbooru.com?tags=3d',
           images: ['/img/featured/gelbooru.com/3d.jpeg']
         },
         {
           name: 'Furry',
-          path: '/posts?domain=gelbooru.com&tags=furry',
+          path: '/posts/gelbooru.com?tags=furry',
           images: ['/img/featured/gelbooru.com/furry.jpeg']
         }
       ]
@@ -252,11 +256,11 @@
 
     {
       domain: 'e621.net',
-      path: '/posts?domain=e621.net',
+      path: '/posts/e621.net',
       tags: [
         {
           name: 'Top posts',
-          path: '/posts?domain=e621.net&filter%5Bsort%5D=score',
+          path: '/posts/e621.net?filter%5Bsort%5D=score',
           images: [
             '/img/featured/e621.net/top-1.jpeg',
             '/img/featured/e621.net/top-2.jpeg',
@@ -266,7 +270,7 @@
         },
         {
           name: 'Popular posts',
-          path: '/posts?domain=e621.net&filter%5Bscore%5D=>%3D50',
+          path: '/posts/e621.net?filter%5Bscore%5D=>%3D50',
           images: [
             '/img/featured/e621.net/top-5.jpeg',
             '/img/featured/e621.net/top-6.jpeg',
@@ -276,17 +280,17 @@
         },
         {
           name: 'Animated',
-          path: '/posts?domain=e621.net&tags=animated',
+          path: '/posts/e621.net?tags=animated',
           images: ['/img/featured/e621.net/animated.jpeg']
         },
         {
           name: 'Gay',
-          path: '/posts?domain=e621.net&tags=gay',
+          path: '/posts/e621.net?tags=gay',
           images: ['/img/featured/e621.net/gay.jpeg']
         },
         {
           name: 'Pokemon',
-          path: '/posts?domain=e621.net&tags=pokemon',
+          path: '/posts/e621.net?tags=pokemon',
           images: ['/img/featured/e621.net/pokemon.jpeg']
         }
       ]
@@ -294,11 +298,11 @@
 
     {
       domain: 'realbooru.com',
-      path: '/posts?domain=realbooru.com',
+      path: '/posts/realbooru.com',
       tags: [
         {
           name: 'Top posts',
-          path: '/posts?domain=realbooru.com&filter%5Bsort%5D=score',
+          path: '/posts/realbooru.com?filter%5Bsort%5D=score',
           images: [
             '/img/featured/realbooru.com/top-1.jpeg',
             '/img/featured/realbooru.com/top-2.jpeg',
@@ -308,7 +312,7 @@
         },
         {
           name: 'Popular posts',
-          path: '/posts?domain=realbooru.com&filter%5Bscore%5D=>%3D50',
+          path: '/posts/realbooru.com?filter%5Bscore%5D=>%3D50',
           images: [
             '/img/featured/realbooru.com/top-5.jpeg',
             '/img/featured/realbooru.com/top-6.jpeg',
@@ -318,12 +322,12 @@
         },
         {
           name: 'Animated',
-          path: '/posts?domain=realbooru.com&tags=animated',
+          path: '/posts/realbooru.com?tags=animated',
           images: ['/img/featured/realbooru.com/animated.jpeg']
         },
         {
           name: 'Cosplay',
-          path: '/posts?domain=realbooru.com&tags=cosplay',
+          path: '/posts/realbooru.com?tags=cosplay',
           images: [
             '/img/featured/realbooru.com/cosplay-1.jpeg',
             '/img/featured/realbooru.com/cosplay-2.jpeg',
@@ -335,7 +339,7 @@
         },
         {
           name: 'Goth',
-          path: '/posts?domain=realbooru.com&tags=goth',
+          path: '/posts/realbooru.com?tags=goth',
           images: [
             '/img/featured/realbooru.com/goth-1.jpeg',
             '/img/featured/realbooru.com/goth-2.jpeg',
@@ -348,7 +352,7 @@
         },
         {
           name: 'Asian',
-          path: '/posts?domain=realbooru.com&tags=asian',
+          path: '/posts/realbooru.com?tags=asian',
           images: [
             '/img/featured/realbooru.com/asian-1.jpeg',
             '/img/featured/realbooru.com/asian-2.jpeg',
@@ -361,7 +365,7 @@
         },
         {
           name: 'Teen (+18)',
-          path: '/posts?domain=realbooru.com&tags=teen',
+          path: '/posts/realbooru.com?tags=teen',
           images: [
             '/img/featured/realbooru.com/teen-1.jpeg',
             '/img/featured/realbooru.com/teen-2.jpeg',
@@ -374,7 +378,7 @@
         },
         {
           name: 'Transgender',
-          path: '/posts?domain=realbooru.com&tags=transgender',
+          path: '/posts/realbooru.com?tags=transgender',
           images: [
             '/img/featured/realbooru.com/transgender-1.jpeg',
             '/img/featured/realbooru.com/transgender-2.jpeg',
