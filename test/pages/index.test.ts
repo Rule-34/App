@@ -22,8 +22,7 @@ describe('/', async () => {
     // Assert
     const currentUrl = new URL(page.url())
 
-    expect(currentUrl.pathname).toBe('/posts')
-    expect(currentUrl.searchParams.get('domain')).toBe('safebooru.org')
+    expect(currentUrl.pathname).toBe('/posts/safebooru.org')
     expect(currentUrl.searchParams.get('page')).toBe('3')
     expect(currentUrl.searchParams.get('tags')).toBe('cat|black_hair')
   })

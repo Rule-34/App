@@ -29,7 +29,7 @@
 
   // TODO: Validate query - https://nuxt.com/docs/getting-started/routing#route-validation
   const selectedBooru = computed(() => {
-    let domain = route.query.domain
+    let domain = route.params.domain
 
     // Fallback to first Booru
     if (!domain) {
@@ -404,8 +404,23 @@
 
   definePageMeta({
     validate: async (route) => {
-      if (!route) {
-        return true
+      const { booruList } = useBooruList()
+
+      const domain = route.params.domain
+
+      const booru = booruList.value.find((booru) => booru.domain === domain)
+
+      if (!booru) {
+        return false
+      }
+
+      const { isPremium } = useUserData()
+
+      if (!isPremium.value && booru.isPremium) {
+        return {
+          statusCode: 401,
+          statusMessage: 'Unauthorized, please login to view this page'
+        }
       }
 
       const page = route.query.page
@@ -419,7 +434,6 @@
         }
       }
 
-      // Validate `domain` query
       // Validate `tags` query
       // Validate `filters` query
 

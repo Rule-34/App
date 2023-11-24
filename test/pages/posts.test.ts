@@ -50,7 +50,7 @@ describe('/', async () => {
       )
 
       // Act
-      await page.goto(url('/posts?domain=safebooru.org'))
+      await page.goto(url('/posts/safebooru.org'))
       const loaderElement = page.getByTestId('posts-loader')
 
       // Assert
@@ -73,10 +73,7 @@ describe('/', async () => {
       )
 
       // Act
-      await Promise.all([
-        page.goto(url('/posts?domain=safebooru.org')),
-        page.waitForResponse('**/posts?baseEndpoint=*')
-      ])
+      await Promise.all([page.goto(url('/posts/safebooru.org')), page.waitForResponse('**/posts?baseEndpoint=*')])
 
       const titleElement = page.getByRole('heading', { name: /no results/i })
 
@@ -101,10 +98,7 @@ describe('/', async () => {
       )
 
       // Act
-      await Promise.all([
-        page.goto(url('/posts?domain=safebooru.org')),
-        page.waitForResponse('**/posts?baseEndpoint=*')
-      ])
+      await Promise.all([page.goto(url('/posts/safebooru.org')), page.waitForResponse('**/posts?baseEndpoint=*')])
 
       const postsListElement = page.getByTestId('posts-list')
 
@@ -146,10 +140,7 @@ describe('/', async () => {
       )
 
       // Act
-      await Promise.all([
-        page.goto(url('/posts?domain=safebooru.org')),
-        page.waitForResponse('**/posts?baseEndpoint=*')
-      ])
+      await Promise.all([page.goto(url('/posts/safebooru.org')), page.waitForResponse('**/posts?baseEndpoint=*')])
 
       // Assert
 
@@ -192,7 +183,7 @@ describe('/', async () => {
 
       // Act
       await Promise.all([
-        page.goto(url('/posts?domain=safebooru.org')),
+        page.goto(url('/posts/safebooru.org')),
         page.waitForResponse('**/posts?baseEndpoint=*'),
 
         await page.waitForRequest('**/example.local/**')
@@ -240,17 +231,14 @@ describe('/', async () => {
       )
 
       // Act
-      await Promise.all([
-        page.goto(url('/posts?domain=safebooru.org')),
-        page.waitForResponse('**/posts?baseEndpoint=*')
-      ])
+      await Promise.all([page.goto(url('/posts/safebooru.org')), page.waitForResponse('**/posts?baseEndpoint=*')])
 
       // Scroll to bottom
       await Promise.all([
         page.getByTestId('load-next-page').scrollIntoViewIfNeeded(),
 
         page.waitForResponse('**/posts?baseEndpoint=*'),
-        page.waitForURL('**/posts?domain=safebooru.org&page=1')
+        page.waitForURL('**/posts/safebooru.org&page=1')
       ])
 
       // Assert DOM
@@ -286,10 +274,7 @@ describe('/', async () => {
       const header2Element = page.getByRole('heading', { name: /tagged with/i })
 
       // Act
-      await Promise.all([
-        page.goto(url('/posts?domain=safebooru.org')),
-        page.waitForResponse('**/posts?baseEndpoint=*')
-      ])
+      await Promise.all([page.goto(url('/posts/safebooru.org')), page.waitForResponse('**/posts?baseEndpoint=*')])
 
       const postsListElement = page.getByTestId('posts-list')
 
@@ -302,7 +287,7 @@ describe('/', async () => {
         // Click on a Post's tag button named "1girl"
         firstPost.getByRole('button', { name: /1girl/i }).click(),
         //
-        page.waitForURL('**/posts?domain=safebooru.org&tags=1girl'),
+        page.waitForURL('**/posts/safebooru.org?tags=1girl'),
         page.waitForResponse('**/posts?baseEndpoint=*')
       ])
 
@@ -361,7 +346,7 @@ describe('/', async () => {
       )
 
       // Act
-      await page.goto(url('/posts?domain=safebooru.org'))
+      await page.goto(url('/posts/safebooru.org'))
 
       const postsListElement = page.getByTestId('posts-list')
 
@@ -384,7 +369,7 @@ describe('/', async () => {
       await Promise.all([
         firstPost.getByRole('button', { name: /1girl/i }).click(),
 
-        page.waitForURL('**/posts?domain=safebooru.org&tags=1girl'),
+        page.waitForURL('**/posts/safebooru.org?tags=1girl'),
         page.waitForResponse('**/posts?baseEndpoint=*')
       ])
 
@@ -398,7 +383,7 @@ describe('/', async () => {
       ).toBe('safebooru.org-' + mockPostsPage1.data[0].id.toString())
 
       // === Go back === //
-      await Promise.all([page.goBack(), page.waitForURL('**/posts?domain=safebooru.org')])
+      await Promise.all([page.goBack(), page.waitForURL('**/posts/safebooru.org')])
 
       // Expect first post to have same testId as mockPostsPage0
       expect(
@@ -413,7 +398,7 @@ describe('/', async () => {
       ).toBe(200)
 
       // === Go forward === //
-      await Promise.all([page.goForward(), page.waitForURL('**/posts?domain=safebooru.org&tags=1girl')])
+      await Promise.all([page.goForward(), page.waitForURL('**/posts/safebooru.org?tags=1girl')])
 
       // Expect first post to have same testId as mockPostsPage1
       expect(
@@ -456,7 +441,7 @@ describe('/', async () => {
       await Promise.all([
         page.getByRole('option', { name: /safebooru/i }).click(),
 
-        page.waitForURL('**/posts?domain=safebooru.org')
+        page.waitForURL('**/posts/safebooru.org')
       ])
 
       // Assert
