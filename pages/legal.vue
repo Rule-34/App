@@ -19,7 +19,8 @@
           :links="[
             {
               text: 'Terms of service',
-              href: '/terms-of-service'
+              href: '/terms-of-service',
+              target: '_blank'
             }
           ]"
           text="You can find the Terms Of Service (TOS) in the next link"
@@ -33,7 +34,8 @@
           :links="[
             {
               text: 'Privacy policy',
-              href: '/privacy-policy'
+              href: '/privacy-policy',
+              target: '_blank'
             }
           ]"
           text="You can find the Privacy policy in the next link"
@@ -47,7 +49,8 @@
           :links="[
             {
               text: 'Opt Out',
-              href: '/privacy-policy#opt-out'
+              href: '/privacy-policy#opt-out',
+              target: '_blank'
             }
           ]"
           text="Self hosted Matomo analytics are used, configured to NOT gather, or store, any personal info
@@ -63,7 +66,8 @@
           :links="[
             {
               text: 'contact@r34.app',
-              href: 'mailto:contact@r34.app'
+              href: 'mailto:contact@r34.app',
+              target: '_blank'
             }
           ]"
           text="Reach me to discuss questions, suggestions, requests, comments, or any other concern"
@@ -86,7 +90,8 @@
           :links="[
             {
               text: 'Github repository',
-              href: 'https://github.com/AlejandroAkbal/Rule-34-App'
+              href: 'https://github.com/AlejandroAkbal/Rule-34-App',
+              target: '_blank'
             }
           ]"
           text="If you're the owner of a site where we get the media content and would like to cease these actions, please contact us with proof that you're the owner of that site and a message regarding the cease to actions
