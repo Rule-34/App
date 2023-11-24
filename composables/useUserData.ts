@@ -1,8 +1,6 @@
-// TODO: Run migrations on https://nuxt.com/docs/api/utils/on-nuxt-ready
-
-const { status, data } = useAuth()
-
 export function useUserData() {
+  const { status, data } = useAuth()
+
   return {
     isPremium: computed(
       //

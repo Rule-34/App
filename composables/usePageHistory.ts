@@ -1,24 +1,32 @@
 import { useEventListener, useStorage } from '@vueuse/core'
 
-const route = useRoute()
-
 interface PageHistory {
   path: string
 
   date: Date
 }
 
-const pageHistory = useStorage<PageHistory[]>('settings-pageHistory', [], localStorage, {
-  writeDefaults: false
+let pageHistory = ref<PageHistory[]>([])
+
+if (process.client) {
+  pageHistory = useStorage<PageHistory[]>('settings-pageHistory', [], localStorage, {
+    writeDefaults: false
+  })
   // TODO: Serialize Date
-})
+}
 
 export function usePageHistory() {
+  const route = useRoute()
+
   /**
    * Saves the current route full path to the page history
    * With a maximum of 10 pages
    */
   function addListener() {
+    if (process.server) {
+      return
+    }
+
     useEventListener(document, 'visibilitychange', (event) => {
       if (document.visibilityState !== 'hidden') {
         return

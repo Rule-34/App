@@ -26,8 +26,8 @@ dependencies:
     specifier: ^0.5.7
     version: 0.5.7(tailwindcss@3.3.5)
   '@tanstack/vue-query':
-    specifier: ^5.8.4
-    version: 5.8.4(vue@3.3.8)
+    specifier: ^5.8.6
+    version: 5.8.6(vue@3.3.8)
   '@tanstack/vue-virtual':
     specifier: 3.0.0-beta.68
     version: 3.0.0-beta.68(vue@3.3.8)
@@ -3369,16 +3369,16 @@ packages:
       remove-accents: 0.4.2
     dev: false
 
-  /@tanstack/query-core@5.8.3:
-    resolution: {integrity: sha512-SWFMFtcHfttLYif6pevnnMYnBvxKf3C+MHMH7bevyYfpXpTMsLB9O6nNGBdWSoPwnZRXFNyNeVZOw25Wmdasow==}
+  /@tanstack/query-core@5.8.6:
+    resolution: {integrity: sha512-QLzMH6E5hZ0cIlvc0rdEGWajU17CZEZqaa1dEdfI16d8yjF2cIK+Zu+JpdLmF5MURCtQi5jVh0V1hMPjAC2IvQ==}
     dev: false
 
   /@tanstack/virtual-core@3.0.0-beta.68:
     resolution: {integrity: sha512-CnvsEJWK7cugigckt13AeY80FMzH+OMdEP0j0bS3/zjs44NiRe49x8FZC6R9suRXGMVMXtUHet0zbTp/Ec9Wfg==}
     dev: false
 
-  /@tanstack/vue-query@5.8.4(vue@3.3.8):
-    resolution: {integrity: sha512-MxxjyOR2TMCDLuv9n1SC1j6DKFgXNC+6jkP9/vaOOXjqAr6sGcDTgzyzh801lL7aB+6K94W67FMS+RGN+Ip9FA==}
+  /@tanstack/vue-query@5.8.6(vue@3.3.8):
+    resolution: {integrity: sha512-9YeHPoiGxervd+u4KKDT7Mvxv7jd//weHCGs+u3dDt6lIaE+eYhscWVZ7i+pUpSxokMdqcZob8AE765rB7f1gw==}
     peerDependencies:
       '@vue/composition-api': ^1.1.2
       vue: ^2.6.0 || ^3.3.0
@@ -3387,7 +3387,7 @@ packages:
         optional: true
     dependencies:
       '@tanstack/match-sorter-utils': 8.8.4
-      '@tanstack/query-core': 5.8.3
+      '@tanstack/query-core': 5.8.6
       '@vue/devtools-api': 6.5.1
       vue: 3.3.8
       vue-demi: 0.14.6(vue@3.3.8)
