@@ -48,13 +48,17 @@ const defaultTagCollections: TagCollection[] = [
   }
 ]
 
-const tagCollections = useStorage('user-tagCollections', cloneDeep(defaultTagCollections), localStorage, {
-  writeDefaults: false
-})
+const [value, toggle] = useToggle(false)
+
+let tagCollections = ref<TagCollection[]>(cloneDeep(defaultTagCollections))
+
+if (process.client) {
+  tagCollections = useStorage('user-tagCollections', cloneDeep(defaultTagCollections), localStorage, {
+    writeDefaults: false
+  })
+}
 
 export function useTagCollections() {
-  const [value, toggle] = useToggle(false)
-
   return {
     isActive: value,
     toggleIsActive: toggle,

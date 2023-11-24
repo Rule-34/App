@@ -1,14 +1,19 @@
 import { useStorage } from '@vueuse/core'
 
-const timesTheAppHasBeenOpened = useStorage('statistics-appOpenedCount', 0, localStorage, {
-  writeDefaults: false
-})
+let timesTheAppHasBeenOpened = ref<number>(0)
 
-const tutorialLongClickTag = useStorage('tutorial-longClickTag', false, localStorage, {
-  writeDefaults: false
-})
+let tutorialLongClickTag = ref<boolean>(false)
 
-// Add one to the timesTheAppHasBeenOpened
+if (process.client) {
+  timesTheAppHasBeenOpened = useStorage('statistics-appOpenedCount', 0, localStorage, {
+    writeDefaults: false
+  })
+
+  tutorialLongClickTag = useStorage('tutorial-longClickTag', false, localStorage, {
+    writeDefaults: false
+  })
+}
+
 timesTheAppHasBeenOpened.value++
 
 export function useAppStatistics() {

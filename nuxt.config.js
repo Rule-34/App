@@ -1,6 +1,36 @@
 export default defineNuxtConfig({
-  // https://nuxt.com/docs/getting-started/deployment#static-hosting
-  ssr: false,
+  /**
+   * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
+   */
+  routeRules: {
+    '/posts': {
+      // Incremental Static Regeneration for 5 minutes
+      isr: 60 * 5,
+
+      sitemap: {
+        priority: 1,
+        changefreq: 'always'
+      }
+    },
+
+    // Static pages are prerendered
+    '/': { prerender: true },
+    '/friends': { prerender: true },
+    '/legal': { prerender: true },
+
+    '/settings': { ssr: false },
+
+    '/premium': { prerender: true },
+    '/premium/sign-in': { prerender: true },
+
+    // All premium pages are client-side rendered
+    '/premium/dashboard': { ssr: false },
+    '/premium/saved-posts': { ssr: false },
+    '/premium/tag-collections': { ssr: false },
+    '/premium/additional-boorus': { ssr: false },
+    '/premium/backup': { ssr: false },
+    '/premium/migrate-old-data': { ssr: false }
+  },
 
   nitro: {
     esbuild: {
@@ -255,15 +285,6 @@ export default defineNuxtConfig({
           changefreq: 'weekly'
           // lastmod: new Date()
         }
-      }
-    }
-  },
-
-  routeRules: {
-    '/posts': {
-      sitemap: {
-        priority: 1,
-        changefreq: 'always'
       }
     }
   },

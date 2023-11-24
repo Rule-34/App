@@ -6,8 +6,7 @@ import { cloneDeep } from 'lodash-es'
 const defaultBooruList: Domain[] = completeBooruList.map((booruObj, index) => {
   const booruType = booruTypeList.find((booruTypeObj) => booruTypeObj.type === booruObj.type)
 
-  if (!booruType)
-    throw new Error(`Booru type not found: ${ booruObj.type }`)
+  if (!booruType) throw new Error(`Booru type not found: ${booruObj.type}`)
 
   return {
     domain: booruObj.domain,
@@ -21,9 +20,13 @@ const defaultBooruList: Domain[] = completeBooruList.map((booruObj, index) => {
   } as Domain
 })
 
-const userBooruList = useStorage('user-booruList', cloneDeep(defaultBooruList), localStorage, {
-  writeDefaults: false
-})
+let userBooruList = ref<Domain[]>(cloneDeep(defaultBooruList))
+
+if (process.client) {
+  userBooruList = useStorage<Domain[]>('user-booruList', cloneDeep(defaultBooruList), localStorage, {
+    writeDefaults: false
+  })
+}
 
 export function useBooruList() {
   return {

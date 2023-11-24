@@ -1,5 +1,5 @@
 <script setup>
-  import { toast } from 'vue-sonner'
+  import { toast, Toaster } from 'vue-sonner'
 
   useAppStatistics()
 

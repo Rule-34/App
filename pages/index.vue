@@ -453,16 +453,18 @@
       </section>
 
       <!-- History -->
-      <section v-if="pageHistory.length">
-        <PageHeader as="h2">
-          <template #title>History</template>
-          <template #text>Continue where you left off</template>
-        </PageHeader>
+      <ClientOnly>
+        <section v-if="pageHistory.length">
+          <PageHeader as="h2">
+            <template #title>History</template>
+            <template #text>Continue where you left off</template>
+          </PageHeader>
 
-        <ShowMore :max-height-in-rem="12">
-          <LazyPageHistory class="mt-4 sm:pr-4" />
-        </ShowMore>
-      </section>
+          <ShowMore :max-height-in-rem="12">
+            <PageHistory class="mt-4 sm:pr-4" />
+          </ShowMore>
+        </section>
+      </ClientOnly>
 
       <!-- Featured tags -->
       <section>
