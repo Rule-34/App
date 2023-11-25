@@ -74,9 +74,8 @@
 
   function onSearchSubmit(tag?: string | undefined) {
     navigateTo({
-      path: '/posts',
+      path: '/posts/' + selectedBooru.value.domain,
       query: {
-        domain: selectedBooru.value.domain,
         tags: tag
       }
     })
