@@ -18,7 +18,7 @@
 </script>
 
 <template>
-  <Teleport to="body">
+  <SafeTeleport to="#teleport-target">
     <transition
       enter-active-class="transition ease-out duration-150"
       enter-from-class="transform opacity-0 scale-95"
@@ -38,5 +38,5 @@
         <ArrowUpIcon class="h-6 w-6" />
       </button>
     </transition>
-  </Teleport>
+  </SafeTeleport>
 </template>

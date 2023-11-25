@@ -477,10 +477,7 @@
     />
   </SearchMenuWrapper>
 
-  <Teleport to="body">
-    <!-- Scroll to top -->
-    <ScrollTopButton />
-  </Teleport>
+  <ScrollTopButton />
 
   <!-- Container -->
   <main class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
