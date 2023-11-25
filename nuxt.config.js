@@ -203,8 +203,35 @@ export default defineNuxtConfig({
     }
   },
 
+  /**
+   * Also
+   * @see matomo.client.ts
+   */
   partytown: {
     forward: ['_paq.push']
+  },
+
+  app: {
+    head: {
+      script: [
+        {
+          type: 'text/partytown',
+          children: `
+          var _paq = window._paq = window._paq || [];
+
+          _paq.push(["disableCookies"]);
+
+          _paq.push(['setTrackerUrl', 'https://matomo.akbal.dev/matomo.php']);
+          _paq.push(['setSiteId', '1']);
+        `
+        },
+        {
+          type: 'text/partytown',
+          src: 'https://matomo.akbal.dev/matomo.js',
+          async: true
+        }
+      ]
+    }
   },
 
   /** @type {import('@nuxtjs/sentry')} */
