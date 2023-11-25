@@ -125,6 +125,9 @@
     :throttle="250"
   />
 
+  <!-- https://vuejs.org/guide/scaling-up/ssr.html#teleports -->
+  <TeleportTarget id="teleport-target" />
+
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
