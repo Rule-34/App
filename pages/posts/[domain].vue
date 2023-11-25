@@ -27,14 +27,8 @@
 
   const { selectedDomainFromStorage } = useSelectedDomainFromStorage()
 
-  // TODO: Validate query - https://nuxt.com/docs/getting-started/routing#route-validation
   const selectedBooru = computed(() => {
     let domain = route.params.domain
-
-    // Fallback to first Booru
-    if (!domain) {
-      return booruList.value[0]
-    }
 
     const booru = booruList.value.find((booru) => booru.domain === domain)
 
