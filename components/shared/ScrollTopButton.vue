@@ -1,11 +1,16 @@
 <script setup>
-  import { computed } from 'vue'
   import { useScroll } from '@vueuse/core'
   import { ArrowUpIcon } from '@heroicons/vue/24/solid'
 
-  const { y } = useScroll(document, {
-    behavior: 'smooth'
-  })
+  let y = ref(0)
+
+  if (process.client) {
+    const { y: scrollY } = useScroll(document, {
+      behavior: 'smooth'
+    })
+
+    y = scrollY
+  }
 
   const shouldShowScrollTopButton = computed(() => y.value > 250)
 
@@ -18,7 +23,7 @@
 </script>
 
 <template>
-  <SafeTeleport to="#teleport-target">
+  <Teleport to="body">
     <transition
       enter-active-class="transition ease-out duration-150"
       enter-from-class="transform opacity-0 scale-95"
@@ -38,5 +43,5 @@
         <ArrowUpIcon class="h-6 w-6" />
       </button>
     </transition>
-  </SafeTeleport>
+  </Teleport>
 </template>
