@@ -114,6 +114,8 @@
 
   // TODO: Should include page number in key, maybe an initial page number?
   const {
+    suspense,
+
     data,
     error,
     refetch,
@@ -148,6 +150,10 @@
 
       return firstPage.links.prev
     }
+  })
+
+  onServerPrefetch(async () => {
+    await suspense()
   })
 
   // TODO: Virtualize posts or use a clever maxPages combination and scroll to last page end
@@ -440,25 +446,28 @@
 
 <template>
   <!-- Search -->
-  <SafeTeleport to="#navbar-actions">
-    <button
-      class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
-      type="button"
-      @click="toggleSearchMenu()"
-    >
-      <span class="sr-only">Search posts</span>
-
-      <MagnifyingGlassIcon class="h-6 w-6 text-base-content-highlight" />
-
-      <!-- Highlighter -->
-      <span
-        v-if="selectedTags.length || Object.values(selectedFilters).some((value) => value !== undefined)"
-        class="absolute right-0 top-0 flex h-2 w-2"
+  <!-- TODO: Find a better way to embed search -->
+  <ClientOnly>
+    <SafeTeleport to="#navbar-actions">
+      <button
+        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
+        type="button"
+        @click="toggleSearchMenu()"
       >
-        <span class="relative inline-flex h-2 w-2 rounded-full bg-primary-600"></span>
-      </span>
-    </button>
-  </SafeTeleport>
+        <span class="sr-only">Search posts</span>
+
+        <MagnifyingGlassIcon class="h-6 w-6 text-base-content-highlight" />
+
+        <!-- Highlighter -->
+        <span
+          v-if="selectedTags.length || Object.values(selectedFilters).some((value) => value !== undefined)"
+          class="absolute right-0 top-0 flex h-2 w-2"
+        >
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-primary-600"></span>
+        </span>
+      </button>
+    </SafeTeleport>
+  </ClientOnly>
 
   <!-- Search menu -->
   <SearchMenuWrapper>
