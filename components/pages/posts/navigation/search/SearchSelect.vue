@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions } from '@headlessui/vue'
   import { CheckIcon, ChevronDownIcon } from '@heroicons/vue/20/solid'
-  import { Float } from '@headlessui-float/vue'
 
   const props = defineProps({
     modelValue: {

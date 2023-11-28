@@ -71,6 +71,8 @@ export default defineNuxtConfig({
   modules: [
     '@sidebase/nuxt-auth',
 
+    '@headlessui-float/nuxt',
+
     // '@nuxtjs/sentry',
 
     'nuxt-schema-org',
