@@ -334,6 +334,12 @@ export default defineNuxtConfig({
     }
   },
 
+  experimental: {
+    // TODO: Remove when it is compatible with vue-query hydration
+    // @see https://github.com/nuxt/nuxt/issues?q=Cannot+stringify+arbitrary+non-POJO
+    renderJsonPayloads: false
+  },
+
   devtools: {
     enabled: false
   },
