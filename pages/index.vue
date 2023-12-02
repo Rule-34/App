@@ -402,7 +402,7 @@
       >
         R34
 
-        <img
+        <NuxtImg
           alt="Icon"
           class="flip-vertical-fwd h-6 w-6 text-base-content-highlight"
           height="16"
@@ -484,12 +484,12 @@
                 :href="featuredDomain.path"
                 class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util flex items-center gap-2 rounded-md px-2"
               >
-                <img
+                <NuxtImg
                   :src="`https://www.google.com/s2/favicons?domain=${featuredDomain.domain}&sz=128`"
                   alt="Favicon"
                   class="h-5 w-5 rounded"
                   height="128"
-                  loading="lazy"
+                  loading="eager"
                   width="128"
                 />
 

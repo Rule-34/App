@@ -50,7 +50,7 @@
         class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util relative cursor-default rounded-md py-1.5 pl-3 pr-10 text-left ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
       >
         <span class="flex items-center">
-          <img
+          <NuxtImg
             :src="`https://www.google.com/s2/favicons?domain=${props.modelValue.domain}&sz=128`"
             alt="Favicon"
             class="h-5 w-5 flex-shrink-0 rounded"
@@ -98,12 +98,12 @@
             class="relative cursor-default select-none py-2 pl-3 pr-14"
           >
             <div class="flex items-center">
-              <img
+              <NuxtImg
                 :src="`https://www.google.com/s2/favicons?domain=${booru.domain}&sz=128`"
                 alt="Favicon"
                 class="h-5 w-5 flex-shrink-0 rounded"
                 height="128"
-                loading="lazy"
+                loading="eager"
                 width="128"
               />
 

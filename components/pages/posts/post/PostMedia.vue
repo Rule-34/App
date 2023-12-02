@@ -17,6 +17,8 @@
 
   const localSrc = shallowRef(props.mediaSrc)
 
+  const mediaHasLoaded = ref(false)
+
   const error = ref<Error | null>(null)
   const hasError = computed(() => error.value !== null)
 
@@ -81,6 +83,10 @@
 
     video.pause()
   }
+
+  function onMediaLoad(event: Event) {
+    mediaHasLoaded.value = true
+  }
 </script>
 
 <template>
@@ -138,17 +144,18 @@
 
     <!-- Image -->
     <template v-else-if="isImage">
-      <img
+      <NuxtImg
         :alt="mediaAlt"
+        :class="[mediaHasLoaded ? 'opacity-100' : 'opacity-0']"
         :height="mediaSrcHeight"
         :src="localSrc"
         :width="mediaSrcWidth"
-        class="h-auto w-full opacity-0 transition-opacity duration-700 ease-in-out"
+        class="h-auto w-full transition-opacity duration-700 ease-in-out"
         decoding="async"
         loading="lazy"
-        onload='this.classList.remove("opacity-0")'
         referrerpolicy="no-referrer"
         @error="onMediaError"
+        @load="onMediaLoad"
       />
     </template>
 

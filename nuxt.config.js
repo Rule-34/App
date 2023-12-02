@@ -69,6 +69,8 @@ export default defineNuxtConfig({
   components: [{ path: '~/components', pathPrefix: false }],
 
   modules: [
+    '@nuxt/image',
+
     '@sidebase/nuxt-auth',
 
     '@headlessui-float/nuxt',
@@ -85,6 +87,10 @@ export default defineNuxtConfig({
 
     '@formkit/auto-animate/nuxt'
   ],
+
+  image: {
+    domains: ['localhost', 'localhost:8081', 'www.google.com']
+  },
 
   /** @type {import('@sidebase/nuxt-auth')} */
   auth: {
