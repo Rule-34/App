@@ -27,14 +27,12 @@
         class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util block overflow-hidden rounded-md border border-transparent"
       >
         <figure>
-          <img
+          <NuxtImg
             :alt="'Featured tag: ' + tag.name"
             :src="getRandomImage(tag.images)"
             class="h-auto w-full"
-            height="800"
             loading="lazy"
             style="aspect-ratio: 800/1200"
-            width="1200"
           />
 
           <figcaption class="truncate px-2 py-1.5 text-center text-sm font-medium">
@@ -44,6 +42,4 @@
       </NuxtLink>
     </li>
   </ol>
-
-  <!--  <span class='mt-3 block text-right text-xs'>You can scroll through the list →</span>-->
 </template>

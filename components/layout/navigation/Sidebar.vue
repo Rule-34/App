@@ -69,7 +69,7 @@
 <template>
   <!-- Logo -->
   <div class="my-6 flex shrink-0 flex-col items-center justify-center gap-2">
-    <img
+    <NuxtImg
       alt="Logo"
       class="h-24 w-full opacity-95"
       height="16"
