@@ -19,8 +19,7 @@
           :links="[
             {
               text: 'Terms of service',
-              href: '/terms-of-service',
-              target: '_blank'
+              href: '/terms-of-service'
             }
           ]"
           text="You can find the Terms Of Service (TOS) in the next link"
@@ -34,8 +33,7 @@
           :links="[
             {
               text: 'Privacy policy',
-              href: '/privacy-policy',
-              target: '_blank'
+              href: '/privacy-policy'
             }
           ]"
           text="You can find the Privacy policy in the next link"
@@ -49,8 +47,7 @@
           :links="[
             {
               text: 'Opt Out',
-              href: '/privacy-policy#opt-out',
-              target: '_blank'
+              href: '/privacy-policy#opt-out'
             }
           ]"
           text="Self hosted Matomo analytics are used, configured to NOT gather, or store, any personal info
