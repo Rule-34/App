@@ -89,7 +89,13 @@ export default defineNuxtConfig({
   ],
 
   image: {
-    domains: ['localhost', 'localhost:8081', 'www.google.com']
+    domains: [
+      //
+      process.env.APP_DOMAIN,
+      'localhost',
+      'localhost:8081',
+      'www.google.com'
+    ]
   },
 
   /** @type {import('@sidebase/nuxt-auth')} */
