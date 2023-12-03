@@ -41,8 +41,8 @@ dependencies:
     specifier: ^0.0.11
     version: 0.0.11
   '@vite-pwa/nuxt':
-    specifier: ^0.3.2
-    version: 0.3.2(rollup@2.79.1)(vite@5.0.4)(workbox-build@7.0.0)(workbox-window@7.0.0)
+    specifier: ^0.3.3
+    version: 0.3.3(rollup@2.79.1)(vite@5.0.4)(workbox-build@7.0.0)(workbox-window@7.0.0)
   '@vueuse/components':
     specifier: ^10.6.1
     version: 10.6.1(vue@3.3.9)
@@ -3989,8 +3989,8 @@ packages:
       unconfig: 0.3.11
     dev: false
 
-  /@vite-pwa/nuxt@0.3.2(rollup@2.79.1)(vite@5.0.4)(workbox-build@7.0.0)(workbox-window@7.0.0):
-    resolution: {integrity: sha512-VqYSaQvNMQx26Z/2L32gWIT5aJIkJw+Dot/ttqsmHMUv3CnbKBv+o1x5XFC24Zk1as5XKDocwyS2LF8+mhN8Hg==}
+  /@vite-pwa/nuxt@0.3.3(rollup@2.79.1)(vite@5.0.4)(workbox-build@7.0.0)(workbox-window@7.0.0):
+    resolution: {integrity: sha512-lmX7KYeSUZDjfpZjgiR1K+9PF4q/nSzY5P6WmdgiL1JamBWeooRdAFt+35Y9DV5zij4amtEVvxmDOWZilN3f0Q==}
     dependencies:
       '@nuxt/kit': 3.8.2(rollup@2.79.1)
       pathe: 1.1.1
