@@ -5,6 +5,7 @@
   import { liveQuery } from 'dexie'
   import { useObservable } from '@vueuse/rxjs'
   import type { IPost } from '~/assets/js/post'
+  import { toast } from 'vue-sonner'
 
   // TODO: Load this component in <suspense>
 
@@ -13,6 +14,8 @@
 
     post: IPost
   }>()
+
+  const { isPremium } = useUserData()
 
   const postCount = useObservable(
     //
@@ -28,6 +31,13 @@
   const isPostSaved = computed(() => postCount.value > 0)
 
   async function onClick() {
+    if (!isPremium.value) {
+      toast.info('Premium feature', {
+        description: 'Save posts to your device and enjoy them later'
+      })
+      return
+    }
+
     switch (isPostSaved.value) {
       case false: {
         await savePost()
