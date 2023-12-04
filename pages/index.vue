@@ -431,6 +431,7 @@
             :boorus="booruList"
             :compact="true"
             :model-value="selectedBooru"
+            class="self-stretch"
             @update:model-value="onDomainChange"
           />
 

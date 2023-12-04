@@ -4,6 +4,10 @@
   import { PlusIcon } from '@heroicons/vue/24/solid'
   import type { Domain } from '~/assets/js/domain'
 
+  defineOptions({
+    inheritAttrs: false
+  })
+
   interface DomainSelectorProps {
     boorus: Domain[]
     modelValue: Domain
@@ -32,11 +36,9 @@
     as="template"
     @update:modelValue="emit('update:modelValue', $event)"
   >
-    <!-- TODO: Fix width -->
     <Float
       :offset="16"
-      as="div"
-      class="relative"
+      as="template"
       data-testid="domain-selector"
       leave="transition ease-in duration-100"
       leave-from="opacity-100"
@@ -46,8 +48,9 @@
     >
       <!-- Select -->
       <ListboxButton
-        :class="[props.compact ? 'w-auto !rounded-full !p-2.5' : 'w-56']"
+        :class="[props.compact ? 'flex w-auto items-stretch !rounded-full !p-0' : 'w-56']"
         class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util relative cursor-default rounded-md py-1.5 pl-3 pr-10 text-left ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
+        v-bind="$attrs"
       >
         <span class="flex items-center">
           <NuxtImg
