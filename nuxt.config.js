@@ -100,19 +100,18 @@ export default defineNuxtConfig({
 
   /** @type {import('@sidebase/nuxt-auth')} */
   auth: {
-    // TODO: Refresh token
-
     baseURL: process.env.API_URL + '/auth',
 
     provider: {
-      type: 'local',
+      type: 'refresh',
 
       endpoints: {
         signIn: { path: '/log-in', method: 'post' },
-        signOut: null,
         signUp: null,
+        signOut: null,
 
-        getSession: { path: '/profile', method: 'get' }
+        getSession: { path: '/profile', method: 'get' },
+        refresh: { path: '/refresh', method: 'post'}
       },
 
       pages: {
@@ -124,8 +123,14 @@ export default defineNuxtConfig({
 
         type: 'Bearer',
 
-        maxAgeInSeconds: 1800 // 30 minutes
+        maxAgeInSeconds: 60 * 30 // 30 minutes
       },
+
+      refreshToken: {
+        signInResponseRefreshTokenPointer: '/refresh_token',
+
+        maxAgeInSeconds: 60 * 60 * 24 * 30 // 30 days
+        },
 
       sessionDataType: {
         email: 'string',
