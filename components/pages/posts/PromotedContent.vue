@@ -2,7 +2,56 @@
 const promos = [
   // Premium
   {
-    media: '/img/promo/R34_App_Premium.jpg',
+    media: '/img/promo/premium/Additional Boorus.jpg',
+    mediaWidth: 1280,
+    mediaHeight: 1280,
+    mediaType: 'image',
+    link: '/premium'
+  },
+  {
+    media: '/img/promo/premium/Discord Role.jpg',
+    mediaWidth: 1280,
+    mediaHeight: 1280,
+    mediaType: 'image',
+    link: '/premium'
+  },
+  {
+    media: '/img/promo/premium/Hide Promoted Content.jpg',
+    mediaWidth: 1280,
+    mediaHeight: 1280,
+    mediaType: 'image',
+    link: '/premium'
+  },
+  {
+    media: '/img/promo/premium/One-Click Downloads.jpg',
+    mediaWidth: 1280,
+    mediaHeight: 1280,
+    mediaType: 'image',
+    link: '/premium'
+  },
+  {
+    media: '/img/promo/premium/Save Posts.jpg',
+    mediaWidth: 1280,
+    mediaHeight: 1280,
+    mediaType: 'image',
+    link: '/premium'
+  },
+  {
+    media: '/img/promo/premium/Source Locator.jpg',
+    mediaWidth: 1280,
+    mediaHeight: 1280,
+    mediaType: 'image',
+    link: '/premium'
+  },
+  {
+    media: '/img/promo/premium/Support Us.jpg',
+    mediaWidth: 1280,
+    mediaHeight: 1280,
+    mediaType: 'image',
+    link: '/premium'
+  },
+  {
+    media: '/img/promo/premium/Tag Collections.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
