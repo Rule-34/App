@@ -91,7 +91,7 @@ definePageMeta({
                 id='license'
                 v-model.trim='formData.password'
                 autocomplete='current-password'
-                class='focus-visible:focus-outline-util block w-full rounded-md border-0 bg-base-0/5 py-1.5 text-base-content-highlight shadow-sm ring-1 ring-inset ring-base-0/10 focus-visible:ring-inset sm:text-sm sm:leading-6'
+                class='focus-visible:focus-outline-util block w-full rounded-md border-0 bg-transparent py-1.5 text-base-content-highlight shadow-sm ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6'
                 name='password'
                 required
                 type='password'

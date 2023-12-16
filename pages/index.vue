@@ -443,7 +443,7 @@
           />
 
           <button
-            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-full border-0 bg-base-1000 p-2.5 ring-1 ring-inset ring-base-0/20 sm:text-sm"
+            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-full border-0 bg-transparent p-2.5 ring-1 ring-inset ring-base-0/20 sm:text-sm"
             @click="onSearchSubmit()"
           >
             <span class="sr-only"> Go to {{ selectedBooru.domain }}</span>
