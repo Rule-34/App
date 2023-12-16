@@ -29,6 +29,9 @@
     /* Fix for elements jumping around with overflow-auto */
     * {
         scrollbar-gutter: stable;
+
+        /*min-width: 0;*/
+        /*min-height: 0;*/
     }
 }
 

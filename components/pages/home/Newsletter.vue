@@ -2,7 +2,7 @@
 
 <template>
   <div
-    class="relative isolate overflow-hidden bg-transparent px-6 pb-12 pt-16 shadow-2xl sm:rounded-3xl sm:px-24 xl:py-32"
+    class="relative isolate overflow-hidden bg-transparent px-6 pb-12 pt-16 shadow-2xl sm:rounded-3xl sm:px-24 sm:py-28"
   >
     <h2 class="mx-auto max-w-2xl text-center text-3xl font-bold tracking-tight text-base-content-highlight sm:text-4xl">
       Newsletter
@@ -24,7 +24,7 @@
       <input
         id="email-address"
         autocomplete="email"
-        class="focus-visible:focus-outline-util min-w-0 flex-auto rounded-md border-0 bg-base-0/5 px-3.5 py-2 text-base-content-highlight ring-1 ring-inset ring-base-0/10 sm:text-sm sm:leading-6"
+        class="focus-visible:focus-outline-util min-w-0 flex-auto rounded-md border-0 bg-base-0/10 px-3.5 py-2 text-base-content-highlight ring-1 ring-inset ring-base-0/10 sm:text-sm sm:leading-6"
         name="email"
         placeholder="Enter your email"
         required=""

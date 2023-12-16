@@ -83,7 +83,7 @@
         <!-- Input -->
         <ComboboxInput
           :displayValue="(tag) => tag?.name"
-          class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util w-full rounded-full border-0 bg-base-0/5 px-9 py-2 text-base-content-highlight ring-1 ring-inset ring-base-0/10 sm:text-sm"
+          class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util w-full rounded-full border-0 bg-transparent px-9 py-2 text-base-content-highlight ring-1 ring-inset ring-base-0/20 sm:text-sm"
           placeholder="Search for tags: genshin_impact"
           @change="onComboboxInputChange"
         />

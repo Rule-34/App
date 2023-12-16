@@ -48,8 +48,8 @@
     >
       <!-- Select -->
       <ListboxButton
-        :class="[props.compact ? 'flex w-auto items-stretch !rounded-full !p-0' : 'w-56']"
-        class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util relative cursor-default rounded-md py-1.5 pl-3 pr-10 text-left ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
+        :class="[props.compact ? 'flex w-auto items-stretch !rounded-full !p-2.5' : 'w-56']"
+        class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util relative cursor-default rounded-md py-1.5 pl-3 pr-10 text-left ring-1 ring-inset ring-base-0/20 bg-transparent sm:text-sm sm:leading-6"
         v-bind="$attrs"
       >
         <span class="flex items-center">
