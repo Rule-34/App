@@ -1,6 +1,7 @@
 <script setup>
   import {
     ArrowDownTrayIcon,
+    BookmarkIcon,
     BuildingLibraryIcon,
     Cog6ToothIcon,
     HomeIcon,
@@ -11,6 +12,7 @@
   } from '@heroicons/vue/24/outline'
 
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
+  const { isPremium } = useUserData()
 
   const navigation = [
     {
@@ -90,7 +92,7 @@
       <li
         v-for="item in navigation"
         :key="item.name"
-        class="-mx-2 space-y-1"
+        class="-mx-2"
       >
         <NuxtLink
           :href="item.href"
@@ -107,7 +109,7 @@
       </li>
 
       <!-- Premium -->
-      <li class="-mx-2 space-y-1">
+      <li class="-mx-2">
         <NuxtLink
           class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 underline decoration-primary-500 decoration-2 underline-offset-8"
           exactActiveClass="bg-base-0/20 text-base-content-highlight"
@@ -117,6 +119,30 @@
           Premium
         </NuxtLink>
       </li>
+
+      <template v-if="isPremium">
+        <li class="-mr-2 ml-6">
+          <NuxtLink
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
+            exactActiveClass="bg-base-0/20 text-base-content-highlight"
+            href="/premium/saved-posts"
+          >
+            <BookmarkIcon class="h-6 w-6 shrink-0 text-primary-500" />
+            Saved Posts
+          </NuxtLink>
+        </li>
+
+        <li class="-mr-2 ml-6">
+          <NuxtLink
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
+            exactActiveClass="bg-base-0/20 text-base-content-highlight"
+            href="/premium/backup"
+          >
+            <ArrowDownTrayIcon class="h-6 w-6 shrink-0 text-primary-500" />
+            Backup & Restore
+          </NuxtLink>
+        </li>
+      </template>
 
       <!-- Bottom -->
       <li class="flex flex-1 flex-col">
