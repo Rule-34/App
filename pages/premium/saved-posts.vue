@@ -124,7 +124,11 @@
 
           <h1>No results</h1>
 
-          <h2 class="text-base">Try changing the domain or the tags</h2>
+          <h2 class="text-base">
+            <template v-if="!postsInDb.length">Go and save some posts!</template>
+
+            <template v-else>Try changing the domain or the tags</template>
+          </h2>
         </div>
       </template>
 
