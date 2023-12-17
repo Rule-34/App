@@ -584,8 +584,8 @@
             >
               <li :data-testid="`${selectedBooru.domain}-${post.id}`">
                 <Post
+                  :domain="selectedBooru.domain"
                   :post="post"
-                  :post-name="`${selectedBooru.domain}-${post.id}`"
                   :selected-tags="selectedTags"
                   @click-tag="onPostClickTag"
                   @click-long-tag="onPostClickLongTag"

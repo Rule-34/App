@@ -10,7 +10,7 @@
   import { useAppStatistics } from '~/composables/useAppStatistics'
 
   const props = defineProps<{
-    postName: string
+    domain: string
 
     post: IPost
 
@@ -120,13 +120,13 @@
       <div class="flex items-center p-2">
         <PostSave
           v-if="mediaFile.file"
+          :domain="domain"
           :post="post"
-          :postId="postName"
         />
 
         <PostDownload
           v-if="mediaFile.file"
-          :mediaName="postName"
+          :mediaName="`${domain}-${post.id}`"
           :mediaUrl="mediaFile.file"
         />
 
