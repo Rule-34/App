@@ -8,6 +8,7 @@
       await migrateOldVersionState()
     } catch (error) {
       // TODO: Sentry
+      console.error(error)
       toast.error('Error migrating old data', {
         description: error.message
       })
