@@ -14,6 +14,7 @@
     { title: 'Resume browsing', additionalInfo: '#history' },
     { title: 'Integrated proxy to bypass website blocks', additionalInfo: '#proxy' },
     { title: 'Backup your data', additionalInfo: '#backup' },
+    { title: 'Enjoy on any device or browser', additionalInfo: undefined },
     { title: '“Premium” Discord role', additionalInfo: undefined },
     { title: 'Support the development', additionalInfo: '#support-development' }
   ]
