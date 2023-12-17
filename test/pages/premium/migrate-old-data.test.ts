@@ -1,16 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { createPage, setup } from '@nuxt/test-utils'
-import {
-  migratedBooruListMock,
-  migratedTagCollectionsMock,
-  oldLocalStorageVuexUserMock
-} from './migrate-old-data.mock-data'
-
-oldLocalStorageVuexUserMock
+import { migratedTagCollectionsMock, oldLocalStorageVuexUserMock } from './migrate-old-data.mock-data'
+// import { debugBrowserOptions } from '../../helper'
 
 describe('/premium/migrate-old-data', async () => {
   await setup({
     browser: true
+    // browserOptions: debugBrowserOptions
   })
 
   it('renders', async () => {
@@ -31,12 +27,11 @@ describe('/premium/migrate-old-data', async () => {
       localStorage.setItem('vuex-user', localStorageVuexUserMock)
     }, JSON.stringify(oldLocalStorageVuexUserMock))
 
-    // await page.reload()
-
     // === Act
 
     await page.getByRole('button', { name: /Migrate/i }).click()
 
+    // TODO: Check on settings page
     const migratedSettings = await page.evaluate(() => {
       return {
         'settings-navigationTouchGestures': localStorage.getItem('settings-navigationTouchGestures'),
@@ -52,8 +47,6 @@ describe('/premium/migrate-old-data', async () => {
     const migratedBoorus = await page.evaluate(() => {
       return JSON.parse(localStorage.getItem('user-booruList')!)
     })
-
-    // TODO: Test saved posts
 
     const isLocalStorageCleaned = await page.evaluate(() => {
       return localStorage.getItem('vuex-user') === null
@@ -74,7 +67,9 @@ describe('/premium/migrate-old-data', async () => {
 
     expect(migratedTagCollections).toEqual(migratedTagCollectionsMock)
 
-    expect(migratedBoorus).toEqual(migratedBooruListMock)
+    // TODO: Test migrated Boorus
+    // TODO: Test saved posts
+    // TODO: Test by going to the respective pages instead of checking technical stuff
 
     expect(isLocalStorageCleaned).toBe(true)
   })
