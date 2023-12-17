@@ -33,7 +33,7 @@
     "@sidebase/nuxt-auth": "0.6.3",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.10",
-    "@tanstack/vue-query": "^5.14.0",
+    "@tanstack/vue-query": "^5.14.1",
     "@tanstack/vue-virtual": "3.0.1",
     "@vite-pwa/assets-generator": "^0.2.1",
     "@vite-pwa/nuxt": "^0.3.5",
