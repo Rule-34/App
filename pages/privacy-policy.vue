@@ -7,7 +7,7 @@
 </script>
 
 <template>
-  <main class="prose prose-invert container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
+  <main class="container prose prose-invert mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
     <PageHeader>
       <template #title>Privacy Policy</template>
     </PageHeader>
@@ -39,7 +39,7 @@
     </p>
 
     <h3 id="opt-out">Opt out of tracking</h3>
-    <p>You can opt out of being tracked by our Matomo Analytics instance below:</p>
+    <p>You can opt out of being tracked by our analytics below:</p>
     <iframe
       loading="lazy"
       src="https://matomo.akbal.dev/index.php?module=CoreAdminHome&action=optOut&language=en&backgroundColor=000&fontColor=d2d5db&fontSize=&fontFamily="

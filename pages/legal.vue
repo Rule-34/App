@@ -22,7 +22,7 @@
               href: '/terms-of-service'
             }
           ]"
-          text="You can find the Terms Of Service (TOS) in the next link"
+          text="You can find the terms of service in the next link"
           title="Terms of service"
         />
       </li>
@@ -36,7 +36,7 @@
               href: '/privacy-policy'
             }
           ]"
-          text="You can find the Privacy policy in the next link"
+          text="You can find the privacy policy in the next link"
           title="Privacy policy"
         />
       </li>
@@ -50,9 +50,9 @@
               href: '/privacy-policy#opt-out'
             }
           ]"
-          text="Self hosted Matomo analytics are used, configured to NOT gather, or store, any personal info
+          text="We use first party analytics that do not gather or store any personal info
 
-				 Feel free to opt out on the next link"
+				 Feel free to opt out of being tracked on the next link"
           title="Analytics"
         />
       </li>
@@ -67,34 +67,8 @@
               target: '_blank'
             }
           ]"
-          text="Reach me to discuss questions, suggestions, requests, comments, or any other concern"
+          text="Reach us for any question, suggestion, request, or any other concern"
           title="Contact"
-        />
-      </li>
-    </ol>
-
-    <PageHeader
-      as="h2"
-      class="mt-14"
-    >
-      <template #title>Miscelaneous</template>
-    </PageHeader>
-
-    <ol class="mx-2 mt-4 space-y-4">
-      <!-- Remove media -->
-      <li>
-        <ContentContainer
-          :links="[
-            {
-              text: 'Github repository',
-              href: 'https://github.com/AlejandroAkbal/Rule-34-App',
-              target: '_blank'
-            }
-          ]"
-          text="If you're the owner of a site where we get the media content and would like to cease these actions, please contact us with proof that you're the owner of that site and a message regarding the cease to actions
-
-      Keep in mind that all the content we get is from public released APIs from the site itself"
-          title="Media content disclaimer"
         />
       </li>
     </ol>
