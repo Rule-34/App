@@ -4,6 +4,7 @@ import type { VuexUser } from '~/assets/js/oldLocalStorage.dto'
 import { cloneDeep, toLower, union, unionWith } from 'lodash-es'
 import type { Domain } from '~/assets/js/domain'
 import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+import type { IPost } from '~/assets/js/post'
 
 export interface IBackupState {
   version: number
@@ -86,7 +87,7 @@ export function removeOldVersionState() {
   localStorage.removeItem('vuex-notifications')
 }
 
-export function migrateOldVersionState(): void {
+export async function migrateOldVersionState(): Promise<void> {
   const { tagCollections } = useTagCollections()
   const userSettings = useUserSettings()
   const { booruList } = useBooruList()
@@ -107,28 +108,62 @@ export function migrateOldVersionState(): void {
   if (vuexUser.user.settings.postsPerPage) userSettings.postsPerPage = vuexUser.user.settings.postsPerPage.value
 
   // === Migrate tag collections
-  if (vuexUser.user.custom.tagCollections) {
+  if (vuexUser.user.custom.tagCollections?.length) {
     tagCollections.value = mergeBlocklists(tagCollections.value, vuexUser.user.custom.tagCollections)
   }
 
   // === Migrate Boorus
-  const vuexUserBoorusMigrated = vuexUser.user.custom.boorus.map((booru) => {
-    return {
-      domain: booru.domain,
+  if (!vuexUser.user.custom.boorus?.length) {
+    const vuexUserBoorusMigrated = vuexUser.user.custom.boorus.map((booru) => {
+      return {
+        domain: booru.domain,
 
-      type: booruTypeList.find((type) => type.type === booru.type),
+        type: booruTypeList.find((type) => type.type === booru.type),
 
-      config: booru.config,
+        config: booru.config,
 
-      isPremium: true
-    }
-  }) as Domain[]
+        isPremium: true
+      }
+    }) as Domain[]
 
-  booruList.value = unionWith(booruList.value, vuexUserBoorusMigrated, (obj1, obj2) => {
-    return obj1.domain === obj2.domain
-  })
+    booruList.value = unionWith(booruList.value, vuexUserBoorusMigrated, (obj1, obj2) => {
+      return obj1.domain === obj2.domain
+    })
+  }
 
   // === Migrate saved posts
+  if (vuexUser.user.custom.savedPosts?.length) {
+    const { posts } = postsDb
+
+    const oldSavedPostsAsNewSavedPosts = vuexUser.user.custom.savedPosts.map((oldSavedPost) => {
+      const newSavedPost: ISavedPost = {
+        original_id: oldSavedPost.data.id,
+        original_domain: oldSavedPost.meta_data.booru_domain,
+
+        data: {
+          id: oldSavedPost.data.id,
+
+          score: oldSavedPost.data.score,
+
+          high_res_file: oldSavedPost.data.high_res_file,
+          low_res_file: oldSavedPost.data.low_res_file,
+          preview_file: oldSavedPost.data.preview_file,
+
+          tags: oldSavedPost.data.tags,
+
+          rating: oldSavedPost.data.rating,
+
+          media_type: oldSavedPost.data.media_type as IPost['media_type'],
+
+          sources: oldSavedPost.data.sources
+        }
+      }
+
+      return newSavedPost
+    })
+
+    await posts.bulkAdd(oldSavedPostsAsNewSavedPosts)
+  }
 
   removeOldVersionState()
 }
