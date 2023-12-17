@@ -162,6 +162,8 @@ export async function migrateOldVersionState(): Promise<void> {
       return newSavedPost
     })
 
+    await posts.clear()
+
     await posts.bulkAdd(oldSavedPostsAsNewSavedPosts)
   }
 
