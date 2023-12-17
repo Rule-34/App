@@ -5,7 +5,7 @@
   import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 
   const mainFeatures = [
-    { title: 'Hide promoted content', additionalInfo: undefined },
+    { title: 'No ads', additionalInfo: undefined },
     { title: 'Access additional Boorus (websites)', additionalInfo: '#additional-boorus' },
     { title: 'Save posts', additionalInfo: '#save-posts' },
     { title: 'Download posts with one click', additionalInfo: '#download-posts' },
