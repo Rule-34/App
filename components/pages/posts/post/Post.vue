@@ -90,7 +90,9 @@
     emit('clickTag', tag.name)
 
     if (!tutorialLongClickTag.value) {
-      toast.info('Tip: long click a tag to exclude it from search results')
+      toast.info('Browsing Tip', {
+        description: 'Long click a tag to exclude it from search results'
+      })
 
       tutorialLongClickTag.value = true
     }

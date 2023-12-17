@@ -33,7 +33,11 @@
   async function onClick() {
     if (!isPremium.value) {
       toast.info('Premium feature', {
-        description: 'Save posts to your device and enjoy them later'
+        description: 'Save posts to your device and enjoy them later',
+        action: {
+          label: 'Subscribe',
+          onClick: () => navigateTo('/premium')
+        }
       })
       return
     }
