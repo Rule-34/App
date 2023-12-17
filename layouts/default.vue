@@ -57,6 +57,7 @@
 
     <ClientOnly>
       <Toaster
+        :expand="true"
         close-button
         position="top-center"
         theme="dark"

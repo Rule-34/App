@@ -71,7 +71,11 @@
   function openSourceFinder(url: string) {
     if (!isPremium.value) {
       toast.info('Premium feature', {
-        description: 'Find the source of this post with SauceNAO, IQDB, Google, Yandex, Bing, and many more!'
+        description: 'Find the source of this post with SauceNAO, IQDB, Google, Yandex, Bing, and many more!',
+        action: {
+          label: 'Subscribe',
+          onClick: () => navigateTo('/premium')
+        }
       })
       return
     }

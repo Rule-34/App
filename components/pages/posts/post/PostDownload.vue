@@ -19,7 +19,11 @@
   async function downloadMedia() {
     if (!isPremium.value) {
       toast.info('Premium feature', {
-        description: 'Automatically download media with the correct name & extension: rule34.xxx-123.png'
+        description: 'Automatically download media with the correct name & extension: rule34.xxx-123.png',
+        action: {
+          label: 'Subscribe',
+          onClick: () => navigateTo('/premium')
+        }
       })
       return
     }
