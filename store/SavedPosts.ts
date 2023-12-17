@@ -9,8 +9,7 @@ import type { IPost } from '~/assets/js/post'
 export interface ISavedPost {
   id?: number // Primary key. Optional (autoincremented)
 
-  internal_id: string // Internal ID. Used to identify posts across domains
-
+  original_id: number
   original_domain: BooruObj['domain']
 
   data: IPost
@@ -29,7 +28,7 @@ export class SavedPostDatabase extends Dexie {
 
     this.version(1).stores({
       // Do not index 'data' because it's not searchable
-      posts: '++id, internal_id, original_domain, created_at'
+      posts: '++id, &[original_domain+original_id], created_at'
     })
 
     this.posts.hook('creating', (primKey, obj, transaction) => {
@@ -40,7 +39,7 @@ export class SavedPostDatabase extends Dexie {
     this.on('populate', async () => {
       await this.posts.bulkAdd([
         {
-          internal_id: 'safebooru.org-1',
+          original_id: 1,
 
           original_domain: 'safebooru.org',
 
@@ -111,7 +110,7 @@ export class SavedPostDatabase extends Dexie {
           }
         },
         {
-          internal_id: 'gelbooru.com-5',
+          original_id: 5,
 
           original_domain: 'gelbooru.com',
 

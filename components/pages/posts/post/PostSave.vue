@@ -10,7 +10,7 @@
   // TODO: Load this component in <suspense>
 
   const props = defineProps<{
-    postId: string
+    domain: string
 
     post: IPost
   }>()
@@ -20,15 +20,15 @@
   const postCount = useObservable(
     //
     liveQuery(() =>
-      //
-      db.posts.where('internal_id').equals(props.postId).count()
+      // TODO: .counts() and .exists() are not optimized - https://github.com/dexie/Dexie.js/releases/tag/v4.0.1-alpha.17
+      db.posts.where('[original_domain+original_id]').equals([props.domain, props.post.id]).toArray()
     ),
     {
-      initialValue: 0
+      initialValue: []
     }
   )
 
-  const isPostSaved = computed(() => postCount.value > 0)
+  const isPostSaved = computed(() => postCount.value.length > 0)
 
   async function onClick() {
     if (!isPremium.value) {
@@ -55,19 +55,17 @@
   }
 
   async function savePost() {
-    const originalDomain = props.postId.split('-')[0]
-
     await db.posts.put({
-      internal_id: toRaw(props.postId),
+      original_id: toRaw(props.post.id),
 
-      original_domain: originalDomain,
+      original_domain: props.domain,
 
       data: toRaw(props.post)
     })
   }
 
   async function deletePost() {
-    await db.posts.where('internal_id').equals(props.postId).delete()
+    await db.posts.where('[original_domain+original_id]').equals([props.domain, props.post.id]).delete()
   }
 </script>
 
