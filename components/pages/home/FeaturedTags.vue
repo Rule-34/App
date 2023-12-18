@@ -27,18 +27,20 @@
     >
       <NuxtLink
         :href="tag.path"
-        class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util block overflow-hidden rounded-md border border-transparent"
+        class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util block rounded-md"
       >
         <figure>
+          <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
           <NuxtImg
             :alt="'Featured tag: ' + tag.name"
             :src="getRandomImage(tag.images)"
-            class="h-auto w-full"
+            class="h-auto w-full rounded-t-md"
             loading="lazy"
             style="aspect-ratio: 800/1200"
           />
 
-          <figcaption class="truncate px-2 py-1.5 text-center text-sm font-medium">
+          <!-- Fix(not taking available width because of truncate): use negative margin -->
+          <figcaption class="-mr-4 truncate px-1.5 py-1.5 text-center text-sm font-medium">
             {{ tag.name }}
           </figcaption>
         </figure>
