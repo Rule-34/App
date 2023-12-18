@@ -144,13 +144,14 @@
 
     <!-- Image -->
     <template v-else-if="isImage">
+      <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <NuxtImg
         :alt="mediaAlt"
         :class="[mediaHasLoaded ? 'opacity-100' : 'opacity-0']"
         :height="mediaSrcHeight"
         :src="localSrc"
         :width="mediaSrcWidth"
-        class="h-auto w-full transition-opacity duration-700 ease-in-out"
+        class="h-auto w-full rounded-t-md transition-opacity duration-700 ease-in-out"
         decoding="async"
         loading="lazy"
         referrerpolicy="no-referrer"
@@ -162,13 +163,14 @@
     <!-- Video -->
     <template v-else-if="isVideo">
       <!-- TODO: Add load animation -->
+      <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <video
         v-intersection-observer="onIntersectionObserver"
         :height="mediaSrcHeight"
         :poster="mediaPosterSrc"
         :src="localSrc"
         :width="mediaSrcWidth"
-        class="h-auto w-full"
+        class="h-auto w-full rounded-t-md"
         controls
         loop
         playsinline

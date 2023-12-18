@@ -87,7 +87,7 @@
 </script>
 
 <template>
-  <figure class="promo -mx-1 overflow-hidden rounded-md ring-1 ring-base-0/20">
+  <figure class="-mx-1 rounded-md border border-base-0/20">
     <!-- -->
 
     <!-- Media -->

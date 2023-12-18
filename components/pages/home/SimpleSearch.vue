@@ -110,7 +110,7 @@
               class="relative cursor-default select-none py-2 pl-8"
             >
               <span :class="['block truncate', selected && 'font-semibold']">
-                Create “{{ customTagFromQuery.name }}” tag
+                Search “{{ customTagFromQuery.name }}” tag
               </span>
 
               <span
