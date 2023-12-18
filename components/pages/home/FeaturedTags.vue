@@ -7,18 +7,21 @@
     }[]
   }>()
 
+  // TODO: Figure out how to make this reload on page reload
+  const preselectedTags = props.tags.map((tag) => ({
+    ...tag,
+    images: [getRandomImage(tag.images)]
+  }))
+
   function getRandomImage(images: string[]) {
     return images[Math.floor(Math.random() * images.length)]
   }
 </script>
 
 <template>
-  <ol
-    class="scrollbar-hide flex gap-x-4 overflow-x-auto"
-    v-bind="$attrs"
-  >
+  <ol class="scrollbar-hide flex gap-x-4 overflow-x-auto">
     <li
-      v-for="tag in tags"
+      v-for="tag in preselectedTags"
       :key="tag.name"
       class="max-w-[8rem] flex-shrink-0"
     >
