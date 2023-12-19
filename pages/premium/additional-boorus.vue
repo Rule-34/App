@@ -172,7 +172,7 @@
           </div>
 
           <!-- Favicon -->
-          <NuxtImg
+          <img
             :src="`https://www.google.com/s2/favicons?domain=${booru.domain}&sz=128`"
             alt="Favicon"
             class="h-5 w-5 flex-shrink-0 rounded"

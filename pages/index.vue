@@ -485,7 +485,7 @@
                 :href="featuredDomain.path"
                 class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util flex items-center gap-2 rounded-md px-2"
               >
-                <NuxtImg
+                <img
                   :src="`https://www.google.com/s2/favicons?domain=${featuredDomain.domain}&sz=128`"
                   alt="Favicon"
                   class="h-5 w-5 rounded"

@@ -31,9 +31,9 @@
       >
         <figure>
           <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
-          <NuxtImg
+          <img
             :alt="'Featured tag: ' + tag.name"
-            :src="getRandomImage(tag.images)"
+            :src="tag.images[0]"
             class="h-auto w-full rounded-t-md"
             loading="lazy"
             style="aspect-ratio: 800/1200"
