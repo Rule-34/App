@@ -145,7 +145,7 @@
     <!-- Image -->
     <template v-else-if="isImage">
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
-      <NuxtImg
+      <img
         :alt="mediaAlt"
         :class="[mediaHasLoaded ? 'opacity-100' : 'opacity-0']"
         :height="mediaSrcHeight"

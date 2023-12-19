@@ -128,7 +128,7 @@
                 class="group flex w-full items-center px-4 py-2 text-sm"
                 target="_blank"
               >
-                <NuxtImg
+                <img
                   :src="`https://www.google.com/s2/favicons?domain=${getHostnameFromUrl(source)}&sz=128`"
                   alt="Favicon"
                   class="mr-3 h-5 w-5 flex-shrink-0 rounded"
@@ -162,7 +162,7 @@
               type="button"
               @click="openSourceFinder(service.link)"
             >
-              <NuxtImg
+              <img
                 :src="`https://www.google.com/s2/favicons?domain=${getHostnameFromUrl(service.link)}&sz=128`"
                 alt="Favicon"
                 class="mr-3 h-5 w-5 flex-shrink-0 rounded"
@@ -189,7 +189,7 @@
               type="button"
               @click="openSourceFinder(service.link)"
             >
-              <NuxtImg
+              <img
                 :src="`https://www.google.com/s2/favicons?domain=${getHostnameFromUrl(service.link)}&sz=128`"
                 alt="Favicon"
                 class="mr-3 h-5 w-5 flex-shrink-0 rounded"
