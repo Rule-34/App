@@ -1,5 +1,4 @@
 <script setup>
-  import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
   import { XMarkIcon } from '@heroicons/vue/24/outline'
 
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
@@ -7,17 +6,17 @@
 
 <template>
   <div>
-    <TransitionRoot
+    <HeadlessTransitionRoot
       :show="isMenuActive"
       as="template"
     >
-      <Dialog
+      <HeadlessDialog
         as="div"
         class="relative z-40"
         @close="toggleMenu(false)"
       >
         <!-- Background -->
-        <TransitionChild
+        <HeadlessTransitionChild
           as="template"
           enter="transition-opacity ease-linear duration-300"
           enter-from="opacity-0"
@@ -27,12 +26,12 @@
           leave-to="opacity-0"
         >
           <div class="fixed inset-0 bg-base-1000/80 backdrop-blur" />
-        </TransitionChild>
+        </HeadlessTransitionChild>
 
         <div class="fixed inset-0 flex">
           <!-- Feedback -->
           <!-- TODO: Fix leave transition -->
-          <TransitionChild
+          <HeadlessTransitionChild
             as="template"
             enter="transform transition ease-in-out duration-300"
             enter-from="translate-x-full"
@@ -42,10 +41,10 @@
             leave-to="translate-x-full"
           >
             <FeedbackButton />
-          </TransitionChild>
+          </HeadlessTransitionChild>
 
           <!-- Dialog -->
-          <TransitionChild
+          <HeadlessTransitionChild
             as="template"
             enter="transition ease-in-out duration-300 transform"
             enter-from="-translate-x-full"
@@ -54,9 +53,9 @@
             leave-from="translate-x-0"
             leave-to="-translate-x-full"
           >
-            <DialogPanel class="relative mr-16 flex w-full max-w-xs flex-1">
+            <HeadlessDialogPanel class="relative mr-16 flex w-full max-w-xs flex-1">
               <!-- Close button -->
-              <TransitionChild
+              <HeadlessTransitionChild
                 as="template"
                 enter="ease-in-out duration-300"
                 enter-from="opacity-0"
@@ -76,16 +75,16 @@
                     <XMarkIcon class="h-6 w-6" />
                   </button>
                 </div>
-              </TransitionChild>
+              </HeadlessTransitionChild>
 
               <!-- Sidebar -->
               <div class="flex grow flex-col overflow-y-auto bg-base-1000 px-6 ring-1 ring-base-0/10">
                 <slot v-if="isMenuActive" />
               </div>
-            </DialogPanel>
-          </TransitionChild>
+            </HeadlessDialogPanel>
+          </HeadlessTransitionChild>
         </div>
-      </Dialog>
-    </TransitionRoot>
+      </HeadlessDialog>
+    </HeadlessTransitionRoot>
   </div>
 </template>

@@ -5,8 +5,6 @@
 </script>
 
 <script setup>
-  import { SwitchGroup, SwitchLabel } from '@headlessui/vue'
-
   const props = defineProps(['modelValue'])
   const emit = defineEmits(['update:modelValue'])
 </script>

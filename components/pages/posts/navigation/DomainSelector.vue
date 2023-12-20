@@ -1,37 +1,36 @@
 <script lang="ts" setup>
-  import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/vue'
-  import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
-  import { PlusIcon } from '@heroicons/vue/24/solid'
-  import type { Domain } from '~/assets/js/domain'
+import {CheckIcon, ChevronUpDownIcon} from '@heroicons/vue/20/solid'
+import {PlusIcon} from '@heroicons/vue/24/solid'
+import type {Domain} from '~/assets/js/domain'
 
-  defineOptions({
-    inheritAttrs: false
-  })
+defineOptions({
+  inheritAttrs: false
+})
 
-  interface DomainSelectorProps {
-    boorus: Domain[]
-    modelValue: Domain
+interface DomainSelectorProps {
+  boorus: Domain[]
+  modelValue: Domain
 
-    compact?: boolean
+  compact?: boolean
+}
+
+const props = defineProps<DomainSelectorProps>()
+
+const emit = defineEmits(['update:modelValue'])
+
+const {isPremium} = useUserData()
+
+function shouldBooruBeDisabled(booru: Domain) {
+  if (booru.isPremium && !isPremium.value) {
+    return true
   }
 
-  const props = defineProps<DomainSelectorProps>()
-
-  const emit = defineEmits(['update:modelValue'])
-
-  const { isPremium } = useUserData()
-
-  function shouldBooruBeDisabled(booru: Domain) {
-    if (booru.isPremium && !isPremium.value) {
-      return true
-    }
-
-    return false
-  }
+  return false
+}
 </script>
 
 <template>
-  <Listbox
+  <HeadlessListbox
     :modelValue="props.modelValue"
     as="template"
     @update:modelValue="emit('update:modelValue', $event)"
@@ -47,7 +46,7 @@
       tailwindcss-origin-class
     >
       <!-- Select -->
-      <ListboxButton
+      <HeadlessListboxButton
         :class="[props.compact ? 'flex w-auto items-stretch !rounded-full !p-2.5' : 'w-56']"
         class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util relative cursor-default rounded-md bg-transparent py-1.5 pl-3 pr-10 text-left ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
         v-bind="$attrs"
@@ -67,7 +66,7 @@
           <span
             v-if="!props.compact"
             class="ml-3 block truncate"
-            >{{ props.modelValue.domain }}</span
+          >{{ props.modelValue.domain }}</span
           >
         </span>
 
@@ -76,77 +75,77 @@
           v-if="!props.compact"
           class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2"
         >
-          <ChevronUpDownIcon class="h-5 w-5" />
+          <ChevronUpDownIcon class="h-5 w-5"/>
         </span>
-      </ListboxButton>
+        </HeadlessListboxButton>
 
-      <!-- Menu -->
-      <ListboxOptions
-        class="max-h-[23rem] w-full max-w-sm overflow-auto rounded-md bg-base-1000 py-1 ring-1 ring-base-0/20 focus:outline-none sm:text-sm"
-      >
-        <!-- Options -->
-        <ListboxOption
-          v-for="booru in props.boorus"
-          :key="booru.domain"
-          v-slot="{ active, selected }"
-          :disabled="shouldBooruBeDisabled(booru)"
-          :value="booru"
-          as="template"
+        <!-- Menu -->
+        <HeadlessListboxOptions
+          class="max-h-[23rem] w-full max-w-sm overflow-auto rounded-md bg-base-1000 py-1 ring-1 ring-base-0/20 focus:outline-none sm:text-sm"
         >
-          <li
-            :class="[
+          <!-- Options -->
+          <HeadlessListboxOption
+            v-for="booru in props.boorus"
+            :key="booru.domain"
+            v-slot="{ active, selected }"
+            :disabled="shouldBooruBeDisabled(booru)"
+            :value="booru"
+            as="template"
+          >
+            <li
+              :class="[
               active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content',
               shouldBooruBeDisabled(booru) ? 'cursor-not-allowed opacity-50' : ''
             ]"
-            class="relative cursor-default select-none py-2 pl-3 pr-14"
-          >
-            <div class="flex items-center">
-              <img
-                :src="`https://www.google.com/s2/favicons?domain=${booru.domain}&sz=128`"
-                alt="Favicon"
-                class="h-5 w-5 flex-shrink-0 rounded"
-                height="128"
-                loading="eager"
-                width="128"
-              />
+              class="relative cursor-default select-none py-2 pl-3 pr-14"
+            >
+              <div class="flex items-center">
+                <img
+                  :src="`https://www.google.com/s2/favicons?domain=${booru.domain}&sz=128`"
+                  alt="Favicon"
+                  class="h-5 w-5 flex-shrink-0 rounded"
+                  height="128"
+                  loading="eager"
+                  width="128"
+                />
 
-              <span :class="[selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate']">{{
-                booru.domain
-              }}</span>
+                <span :class="[selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate']">{{
+                    booru.domain
+                  }}</span>
 
-              <!-- Premium badge-->
-              <span
-                v-if="shouldBooruBeDisabled(booru)"
-                class="ml-2 inline-flex items-center rounded-full bg-primary-800 px-2.5 py-0.5 text-xs font-medium text-primary-500"
-              >
+                <!-- Premium badge-->
+                <span
+                  v-if="shouldBooruBeDisabled(booru)"
+                  class="ml-2 inline-flex items-center rounded-full bg-primary-800 px-2.5 py-0.5 text-xs font-medium text-primary-500"
+                >
                 Premium
               </span>
-            </div>
+              </div>
 
-            <div class="absolute inset-y-0 right-0 flex items-center gap-2 pr-4">
-              <!-- Checked -->
-              <span
-                v-if="selected"
-                class="text-base-content-highlight"
-              >
-                <CheckIcon class="h-5 w-5" />
+              <div class="absolute inset-y-0 right-0 flex items-center gap-2 pr-4">
+                <!-- Checked -->
+                <span
+                  v-if="selected"
+                  class="text-base-content-highlight"
+                >
+                <CheckIcon class="h-5 w-5"/>
               </span>
+              </div>
+            </li>
+            </HeadlessListboxOption>
+
+            <!-- Add more button -->
+            <div class="hover:hover-text-util hover:hover-bg-util group flex items-center px-3 py-2">
+              <PlusIcon class="group-hover:hover-text-util h-5 w-5 rounded"/>
+
+              <NuxtLink
+                class="focus-visible:focus-outline-util ml-3"
+                href="/premium/additional-boorus"
+              >
+                Add more Boorus
+              </NuxtLink>
             </div>
-          </li>
-        </ListboxOption>
-
-        <!-- Add more button -->
-        <div class="hover:hover-text-util hover:hover-bg-util group flex items-center px-3 py-2">
-          <PlusIcon class="group-hover:hover-text-util h-5 w-5 rounded" />
-
-          <NuxtLink
-            class="focus-visible:focus-outline-util ml-3"
-            href="/premium/additional-boorus"
-          >
-            Add more Boorus
-          </NuxtLink>
-        </div>
-      </ListboxOptions>
+            </HeadlessListboxOptions>
     </Float>
-  </Listbox>
+    </HeadlessListbox>
 </template>

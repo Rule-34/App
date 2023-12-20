@@ -71,21 +71,23 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/image',
 
-    '@sidebase/nuxt-auth',
+    'nuxt-headlessui',
 
     '@headlessui-float/nuxt',
 
-    // '@nuxtjs/sentry',
+    '@sidebase/nuxt-auth',
 
-    'nuxt-schema-org',
-
-    '@vite-pwa/nuxt',
+    '@formkit/auto-animate/nuxt',
 
     '@nuxtjs/partytown',
 
-    'nuxt-simple-sitemap',
+    // '@nuxtjs/sentry',
 
-    '@formkit/auto-animate/nuxt'
+    '@vite-pwa/nuxt',
+
+    'nuxt-schema-org',
+
+    'nuxt-simple-sitemap'
   ],
 
   image: {
@@ -111,7 +113,7 @@ export default defineNuxtConfig({
         signOut: null,
 
         getSession: { path: '/profile', method: 'get' },
-        refresh: { path: '/refresh', method: 'post'}
+        refresh: { path: '/refresh', method: 'post' }
       },
 
       pages: {
@@ -130,7 +132,7 @@ export default defineNuxtConfig({
         signInResponseRefreshTokenPointer: '/refresh_token',
 
         maxAgeInSeconds: 60 * 60 * 24 * 30 // 30 days
-        },
+      },
 
       sessionDataType: {
         email: 'string',

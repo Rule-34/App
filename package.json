@@ -45,6 +45,7 @@
     "js-abbreviation-number": "^1.4.0",
     "lodash-es": "^4.17.21",
     "nuxt": "^3.8.2",
+    "nuxt-headlessui": "^1.1.4",
     "nuxt-schema-org": "^3.2.3",
     "nuxt-simple-sitemap": "^4.2.0",
     "qs": "^6.11.2",
