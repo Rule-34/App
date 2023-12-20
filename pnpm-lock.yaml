@@ -71,6 +71,9 @@ dependencies:
   nuxt:
     specifier: ^3.8.2
     version: 3.8.2(rollup@2.79.1)(vite@5.0.8)
+  nuxt-headlessui:
+    specifier: ^1.1.4
+    version: 1.1.4(rollup@2.79.1)(vue@3.3.11)
   nuxt-schema-org:
     specifier: ^3.2.3
     version: 3.2.3(@nuxt/devtools@1.0.6)(@unhead/shared@1.8.9)(@vue/compiler-core@3.3.11)(nuxt@3.8.2)(postcss@8.4.32)(rollup@2.79.1)(sortablejs@1.15.1)(unhead@1.8.9)(vite@5.0.8)(vue@3.3.11)(webpack@5.89.0)
@@ -8914,6 +8917,18 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.3
+    dev: false
+
+  /nuxt-headlessui@1.1.4(rollup@2.79.1)(vue@3.3.11):
+    resolution: {integrity: sha512-/8C1w/nfBJBFzWvD/WUxwHFviPECO6owj8JgmwOK348E0IE7ZKhpFuEuy8rZ2hSm/JWexvz3QbmMRfndfzl3qw==}
+    dependencies:
+      '@headlessui/vue': 1.7.16(vue@3.3.11)
+      '@nuxt/kit': 3.8.2(rollup@2.79.1)
+      pathe: 1.1.1
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
+      - vue
     dev: false
 
   /nuxt-schema-org@3.2.3(@nuxt/devtools@1.0.6)(@unhead/shared@1.8.9)(@vue/compiler-core@3.3.11)(nuxt@3.8.2)(postcss@8.4.32)(rollup@2.79.1)(sortablejs@1.15.1)(unhead@1.8.9)(vite@5.0.8)(vue@3.3.11)(webpack@5.89.0):

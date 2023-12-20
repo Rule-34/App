@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-  import { DialogTitle } from '@headlessui/vue'
   import Tag from '~/assets/js/tag.dto'
   import { Cog6ToothIcon, PlusIcon, TagIcon } from '@heroicons/vue/24/outline'
   import { toast } from 'vue-sonner'
@@ -67,12 +66,12 @@
 
   <nav class="relative flex flex-col gap-6">
     <header>
-      <DialogTitle
+      <HeadlessDialogTitle
         as="h3"
         class="text-lg font-medium leading-10 text-base-content-highlight"
       >
         Tag Collections
-      </DialogTitle>
+      </HeadlessDialogTitle>
 
       <h4 class="text-sm">List of tags that you can create for easy access</h4>
     </header>
