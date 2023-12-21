@@ -93,8 +93,8 @@
     <!-- Media -->
     <NuxtLink
       :href="promo.link"
+      :target="promo.link.startsWith('http') ? '_blank' : null"
       class="focus-visible:focus-outline-util focus-visible:ring-inset"
-      target="_blank"
     >
       <PostMedia
         :media-alt="'Promoted content'"
