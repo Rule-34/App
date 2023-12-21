@@ -26,6 +26,14 @@
         @apply h-full;
     }
 
+    /* Disable arrows on Number input - https://stackoverflow.com/a/74043438 */
+    input[type='number']::-webkit-outer-spin-button,
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number'] {
+        -webkit-appearance: none;
+        -moz-appearance: textfield !important;
+    }
+
     /* Fix for elements jumping around with overflow-auto */
     * {
         scrollbar-gutter: stable;
