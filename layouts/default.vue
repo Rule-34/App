@@ -55,6 +55,8 @@
       />
     </div>
 
+    <PwaUpdater />
+
     <ClientOnly>
       <Toaster
         :expand="true"

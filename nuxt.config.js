@@ -153,6 +153,8 @@ export default defineNuxtConfig({
 
     registerType: 'autoUpdate',
 
+    registerWebManifestInRouteRules: true,
+
     manifest: {
       name: 'Rule 34 App',
       short_name: 'R34 App',
@@ -208,13 +210,11 @@ export default defineNuxtConfig({
     },
 
     client: {
-      installPrompt: true
+      installPrompt: true,
       // you don't need to include this: only for testing purposes
       // if enabling periodic sync for update use 1 hour or so (periodicSyncForUpdates: 3600)
       // , periodicSyncForUpdates: 3600
     },
-
-    selfDestroying: true,
 
     devOptions: {
       enabled: true,
