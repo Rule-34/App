@@ -210,7 +210,7 @@ export default defineNuxtConfig({
     },
 
     client: {
-      installPrompt: true,
+      installPrompt: true
       // you don't need to include this: only for testing purposes
       // if enabling periodic sync for update use 1 hour or so (periodicSyncForUpdates: 3600)
       // , periodicSyncForUpdates: 3600
@@ -351,12 +351,6 @@ export default defineNuxtConfig({
       tailwindcss: {},
       autoprefixer: {}
     }
-  },
-
-  experimental: {
-    // TODO: Remove when it is compatible with vue-query hydration
-    // @see https://github.com/nuxt/nuxt/issues?q=Cannot+stringify+arbitrary+non-POJO
-    renderJsonPayloads: false
   },
 
   devtools: {
