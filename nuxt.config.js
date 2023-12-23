@@ -148,7 +148,9 @@ export default defineNuxtConfig({
 
   /** @type {import('@vite-pwa/nuxt').ModuleOptions} */
   pwa: {
-    // strategies: 'injectManifest',
+    // Disable service worker, fuck it
+    selfDestroying: true,
+
     strategies: 'generateSW',
 
     registerType: 'autoUpdate',
@@ -206,7 +208,9 @@ export default defineNuxtConfig({
 
     workbox: {
       navigateFallback: '/',
-      globPatterns: ['**/*.{js,css,html,png,svg,ico}']
+      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+
+      cleanupOutdatedCaches: true
     },
 
     devOptions: {
