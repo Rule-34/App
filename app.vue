@@ -53,11 +53,12 @@
       {
         rel: 'icon',
         href: '/favicon.ico',
-        sizes: 'any'
+        sizes: '48x48'
       },
       {
         rel: 'icon',
         href: '/icon.svg',
+        sizes: 'any',
         type: 'image/svg+xml'
       },
       {
