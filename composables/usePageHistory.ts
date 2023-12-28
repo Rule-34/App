@@ -1,4 +1,4 @@
-import { useEventListener, useStorage } from '@vueuse/core'
+import { useStorage } from '@vueuse/core'
 
 interface PageHistory {
   path: string
@@ -15,56 +15,81 @@ if (process.client) {
   // TODO: Serialize Date
 }
 
-export function usePageHistory() {
-  const route = useRoute()
+/**
+ * Checks if the relative URL is the previous page
+ */
+function isUrlPreviousPage(url1: string, url2: string): boolean {
+  if (!url1 || !url2) {
+    return false
+  }
 
+  const url1WithoutPage = new URL(url1, window.location.origin)
+  const url1Page = url1WithoutPage.searchParams.get('page')
+  url1WithoutPage.searchParams.delete('page')
+
+  const url2WithoutPage = new URL(url2, window.location.origin)
+  const url2Page = url2WithoutPage.searchParams.get('page')
+  url2WithoutPage.searchParams.delete('page')
+
+  const isSameUrlWithoutPage = url1WithoutPage.href === url2WithoutPage.href
+  const isPreviousPage = url2Page === String(Number(url1Page) - 1)
+
+  return isSameUrlWithoutPage && isPreviousPage
+}
+
+export function usePageHistory() {
   /**
-   * Saves the current route full path to the page history
+   * Adds a relative URL to the page history
    * With a maximum of 10 pages
    */
-  function addListener() {
+  function addUrlToPageHistory(relativeUrl: string) {
     if (process.server) {
+      throw new Error('This should only be called on the client')
+    }
+
+    const url = new URL(relativeUrl, window.location.origin)
+
+    // Skip if it's not the posts path
+    if (!url.pathname.startsWith('/posts/')) {
       return
     }
 
-    useEventListener(document, 'visibilitychange', (event) => {
-      if (document.visibilityState !== 'hidden') {
-        return
-      }
+    // Skip if there are no query params
+    if (!url.search) {
+      return
+    }
 
-      if (route.path !== '/posts') {
-        return
-      }
+    const previousPage = pageHistory.value[pageHistory.value.length - 1]
 
-      if (route.fullPath === '/posts') {
-        return
-      }
+    // Skip if the previous url is the same
+    if (previousPage && previousPage.path === relativeUrl) {
+      return
+    }
 
-      // Skip if the last page is the same
-      if (pageHistory.value.length && pageHistory.value[pageHistory.value.length - 1].path === route.fullPath) {
-        return
-      }
+    // Replace if the previous url is the previous page before current page
+    if (previousPage && isUrlPreviousPage(relativeUrl, previousPage.path)) {
+      pageHistory.value.pop()
+    }
 
-      // TODO: Skip if only domain is set
+    // Maximum of 10 pages
+    if (pageHistory.value.length >= 10) {
+      pageHistory.value.shift()
+    }
 
-      if (pageHistory.value.length >= 10) {
-        pageHistory.value.shift()
-      }
-
-      pageHistory.value.push({
-        path: route.fullPath,
-        date: new Date()
-      })
-
-      // Deduplicate and retain the last duplicate
-      pageHistory.value = pageHistory.value.filter((value, index, self) => {
-        return self.indexOf(value) === index
-      })
+    pageHistory.value.push({
+      path: relativeUrl,
+      date: new Date()
     })
+
+    // TODO: Remove duplicated paths, while keeping the most recent
+    // pageHistory.value = pageHistory.value.filter((page, index, self) => {
+    //
+    //   return self.findIndex((p) => p.path === page.path) === index
+    // })
   }
 
   return {
     pageHistory,
-    addListener
+    addUrlToPageHistory
   }
 }

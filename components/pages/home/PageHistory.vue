@@ -11,7 +11,8 @@
     return (
       path
         //
-        .replace('/posts?', '')
+        .replace('/posts/', 'domain: ')
+        .replace('?', '&')
         .split('&')
         .map(
           (_query) =>
