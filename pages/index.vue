@@ -490,7 +490,7 @@
                   alt="Favicon"
                   class="h-5 w-5 rounded"
                   height="128"
-                  loading="eager"
+                  loading="lazy"
                   width="128"
                 />
 
