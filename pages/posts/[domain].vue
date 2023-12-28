@@ -21,9 +21,15 @@
   const userSettings = useUserSettings()
   const { isPremium } = useUserData()
   const { booruList } = useBooruList()
-  const { addListener } = usePageHistory()
+  const { addUrlToPageHistory } = usePageHistory()
 
-  addListener()
+  const unregisterRouterAfterEach = router.afterEach((to, from) => {
+    addUrlToPageHistory(to.fullPath)
+  })
+
+  onBeforeUnmount(() => {
+    unregisterRouterAfterEach()
+  })
 
   const { selectedDomainFromStorage } = useSelectedDomainFromStorage()
 
