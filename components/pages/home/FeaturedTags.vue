@@ -35,8 +35,9 @@
             :alt="'Featured tag: ' + tag.name"
             :src="tag.images[0]"
             class="h-auto w-full rounded-t-md"
+            height="600"
             loading="lazy"
-            style="aspect-ratio: 800/1200"
+            width="400"
           />
 
           <!-- Fix(not taking available width because of truncate): use negative margin -->
