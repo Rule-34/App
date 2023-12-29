@@ -427,13 +427,20 @@
         </PageHeader>
 
         <div class="mt-2 flex items-center gap-2">
-          <DomainSelector
-            :boorus="booruList"
-            :compact="true"
-            :model-value="selectedBooru"
-            class="self-stretch"
-            @update:model-value="onDomainChange"
-          />
+          <!-- TODO: Find a better fix for modelValue not updating on hydration -->
+          <ClientOnly>
+            <DomainSelector
+              :boorus="booruList"
+              :compact="true"
+              :model-value="selectedBooru"
+              class="self-stretch"
+              @update:model-value="onDomainChange"
+            />
+
+            <template #fallback>
+              <div class="pr-10" />
+            </template>
+          </ClientOnly>
 
           <SimpleSearch
             :tag-results="searchTagResults"
@@ -446,7 +453,7 @@
             class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-full border-0 bg-transparent p-2.5 ring-1 ring-inset ring-base-0/20 sm:text-sm"
             @click="onSearchSubmit()"
           >
-            <span class="sr-only"> Go to {{ selectedBooru.domain }}</span>
+            <span class="sr-only">Go to selected Booru</span>
 
             <ArrowRightIcon
               aria-hidden="true"
