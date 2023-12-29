@@ -79,7 +79,7 @@
     title: 'Backup'
   })
 
-  // definePageMeta({ middleware: 'auth' })
+  definePageMeta({ middleware: 'auth' })
 </script>
 
 <template>
