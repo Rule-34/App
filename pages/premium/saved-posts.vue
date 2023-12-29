@@ -24,7 +24,7 @@
   const booruList = computed(() => {
     const _booruList: Domain[] = [
       {
-        domain: 'r34.app',
+        domain: 'Everything',
         type: booruTypeList[0],
         isPremium: false
       }
@@ -60,8 +60,8 @@
 
     const currentDomain = selectedBooru.value.domain
 
-    // Return all posts if selected booru is r34.app
-    if (currentDomain && currentDomain === 'r34.app') {
+    // Return all posts if selected booru is Everything
+    if (currentDomain && currentDomain === 'Everything') {
       return posts
     }
 
