@@ -10,44 +10,6 @@
       return titleChunk ? `${titleChunk} | Rule 34 App` : 'Rule 34 App'
     },
 
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-
-      // TODO: Remove this when the app is ready
-      {
-        name: 'robots',
-        content: 'noindex'
-      },
-
-      // TODO: Improve description
-      {
-        name: 'description',
-        content:
-          'Stream and download Rule 34 porn videos, GIFs, and images from multiple Boorus in a mobile-first web app'
-      },
-
-      {
-        name: 'rating',
-        content: 'adult'
-      },
-
-      {
-        name: 'color-scheme',
-        content: 'dark'
-      },
-
-      {
-        name: 'theme-color',
-        content: '#000'
-      },
-
-      {
-        name: 'monetization',
-        content: config.public.MONETIZATION_URI
-      }
-    ],
-
     link: [
       // Favicon
       {
@@ -66,6 +28,25 @@
         href: '/apple-touch-icon-180x180.png'
       }
     ]
+  })
+
+  useServerSeoMeta({
+    charset: 'utf-8',
+    viewport: 'width=device-width, initial-scale=1',
+
+    // TODO: Improve description
+    description:
+      'Stream and download Rule 34 porn videos, GIFs, and images from multiple Boorus in a mobile-first web app',
+
+    // TODO: Remove this when the app is ready
+    robots: 'noindex',
+
+    rating: 'adult',
+
+    colorScheme: 'dark',
+    themeColor: '#000',
+
+    monetization: config.public.MONETIZATION_URI
   })
 
   useSchemaOrg([

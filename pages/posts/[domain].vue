@@ -366,6 +366,17 @@
     return _title
   })
 
+  const canonicalUrl = computed(() => {
+    const rawRoute = generatePostsRoute(
+      selectedBooru.value.domain,
+      selectedPage.value,
+      selectedTags.value,
+      selectedFilters.value
+    )
+
+    return 'https://' + config.public.APP_DOMAIN + router.resolve(rawRoute).href
+  })
+
   useSeoMeta({
     title,
 
@@ -383,20 +394,11 @@
       description += '. Fast and free anime hentai with the Rule 34 App.'
 
       return description
-    },
-
-    referrer: 'no-referrer'
+    }
   })
 
-  const canonicalUrl = computed(() => {
-    const rawRoute = generatePostsRoute(
-      selectedBooru.value.domain,
-      selectedPage.value,
-      selectedTags.value,
-      selectedFilters.value
-    )
-
-    return 'https://' + config.public.APP_DOMAIN + router.resolve(rawRoute).href
+  useServerSeoMeta({
+    referrer: 'no-referrer'
   })
 
   useHead({
