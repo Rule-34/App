@@ -144,6 +144,8 @@
   useSeoMeta({
     title: 'Additional Boorus'
   })
+
+  definePageMeta({ middleware: 'auth' })
 </script>
 
 <template>

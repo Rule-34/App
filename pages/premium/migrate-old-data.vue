@@ -32,7 +32,7 @@
     title: 'Migrate old data'
   })
 
-  // definePageMeta({ middleware: 'auth' })
+  definePageMeta({ middleware: 'auth' })
 </script>
 
 <template>
