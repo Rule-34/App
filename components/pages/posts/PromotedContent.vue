@@ -64,22 +64,6 @@
       mediaHeight: 1280,
       mediaType: 'image',
       link: 'https://hentaiporn.app/?utm_source=r34.app&utm_medium=promotion'
-    },
-    // Promptchan
-    {
-      media: '/img/promo/promptchan_ai.jpg',
-      mediaWidth: 1280,
-      mediaHeight: 1280,
-      mediaType: 'image',
-      link: 'https://promptchan.ai/m/wVKbbEDyPff89wF19ikY65SOZDy2'
-    },
-    // DeepSwap
-    {
-      media: '/img/promo/deepswap_ai.jpg',
-      mediaWidth: 1280,
-      mediaHeight: 1280,
-      mediaType: 'image',
-      link: 'https://www.deepswap.ai?utm_source=af-rule34&cp_id=ElLfUSVX'
     }
   ]
 
