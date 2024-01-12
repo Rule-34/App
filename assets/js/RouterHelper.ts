@@ -3,18 +3,19 @@ import type { RouteLocationRaw } from 'vue-router'
 import { isEmpty, isNil, omitBy } from 'lodash-es'
 
 export function generatePostsRoute(
+  path: string = '/posts',
   domain?: string | undefined | null,
   page?: number | undefined | null,
   tags?: Tag[] | undefined | null,
   filters?: Object | undefined | null
 ) {
   const route: RouteLocationRaw = {
-    path: '/posts',
+    path,
     query: {}
   }
 
   if (domain != null) {
-    route.path = `/posts/${domain}`
+    route.path = `${path}/${domain}`
   }
 
   if (page != null) {

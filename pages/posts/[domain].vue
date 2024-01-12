@@ -204,7 +204,7 @@
       filters = selectedFilters.value
     }
 
-    const postsRoute = generatePostsRoute(domain, page, tags, filters)
+    const postsRoute = generatePostsRoute(undefined, domain, page, tags, filters)
 
     await navigateTo({ ...postsRoute }, { replace })
   }
@@ -368,6 +368,7 @@
 
   const canonicalUrl = computed(() => {
     const rawRoute = generatePostsRoute(
+      undefined,
       selectedBooru.value.domain,
       selectedPage.value,
       selectedTags.value,
