@@ -232,6 +232,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       script: [
+        // Matomo
         {
           type: 'text/partytown',
           children: `

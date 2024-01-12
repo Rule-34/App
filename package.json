@@ -52,7 +52,6 @@
     "rxjs": "^7.8.1",
     "sortablejs": "^1.15.1",
     "tailwindcss": "^3.4.1",
-    "vue-matomo": "^4.2.0",
     "vue-safe-teleport": "^0.1.2",
     "vue-sonner": "^1.0.2"
   },

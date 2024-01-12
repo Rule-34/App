@@ -46,7 +46,10 @@
     colorScheme: 'dark',
     themeColor: '#000',
 
-    monetization: config.public.MONETIZATION_URI
+    monetization: config.public.MONETIZATION_URI,
+
+    // HilltopAds
+    '217743fdfd9036c583a4e4a2d7ace5789653ce47': '217743fdfd9036c583a4e4a2d7ace5789653ce47'
   })
 
   useSchemaOrg([
