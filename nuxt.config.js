@@ -25,7 +25,7 @@ export default defineNuxtConfig({
 
     // All premium pages are client-side rendered
     '/premium/dashboard': { ssr: false },
-    '/premium/saved-posts': { ssr: false },
+    '/premium/saved-posts/*': { ssr: false },
     '/premium/tag-collections': { ssr: false },
     '/premium/additional-boorus': { ssr: false },
     '/premium/backup': { ssr: false },
@@ -201,7 +201,7 @@ export default defineNuxtConfig({
         },
         {
           name: 'Saved Posts',
-          url: '/premium/saved-posts?utm_source=pwa&utm_medium=shortcut'
+          url: '/premium/saved-posts/r34.app?utm_source=pwa&utm_medium=shortcut'
         }
       ]
     },
