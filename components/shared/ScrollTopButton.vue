@@ -5,9 +5,7 @@
   let y = ref(0)
 
   if (process.client) {
-    const { y: scrollY } = useScroll(document, {
-      behavior: 'smooth'
-    })
+    const { y: scrollY } = useScroll(document)
 
     y = scrollY
   }
@@ -16,8 +14,7 @@
 
   function scrollToTop() {
     window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
+      top: 0
     })
   }
 </script>
