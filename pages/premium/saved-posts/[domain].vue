@@ -332,12 +332,10 @@
     return _title
   })
 
-  useServerSeoMeta({
-    referrer: 'no-referrer'
-  })
-
   useSeoMeta({
-    title
+    title,
+
+    referrer: 'no-referrer'
   })
 
   definePageMeta({

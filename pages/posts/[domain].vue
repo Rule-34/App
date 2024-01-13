@@ -395,10 +395,8 @@
       description += '. Fast and free anime hentai with the Rule 34 App.'
 
       return description
-    }
-  })
+    },
 
-  useServerSeoMeta({
     referrer: 'no-referrer'
   })
 
