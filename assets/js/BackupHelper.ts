@@ -5,12 +5,14 @@ import { cloneDeep, toLower, union, unionWith } from 'lodash-es'
 import type { Domain } from '~/assets/js/domain'
 import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 import type { IPost } from '~/assets/js/post'
+import type { IOldBackupState } from '~/assets/js/oldBackup'
 
 export interface IBackupState {
   version: number
 
-  saved_posts: ISavedPost[]
+  boorus: Domain[]
   tag_collections: ITagCollection[]
+  saved_posts: ISavedPost[]
 
   settings: {
     [key: string]: any
@@ -18,8 +20,9 @@ export interface IBackupState {
 }
 
 export async function createBackupState(): Promise<IBackupState> {
-  const savedPosts = await postsDb.posts.toArray()
+  const { booruList } = useBooruList()
   const { tagCollections } = useTagCollections()
+  const savedPosts = await postsDb.posts.toArray()
   const userSettings = useUserSettings()
 
   // TODO: Only save data that is not defaulted
@@ -27,8 +30,9 @@ export async function createBackupState(): Promise<IBackupState> {
   const backupState: IBackupState = {
     version: 1,
 
-    saved_posts: savedPosts,
+    boorus: booruList.value,
     tag_collections: tagCollections.value,
+    saved_posts: savedPosts,
 
     settings: userSettings
   }
@@ -36,23 +40,25 @@ export async function createBackupState(): Promise<IBackupState> {
   return backupState
 }
 
-export async function restoreBackupState(backupState: IBackupState): Promise<void> {
-  if (backupState.version !== 1) {
-    throw new Error('Backup version not supported')
+async function restoreV4Backup(backupState: IBackupState) {
+  if (backupState.boorus?.length) {
+    const { booruList } = useBooruList()
+
+    booruList.value = backupState.boorus
   }
 
-  if (backupState.saved_posts) {
+  if (backupState.tag_collections?.length) {
+    const { tagCollections } = useTagCollections()
+
+    tagCollections.value = backupState.tag_collections
+  }
+
+  if (backupState.saved_posts?.length) {
     const { posts } = postsDb
 
     await posts.clear()
 
     await posts.bulkAdd(backupState.saved_posts)
-  }
-
-  if (backupState.tag_collections) {
-    const { tagCollections } = useTagCollections()
-
-    tagCollections.value = backupState.tag_collections
   }
 
   if (backupState.settings) {
@@ -72,7 +78,93 @@ export async function restoreBackupState(backupState: IBackupState): Promise<voi
   }
 }
 
-export function doesHaveOldVersionState(): boolean {
+function restoreV3Backup(backupState: IOldBackupState) {
+  if (backupState.user.custom.boorus?.length) {
+    const { booruList } = useBooruList()
+
+    const migratedBooruList: Domain[] = backupState.user.custom.boorus.map((booru) => {
+      return {
+        domain: booru.domain,
+
+        type: booruTypeList.find((type) => type.type === booru.type) as Domain['type'],
+
+        config: booru.config,
+
+        // Doesnt matter if its Premium or not, API is protected
+        isPremium: false
+      }
+    })
+
+    booruList.value = migratedBooruList
+  }
+
+  if (backupState.user.custom.tagCollections?.length) {
+    const { tagCollections } = useTagCollections()
+
+    tagCollections.value = backupState.user.custom.tagCollections
+  }
+
+  if (backupState.user.custom.savedPosts?.length) {
+    const { posts } = postsDb
+
+    const oldSavedPostsAsNewSavedPosts = backupState.user.custom.savedPosts.map((oldSavedPost) => {
+      // Restore date too
+
+      const newSavedPost: ISavedPost = {
+        original_id: oldSavedPost.data.id,
+        original_domain: oldSavedPost.meta_data.booru_domain,
+
+        data: {
+          id: oldSavedPost.data.id,
+
+          score: oldSavedPost.data.score,
+
+          high_res_file: oldSavedPost.data.high_res_file,
+          low_res_file: oldSavedPost.data.low_res_file,
+          preview_file: oldSavedPost.data.preview_file,
+
+          tags: oldSavedPost.data.tags,
+
+          rating: oldSavedPost.data.rating,
+
+          media_type: oldSavedPost.data.media_type as IPost['media_type'],
+
+          sources: oldSavedPost.data.sources
+        }
+      }
+
+      return newSavedPost
+    })
+
+    posts.clear()
+
+    posts.bulkAdd(oldSavedPostsAsNewSavedPosts)
+  }
+
+  // TODO: Restore settings
+}
+
+/**
+ * Attempts to restore a backup, either from the old (<V3) or current (>V4) app version format
+ * Destroys the current data
+ */
+export async function tryToRestoreV3OrV4Backup(backup: any): Promise<void> {
+  // V3 Version check
+  if ('user' in backup && 'custom' in backup.user) {
+    restoreV3Backup(backup)
+  }
+
+  // V4 Version check
+  if (backup.version !== 1) {
+    throw new Error('Backup version not supported')
+  }
+
+  // TODO: Verify object with Zod
+
+  await restoreV4Backup(backup)
+}
+
+export function doesBrowserHaveOldVersionState(): boolean {
   if (localStorage.getItem('vuex-user')) {
     return true
   }
@@ -80,14 +172,18 @@ export function doesHaveOldVersionState(): boolean {
   return false
 }
 
-export function removeOldVersionState() {
+export function removeBrowserOldVersionState() {
   localStorage.removeItem('vuex-root')
   localStorage.removeItem('vuex-user')
   localStorage.removeItem('vuex-booru')
   localStorage.removeItem('vuex-notifications')
 }
 
-export async function migrateOldVersionState(): Promise<void> {
+/**
+ * Migrates the old (V3) browser state to the new one (V4)
+ * Merges the data
+ */
+export async function migrateBrowserOldVersionState(): Promise<void> {
   const { tagCollections } = useTagCollections()
   const userSettings = useUserSettings()
   const { booruList } = useBooruList()
@@ -122,7 +218,8 @@ export async function migrateOldVersionState(): Promise<void> {
 
         config: booru.config,
 
-        isPremium: true
+        // Doesnt matter if its Premium or not, API is protected
+        isPremium: false
       }
     }) as Domain[]
 
@@ -167,7 +264,7 @@ export async function migrateOldVersionState(): Promise<void> {
     await posts.bulkAdd(oldSavedPostsAsNewSavedPosts)
   }
 
-  removeOldVersionState()
+  removeBrowserOldVersionState()
 }
 
 function mergeTags(tags1: string[], tags2: string[]): string[] {

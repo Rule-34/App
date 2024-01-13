@@ -1,11 +1,11 @@
 <script lang="ts" setup>
   import PageHeader from '~/components/layout/PageHeader.vue'
-  import { migrateOldVersionState, removeOldVersionState } from '~/assets/js/BackupHelper'
+  import { migrateBrowserOldVersionState, removeBrowserOldVersionState } from '~/assets/js/BackupHelper'
   import { toast } from 'vue-sonner'
 
   async function migrateOldData() {
     try {
-      await migrateOldVersionState()
+      await migrateBrowserOldVersionState()
     } catch (error) {
       // TODO: Sentry
       console.error(error)
@@ -21,7 +21,7 @@
   }
 
   function removeOldData() {
-    removeOldVersionState()
+    removeBrowserOldVersionState()
 
     toast.success('Old data removed successfully!')
 
