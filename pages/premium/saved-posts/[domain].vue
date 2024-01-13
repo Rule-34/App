@@ -113,8 +113,8 @@
       // .orderBy('created_at')
       .reverse()
       //
-      .limit(PAGE_SIZE)
-      .offset(page * PAGE_SIZE)
+      // .limit(PAGE_SIZE)
+      // .offset(page * PAGE_SIZE)
       //
       .toArray()
 
@@ -341,7 +341,7 @@
   })
 
   definePageMeta({
-    // middleware: 'auth',
+    middleware: 'auth',
 
     validate: async (route) => {
       const page = route.query.page

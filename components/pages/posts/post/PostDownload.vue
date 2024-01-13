@@ -30,7 +30,7 @@
 
     const { proxiedUrl } = useProxyHelper(props.mediaUrl)
 
-    const response = await $fetch.raw(proxiedUrl, {
+    const response = await $fetch.raw(proxiedUrl.value, {
       responseType: 'blob',
 
       onResponseError(context) {
