@@ -113,8 +113,8 @@
       // .orderBy('created_at')
       .reverse()
       //
-      // .limit(PAGE_SIZE)
-      // .offset(page * PAGE_SIZE)
+      .offset(page * PAGE_SIZE)
+      .limit(PAGE_SIZE)
       //
       .toArray()
 
