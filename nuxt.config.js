@@ -5,7 +5,10 @@ export default defineNuxtConfig({
   routeRules: {
     '/posts/*': {
       // Incremental Static Regeneration for 5 minutes
-      isr: 60 * 5,
+      // isr: 60 * 5,
+
+      // TODO: Change when Cloudflare Pages supports ISR
+      ssr: false,
 
       sitemap: {
         priority: 1,
