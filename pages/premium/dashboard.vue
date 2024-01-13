@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { ArrowLeftOnRectangleIcon } from '@heroicons/vue/24/solid'
-  import { doesHaveOldVersionState } from '~/assets/js/BackupHelper'
+  import { doesBrowserHaveOldVersionState } from '~/assets/js/BackupHelper'
 
   const { data, signOut: _signOut } = useAuth()
 
@@ -27,7 +27,7 @@
     }
   ]
 
-  const doesHaveOldVersionStateData = doesHaveOldVersionState()
+  const doesHaveOldVersionStateData = doesBrowserHaveOldVersionState()
 
   if (doesHaveOldVersionStateData) {
     links.unshift({
