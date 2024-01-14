@@ -88,7 +88,7 @@ export default defineNuxtConfig({
 
     'nuxt-schema-org',
 
-    'nuxt-simple-sitemap'
+    '@nuxtjs/sitemap'
   ],
 
   image: {
@@ -321,7 +321,7 @@ export default defineNuxtConfig({
     }
   },
 
-  /** @type {import('nuxt-simple-sitemap').ModuleOptions} */
+  /** @type {import('@nuxtjs/sitemap').ModuleOptions} */
   sitemap: {
     discoverImages: false,
 
