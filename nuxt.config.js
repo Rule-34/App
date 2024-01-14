@@ -8,12 +8,7 @@ export default defineNuxtConfig({
       // isr: 60 * 5,
 
       // TODO: Change when Cloudflare Pages supports ISR
-      ssr: false,
-
-      sitemap: {
-        priority: 1,
-        changefreq: 'always'
-      }
+      ssr: false
     },
 
     // Static pages are prerendered
@@ -323,19 +318,20 @@ export default defineNuxtConfig({
 
   /** @type {import('@nuxtjs/sitemap').ModuleOptions} */
   sitemap: {
+    autoLastmod: true,
+
     discoverImages: false,
 
-    credits: false,
+    defaults: {
+      changefreq: 'weekly',
+      priority: 0.6
+    },
 
-    sitemaps: {
-      pages: {
-        defaults: {
-          priority: 0.7,
-          changefreq: 'weekly'
-          // lastmod: new Date()
-        }
-      }
-    }
+    sources: ['/api/_sitemap-urls'],
+
+    experimentalWarmUp: true,
+
+    credits: false
   },
 
   build: {
