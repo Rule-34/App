@@ -40,7 +40,7 @@ export async function createBackupState(): Promise<IBackupState> {
   return backupState
 }
 
-async function restoreV4Backup(backupState: IBackupState) {
+async function restoreV3Backup(backupState: IBackupState) {
   if (backupState.boorus?.length) {
     const { booruList } = useBooruList()
 
@@ -78,7 +78,7 @@ async function restoreV4Backup(backupState: IBackupState) {
   }
 }
 
-function restoreV3Backup(backupState: IOldBackupState) {
+function restoreV2Backup(backupState: IOldBackupState) {
   if (backupState.user.custom.boorus?.length) {
     const { booruList } = useBooruList()
 
@@ -145,23 +145,23 @@ function restoreV3Backup(backupState: IOldBackupState) {
 }
 
 /**
- * Attempts to restore a backup, either from the old (<V3) or current (>V4) app version format
+ * Attempts to restore a backup, either from the old (<V2) or current (>V3) app version format
  * Destroys the current data
  */
-export async function tryToRestoreV3OrV4Backup(backup: any): Promise<void> {
-  // V3 Version check
+export async function tryToRestoreV2OrV3Backup(backup: any): Promise<void> {
+  // V2 Version check
   if ('user' in backup && 'custom' in backup.user) {
-    restoreV3Backup(backup)
+    restoreV2Backup(backup)
   }
 
-  // V4 Version check
+  // V3 Version check
   if (backup.version !== 1) {
     throw new Error('Backup version not supported')
   }
 
   // TODO: Verify object with Zod
 
-  await restoreV4Backup(backup)
+  await restoreV3Backup(backup)
 }
 
 export function doesBrowserHaveOldVersionState(): boolean {
@@ -180,7 +180,7 @@ export function removeBrowserOldVersionState() {
 }
 
 /**
- * Migrates the old (V3) browser state to the new one (V4)
+ * Migrates the old (V2) browser state to the new one (V3)
  * Merges the data
  */
 export async function migrateBrowserOldVersionState(): Promise<void> {
