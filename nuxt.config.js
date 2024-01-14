@@ -61,9 +61,7 @@ export default defineNuxtConfig({
 
       API_URL: process.env.API_URL,
 
-      PROXY_URL: process.env.PROXY_URL,
-
-      MONETIZATION_URI: process.env.MONETIZATION_URI
+      PROXY_URL: process.env.PROXY_URL
     }
   },
 
