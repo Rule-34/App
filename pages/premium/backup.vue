@@ -2,7 +2,7 @@
   import { ArrowDownTrayIcon, ArrowUturnLeftIcon } from '@heroicons/vue/24/solid'
   import PageHeader from '~/components/layout/PageHeader.vue'
   import { toast } from 'vue-sonner'
-  import { createBackupState, type IBackupState, tryToRestoreV3OrV4Backup } from '~/assets/js/BackupHelper'
+  import { createBackupState, type IBackupState, tryToRestoreV2OrV3Backup } from '~/assets/js/BackupHelper'
 
   const fileInputElement = ref<HTMLInputElement | null>(null)
 
@@ -66,7 +66,7 @@
     const backupState: IBackupState = JSON.parse(await file.text())
 
     try {
-      await tryToRestoreV3OrV4Backup(backupState)
+      await tryToRestoreV2OrV3Backup(backupState)
     } catch (error) {
       toast.error(`Failed to restore backup: ${error}`)
       return
