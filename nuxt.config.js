@@ -128,7 +128,9 @@ export default defineNuxtConfig({
 
         type: 'Bearer',
 
-        maxAgeInSeconds: 60 * 30 // 30 minutes
+        maxAgeInSeconds: 60 * 30, // 30 minutes
+
+        sameSiteAttribute: 'lax'
       },
 
       refreshToken: {
