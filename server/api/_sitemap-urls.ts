@@ -9,7 +9,7 @@ export default cachedEventHandler(
     const popularSiteSearchKeywords = await getPopularSiteSearchKeywordsFromMatomoApi()
 
     return popularSiteSearchKeywords.map((keyword) => ({
-      loc: `/posts?tags=${keyword.label}`,
+      loc: `/posts/rule34.xxx?tags=${keyword.label}`,
       changefreq: 'always',
       priority: 0.8
     }))
