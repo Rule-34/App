@@ -233,7 +233,7 @@
       newTags = filteredSelectedTags
     }
 
-    await reflectChangesInUrl({ page: null, tags: newTags, filters: null })
+    await reflectChangesInUrl({ page: null, tags: newTags })
   }
 
   /**
@@ -244,7 +244,7 @@
 
     newTags.push(new Tag({ name: '-' + tag }))
 
-    await reflectChangesInUrl({ page: null, tags: newTags, filters: null })
+    await reflectChangesInUrl({ page: null, tags: newTags })
   }
 
   async function onLoadNextPostPage() {
