@@ -3,22 +3,17 @@ const config = useRuntimeConfig()
 /**
  * @see https://github.com/harlan-zw/nuxt-simple-sitemap#handling-dynamic-urls
  */
-export default cachedEventHandler(
-  async () => {
-    // TODO: Fetch more data
-    const popularSiteSearchKeywords = await getPopularSiteSearchKeywordsFromMatomoApi()
+export default defineSitemapEventHandler(async () => {
+  // TODO: Fetch more data
+  const popularSiteSearchKeywords = await getPopularSiteSearchKeywordsFromMatomoApi()
 
-    return popularSiteSearchKeywords.map((keyword) => ({
-      loc: `/posts/rule34.xxx?tags=${keyword.label}`,
-      changefreq: 'always',
-      priority: 0.8
-    }))
-  },
-  {
-    name: 'sitemap-dynamic-urls',
-    maxAge: 60 * 10 // cache URLs for 10 minutes
-  }
-)
+  return popularSiteSearchKeywords.map((keyword) => ({
+    loc: `/posts/rule34.xxx?tags=${keyword.label}`,
+    changefreq: 'always',
+    priority: 0.8,
+    _sitemap: 'pages'
+  }))
+})
 
 interface MatomoResponse {
   label: string
@@ -38,7 +33,7 @@ interface MatomoErrorResponse {
   message: string
 }
 
-async function getPopularSiteSearchKeywordsFromMatomoApi() {
+async function getPopularSiteSearchKeywordsFromMatomoApi(): Promise<MatomoResponse[]> {
   const baseUrl = `https://matomo.akbal.dev/`
   const apiToken = config.MATOMO_API_KEY
 
