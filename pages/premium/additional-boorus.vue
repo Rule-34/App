@@ -328,12 +328,13 @@
         Delete
       </button>
 
-      <button
-        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium ring-1 ring-base-0/20"
-        type="button"
-      >
-        Test Booru
-      </button>
+      <!-- TODO: Test Booru functionality -->
+      <!--      <button-->
+      <!--        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium ring-1 ring-base-0/20"-->
+      <!--        type="button"-->
+      <!--      >-->
+      <!--        Test Booru-->
+      <!--      </button>-->
 
       <button
         class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium ring-1 ring-base-0/20"
