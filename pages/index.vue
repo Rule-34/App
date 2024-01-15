@@ -87,20 +87,30 @@
        * Redirect to /posts/<domain> if query parameters [domain, page, tags] are set.
        */
       function (to, from) {
+        if (process.server) {
+          return
+        }
+
         if (!to) {
           return
         }
 
-        // TODO: This
         if (Object.keys(to.query).length === 0) {
           return
         }
 
-        return navigateTo({
-          path: '/posts/' + to.query.domain,
-          query: to.query,
-          hash: to.hash
-        })
+        if (to.query.domain == null) {
+          return
+        }
+
+        // return navigateTo({
+        //   path: '/posts/' + to.query.domain,
+        //   query: to.query,
+        //   hash: to.hash
+        // })
+
+        // Redirect
+        window.location.replace('/posts/' + to.query.domain + '?' + new URLSearchParams(to.query).toString())
       }
     ]
   })
