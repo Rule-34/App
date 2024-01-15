@@ -7,11 +7,14 @@
     }[]
   }>()
 
-  // TODO: Figure out how to make this reload on page reload
-  const preselectedTags = props.tags.map((tag) => ({
-    ...tag,
-    images: [getRandomImage(tag.images)]
-  }))
+  const preselectedTags = useState('preselectedTags' + props.tags[0].path)
+
+  callOnce(() => {
+    preselectedTags.value = props.tags.map((tag) => ({
+      ...tag,
+      images: [getRandomImage(tag.images)]
+    }))
+  })
 
   function getRandomImage(images: string[]) {
     return images[Math.floor(Math.random() * images.length)]
