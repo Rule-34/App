@@ -11,7 +11,7 @@ if (process.client) {
   postFullSizeImages = useStorage('settings-postFullSizeImages', false, localStorage, {
     writeDefaults: false
   })
-  postsPerPage = useStorage('settings-postsPerPage', 30, localStorage, {
+  postsPerPage = useStorage('settings-postsPerPage', 29, localStorage, {
     writeDefaults: false
   })
 }
