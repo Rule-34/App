@@ -129,7 +129,9 @@ export default defineNuxtConfig({
       refreshToken: {
         signInResponseRefreshTokenPointer: '/refresh_token',
 
-        maxAgeInSeconds: 60 * 60 * 24 * 30 // 30 days
+        maxAgeInSeconds: 60 * 60 * 24 * 30, // 30 days
+
+        sameSiteAttribute: 'lax'
       },
 
       sessionDataType: {
