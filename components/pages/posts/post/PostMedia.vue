@@ -149,9 +149,10 @@
 
     <!-- Image -->
     <template v-else-if="isImage">
+      <!-- TODO: Fix very large images not being on screen so not loaded -->
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <img
-        v-intersection-observer="[onIntersectionObserver, { rootMargin: '1000px', threshold: 1 }]"
+        v-intersection-observer="[onIntersectionObserver, { rootMargin: '1200px' }]"
         :alt="mediaAlt"
         :class="[mediaHasLoaded ? 'opacity-100' : 'opacity-0']"
         :data-src="localSrc"
@@ -172,7 +173,7 @@
       <!-- TODO: Add load animation -->
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <video
-        v-intersection-observer="[onIntersectionObserver, { rootMargin: '300px', threshold: 1 }]"
+        v-intersection-observer="[onIntersectionObserver, { rootMargin: '1200px' }]"
         :data-src="localSrc"
         :height="mediaSrcHeight"
         :poster="mediaPosterSrc"
