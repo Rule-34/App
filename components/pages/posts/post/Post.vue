@@ -132,8 +132,8 @@ function onClickLongTag(tag: Tag) {
         />
 
         <PostSource
-          v-if="post.media_type === 'image'"
-          :post-file-url="mediaFile.file"
+          v-if="post.media_type !== 'unknown'"
+          :post-file-url="post.media_type === 'image' ? mediaFile.file : mediaFile.posterFile"
           :post-sources="post.sources"
         />
 
