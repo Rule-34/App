@@ -5,10 +5,12 @@
     class="relative isolate overflow-hidden bg-transparent px-6 pb-12 pt-16 shadow-2xl sm:rounded-3xl sm:px-24 sm:py-28"
   >
     <h2 class="mx-auto max-w-2xl text-center text-3xl font-bold tracking-tight text-base-content-highlight sm:text-4xl">
-      Newsletter
+      Premium Giveaway
     </h2>
 
-    <p class="mx-auto mt-2 max-w-xl text-center text-lg leading-8">Get notified of our giveaways, updates, and more!</p>
+    <p class="mx-auto mt-2 max-w-xl text-center text-lg leading-8">
+      Get notified about new features and future giveaways by subscribing to our newsletter
+    </p>
 
     <form
       action="https://mail.akbal.dev/subscribe/a97031df-b6c5-47f3-8c09-1d373fcc907d"
@@ -49,6 +51,9 @@
       >
         Notify me
       </button>
+
+      <!-- TODO: Add this text -->
+      <!-- No spam. Unsubscribe anytime. -->
     </form>
 
     <!-- Background -->
