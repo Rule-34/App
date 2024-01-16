@@ -56,7 +56,7 @@
             class="focus-visible:focus-outline-util flex-shrink-0"
             to="/"
           >
-            <NuxtImg
+            <img
               alt="Icon"
               class="flip-vertical-fwd h-6 w-6 text-base-content-highlight"
               height="16"

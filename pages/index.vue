@@ -412,7 +412,7 @@
       >
         R34
 
-        <NuxtImg
+        <img
           alt="Icon"
           class="flip-vertical-fwd h-6 w-6 text-base-content-highlight"
           height="16"
