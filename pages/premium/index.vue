@@ -1,6 +1,5 @@
 <script lang="ts" setup>
   import { CheckIcon, StarIcon } from '@heroicons/vue/20/solid'
-  import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline'
   import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
   import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 
@@ -174,15 +173,15 @@
                       </span>
 
                       <!-- TODO: Better linking -->
-                      <a
-                        v-if="mainFeature.additionalInfo"
-                        :href="mainFeature.additionalInfo"
-                        class="focus-visible:focus-outline-util hover:hover-text-util text-base-content"
-                      >
-                        <span class="sr-only">Learn more about this feature</span>
+                      <!--                      <a-->
+                      <!--                        v-if="mainFeature.additionalInfo"-->
+                      <!--                        :href="mainFeature.additionalInfo"-->
+                      <!--                        class="focus-visible:focus-outline-util hover:hover-text-util text-base-content"-->
+                      <!--                      >-->
+                      <!--                        <span class="sr-only">Learn more about this feature</span>-->
 
-                        <QuestionMarkCircleIcon class="h-5 w-5 flex-none" />
-                      </a>
+                      <!--                        <QuestionMarkCircleIcon class="h-5 w-5 flex-none" />-->
+                      <!--                      </a>-->
                     </li>
                   </ol>
                 </div>
