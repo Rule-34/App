@@ -1,34 +1,37 @@
 export default defineNuxtConfig({
+  // TODO: Enable SSR and pre-rendering when Nuxt-Auth supports it
+  ssr: false,
+
   /**
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
    */
-  routeRules: {
-    '/posts/*': {
-      // Incremental Static Regeneration for 5 minutes
-      // isr: 60 * 5,
-
-      // TODO: Change when Cloudflare Pages supports ISR
-      ssr: false
-    },
-
-    // Static pages are prerendered
-    '/': { prerender: true },
-    '/friends': { prerender: true },
-    '/legal': { prerender: true },
-
-    '/settings': { ssr: false },
-
-    '/premium': { prerender: true },
-    '/premium/sign-in': { prerender: true },
-
-    // All premium pages are client-side rendered
-    '/premium/dashboard': { ssr: false },
-    '/premium/saved-posts/*': { ssr: false },
-    '/premium/tag-collections': { ssr: false },
-    '/premium/additional-boorus': { ssr: false },
-    '/premium/backup': { ssr: false },
-    '/premium/migrate-old-data': { ssr: false }
-  },
+  // routeRules: {
+  //   '/posts/*': {
+  //     // Incremental Static Regeneration for 5 minutes
+  //     // isr: 60 * 5,
+  //
+  //     // TODO: Change when Cloudflare Pages supports ISR
+  //     ssr: false
+  //   },
+  //
+  //   // Static pages are prerendered
+  //   '/': { prerender: true },
+  //   '/friends': { prerender: true },
+  //   '/legal': { prerender: true },
+  //
+  //   '/settings': { ssr: false },
+  //
+  //   '/premium': { prerender: true },
+  //   '/premium/sign-in': { prerender: true },
+  //
+  //   // All premium pages are client-side rendered
+  //   '/premium/dashboard': { ssr: false },
+  //   '/premium/saved-posts/*': { ssr: false },
+  //   '/premium/tag-collections': { ssr: false },
+  //   '/premium/additional-boorus': { ssr: false },
+  //   '/premium/backup': { ssr: false },
+  //   '/premium/migrate-old-data': { ssr: false }
+  // },
 
   nitro: {
     esbuild: {
@@ -37,9 +40,12 @@ export default defineNuxtConfig({
       }
     },
 
-    prerender: {
-      crawlLinks: true
-    }
+    static: true
+
+    // prerender: {
+    //   crawlLinks: true,
+    //   routes: ['/sitemap.xml', '/robots.txt']
+    // }
   },
 
   site: {
@@ -121,15 +127,13 @@ export default defineNuxtConfig({
 
         maxAgeInSeconds: 60 * 30, // 30 minutes
 
-        sameSiteAttribute: 'lax'
+        sameSiteAttribute: 'strict'
       },
 
       refreshToken: {
         signInResponseRefreshTokenPointer: '/refresh_token',
 
-        maxAgeInSeconds: 60 * 60 * 24 * 30, // 30 days
-
-        sameSiteAttribute: 'lax'
+        maxAgeInSeconds: 60 * 60 * 24 * 30 // 30 days
       },
 
       sessionDataType: {
