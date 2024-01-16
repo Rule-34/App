@@ -335,7 +335,14 @@
   useSeoMeta({
     title,
 
-    referrer: 'no-referrer'
+    referrer: () => {
+      // Include referrer for specific Boorus
+      if (!['danbooru.donmai.us'].includes(selectedBooru.value.domain)) {
+        return 'no-referrer'
+      }
+
+      return 'strict-origin-when-cross-origin'
+    }
   })
 
   definePageMeta({

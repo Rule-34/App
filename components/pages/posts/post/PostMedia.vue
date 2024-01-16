@@ -162,7 +162,6 @@
         class="h-auto w-full rounded-t-md transition-opacity duration-700 ease-in-out"
         decoding="async"
         loading="lazy"
-        referrerpolicy="no-referrer"
         @error="onMediaError"
         @load="onMediaLoad"
       />
