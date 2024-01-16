@@ -28,6 +28,8 @@ if (process.client) {
   })
 }
 
+// TODO: Only save custom boorus, not default ones
+
 export function useBooruList() {
   return {
     booruList: userBooruList,
