@@ -2,7 +2,7 @@
   import { ArrowLeftOnRectangleIcon } from '@heroicons/vue/24/solid'
   import { doesBrowserHaveOldVersionState } from '~/assets/js/BackupHelper'
 
-  const { data, signOut: _signOut } = useAuth()
+  const { user, logout: _signOut } = useAuth()
 
   const links = [
     {
@@ -37,9 +37,9 @@
     })
   }
 
-  function signOut() {
-    _signOut()
-    window.location.reload()
+  async function signOut() {
+    await _signOut()
+    // window.location.reload()
   }
 
   useSeoMeta({
@@ -78,7 +78,7 @@
           <span
             class="inline-flex items-center rounded-md bg-primary-400/10 px-2 py-1 text-sm font-medium text-primary-400 ring-1 ring-inset ring-primary-400/20"
           >
-            {{ data.email }}
+            {{ user.email }}
           </span>
         </p>
       </template>

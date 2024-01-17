@@ -7,7 +7,7 @@
   import { ArrowRightIcon } from '@heroicons/vue/24/solid'
 
   const config = useRuntimeConfig()
-  const { token: authToken } = useAuth()
+  const $authState = useState('auth-internal')
 
   const { pageHistory } = usePageHistory()
 
@@ -56,7 +56,7 @@
       },
 
       headers: {
-        Authorization: authToken.value
+        Authorization: $authState.value['_token.local'] ?? undefined
       },
 
       onResponseError(context) {

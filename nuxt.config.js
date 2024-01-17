@@ -73,7 +73,7 @@ export default defineNuxtConfig({
 
     '@headlessui-float/nuxt',
 
-    '@sidebase/nuxt-auth',
+    '@nuxt-alt/auth',
 
     '@formkit/auto-animate/nuxt',
 
@@ -98,50 +98,36 @@ export default defineNuxtConfig({
     ]
   },
 
-  /** @type {import('@sidebase/nuxt-auth')} */
+  /** @type {import('@nuxt-alt/auth').ModuleOptions} */
   auth: {
-    baseURL: process.env.API_URL + '/auth',
+    redirect: {
+      login: '/premium/sign-in',
+      logout: '/premium',
+      home: '/premium/dashboard'
+    },
 
-    provider: {
-      type: 'refresh',
-
-      endpoints: {
-        signIn: { path: '/log-in', method: 'post' },
-        signUp: null,
-        signOut: null,
-
-        getSession: { path: '/profile', method: 'get' },
-        refresh: { path: '/refresh', method: 'post' }
-      },
-
-      pages: {
-        login: '/premium/sign-in'
-      },
-
-      token: {
-        signInResponseTokenPointer: '/access_token',
-
-        type: 'Bearer',
-
-        maxAgeInSeconds: 60 * 30, // 30 minutes
-
-        sameSiteAttribute: 'strict'
-      },
-
-      refreshToken: {
-        signInResponseRefreshTokenPointer: '/refresh_token',
-
-        maxAgeInSeconds: 60 * 60 * 24 * 30 // 30 days
-      },
-
-      sessionDataType: {
-        email: 'string',
-
-        is_subscription_valid: 'boolean',
-
-        license_uses: 'number',
-
-        sale_timestamp: 'string'
+    strategies: {
+      local: {
+        scheme: 'refresh',
+        token: {
+          property: 'access_token',
+          maxAge: 60 * 30, // 30 minutes
+          global: false
+        },
+        refreshToken: {
+          property: 'refresh_token',
+          data: 'refresh_token',
+          maxAge: 60 * 60 * 24 * 30 // 30 days
+        },
+        user: {
+          property: false
+        },
+        endpoints: {
+          login: { url: process.env.API_URL + '/auth/log-in', method: 'post' },
+          refresh: { url: process.env.API_URL + '/auth/refresh', method: 'post' },
+          user: { url: process.env.API_URL + '/auth/profile', method: 'get' },
+          logout: false
+        }
       }
     }
   },

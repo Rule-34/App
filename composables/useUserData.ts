@@ -1,26 +1,26 @@
 export function useUserData() {
-  const { status, data } = useAuth()
+  const { loggedIn, user } = useAuth()
 
   return {
     isPremium: computed(
       //
       () => {
-        if (status.value !== 'authenticated') {
+        if (!loggedIn) {
           return false
         }
 
-        return data.value.is_subscription_valid
+        return user.is_subscription_valid
       }
     ),
 
     email: computed(
       //
       () => {
-        if (status.value !== 'authenticated') {
+        if (!loggedIn) {
           return null
         }
 
-        return data.value.email
+        return user.email
       }
     )
   }
