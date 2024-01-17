@@ -27,7 +27,7 @@
     } catch (error) {
       if (error instanceof FetchError) {
         if (error.status === 401) {
-          toast.error('Invalid license key, check it and try again')
+          toast.error('Invalid license key: ' + error.data.message)
           return
         }
       }
