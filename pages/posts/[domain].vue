@@ -15,7 +15,7 @@
   const router = useRouter()
   const route = useRoute()
   const config = useRuntimeConfig()
-  const { token: authToken } = useAuth()
+  const $authState = useState('auth-internal')
 
   const { toggle: toggleSearchMenu } = useSearchMenu()
   const userSettings = useUserSettings()
@@ -83,7 +83,7 @@
     if (options.pageParam) {
       return $fetch<IPostPage>(options.pageParam, {
         headers: {
-          Authorization: authToken.value
+          Authorization: $authState.value['_token.local'] ?? undefined
         },
 
         retry: false
@@ -111,7 +111,7 @@
       },
 
       headers: {
-        Authorization: authToken.value
+        Authorization: $authState.value['_token.local'] ?? undefined
       },
 
       retry: false
@@ -225,7 +225,7 @@
       },
 
       headers: {
-        Authorization: authToken.value
+        Authorization: $authState.value['_token.local'] ?? undefined
       },
 
       onResponseError(context) {

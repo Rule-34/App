@@ -23,15 +23,6 @@
 
     description: 'Enhance your experience with additional features'
   })
-
-  definePageMeta({
-    middleware: 'auth',
-
-    auth: {
-      unauthenticatedOnly: true,
-      navigateAuthenticatedTo: '/premium/dashboard'
-    }
-  })
 </script>
 
 <template>
