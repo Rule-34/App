@@ -111,13 +111,13 @@ export default defineNuxtConfig({
         scheme: 'refresh',
         token: {
           property: 'access_token',
-          maxAge: 60 * 30, // 30 minutes
+          maxAge: 60 * 60, // 60 minutes
           global: false
         },
         refreshToken: {
           property: 'refresh_token',
           data: 'refresh_token',
-          maxAge: 60 * 60 * 24 * 30 // 30 days
+          maxAge: 60 * 60 * 24 * 90 // 90 days
         },
         user: {
           property: false
