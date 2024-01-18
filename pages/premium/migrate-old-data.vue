@@ -15,9 +15,7 @@
       return
     }
 
-    toast.success('Old data migrated successfully!')
-
-    navigateTo('/premium/dashboard')
+    window.location.href = '/premium/dashboard?message=Old data migrated successfully!'
   }
 
   function removeOldData() {
