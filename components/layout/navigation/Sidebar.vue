@@ -111,9 +111,9 @@
       <!-- Premium -->
       <li class="-mx-2">
         <NuxtLink
+          :href="isPremium ? '/premium/dashboard' : '/premium'"
           class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 underline decoration-primary-500 decoration-2 underline-offset-8"
           exactActiveClass="bg-base-0/20 text-base-content-highlight"
-          href="/premium"
         >
           <SparklesIcon class="h-6 w-6 shrink-0 text-primary-500" />
           Premium
