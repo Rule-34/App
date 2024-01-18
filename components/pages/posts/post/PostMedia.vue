@@ -48,6 +48,8 @@
       const { proxiedUrl } = useProxyHelper(localSrc.value)
 
       localSrc.value = proxiedUrl.value
+      // Fix: Inmediately set src to proxied url, since onIntersectionObserver method will not be called until out of viewport
+      event.target.src = proxiedUrl.value
 
       return
     }
