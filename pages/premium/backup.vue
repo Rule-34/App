@@ -72,7 +72,7 @@
       return
     }
 
-    toast.success('Backup restored')
+    window.location.href = '/premium/dashboard?message=Backup restored successfully!'
   }
 
   useSeoMeta({

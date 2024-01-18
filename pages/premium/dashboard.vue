@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { ArrowLeftOnRectangleIcon } from '@heroicons/vue/24/solid'
   import { doesBrowserHaveOldVersionState } from '~/assets/js/BackupHelper'
+  import { toast } from 'vue-sonner'
 
   const { user, logout: _signOut } = useAuth()
 
@@ -27,9 +28,7 @@
     }
   ]
 
-  const doesHaveOldVersionStateData = doesBrowserHaveOldVersionState()
-
-  if (doesHaveOldVersionStateData) {
+  if (doesBrowserHaveOldVersionState()) {
     links.unshift({
       name: '⚠ Migrate old data ⚠',
       description: 'Migrate your old saved posts, tag collections, etc',
@@ -41,6 +40,15 @@
     await _signOut()
     // window.location.reload()
   }
+
+  onNuxtReady(() => {
+    const route = useRoute()
+    const message = route.query.message
+
+    if (message) {
+      toast.success(message)
+    }
+  })
 
   useSeoMeta({
     title: 'Premium dashboard'
