@@ -188,7 +188,7 @@ export async function migrateBrowserOldVersionState(): Promise<void> {
   const userSettings = useUserSettings()
   const { booruList } = useBooruList()
 
-  if (!localStorage.getItem('vuex-user')) {
+  if (!doesBrowserHaveOldVersionState()) {
     return
   }
 
@@ -209,7 +209,7 @@ export async function migrateBrowserOldVersionState(): Promise<void> {
   }
 
   // === Migrate Boorus
-  if (!vuexUser.user.custom.boorus?.length) {
+  if (vuexUser.user.custom.boorus?.length) {
     const vuexUserBoorusMigrated = vuexUser.user.custom.boorus.map((booru) => {
       return {
         domain: booru.domain,
@@ -223,9 +223,11 @@ export async function migrateBrowserOldVersionState(): Promise<void> {
       }
     }) as Domain[]
 
-    booruList.value = unionWith(booruList.value, vuexUserBoorusMigrated, (obj1, obj2) => {
+    const uniqueBoorus = unionWith(booruList.value, vuexUserBoorusMigrated, (obj1, obj2) => {
       return obj1.domain === obj2.domain
     })
+
+    booruList.value = uniqueBoorus
   }
 
   // === Migrate saved posts
