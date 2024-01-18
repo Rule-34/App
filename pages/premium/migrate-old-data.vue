@@ -17,7 +17,7 @@
 
     toast.success('Old data migrated successfully!')
 
-    navigateTo('/premium')
+    navigateTo('/premium/dashboard')
   }
 
   function removeOldData() {
@@ -25,7 +25,7 @@
 
     toast.success('Old data removed successfully!')
 
-    navigateTo('/premium')
+    navigateTo('/premium/dashboard')
   }
 
   useSeoMeta({
