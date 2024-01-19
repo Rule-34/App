@@ -38,9 +38,6 @@
     description:
       'Stream and download Rule 34 porn videos, GIFs, and images from multiple Boorus in a mobile-first web app',
 
-    // TODO: Remove this when the app is ready
-    robots: 'noindex',
-
     rating: 'adult',
 
     colorScheme: 'dark',
