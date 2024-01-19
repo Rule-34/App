@@ -103,14 +103,11 @@
           return
         }
 
-        // return navigateTo({
-        //   path: '/posts/' + to.query.domain,
-        //   query: to.query,
-        //   hash: to.hash
-        // })
+        const searchParams = new URLSearchParams(to.query)
+        searchParams.delete('domain')
 
         // Redirect
-        window.location.replace('/posts/' + to.query.domain + '?' + new URLSearchParams(to.query).toString())
+        window.location.replace('/posts/' + to.query.domain + '?' + searchParams.toString())
       }
     ]
   })
