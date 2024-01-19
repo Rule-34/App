@@ -1,13 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { createPage, setup } from '@nuxt/test-utils'
-import { defaultBrowserOptions } from '../../helper'
+import { defaultSetupConfig } from '../../helper'
 import path from 'path'
 
 describe('/premium/backup', async () => {
-  await setup({
-    browser: true,
-    browserOptions: defaultBrowserOptions
-  })
+  await setup(defaultSetupConfig)
 
   it('renders', async () => {
     const page = await createPage('/premium/backup')

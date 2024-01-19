@@ -7,13 +7,10 @@ import {
   mockPostsPageWithoutResults,
   mockPostsPageWithUnknownMedia
 } from './posts.mock-data'
-import { debugBrowserOptions } from '../helper'
+import { defaultSetupConfig } from '../helper'
 
 describe('/', async () => {
-  await setup({
-    browser: true,
-    browserOptions: debugBrowserOptions
-  })
+  await setup(defaultSetupConfig)
 
   it('sets mockdata correctly', async () => {
     // Make sure mockPostsPage0 and mockPostsPage1 have different first posts
