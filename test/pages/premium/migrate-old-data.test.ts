@@ -1,13 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { createPage, setup } from '@nuxt/test-utils'
 import { migratedTagCollectionsMock, oldLocalStorageVuexUserMock } from './migrate-old-data.mock-data'
-// import { debugBrowserOptions } from '../../helper'
+import { defaultSetupConfig } from '../../helper'
 
 describe('/premium/migrate-old-data', async () => {
-  await setup({
-    browser: true
-    // browserOptions: debugBrowserOptions
-  })
+  await setup(defaultSetupConfig)
 
   it('renders', async () => {
     const page = await createPage('/premium/migrate-old-data')
@@ -56,9 +53,6 @@ describe('/premium/migrate-old-data', async () => {
 
     // === Assert
 
-    // Redirected successfully
-    expect(currentUrl.pathname).toBe('/premium')
-
     expect(migratedSettings).toEqual({
       'settings-navigationTouchGestures': 'false',
       'settings-postFullSizeImages': 'true',
@@ -72,5 +66,8 @@ describe('/premium/migrate-old-data', async () => {
     // TODO: Test by going to the respective pages instead of checking technical stuff
 
     expect(isLocalStorageCleaned).toBe(true)
+
+    // Redirected successfully
+    expect(currentUrl.pathname).toBe('/premium')
   })
 })

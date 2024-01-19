@@ -16,3 +16,8 @@ export const debugBrowserOptions: TestOptions['browserOptions'] = {
     devtools: true
   }
 }
+
+export const defaultSetupConfig: TestOptions = {
+  browser: true,
+  browserOptions: debugBrowserOptions
+}
