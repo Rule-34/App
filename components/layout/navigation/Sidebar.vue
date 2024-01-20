@@ -5,7 +5,6 @@
     BuildingLibraryIcon,
     Cog6ToothIcon,
     HomeIcon,
-    PhotoIcon,
     QuestionMarkCircleIcon,
     SparklesIcon,
     UserGroupIcon
@@ -23,26 +22,18 @@
       isExternal: false
     },
     {
-      name: 'Posts',
-      icon: PhotoIcon,
-
-      // TODO: Make this dynamic
-      href: '/posts/rule34.xxx',
-      isExternal: false
-    },
-    {
-      name: 'Friends',
-      icon: UserGroupIcon,
-
-      href: '/friends',
-      isExternal: false
-    },
-    {
-      name: 'FAQ',
+      name: 'F.A.Q.',
       icon: QuestionMarkCircleIcon,
 
       href: 'https://docs.r34.app/frequently-asked-questions',
       isExternal: true
+    },
+    {
+      name: 'Other sites',
+      icon: UserGroupIcon,
+
+      href: '/other-sites',
+      isExternal: false
     },
     {
       name: 'Legal',
