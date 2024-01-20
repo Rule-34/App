@@ -16,7 +16,7 @@ export default defineNuxtConfig({
   //
   //   // Static pages are prerendered
   //   '/': { prerender: true },
-  //   '/friends': { prerender: true },
+  //   '/other-sites': { prerender: true },
   //   '/legal': { prerender: true },
   //
   //   '/settings': { ssr: false },

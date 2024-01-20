@@ -1,16 +1,16 @@
 <script setup>
   useSeoMeta({
-    title: 'Friends',
+    title: 'Other sites',
 
-    description: 'Friends of the Rule 34 App, and other cool sites.'
+    description: 'Partners of the Rule 34 App, and other cool sites.'
   })
 </script>
 
 <template>
   <main class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
     <PageHeader>
-      <template #title>Friends</template>
-      <template #text>Friends of the Rule 34 App, and other cool sites</template>
+      <template #title>Other sites</template>
+      <template #text>Partners of the Rule 34 App, and other cool sites</template>
     </PageHeader>
 
     <ol class="mx-2 mt-4 space-y-4">
