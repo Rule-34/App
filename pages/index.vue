@@ -533,7 +533,7 @@
       <!-- News -->
       <section>
         <PageHeader as="h2">
-          <template #title>News & updates</template>
+          <template #title>News</template>
         </PageHeader>
 
         <News class="mt-2 px-2" />
