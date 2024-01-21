@@ -419,7 +419,7 @@
       {
         // type: 'text/partytown',
         src: () =>
-          isPremium.value
+          isPremium.value || ['danbooru.donmai.us'].includes(selectedBooru.value.domain)
             ? ''
             : 'https://weightypoem.com/cTDc9/6.bF2Z5IlCSIWjQ_9qN_T/ECz/OdTbcN5bNyi/0v1/MqT/MB5FNCzEkM3m',
         async: true
