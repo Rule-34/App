@@ -15,7 +15,7 @@
     post: IPost
   }>()
 
-  const { tutorialLongClickTag } = useAppStatistics()
+  const { tutorialPostSave } = useAppStatistics()
 
   const postCount = useObservable(
     //
@@ -31,16 +31,13 @@
   const isPostSaved = computed(() => postCount.value.length > 0)
 
   async function onClick() {
-    if (!tutorialLongClickTag.value) {
-      toast.info('Premium feature', {
+    if (!tutorialPostSave.value) {
+      toast.info('Saved post!', {
         description: 'Save posts to your device and enjoy them later',
-        action: {
-          label: 'Subscribe',
-          onClick: () => navigateTo('/premium')
-        }
+        duration: 10000
       })
 
-      tutorialLongClickTag.value = true
+      tutorialPostSave.value = true
     }
 
     switch (isPostSaved.value) {
