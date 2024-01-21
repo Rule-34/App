@@ -89,7 +89,7 @@
     }
 
     toast.info('Post Source', {
-      description: 'Find the source (artist) of this post with SauceNAO, IQDB, Google, Yandex, Bing, and many more!',
+      description: 'Find the source (artist) of posts with SauceNAO, IQDB, Google, Yandex, Bing, and many more!',
       duration: 10000
     })
 

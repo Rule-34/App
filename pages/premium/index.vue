@@ -5,12 +5,12 @@
 
   const mainFeatures = [
     { title: 'No ads', additionalInfo: undefined },
-    { title: 'Access additional Boorus (websites)', additionalInfo: '#additional-boorus' },
+    { title: 'Access to 7 additional Boorus (websites)', additionalInfo: '#additional-boorus' },
     { title: 'Save posts', additionalInfo: '#save-posts' },
     { title: 'Download posts with one click', additionalInfo: '#download-posts' },
-    { title: 'Find original source of a post', additionalInfo: '#find-source' },
+    { title: 'Find original source (artist) of posts', additionalInfo: '#find-source' },
     { title: 'Create tag collections', additionalInfo: '#tag-collections' },
-    { title: 'Resume browsing', additionalInfo: '#history' },
+    { title: 'Integrated history to resume browsing', additionalInfo: '#history' },
     { title: 'Integrated proxy to bypass website blocks', additionalInfo: '#proxy' },
     { title: 'Backup your data', additionalInfo: '#backup' },
     { title: 'Enjoy on any device or browser', additionalInfo: undefined },
@@ -102,7 +102,7 @@
               <p class="sr-only">4.7 out of 5 stars</p>
             </div>
 
-            <span> Trusted by 900+ customers </span>
+            <span> Trusted by 1000 customers </span>
           </NuxtLink>
 
           <!-- TODO: Images of user profiles -->
