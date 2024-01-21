@@ -64,10 +64,6 @@ async function restoreV3Backup(backupState: IBackupState) {
   if (backupState.settings) {
     const userSettings = useUserSettings()
 
-    if (backupState.settings.navigationTouchGestures) {
-      userSettings.navigationTouchGestures = backupState.settings.navigationTouchGestures
-    }
-
     if (backupState.settings.postFullSizeImages) {
       userSettings.postFullSizeImages = backupState.settings.postFullSizeImages
     }
@@ -195,9 +191,6 @@ export async function migrateBrowserOldVersionState(): Promise<void> {
   const vuexUser: VuexUser = JSON.parse(localStorage.getItem('vuex-user')!)
 
   // === Migrate settings
-  if (vuexUser.user.settings.touchGestures)
-    userSettings.navigationTouchGestures = vuexUser.user.settings.touchGestures.value
-
   if (vuexUser.user.settings.fullSizeImages)
     userSettings.postFullSizeImages = vuexUser.user.settings.fullSizeImages.value
 

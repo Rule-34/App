@@ -82,15 +82,6 @@
     <!-- Settings -->
     <section class="mx-2 mt-4 flex-auto">
       <ol class="space-y-4">
-        <!-- navigationTouchGestures -->
-        <li>
-          <SettingSwitch v-model="userSettings.navigationTouchGestures">
-            <template #name> Touch gestures</template>
-
-            <template #description> Open the menu when swiping left-to-right, and search on right-to-left</template>
-          </SettingSwitch>
-        </li>
-
         <!-- postFullSizeImages -->
         <li>
           <SettingSwitch v-model="userSettings.postFullSizeImages">
