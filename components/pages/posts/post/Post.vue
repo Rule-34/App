@@ -126,17 +126,20 @@
           :post="post"
         />
 
-        <PostDownload
-          v-if="mediaFile.file"
-          :mediaName="`${domain}-${post.id}`"
-          :mediaUrl="mediaFile.file"
-        />
+        <!-- TODO: Add animation -->
+        <template v-if="open">
+          <PostDownload
+            v-if="mediaFile.file"
+            :mediaName="`${domain}-${post.id}`"
+            :mediaUrl="mediaFile.file"
+          />
 
-        <PostSource
-          v-if="post.media_type !== 'unknown'"
-          :post-file-url="post.media_type === 'image' ? mediaFile.file : mediaFile.posterFile"
-          :post-sources="post.sources"
-        />
+          <PostSource
+            v-if="post.media_type !== 'unknown'"
+            :post-file-url="post.media_type === 'image' ? mediaFile.file : mediaFile.posterFile"
+            :post-sources="post.sources"
+          />
+        </template>
 
         <HeadlessDisclosureButton
           class="hover:hover-bg-util focus-visible:focus-outline-util group ml-auto flex items-center gap-1 rounded-md px-1.5 py-1"
