@@ -82,11 +82,11 @@
                 <defs>
                   <linearGradient id="something">
                     <stop
-                      offset="60%"
+                      offset="70%"
                       stop-color="#e5e7eb"
                     />
                     <stop
-                      offset="60%"
+                      offset="70%"
                       stop-color="#9ca3af"
                     />
                   </linearGradient>
@@ -99,7 +99,7 @@
                 />
               </svg>
 
-              <p class="sr-only">4.6 out of 5 stars</p>
+              <p class="sr-only">4.7 out of 5 stars</p>
             </div>
 
             <span> Trusted by 900+ customers </span>
