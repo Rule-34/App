@@ -31,7 +31,6 @@ describe('/premium/migrate-old-data', async () => {
     // TODO: Check on settings page
     const migratedSettings = await page.evaluate(() => {
       return {
-        'settings-navigationTouchGestures': localStorage.getItem('settings-navigationTouchGestures'),
         'settings-postFullSizeImages': localStorage.getItem('settings-postFullSizeImages'),
         'settings-postsPerPage': localStorage.getItem('settings-postsPerPage')
       }
@@ -54,7 +53,6 @@ describe('/premium/migrate-old-data', async () => {
     // === Assert
 
     expect(migratedSettings).toEqual({
-      'settings-navigationTouchGestures': 'false',
       'settings-postFullSizeImages': 'true',
       'settings-postsPerPage': '69'
     })

@@ -1,13 +1,9 @@
 import { useStorage } from '@vueuse/core'
 
-let navigationTouchGestures = ref<boolean>(true)
 let postFullSizeImages = ref<boolean>(false)
 let postsPerPage = ref<number>(30)
 
 if (process.client) {
-  navigationTouchGestures = useStorage('settings-navigationTouchGestures', true, localStorage, {
-    writeDefaults: false
-  })
   postFullSizeImages = useStorage('settings-postFullSizeImages', false, localStorage, {
     writeDefaults: false
   })
@@ -18,8 +14,6 @@ if (process.client) {
 
 export function useUserSettings() {
   return reactive({
-    navigationTouchGestures,
-
     postFullSizeImages,
     postsPerPage
   })
