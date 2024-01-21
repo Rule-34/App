@@ -17,7 +17,7 @@
       applicable law and regulation regarding any personal information we may collect about you, including across our
       website, <a href="https://r34.app">https://r34.app</a>, and other sites we own and operate.
     </p>
-    <p>This policy is effective as of 29 October 2019 and was last updated on 2 March 2021.</p>
+    <p>This policy is effective as of 29 October 2019 and was last updated on 21 January 2024.</p>
 
     <h2>Information We Collect</h2>
     <p>
@@ -28,14 +28,20 @@
 
     <h3>Log Data</h3>
     <p>
-      When you visit our website, our servers may automatically log the standard data provided by your web browser. It
-      may include your device’s Internet Protocol (IP) address, your browser type and version, the pages you visit, the
-      time and date of your visit, the time spent on each page, other details about your visit, and technical details
-      that occur in conjunction with any errors you may encounter.
+      When you visit our website, our servers may automatically log the standard data provided by your web browser, to
+      ensure the security and integrity of our system. It may include your device’s Internet Protocol (IP) address, your
+      browser type and version, the pages you visit, the time and date of your visit, the time spent on each page, other
+      details about your visit, and technical details that occur in conjunction with any errors you may encounter.
     </p>
+
+    <h3>Newsletter</h3>
     <p>
-      Please be aware that while this information may not be personally identifying by itself, it may be possible to
-      combine it with other data to personally identify individual persons.
+      We collect and store email addresses provided voluntarily by users for the sole purpose of sending news, updates,
+      giveaways, or similar content. No other personal data is collected.
+    </p>
+
+    <p>
+      The email addresses are securely stored and encrypted using Mailcoach, a GDPR-compliant email marketing service.
     </p>
 
     <h3 id="opt-out">Opt out of tracking</h3>
