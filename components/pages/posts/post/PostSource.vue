@@ -143,7 +143,7 @@
                 target="_blank"
               >
                 <img
-                  :src="`https://www.google.com/s2/favicons?domain=${getHostnameFromUrl(source)}&sz=128`"
+                  :src="`https://icons.duckduckgo.com/ip2/${getHostnameFromUrl(source)}.ico`"
                   alt="Favicon"
                   class="mr-3 h-5 w-5 flex-shrink-0 rounded"
                   height="128"
@@ -177,7 +177,7 @@
               @click="openSourceFinder(service.link)"
             >
               <img
-                :src="`https://www.google.com/s2/favicons?domain=${getHostnameFromUrl(service.link)}&sz=128`"
+                :src="`https://icons.duckduckgo.com/ip2/${getHostnameFromUrl(service.link)}.ico`"
                 alt="Favicon"
                 class="mr-3 h-5 w-5 flex-shrink-0 rounded"
                 height="128"
@@ -204,7 +204,7 @@
               @click="openSourceFinder(service.link)"
             >
               <img
-                :src="`https://www.google.com/s2/favicons?domain=${getHostnameFromUrl(service.link)}&sz=128`"
+                :src="`https://icons.duckduckgo.com/ip2/${getHostnameFromUrl(service.link)}.ico`"
                 alt="Favicon"
                 class="mr-3 h-5 w-5 flex-shrink-0 rounded"
                 height="128"
