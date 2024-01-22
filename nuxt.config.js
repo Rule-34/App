@@ -7,33 +7,40 @@ export default defineNuxtConfig({
   /**
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
    */
-  // routeRules: {
-  //   '/posts/*': {
-  //     // Incremental Static Regeneration for 5 minutes
-  //     // isr: 60 * 5,
-  //
-  //     // TODO: Change when Cloudflare Pages supports ISR
-  //     ssr: false
-  //   },
-  //
-  //   // Static pages are prerendered
-  //   '/': { prerender: true },
-  //   '/other-sites': { prerender: true },
-  //   '/legal': { prerender: true },
-  //
-  //   '/settings': { ssr: false },
-  //
-  //   '/premium': { prerender: true },
-  //   '/premium/sign-in': { prerender: true },
-  //
-  //   // All premium pages are client-side rendered
-  //   '/premium/dashboard': { ssr: false },
-  //   '/premium/saved-posts/*': { ssr: false },
-  //   '/premium/tag-collections': { ssr: false },
-  //   '/premium/additional-boorus': { ssr: false },
-  //   '/premium/backup': { ssr: false },
-  //   '/premium/migrate-old-data': { ssr: false }
-  // },
+  routeRules: {
+    //   '/posts/*': {
+    //     // Incremental Static Regeneration for 5 minutes
+    //     // isr: 60 * 5,
+    //
+    //     // TODO: Change when Cloudflare Pages supports ISR
+    //     ssr: false
+    //   },
+    //
+    //   // Static pages are prerendered
+    //   '/': { prerender: true },
+    //   '/other-sites': { prerender: true },
+    //   '/legal': { prerender: true },
+    //
+    //   '/settings': { ssr: false },
+    //
+    //   '/premium': { prerender: true },
+    //   '/premium/sign-in': { prerender: true },
+    //
+    //   // All premium pages are client-side rendered
+    //   '/premium/dashboard': { ssr: false },
+    //   '/premium/saved-posts/*': { ssr: false },
+    //   '/premium/tag-collections': { ssr: false },
+    //   '/premium/additional-boorus': { ssr: false },
+    //   '/premium/backup': { ssr: false },
+    //   '/premium/migrate-old-data': { ssr: false }
+
+    // Public assets
+    '/img/*': {
+      headers: {
+        'Cache-Control': 'public, max-age=31536000, immutable'
+      }
+    }
+  },
 
   nitro: {
     esbuild: {
