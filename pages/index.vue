@@ -5,6 +5,8 @@
   import { useBooruList } from '~/composables/useBooruList'
   import type { Domain } from '~/assets/js/domain'
   import { ArrowRightIcon } from '@heroicons/vue/24/solid'
+  import * as Sentry from '@sentry/vue'
+  import { FetchError } from 'ofetch'
 
   const config = useRuntimeConfig()
   const $authState = useState('auth-internal')
@@ -57,17 +59,28 @@
 
       headers: {
         Authorization: $authState.value['_token.local'] ?? undefined
-      },
-
-      onResponseError(context) {
-        if (context.response.status === 404) {
-          searchTagResults.value = []
-          return
-        }
-
-        toast.error(`Failed to load tags: "${context.response.statusText}"`)
       }
     })
+      //
+      .catch((error) => {
+        Sentry.captureException(error)
+
+        return error
+      })
+
+    if (response instanceof FetchError) {
+      switch (response.status) {
+        case 404:
+          toast.error('No tags found for query "' + tag + '"')
+          break
+
+        default:
+          toast.error(`Failed to load tags: "${response.message}"`)
+          break
+      }
+
+      return
+    }
 
     searchTagResults.value = response.data
   }
