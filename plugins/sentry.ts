@@ -105,8 +105,19 @@ export default defineNuxtPlugin({
 
         // Media
         'AbortError',
+        'Request aborted',
+        'Picture-in-Picture',
+        'webkitExitFullScreen',
+        'NotSupportedError: The operation is not supported', // Safari not compatible video - https://stackoverflow.com/a/47976124
 
+        // Network
+        // TODO: Handle these errors
         'FetchError: [GET]',
+
+        // - Misc -
+        'native code',
+        'Background Sync is disabled',
+        'ResizeObserver loop limit exceeded',
 
         /**
          * @see https://github.com/fdev/sentry-ignores
