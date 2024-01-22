@@ -500,7 +500,7 @@
                 class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util flex items-center gap-2 rounded-md px-2"
               >
                 <img
-                  :src="`https://www.google.com/s2/favicons?domain=${featuredDomain.domain}&sz=128`"
+                  :src="`https://icons.duckduckgo.com/ip2/${featuredDomain.domain}.ico`"
                   alt="Favicon"
                   class="h-5 w-5 rounded"
                   height="128"

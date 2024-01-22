@@ -53,7 +53,7 @@
       >
         <span class="flex items-center">
           <img
-            :src="`https://www.google.com/s2/favicons?domain=${props.modelValue.domain}&sz=128`"
+            :src="`https://icons.duckduckgo.com/ip2/${props.modelValue.domain}.ico`"
             alt="Favicon"
             class="h-5 w-5 flex-shrink-0 rounded"
             height="128"
@@ -101,7 +101,7 @@
           >
             <div class="flex items-center">
               <img
-                :src="`https://www.google.com/s2/favicons?domain=${booru.domain}&sz=128`"
+                :src="`https://icons.duckduckgo.com/ip2/${booru.domain}.ico`"
                 alt="Favicon"
                 class="h-5 w-5 flex-shrink-0 rounded"
                 height="128"
