@@ -232,7 +232,7 @@
       tags: [
         {
           name: 'Top posts',
-          path: '/posts/gelbooru.com?filter%5Bsort%5D=score',
+          path: '/posts/gelbooru.com?filter%5Bsort%5D=score&filter%5Brating%5D=explicit',
           images: [
             '/img/featured/gelbooru.com/top-1.jpeg',
             '/img/featured/gelbooru.com/top-2.jpeg',
