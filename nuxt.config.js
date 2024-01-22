@@ -1,3 +1,5 @@
+import { sentryVitePlugin } from '@sentry/vite-plugin'
+
 export default defineNuxtConfig({
   // TODO: Enable SSR and pre-rendering when Nuxt-Auth supports it
   ssr: false,
@@ -46,8 +48,29 @@ export default defineNuxtConfig({
     }
   },
 
-  site: {
-    url: `https://${process.env.APP_DOMAIN}`
+  vite: {
+    plugins: [
+      // Put the Sentry vite plugin after all other plugins
+      sentryVitePlugin({
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+        org: 'alejandro-akbal',
+        project: 'app',
+        url: 'https://glitchtip.akbal.dev/'
+      })
+    ]
+  },
+
+  build: {
+    transpile: ['vue-sonner']
+  },
+
+  sourcemap: true,
+
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {}
+    }
   },
 
   runtimeConfig: {
@@ -60,13 +83,19 @@ export default defineNuxtConfig({
 
       API_URL: process.env.API_URL,
 
-      PROXY_URL: process.env.PROXY_URL
+      PROXY_URL: process.env.PROXY_URL,
+
+      SENTRY_DSN: process.env.SENTRY_DSN
     }
   },
 
   css: ['~/assets/css/main.css'],
 
   components: [{ path: '~/components', pathPrefix: false }],
+
+  site: {
+    url: `https://${process.env.APP_DOMAIN}`
+  },
 
   modules: [
     'nuxt-headlessui',
@@ -78,8 +107,6 @@ export default defineNuxtConfig({
     '@formkit/auto-animate/nuxt',
 
     '@nuxtjs/partytown',
-
-    // '@nuxtjs/sentry',
 
     '@vite-pwa/nuxt',
 
@@ -239,71 +266,6 @@ export default defineNuxtConfig({
     }
   },
 
-  /** @type {import('@nuxtjs/sentry')} */
-  sentry: {
-    dsn: process.env.SENTRY_DSN,
-
-    lazy: true,
-
-    disabled: process.env.SENTRY_DISABLED || false,
-    disableClientSide: false,
-    disableServerSide: true,
-
-    // Publish options are set in `.sentryclirc` or as ENV variables
-    publishRelease: true,
-    sourceMapStyle: 'source-map',
-
-    config: {
-      sampleRate: process.env.SENTRY_SAMPLE_RATE || 1,
-
-      allowUrls: [process.env.APP_DOMAIN],
-
-      ignoreErrors: [
-        // - Network -
-        'Request failed with status code',
-        'Network Error',
-
-        // - Media -
-        'AbortError',
-        'Request aborted',
-        'webkitExitFullScreen',
-        'Picture-in-Picture',
-
-        // - Plugins -
-        'matomo',
-        'vue-matomo',
-
-        // Matomo
-        'ao.sync',
-
-        // Axios
-        'timeout of 0ms exceeded',
-
-        // Browser
-        'ReportingObserver [deprecation]: Deprecation messages are stored',
-        'ReportingObserver [deprecation]: Element.createShadowRoot is deprecated',
-        'ReportingObserver [deprecation]: Synchronous XMLHttpRequest on the main thread',
-        'ReportingObserver [deprecation]: Custom cursors with size greater than 32x32 DIP intersecting native UI is deprecated',
-        'ReportingObserver [intervention]: Modified page load behavior on the page because the page was expected to take a long amount of time to load',
-        "ReportingObserver [deprecation]: 'Event.path' is deprecated and will be removed in M109",
-        "ReportingObserver [deprecation]: 'window.webkitStorageInfo' is deprecated.",
-        'ReportingObserver [deprecation]: chrome.loadTimes() is deprecated',
-
-        // Browser extensions
-        'instantSearchSDKJSBridgeClearHighlight',
-        'window.bannerNight',
-
-        // - Misc -
-        'native code',
-        'extension',
-        'unknown module',
-        'NotAllowedError',
-        'Background Sync is disabled',
-        'ResizeObserver loop limit exceeded'
-      ]
-    }
-  },
-
   /** @type {import('@nuxtjs/sitemap').ModuleOptions} */
   sitemap: {
     autoLastmod: true,
@@ -320,22 +282,6 @@ export default defineNuxtConfig({
     experimentalWarmUp: true,
 
     credits: false
-  },
-
-  build: {
-    transpile: ['vue-sonner']
-  },
-
-  sourcemap: {
-    server: true,
-    client: true
-  },
-
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-      autoprefixer: {}
-    }
   },
 
   devtools: {
