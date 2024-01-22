@@ -9,8 +9,8 @@ dependencies:
     specifier: ^0.8.1
     version: 0.8.1
   '@headlessui-float/nuxt':
-    specifier: ^0.13.0
-    version: 0.13.0(rollup@3.29.4)(vue@3.4.14)
+    specifier: ^0.13.1
+    version: 0.13.1(rollup@3.29.4)(vue@3.4.14)
   '@headlessui/tailwindcss':
     specifier: ^0.2.0
     version: 0.2.0(tailwindcss@3.4.1)
@@ -45,8 +45,8 @@ dependencies:
     specifier: ^0.5.10
     version: 0.5.10(tailwindcss@3.4.1)
   '@tanstack/vue-query':
-    specifier: ^5.17.15
-    version: 5.17.15(vue@3.4.14)
+    specifier: ^5.17.19
+    version: 5.17.19(vue@3.4.14)
   '@tanstack/vue-virtual':
     specifier: 3.0.2
     version: 3.0.2(vue@3.4.14)
@@ -122,8 +122,8 @@ devDependencies:
     specifier: ^29.7.0
     version: 29.7.0
   playwright:
-    specifier: ^1.41.0
-    version: 1.41.0
+    specifier: ^1.41.1
+    version: 1.41.1
   postcss:
     specifier: ^8.4.33
     version: 8.4.33
@@ -1639,12 +1639,12 @@ packages:
     resolution: {integrity: sha512-0/Z2cuNXWVVIG/l0SpcHAWFhGdvLJ8DRvEfRWvmojtmRWfEy+LWNwgDazbZqY0qQYtkHcoEK3jBLkhiZaB/4Ig==}
     dev: false
 
-  /@headlessui-float/nuxt@0.13.0(rollup@3.29.4)(vue@3.4.14):
-    resolution: {integrity: sha512-1jQ6Ub75mgVVE201bS5tMGZr5yv8QwK/3/bW18T+bBDLKq0QX0m9O4npj8Fv0m2pmbLqhnNBaq6IT0M6F4gO6g==}
+  /@headlessui-float/nuxt@0.13.1(rollup@3.29.4)(vue@3.4.14):
+    resolution: {integrity: sha512-wldIwuJneW0kcoAKablTmrUOcltRA+ORkrAdvtarJOLj53maarAjK2pOkYoru+mfuXAB0/NoX2IXYpCDVAmnDw==}
     dependencies:
       '@headlessui-float/vue': 0.13.0(@headlessui/vue@1.7.17)(vue@3.4.14)
       '@headlessui/vue': 1.7.17(vue@3.4.14)
-      '@nuxt/kit': 3.8.2(rollup@3.29.4)
+      '@nuxt/kit': 3.9.3(rollup@3.29.4)
     transitivePeerDependencies:
       - '@vue/composition-api'
       - rollup
@@ -3613,16 +3613,16 @@ packages:
       remove-accents: 0.4.2
     dev: false
 
-  /@tanstack/query-core@5.17.15:
-    resolution: {integrity: sha512-QURxpu77/ICA4d61aPvV7EcJ2MwmksxUejKBaq/xLcO2TUJAlXf4PFKHC/WxnVFI/7F1jeLx85AO3Vpk0+uBXw==}
+  /@tanstack/query-core@5.17.19:
+    resolution: {integrity: sha512-Lzw8FUtnLCc9Jwz0sw9xOjZB+/mCCmJev38v2wHMUl/ioXNIhnNWeMxu0NKUjIhAd62IRB3eAtvxAGDJ55UkyA==}
     dev: false
 
   /@tanstack/virtual-core@3.0.0:
     resolution: {integrity: sha512-SYXOBTjJb05rXa2vl55TTwO40A6wKu0R5i1qQwhJYNDIqaIGF7D0HsLw+pJAyi2OvntlEIVusx3xtbbgSUi6zg==}
     dev: false
 
-  /@tanstack/vue-query@5.17.15(vue@3.4.14):
-    resolution: {integrity: sha512-Rw32liAftueRpB5Q9+qOtZ3LJhpeI9/TtRdVv2Gn1re9Um9Swvk0GbocGsPncire2gRexV0zJJ16LX1Dvnanjw==}
+  /@tanstack/vue-query@5.17.19(vue@3.4.14):
+    resolution: {integrity: sha512-8LsQmOy44qV1FxAPukjhdEYvcDoRq4P+PRkKeig7EsdfgaopxhSH+/GpxyDZiyEfU2Rg/JYQ3p88ufQYV424Sw==}
     peerDependencies:
       '@vue/composition-api': ^1.1.2
       vue: ^2.6.0 || ^3.3.0
@@ -3631,7 +3631,7 @@ packages:
         optional: true
     dependencies:
       '@tanstack/match-sorter-utils': 8.8.4
-      '@tanstack/query-core': 5.17.15
+      '@tanstack/query-core': 5.17.19
       '@vue/devtools-api': 6.5.1
       vue: 3.4.14(typescript@5.3.3)
       vue-demi: 0.14.6(vue@3.4.14)
@@ -9671,18 +9671,18 @@ packages:
       mlly: 1.4.2
       pathe: 1.1.1
 
-  /playwright-core@1.41.0:
-    resolution: {integrity: sha512-UGKASUhXmvqm2Lxa1fNr8sFwAtqjpgBRr9jQ7XBI8Rn5uFiEowGUGwrruUQsVPIom4bk7Lt+oLGpXobnXzrBIw==}
+  /playwright-core@1.41.1:
+    resolution: {integrity: sha512-/KPO5DzXSMlxSX77wy+HihKGOunh3hqndhqeo/nMxfigiKzogn8kfL0ZBDu0L1RKgan5XHCPmn6zXd2NUJgjhg==}
     engines: {node: '>=16'}
     hasBin: true
     dev: true
 
-  /playwright@1.41.0:
-    resolution: {integrity: sha512-XOsfl5ZtAik/T9oek4V0jAypNlaCNzuKOwVhqhgYT3os6kH34PzbRb74F0VWcLYa5WFdnmxl7qyAHBXvPv7lqQ==}
+  /playwright@1.41.1:
+    resolution: {integrity: sha512-gdZAWG97oUnbBdRL3GuBvX3nDDmUOuqzV/D24dytqlKt+eI5KbwusluZRGljx1YoJKZ2NRPaeWiFTeGZO7SosQ==}
     engines: {node: '>=16'}
     hasBin: true
     dependencies:
-      playwright-core: 1.41.0
+      playwright-core: 1.41.1
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
