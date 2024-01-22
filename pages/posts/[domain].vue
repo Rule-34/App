@@ -11,6 +11,8 @@
   import type { Domain } from '~/assets/js/domain'
   import type { IPostPage } from '~/assets/js/post'
   import { useInfiniteQuery } from '@tanstack/vue-query'
+  import { FetchError } from 'ofetch'
+  import * as Sentry from '@sentry/vue'
 
   const router = useRouter()
   const route = useRoute()
@@ -226,17 +228,28 @@
 
       headers: {
         Authorization: $authState.value['_token.local'] ?? undefined
-      },
-
-      onResponseError(context) {
-        if (context.response.status === 404) {
-          tagResults.value = []
-          return
-        }
-
-        toast.error(`Failed to load tags: "${context.response.statusText}"`)
       }
     })
+      //
+      .catch((error) => {
+        Sentry.captureException(error)
+
+        return error
+      })
+
+    if (response instanceof FetchError) {
+      switch (response.status) {
+        case 404:
+          toast.error('No tags found for query "' + tag + '"')
+          break
+
+        default:
+          toast.error(`Failed to load tags: "${response.message}"`)
+          break
+      }
+
+      return
+    }
 
     tagResults.value = response.data
   }
