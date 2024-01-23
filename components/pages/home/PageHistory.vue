@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { formatTimeAgo } from '@vueuse/core'
   import { toast } from 'vue-sonner'
+  import { XMarkIcon } from '@heroicons/vue/20/solid'
 
   const { isPremium } = useUserData()
   const { pageHistory } = usePageHistory()
@@ -47,6 +48,10 @@
 
     navigateTo(path)
   }
+
+  function removeHistoryItem(path: string) {
+    pageHistory.value = pageHistory.value.filter((historyItem) => historyItem.path !== path)
+  }
 </script>
 
 <template>
@@ -55,7 +60,7 @@
     role="list"
   >
     <li
-      v-for="(historyItem, index) in pageHistory.slice().reverse()"
+      v-for="(historyItem, index) in pageHistory.toReversed()"
       :key="index"
       class="relative flex gap-x-4"
     >
@@ -89,6 +94,14 @@
       >
         {{ formatTimeAgo(new Date(historyItem.date)) }}
       </time>
+
+      <button
+        class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util h-fit max-h-fit rounded-md px-1 py-0.5"
+        type="button"
+        @click="removeHistoryItem(historyItem.path)"
+      >
+        <XMarkIcon class="h-5 w-5" />
+      </button>
     </li>
   </ol>
 </template>
