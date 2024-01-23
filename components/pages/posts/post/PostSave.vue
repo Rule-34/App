@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { BookmarkIcon } from '@heroicons/vue/24/outline'
   import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/vue/24/solid'
-  import { db } from '~/store/SavedPosts'
+  import { db } from '~/assets/js/SavedPosts'
   import { liveQuery } from 'dexie'
   import { useObservable } from '@vueuse/rxjs'
   import type { IPost } from '~/assets/js/post'

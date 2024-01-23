@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { db, type ISavedPost } from '~/store/SavedPosts'
+  import { db, type ISavedPost } from '~/assets/js/SavedPosts'
   import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
   import { useBooruList } from '~/composables/useBooruList'
   import type { Domain } from '~/assets/js/domain'

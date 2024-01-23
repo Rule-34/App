@@ -1,4 +1,4 @@
-import { db as postsDb, type ISavedPost } from '~/store/SavedPosts'
+import { db as postsDb, type ISavedPost } from '~/assets/js/SavedPosts'
 import type { ITagCollection } from '~/assets/js/tagCollection.dto'
 import type { VuexUser } from '~/assets/js/oldLocalStorage.dto'
 import { cloneDeep, toLower, union, unionWith } from 'lodash-es'

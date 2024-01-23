@@ -1,38 +1,60 @@
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 export default defineNuxtConfig({
-  // TODO: Enable SSR and pre-rendering when Nuxt-Auth supports it
-  ssr: false,
+  app: {
+    head: {
+      script: [
+        // Matomo
+        {
+          type: 'text/partytown',
+          children: `
+          var _paq = window._paq = window._paq || [];
+
+          _paq.push(["disableCookies"]);
+
+          _paq.push(['setTrackerUrl', 'https://matomo.akbal.dev/matomo.php']);
+          _paq.push(['setSiteId', '1']);
+        `
+        },
+        {
+          type: 'text/partytown',
+          src: 'https://matomo.akbal.dev/matomo.js',
+          async: true
+        }
+      ]
+    }
+  },
+
+  ssr: true,
 
   /**
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
    */
   routeRules: {
-    //   '/posts/*': {
-    //     // Incremental Static Regeneration for 5 minutes
-    //     // isr: 60 * 5,
-    //
-    //     // TODO: Change when Cloudflare Pages supports ISR
-    //     ssr: false
-    //   },
-    //
-    //   // Static pages are prerendered
-    //   '/': { prerender: true },
-    //   '/other-sites': { prerender: true },
-    //   '/legal': { prerender: true },
-    //
-    //   '/settings': { ssr: false },
-    //
-    //   '/premium': { prerender: true },
-    //   '/premium/sign-in': { prerender: true },
-    //
-    //   // All premium pages are client-side rendered
-    //   '/premium/dashboard': { ssr: false },
-    //   '/premium/saved-posts/*': { ssr: false },
-    //   '/premium/tag-collections': { ssr: false },
-    //   '/premium/additional-boorus': { ssr: false },
-    //   '/premium/backup': { ssr: false },
-    //   '/premium/migrate-old-data': { ssr: false }
+    '/posts/*': {
+      // SWR for 5 minutes
+      swr: 60 * 5
+    },
+
+    // Static pages are prerendered
+    '/': { prerender: true },
+    '/other-sites': { prerender: true },
+    '/legal': { prerender: true },
+    '/privacy-policy': { prerender: true },
+    '/terms-of-service': { prerender: true },
+
+    '/settings': { ssr: false },
+
+    '/premium': { prerender: true },
+    '/premium/sign-in': { prerender: true },
+
+    // All premium pages are client-side rendered
+    '/premium/dashboard': { ssr: false },
+    '/premium/saved-posts/*': { ssr: false },
+    '/premium/tag-collections': { ssr: false },
+    '/premium/additional-boorus': { ssr: false },
+    '/premium/backup': { ssr: false },
+    '/premium/migrate-old-data': { ssr: false },
 
     // Public assets
     '/img/*': {
@@ -60,6 +82,11 @@ export default defineNuxtConfig({
       // Put the Sentry vite plugin after all other plugins
       sentryVitePlugin({
         authToken: process.env.SENTRY_AUTH_TOKEN,
+
+        release: {
+          name: process.env.GIT_REV ?? undefined
+        },
+
         org: 'alejandro-akbal',
         project: 'app',
         url: 'https://glitchtip.akbal.dev/'
@@ -68,7 +95,7 @@ export default defineNuxtConfig({
   },
 
   build: {
-    transpile: ['vue-sonner']
+    transpile: ['vue-sonner', 'dexie']
   },
 
   sourcemap: true,
@@ -121,16 +148,6 @@ export default defineNuxtConfig({
 
     '@nuxtjs/sitemap'
   ],
-
-  image: {
-    domains: [
-      //
-      process.env.APP_DOMAIN,
-      'localhost',
-      'localhost:8081',
-      'www.google.com'
-    ]
-  },
 
   /** @type {import('@nuxt-alt/auth').ModuleOptions} */
   auth: {
@@ -247,30 +264,6 @@ export default defineNuxtConfig({
    */
   partytown: {
     forward: ['_paq.push']
-  },
-
-  app: {
-    head: {
-      script: [
-        // Matomo
-        {
-          type: 'text/partytown',
-          children: `
-          var _paq = window._paq = window._paq || [];
-
-          _paq.push(["disableCookies"]);
-
-          _paq.push(['setTrackerUrl', 'https://matomo.akbal.dev/matomo.php']);
-          _paq.push(['setSiteId', '1']);
-        `
-        },
-        {
-          type: 'text/partytown',
-          src: 'https://matomo.akbal.dev/matomo.js',
-          async: true
-        }
-      ]
-    }
   },
 
   /** @type {import('@nuxtjs/sitemap').ModuleOptions} */
