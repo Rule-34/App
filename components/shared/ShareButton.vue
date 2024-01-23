@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+  import * as Sentry from '@sentry/vue'
   import { ShareIcon } from '@heroicons/vue/24/outline'
 
   interface ShareButtonProps {
@@ -36,11 +37,15 @@
      *  <url>
      */
 
-    await window.navigator.share({
-      title: props.title,
-      text: text,
-      url: props.url
-    })
+    try {
+      await window.navigator.share({
+        title: props.title,
+        text: text,
+        url: props.url
+      })
+    } catch (error) {
+      Sentry.captureException(error)
+    }
   }
 </script>
 
