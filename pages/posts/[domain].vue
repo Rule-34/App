@@ -58,7 +58,10 @@
       return []
     }
 
-    return tags.split('|').map((tag) => new Tag({ name: tag }))
+    return tags
+      .split('|')
+      .map((tag) => decodeURIComponent(tag))
+      .map((tag) => new Tag({ name: tag }))
   })
 
   const selectedPage = computed(() => {
