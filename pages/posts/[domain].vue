@@ -574,12 +574,21 @@
 
       <!-- Error -->
       <template v-else-if="isError">
-        <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-lg">
+        <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-center text-lg">
           <ExclamationCircleIcon class="h-12 w-12" />
 
-          <h3>Failed to load posts</h3>
+          <template v-if="error.status === 404">
+            <h3>No posts found</h3>
+          </template>
 
-          <span class="w-full overflow-x-auto text-base">{{ error.message }}</span>
+          <template v-else>
+            <h3>Failed to load posts</h3>
+            <span class="w-full overflow-x-auto text-base">
+              {{ error.data.message ?? error.message }}
+            </span>
+          </template>
+
+          <!-- TODO: Retry button -->
         </div>
       </template>
 
