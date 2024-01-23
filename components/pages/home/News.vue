@@ -1,21 +1,6 @@
 <script lang="ts" setup>
   const newsList = [
     {
-      name: 'Annoying popup ads solution',
-      text:
-        'There are ads that open in a new tab, BUT:\n' +
-        'Instead of closing that tab, just PRESS THE BACK BUTTON ON YOUR BROWSER\n' +
-        'And you can continue browsing just where you were before, in the same scroll position and everything\n' +
-        '\n' +
-        'If you want to get rid of ads, you can subscribe to Premium, which includes lots of other nice things',
-      links: [
-        {
-          text: 'Premium',
-          href: '/premium'
-        }
-      ]
-    },
-    {
       name: 'Install the App',
       text: 'Learn how to install the Rule 34 App on your device, in 3 simple steps',
       links: [
