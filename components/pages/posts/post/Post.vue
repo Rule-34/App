@@ -177,7 +177,7 @@
                 (selectedTag) => selectedTag.name === tag.name
               )
             }"
-            class="focus-visible:focus-outline-util group inline-flex items-center rounded-full px-2 py-1 ring-1 ring-inset ring-base-0/20"
+            class="focus-visible:focus-outline-util group inline-flex select-none items-center rounded-full px-2 py-1 ring-1 ring-inset ring-base-0/20"
             type="button"
             @click="onClickTag(tag)"
           >
