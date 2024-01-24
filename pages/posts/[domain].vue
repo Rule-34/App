@@ -429,17 +429,6 @@
         rel: 'canonical',
         href: canonicalUrl
       }
-    ],
-
-    script: [
-      {
-        // type: 'text/partytown',
-        src: () =>
-          isPremium.value || ['danbooru.donmai.us'].includes(selectedBooru.value.domain)
-            ? ''
-            : 'https://weightypoem.com/cTDc9/6.bF2Z5IlCSIWjQ_9qN_T/ECz/OdTbcN5bNyi/0v1/MqT/MB5FNCzEkM3m',
-        async: true
-      }
     ]
   })
 
@@ -584,7 +573,7 @@
           <template v-else>
             <h3>Failed to load posts</h3>
             <span class="w-full overflow-x-auto text-base">
-              {{ error.data.message ?? error.message }}
+              {{ error.data?.message ?? error.message }}
             </span>
           </template>
 
