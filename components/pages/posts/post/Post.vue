@@ -1,106 +1,106 @@
 <script lang="ts" setup>
-  import { useUserSettings } from '~/composables/useUserSettings'
-  import { ChevronDownIcon } from '@heroicons/vue/24/outline'
+import {useUserSettings} from '~/composables/useUserSettings'
+import {ChevronDownIcon} from '@heroicons/vue/24/outline'
 
-  import { vOnLongPress } from '@vueuse/components'
-  import Tag from '~/assets/js/tag.dto'
-  import type { IPost } from '~/assets/js/post'
-  import { toast } from 'vue-sonner'
-  import { useAppStatistics } from '~/composables/useAppStatistics'
+import {vOnLongPress} from '@vueuse/components'
+import Tag from '~/assets/js/tag.dto'
+import type {IPost} from '~/assets/js/post'
+import {toast} from 'vue-sonner'
+import {useAppStatistics} from '~/composables/useAppStatistics'
 
-  const props = defineProps<{
-    domain: string
+const props = defineProps<{
+  domain: string
 
-    post: IPost
+  post: IPost
 
-    selectedTags: Tag[]
-  }>()
+  selectedTags: Tag[]
+}>()
 
-  const emit = defineEmits<{
-    clickTag: [tag: string]
-    clickLongTag: [tag: string]
-  }>()
+const emit = defineEmits<{
+  clickTag: [tag: string]
+  clickLongTag: [tag: string]
+}>()
 
-  const userSettings = useUserSettings()
-  const { tutorialLongClickTag } = useAppStatistics()
+const userSettings = useUserSettings()
+const {tutorialLongClickTag} = useAppStatistics()
 
-  const mediaFile = computed(() => {
-    const data = {
-      file: null,
-      width: null,
-      height: null,
-      posterFile: null,
-      alt: 'Post with tags: ' + tagsAsSingleArray.value.map((tag) => tag.name).join(', ')
-    }
+const mediaFile = computed(() => {
+  const data = {
+    file: null,
+    width: null,
+    height: null,
+    posterFile: null,
+    alt: 'Post with tags: ' + tagsAsSingleArray.value.map((tag) => tag.name).join(', ')
+  }
 
-    switch (props.post.media_type) {
-      case 'image': {
-        // Return full image if its setting is enabled OR if low resolution file doesn't exist
-        if (!props.post.low_res_file.url || userSettings.postFullSizeImages) {
-          data.file = props.post.high_res_file.url
-          data.width = props.post.high_res_file.width
-          data.height = props.post.high_res_file.height
-        } else {
-          // Return low res file
-          data.file = props.post.low_res_file.url
-          data.width = props.post.low_res_file.width ?? props.post.high_res_file.width
-          data.height = props.post.low_res_file.height ?? props.post.high_res_file.height
-        }
-
-        break
-      }
-
-      case 'video': {
+  switch (props.post.media_type) {
+    case 'image': {
+      // Return full image if its setting is enabled OR if low resolution file doesn't exist
+      if (!props.post.low_res_file.url || userSettings.postFullSizeImages) {
         data.file = props.post.high_res_file.url
         data.width = props.post.high_res_file.width
         data.height = props.post.high_res_file.height
-
-        data.posterFile = props.post.preview_file.url
-        break
+      } else {
+        // Return low res file
+        data.file = props.post.low_res_file.url
+        data.width = props.post.low_res_file.width ?? props.post.high_res_file.width
+        data.height = props.post.low_res_file.height ?? props.post.high_res_file.height
       }
 
-      default:
-        data.file = props.post.high_res_file.url
-        data.width = props.post.high_res_file.width
-        data.height = props.post.high_res_file.height
+      break
     }
 
-    return data
-  })
+    case 'video': {
+      data.file = props.post.high_res_file.url
+      data.width = props.post.high_res_file.width
+      data.height = props.post.high_res_file.height
 
-  /**
-   * Take in an object of tags like { character: ['tag1', 'tag2'], artist: ['tag3', 'tag4'] }
-   * and return an array of tags like [{ name: 'tag1', type: 'character' }, { name: 'tag2', type: 'character' }, { name: 'tag3', type: 'artist' }, { name: 'tag4', type: 'artist' }]
-   * @returns {Array<{ name: string, type: string }>}
-   */
-  const tagsAsSingleArray = computed(() => {
-    const tags = []
-
-    for (const [type, tagsArray] of Object.entries(props.post.tags)) {
-      for (const tag of tagsArray) {
-        tags.push({ name: tag, type })
-      }
+      data.posterFile = props.post.preview_file.url
+      break
     }
 
-    return tags
-  })
+    default:
+      data.file = props.post.high_res_file.url
+      data.width = props.post.high_res_file.width
+      data.height = props.post.high_res_file.height
+  }
 
-  function onClickTag(tag: Tag) {
-    emit('clickTag', tag.name)
+  return data
+})
 
-    if (!tutorialLongClickTag.value) {
-      toast.info('Browsing Tip', {
-        description: 'Long click a tag to exclude it from search results',
-        duration: 10000
-      })
+/**
+ * Take in an object of tags like { character: ['tag1', 'tag2'], artist: ['tag3', 'tag4'] }
+ * and return an array of tags like [{ name: 'tag1', type: 'character' }, { name: 'tag2', type: 'character' }, { name: 'tag3', type: 'artist' }, { name: 'tag4', type: 'artist' }]
+ * @returns {Array<{ name: string, type: string }>}
+ */
+const tagsAsSingleArray = computed(() => {
+  const tags = []
 
-      tutorialLongClickTag.value = true
+  for (const [type, tagsArray] of Object.entries(props.post.tags)) {
+    for (const tag of tagsArray) {
+      tags.push({name: tag, type})
     }
   }
 
-  function onClickLongTag(tag: Tag) {
-    emit('clickLongTag', tag.name)
+  return tags
+})
+
+function onClickTag(tag: Tag) {
+  emit('clickTag', tag.name)
+
+  if (!tutorialLongClickTag.value) {
+    toast.info('Browsing Tip', {
+      description: 'Long click a tag to exclude it from search results',
+      duration: 10000
+    })
+
+    tutorialLongClickTag.value = true
   }
+}
+
+function onClickLongTag(tag: Tag) {
+  emit('clickLongTag', tag.name)
+}
 </script>
 
 <template>
@@ -120,11 +120,19 @@
     >
       <!-- Actions -->
       <div class="flex items-center p-2">
-        <PostSave
-          v-if="mediaFile.file"
-          :domain="domain"
-          :post="post"
-        />
+
+        <ClientOnly>
+
+          <PostSave
+            v-if="mediaFile.file"
+            :domain="domain"
+            :post="post"
+          />
+
+          <template #fallback>
+            <PostSaveFallback/>
+          </template>
+        </ClientOnly>
 
         <PostDownload
           v-if="mediaFile.file"
