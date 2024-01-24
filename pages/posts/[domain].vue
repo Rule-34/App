@@ -573,7 +573,7 @@
           <template v-else>
             <h3>Failed to load posts</h3>
             <span class="w-full overflow-x-auto text-base">
-              {{ error.data.message ?? error.message }}
+              {{ error.data?.message ?? error.message }}
             </span>
           </template>
 
