@@ -29,12 +29,12 @@
     "@headlessui/tailwindcss": "^0.2.0",
     "@headlessui/vue": "^1.7.17",
     "@heroicons/vue": "^2.1.1",
-    "@nuxt-alt/auth": "^3.1.4",
-    "@nuxt-alt/http": "^1.7.8",
+    "@nuxt-alt/auth": "^3.1.5",
+    "@nuxt-alt/http": "^1.7.9",
     "@nuxtjs/partytown": "^1.4.0",
     "@nuxtjs/sitemap": "^5.0.5",
     "@sentry/vite-plugin": "^2.10.3",
-    "@sentry/vue": "^7.94.1",
+    "@sentry/vue": "^7.95.0",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.10",
     "@tanstack/vue-query": "^5.17.19",
@@ -58,7 +58,7 @@
     "vue": "^3.4.15",
     "vue-router": "^4.2.5",
     "vue-safe-teleport": "^0.1.2",
-    "vue-sonner": "^1.0.2"
+    "vue-sonner": "^1.0.3"
   },
   "devDependencies": {
     "@nuxt/test-utils": "^3.10.0",

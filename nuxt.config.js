@@ -1,4 +1,4 @@
-import { sentryVitePlugin } from '@sentry/vite-plugin'
+import {sentryVitePlugin} from '@sentry/vite-plugin'
 
 export default defineNuxtConfig({
   app: {
@@ -70,7 +70,7 @@ export default defineNuxtConfig({
         target: 'esnext'
       }
     },
-
+    
     prerender: {
       // crawlLinks: true
       // routes: ['/sitemap.xml', '/robots.txt']
@@ -125,7 +125,7 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
-  components: [{ path: '~/components', pathPrefix: false }],
+  components: [{path: '~/components', pathPrefix: false}],
 
   site: {
     url: `https://${process.env.APP_DOMAIN}`
@@ -174,9 +174,9 @@ export default defineNuxtConfig({
           property: false
         },
         endpoints: {
-          login: { url: process.env.API_URL + '/auth/log-in', method: 'post' },
-          refresh: { url: process.env.API_URL + '/auth/refresh', method: 'post' },
-          user: { url: process.env.API_URL + '/auth/profile', method: 'get' },
+          login: {url: process.env.API_URL + '/auth/log-in', method: 'post'},
+          refresh: {url: process.env.API_URL + '/auth/refresh', method: 'post'},
+          user: {url: process.env.API_URL + '/auth/profile', method: 'get'},
           logout: false
         }
       }

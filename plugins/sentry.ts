@@ -47,6 +47,14 @@ export default defineNuxtPlugin({
       replaysSessionSampleRate: 1.0,
       replaysOnErrorSampleRate: 1.0,
 
+      beforeSend(event, hint) {
+        if (isInjectedCode(event)) {
+          return null
+        }
+
+        return event
+      },
+
       denyUrls: [
         /**
          * @see https://github.com/fdev/sentry-ignores
@@ -125,7 +133,7 @@ export default defineNuxtPlugin({
         // Random plugins and extensions.
         // http://blog.errorception.com/2012/03/tale-of-unfindable-js-error.html
         'atomicFindClose',
-        "Can't find variable: ZiteReader",
+        'Can\'t find variable: ZiteReader',
         'canvas.contentDocument',
         'ComboSearch is not defined',
         'http://loading.retry.widdit.com/',
@@ -180,7 +188,7 @@ export default defineNuxtPlugin({
 
         // Firefox freeing add-on memory.
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Dead_object
-        "can't access dead object",
+        'can\'t access dead object',
 
         // Nuance Dragon Web Extension.
         'plugin.setSuspendState',
@@ -214,3 +222,34 @@ export default defineNuxtPlugin({
     lazyLoadSentryIntegrations()
   }
 })
+
+/**
+ *  Disable errors originating from injected scripts such as Google Tag Manager
+ *  @see https://github.com/getsentry/sentry-javascript/issues/3147#issuecomment-1782504804
+ **/
+function isInjectedCode(event: Sentry.Event | undefined): boolean {
+  const frames = event?.exception?.values?.[0]?.stacktrace?.frames
+
+  if (!frames || frames.length === 0) return false
+
+  const firstFrame = frames[0]
+
+  if (firstFrame.filename === '<anonymous>') {
+    return true
+  }
+
+  if (
+    frames.some(
+      (frame) =>
+        typeof frame.filename === 'string' &&
+
+        // Ignore errors from Partytown
+        (frame.filename.includes('partytown')
+        ),
+    )
+  ) {
+    return true
+  }
+
+  return false
+}
