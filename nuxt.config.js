@@ -37,24 +37,24 @@ export default defineNuxtConfig({
     },
 
     // Static pages are prerendered
-    '/': { prerender: true },
-    '/other-sites': { prerender: true },
-    '/legal': { prerender: true },
-    '/privacy-policy': { prerender: true },
-    '/terms-of-service': { prerender: true },
+    '/': {prerender: true},
+    '/other-sites': {prerender: true},
+    '/legal': {prerender: true},
+    '/privacy-policy': {prerender: true},
+    '/terms-of-service': {prerender: true},
 
-    '/settings': { ssr: false },
+    '/settings': {ssr: false},
 
-    '/premium': { prerender: true },
-    '/premium/sign-in': { prerender: true },
+    '/premium': {prerender: true},
+    '/premium/sign-in': {prerender: true},
 
     // All premium pages are client-side rendered
-    '/premium/dashboard': { ssr: false },
-    '/premium/saved-posts/*': { ssr: false },
-    '/premium/tag-collections': { ssr: false },
-    '/premium/additional-boorus': { ssr: false },
-    '/premium/backup': { ssr: false },
-    '/premium/migrate-old-data': { ssr: false },
+    '/premium/dashboard': {ssr: false},
+    '/premium/saved-posts/*': {ssr: false},
+    '/premium/tag-collections': {ssr: false},
+    '/premium/additional-boorus': {ssr: false},
+    '/premium/backup': {ssr: false},
+    '/premium/migrate-old-data': {ssr: false},
 
     // Public assets
     '/img/*': {
@@ -70,7 +70,7 @@ export default defineNuxtConfig({
         target: 'esnext'
       }
     },
-    
+
     prerender: {
       // crawlLinks: true
       // routes: ['/sitemap.xml', '/robots.txt']
@@ -96,6 +96,11 @@ export default defineNuxtConfig({
 
   build: {
     transpile: ['vue-sonner', 'dexie']
+  },
+
+  // TODO: Remove when I fix "Cannot stringify arbitrary non-POJOs error" - https://github.com/nuxt/nuxt/issues/20787
+  experimental: {
+    renderJsonPayloads: false
   },
 
   sourcemap: true,
