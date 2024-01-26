@@ -21,6 +21,11 @@
   if (process.client) {
     const { arrivedState, directions } = useScroll(window, {
       onScroll: () => {
+        // Skip if on '/posts/*', '/saved-posts/*'
+        if (!['/posts/', '/premium/saved-posts/'].some((path) => route.path.startsWith(path))) {
+          return
+        }
+
         if (
           //
           arrivedState.top === false &&
