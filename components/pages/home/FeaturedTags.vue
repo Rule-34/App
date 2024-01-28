@@ -44,7 +44,7 @@
           />
 
           <!-- Fix(not taking available width because of truncate): use negative margin -->
-          <figcaption class="-mr-4 truncate px-1.5 py-1.5 text-center text-sm font-medium">
+          <figcaption class="truncate py-1.5 text-center text-sm font-medium">
             {{ tag.name }}
           </figcaption>
         </figure>

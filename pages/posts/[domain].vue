@@ -413,14 +413,7 @@
       return description
     },
 
-    referrer: () => {
-      // Include referrer for specific Boorus
-      if (!['danbooru.donmai.us'].includes(selectedBooru.value.domain)) {
-        return 'no-referrer'
-      }
-
-      return 'strict-origin-when-cross-origin'
-    }
+    referrer: 'no-referrer'
   })
 
   useHead({

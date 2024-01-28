@@ -5,7 +5,7 @@
 
   const mainFeatures = [
     { title: 'No ads', additionalInfo: undefined },
-    { title: 'Access to 7 additional Boorus (websites)', additionalInfo: '#additional-boorus' },
+    { title: 'Access 7 additional Boorus (websites)', additionalInfo: '#additional-boorus' },
     { title: 'Save posts', additionalInfo: '#save-posts' },
     { title: 'Download posts with one click', additionalInfo: '#download-posts' },
     { title: 'Find original source (artist) of posts', additionalInfo: '#find-source' },
@@ -21,7 +21,7 @@
   useSeoMeta({
     title: 'Premium',
 
-    description: 'Enhance your experience with additional features'
+    description: 'Enhance your experience with no ads and exclusive features'
   })
 </script>
 
@@ -51,9 +51,7 @@
             </h1>
 
             <p class="mx-auto mt-4 max-w-2xl text-center text-base leading-8 lg:mt-3">
-              <!-- TODO: Improve description -->
-              Get access to {{ completeBooruList.length - defaultBooruList.length }} additional Boorus, and
-              {{ mainFeatures.length }} exclusive features!
+              Enhance your experience with no ads and exclusive features
             </p>
           </div>
 
@@ -98,11 +96,9 @@
                   fill-rule="evenodd"
                 />
               </svg>
-
-              <p class="sr-only">4.7 out of 5 stars</p>
             </div>
 
-            <span> Trusted by 1000 customers </span>
+            <span> Trusted by 1141+ customers</span>
           </NuxtLink>
 
           <!-- TODO: Images of user profiles -->
@@ -142,7 +138,10 @@
                 <div>
                   <h2 class="text-2xl font-bold tracking-wide text-base-content-highlight">Premium</h2>
 
-                  <p class="mt-2 text-sm leading-7">Enhance your experience with additional features</p>
+                  <p class="mt-2 text-sm leading-7">
+                    Get access to {{ completeBooruList.length - defaultBooruList.length }} additional Boorus, and
+                    {{ mainFeatures.length }} exclusive features!
+                  </p>
                 </div>
 
                 <!-- Features -->
@@ -192,7 +191,7 @@
                   </div>
 
                   <div class="mb-1 text-center text-sm leading-6">
-                    ✨ Up to
+                    ✨ Cant afford it? Get up to
 
                     <span
                       class="inline-flex items-center gap-x-1.5 rounded-full bg-primary-400/20 px-2 py-0.5 font-medium leading-normal text-primary-400"
@@ -211,6 +210,18 @@
                   >
                     Get Premium
                   </NuxtLink>
+
+                  <p class="text-center text-xs">
+                    Cancel anytime, subscription managed by
+
+                    <NuxtLink
+                      class="focus-visible:focus-outline-util hover:hover-text-util"
+                      href="https://gumroad.com/discover"
+                      target="_blank"
+                    >
+                      Gumroad
+                    </NuxtLink>
+                  </p>
                 </div>
               </div>
             </div>
