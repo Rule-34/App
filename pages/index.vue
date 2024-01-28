@@ -151,7 +151,7 @@
           ]
         },
         {
-          name: 'Animated',
+          name: 'Animated (video)',
           path: '/posts/rule34.xxx?tags=animated',
           images: ['/img/featured/rule34.xxx/animated.jpeg']
         },
@@ -251,7 +251,7 @@
           ]
         },
         {
-          name: 'Animated',
+          name: 'Animated (video)',
           path: '/posts/gelbooru.com?tags=animated',
           images: ['/img/featured/gelbooru.com/animated.jpeg']
         },
@@ -298,7 +298,7 @@
           ]
         },
         {
-          name: 'Animated',
+          name: 'Animated (video)',
           path: '/posts/e621.net?tags=animated',
           images: ['/img/featured/e621.net/animated.jpeg']
         },
@@ -340,7 +340,7 @@
     //       ]
     //     },
     //     {
-    //       name: 'Animated',
+    //       name: 'Animated (video)',
     //       path: '/posts/realbooru.com?tags=animated',
     //       images: ['/img/featured/realbooru.com/animated.jpeg']
     //     },
@@ -434,9 +434,7 @@
         App
       </h1>
 
-      <p class="mt-4 leading-relaxed">
-        Stream and download Rule 34 porn videos, GIFs, and images from multiple Boorus in a mobile-first web app
-      </p>
+      <p class="mt-4 leading-relaxed">Find the best hentai of your favorite characters, games, anime, and more!</p>
     </div>
 
     <div class="mt-8 space-y-8">
