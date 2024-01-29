@@ -43,7 +43,16 @@
    */
   const selectedTags = ref(cloneDeep(props.initialSelectedTags))
 
+  /**
+   * Close combobox options when a tag is selected
+   */
+  watch(selectedTags, async () => {
+    comboboxButtonRef.value?.el.click()
+  })
+
   const searchQuery = shallowRef('')
+
+  const comboboxButtonRef = ref<HTMLInputElement | null>(null)
 
   // Change event
   function onComboboxInputChange(event: InputEvent) {
@@ -212,7 +221,10 @@
         />
 
         <!-- Button -->
-        <HeadlessComboboxButton class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2">
+        <HeadlessComboboxButton
+          ref="comboboxButtonRef"
+          class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2"
+        >
           <ChevronUpDownIcon class="h-5 w-5 text-base-content group-hover:text-base-content-hover" />
         </HeadlessComboboxButton>
 
