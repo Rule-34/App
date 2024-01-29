@@ -28,7 +28,7 @@
     "@headlessui/tailwindcss": "^0.2.0",
     "@headlessui/vue": "^1.7.17",
     "@heroicons/vue": "^2.1.1",
-    "@nuxt-alt/auth": "^3.1.6",
+    "@nuxt-alt/auth": "^3.1.7-beta.0",
     "@nuxt-alt/http": "^1.7.10",
     "@nuxtjs/partytown": "^1.4.0",
     "@nuxtjs/sitemap": "^5.0.5",

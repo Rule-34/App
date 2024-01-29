@@ -2,7 +2,7 @@ import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 export default defineNuxtConfig({
   // TODO: Enable when SSR is enabled
-  ssr: false,
+  ssr: true,
 
   /**
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
@@ -145,6 +145,7 @@ export default defineNuxtConfig({
 
     strategies: {
       local: {
+        ssr: false,
         scheme: 'refresh',
         token: {
           property: 'access_token',
