@@ -35,7 +35,7 @@ export default defineNuxtConfig({
     //   '/premium/migrate-old-data': { ssr: false }
 
     // Public assets
-    '/img/*': {
+    '/img/**': {
       headers: {
         'Cache-Control': 'public, max-age=31536000, immutable'
       }
