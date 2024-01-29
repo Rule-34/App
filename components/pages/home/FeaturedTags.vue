@@ -24,7 +24,7 @@
 <template>
   <ol class="scrollbar-hide flex gap-x-4 overflow-x-auto">
     <li
-      v-for="tag in preselectedTags"
+      v-for="(tag, index) in preselectedTags"
       :key="tag.name"
       class="max-w-[8rem] flex-shrink-0"
     >
@@ -36,10 +36,10 @@
           <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
           <img
             :alt="'Featured tag: ' + tag.name"
+            :loading="index > 5 ? 'lazy' : 'eager'"
             :src="tag.images[0]"
             class="h-auto w-full rounded-t-md"
             height="600"
-            loading="lazy"
             width="400"
           />
 
