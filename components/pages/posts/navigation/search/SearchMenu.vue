@@ -338,7 +338,10 @@
       <p class="block text-lg font-medium text-base-content">Selected tags</p>
 
       <!-- Selected tags -->
-      <ol class="mt-2 flex flex-wrap gap-2.5 rounded-md">
+      <ol
+        v-auto-animate
+        class="mt-2 flex flex-wrap gap-2.5 rounded-md"
+      >
         <!-- -->
 
         <!-- TODO: Clear all button -->
