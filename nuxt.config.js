@@ -1,38 +1,37 @@
-import {sentryVitePlugin} from '@sentry/vite-plugin'
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 export default defineNuxtConfig({
-  // TODO: Enable SSR and pre-rendering when Nuxt-Auth supports it
-  ssr: false,
+  ssr: true,
 
   /**
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
    */
   routeRules: {
-    //   '/posts/*': {
-    //     // Incremental Static Regeneration for 5 minutes
-    //     // isr: 60 * 5,
-    //
-    //     // TODO: Change when Cloudflare Pages supports ISR
-    //     ssr: false
-    //   },
-    //
-    //   // Static pages are prerendered
-    //   '/': { prerender: true },
-    //   '/other-sites': { prerender: true },
-    //   '/legal': { prerender: true },
-    //
-    //   '/settings': { ssr: false },
-    //
-    //   '/premium': { prerender: true },
-    //   '/premium/sign-in': { prerender: true },
-    //
-    //   // All premium pages are client-side rendered
-    //   '/premium/dashboard': { ssr: false },
-    //   '/premium/saved-posts/*': { ssr: false },
-    //   '/premium/tag-collections': { ssr: false },
-    //   '/premium/additional-boorus': { ssr: false },
-    //   '/premium/backup': { ssr: false },
-    //   '/premium/migrate-old-data': { ssr: false }
+    '/posts/**': {
+      // TODO: Change when Cloudflare Pages supports ISR
+      // Incremental Static Regeneration for 5 minutes
+      // isr: 60 * 5,
+
+      ssr: false
+    },
+
+    // Static pages are prerendered
+    '/': { prerender: true },
+    '/other-sites': { prerender: true },
+    '/legal': { prerender: true },
+
+    '/settings': { ssr: false },
+
+    '/premium': { prerender: true },
+    '/premium/sign-in': { prerender: true },
+
+    // All premium pages are client-side rendered
+    '/premium/dashboard': { ssr: false },
+    '/premium/saved-posts/*': { ssr: false },
+    '/premium/tag-collections': { ssr: false },
+    '/premium/additional-boorus': { ssr: false },
+    '/premium/backup': { ssr: false },
+    '/premium/migrate-old-data': { ssr: false },
 
     // Public assets
     '/img/**': {
@@ -43,12 +42,15 @@ export default defineNuxtConfig({
   },
 
   nitro: {
+    // TODO: Remove when SSR is enabled
+    static: true,
+
     esbuild: {
       options: {
         target: 'esnext'
       }
     },
-    
+
     prerender: {
       // crawlLinks: true
       // routes: ['/sitemap.xml', '/robots.txt']
@@ -98,7 +100,7 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
-  components: [{path: '~/components', pathPrefix: false}],
+  components: [{ path: '~/components', pathPrefix: false }],
 
   site: {
     url: `https://${process.env.APP_DOMAIN}`
@@ -157,9 +159,9 @@ export default defineNuxtConfig({
           property: false
         },
         endpoints: {
-          login: {url: process.env.API_URL + '/auth/log-in', method: 'post'},
-          refresh: {url: process.env.API_URL + '/auth/refresh', method: 'post'},
-          user: {url: process.env.API_URL + '/auth/profile', method: 'get'},
+          login: { url: process.env.API_URL + '/auth/log-in', method: 'post' },
+          refresh: { url: process.env.API_URL + '/auth/refresh', method: 'post' },
+          user: { url: process.env.API_URL + '/auth/profile', method: 'get' },
           logout: false
         }
       }
