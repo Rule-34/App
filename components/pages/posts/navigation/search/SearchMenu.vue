@@ -47,12 +47,17 @@
    * Close combobox options when a tag is selected
    */
   watch(selectedTags, async () => {
-    comboboxButtonRef.value?.el.click()
+    const comboboxOptionsAreOpen = comboboxOptionsRef.value?.el?.getAttribute('data-headlessui-state') === 'open'
+
+    if (comboboxOptionsAreOpen) {
+      comboboxButtonRef.value?.el.click()
+    }
   })
 
   const searchQuery = shallowRef('')
 
   const comboboxButtonRef = ref<HTMLInputElement | null>(null)
+  const comboboxOptionsRef = ref<HTMLInputElement | null>(null)
 
   // Change event
   function onComboboxInputChange(event: InputEvent) {
@@ -230,6 +235,7 @@
 
         <!-- Options -->
         <HeadlessComboboxOptions
+          ref="comboboxOptionsRef"
           class="absolute z-10 mt-2 max-h-72 w-full overflow-auto rounded-md bg-base-1000 py-1 text-base ring-1 ring-base-0/20 sm:text-sm"
         >
           <!-- Custom option -->
