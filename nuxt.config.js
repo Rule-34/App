@@ -1,7 +1,8 @@
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 export default defineNuxtConfig({
-  ssr: true,
+  // TODO: Enable when SSR is enabled
+  ssr: false,
 
   /**
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
