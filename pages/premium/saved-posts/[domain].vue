@@ -502,9 +502,27 @@
 
         <!-- Next Pagination -->
         <PostsPagination @load-next-page="onLoadNextPostPage">
-          <span v-if="isFetchingNextPage">Loading more&hellip;</span>
-          <span v-else-if="hasNextPage">Reach here to load more</span>
-          <span v-else>Nothing more to load</span>
+          <span
+            v-if="isFetchingNextPage"
+            class="block rounded-md px-1.5 py-1"
+          >
+            Loading more&hellip;
+          </span>
+
+          <button
+            v-else-if="hasNextPage"
+            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-md px-1.5 py-1"
+            @click="onLoadNextPostPage"
+          >
+            Scroll here or click me to load more
+          </button>
+
+          <span
+            v-else
+            class="block rounded-md px-1.5 py-1"
+          >
+            Nothing more to load
+          </span>
         </PostsPagination>
       </div>
     </section>
