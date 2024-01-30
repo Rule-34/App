@@ -297,6 +297,23 @@
     await reflectChangesInUrl({ page: null, tags: newTags })
   }
 
+  /**
+   * Opens the tag in a new tab
+   */
+  async function onPostClickMiddleTag(tag: string) {
+    const tagUrl = generatePostsRoute(
+      undefined,
+      selectedBooru.value.domain,
+      undefined,
+      [new Tag({ name: tag })],
+      undefined
+    )
+
+    const resolvedTagUrl = router.resolve(tagUrl).href
+
+    window.open(resolvedTagUrl, '_blank')
+  }
+
   async function onLoadNextPostPage() {
     // Skip if already fetching
     if (isFetching.value || isFetchingNextPage.value) {
@@ -621,6 +638,7 @@
                   :selected-tags="selectedTags"
                   @click-tag="onPostClickTag"
                   @click-long-tag="onPostClickLongTag"
+                  @click-middle-tag="onPostClickMiddleTag"
                 />
               </li>
 
