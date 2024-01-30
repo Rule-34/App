@@ -19,6 +19,7 @@
   const emit = defineEmits<{
     clickTag: [tag: string]
     clickLongTag: [tag: string]
+    clickMiddleTag: [tag: string]
   }>()
 
   const userSettings = useUserSettings()
@@ -101,6 +102,10 @@
   function onClickLongTag(tag: Tag) {
     emit('clickLongTag', tag.name)
   }
+
+  function onClickMiddleTag(tag: Tag) {
+    emit('clickMiddleTag', tag.name)
+  }
 </script>
 
 <template>
@@ -180,6 +185,7 @@
             class="focus-visible:focus-outline-util group inline-flex select-none items-center rounded-full px-2 py-1 ring-1 ring-inset ring-base-0/20"
             type="button"
             @click="onClickTag(tag)"
+            @click.middle="onClickMiddleTag(tag)"
           >
             <span class="group-hover:hover-text-util text-xs font-medium">
               {{ tag.name }}
