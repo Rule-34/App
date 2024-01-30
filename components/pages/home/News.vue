@@ -31,17 +31,6 @@
           target: '_blank'
         }
       ]
-    },
-    {
-      name: 'We are open source',
-      text: 'Check out and contribute to our source code',
-      links: [
-        {
-          text: 'GitHub',
-          href: 'https://redirect.r34.app/github',
-          target: '_blank'
-        }
-      ]
     }
   ]
 </script>
