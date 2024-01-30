@@ -158,7 +158,9 @@
             </template>
 
             <template v-else>
-              {{ source }}
+              <span class="block break-words px-4 py-2 text-sm">
+                {{ source }}
+              </span>
             </template>
           </HeadlessMenuItem>
         </div>
