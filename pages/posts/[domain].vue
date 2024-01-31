@@ -74,13 +74,21 @@
     return page
   })
 
+  const defaultFiltersByBooru = {
+    'rule34.xxx': {
+      rating: undefined,
+      sort: undefined,
+      score: '>=5'
+    }
+  }
+
   const selectedFilters = computed(() => {
     // TODO: Validate
 
     return {
-      rating: route.query.filter?.rating ?? undefined,
-      sort: route.query.filter?.sort ?? undefined,
-      score: route.query.filter?.score ?? undefined
+      rating: route.query.filter?.rating ?? defaultFiltersByBooru[selectedBooru.value.domain]?.rating ?? undefined,
+      sort: route.query.filter?.sort ?? defaultFiltersByBooru[selectedBooru.value.domain]?.sort ?? undefined,
+      score: route.query.filter?.score ?? defaultFiltersByBooru[selectedBooru.value.domain]?.score ?? undefined
     }
   })
 
