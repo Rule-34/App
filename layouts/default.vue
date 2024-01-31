@@ -55,7 +55,8 @@
       />
     </div>
 
-    <PwaUpdater />
+    <!-- TODO: Restore when needed -->
+    <!--    <PwaUpdater />-->
 
     <ClientOnly>
       <Toaster
