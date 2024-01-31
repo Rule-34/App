@@ -20,7 +20,7 @@ export interface IBackupState {
 }
 
 export async function createBackupState(): Promise<IBackupState> {
-  const { booruList } = useBooruList()
+  const { userBooruList } = useBooruList()
   const { tagCollections } = useTagCollections()
   const savedPosts = await postsDb.posts.toArray()
   const userSettings = useUserSettings()
@@ -30,7 +30,7 @@ export async function createBackupState(): Promise<IBackupState> {
   const backupState: IBackupState = {
     version: 1,
 
-    boorus: booruList.value,
+    boorus: userBooruList.value,
     tag_collections: tagCollections.value,
     saved_posts: savedPosts,
 
@@ -42,9 +42,9 @@ export async function createBackupState(): Promise<IBackupState> {
 
 async function restoreV3Backup(backupState: IBackupState) {
   if (backupState.boorus?.length) {
-    const { booruList } = useBooruList()
+    const { userBooruList } = useBooruList()
 
-    booruList.value = backupState.boorus
+    userBooruList.value = backupState.boorus
   }
 
   if (backupState.tag_collections?.length) {
@@ -76,7 +76,7 @@ async function restoreV3Backup(backupState: IBackupState) {
 
 function restoreV2Backup(backupState: IOldBackupState) {
   if (backupState.user.custom.boorus?.length) {
-    const { booruList } = useBooruList()
+    const { userBooruList } = useBooruList()
 
     const migratedBooruList: Domain[] = backupState.user.custom.boorus.map((booru) => {
       return {
@@ -91,7 +91,7 @@ function restoreV2Backup(backupState: IOldBackupState) {
       }
     })
 
-    booruList.value = migratedBooruList
+    userBooruList.value = migratedBooruList
   }
 
   if (backupState.user.custom.tagCollections?.length) {
@@ -182,7 +182,7 @@ export function removeBrowserOldVersionState() {
 export async function migrateBrowserOldVersionState(): Promise<void> {
   const { tagCollections } = useTagCollections()
   const userSettings = useUserSettings()
-  const { booruList } = useBooruList()
+  const { userBooruList } = useBooruList()
 
   if (!doesBrowserHaveOldVersionState()) {
     return
@@ -216,11 +216,11 @@ export async function migrateBrowserOldVersionState(): Promise<void> {
       }
     }) as Domain[]
 
-    const uniqueBoorus = unionWith(booruList.value, vuexUserBoorusMigrated, (obj1, obj2) => {
+    const uniqueBoorus = unionWith(userBooruList.value, vuexUserBoorusMigrated, (obj1, obj2) => {
       return obj1.domain === obj2.domain
     })
 
-    booruList.value = uniqueBoorus
+    userBooruList.value = uniqueBoorus
   }
 
   // === Migrate saved posts

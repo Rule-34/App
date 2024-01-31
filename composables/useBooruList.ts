@@ -1,7 +1,6 @@
 import { booruTypeList, completeBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 import { useStorage } from '@vueuse/core'
 import type { Domain } from '~/assets/js/domain'
-import { cloneDeep } from 'lodash-es'
 
 const defaultBooruList: Domain[] = completeBooruList.map((booruObj, index) => {
   const booruType = booruTypeList.find((booruTypeObj) => booruTypeObj.type === booruObj.type)
@@ -16,26 +15,31 @@ const defaultBooruList: Domain[] = completeBooruList.map((booruObj, index) => {
     config: booruObj.config,
 
     // The first 7 boorus are free
-    isPremium: index > 6
+    isPremium: index > 6,
+    isCustom: false
   } as Domain
 })
 
-let userBooruList = ref<Domain[]>(cloneDeep(defaultBooruList))
+let userBooruList = ref<Domain[]>([])
 
 if (process.client) {
-  userBooruList = useStorage<Domain[]>('user-booruList', cloneDeep(defaultBooruList), localStorage, {
+  userBooruList = useStorage<Domain[]>('user-booruList-2', [], localStorage, {
     writeDefaults: false
   })
 }
 
-// TODO: Only save custom boorus, not default ones
-
 export function useBooruList() {
   return {
-    booruList: userBooruList,
+    booruList: computed(() => {
+      return [...defaultBooruList, ...userBooruList.value]
+    }),
 
-    resetBooruList() {
-      userBooruList.value = cloneDeep(defaultBooruList)
+    defaultBooruList,
+
+    userBooruList,
+
+    resetUserBooruList() {
+      userBooruList.value = []
     }
   }
 }
