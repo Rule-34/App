@@ -399,16 +399,9 @@
     return _title
   })
 
+  // TODO: Think about setting a real canonical URL
   const canonicalUrl = computed(() => {
-    const rawRoute = generatePostsRoute(
-      undefined,
-      selectedBooru.value.domain,
-      selectedPage.value,
-      selectedTags.value,
-      selectedFilters.value
-    )
-
-    return 'https://' + config.public.APP_DOMAIN + router.resolve(rawRoute).href
+    return window.location.href
   })
 
   useSeoMeta({
@@ -423,7 +416,7 @@
 
       // TODO: Filters
 
-      description += ` from the ${selectedBooru.value.domain} website`
+      description += ` from ${selectedBooru.value.domain}`
 
       description += '. Fast and free anime hentai with the Rule 34 App.'
 
