@@ -8,4 +8,5 @@ export interface Domain {
   config: Record<string, unknown> | null
 
   isPremium: boolean
+  isCustom: boolean
 }

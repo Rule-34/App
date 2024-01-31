@@ -5,21 +5,43 @@
   import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
   import type { Ref } from 'vue'
   import { toast } from 'vue-sonner'
+  import { ExclamationCircleIcon } from '@heroicons/vue/24/solid'
 
-  const { booruList, resetBooruList } = useBooruList()
+  const { userBooruList, resetUserBooruList } = useBooruList()
 
   const sortableElement = ref<HTMLElement | null>(null)
 
-  useSortable(sortableElement, booruList, {
+  const sortable = useSortable(sortableElement, userBooruList, {
     handle: '.handle',
     animation: 150,
 
     onUpdate: (e: any) => {
       nextTick(() => {
-        moveArrayElement(booruList.value, e.oldIndex, e.newIndex)
+        moveArrayElement(userBooruList.value, e.oldIndex, e.newIndex)
       })
     }
   })
+
+  watch(
+    userBooruList,
+    (value, oldValue) => {
+      if (!sortableElement.value) {
+        return
+      }
+
+      if (value.length > 2) {
+        return
+      }
+
+      console.log(value.length, oldValue?.length)
+      sortable.stop()
+      sortable.start()
+    },
+    {
+      immediate: true,
+      deep: true
+    }
+  )
 
   const dialogOpen = shallowRef(false)
 
@@ -42,12 +64,12 @@
     type: undefined
   })
 
-  function resetBooruListToDefault() {
+  function resetUserBooruListToDefault() {
     if (!confirm('Are you sure you want to reset all Boorus to default?')) {
       return
     }
 
-    resetBooruList()
+    resetUserBooruList()
   }
 
   function openCreateBooruDialog() {
@@ -61,7 +83,7 @@
   }
 
   function openEditBooru(index: number) {
-    const booru = booruList.value[index]
+    const booru = userBooruList.value[index]
 
     currentBooru.value = {
       domain: booru.domain,
@@ -96,15 +118,20 @@
 
     // TODO: Validate with Domain object
 
-    if (booruList.value.find((booruFromList) => booruFromList.domain === currentBooru.value.domain)) {
+    if (userBooruList.value.find((booruFromList) => booruFromList.domain === currentBooru.value.domain)) {
       toast.error('Booru already exists')
       return
     }
 
-    booruList.value.push({
+    // TODO: Validate with Domain object
+    userBooruList.value.push({
       domain: currentBooru.value.domain,
       type: booruType,
-      isPremium: true
+
+      config: null,
+
+      isPremium: true,
+      isCustom: true
     })
 
     dialogOpen.value = false
@@ -125,18 +152,21 @@
     }
 
     // TODO: Validate with Domain object
-
-    booruList.value[dialogEditIndex.value!] = {
+    userBooruList.value[dialogEditIndex.value!] = {
       domain: currentBooru.value.domain,
       type: booruType,
-      isPremium: true
+
+      config: null,
+
+      isPremium: true,
+      isCustom: true
     }
 
     dialogOpen.value = false
   }
 
   function deleteBooru() {
-    booruList.value.splice(dialogEditIndex.value!, 1)
+    userBooruList.value.splice(dialogEditIndex.value!, 1)
 
     dialogOpen.value = false
   }
@@ -156,68 +186,80 @@
     </PageHeader>
 
     <section class="mx-2 mt-4 flex-auto">
-      <ol
-        ref="sortableElement"
-        v-auto-animate
-        class="space-y-4"
-      >
-        <li
-          v-for="(booru, index) in booruList"
-          :key="booru.domain"
-          class="flex w-full items-center gap-2"
+      <template v-if="!userBooruList.length">
+        <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-center text-lg">
+          <ExclamationCircleIcon class="h-12 w-12" />
+
+          <h3>Start adding Boorus!</h3>
+
+          <span class="w-full overflow-x-auto text-sm italic"> Default Boorus can't be edited </span>
+        </div>
+      </template>
+
+      <template v-else>
+        <ol
+          ref="sortableElement"
+          v-auto-animate
+          class="space-y-4"
         >
-          <!-- Handle -->
-          <div class="handle mr-2 cursor-move">
-            <span class="sr-only">Drag to reorder</span>
+          <li
+            v-for="(booru, index) in userBooruList"
+            :key="booru.domain"
+            class="flex w-full items-center gap-2"
+          >
+            <!-- Handle -->
+            <div class="handle mr-2 cursor-move">
+              <span class="sr-only">Drag to reorder</span>
 
-            <Bars2Icon class="h-4 w-4 text-base-content group-hover:text-base-content-hover" />
-          </div>
+              <Bars2Icon class="h-4 w-4 text-base-content group-hover:text-base-content-hover" />
+            </div>
 
-          <!-- Favicon -->
-          <img
-            :src="`https://icons.duckduckgo.com/ip2/${booru.domain}.ico`"
-            alt="Favicon"
-            class="h-5 w-5 flex-shrink-0 rounded"
-            height="128"
-            loading="eager"
-            width="128"
-          />
+            <!-- Favicon -->
+            <img
+              :src="`https://icons.duckduckgo.com/ip2/${booru.domain}.ico`"
+              alt="Favicon"
+              class="h-5 w-5 flex-shrink-0 rounded"
+              height="128"
+              loading="eager"
+              width="128"
+            />
 
-          <!-- Domain -->
-          <span class="">
-            {{ booru.domain }}
-          </span>
+            <!-- Domain -->
+            <span class="">
+              {{ booru.domain }}
+            </span>
 
-          <!-- Take space -->
-          <div class="flex-1" />
+            <!-- Take space -->
+            <div class="flex-1" />
 
-          <!-- Actions -->
-          <div class="flex gap-2">
-            <!-- Edit -->
-            <button
-              class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util inline-flex items-center justify-center rounded-md p-2"
-              type="button"
-              @click="openEditBooru(index)"
-            >
-              <span class="sr-only">Edit</span>
-              <PencilIcon class="h-4 w-4" />
-            </button>
-          </div>
-        </li>
-      </ol>
+            <!-- Actions -->
+            <div class="flex gap-2">
+              <!-- Edit -->
+              <button
+                class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util inline-flex items-center justify-center rounded-md p-2"
+                type="button"
+                @click="openEditBooru(index)"
+              >
+                <span class="sr-only">Edit</span>
+                <PencilIcon class="h-4 w-4" />
+              </button>
+            </div>
+          </li>
+        </ol>
+      </template>
     </section>
 
     <!-- Actions -->
     <section class="mt-4 flex items-center justify-between gap-2">
-      <!-- Reset to default -->
+      <!-- Reset -->
       <button
         class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util inline-flex items-center justify-center gap-2 rounded-md px-2 py-1"
         type="button"
-        @click="resetBooruListToDefault"
+        @click="resetUserBooruListToDefault"
       >
         <ArrowUturnLeftIcon class="mr-2 h-4 w-4" />
 
-        Reset to default
+        Reset
       </button>
 
       <!-- Add Booru -->
@@ -240,7 +282,7 @@
   >
     <template #title> {{ dialogMode === 'create' ? 'Add' : 'Edit' }} Booru</template>
 
-    <template #description> Remember to test the Booru before saving it</template>
+    <!--    <template #description> Remember to test the Booru before saving it</template>-->
 
     <div class="divide-y divide-gray-200 px-4 sm:px-6">
       <!-- Form -->
@@ -310,7 +352,7 @@
             id="type-description"
             class="mt-2 text-sm"
           >
-            Usually found at the bottom of a Booru's website
+            Usually indicated in the footer (bottom) of a Booru's website
 
             <span class="mt-2 block text-xs italic"> If the type is equal to the domain, choose that option </span>
           </p>
