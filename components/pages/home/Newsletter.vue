@@ -51,10 +51,19 @@
       >
         Notify me
       </button>
-
-      <!-- TODO: Add this text -->
-      <!-- No spam. Unsubscribe anytime. -->
     </form>
+
+    <p class="mx-auto mt-10 text-center text-sm leading-6">
+      Unsubscribe anytime
+      <br />
+      We care about your data, read our
+      <NuxtLink
+        class="hover:hover-text-util focus-visible:focus-outline-util"
+        href="/privacy-policy"
+      >
+        privacy&nbsp;policy
+      </NuxtLink>
+    </p>
 
     <!-- Background -->
     <svg
