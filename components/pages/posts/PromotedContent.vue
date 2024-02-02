@@ -16,7 +16,14 @@
       link: '/premium'
     },
     {
-      media: '/img/promo/premium/Hide Promoted Content.jpg',
+      media: '/img/promo/premium/No Ads.jpg',
+      mediaWidth: 1280,
+      mediaHeight: 1280,
+      mediaType: 'image',
+      link: '/premium'
+    },
+    {
+      media: '/img/promo/premium/History.jpg',
       mediaWidth: 1280,
       mediaHeight: 1280,
       mediaType: 'image',
@@ -37,7 +44,7 @@
       link: '/premium'
     },
     {
-      media: '/img/promo/premium/Source Locator.jpg',
+      media: '/img/promo/premium/Source Finder.jpg',
       mediaWidth: 1280,
       mediaHeight: 1280,
       mediaType: 'image',
