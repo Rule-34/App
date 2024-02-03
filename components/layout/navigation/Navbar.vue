@@ -74,8 +74,6 @@
     <!-- TODO: refactor code -->
     <div
       :class="[
-        // Container
-        'container mx-auto max-w-3xl sm:px-6 lg:px-8',
         isPostsPage
           ? //
             'fixed'
@@ -83,8 +81,8 @@
         isPostsPage
           ? showNavbarBackground
             ? //
-              'border-b-2 border-base-0/20 bg-base-1000/60 backdrop-blur md:rounded-b-md md:border-x-2'
-            : '!border-0 border-transparent bg-transparent md:rounded-b-md md:border-x-2'
+              'border-b-2 border-base-0/20 bg-base-1000/60 backdrop-blur'
+            : '!border-0 border-transparent bg-transparent'
           : '',
         isPostsPage
           ? showFixedNavbar
@@ -96,7 +94,13 @@
       class="inset-x-0 z-10 transition duration-200"
     >
       <!-- Navbar -->
-      <div class="relative flex h-14 items-center justify-between">
+      <div
+        :class="[
+          // Container
+          'container mx-auto max-w-3xl sm:px-6 lg:px-8'
+        ]"
+        class="relative flex h-14 items-center justify-between"
+      >
         <!-- -->
 
         <!-- Right side: Menu button -->
