@@ -9,11 +9,7 @@ export default defineNuxtConfig({
    */
   routeRules: {
     '/posts/**': {
-      // TODO: Change when Cloudflare Pages supports ISR
-      // Incremental Static Regeneration for 5 minutes
-      // isr: 60 * 5,
-
-      ssr: false
+      swr: 60 * 5
     },
 
     // Static pages are prerendered
@@ -43,9 +39,6 @@ export default defineNuxtConfig({
   },
 
   nitro: {
-    // TODO: Remove when SSR is enabled
-    static: true,
-
     esbuild: {
       options: {
         target: 'esnext'
@@ -63,6 +56,11 @@ export default defineNuxtConfig({
       // Put the Sentry vite plugin after all other plugins
       sentryVitePlugin({
         authToken: process.env.SENTRY_AUTH_TOKEN,
+
+        release: {
+          name: process.env.GIT_REV ?? undefined
+        },
+
         org: 'alejandro-akbal',
         project: 'app',
         url: 'https://glitchtip.akbal.dev/'
@@ -71,7 +69,12 @@ export default defineNuxtConfig({
   },
 
   build: {
-    transpile: ['vue-sonner']
+    transpile: ['vue-sonner', 'dexie']
+  },
+
+  // TODO: Remove when I fix "Cannot stringify arbitrary non-POJOs error" - https://github.com/nuxt/nuxt/issues/20787
+  experimental: {
+    renderJsonPayloads: false
   },
 
   sourcemap: true,
@@ -124,16 +127,6 @@ export default defineNuxtConfig({
 
     '@nuxtjs/sitemap'
   ],
-
-  image: {
-    domains: [
-      //
-      process.env.APP_DOMAIN,
-      'localhost',
-      'localhost:8081',
-      'www.google.com'
-    ]
-  },
 
   /** @type {import('@nuxt-alt/auth').ModuleOptions} */
   auth: {

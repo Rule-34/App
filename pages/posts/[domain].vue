@@ -409,7 +409,7 @@
 
   // TODO: Think about setting a real canonical URL
   const canonicalUrl = computed(() => {
-    return window.location.href
+    return route.fullPath
   })
 
   useSeoMeta({
