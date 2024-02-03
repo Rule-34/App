@@ -125,11 +125,17 @@
     >
       <!-- Actions -->
       <div class="flex items-center p-2">
-        <PostSave
-          v-if="mediaFile.file"
-          :domain="domain"
-          :post="post"
-        />
+        <ClientOnly>
+          <PostSave
+            v-if="mediaFile.file"
+            :domain="domain"
+            :post="post"
+          />
+
+          <template #fallback>
+            <PostSaveFallback />
+          </template>
+        </ClientOnly>
 
         <PostDownload
           v-if="mediaFile.file"

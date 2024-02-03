@@ -8,6 +8,7 @@
     "node": "^20"
   },
   "scripts": {
+    "start": "node .output/server/index.mjs",
     "dev": "nuxt dev",
     "_": "",
     "analyze": "nuxt build --analyze",
@@ -20,7 +21,7 @@
     "release:publish": "git push --follow-tags origin main",
     "____": "",
     "postinstall": "nuxt prepare",
-    "build": "nuxt generate"
+    "build": "nuxt build"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",
