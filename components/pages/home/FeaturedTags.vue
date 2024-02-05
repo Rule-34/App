@@ -7,9 +7,11 @@
     }[]
   }>()
 
-  const preselectedTags = useState('preselectedTags' + props.tags[0].path)
+  const tagsKey = props.tags[0].path
 
-  callOnce(() => {
+  const preselectedTags = useState('preselectedTags' + tagsKey)
+
+  callOnce(tagsKey, () => {
     preselectedTags.value = props.tags.map((tag) => ({
       ...tag,
       images: [getRandomImage(tag.images)]
