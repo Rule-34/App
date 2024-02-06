@@ -66,7 +66,7 @@
         theme="dark"
       />
 
-      <LazyDialogManager />
+      <DialogManager />
     </ClientOnly>
 
     <SidebarWrapper>
