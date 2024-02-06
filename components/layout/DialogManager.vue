@@ -1,6 +1,5 @@
 <script lang="ts" setup>
   import { watchOnce } from '@vueuse/core'
-  import { PWA } from '#components'
 
   const open = ref(false)
 
@@ -13,7 +12,8 @@
           return false
         }
 
-        if (timesTheAppHasBeenOpened.value < 1) {
+        // Show after 3 times
+        if (timesTheAppHasBeenOpened.value < 3) {
           return false
         }
 
@@ -23,8 +23,7 @@
 
         return true
       },
-      // TODO: Load dynamically
-      component: PWA
+      component: defineAsyncComponent(() => import('~/components/layout/modal/PWA.vue'))
     }
   ]
 

@@ -1,12 +1,15 @@
 <script lang="ts" setup>
   import { HomeIcon } from '@heroicons/vue/24/outline'
+  import { watchOnce } from '@vueuse/core'
 
   const open = defineModel<boolean>()
 
-  onMounted(() => {
-    const { promptInstallPwa } = useAppStatistics()
+  watchOnce(open, () => {
+    if (!open.value) {
+      const { promptInstallPwa } = useAppStatistics()
 
-    promptInstallPwa.value = true
+      promptInstallPwa.value = true
+    }
   })
 </script>
 
