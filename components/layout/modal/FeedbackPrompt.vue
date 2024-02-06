@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline'
   import { watchOnce } from '@vueuse/core'
+  import { ArrowPathIcon } from '@heroicons/vue/24/solid'
 
   const open = defineModel<boolean>()
 
@@ -11,6 +12,8 @@
       promptFeedback.value = true
     }
   })
+
+  const isIframeLoaded = ref(false)
 </script>
 
 <template>
@@ -38,15 +41,25 @@
   </div>
 
   <!-- Body -->
-  <iframe
-    border="0"
-    cellspacing="0"
-    class="mt-5 h-screen max-h-[60vh] w-full rounded-md sm:mt-6"
-    loading="eager"
-    onload="this.style.visibility='visible';"
-    src="https://docs.google.com/forms/d/e/1FAIpQLSeJLEq12Z2T8nqOh9hqMAnKGKo0G3Zy-J6eBKVIlZAwS5kfSg/viewform?embedded=true"
-    style="visibility: hidden"
-  />
+  <div class="relative">
+    <iframe
+      :class="{ invisible: !isIframeLoaded }"
+      border="0"
+      class="mt-5 h-screen max-h-[60vh] w-full rounded-md sm:mt-6"
+      loading="eager"
+      src="https://docs.google.com/forms/d/e/1FAIpQLSeJLEq12Z2T8nqOh9hqMAnKGKo0G3Zy-J6eBKVIlZAwS5kfSg/viewform?embedded=true"
+      title="Feedback form iframe"
+      @load="isIframeLoaded = true"
+    />
+
+    <template v-if="!isIframeLoaded">
+      <div class="absolute inset-0 flex w-full animate-pulse flex-col items-center justify-center gap-4 text-lg">
+        <ArrowPathIcon class="h-12 w-12 animate-spin" />
+
+        <h3>Loading&hellip;</h3>
+      </div>
+    </template>
+  </div>
 
   <!-- Actions -->
   <div class="mt-5 sm:mt-6">
