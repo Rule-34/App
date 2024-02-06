@@ -7,6 +7,8 @@ let tutorialLongClickTag = ref<boolean>(false)
 let tutorialPostSave = ref<boolean>(false)
 let tutorialPostSource = ref<boolean>(false)
 
+let promptInstallPwa = ref<boolean>(false)
+
 if (process.client) {
   timesTheAppHasBeenOpened = useStorage('statistics-appOpenedCount', 0, localStorage, {
     writeDefaults: false
@@ -19,8 +21,11 @@ if (process.client) {
   tutorialPostSave = useStorage('tutorial-postSave', false, localStorage, {
     writeDefaults: false
   })
-
   tutorialPostSource = useStorage('tutorial-postSource', false, localStorage, {
+    writeDefaults: false
+  })
+
+  promptInstallPwa = useStorage('prompt-installPwa', false, localStorage, {
     writeDefaults: false
   })
 }
@@ -33,6 +38,8 @@ export function useAppStatistics() {
 
     tutorialLongClickTag,
     tutorialPostSave,
-    tutorialPostSource
+    tutorialPostSource,
+
+    promptInstallPwa
   }
 }
