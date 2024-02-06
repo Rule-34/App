@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { watchOnce } from '@vueuse/core'
+  import { PWA } from '#components'
 
   const open = ref(false)
 
@@ -22,7 +23,8 @@
 
         return true
       },
-      component: resolveComponent('PWA')
+      // TODO: Load dynamically
+      component: PWA
     }
   ]
 
