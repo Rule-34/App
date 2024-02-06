@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-  import { watchOnce } from '@vueuse/core'
-
   const open = ref(false)
 
   const dialogs = [
@@ -12,8 +10,8 @@
           return false
         }
 
-        // Show after 3 times
-        if (timesTheAppHasBeenOpened.value < 3) {
+        // Show after 2 times
+        if (timesTheAppHasBeenOpened.value < 2) {
           return false
         }
 
@@ -23,28 +21,35 @@
 
         return true
       },
-      component: defineAsyncComponent(() => import('~/components/layout/modal/PWA.vue'))
+      component: defineAsyncComponent(() => import('~/components/layout/modal/PwaPrompt.vue'))
+    },
+    {
+      condition: () => {
+        const { timesTheAppHasBeenOpened, promptFeedback } = useAppStatistics()
+
+        if (promptFeedback.value) {
+          return false
+        }
+
+        // Show after 5 times
+        if (timesTheAppHasBeenOpened.value < 5) {
+          return false
+        }
+
+        return true
+      },
+      component: defineAsyncComponent(() => import('~/components/layout/modal/FeedbackPrompt.vue'))
     }
   ]
 
-  const dialog = computed(() => {
-    return dialogs.find((dialog) => dialog.condition())?.component
-  })
+  const dialog = dialogs.find((dialog) => dialog.condition())?.component
 
-  watchOnce(
-    dialog,
-    () => {
-      if (dialog.value) {
-        // Show after X seconds
-        setTimeout(() => {
-          open.value = true
-        }, 1000 * 1.33)
-      }
-    },
-    {
-      immediate: true
-    }
-  )
+  if (dialog) {
+    // Show after X seconds
+    setTimeout(() => {
+      open.value = true
+    }, 1000 * 1.33)
+  }
 </script>
 
 <template>
