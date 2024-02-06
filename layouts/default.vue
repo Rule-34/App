@@ -65,6 +65,8 @@
         position="top-center"
         theme="dark"
       />
+
+      <DialogManager />
     </ClientOnly>
 
     <SidebarWrapper>
