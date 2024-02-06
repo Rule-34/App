@@ -8,6 +8,7 @@ let tutorialPostSave = ref<boolean>(false)
 let tutorialPostSource = ref<boolean>(false)
 
 let promptInstallPwa = ref<boolean>(false)
+let promptFeedback = ref<boolean>(false)
 
 if (process.client) {
   timesTheAppHasBeenOpened = useStorage('statistics-appOpenedCount', 0, localStorage, {
@@ -28,6 +29,9 @@ if (process.client) {
   promptInstallPwa = useStorage('prompt-installPwa', false, localStorage, {
     writeDefaults: false
   })
+  promptFeedback = useStorage('prompt-feedback', false, localStorage, {
+    writeDefaults: false
+  })
 }
 
 timesTheAppHasBeenOpened.value++
@@ -40,6 +44,7 @@ export function useAppStatistics() {
     tutorialPostSave,
     tutorialPostSource,
 
-    promptInstallPwa
+    promptInstallPwa,
+    promptFeedback
   }
 }

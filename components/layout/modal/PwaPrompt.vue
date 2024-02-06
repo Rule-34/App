@@ -16,10 +16,10 @@
 <template>
   <!-- Header -->
   <div>
-    <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+    <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-500">
       <HomeIcon
         aria-hidden="true"
-        class="h-6 w-6 text-green-600"
+        class="h-6 w-6 text-blue-100"
       />
     </div>
 
