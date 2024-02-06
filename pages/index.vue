@@ -456,7 +456,10 @@
             />
 
             <template #fallback>
-              <div class="pr-10" />
+              <DomainSelectorFallback
+                :compact="true"
+                class="self-stretch"
+              />
             </template>
           </ClientOnly>
 
