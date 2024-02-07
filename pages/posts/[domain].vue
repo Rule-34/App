@@ -334,7 +334,7 @@
   }
 
   async function onPageIndicatorClick() {
-    const pagePrompt = prompt('What page number would you like to go to?', '10')
+    const pagePrompt = prompt('To which page do you want to go?')
     const page = parseInt(pagePrompt, 10)
 
     if (isNaN(page)) {
