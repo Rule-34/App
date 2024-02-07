@@ -219,55 +219,6 @@
     await reflectChangesInUrl({ domain: domain.domain, page: null, tags: null, filters: null })
   }
 
-  /**
-   * Adds the tag, or removes it if it already exists
-   */
-  async function onPostClickTag(tag: string) {
-    let newTags = undefined
-
-    const filteredSelectedTags = selectedTags.value.filter((selectedTag) => selectedTag.name !== tag)
-
-    // If the tag was not found, add it
-    if (filteredSelectedTags.length === selectedTags.value.length) {
-      newTags = [...selectedTags.value, new Tag({ name: tag })]
-    }
-
-    // If the tag was found, remove it
-    else {
-      newTags = filteredSelectedTags
-    }
-
-    await reflectChangesInUrl({ page: null, tags: newTags })
-  }
-
-  /**
-   * Removes the tag, and adds it to the blocklist
-   */
-  async function onPostClickLongTag(tag: string) {
-    const newTags = selectedTags.value.filter((selectedTag) => selectedTag.name !== tag)
-
-    newTags.push(new Tag({ name: '-' + tag }))
-
-    await reflectChangesInUrl({ page: null, tags: newTags })
-  }
-
-  /**
-   * Opens the tag in a new tab
-   */
-  async function onPostClickMiddleTag(tag: string) {
-    const tagUrl = generatePostsRoute(
-      '/premium/saved-posts',
-      selectedBooru.value.domain,
-      undefined,
-      [new Tag({ name: tag })],
-      undefined
-    )
-
-    const resolvedTagUrl = router.resolve(tagUrl).href
-
-    window.open(resolvedTagUrl, '_blank')
-  }
-
   async function onLoadNextPostPage() {
     // Skip if already fetching
     if (isFetching.value || isFetchingNextPage.value) {
@@ -491,9 +442,6 @@
                   :domain="post.original_domain"
                   :post="post.data"
                   :selected-tags="selectedTags"
-                  @click-tag="onPostClickTag"
-                  @click-long-tag="onPostClickLongTag"
-                  @click-middle-tag="onPostClickMiddleTag"
                 />
               </li>
             </template>
