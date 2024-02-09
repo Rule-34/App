@@ -255,6 +255,13 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      style: [
+        {
+          type: 'text/css',
+          cssText: 'html, body { background-color: black; }'
+        }
+      ],
+
       script: [
         // Matomo
         {
