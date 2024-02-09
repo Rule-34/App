@@ -313,103 +313,103 @@
           images: ['/img/featured/e621.net/pokemon.jpeg']
         }
       ]
-    }
+    },
 
-    // {
-    //   domain: 'realbooru.com',
-    //   path: '/posts/realbooru.com',
-    //   tags: [
-    //     {
-    //       name: 'Top posts',
-    //       path: '/posts/realbooru.com?filter%5Bsort%5D=score',
-    //       images: [
-    //         '/img/featured/realbooru.com/top-1.jpeg',
-    //         '/img/featured/realbooru.com/top-2.jpeg',
-    //         '/img/featured/realbooru.com/top-3.jpeg',
-    //         '/img/featured/realbooru.com/top-4.jpeg'
-    //       ]
-    //     },
-    //     {
-    //       name: 'Popular posts',
-    //       path: '/posts/realbooru.com?filter%5Bscore%5D=>%3D50',
-    //       images: [
-    //         '/img/featured/realbooru.com/top-5.jpeg',
-    //         '/img/featured/realbooru.com/top-6.jpeg',
-    //         '/img/featured/realbooru.com/top-7.jpeg',
-    //         '/img/featured/realbooru.com/top-8.jpeg'
-    //       ]
-    //     },
-    //     {
-    //       name: 'Animated (video)',
-    //       path: '/posts/realbooru.com?tags=animated',
-    //       images: ['/img/featured/realbooru.com/animated.jpeg']
-    //     },
-    //     {
-    //       name: 'Cosplay',
-    //       path: '/posts/realbooru.com?tags=cosplay',
-    //       images: [
-    //         '/img/featured/realbooru.com/cosplay-1.jpeg',
-    //         '/img/featured/realbooru.com/cosplay-2.jpeg',
-    //         '/img/featured/realbooru.com/cosplay-3.jpeg',
-    //         '/img/featured/realbooru.com/cosplay-4.jpeg',
-    //         '/img/featured/realbooru.com/cosplay-5.jpeg',
-    //         '/img/featured/realbooru.com/cosplay-6.jpeg'
-    //       ]
-    //     },
-    //     {
-    //       name: 'Goth',
-    //       path: '/posts/realbooru.com?tags=goth',
-    //       images: [
-    //         '/img/featured/realbooru.com/goth-1.jpeg',
-    //         '/img/featured/realbooru.com/goth-2.jpeg',
-    //         '/img/featured/realbooru.com/goth-3.jpeg',
-    //         '/img/featured/realbooru.com/goth-4.jpeg',
-    //         '/img/featured/realbooru.com/goth-5.jpeg',
-    //         '/img/featured/realbooru.com/goth-6.jpeg',
-    //         '/img/featured/realbooru.com/goth-7.jpeg'
-    //       ]
-    //     },
-    //     {
-    //       name: 'Asian',
-    //       path: '/posts/realbooru.com?tags=asian',
-    //       images: [
-    //         '/img/featured/realbooru.com/asian-1.jpeg',
-    //         '/img/featured/realbooru.com/asian-2.jpeg',
-    //         '/img/featured/realbooru.com/asian-3.jpeg',
-    //         '/img/featured/realbooru.com/asian-4.jpeg',
-    //         '/img/featured/realbooru.com/asian-5.jpeg',
-    //         '/img/featured/realbooru.com/asian-6.jpeg',
-    //         '/img/featured/realbooru.com/asian-7.jpeg'
-    //       ]
-    //     },
-    //     {
-    //       name: 'Teen (+18)',
-    //       path: '/posts/realbooru.com?tags=teen',
-    //       images: [
-    //         '/img/featured/realbooru.com/teen-1.jpeg',
-    //         '/img/featured/realbooru.com/teen-2.jpeg',
-    //         '/img/featured/realbooru.com/teen-3.jpeg',
-    //         '/img/featured/realbooru.com/teen-4.jpeg',
-    //         '/img/featured/realbooru.com/teen-5.jpeg',
-    //         '/img/featured/realbooru.com/teen-6.jpeg',
-    //         '/img/featured/realbooru.com/teen-7.jpeg'
-    //       ]
-    //     },
-    //     {
-    //       name: 'Transgender',
-    //       path: '/posts/realbooru.com?tags=transgender',
-    //       images: [
-    //         '/img/featured/realbooru.com/transgender-1.jpeg',
-    //         '/img/featured/realbooru.com/transgender-2.jpeg',
-    //         '/img/featured/realbooru.com/transgender-3.jpeg',
-    //         '/img/featured/realbooru.com/transgender-4.jpeg',
-    //         '/img/featured/realbooru.com/transgender-5.jpeg',
-    //         '/img/featured/realbooru.com/transgender-6.jpeg',
-    //         '/img/featured/realbooru.com/transgender-7.jpeg'
-    //       ]
-    //     }
-    //   ]
-    // }
+    {
+      domain: 'realbooru.com',
+      path: '/posts/realbooru.com',
+      tags: [
+        {
+          name: 'Top posts',
+          path: '/posts/realbooru.com?filter%5Bsort%5D=score',
+          images: [
+            '/img/featured/realbooru.com/top-1.jpeg',
+            '/img/featured/realbooru.com/top-2.jpeg',
+            '/img/featured/realbooru.com/top-3.jpeg',
+            '/img/featured/realbooru.com/top-4.jpeg'
+          ]
+        },
+        {
+          name: 'Popular posts',
+          path: '/posts/realbooru.com?filter%5Bscore%5D=>%3D50',
+          images: [
+            '/img/featured/realbooru.com/top-5.jpeg',
+            '/img/featured/realbooru.com/top-6.jpeg',
+            '/img/featured/realbooru.com/top-7.jpeg',
+            '/img/featured/realbooru.com/top-8.jpeg'
+          ]
+        },
+        {
+          name: 'Animated (video)',
+          path: '/posts/realbooru.com?tags=animated',
+          images: ['/img/featured/realbooru.com/animated.jpeg']
+        },
+        {
+          name: 'Cosplay',
+          path: '/posts/realbooru.com?tags=cosplay',
+          images: [
+            '/img/featured/realbooru.com/cosplay-1.jpeg',
+            '/img/featured/realbooru.com/cosplay-2.jpeg',
+            '/img/featured/realbooru.com/cosplay-3.jpeg',
+            '/img/featured/realbooru.com/cosplay-4.jpeg',
+            '/img/featured/realbooru.com/cosplay-5.jpeg',
+            '/img/featured/realbooru.com/cosplay-6.jpeg'
+          ]
+        },
+        {
+          name: 'Goth',
+          path: '/posts/realbooru.com?tags=goth',
+          images: [
+            '/img/featured/realbooru.com/goth-1.jpeg',
+            '/img/featured/realbooru.com/goth-2.jpeg',
+            '/img/featured/realbooru.com/goth-3.jpeg',
+            '/img/featured/realbooru.com/goth-4.jpeg',
+            '/img/featured/realbooru.com/goth-5.jpeg',
+            '/img/featured/realbooru.com/goth-6.jpeg',
+            '/img/featured/realbooru.com/goth-7.jpeg'
+          ]
+        },
+        {
+          name: 'Asian',
+          path: '/posts/realbooru.com?tags=asian',
+          images: [
+            '/img/featured/realbooru.com/asian-1.jpeg',
+            '/img/featured/realbooru.com/asian-2.jpeg',
+            '/img/featured/realbooru.com/asian-3.jpeg',
+            '/img/featured/realbooru.com/asian-4.jpeg',
+            '/img/featured/realbooru.com/asian-5.jpeg',
+            '/img/featured/realbooru.com/asian-6.jpeg',
+            '/img/featured/realbooru.com/asian-7.jpeg'
+          ]
+        },
+        {
+          name: 'Teen (+18)',
+          path: '/posts/realbooru.com?tags=teen',
+          images: [
+            '/img/featured/realbooru.com/teen-1.jpeg',
+            '/img/featured/realbooru.com/teen-2.jpeg',
+            '/img/featured/realbooru.com/teen-3.jpeg',
+            '/img/featured/realbooru.com/teen-4.jpeg',
+            '/img/featured/realbooru.com/teen-5.jpeg',
+            '/img/featured/realbooru.com/teen-6.jpeg',
+            '/img/featured/realbooru.com/teen-7.jpeg'
+          ]
+        },
+        {
+          name: 'Transgender',
+          path: '/posts/realbooru.com?tags=transgender',
+          images: [
+            '/img/featured/realbooru.com/transgender-1.jpeg',
+            '/img/featured/realbooru.com/transgender-2.jpeg',
+            '/img/featured/realbooru.com/transgender-3.jpeg',
+            '/img/featured/realbooru.com/transgender-4.jpeg',
+            '/img/featured/realbooru.com/transgender-5.jpeg',
+            '/img/featured/realbooru.com/transgender-6.jpeg',
+            '/img/featured/realbooru.com/transgender-7.jpeg'
+          ]
+        }
+      ]
+    }
   ]
 </script>
 
