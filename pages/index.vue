@@ -129,6 +129,7 @@
     {
       domain: 'rule34.xxx',
       path: '/posts/rule34.xxx',
+      isPremium: false,
       tags: [
         {
           name: 'Top posts',
@@ -229,6 +230,7 @@
     {
       domain: 'gelbooru.com',
       path: '/posts/gelbooru.com',
+      isPremium: false,
       tags: [
         {
           name: 'Top posts',
@@ -276,6 +278,7 @@
     {
       domain: 'e621.net',
       path: '/posts/e621.net',
+      isPremium: false,
       tags: [
         {
           name: 'Top posts',
@@ -318,6 +321,7 @@
     {
       domain: 'realbooru.com',
       path: '/posts/realbooru.com',
+      isPremium: true,
       tags: [
         {
           name: 'Top posts',
@@ -527,6 +531,13 @@
                   :title="featuredDomain.domain"
                   as="h3"
                 />
+
+                <span
+                  v-if="featuredDomain.isPremium"
+                  class="inline-flex items-center rounded-full border-2 border-primary-500/60 px-2.5 py-0.5 text-xs font-medium text-base-content-highlight"
+                >
+                  Premium
+                </span>
               </NuxtLink>
 
               <span class="ml-auto block text-xs">Scroll →</span>

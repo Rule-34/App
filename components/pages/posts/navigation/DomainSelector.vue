@@ -116,7 +116,7 @@
               <!-- Premium badge-->
               <span
                 v-if="shouldBooruBeDisabled(booru)"
-                class="ml-2 inline-flex items-center rounded-full bg-primary-800 px-2.5 py-0.5 text-xs font-medium text-primary-500"
+                class="ml-2 inline-flex items-center rounded-full border-2 border-primary-500/60 px-2.5 py-0.5 text-xs font-medium text-base-content-highlight"
               >
                 Premium
               </span>
