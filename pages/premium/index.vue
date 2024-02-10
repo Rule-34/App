@@ -5,7 +5,10 @@
 
   const mainFeatures = [
     { title: 'No ads', additionalInfo: undefined },
-    { title: 'Access 7 additional Boorus (websites)', additionalInfo: '#additional-boorus' },
+    {
+      title: 'Access ' + (completeBooruList.length - defaultBooruList.length) + ' additional Boorus (websites)',
+      additionalInfo: '#additional-boorus'
+    },
     { title: 'Save posts', additionalInfo: '#save-posts' },
     { title: 'Download posts with one click', additionalInfo: '#download-posts' },
     { title: 'Find original source (artist) of posts', additionalInfo: '#find-source' },
@@ -98,7 +101,7 @@
               </svg>
             </div>
 
-            <span> Trusted by 1141+ customers</span>
+            <span> Trusted by 1203+ customers</span>
           </NuxtLink>
 
           <!-- TODO: Images of user profiles -->
@@ -211,7 +214,7 @@
                     Get Premium
                   </NuxtLink>
 
-                  <p class="text-center text-xs">
+                  <p class="text-center text-xs leading-6">
                     Cancel anytime, subscription managed by
 
                     <NuxtLink
@@ -221,6 +224,9 @@
                     >
                       Gumroad
                     </NuxtLink>
+
+                    <br />
+                    Discreet credit card statement
                   </p>
                 </div>
               </div>
