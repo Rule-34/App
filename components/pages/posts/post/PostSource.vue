@@ -69,17 +69,6 @@
   }
 
   function openSourceFinder(url: string) {
-    if (!isPremium.value) {
-      toast.info('Premium feature', {
-        description: 'Find the source of this post with SauceNAO, IQDB, Google, Yandex, Bing, and many more!',
-        action: {
-          label: 'Subscribe',
-          onClick: () => navigateTo('/premium')
-        }
-      })
-      return
-    }
-
     window.open(url, '_blank')
   }
 
@@ -126,8 +115,17 @@
       <HeadlessMenuItems
         class="w-56 divide-y divide-base-0/20 rounded-md bg-base-1000 ring-1 ring-base-0/20 focus:outline-none"
       >
+        <!-- No source found -->
         <div
-          v-if="postSources.length"
+          v-if="!postSources.length"
+          class="py-1"
+        >
+          <span class="block px-4 py-2 text-sm"> No source found :( </span>
+        </div>
+
+        <!-- Sources -->
+        <div
+          v-else
           class="py-1"
         >
           <HeadlessMenuItem
@@ -167,14 +165,14 @@
 
         <!-- Anime services -->
         <div class="py-1">
-          <!-- SauceNAO -->
           <HeadlessMenuItem
             v-for="service in imageAnimeRelatedServiceOptions"
             v-slot="{ active }"
+            :disabled="!isPremium"
           >
             <button
               :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-              class="group flex w-full items-center px-4 py-2 text-sm"
+              class="group flex w-full items-center px-4 py-2 text-sm ui-disabled:cursor-not-allowed ui-disabled:opacity-50"
               type="button"
               @click="openSourceFinder(service.link)"
             >
@@ -194,14 +192,14 @@
 
         <!--General services -->
         <div class="py-1">
-          <!-- SauceNAO -->
           <HeadlessMenuItem
             v-for="service in imageRelatedServiceOptions"
             v-slot="{ active }"
+            :disabled="!isPremium"
           >
             <button
               :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-              class="group flex w-full items-center px-4 py-2 text-sm"
+              class="group flex w-full items-center px-4 py-2 text-sm ui-disabled:cursor-not-allowed ui-disabled:opacity-50"
               type="button"
               @click="openSourceFinder(service.link)"
             >
