@@ -95,7 +95,10 @@ export default defineNuxtConfig({
 
       PROXY_URL: process.env.PROXY_URL,
 
-      SENTRY_DSN: process.env.SENTRY_DSN
+      SENTRY_DSN: process.env.SENTRY_DSN,
+      
+      POSTHOG_PUBLIC_KEY: process.env.POSTHOG_PUBLIC_KEY,
+      POSTHOG_HOST: process.env.POSTHOG_HOST
     }
   },
 
@@ -115,8 +118,6 @@ export default defineNuxtConfig({
     '@nuxt-alt/auth',
 
     '@formkit/auto-animate/nuxt',
-
-    '@nuxtjs/partytown',
 
     '@vite-pwa/nuxt',
 
@@ -245,14 +246,6 @@ export default defineNuxtConfig({
     }
   },
 
-  /**
-   * Also
-   * @see matomo.client.ts
-   */
-  partytown: {
-    forward: ['_paq.push']
-  },
-
   app: {
     head: {
       style: [
@@ -261,26 +254,6 @@ export default defineNuxtConfig({
           cssText: 'html, body { background-color: black; }'
         }
       ],
-
-      script: [
-        // Matomo
-        {
-          type: 'text/partytown',
-          children: `
-          var _paq = window._paq = window._paq || [];
-
-          _paq.push(["disableCookies"]);
-
-          _paq.push(['setTrackerUrl', 'https://matomo.akbal.dev/matomo.php']);
-          _paq.push(['setSiteId', '1']);
-        `
-        },
-        {
-          type: 'text/partytown',
-          src: 'https://matomo.akbal.dev/matomo.js',
-          async: true
-        }
-      ]
     }
   },
 
