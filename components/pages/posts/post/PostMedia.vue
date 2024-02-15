@@ -1,99 +1,113 @@
 <script lang="ts" setup>
-  import { vIntersectionObserver } from '@vueuse/components'
-  import type { IPost } from 'assets/js/post'
+import {vIntersectionObserver} from '@vueuse/components'
+import type {IPost} from 'assets/js/post'
 
-  const { isPremium } = useUserData()
+const {isPremium} = useUserData()
 
-  export interface PostMediaProps {
-    mediaSrc: string | null
-    mediaSrcHeight: number | null
-    mediaSrcWidth: number | null
-    mediaPosterSrc: string | null
-    mediaType: IPost['media_type']
-    mediaAlt: string
+export interface PostMediaProps {
+  mediaSrc: string | null
+  mediaSrcHeight: number | null
+  mediaSrcWidth: number | null
+  mediaPosterSrc: string | null
+  mediaType: IPost['media_type']
+  mediaAlt: string
+}
+
+const props = defineProps<PostMediaProps>()
+
+const localSrc = shallowRef(props.mediaSrc)
+
+const mediaHasLoaded = ref(false)
+
+const error = ref<Error | null>(null)
+const hasError = computed(() => error.value !== null)
+
+const isImage = computed(() => props.mediaType === 'image')
+const isVideo = computed(() => props.mediaType === 'video')
+
+const triedToLoadWithProxy = shallowRef(false)
+
+if (props.mediaType === 'unknown') {
+  error.value = new Error('Unknown media type')
+}
+
+function onMediaError(event: Event) {
+  if (hasError.value) {
+    return
   }
 
-  const props = defineProps<PostMediaProps>()
-
-  const localSrc = shallowRef(props.mediaSrc)
-
-  const mediaHasLoaded = ref(false)
-
-  const error = ref<Error | null>(null)
-  const hasError = computed(() => error.value !== null)
-
-  const isImage = computed(() => props.mediaType === 'image')
-  const isVideo = computed(() => props.mediaType === 'video')
-
-  const triedToLoadWithProxy = shallowRef(false)
-
-  if (props.mediaType === 'unknown') {
-    error.value = new Error('Unknown media type')
+  // Skip if no src
+  // @see onIntersectionObserver method
+  if (!event.target?.src) {
+    return
   }
 
-  function onMediaError(event: Event) {
-    if (hasError.value) {
-      return
-    }
+  if (!triedToLoadWithProxy.value && isPremium.value) {
+    triedToLoadWithProxy.value = true
 
-    // Skip if no src
-    // @see onIntersectionObserver method
-    if (!event.target?.src) {
-      return
-    }
+    const {proxiedUrl} = useProxyHelper(localSrc.value)
 
-    if (!triedToLoadWithProxy.value && isPremium.value) {
-      triedToLoadWithProxy.value = true
+    localSrc.value = proxiedUrl.value
+    // Fix: Inmediately set src to proxied url, since onIntersectionObserver method will not be called until out of viewport
+    event.target.src = proxiedUrl.value
 
-      const { proxiedUrl } = useProxyHelper(localSrc.value)
-
-      localSrc.value = proxiedUrl.value
-      // Fix: Inmediately set src to proxied url, since onIntersectionObserver method will not be called until out of viewport
-      event.target.src = proxiedUrl.value
-
-      return
-    }
-
-    error.value = new Error('Error loading media')
+    return
   }
 
-  function manuallyReloadMedia() {
-    // Reset state
-    triedToLoadWithProxy.value = false
-    error.value = null
+  error.value = new Error('Error loading media')
+}
 
-    // Reload media
-    localSrc.value = ''
-    localSrc.value = props.mediaSrc
+function manuallyReloadMedia() {
+  // Reset state
+  triedToLoadWithProxy.value = false
+  error.value = null
+
+  // Reload media
+  localSrc.value = ''
+  localSrc.value = props.mediaSrc
+}
+
+function onMediaIntersectionObserver(entries: IntersectionObserverEntry[]) {
+  // Smallest video & image possible - https://stackoverflow.com/a/36610159/11398632
+  const smallestImage =
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII='
+  const smallestVideo =
+    'data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAAAtJtZGF0AAACrQYF//+p3EXpvebZSLeWLNgg2SPu73gyNjQgLSBjb3JlIDE2NCByMzEwMyA5NDFjYWU2IC0gSC4yNjQvTVBFRy00IEFWQyBjb2RlYyAtIENvcHlsZWZ0IDIwMDMtMjAyMiAtIGh0dHA6Ly93d3cudmlkZW9sYW4ub3JnL3gyNjQuaHRtbCAtIG9wdGlvbnM6IGNhYmFjPTEgcmVmPTMgZGVibG9jaz0xOjA6MCBhbmFseXNlPTB4MzoweDExMyBtZT1oZXggc3VibWU9NyBwc3k9MSBwc3lfcmQ9MS4wMDowLjAwIG1peGVkX3JlZj0xIG1lX3JhbmdlPTE2IGNocm9tYV9tZT0xIHRyZWxsaXM9MSA4eDhkY3Q9MSBjcW09MCBkZWFkem9uZT0yMSwxMSBmYXN0X3Bza2lwPTEgY2hyb21hX3FwX29mZnNldD0tMiB0aHJlYWRzPTEgbG9va2FoZWFkX3RocmVhZHM9MSBzbGljZWRfdGhyZWFkcz0wIG5yPTAgZGVjaW1hdGU9MSBpbnRlcmxhY2VkPTAgYmx1cmF5X2NvbXBhdD0wIGNvbnN0cmFpbmVkX2ludHJhPTAgYmZyYW1lcz0zIGJfcHlyYW1pZD0yIGJfYWRhcHQ9MSBiX2JpYXM9MCBkaXJlY3Q9MSB3ZWlnaHRiPTEgb3Blbl9nb3A9MCB3ZWlnaHRwPTIga2V5aW50PTI1MCBrZXlpbnRfbWluPTEgc2NlbmVjdXQ9NDAgaW50cmFfcmVmcmVzaD0wIHJjX2xvb2thaGVhZD00MCByYz1jcmYgbWJ0cmVlPTEgY3JmPTIzLjAgcWNvbXA9MC42MCBxcG1pbj0wIHFwbWF4PTY5IHFwc3RlcD00IGlwX3JhdGlvPTEuNDAgYXE9MToxLjAwAIAAAAAVZYiEABX//vfJ78Cm6/X2tb9gAQD5AAADBm1vb3YAAABsbXZoZAAAAADgYBEw4GARMAAAA+gAAAPoAAEAAAEAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAIwdHJhawAAAFx0a2hkAAAAA+BgETDgYBEwAAAAAQAAAAAAAAPoAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAUAAAAFAAAAAAAJGVkdHMAAAAcZWxzdAAAAAAAAAABAAAD6AAAAAAAAQAAAAABqG1kaWEAAAAgbWRoZAAAAADgYBEw4GARMAAAQAAAAEAAVcQAAAAAAC1oZGxyAAAAAAAAAAB2aWRlAAAAAAAAAAAAAAAAVmlkZW9IYW5kbGVyAAAAAVNtaW5mAAAAFHZtaGQAAAABAAAAAAAAAAAAAAAkZGluZgAAABxkcmVmAAAAAAAAAAEAAAAMdXJsIAAAAAEAAAETc3RibAAAAK9zdHNkAAAAAAAAAAEAAACfYXZjMQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAUABQASAAAAEgAAAAAAAAAARVMYXZjNTkuNTYuMTAwIGxpYngyNjQAAAAAAAAAAAAAABj//wAAADVhdmNDAWQAM//hABhnZAAzrNlJeeeEAAADAAQAAAMACDxgxlgBAAZo6+PLIsD9+PgAAAAAFGJ0cnQAAAAAAAAWUAAAFlAAAAAYc3R0cwAAAAAAAAABAAAAAQAAQAAAAAAcc3RzYwAAAAAAAAABAAAAAQAAAAEAAAABAAAAFHN0c3oAAAAAAAACygAAAAEAAAAUc3RjbwAAAAAAAAABAAAAMAAAAGJ1ZHRhAAAAWm1ldGEAAAAAAAAAIWhkbHIAAAAAAAAAAG1kaXJhcHBsAAAAAAAAAAAAAAAALWlsc3QAAAAlqXRvbwAAAB1kYXRhAAAAAQAAAABMYXZmNTkuMzUuMTAw'
+
+
+  const smallestMedia = isImage.value
+    ? //
+    smallestImage
+    : smallestVideo
+
+  const entry = entries[0]
+
+  const mediaElement = entry.target.children[0] as HTMLImageElement | HTMLVideoElement
+
+  const newSrc = entry.isIntersecting
+    ? //
+    (mediaElement.getAttribute('data-src') as string)
+    : smallestMedia
+
+  mediaElement.src = newSrc
+}
+
+/**
+ * Stops videos when they are out of the viewport
+ */
+function onVideoIntersectionObserver(entries: IntersectionObserverEntry[]) {
+  const entry = entries[0]
+
+  const videoElement = entry.target as HTMLVideoElement
+
+  if (!entry.isIntersecting) {
+    videoElement.pause()
   }
+}
 
-  function onIntersectionObserver(entries: IntersectionObserverEntry[]) {
-    const entry = entries[0]
-
-    // Smallest video & image possible - https://stackoverflow.com/a/36610159/11398632
-    const smallestImage =
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII='
-    const smallestVideo =
-      'data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAAAtJtZGF0AAACrQYF//+p3EXpvebZSLeWLNgg2SPu73gyNjQgLSBjb3JlIDE2NCByMzEwMyA5NDFjYWU2IC0gSC4yNjQvTVBFRy00IEFWQyBjb2RlYyAtIENvcHlsZWZ0IDIwMDMtMjAyMiAtIGh0dHA6Ly93d3cudmlkZW9sYW4ub3JnL3gyNjQuaHRtbCAtIG9wdGlvbnM6IGNhYmFjPTEgcmVmPTMgZGVibG9jaz0xOjA6MCBhbmFseXNlPTB4MzoweDExMyBtZT1oZXggc3VibWU9NyBwc3k9MSBwc3lfcmQ9MS4wMDowLjAwIG1peGVkX3JlZj0xIG1lX3JhbmdlPTE2IGNocm9tYV9tZT0xIHRyZWxsaXM9MSA4eDhkY3Q9MSBjcW09MCBkZWFkem9uZT0yMSwxMSBmYXN0X3Bza2lwPTEgY2hyb21hX3FwX29mZnNldD0tMiB0aHJlYWRzPTEgbG9va2FoZWFkX3RocmVhZHM9MSBzbGljZWRfdGhyZWFkcz0wIG5yPTAgZGVjaW1hdGU9MSBpbnRlcmxhY2VkPTAgYmx1cmF5X2NvbXBhdD0wIGNvbnN0cmFpbmVkX2ludHJhPTAgYmZyYW1lcz0zIGJfcHlyYW1pZD0yIGJfYWRhcHQ9MSBiX2JpYXM9MCBkaXJlY3Q9MSB3ZWlnaHRiPTEgb3Blbl9nb3A9MCB3ZWlnaHRwPTIga2V5aW50PTI1MCBrZXlpbnRfbWluPTEgc2NlbmVjdXQ9NDAgaW50cmFfcmVmcmVzaD0wIHJjX2xvb2thaGVhZD00MCByYz1jcmYgbWJ0cmVlPTEgY3JmPTIzLjAgcWNvbXA9MC42MCBxcG1pbj0wIHFwbWF4PTY5IHFwc3RlcD00IGlwX3JhdGlvPTEuNDAgYXE9MToxLjAwAIAAAAAVZYiEABX//vfJ78Cm6/X2tb9gAQD5AAADBm1vb3YAAABsbXZoZAAAAADgYBEw4GARMAAAA+gAAAPoAAEAAAEAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAIwdHJhawAAAFx0a2hkAAAAA+BgETDgYBEwAAAAAQAAAAAAAAPoAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAUAAAAFAAAAAAAJGVkdHMAAAAcZWxzdAAAAAAAAAABAAAD6AAAAAAAAQAAAAABqG1kaWEAAAAgbWRoZAAAAADgYBEw4GARMAAAQAAAAEAAVcQAAAAAAC1oZGxyAAAAAAAAAAB2aWRlAAAAAAAAAAAAAAAAVmlkZW9IYW5kbGVyAAAAAVNtaW5mAAAAFHZtaGQAAAABAAAAAAAAAAAAAAAkZGluZgAAABxkcmVmAAAAAAAAAAEAAAAMdXJsIAAAAAEAAAETc3RibAAAAK9zdHNkAAAAAAAAAAEAAACfYXZjMQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAUABQASAAAAEgAAAAAAAAAARVMYXZjNTkuNTYuMTAwIGxpYngyNjQAAAAAAAAAAAAAABj//wAAADVhdmNDAWQAM//hABhnZAAzrNlJeeeEAAADAAQAAAMACDxgxlgBAAZo6+PLIsD9+PgAAAAAFGJ0cnQAAAAAAAAWUAAAFlAAAAAYc3R0cwAAAAAAAAABAAAAAQAAQAAAAAAcc3RzYwAAAAAAAAABAAAAAQAAAAEAAAABAAAAFHN0c3oAAAAAAAACygAAAAEAAAAUc3RjbwAAAAAAAAABAAAAMAAAAGJ1ZHRhAAAAWm1ldGEAAAAAAAAAIWhkbHIAAAAAAAAAAG1kaXJhcHBsAAAAAAAAAAAAAAAALWlsc3QAAAAlqXRvbwAAAB1kYXRhAAAAAQAAAABMYXZmNTkuMzUuMTAw'
-
-    const smallestMedia = isImage.value
-      ? //
-        smallestImage
-      : smallestVideo
-
-    const mediaElement = entry.target as HTMLImageElement | HTMLVideoElement
-
-    const newSrc = entry.isIntersecting
-      ? //
-        (mediaElement.getAttribute('data-src') as string)
-      : smallestMedia
-
-    mediaElement.src = newSrc
-  }
-
-  function onMediaLoad(event: Event) {
-    mediaHasLoaded.value = true
-  }
+function onMediaLoad(event: Event) {
+  mediaHasLoaded.value = true
+}
 </script>
 
 <template>
@@ -150,11 +164,10 @@
     </template>
 
     <!-- Image -->
-    <template v-else-if="isImage">
+    <div v-else-if="isImage" v-intersection-observer="[onMediaIntersectionObserver, { rootMargin: '1200px' }]">
       <!-- TODO: Fix very large images not being on screen so not loaded -->
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <img
-        v-intersection-observer="[onIntersectionObserver, { rootMargin: '1200px' }]"
         :alt="mediaAlt"
         :class="[mediaHasLoaded ? 'opacity-100' : 'opacity-0']"
         :data-src="localSrc"
@@ -167,14 +180,14 @@
         @error="onMediaError"
         @load="onMediaLoad"
       />
-    </template>
+    </div>
 
     <!-- Video -->
-    <template v-else-if="isVideo">
+    <div v-else-if="isVideo" v-intersection-observer="[onMediaIntersectionObserver, { rootMargin: '1200px' }]">
       <!-- TODO: Add load animation -->
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <video
-        v-intersection-observer="[onIntersectionObserver, { rootMargin: '1200px' }]"
+        v-intersection-observer="[onVideoIntersectionObserver, { rootMargin: '100px' }]"
         :data-src="localSrc"
         :height="mediaSrcHeight"
         :poster="mediaPosterSrc"
@@ -187,6 +200,6 @@
         preload="none"
         @error="onMediaError"
       />
-    </template>
+    </div>
   </div>
 </template>

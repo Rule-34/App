@@ -12,9 +12,9 @@ export default defineNuxtPlugin(nuxtApp => {
       // we add manual pageview capturing below
       capture_pageview: false,
 
-      loaded: (posthog) => {
-        if (import.meta.env.MODE === 'development') posthog.debug()
-      }
+      // loaded: (posthog) => {
+      //   if (import.meta.env.MODE === 'development') posthog.debug()
+      // }
     })
 
   // Make sure that pageviews are captured with each route change
