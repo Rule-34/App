@@ -1,97 +1,55 @@
-<script setup>
-  import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
-  import { useScroll } from '@vueuse/core'
+<script lang="ts" setup>
+import {Bars3Icon, XMarkIcon} from '@heroicons/vue/24/outline'
+import {vIntersectionObserver} from '@vueuse/components'
 
-  const route = useRoute()
+const route = useRoute()
 
-  const { value: isMenuActive, toggle: toggleMenu } = useMenu()
+const {value: isMenuActive, toggle: toggleMenu} = useMenu()
 
-  const isPageWithLogoDisabled = computed(() => {
-    switch (route.path) {
-      case '/':
-        return true
+const isPageWithLogoDisabled = computed(() => {
+  switch (route.path) {
+    case '/':
+      return true
 
-      default:
-        return false
-    }
-  })
-  const isPostsPage = computed(() =>
-    [
-      //
-      '/posts/',
-      '/premium/saved-posts/'
-    ].some((path) => route.path.startsWith(path))
-  )
+    default:
+      return false
+  }
+})
+const isPostsPage = computed(() =>
+  [
+    //
+    '/posts/',
+    '/premium/saved-posts/'
+  ].some((path) => route.path.startsWith(path))
+)
 
-  const showFixedNavbar = ref(true)
-  const showNavbarBackground = ref(false)
+const isOnTop = ref(true)
 
-  const { y, arrivedState, directions } = useScroll(
-    process.client
-      ? //
-        window
-      : undefined,
-    {
-      onScroll: () => {
-        if (!isPostsPage.value) {
-          showFixedNavbar.value = true
-          showNavbarBackground.value = false
-          return
-        }
+function onIntersectionObserver(entries: IntersectionObserverEntry[]) {
+  const [entry] = entries
 
-        if (
-          //
-          arrivedState.top === true ||
-          //
-          directions.top === true
-        ) {
-          showFixedNavbar.value = true
-
-          //
-        } else {
-          showFixedNavbar.value = false
-        }
-
-        if (
-          //
-          arrivedState.top === false &&
-          y.value >= 0
-        ) {
-          showNavbarBackground.value = true
-
-          //
-        } else {
-          showNavbarBackground.value = false
-        }
-      }
-    }
-  )
+  console.log('entry', entry.isIntersecting)
+  if (entry.isIntersecting) {
+    isOnTop.value = true
+  } else {
+    isOnTop.value = false
+  }
+}
 </script>
 
 <template>
   <!-- Same margin as Nav height -->
   <nav class="mb-14">
-    <!-- TODO: refactor code -->
+
     <div
-      :class="[
-        isPostsPage
-          ? //
-            'fixed'
-          : 'absolute',
-        isPostsPage
-          ? showNavbarBackground
-            ? //
-              'border-b-2 border-base-0/20 bg-base-1000/60 backdrop-blur'
-            : '!border-0 border-transparent bg-transparent'
-          : '',
-        isPostsPage
-          ? showFixedNavbar
-            ? //
-              'translate-y-0 opacity-100'
-            : '-translate-y-full opacity-0'
-          : ''
-      ]"
-      class="inset-x-0 z-10 transition duration-200"
+      v-intersection-observer="[onIntersectionObserver]"
+    />
+
+    <div :class="{
+            '!fixed': isPostsPage,
+           'bg-base-1000/60 backdrop-blur-lg backdrop-saturate-200 shadow-lg md:border-b-2 ': isPostsPage && !isOnTop,
+         }"
+         class="absolute inset-x-0 top-0 z-10 transition duration-200 border-base-0/20"
     >
       <!-- Navbar -->
       <div

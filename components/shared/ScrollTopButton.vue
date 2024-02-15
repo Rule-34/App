@@ -1,32 +1,32 @@
 <script setup>
-  import { useScroll } from '@vueuse/core'
-  import { ArrowUpIcon } from '@heroicons/vue/24/solid'
+import {useScroll} from '@vueuse/core'
+import {ArrowUpIcon} from '@heroicons/vue/24/solid'
 
-  const showScrollTopButton = ref(false)
+const showScrollTopButton = ref(false)
 
-  if (process.client) {
-    const { y, directions } = useScroll(window, {
-      onScroll: () => {
-        if (
-          //
-          directions.top === true &&
-          y.value >= window.innerHeight
-        ) {
-          showScrollTopButton.value = true
+if (process.client) {
+  const {y, directions} = useScroll(window, {
+    onScroll: () => {
+      if (
+        //
+        directions.top === true &&
+        y.value >= window.innerHeight
+      ) {
+        showScrollTopButton.value = true
 
-          //
-        } else {
-          showScrollTopButton.value = false
-        }
+        //
+      } else {
+        showScrollTopButton.value = false
       }
-    })
-  }
+    }
+  })
+}
 
-  function scrollToTop() {
-    window.scrollTo({
-      top: 0
-    })
-  }
+function scrollToTop() {
+  window.scrollTo({
+    top: 0
+  })
+}
 </script>
 
 <template>
@@ -41,13 +41,13 @@
     >
       <button
         v-show="showScrollTopButton"
-        class="hover:hover-text-util hover:hover-bg-util fixed bottom-4 right-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-base-1000/60 text-base-content-highlight ring-2 ring-base-0/20 backdrop-blur"
+        class="hover:hover-text-util hover:hover-bg-util fixed bottom-4 right-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-base-1000/60 text-base-content-highlight ring-2 ring-base-0/20 backdrop-blur-lg backdrop-saturate-200"
         type="button"
         @click="scrollToTop"
       >
         <span class="sr-only"> Scroll to top </span>
 
-        <ArrowUpIcon class="h-6 w-6" />
+        <ArrowUpIcon class="h-6 w-6"/>
       </button>
     </transition>
   </Teleport>
