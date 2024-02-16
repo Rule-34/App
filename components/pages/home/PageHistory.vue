@@ -40,7 +40,7 @@ function onHistoryItemClick(path: string) {
       description: 'Page history is only available for Premium users',
       action: {
         label: 'Subscribe',
-        onClick: () => navigateTo('/premium')
+        onClick: () => navigateTo('/premium?utm_source=web&utm_medium=page-history')
       }
     })
     return
