@@ -489,9 +489,9 @@ const featuredDomains = [
       </section>
 
       <!-- Discounts -->
-      <section>
-        <FeaturedDiscount class='mt-4 m-2'/>
-      </section>
+      <!--      <section>-->
+      <!--        <FeaturedDiscount class='mt-4 m-2'/>-->
+      <!--      </section>-->
 
       <!-- History -->
       <ClientOnly>
