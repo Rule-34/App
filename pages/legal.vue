@@ -1,9 +1,9 @@
 <script setup>
-  useSeoMeta({
-    title: 'Legal',
+useSeoMeta({
+  title: 'Legal',
 
-    description: 'Legal information about the Rule 34 App'
-  })
+  description: 'Legal information about the Rule 34 App'
+})
 </script>
 
 <template>
@@ -44,17 +44,16 @@
       <!-- Analytics -->
       <li>
         <ContentContainer
-          :links="[
-            {
-              text: 'Opt Out',
-              href: '/privacy-policy#opt-out'
-            }
-          ]"
-          text="We use first party analytics that do not gather or store any personal info
-
-				 Feel free to opt out of being tracked on the next link"
-          title="Analytics"
-        />
+          text="Manage your cookies consent in the next link"
+          title="Cookies"
+        >
+          <button
+            class='hover:hover-text-util focus-visible:focus-outline-util text-sm text-base-content underline'
+            type="button"
+            @click='$CC.showPreferences()'>
+            Manage Cookies
+          </button>
+        </ContentContainer>
       </li>
 
       <!-- Contact -->

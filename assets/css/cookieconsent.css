@@ -1,0 +1,60 @@
+.cc--custom {
+  color-scheme: dark;
+
+  --cc-font-family: InterVariable, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+  --cc-bg: #000;
+  /* .text-base-content-highlight */
+  --cc-primary-color: rgb(229 231 235);
+  /* .text-base-content */
+  --cc-secondary-color: rgb(156 163 175);
+
+  /* .text-base-content-highlight */
+  --cc-btn-primary-bg: rgb(229 231 235);
+  --cc-btn-primary-color: #000;
+  --cc-btn-primary-hover-bg: #ccd4d8;
+  --cc-btn-primary-hover-color: #000;
+
+  --cc-btn-secondary-bg: transparent;
+  --cc-btn-secondary-color: var(--cc-primary-color);
+  --cc-btn-secondary-border-color: #252729;
+  --cc-btn-secondary-hover-bg: #252729;
+  --cc-btn-secondary-hover-color: #fff;
+  --cc-btn-secondary-hover-border-color: #252729;
+
+  --cc-cookie-category-block-bg: #101111;
+  --cc-cookie-category-block-border: #1d1e1f;
+  --cc-cookie-category-block-hover-bg: #151516;
+  --cc-cookie-category-block-hover-border: #1d1e1f;
+  --cc-cookie-category-expanded-block-hover-bg: #1d1e1f;
+  --cc-cookie-category-expanded-block-bg: #101111;
+
+  --cc-overlay-bg: rgba(0, 0, 0, 0.9) !important;
+
+  --cc-toggle-on-knob-bg: var(--cc-bg);
+  --cc-toggle-readonly-bg: #2f3132;
+  --cc-toggle-readonly-knob-bg: var(--cc-cookie-category-block-bg);
+
+  --cc-separator-border-color: #252729;
+
+  --cc-footer-border-color: #212529;
+  --cc-footer-bg: #000;
+}
+
+.cc--custom #cc-main .cm,
+.cc--custom #cc-main .pm {
+  border: 1px solid var(--cc-separator-border-color);
+}
+
+/* Body: Remove inner separator borders */
+@media screen and (max-width: 640px) {
+  .cc--custom #cc-main .cm__btns,
+  .cc--custom #cc-main .cm__footer {
+    border-top: none !important;
+  }
+}
+
+/* Footer: padding */
+.cc--custom #cc-main .cm__footer {
+  padding: 0.6em 0 0.8em;
+}

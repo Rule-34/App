@@ -1,9 +1,9 @@
 <script setup>
-  useSeoMeta({
-    title: 'Privacy Policy',
+useSeoMeta({
+  title: 'Privacy Policy',
 
-    description: 'Privacy policy of the Rule 34 App'
-  })
+  description: 'Privacy policy of the Rule 34 App'
+})
 </script>
 
 <template>
@@ -43,15 +43,6 @@
     <p>
       The email addresses are securely stored and encrypted using Mailcoach, a GDPR-compliant email marketing service.
     </p>
-
-    <h3 id="opt-out">Opt out of tracking</h3>
-    <p>You can opt out of being tracked by our analytics below:</p>
-    <iframe
-      loading="lazy"
-      src="https://matomo.akbal.dev/index.php?module=CoreAdminHome&action=optOut&language=en&backgroundColor=000&fontColor=d2d5db&fontSize=&fontFamily="
-      style="height: auto; width: 100%; max-width: 600px"
-      title="Matomo opt out"
-    />
 
     <h3>Personal Information</h3>
     <p>We may ask for personal information which may include one or more of the following:</p>
@@ -191,17 +182,17 @@
       <a
         href="http://gumroad.com"
         rel="noopener nofollow"
-        >Gumroad</a
+      >Gumroad</a
       >. If you choose to subscribe you agree to their
       <a
         href="https://gumroad.com/privacy"
         rel="noopener nofollow"
-        >privacy policy</a
+      >privacy policy</a
       >, their
       <a
         href="https://gumroad.com/terms"
         rel="noopener nofollow"
-        >terms of service</a
+      >terms of service</a
       >
       and ours.
     </p>
@@ -228,7 +219,7 @@
     <h2>Contact Us</h2>
     <p>For any questions or concerns regarding your privacy, you may contact us using the following details:</p>
     <p>
-      Rule 34 App<br />
+      Rule 34 App<br/>
       contact@r34.app
     </p>
   </main>

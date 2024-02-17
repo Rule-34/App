@@ -98,6 +98,9 @@ dependencies:
   tailwindcss:
     specifier: ^3.4.1
     version: 3.4.1
+  vanilla-cookieconsent:
+    specifier: ^3.0.0
+    version: 3.0.0
   vue-safe-teleport:
     specifier: ^0.1.2
     version: 0.1.2(vue@3.4.15)
@@ -12697,6 +12700,10 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       builtins: 5.0.1
+    dev: false
+
+  /vanilla-cookieconsent@3.0.0:
+    resolution: {integrity: sha512-oeK7FivRDb424mt3/UT8DG98Pu5m6Uuye7JsdzO6HnYkstW5QHXhkslXyUpE3phtKz3NEeIo7hzLUtfRNRMfbQ==}
     dev: false
 
   /vite-node@1.2.2:

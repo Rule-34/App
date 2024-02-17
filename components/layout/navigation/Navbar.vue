@@ -28,7 +28,6 @@ const isOnTop = ref(true)
 function onIntersectionObserver(entries: IntersectionObserverEntry[]) {
   const [entry] = entries
 
-  console.log('entry', entry.isIntersecting)
   if (entry.isIntersecting) {
     isOnTop.value = true
   } else {
