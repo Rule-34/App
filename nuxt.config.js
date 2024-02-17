@@ -1,4 +1,4 @@
-import { sentryVitePlugin } from '@sentry/vite-plugin'
+import {sentryVitePlugin} from '@sentry/vite-plugin'
 
 export default defineNuxtConfig({
   // TODO: Enable when SSR is enabled
@@ -17,22 +17,22 @@ export default defineNuxtConfig({
     },
 
     // Static pages are prerendered
-    '/': { prerender: true },
-    '/other-sites': { prerender: true },
-    '/legal': { prerender: true },
+    '/': {prerender: true},
+    '/other-sites': {prerender: true},
+    '/legal': {prerender: true},
 
-    '/settings': { ssr: false },
+    '/settings': {ssr: false},
 
-    '/premium': { prerender: true },
-    '/premium/sign-in': { prerender: true },
+    '/premium': {prerender: true},
+    '/premium/sign-in': {prerender: true},
 
     // All premium pages are client-side rendered
-    '/premium/dashboard': { ssr: false },
-    '/premium/saved-posts/*': { ssr: false },
-    '/premium/tag-collections': { ssr: false },
-    '/premium/additional-boorus': { ssr: false },
-    '/premium/backup': { ssr: false },
-    '/premium/migrate-old-data': { ssr: false },
+    '/premium/dashboard': {ssr: false},
+    '/premium/saved-posts/*': {ssr: false},
+    '/premium/tag-collections': {ssr: false},
+    '/premium/additional-boorus': {ssr: false},
+    '/premium/backup': {ssr: false},
+    '/premium/migrate-old-data': {ssr: false},
 
     // Public assets
     '/img/**': {
@@ -96,15 +96,15 @@ export default defineNuxtConfig({
       PROXY_URL: process.env.PROXY_URL,
 
       SENTRY_DSN: process.env.SENTRY_DSN,
-      
+
       POSTHOG_PUBLIC_KEY: process.env.POSTHOG_PUBLIC_KEY,
       POSTHOG_HOST: process.env.POSTHOG_HOST
     }
   },
 
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css', '~/assets/css/cookieconsent.css'],
 
-  components: [{ path: '~/components', pathPrefix: false }],
+  components: [{path: '~/components', pathPrefix: false}],
 
   site: {
     url: `https://${process.env.APP_DOMAIN}`
@@ -162,9 +162,9 @@ export default defineNuxtConfig({
           property: false
         },
         endpoints: {
-          login: { url: process.env.API_URL + '/auth/log-in', method: 'post' },
-          refresh: { url: process.env.API_URL + '/auth/refresh', method: 'post' },
-          user: { url: process.env.API_URL + '/auth/profile', method: 'get' },
+          login: {url: process.env.API_URL + '/auth/log-in', method: 'post'},
+          refresh: {url: process.env.API_URL + '/auth/refresh', method: 'post'},
+          user: {url: process.env.API_URL + '/auth/profile', method: 'get'},
           logout: false
         }
       }
@@ -248,6 +248,9 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      bodyAttrs: {
+        class: 'cc--custom'
+      },
       style: [
         {
           type: 'text/css',
