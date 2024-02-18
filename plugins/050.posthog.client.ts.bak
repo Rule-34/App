@@ -1,0 +1,26 @@
+import {defineNuxtPlugin} from '#app'
+
+
+/**
+ * Track page view using Posthog
+ * For the Script,
+ * @see nuxt.config.js
+ *
+ * @see https://posthog.com/docs/libraries/nuxt-js
+ */
+export default defineNuxtPlugin(nuxtApp => {
+  const router = useRouter()
+
+  // Make sure that pageviews are captured with each route change
+  router.afterEach((to) => {
+    if (!window.posthog) {
+      return
+    }
+
+    nextTick(() => {
+      window.posthog.capture('$pageview', {
+        current_url: to.fullPath
+      })
+    })
+  })
+})
