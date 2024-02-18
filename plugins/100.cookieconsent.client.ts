@@ -11,7 +11,7 @@ const config: CookieConsentConfig = {
 
   guiOptions: {
     consentModal: {
-      layout: 'cloud',
+      layout: 'bar',
       position: 'bottom center',
       equalWeightButtons: true,
       flipButtons: false
