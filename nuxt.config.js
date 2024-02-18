@@ -96,9 +96,6 @@ export default defineNuxtConfig({
       PROXY_URL: process.env.PROXY_URL,
 
       SENTRY_DSN: process.env.SENTRY_DSN,
-
-      POSTHOG_PUBLIC_KEY: process.env.POSTHOG_PUBLIC_KEY,
-      POSTHOG_HOST: process.env.POSTHOG_HOST
     }
   },
 
@@ -257,6 +254,16 @@ export default defineNuxtConfig({
           cssText: 'html, body { background-color: black; }'
         }
       ],
+      script: [
+        // PostHog
+        {
+          src: '/js/posthog.js',
+          type: 'text/plain',
+          async: true,
+          'data-category': 'analytics',
+          'data-service': 'posthog'
+        }
+      ]
     }
   },
 
