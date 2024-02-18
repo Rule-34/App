@@ -2,7 +2,7 @@
 	<ContentContainer
 		:links="[
 			{
-				href: 'https://redirect.r34.app/donations',
+				href: 'https://docs.r34.app/donations',
 				text: 'Donation'
 			},
 			{ href: '/premium', text: 'Subscription' }

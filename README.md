@@ -44,7 +44,7 @@ Follow the Rule 34 App on **[Twitter](https://twitter.com/Rule34App)** for annou
 
 ### Discord
 
-Join the **[Discord](https://redirect.r34.app/discord)** community to keep up with the updates of the project and
+Join the **[Discord](https://discord.gg/fUhYHSZ)** community to keep up with the updates of the project and
 receive support.
 
 ![Discord badge](https://img.shields.io/discord/656241666553806861?style=for-the-badge)
