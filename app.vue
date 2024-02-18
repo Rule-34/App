@@ -1,4 +1,4 @@
- <script setup>
+<script setup>
   const config = useRuntimeConfig()
 
   useHead({
@@ -57,9 +57,9 @@
       sameAs: [
         'https://rule34.app',
         'https://twitter.com/Rule34App',
-        'https://redirect.r34.app/twitter',
-        'https://redirect.r34.app/discord',
-        'https://redirect.r34.app/github'
+        'https://twitter.com/Rule34App',
+        'https://discord.gg/fUhYHSZ',
+        'https://github.com/Rule-34/App'
       ]
     })
   ])

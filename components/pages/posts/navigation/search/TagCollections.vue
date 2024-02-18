@@ -1,64 +1,64 @@
 <script lang="ts" setup>
-import Tag from '~/assets/js/tag.dto'
-import {Cog6ToothIcon, PlusIcon, TagIcon} from '@heroicons/vue/24/outline'
-import {toast} from 'vue-sonner'
-import {TagCollection} from '~/assets/js/tagCollection.dto'
+  import Tag from '~/assets/js/tag.dto'
+  import { Cog6ToothIcon, PlusIcon, TagIcon } from '@heroicons/vue/24/outline'
+  import { toast } from 'vue-sonner'
+  import { TagCollection } from '~/assets/js/tagCollection.dto'
 
-const props = defineProps<{
-  selectedTags: Tag[]
-}>()
+  const props = defineProps<{
+    selectedTags: Tag[]
+  }>()
 
-const emit = defineEmits<{
-  updateSelectedTags: [selectedTags: Tag[]]
-}>()
+  const emit = defineEmits<{
+    updateSelectedTags: [selectedTags: Tag[]]
+  }>()
 
-const {isPremium} = useUserData()
+  const { isPremium } = useUserData()
 
-const {tagCollections} = useTagCollections()
+  const { tagCollections } = useTagCollections()
 
-function setTagCollectionAsSelected(tagCollection: TagCollection) {
-  if (!isPremium.value) {
-    toast.info('Premium feature', {
-      description: 'You need to be a premium user to use this feature',
-      action: {
-        label: 'Subscribe',
-        onClick: () => navigateTo('/premium?utm_source=web&utm_medium=tag-collections')
-      }
+  function setTagCollectionAsSelected(tagCollection: TagCollection) {
+    if (!isPremium.value) {
+      toast.info('Premium feature', {
+        description: 'You need to be a premium user to use this feature',
+        action: {
+          label: 'Subscribe',
+          onClick: () => navigateTo('/premium?utm_source=web&utm_medium=tag-collections')
+        }
+      })
+      return
+    }
+
+    const selectedTags = tagCollection.tags.map((tagName) => new Tag({ name: tagName }))
+
+    emit('updateSelectedTags', selectedTags)
+  }
+
+  function createTagCollectionFromSelectedTags() {
+    const selectedTags = props.selectedTags
+
+    if (selectedTags.length === 0) {
+      toast.error('You need to select at least one tag')
+      return
+    }
+
+    const name = prompt('Enter a name for the new tag collection')
+
+    if (!name) {
+      return
+    }
+
+    if (tagCollections.value.some((tagCollection) => tagCollection.name === name)) {
+      toast.error('A tag collection with this name already exists')
+      return
+    }
+
+    const tagCollection = new TagCollection({
+      name,
+      tags: selectedTags.map((tag) => tag.name)
     })
-    return
+
+    tagCollections.value.push(tagCollection)
   }
-
-  const selectedTags = tagCollection.tags.map((tagName) => new Tag({name: tagName}))
-
-  emit('updateSelectedTags', selectedTags)
-}
-
-function createTagCollectionFromSelectedTags() {
-  const selectedTags = props.selectedTags
-
-  if (selectedTags.length === 0) {
-    toast.error('You need to select at least one tag')
-    return
-  }
-
-  const name = prompt('Enter a name for the new tag collection')
-
-  if (!name) {
-    return
-  }
-
-  if (tagCollections.value.some((tagCollection) => tagCollection.name === name)) {
-    toast.error('A tag collection with this name already exists')
-    return
-  }
-
-  const tagCollection = new TagCollection({
-    name,
-    tags: selectedTags.map((tag) => tag.name)
-  })
-
-  tagCollections.value.push(tagCollection)
-}
 </script>
 
 <template>
@@ -83,7 +83,7 @@ function createTagCollectionFromSelectedTags() {
       >
         <span class="sr-only"> Manage tag collections </span>
 
-        <Cog6ToothIcon class="h-6 w-6"/>
+        <Cog6ToothIcon class="h-6 w-6" />
       </NuxtLink>
     </div>
 
@@ -107,7 +107,7 @@ function createTagCollectionFromSelectedTags() {
                 {{ tagCollection.tags.length }}
               </span>
 
-              <TagIcon class="h-5 w-5"/>
+              <TagIcon class="h-5 w-5" />
             </div>
           </button>
         </li>
@@ -122,7 +122,7 @@ function createTagCollectionFromSelectedTags() {
           >
             <span class="whitespace-nowrap">Create from current tags</span>
 
-            <PlusIcon class="h-5 w-5"/>
+            <PlusIcon class="h-5 w-5" />
           </button>
         </li>
       </ol>

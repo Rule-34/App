@@ -1,70 +1,70 @@
 <script lang="ts" setup>
-import {CheckIcon, MagnifyingGlassIcon} from '@heroicons/vue/20/solid'
-import {watchDebounced} from '@vueuse/core'
-import {abbreviateNumber} from 'js-abbreviation-number'
-import Tag from '~/assets/js/tag.dto'
+  import { CheckIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
+  import { watchDebounced } from '@vueuse/core'
+  import { abbreviateNumber } from 'js-abbreviation-number'
+  import Tag from '~/assets/js/tag.dto'
 
-const props = defineProps<{
-  tagResults: Tag[]
-}>()
+  const props = defineProps<{
+    tagResults: Tag[]
+  }>()
 
-const emit = defineEmits<{
-  searchTag: [tag: string]
+  const emit = defineEmits<{
+    searchTag: [tag: string]
 
-  submit: [payload: string | undefined]
-}>()
+    submit: [payload: string | undefined]
+  }>()
 
-const selectedTag = ref<Tag | undefined>()
+  const selectedTag = ref<Tag | undefined>()
 
-watch(selectedTag, () => onSubmitted())
+  watch(selectedTag, () => onSubmitted())
 
-const searchQuery = shallowRef('')
+  const searchQuery = shallowRef('')
 
-// Change event
-function onComboboxInputChange(event: InputEvent) {
-  let value = (event.target as HTMLInputElement).value
+  // Change event
+  function onComboboxInputChange(event: InputEvent) {
+    let value = (event.target as HTMLInputElement).value
 
-  value = value.trim()
+    value = value.trim()
 
-  // Replace empty spaces with underscores
-  value = value.replace(/\s/g, '_')
+    // Replace empty spaces with underscores
+    value = value.replace(/\s/g, '_')
 
-  searchQuery.value = value
-}
-
-watchDebounced(searchQuery, (value) => onSearchChange(value), {debounce: 350})
-
-function onSearchChange(tag: string) {
-  tag = tag.trim()
-
-  if (!tag || tag === '') {
-    return
+    searchQuery.value = value
   }
 
-  emit('searchTag', tag)
-}
+  watchDebounced(searchQuery, (value) => onSearchChange(value), { debounce: 350 })
 
-const customTagFromQuery = computed(() => {
-  let tag = searchQuery.value
+  function onSearchChange(tag: string) {
+    tag = tag.trim()
 
-  if (!tag || tag === '') {
-    return null
+    if (!tag || tag === '') {
+      return
+    }
+
+    emit('searchTag', tag)
   }
 
-  // If the tag is already in tagResults, return null
-  if (props.tagResults.some((tagResult) => tagResult.name === tag)) {
-    return null
-  }
+  const customTagFromQuery = computed(() => {
+    let tag = searchQuery.value
 
-  return {
-    name: tag,
-    count: null
-  }
-})
+    if (!tag || tag === '') {
+      return null
+    }
 
-function onSubmitted() {
-  emit('submit', selectedTag.value?.name)
-}
+    // If the tag is already in tagResults, return null
+    if (props.tagResults.some((tagResult) => tagResult.name === tag)) {
+      return null
+    }
+
+    return {
+      name: tag,
+      count: null
+    }
+  })
+
+  function onSubmitted() {
+    emit('submit', selectedTag.value?.name)
+  }
 </script>
 
 <template>
@@ -76,7 +76,7 @@ function onSubmitted() {
       <div class="group relative">
         <!-- Icon -->
         <div class="group pointer-events-none absolute inset-y-0 left-0 flex items-center rounded-l-md px-2">
-          <MagnifyingGlassIcon class="h-5 w-5 text-base-content group-hover:text-base-content-hover"/>
+          <MagnifyingGlassIcon class="h-5 w-5 text-base-content group-hover:text-base-content-hover" />
         </div>
 
         <!-- Input -->
@@ -116,45 +116,45 @@ function onSubmitted() {
                 v-if="selected"
                 class="absolute inset-y-0 left-0 flex items-center pl-1.5 text-base-content-highlight"
               >
-                <CheckIcon class="h-5 w-5"/>
+                <CheckIcon class="h-5 w-5" />
               </span>
             </div>
-            </HeadlessComboboxOption>
+          </HeadlessComboboxOption>
 
-            <!-- Options -->
-            <HeadlessComboboxOption
-              v-for="tag in tagResults"
-              :key="tag.name"
-              v-slot="{ active, selected }"
-              :value="tag"
+          <!-- Options -->
+          <HeadlessComboboxOption
+            v-for="tag in tagResults"
+            :key="tag.name"
+            v-slot="{ active, selected }"
+            :value="tag"
+          >
+            <div
+              :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+              class="relative cursor-default select-none py-2 pl-8 pr-12"
             >
-              <div
-                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-                class="relative cursor-default select-none py-2 pl-8 pr-12"
+              <!-- Check icon -->
+              <span
+                v-if="selected"
+                class="absolute inset-y-0 left-0 flex items-center pl-1.5 text-base-content-highlight"
               >
-                <!-- Check icon -->
-                <span
-                  v-if="selected"
-                  class="absolute inset-y-0 left-0 flex items-center pl-1.5 text-base-content-highlight"
-                >
-                <CheckIcon class="h-5 w-5"/>
+                <CheckIcon class="h-5 w-5" />
               </span>
 
-                <!-- Tag -->
-                <span :class="['block truncate', selected && 'font-semibold']">
+              <!-- Tag -->
+              <span :class="['block truncate', selected && 'font-semibold']">
                 {{ tag.name }}
               </span>
 
-                <!-- Tag count -->
-                <div class="absolute inset-y-0 right-0 flex items-center gap-2 pr-4">
+              <!-- Tag count -->
+              <div class="absolute inset-y-0 right-0 flex items-center gap-2 pr-4">
                 <span v-if="tag.count">
                   {{ abbreviateNumber(tag.count, 0) }}
                 </span>
-                </div>
               </div>
-              </HeadlessComboboxOption>
-              </HeadlessComboboxOptions>
+            </div>
+          </HeadlessComboboxOption>
+        </HeadlessComboboxOptions>
       </div>
-      </HeadlessCombobox>
+    </HeadlessCombobox>
   </section>
 </template>
