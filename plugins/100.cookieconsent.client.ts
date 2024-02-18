@@ -44,7 +44,7 @@ const config: CookieConsentConfig = {
           label: 'Matomo',
           cookies: [
             {
-              name: 'MATOMO_SESSID'
+              name: /^(_pk_)/
             },
           ],
 
