@@ -102,7 +102,7 @@ const config: CookieConsentConfig = {
           description: 'This website uses <strong>cookies</strong> to ensure I can craft the best experience. ' +
             'I only use essential cookies required for the site to function, and third-party analytics cookies to' +
             ' understand the audience better. ' +
-            'You can manage cookies anytime by visiting the “Cookies” section in ' +
+            'You can manage cookies anytime by visiting the “Consent Preferences Center” section in ' +
             'the “Legal” page.',
 
           acceptAllBtn: 'Accept all',

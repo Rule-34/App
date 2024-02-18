@@ -13,21 +13,8 @@ useSeoMeta({
     </PageHeader>
 
     <ol class="mx-2 mt-4 space-y-4">
-      <!-- Generated terms of service -->
-      <li>
-        <ContentContainer
-          :links="[
-            {
-              text: 'Terms of service',
-              href: '/terms-of-service'
-            }
-          ]"
-          text="You can find the terms of service in the next link"
-          title="Terms of service"
-        />
-      </li>
 
-      <!-- Generated terms of service -->
+      <!-- Privacy policy -->
       <li>
         <ContentContainer
           :links="[
@@ -41,19 +28,47 @@ useSeoMeta({
         />
       </li>
 
-      <!-- Analytics -->
+      <!-- Cookie policy -->
+      <li>
+        <ContentContainer
+          :links="[
+            {
+              text: 'Cookie policy',
+              href: '/cookie-policy'
+            }
+          ]"
+          text="You can find the cookie policy in the next link"
+          title="Cookie policy"
+        />
+      </li>
+
+      <!-- Consent -->
       <li>
         <ContentContainer
           text="Manage your cookies consent in the next link"
-          title="Cookies"
+          title="Consent Preferences Center"
         >
           <button
             class='hover:hover-text-util focus-visible:focus-outline-util text-sm text-base-content underline'
             type="button"
             @click='$CC.showPreferences()'>
-            Manage Cookies
+            Open Preferences Center
           </button>
         </ContentContainer>
+      </li>
+
+      <!-- Terms of Service -->
+      <li>
+        <ContentContainer
+          :links="[
+            {
+              text: 'Terms of service',
+              href: '/terms-of-service'
+            }
+          ]"
+          text="You can find the terms of service in the next link"
+          title="Terms of service"
+        />
       </li>
 
       <!-- Contact -->
