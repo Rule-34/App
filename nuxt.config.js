@@ -255,6 +255,13 @@ export default defineNuxtConfig({
         }
       ],
       script: [
+        // Matomo
+        {
+          src: '/js/matomo.js',
+          type: 'text/plain',
+          'data-category': 'analytics',
+          'data-service': 'matomo'
+        },
         // PostHog
         {
           src: '/js/posthog.js',

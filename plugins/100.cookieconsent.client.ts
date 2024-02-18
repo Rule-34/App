@@ -7,7 +7,7 @@ import * as CookieConsent from 'vanilla-cookieconsent'
  */
 const config: CookieConsentConfig = {
   // TODO: Change when changing categories
-  revision: 1,
+  revision: 2,
 
   guiOptions: {
     consentModal: {
@@ -40,6 +40,28 @@ const config: CookieConsentConfig = {
 
     analytics: {
       services: {
+        matomo: {
+          label: 'Matomo',
+          cookies: [
+            {
+              name: 'MATOMO_SESSID'
+            },
+          ],
+
+          onAccept: () => {
+            // console.debug('Matomo accepted')
+
+            // Reload the page to load the Matomo script
+            // window.location.reload()
+          },
+
+          onReject: () => {
+            // console.debug('Matomo rejected')
+
+            // Reload the page to remove the Matomo script
+            window.location.reload()
+          }
+        },
         posthog: {
           label: 'PostHog',
 
