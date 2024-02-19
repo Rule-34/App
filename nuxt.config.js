@@ -261,14 +261,6 @@ export default defineNuxtConfig({
           type: 'text/plain',
           'data-category': 'analytics',
           'data-service': 'matomo'
-        },
-        // PostHog
-        {
-          src: '/js/posthog.js',
-          type: 'text/plain',
-          async: true,
-          'data-category': 'analytics',
-          'data-service': 'posthog'
         }
       ]
     }
