@@ -61,29 +61,6 @@ const config: CookieConsentConfig = {
             // Reload the page to remove the Matomo script
             window.location.reload()
           }
-        },
-        posthog: {
-          label: 'PostHog',
-
-          cookies: [
-            {
-              name: /^(ph_)/
-            },
-          ],
-
-          onAccept: () => {
-            // console.debug('PostHog accepted')
-
-            // Reload the page to load the PostHog script
-            // window.location.reload()
-          },
-
-          onReject: () => {
-            // console.debug('PostHog rejected')
-
-            // Reload the page to remove the PostHog script
-            window.location.reload()
-          }
         }
       }
     }

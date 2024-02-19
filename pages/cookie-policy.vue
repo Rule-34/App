@@ -297,65 +297,6 @@ useSeoMeta({
               </table>
             </div>
           </section>
-          <section>
-            <div>
-              <table>
-                <tbody>
-                <tr>
-                  <td>
-                    Name:
-                  </td>
-                  <td>
-                    ph_*
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Purpose:
-                  </td>
-                  <td>
-                    Analytics
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Provider:
-                  </td>
-                  <td>
-                    PostHog
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Service:
-                  </td>
-                  <td>
-                    __________
-                    <a href="https://posthog.com/privacy">
-                      View Service Privacy Policy
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Type:
-                  </td>
-                  <td>
-                    http_cookie
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Expires in:
-                  </td>
-                  <td>
-                    __________
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
         </div>
       </div>
       <div>
