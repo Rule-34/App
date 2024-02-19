@@ -34,8 +34,8 @@ const config: CookieConsentConfig = {
       services: {
         auth: {
           label: 'Authentication',
-        }
-      }
+        },
+      },
     },
 
     analytics: {

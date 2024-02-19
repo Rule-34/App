@@ -15,9 +15,12 @@ export default defineNuxtPlugin((nuxtApp) => {
       return
     }
 
-    window._paq.push(['setCustomUrl', to.fullPath])
-    window._paq.push(['setDocumentTitle', document.title])
-    window._paq.push(['trackPageView'])
-    window._paq.push(['enableLinkTracking'])
+    nextTick(() => {
+      window._paq.push(['setCustomUrl', to.fullPath])
+      window._paq.push(['setDocumentTitle', document.title])
+
+      window._paq.push(['trackPageView'])
+      window._paq.push(['enableLinkTracking'])
+    })
   })
 })
