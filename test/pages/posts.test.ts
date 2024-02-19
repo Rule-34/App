@@ -1,13 +1,12 @@
-import { describe, expect, it } from 'vitest'
-import { createPage, setup, url } from '@nuxt/test-utils'
+import {describe, expect, it} from 'vitest'
+import {createPage, setup, url} from '@nuxt/test-utils'
 import {
   mockPostsPage0,
   mockPostsPage1,
   mockPostsPageWithOfflineMedia,
-  mockPostsPageWithoutResults,
-  mockPostsPageWithUnknownMedia
+  mockPostsPageWithoutResults
 } from './posts.mock-data'
-import { defaultSetupConfig } from '../helper'
+import {defaultSetupConfig} from '../helper'
 
 describe('/', async () => {
   await setup(defaultSetupConfig)
@@ -122,37 +121,7 @@ describe('/', async () => {
       ).toBe(mockPostsPage0.data[0].tags.general.length)
     })
 
-    it('renders warning when unknown media is loaded', async () => {
-      // Arrange
-      const page = await createPage()
-
-      await page.route(
-        '**/posts?baseEndpoint=*',
-        (route) =>
-          route.fulfill({
-            status: 200,
-            json: mockPostsPageWithUnknownMedia
-          }),
-        { times: 1 }
-      )
-
-      // Act
-      await Promise.all([page.goto(url('/posts/safebooru.org')), page.waitForResponse('**/posts?baseEndpoint=*')])
-
-      // Assert
-
-      // Expect 1 post
-      expect(
-        //
-        await page.getByTestId('posts-list').locator('li').count()
-      ).toBe(1)
-
-      // Expect post to have warning
-      expect(
-        //
-        await page.getByTestId('posts-list').locator('li').first().textContent()
-      ).toContain('Unknown media')
-    })
+    // TODO: Test that verifies if a post with 'unknown' media type is not rendered
 
     it.skip('proxies media when media failed to load', async () => {
       throw new Error('Not implemented')

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-  import { vIntersectionObserver } from '@vueuse/components'
-  import type { IPost } from 'assets/js/post'
+import {vIntersectionObserver} from '@vueuse/components'
+import type {IPost} from 'assets/js/post'
 
-  const { isPremium } = useUserData()
+const { isPremium } = useUserData()
 
   export interface PostMediaProps {
     mediaSrc: string | null
@@ -26,10 +26,6 @@
   const isVideo = computed(() => props.mediaType === 'video')
 
   const triedToLoadWithProxy = shallowRef(false)
-
-  if (props.mediaType === 'unknown') {
-    error.value = new Error('Unknown media type')
-  }
 
   function onMediaError(event: Event) {
     if (hasError.value) {
@@ -122,7 +118,6 @@
           </span>
 
           <button
-            v-if="error?.message !== 'Unknown media type'"
             class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto inline-flex items-center justify-center rounded-md px-2 py-1 text-sm ring-1 ring-base-0/20"
             type="button"
             @click="manuallyReloadMedia"
@@ -134,7 +129,7 @@
         <!-- Premium promotion -->
         <!-- TODO: Improve style -->
         <div
-          v-if="!isPremium && error?.message !== 'Unknown media type'"
+          v-if="!isPremium"
           class="text-xs text-base-content"
         >
           <NuxtLink
