@@ -1,20 +1,20 @@
 <script lang="ts" setup>
-  import { useBooruList } from '~/composables/useBooruList'
-  import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
-  import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
-  import { toast } from 'vue-sonner'
-  import Tag from '~/assets/js/tag.dto'
-  import type { Ref } from 'vue'
-  import { generatePostsRoute } from '~/assets/js/RouterHelper'
-  import { tagArrayToTitle } from '~/assets/js/SeoHelper'
-  import { capitalize } from 'lodash-es'
-  import type { Domain } from '~/assets/js/domain'
-  import type { IPostPage } from '~/assets/js/post'
-  import { useInfiniteQuery } from '@tanstack/vue-query'
-  import { FetchError } from 'ofetch'
-  import * as Sentry from '@sentry/vue'
+import {useBooruList} from '~/composables/useBooruList'
+import {ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon} from '@heroicons/vue/24/solid'
+import {MagnifyingGlassIcon} from '@heroicons/vue/24/outline'
+import {toast} from 'vue-sonner'
+import Tag from '~/assets/js/tag.dto'
+import type {Ref} from 'vue'
+import {generatePostsRoute} from '~/assets/js/RouterHelper'
+import {tagArrayToTitle} from '~/assets/js/SeoHelper'
+import {capitalize} from 'lodash-es'
+import type {Domain} from '~/assets/js/domain'
+import type {IPostPage} from '~/assets/js/post'
+import {useInfiniteQuery} from '@tanstack/vue-query'
+import {FetchError} from 'ofetch'
+import * as Sentry from '@sentry/vue'
 
-  const router = useRouter()
+const router = useRouter()
   const route = useRoute()
   const config = useRuntimeConfig()
   const $authState = useState('auth-internal')
@@ -149,6 +149,18 @@
   } = useInfiniteQuery({
     queryKey: ['posts', selectedBooru, selectedTags, selectedFilters],
     queryFn: fetchPosts,
+    select: (data) => {
+
+      // Delete all posts that have `media_type: 'unknown'`
+      data.pages.forEach((page) => {
+        page.data = page.data.filter((post) => post.media_type !== 'unknown')
+      })
+
+      return {
+        pages: data.pages,
+        pageParams: data.pageParams,
+      }
+    },
     initialPageParam: '',
     getNextPageParam: (lastPage, allPages, lastPageParam) => {
       if (lastPage.links.next == null) {

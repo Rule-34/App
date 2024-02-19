@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-  import { useUserSettings } from '~/composables/useUserSettings'
-  import { ChevronDownIcon } from '@heroicons/vue/24/outline'
+import {useUserSettings} from '~/composables/useUserSettings'
+import {ChevronDownIcon} from '@heroicons/vue/24/outline'
 
-  import { vOnLongPress } from '@vueuse/components'
-  import Tag from '~/assets/js/tag.dto'
-  import type { IPost } from '~/assets/js/post'
-  import { toast } from 'vue-sonner'
-  import { useAppStatistics } from '~/composables/useAppStatistics'
+import {vOnLongPress} from '@vueuse/components'
+import Tag from '~/assets/js/tag.dto'
+import type {IPost} from '~/assets/js/post'
+import {toast} from 'vue-sonner'
+import {useAppStatistics} from '~/composables/useAppStatistics'
 
-  const props = defineProps<{
+const props = defineProps<{
     domain: string
 
     post: IPost
@@ -138,7 +138,6 @@
         />
 
         <PostSource
-          v-if="post.media_type !== 'unknown'"
           :post-file-url="post.media_type === 'image' ? mediaFile.file : mediaFile.posterFile"
           :post-sources="post.sources"
         />
