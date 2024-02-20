@@ -22,7 +22,7 @@
         description: 'Automatically download media with the correct name & extension: rule34.xxx-123.png',
         action: {
           label: 'Subscribe',
-          onClick: () => navigateTo('/premium?utm_source=web&utm_medium=download-media')
+          onClick: () => navigateTo('/premium?utm_source=internal&utm_medium=download-media')
         }
       })
       return
