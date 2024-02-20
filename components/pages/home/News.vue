@@ -9,7 +9,7 @@
       links: [
         {
           text: 'Premium',
-          href: '/premium?utm_source=web&utm_medium=news'
+          href: '/premium?utm_source=internal&utm_medium=news'
         }
       ]
     },

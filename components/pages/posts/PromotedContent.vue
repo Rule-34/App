@@ -6,64 +6,64 @@
       mediaWidth: 1280,
       mediaHeight: 1280,
       mediaType: 'image',
-      link: '/premium?utm_source=web&utm_medium=promo-additional-boorus'
+      link: '/premium?utm_source=internal&utm_medium=promo-additional-boorus'
     },
     {
       media: '/img/promo/premium/Discord Role.jpg',
       mediaWidth: 1280,
       mediaHeight: 1280,
       mediaType: 'image',
-      link: '/premium?utm_source=web&utm_medium=promo-discord-role'
+      link: '/premium?utm_source=internal&utm_medium=promo-discord-role'
     },
     {
       media: '/img/promo/premium/No Ads.jpg',
       mediaWidth: 1280,
       mediaHeight: 1280,
       mediaType: 'image',
-      link: '/premium?utm_source=web&utm_medium=promo-no-ads'
+      link: '/premium?utm_source=internal&utm_medium=promo-no-ads'
     },
     {
       media: '/img/promo/premium/History.jpg',
       mediaWidth: 1280,
       mediaHeight: 1280,
       mediaType: 'image',
-      link: '/premium?utm_source=web&utm_medium=promo-history'
+      link: '/premium?utm_source=internal&utm_medium=promo-history'
     },
     {
       media: '/img/promo/premium/One-Click Downloads.jpg',
       mediaWidth: 1280,
       mediaHeight: 1280,
       mediaType: 'image',
-      link: '/premium?utm_source=web&utm_medium=promo-one-click-downloads'
+      link: '/premium?utm_source=internal&utm_medium=promo-one-click-downloads'
     },
     {
       media: '/img/promo/premium/Save Posts.jpg',
       mediaWidth: 1280,
       mediaHeight: 1280,
       mediaType: 'image',
-      link: '/premium?utm_source=web&utm_medium=promo-save-posts'
+      link: '/premium?utm_source=internal&utm_medium=promo-save-posts'
     },
     {
       media: '/img/promo/premium/Source Finder.jpg',
       mediaWidth: 1280,
       mediaHeight: 1280,
       mediaType: 'image',
-      link: '/premium?utm_source=web&utm_medium=promo-source-finder'
+      link: '/premium?utm_source=internal&utm_medium=promo-source-finder'
     },
     {
       media: '/img/promo/premium/Support Us.jpg',
       mediaWidth: 1280,
       mediaHeight: 1280,
       mediaType: 'image',
-      link: '/premium?utm_source=web&utm_medium=promo-support-us'
+      link: '/premium?utm_source=internal&utm_medium=promo-support-us'
     },
     {
       media: '/img/promo/premium/Tag Collections.jpg',
       mediaWidth: 1280,
       mediaHeight: 1280,
       mediaType: 'image',
-      link: '/premium?utm_source=web&utm_medium=promo-tag-collections'
-    },
+      link: '/premium?utm_source=internal&utm_medium=promo-tag-collections'
+    }
     // HentaiPorn
     {
       media: '/img/promo/HentaiPorn.jpg',
