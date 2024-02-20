@@ -1,5 +1,7 @@
 <script setup>
-  const promos = [
+  import { default as random_weighted_choice } from 'random-weighted-choice'
+
+  const premiumPromotions = [
     // Premium
     {
       media: '/img/promo/premium/Additional Boorus.jpg',
@@ -64,6 +66,9 @@
       mediaType: 'image',
       link: '/premium?utm_source=internal&utm_medium=promo-tag-collections'
     }
+  ]
+
+  const otherPromotions = [
     // HentaiPorn
     {
       media: '/img/promo/HentaiPorn.jpg',
@@ -74,7 +79,44 @@
     }
   ]
 
-  const promo = promos[Math.floor(Math.random() * promos.length)]
+  const referralPromotions = [
+    //
+  ]
+
+  const weightedPromotions = [
+    {
+      id: 'premiumPromotions',
+      weight: 1.5
+    },
+    {
+      id: 'otherPromotions',
+      weight: 1
+    }
+    // {
+    //   weight: 1,
+    //   id: 'referralPromotions'
+    // }
+  ]
+
+  const selectedPromotionsName = random_weighted_choice(weightedPromotions)
+
+  let selectedPromotions = []
+
+  switch (selectedPromotionsName) {
+    case 'premiumPromotions':
+      selectedPromotions = premiumPromotions
+      break
+    case 'otherPromotions':
+      selectedPromotions = otherPromotions
+      break
+    case 'referralPromotions':
+      selectedPromotions = referralPromotions
+      break
+    default:
+      throw new Error('Invalid promotion type')
+  }
+
+  const promo = selectedPromotions[Math.floor(Math.random() * selectedPromotions.length)]
 </script>
 
 <template>
