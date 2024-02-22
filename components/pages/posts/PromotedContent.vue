@@ -1,7 +1,7 @@
 <script setup>
-  import { default as random_weighted_choice } from 'random-weighted-choice'
+import {default as random_weighted_choice} from 'random-weighted-choice'
 
-  const premiumPromotions = [
+const premiumPromotions = [
     // Premium
     {
       media: '/img/promo/premium/Additional Boorus.jpg',
@@ -80,22 +80,36 @@
   ]
 
   const referralPromotions = [
-    //
+    // DreamGF
+    {
+      media: '/img/promo/referrals/DreamGF-300x600-2.gif',
+      mediaWidth: 300,
+      mediaHeight: 600,
+      mediaType: 'image',
+      link: 'https://dreamgf.ai/?a=dEhouXU2PPmKlo'
+    },
+    {
+      media: '/img/promo/referrals/DreamGF-1200x1200-1.jpg',
+      mediaWidth: 1200,
+      mediaHeight: 1200,
+      mediaType: 'image',
+      link: 'https://dreamgf.ai/?a=dEhouXU2PPmKlo'
+    }
   ]
 
   const weightedPromotions = [
     {
       id: 'premiumPromotions',
-      weight: 1.5
+      weight: 1.2
     },
     {
       id: 'otherPromotions',
       weight: 1
+    },
+    {
+      weight: 1,
+      id: 'referralPromotions'
     }
-    // {
-    //   weight: 1,
-    //   id: 'referralPromotions'
-    // }
   ]
 
   const selectedPromotionsName = random_weighted_choice(weightedPromotions)
