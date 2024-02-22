@@ -23,27 +23,6 @@
           target: '_blank'
         }
       ]
-    },
-    {
-      name: 'Social media Bots',
-      text: 'Enjoy the best hentai anywhere and anytime',
-      links: [
-        // {
-        //   text: 'Twitter',
-        //   href: 'https://twitter.com/Rule34_Pokebot',
-        //   target: '_blank'
-        // },
-        {
-          text: 'Telegram',
-          href: 'https://t.me/Rule_34_Hentai',
-          target: '_blank'
-        },
-        {
-          text: 'Mastodon',
-          href: 'https://mastodon.social/@r34',
-          target: '_blank'
-        }
-      ]
     }
   ]
 </script>
