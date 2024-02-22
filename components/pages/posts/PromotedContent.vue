@@ -80,7 +80,7 @@ const premiumPromotions = [
   ]
 
   const referralPromotions = [
-    // DreamGF
+    // dreamgf.ai
     {
       media: '/img/promo/referrals/DreamGF-300x600-2.gif',
       mediaWidth: 300,
@@ -94,6 +94,21 @@ const premiumPromotions = [
       mediaHeight: 1200,
       mediaType: 'image',
       link: 'https://dreamgf.ai/?a=dEhouXU2PPmKlo'
+    },
+    // candy.ai
+    {
+      media: '/img/promo/referrals/AI-Girlfriend-300x600.jpg',
+      mediaWidth: 300,
+      mediaHeight: 600,
+      mediaType: 'image',
+      link: 'https://candy.ai?via=rule-3496'
+    },
+    {
+      media: '/img/promo/referrals/AI-sexting-1200x1200.jpg',
+      mediaWidth: 1200,
+      mediaHeight: 1200,
+      mediaType: 'image',
+      link: 'https://candy.ai?via=rule-3496'
     }
   ]
 
