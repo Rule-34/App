@@ -545,7 +545,7 @@ const featuredDomains = [
                 </span>
               </NuxtLink>
 
-              <span class="ml-auto block text-xs">Scroll →</span>
+<!--              <span class="ml-auto block text-xs">Scroll →</span>-->
             </div>
 
             <FeaturedTags
