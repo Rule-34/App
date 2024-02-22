@@ -148,7 +148,7 @@ const { isPremium } = useUserData()
 
           <NuxtLink
             class="hover:hover-text-util focus-visible:focus-outline-util underline"
-            href="https://www.rule34.app/frequently-asked-questions#74cfdf0316b04111b0c65b7f8502dfda"
+            href="https://docs.r34.app/frequently-asked-questions#74cfdf0316b04111b0c65b7f8502dfda"
             target="_blank"
           >
             Learn more
