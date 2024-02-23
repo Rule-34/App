@@ -4,19 +4,11 @@ var _paq = window._paq = window._paq || []
 _paq.push(["setDomains", ["*.r34.app","*.alt.r34.app","*.dev.r34.app"]]);
 _paq.push(["enableCrossDomainLinking"]);
 
-_paq.push(['setExcludedQueryParams', ['page', 'cursor']])
-
-_paq.push(['trackPageView'])
-_paq.push(['enableLinkTracking']);
+_paq.push(['setExcludedQueryParams', ['page', 'cursor']]);
 
 (function () {
   var u = 'https://matomo.akbal.dev/'
 
   _paq.push(['setTrackerUrl', u + 'matomo.php'])
   _paq.push(['setSiteId', '1'])
-
-  var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0]
-  g.async = true
-  g.src = u + 'matomo.js'
-  s.parentNode.insertBefore(g, s)
 })()
