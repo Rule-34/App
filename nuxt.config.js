@@ -23,7 +23,9 @@ export default defineNuxtConfig({
 
     '/settings': {ssr: false},
 
-    '/premium': {prerender: true},
+    // TODO: Remove when A/B testing is finished @see 040.matomo.client.ts
+    '/premium': {ssr: false},
+    // '/premium': {prerender: true},
     '/premium/sign-in': {prerender: true},
 
     // All premium pages are client-side rendered

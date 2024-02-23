@@ -21,6 +21,14 @@
     { title: 'Support the development', additionalInfo: '#support-development' }
   ]
 
+  const {experimentPrice} = useExperiments()
+
+  const experimentPriceCoupon = computed(() => {
+    if (experimentPrice.value === 12.9) return ''
+
+    return `/p` + experimentPrice.value.toString().replace('.', '_')
+  })
+
   useSeoMeta({
     title: 'Premium',
 
@@ -185,7 +193,7 @@
                 >
                   <!-- Price -->
                   <div class="mt-10 flex items-center justify-center gap-x-4">
-                    <p class="text-4xl font-bold tracking-tight text-base-content-highlight">€4.9</p>
+                    <p class="text-4xl font-bold tracking-tight text-base-content-highlight">€{{experimentPrice}}</p>
 
                     <div class="text-sm leading-5">
                       <p class="text-base-content">EUR</p>
@@ -208,7 +216,7 @@
                   <NuxtLink
                     aria-describedby="premium-features"
                     class="focus-visible:focus-outline-util hover:hover-text-util rounded-md bg-primary-700 px-3 py-2 text-center text-sm font-semibold leading-6 text-base-content-highlight hover:bg-primary-600 focus-visible:ring-offset-2"
-                    href="https://gum.co/Rule34App"
+                    :href="'https://gum.co/Rule34App' + experimentPriceCoupon"
                     target="_blank"
                   >
                     Get Premium
