@@ -109,6 +109,21 @@ const premiumPromotions = [
       mediaHeight: 1200,
       mediaType: 'image',
       link: 'https://candy.ai?via=rule-3496'
+    },
+    // Lovense
+    {
+      media: '/img/promo/referrals/Lovense1.jpg',
+      mediaWidth: 300,
+      mediaHeight: 250,
+      mediaType: 'image',
+      link: 'https://www.lovense.com/r/iopfay'
+    },
+    {
+      media: '/img/promo/referrals/Lovense2.jpg',
+      mediaWidth: 300,
+      mediaHeight: 250,
+      mediaType: 'image',
+      link: 'https://www.lovense.com/r/iopfay'
     }
   ]
 
