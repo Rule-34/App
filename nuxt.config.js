@@ -261,6 +261,12 @@ export default defineNuxtConfig({
           type: 'text/plain',
           'data-category': 'analytics',
           'data-service': 'matomo'
+        },
+        {
+          src: 'https://matomo.akbal.dev/matomo.js',
+          type: 'text/plain',
+          'data-category': 'analytics',
+          'data-service': 'matomo'
         }
       ]
     }
