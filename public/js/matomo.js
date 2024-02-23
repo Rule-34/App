@@ -1,8 +1,8 @@
 var _paq = window._paq = window._paq || []
 
 /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-_paq.push(['setCookieDomain', '*.r34.app'])
-_paq.push(['setDomains', ['*.r34.app']])
+_paq.push(["setDomains", ["*.r34.app","*.alt.r34.app","*.dev.r34.app"]]);
+_paq.push(["enableCrossDomainLinking"]);
 
 _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
 
