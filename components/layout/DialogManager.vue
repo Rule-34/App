@@ -2,6 +2,7 @@
   const open = ref(false)
 
   const dialogs = [
+    // PWA prompt
     {
       condition: () => {
         const { timesTheAppHasBeenOpened, promptInstallPwa } = useAppStatistics()
@@ -23,6 +24,7 @@
       },
       component: defineAsyncComponent(() => import('~/components/layout/modal/PwaPrompt.vue'))
     },
+    // Feedback prompt
     {
       condition: () => {
         const { timesTheAppHasBeenOpened, promptFeedback } = useAppStatistics()
@@ -39,6 +41,25 @@
         return true
       },
       component: defineAsyncComponent(() => import('~/components/layout/modal/FeedbackPrompt.vue'))
+    },
+    // Support prompt
+    {
+      condition: () => {
+        const {timesTheAppHasBeenOpened} = useAppStatistics()
+        const {isPremium} = useUserData()
+
+        // Show every 10 times the app is opened
+        if (timesTheAppHasBeenOpened.value % 10 !== 0) {
+          return false
+        }
+
+        if (isPremium.value) {
+          return false
+        }
+
+        return true
+      },
+      component: defineAsyncComponent(() => import('~/components/layout/modal/SupportPrompt.vue'))
     }
   ]
 
