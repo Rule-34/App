@@ -23,6 +23,17 @@
           target: '_blank'
         }
       ]
+    },
+    {
+      name: 'Blocked in your country? 🇷🇺',
+      text: 'Go to the alternative site, alt.r34.app, to access the Rule 34 App without restrictions',
+      links: [
+        {
+          text: 'alt.r34.app',
+          href: 'https://alt.r34.app',
+          target: '_blank'
+        }
+      ]
     }
   ]
 </script>

@@ -36,10 +36,13 @@
 
       <div class="mt-2">
         <p class="text-sm">
-          <!-- TODO: Mention times visited? -->
           Add it to your home screen for quick and easy access,
           <!--          -->
-          it doesn't take any storage!
+          it doesnt need any permissions,
+          <!--          -->
+<!--          is automatically updated,-->
+          <!--          -->
+          and it doesn't take any storage!
         </p>
       </div>
     </div>
