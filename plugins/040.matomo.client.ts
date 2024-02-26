@@ -11,8 +11,12 @@ export default defineNuxtPlugin((nuxtApp) => {
   const router = useRouter()
 
   router.afterEach((to, from) => {
-    nextTick(async () => {
-      var _paq = window._paq = window._paq || []
+    onNuxtReady(async () => {
+      const _paq = window._paq
+
+      if (!_paq) {
+        return
+      }
 
       _paq.push(['setCustomUrl', to.fullPath])
       _paq.push(['setDocumentTitle', document.title])
@@ -25,8 +29,15 @@ export default defineNuxtPlugin((nuxtApp) => {
   })
 })
 
+let hasAbTestingLoaded = false
+
 // TODO: A/B Test prices in USD
 function loadAbTesting() {
+
+  if (hasAbTestingLoaded) {
+    return
+  }
+
   const {experimentPrice} = useExperiments()
 
   _paq.push(['AbTesting::create', {
@@ -137,4 +148,6 @@ function loadAbTesting() {
       return true // here you can further customize which of your visitors will participate in this experiment
     }
   }])
+
+  hasAbTestingLoaded = true
 }
