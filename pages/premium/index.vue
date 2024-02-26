@@ -218,6 +218,7 @@
                     class="focus-visible:focus-outline-util hover:hover-text-util rounded-md bg-primary-700 px-3 py-2 text-center text-sm font-semibold leading-6 text-base-content-highlight hover:bg-primary-600 focus-visible:ring-offset-2"
                     :href="'https://gum.co/Rule34App' + experimentPriceCoupon"
                     target="_blank"
+                    onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click'])"
                   >
                     Get Premium
                   </NuxtLink>
