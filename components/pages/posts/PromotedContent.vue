@@ -110,21 +110,28 @@ const premiumPromotions = [
       mediaType: 'image',
       link: 'https://candy.ai?via=rule-3496'
     },
-    // Lovense
+    // ehentai.ai
     {
-      media: '/img/promo/referrals/Lovense1.jpg',
+      media: '/img/promo/referrals/eHentai-300x250-2.jpg',
       mediaWidth: 300,
       mediaHeight: 250,
       mediaType: 'image',
-      link: 'https://www.lovense.com/r/iopfay'
+      link: 'https://ehentai.ai/?a=5Zwcn730LArsRN'
     },
     {
-      media: '/img/promo/referrals/Lovense2.jpg',
+      media: '/img/promo/referrals/eHentai-300x250-5.jpg',
       mediaWidth: 300,
       mediaHeight: 250,
       mediaType: 'image',
-      link: 'https://www.lovense.com/r/iopfay'
-    }
+      link: 'https://ehentai.ai/?a=5Zwcn730LArsRN'
+    },
+    {
+      media: '/img/promo/referrals/eHentai-300x250-12.jpg',
+      mediaWidth: 300,
+      mediaHeight: 250,
+      mediaType: 'image',
+      link: 'https://ehentai.ai/?a=5Zwcn730LArsRN'
+    },
   ]
 
   const weightedPromotions = [
