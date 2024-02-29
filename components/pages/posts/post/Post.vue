@@ -1,14 +1,11 @@
 <script lang="ts" setup>
-import {useUserSettings} from '~/composables/useUserSettings'
-import {ChevronDownIcon} from '@heroicons/vue/24/outline'
+  import { useUserSettings } from '~/composables/useUserSettings'
+  import { ChevronDownIcon } from '@heroicons/vue/24/outline'
+  import Tag from '~/assets/js/tag.dto'
+  import type { IPost } from '~/assets/js/post'
+  import { useAppStatistics } from '~/composables/useAppStatistics'
 
-import {vOnLongPress} from '@vueuse/components'
-import Tag from '~/assets/js/tag.dto'
-import type {IPost} from '~/assets/js/post'
-import {toast} from 'vue-sonner'
-import {useAppStatistics} from '~/composables/useAppStatistics'
-
-const props = defineProps<{
+  const props = defineProps<{
     domain: string
 
     post: IPost
@@ -16,10 +13,15 @@ const props = defineProps<{
     selectedTags: Tag[]
   }>()
 
+  // TODO: Find a better way to bubble events up
+  /**
+   * Events from child components
+   * @see PostTag.vue
+   */
   const emit = defineEmits<{
-    clickTag: [tag: string]
-    clickLongTag: [tag: string]
-    clickMiddleTag: [tag: string]
+    addTag: [tag: string]
+    setTag: [tag: string]
+    openTagInNewTab: [tag: string]
   }>()
 
   const userSettings = useUserSettings()
@@ -85,27 +87,6 @@ const props = defineProps<{
 
     return tags
   })
-
-  function onClickTag(tag: Tag) {
-    emit('clickTag', tag.name)
-
-    if (!tutorialLongClickTag.value) {
-      toast.info('Browsing Tip', {
-        description: 'Long click a tag to exclude it from search results',
-        duration: 10000
-      })
-
-      tutorialLongClickTag.value = true
-    }
-  }
-
-  function onClickLongTag(tag: Tag) {
-    emit('clickLongTag', tag.name)
-  }
-
-  function onClickMiddleTag(tag: Tag) {
-    emit('clickMiddleTag', tag.name)
-  }
 </script>
 
 <template>
@@ -167,29 +148,13 @@ const props = defineProps<{
           v-for="tag in tagsAsSingleArray"
           :key="tag.name"
         >
-          <button
-            v-on-long-press.prevent.stop="() => onClickLongTag(tag)"
-            :class="{
-              'bg-primary-400/20 text-primary-400/90 ring-accent-400/20 hover:bg-primary-400/20': tag.type === 'artist',
-              'bg-green-400/20 text-green-400/90 ring-green-400/20 hover:bg-green-400/20': tag.type === 'copyright',
-              'bg-emerald-400/20 text-emerald-400/90 ring-emerald-400/20 hover:bg-emerald-400/20':
-                tag.type === 'character',
-              'hover:hover-bg-util': tag.type === 'general' || tag.type === 'meta',
-
-              // Mark tag as selected
-              'hover-bg-util hover-text-util !ring-base-0/20': selectedTags.some(
-                (selectedTag) => selectedTag.name === tag.name
-              )
-            }"
-            class="focus-visible:focus-outline-util group inline-flex select-none items-center rounded-full px-2 py-1 ring-1 ring-inset ring-base-0/20"
-            type="button"
-            @click="onClickTag(tag)"
-            @click.middle="onClickMiddleTag(tag)"
-          >
-            <span class="group-hover:hover-text-util text-xs font-medium">
-              {{ tag.name }}
-            </span>
-          </button>
+          <PostTag
+            :selectedTags="selectedTags"
+            :tag="tag"
+            @addTag="emit('addTag', $event)"
+            @openTagInNewTab="emit('openTagInNewTab', $event)"
+            @setTag="emit('setTag', $event)"
+          />
         </li>
       </HeadlessDisclosurePanel>
     </HeadlessDisclosure>
