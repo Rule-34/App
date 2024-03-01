@@ -64,6 +64,12 @@ const { isPremium } = useUserData()
   }
 
   function onMediaIntersectionObserver(entries: IntersectionObserverEntry[]) {
+
+    // Skip on fullscreen
+    if (document.fullscreenElement) {
+      return
+    }
+
     // Smallest video & image possible - https://stackoverflow.com/a/36610159/11398632
     const smallestImage =
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII='
@@ -91,6 +97,12 @@ const { isPremium } = useUserData()
    * Stops videos when they are out of the viewport
    */
   function onVideoIntersectionObserver(entries: IntersectionObserverEntry[]) {
+    
+    // Skip on fullscreen
+    if (document.fullscreenElement) {
+      return
+    }
+
     const entry = entries[0]
 
     const videoElement = entry.target as HTMLVideoElement
