@@ -1,4 +1,5 @@
 <script setup>
+  import { useEventListener } from '@vueuse/core'
   import { toast, Toaster } from 'vue-sonner'
 
   useAppStatistics()
@@ -18,6 +19,30 @@
   // TODO: Verify it works
   onErrorCaptured((error) => {
     toast.error(error.message)
+  })
+
+
+  // Restore scroll position after fullscreen
+  useEventListener('fullscreenchange', async (event) => {
+    const isInFullscreen = document.fullscreenElement !== null
+
+    if (isInFullscreen) {
+      return
+    }
+
+    await nextTick()
+
+    await new Promise((resolve) => setTimeout(resolve, 50))
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+
+        event.target.scrollIntoView({
+          block: 'center',
+          inline: 'center',
+        })
+      })
+    })
   })
 
   console.info(
