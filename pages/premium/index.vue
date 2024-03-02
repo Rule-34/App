@@ -190,7 +190,9 @@
                     <p class="text-4xl font-bold tracking-tight text-base-content-highlight">{{experimentPriceCurrency}}7</p>
 
                     <div class="text-sm leading-5">
-                      <p class="text-base-content">EUR</p>
+                      <p class="text-base-content">
+                        {{ experimentPriceCurrency === '$' ? 'USD' : 'EUR'}}
+                      </p>
                       <p>Billed monthly</p>
                     </div>
                   </div>
