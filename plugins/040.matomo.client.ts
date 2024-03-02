@@ -21,7 +21,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       _paq.push(['setCustomUrl', to.fullPath])
       _paq.push(['setDocumentTitle', document.title])
 
-      loadAbTesting()
+      loadAbTesting(_paq)
 
       _paq.push(['trackPageView'])
       _paq.push(['enableLinkTracking'])
@@ -32,7 +32,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 let hasAbTestingLoaded = false
 
 // TODO: A/B Test prices in USD
-function loadAbTesting() {
+function loadAbTesting(_paq) {
 
   if (hasAbTestingLoaded) {
     return
