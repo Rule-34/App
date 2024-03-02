@@ -1,9 +1,9 @@
 import { useStorage } from '@vueuse/core'
 
-let experimentPrice = ref<number>(4.9)
+let experimentPriceCurrency = ref('€')
 
 if (process.client) {
-  experimentPrice = useStorage('experiment-price', 4.9, sessionStorage, {
+  experimentPriceCurrency = useStorage('experiment-price', '€', sessionStorage, {
     writeDefaults: false
   })
 }
@@ -11,6 +11,6 @@ if (process.client) {
 export function useExperiments() {
 
   return {
-    experimentPrice,
+    experimentPriceCurrency,
   }
 }
