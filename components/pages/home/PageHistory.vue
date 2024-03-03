@@ -40,7 +40,7 @@
         description: 'Page history is only available for Premium users',
         action: {
           label: 'Subscribe',
-          onClick: () => navigateTo('/premium?utm_source=internal&utm_medium=page-history')
+          onClick: () => navigateTo('/premium?utm_source=internal&utm_medium=premium-page-history')
         }
       })
       return

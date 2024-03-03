@@ -194,7 +194,7 @@ const premiumPromotions = [
     <figcaption class="whitespace-normal px-1 py-3 text-center text-sm">
       <NuxtLink
         class="hover:hover-text-util focus-visible:focus-outline-util underline"
-        href="/premium"
+        href="/premium?utm_source=internal&utm_medium=promo"
         >Get Premium<!----></NuxtLink
       ><!---->: No ads + exclusive features
     </figcaption>
