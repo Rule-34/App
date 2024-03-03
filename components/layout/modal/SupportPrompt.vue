@@ -47,7 +47,7 @@ const open = defineModel<boolean>()
             <NuxtLink
               class="hover:hover-text-util underline focus-visible:focus-outline-util"
               target="_blank"
-              to="/premium"
+              to="/premium?utm_source=internal&utm_medium=prompt-support"
             >
               Subscribe to Premium
             </NuxtLink>

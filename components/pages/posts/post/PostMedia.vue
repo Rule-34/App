@@ -97,7 +97,7 @@ const { isPremium } = useUserData()
    * Stops videos when they are out of the viewport
    */
   function onVideoIntersectionObserver(entries: IntersectionObserverEntry[]) {
-    
+
     // Skip on fullscreen
     if (document.fullscreenElement) {
       return
@@ -146,7 +146,7 @@ const { isPremium } = useUserData()
         >
           <NuxtLink
             class="hover:hover-text-util focus-visible:focus-outline-util underline"
-            href="/premium"
+            href="/premium?utm_source=internal&utm_medium=media-error"
           >
             <!-- @formatter:off -->
             Get Premium</NuxtLink
