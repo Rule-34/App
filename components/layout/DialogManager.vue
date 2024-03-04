@@ -48,8 +48,8 @@
         const {timesTheAppHasBeenOpened} = useAppStatistics()
         const {isPremium} = useUserData()
 
-        // Show every 10 times the app is opened
-        if (timesTheAppHasBeenOpened.value % 10 !== 0) {
+        // Show every 20 times the app is opened
+        if (timesTheAppHasBeenOpened.value % 20 !== 0) {
           return false
         }
 
