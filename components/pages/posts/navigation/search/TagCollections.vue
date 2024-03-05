@@ -22,7 +22,7 @@
         description: 'You need to be a premium user to use this feature',
         action: {
           label: 'Subscribe',
-          onClick: () => navigateTo('/premium')
+          onClick: () => navigateTo('/premium?utm_source=internal&utm_medium=premium-tag-collections')
         }
       })
       return

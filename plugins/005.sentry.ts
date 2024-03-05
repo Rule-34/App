@@ -76,6 +76,7 @@ export default defineNuxtPlugin({
         /hotjar\./i,
         /netstats\.space/i,
         /pagead\/js/i,
+        /posthog\.com/i,
 
         // Chrome extensions.
         /^chrome:\/\//i,

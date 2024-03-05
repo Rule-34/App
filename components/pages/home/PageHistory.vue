@@ -1,57 +1,57 @@
 <script lang="ts" setup>
-import {formatTimeAgo} from '@vueuse/core'
-import {toast} from 'vue-sonner'
-import {XMarkIcon} from '@heroicons/vue/20/solid'
+  import { formatTimeAgo } from '@vueuse/core'
+  import { toast } from 'vue-sonner'
+  import { XMarkIcon } from '@heroicons/vue/20/solid'
 
-const {isPremium} = useUserData()
-const {pageHistory} = usePageHistory()
+  const { isPremium } = useUserData()
+  const { pageHistory } = usePageHistory()
 
-function historyPathToTitle(path: string) {
-  path = decodeURIComponent(path)
+  function historyPathToTitle(path: string) {
+    path = decodeURIComponent(path)
 
-  return (
-    path
-      //
-      .replace('/posts/', 'domain: ')
-      .replace('?', '&')
-      .split('&')
-      .map(
-        (_query) =>
-          _query
-            // Capitalize first character
-            .charAt(0)
-            .toUpperCase() +
-          _query
-            .slice(1)
+    return (
+      path
+        //
+        .replace('/posts/', 'domain: ')
+        .replace('?', '&')
+        .split('&')
+        .map(
+          (_query) =>
+            _query
+              // Capitalize first character
+              .charAt(0)
+              .toUpperCase() +
+            _query
+              .slice(1)
 
-            // Replace first '=' with ': '
-            .replace(/=/, ': ')
-      )
-      // Query separator
-      .join('\n')
-      // Separate tags
-      .replace(/\|/g, ', ')
-  )
-}
-
-function onHistoryItemClick(path: string) {
-  if (!isPremium.value) {
-    toast.info('Premium feature', {
-      description: 'Page history is only available for Premium users',
-      action: {
-        label: 'Subscribe',
-        onClick: () => navigateTo('/premium')
-      }
-    })
-    return
+              // Replace first '=' with ': '
+              .replace(/=/, ': ')
+        )
+        // Query separator
+        .join('\n')
+        // Separate tags
+        .replace(/\|/g, ', ')
+    )
   }
 
-  navigateTo(path)
-}
+  function onHistoryItemClick(path: string) {
+    if (!isPremium.value) {
+      toast.info('Premium feature', {
+        description: 'Page history is only available for Premium users',
+        action: {
+          label: 'Subscribe',
+          onClick: () => navigateTo('/premium?utm_source=internal&utm_medium=premium-page-history')
+        }
+      })
+      return
+    }
 
-function removeHistoryItem(path: string) {
-  pageHistory.value = pageHistory.value.filter((historyItem) => historyItem.path !== path)
-}
+    navigateTo(path)
+  }
+
+  function removeHistoryItem(path: string) {
+    pageHistory.value = pageHistory.value.filter((historyItem) => historyItem.path !== path)
+  }
 </script>
 
 <template>
@@ -71,12 +71,12 @@ function removeHistoryItem(path: string) {
           'absolute left-0 top-0 flex w-6 justify-center'
         ]"
       >
-        <div class="w-px bg-base-0/20"/>
+        <div class="w-px bg-base-0/20" />
       </div>
 
       <!-- Icon (dot) -->
       <div class="relative flex h-6 w-6 flex-none items-center justify-center bg-base-1000">
-        <div class="h-1.5 w-1.5 rounded-full bg-base-0/10 ring-1 ring-base-0/20"/>
+        <div class="h-1.5 w-1.5 rounded-full bg-base-0/10 ring-1 ring-base-0/20" />
       </div>
 
       <!-- Text -->
@@ -100,7 +100,7 @@ function removeHistoryItem(path: string) {
         type="button"
         @click="removeHistoryItem(historyItem.path)"
       >
-        <XMarkIcon class="h-5 w-5"/>
+        <XMarkIcon class="h-5 w-5" />
       </button>
     </li>
   </ol>
