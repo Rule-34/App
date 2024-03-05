@@ -185,7 +185,7 @@
                 >
                   <!-- Price -->
                   <div class="mt-10 flex items-center justify-center gap-x-4">
-                    <p class="text-4xl font-bold tracking-tight text-base-content-highlight">€7</p>
+                    <p class="text-4xl font-bold tracking-tight text-base-content-highlight">€4.9</p>
 
                     <div class="text-sm leading-5">
                       <p class="text-base-content">
