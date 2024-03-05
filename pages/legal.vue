@@ -1,9 +1,9 @@
 <script setup>
-  useSeoMeta({
-    title: 'Legal',
+useSeoMeta({
+  title: 'Legal',
 
-    description: 'Legal information about the Rule 34 App'
-  })
+  description: 'Legal information about the Rule 34 App'
+})
 </script>
 
 <template>
@@ -13,21 +13,8 @@
     </PageHeader>
 
     <ol class="mx-2 mt-4 space-y-4">
-      <!-- Generated terms of service -->
-      <li>
-        <ContentContainer
-          :links="[
-            {
-              text: 'Terms of service',
-              href: '/terms-of-service'
-            }
-          ]"
-          text="You can find the terms of service in the next link"
-          title="Terms of service"
-        />
-      </li>
 
-      <!-- Generated terms of service -->
+      <!-- Privacy policy -->
       <li>
         <ContentContainer
           :links="[
@@ -41,19 +28,46 @@
         />
       </li>
 
-      <!-- Analytics -->
+      <!-- Cookie policy -->
       <li>
         <ContentContainer
           :links="[
             {
-              text: 'Opt Out',
-              href: '/privacy-policy#opt-out'
+              text: 'Cookie policy',
+              href: '/cookie-policy'
             }
           ]"
-          text="We use first party analytics that do not gather or store any personal info
+          text="You can find the cookie policy in the next link"
+          title="Cookie policy"
+        />
+      </li>
 
-				 Feel free to opt out of being tracked on the next link"
-          title="Analytics"
+      <!-- Consent -->
+      <li>
+        <ContentContainer
+          text="Manage your cookies consent in the next link"
+          title="Consent Preferences Center"
+        >
+          <button
+            class='hover:hover-text-util focus-visible:focus-outline-util text-sm text-base-content underline'
+            type="button"
+            @click='$CC.showPreferences()'>
+            Open Preferences Center
+          </button>
+        </ContentContainer>
+      </li>
+
+      <!-- Terms of Service -->
+      <li>
+        <ContentContainer
+          :links="[
+            {
+              text: 'Terms of service',
+              href: '/terms-of-service'
+            }
+          ]"
+          text="You can find the terms of service in the next link"
+          title="Terms of service"
         />
       </li>
 

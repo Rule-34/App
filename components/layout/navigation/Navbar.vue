@@ -1,6 +1,6 @@
-<script setup>
+<script lang="ts" setup>
   import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
-  import { useScroll } from '@vueuse/core'
+  import { vIntersectionObserver } from '@vueuse/components'
 
   const route = useRoute()
 
@@ -23,80 +23,39 @@
     ].some((path) => route.path.startsWith(path))
   )
 
-  const showFixedNavbar = ref(true)
-  const showNavbarBackground = ref(false)
+  const isOnTop = ref(true)
 
-  const { y, arrivedState, directions } = useScroll(
-    process.client
-      ? //
-        window
-      : undefined,
-    {
-      onScroll: () => {
-        if (!isPostsPage.value) {
-          showFixedNavbar.value = true
-          showNavbarBackground.value = false
-          return
-        }
+  function onIntersectionObserver(entries: IntersectionObserverEntry[]) {
+    const [entry] = entries
 
-        if (
-          //
-          arrivedState.top === true ||
-          //
-          directions.top === true
-        ) {
-          showFixedNavbar.value = true
-
-          //
-        } else {
-          showFixedNavbar.value = false
-        }
-
-        if (
-          //
-          arrivedState.top === false &&
-          y.value >= 0
-        ) {
-          showNavbarBackground.value = true
-
-          //
-        } else {
-          showNavbarBackground.value = false
-        }
-      }
+    if (entry.isIntersecting) {
+      isOnTop.value = true
+    } else {
+      isOnTop.value = false
     }
-  )
+  }
 </script>
 
 <template>
   <!-- Same margin as Nav height -->
   <nav class="mb-14">
-    <!-- TODO: refactor code -->
+    <div v-intersection-observer="[onIntersectionObserver]" />
+
     <div
-      :class="[
-        // Container
-        'container mx-auto max-w-3xl sm:px-6 lg:px-8',
-        isPostsPage
-          ? //
-            'fixed'
-          : 'absolute',
-        isPostsPage
-          ? showNavbarBackground
-            ? //
-              'border-b-2 border-base-0/20 bg-base-1000/60 backdrop-blur md:rounded-b-md md:border-x-2'
-            : '!border-0 border-transparent bg-transparent md:rounded-b-md md:border-x-2'
-          : '',
-        isPostsPage
-          ? showFixedNavbar
-            ? //
-              'translate-y-0 opacity-100'
-            : '-translate-y-full opacity-0'
-          : ''
-      ]"
-      class="inset-x-0 z-10 transition duration-200"
+      :class="{
+        '!fixed': isPostsPage,
+        'bg-base-1000/60 shadow-lg backdrop-blur-lg backdrop-saturate-200 md:border-b-2 ': isPostsPage && !isOnTop
+      }"
+      class="absolute inset-x-0 top-0 z-10 border-base-0/20 transition duration-200"
     >
       <!-- Navbar -->
-      <div class="relative flex h-14 items-center justify-between">
+      <div
+        :class="[
+          // Container
+          'container mx-auto max-w-3xl sm:px-6 lg:px-8'
+        ]"
+        class="relative flex h-14 items-center justify-between"
+      >
         <!-- -->
 
         <!-- Right side: Menu button -->

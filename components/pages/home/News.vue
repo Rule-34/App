@@ -1,8 +1,27 @@
 <script lang="ts" setup>
   const newsList = [
     {
+      name: 'Get the best Hentai on social media! 📱',
+      text:
+        "We're on Twitter, Mastodon, and Telegram",
+      links: [
+        {
+          text: 'Twitter',
+          href: 'https://twitter.com/Rule34_Pokebot'
+        },
+        {
+          text: 'Mastodon',
+          href: 'https://mastodon.social/@r34'
+        },
+        {
+          text: 'Telegram',
+          href: 'https://t.me/Rule_34_Hentai'
+        },
+      ]
+    },
+    {
       name: 'Install the App',
-      text: 'Learn how to install the Rule 34 App on your device, in 3 simple steps',
+      text: 'Learn how to install the Rule 34 App, in 3 simple steps',
       links: [
         {
           text: 'Install the App',
@@ -12,22 +31,12 @@
       ]
     },
     {
-      name: 'Social media Bots',
-      text: 'Enjoy the best hentai anywhere and anytime',
+      name: 'Blocked in your country? 🇷🇺',
+      text: 'Access the Rule 34 App without restrictions, with the alternative site',
       links: [
-        // {
-        //   text: 'Twitter',
-        //   href: 'https://twitter.com/Rule34_Pokebot',
-        //   target: '_blank'
-        // },
         {
-          text: 'Telegram',
-          href: 'https://t.me/Rule_34_Hentai',
-          target: '_blank'
-        },
-        {
-          text: 'Mastodon',
-          href: 'https://mastodon.social/@r34',
+          text: 'alt.r34.app',
+          href: 'https://alt.r34.app',
           target: '_blank'
         }
       ]

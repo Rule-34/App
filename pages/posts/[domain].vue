@@ -7,7 +7,7 @@
   import type { Ref } from 'vue'
   import { generatePostsRoute } from '~/assets/js/RouterHelper'
   import { tagArrayToTitle } from '~/assets/js/SeoHelper'
-  import { capitalize } from 'lodash-es'
+  import { capitalize, cloneDeep } from 'lodash-es'
   import type { Domain } from '~/assets/js/domain'
   import type { IPostPage } from '~/assets/js/post'
   import { useInfiniteQuery } from '@tanstack/vue-query'
@@ -149,6 +149,17 @@
   } = useInfiniteQuery({
     queryKey: ['posts', selectedBooru, selectedTags, selectedFilters],
     queryFn: fetchPosts,
+    select: (data) => {
+      // Delete all posts that have `media_type: 'unknown'`
+      data.pages.forEach((page) => {
+        page.data = page.data.filter((post) => post.media_type !== 'unknown')
+      })
+
+      return {
+        pages: data.pages,
+        pageParams: data.pageParams
+      }
+    },
     initialPageParam: '',
     getNextPageParam: (lastPage, allPages, lastPageParam) => {
       if (lastPage.links.next == null) {
@@ -276,39 +287,45 @@
   /**
    * Adds the tag, or removes it if it already exists
    */
-  async function onPostClickTag(tag: string) {
-    let newTags = undefined
+  async function onPostAddTag(tag: string) {
+    const isTagNegative = tag.startsWith('-')
 
-    const filteredSelectedTags = selectedTags.value.filter((selectedTag) => selectedTag.name !== tag)
+    let newTags = cloneDeep(selectedTags.value)
 
-    // If the tag was not found, add it
-    if (filteredSelectedTags.length === selectedTags.value.length) {
-      newTags = [...selectedTags.value, new Tag({ name: tag })]
+    // Remove tag if it already exists
+    const isTagAlreadySelected = newTags.some((selectedTag) => selectedTag.name === tag)
+
+    if (isTagAlreadySelected) {
+      newTags = newTags.filter((selectedTag) => selectedTag.name !== tag)
+
+      await reflectChangesInUrl({ page: null, tags: newTags })
+      return
     }
 
-    // If the tag was found, remove it
-    else {
-      newTags = filteredSelectedTags
+    if (isTagNegative) {
+      const doesTagExistInPositive = newTags.some((selectedTag) => selectedTag.name === tag.slice(1))
+
+      if (doesTagExistInPositive) {
+        newTags = newTags.filter((selectedTag) => selectedTag.name !== tag.slice(1))
+      }
     }
+
+    newTags.push(new Tag({ name: tag }))
 
     await reflectChangesInUrl({ page: null, tags: newTags })
   }
 
   /**
-   * Removes the tag, and adds it to the blocklist
+   * Sets tags to only the given tag
    */
-  async function onPostClickLongTag(tag: string) {
-    const newTags = selectedTags.value.filter((selectedTag) => selectedTag.name !== tag)
-
-    newTags.push(new Tag({ name: '-' + tag }))
-
-    await reflectChangesInUrl({ page: null, tags: newTags })
+  async function onPostSetTag(tag: string) {
+    await reflectChangesInUrl({ page: null, tags: [new Tag({ name: tag })] })
   }
 
   /**
    * Opens the tag in a new tab
    */
-  async function onPostClickMiddleTag(tag: string) {
+  async function onPostOpenTagInNewTab(tag: string) {
     const tagUrl = generatePostsRoute(
       undefined,
       selectedBooru.value.domain,
@@ -334,7 +351,7 @@
   }
 
   async function onPageIndicatorClick() {
-    const pagePrompt = prompt('What page number would you like to go to?', '10')
+    const pagePrompt = prompt('To which page do you want to go?')
     const page = parseInt(pagePrompt, 10)
 
     if (isNaN(page)) {
@@ -637,9 +654,9 @@
                   :domain="selectedBooru.domain"
                   :post="post"
                   :selected-tags="selectedTags"
-                  @click-tag="onPostClickTag"
-                  @click-long-tag="onPostClickLongTag"
-                  @click-middle-tag="onPostClickMiddleTag"
+                  @addTag="onPostAddTag"
+                  @openTagInNewTab="onPostOpenTagInNewTab"
+                  @setTag="onPostSetTag"
                 />
               </li>
 

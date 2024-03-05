@@ -1,12 +1,12 @@
 <script>
-export default {
-  inheritAttrs: false
-}
+  export default {
+    inheritAttrs: false
+  }
 </script>
 
 <script setup>
-const props = defineProps(['modelValue'])
-const emit = defineEmits(['update:modelValue'])
+  const props = defineProps(['modelValue'])
+  const emit = defineEmits(['update:modelValue'])
 </script>
 
 <template>
@@ -20,15 +20,15 @@ const emit = defineEmits(['update:modelValue'])
         class="font-medium leading-8 text-base-content-highlight"
         passive
       >
-        <slot name="name"/>
-        </HeadlessSwitchLabel>
+        <slot name="name" />
+      </HeadlessSwitchLabel>
 
-        <HeadlessSwitchDescription
-          as="span"
-          class="text-sm text-base-content"
-        >
-        <slot name="description"/>
-          </HeadlessSwitchDescription>
+      <HeadlessSwitchDescription
+        as="span"
+        class="text-sm text-base-content"
+      >
+        <slot name="description" />
+      </HeadlessSwitchDescription>
     </span>
 
     <HeadlessSwitch
@@ -40,6 +40,6 @@ const emit = defineEmits(['update:modelValue'])
         aria-hidden="true"
         class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-base-content-highlight shadow ring-0 transition duration-200 ease-in-out ui-checked:translate-x-6 ui-not-checked:translate-x-0"
       />
-      </HeadlessSwitch>
-      </HeadlessSwitchGroup>
+    </HeadlessSwitch>
+  </HeadlessSwitchGroup>
 </template>

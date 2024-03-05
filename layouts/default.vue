@@ -1,4 +1,5 @@
 <script setup>
+  import { useEventListener } from '@vueuse/core'
   import { toast, Toaster } from 'vue-sonner'
 
   useAppStatistics()
@@ -20,12 +21,36 @@
     toast.error(error.message)
   })
 
+
+  // Restore scroll position after fullscreen
+  useEventListener('fullscreenchange', async (event) => {
+    const isInFullscreen = document.fullscreenElement !== null
+
+    if (isInFullscreen) {
+      return
+    }
+
+    await nextTick()
+
+    await new Promise((resolve) => setTimeout(resolve, 50))
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+
+        event.target.scrollIntoView({
+          block: 'center',
+          inline: 'center',
+        })
+      })
+    })
+  })
+
   console.info(
     '%cWe ❤︎ open source!',
     'font-size:32px;font-weight:bold;letter-spacing:0.02em;color:hsl(205, 78%, 62%);background-color:white;padding:8px 16px;'
   )
   console.info(
-    '%cContribute: https://redirect.r34.app/github\nJoin our discord: https://redirect.r34.app/discord',
+    '%cContribute: https://github.com/Rule-34/App\nJoin our discord: https://discord.gg/fUhYHSZ',
     'background-color:hsl(0, 0%, 7%);padding:4px 8px;font-size:16px;color:white;'
   )
 </script>
@@ -36,10 +61,10 @@
     <!-- Background -->
     <div
       aria-hidden="true"
-      class="absolute inset-x-0 -z-10 flex transform-gpu justify-center overflow-hidden blur-xl md:blur-3xl"
+      class="absolute inset-x-0 -z-10 flex transform-gpu justify-center blur-xl md:blur-3xl"
     >
       <div
-        class="-mr-3 -mt-3 aspect-[1108/632] w-full flex-none bg-gradient-to-l from-primary-300 to-accent-700 opacity-25"
+        class="aspect-[1108/632] w-full flex-none bg-gradient-to-l from-primary-300 to-accent-700 opacity-25"
         style="
           clip-path: polygon(
             100% 0%,
@@ -65,6 +90,8 @@
         position="top-center"
         theme="dark"
       />
+
+      <DialogManager />
     </ClientOnly>
 
     <SidebarWrapper>

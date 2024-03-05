@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-  import { vIntersectionObserver } from '@vueuse/components'
-  import type { IPost } from 'assets/js/post'
+import {vIntersectionObserver} from '@vueuse/components'
+import type {IPost} from 'assets/js/post'
 
-  const { isPremium } = useUserData()
+const { isPremium } = useUserData()
 
   export interface PostMediaProps {
     mediaSrc: string | null
@@ -26,10 +26,6 @@
   const isVideo = computed(() => props.mediaType === 'video')
 
   const triedToLoadWithProxy = shallowRef(false)
-
-  if (props.mediaType === 'unknown') {
-    error.value = new Error('Unknown media type')
-  }
 
   function onMediaError(event: Event) {
     if (hasError.value) {
@@ -67,8 +63,12 @@
     localSrc.value = props.mediaSrc
   }
 
-  function onIntersectionObserver(entries: IntersectionObserverEntry[]) {
-    const entry = entries[0]
+  function onMediaIntersectionObserver(entries: IntersectionObserverEntry[]) {
+
+    // Skip on fullscreen
+    if (document.fullscreenElement) {
+      return
+    }
 
     // Smallest video & image possible - https://stackoverflow.com/a/36610159/11398632
     const smallestImage =
@@ -81,7 +81,9 @@
         smallestImage
       : smallestVideo
 
-    const mediaElement = entry.target as HTMLImageElement | HTMLVideoElement
+    const entry = entries[0]
+
+    const mediaElement = entry.target.children[0] as HTMLImageElement | HTMLVideoElement
 
     const newSrc = entry.isIntersecting
       ? //
@@ -89,6 +91,25 @@
       : smallestMedia
 
     mediaElement.src = newSrc
+  }
+
+  /**
+   * Stops videos when they are out of the viewport
+   */
+  function onVideoIntersectionObserver(entries: IntersectionObserverEntry[]) {
+
+    // Skip on fullscreen
+    if (document.fullscreenElement) {
+      return
+    }
+
+    const entry = entries[0]
+
+    const videoElement = entry.target as HTMLVideoElement
+
+    if (!entry.isIntersecting) {
+      videoElement.pause()
+    }
   }
 
   function onMediaLoad(event: Event) {
@@ -109,7 +130,6 @@
           </span>
 
           <button
-            v-if="error?.message !== 'Unknown media type'"
             class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto inline-flex items-center justify-center rounded-md px-2 py-1 text-sm ring-1 ring-base-0/20"
             type="button"
             @click="manuallyReloadMedia"
@@ -121,12 +141,12 @@
         <!-- Premium promotion -->
         <!-- TODO: Improve style -->
         <div
-          v-if="!isPremium && error?.message !== 'Unknown media type'"
+          v-if="!isPremium"
           class="text-xs text-base-content"
         >
           <NuxtLink
             class="hover:hover-text-util focus-visible:focus-outline-util underline"
-            href="/premium"
+            href="/premium?utm_source=internal&utm_medium=media-error"
           >
             <!-- @formatter:off -->
             Get Premium</NuxtLink
@@ -140,7 +160,7 @@
 
           <NuxtLink
             class="hover:hover-text-util focus-visible:focus-outline-util underline"
-            href="https://www.rule34.app/frequently-asked-questions#74cfdf0316b04111b0c65b7f8502dfda"
+            href="https://docs.r34.app/frequently-asked-questions#74cfdf0316b04111b0c65b7f8502dfda"
             target="_blank"
           >
             Learn more
@@ -150,11 +170,13 @@
     </template>
 
     <!-- Image -->
-    <template v-else-if="isImage">
+    <div
+      v-else-if="isImage"
+      v-intersection-observer="[onMediaIntersectionObserver, { rootMargin: '1200px' }]"
+    >
       <!-- TODO: Fix very large images not being on screen so not loaded -->
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <img
-        v-intersection-observer="[onIntersectionObserver, { rootMargin: '1200px' }]"
         :alt="mediaAlt"
         :class="[mediaHasLoaded ? 'opacity-100' : 'opacity-0']"
         :data-src="localSrc"
@@ -167,14 +189,17 @@
         @error="onMediaError"
         @load="onMediaLoad"
       />
-    </template>
+    </div>
 
     <!-- Video -->
-    <template v-else-if="isVideo">
+    <div
+      v-else-if="isVideo"
+      v-intersection-observer="[onMediaIntersectionObserver, { rootMargin: '1200px' }]"
+    >
       <!-- TODO: Add load animation -->
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <video
-        v-intersection-observer="[onIntersectionObserver, { rootMargin: '1200px' }]"
+        v-intersection-observer="[onVideoIntersectionObserver, { rootMargin: '100px' }]"
         :data-src="localSrc"
         :height="mediaSrcHeight"
         :poster="mediaPosterSrc"
@@ -187,6 +212,6 @@
         preload="none"
         @error="onMediaError"
       />
-    </template>
+    </div>
   </div>
 </template>

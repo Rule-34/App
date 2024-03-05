@@ -1,4 +1,4 @@
-import { sentryVitePlugin } from '@sentry/vite-plugin'
+import {sentryVitePlugin} from '@sentry/vite-plugin'
 
 export default defineNuxtConfig({
   // TODO: Enable when SSR is enabled
@@ -13,22 +13,24 @@ export default defineNuxtConfig({
     },
 
     // Static pages are prerendered
-    '/': { prerender: true },
-    '/other-sites': { prerender: true },
-    '/legal': { prerender: true },
+    '/': {prerender: true},
+    '/other-sites': {prerender: true},
+    '/legal': {prerender: true},
 
-    '/settings': { ssr: false },
+    '/settings': {ssr: false},
 
-    '/premium': { prerender: true },
-    '/premium/sign-in': { prerender: true },
+    // TODO: Remove when A/B testing is finished @see 040.matomo.client.ts
+    '/premium': {ssr: false},
+    // '/premium': {prerender: true},
+    '/premium/sign-in': {prerender: true},
 
     // All premium pages are client-side rendered
-    '/premium/dashboard': { ssr: false },
-    '/premium/saved-posts/*': { ssr: false },
-    '/premium/tag-collections': { ssr: false },
-    '/premium/additional-boorus': { ssr: false },
-    '/premium/backup': { ssr: false },
-    '/premium/migrate-old-data': { ssr: false },
+    '/premium/dashboard': {ssr: false},
+    '/premium/saved-posts/*': {ssr: false},
+    '/premium/tag-collections': {ssr: false},
+    '/premium/additional-boorus': {ssr: false},
+    '/premium/backup': {ssr: false},
+    '/premium/migrate-old-data': {ssr: false},
 
     // Public assets
     '/img/**': {
@@ -98,13 +100,13 @@ export default defineNuxtConfig({
 
       PROXY_URL: process.env.PROXY_URL,
 
-      SENTRY_DSN: process.env.SENTRY_DSN
+      SENTRY_DSN: process.env.SENTRY_DSN,
     }
   },
 
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css', '~/assets/css/cookieconsent.css'],
 
-  components: [{ path: '~/components', pathPrefix: false }],
+  components: [{path: '~/components', pathPrefix: false}],
 
   site: {
     url: `https://${process.env.APP_DOMAIN}`
@@ -118,8 +120,6 @@ export default defineNuxtConfig({
     '@nuxt-alt/auth',
 
     '@formkit/auto-animate/nuxt',
-
-    '@nuxtjs/partytown',
 
     '@vite-pwa/nuxt',
 
@@ -154,9 +154,9 @@ export default defineNuxtConfig({
           property: false
         },
         endpoints: {
-          login: { url: process.env.API_URL + '/auth/log-in', method: 'post' },
-          refresh: { url: process.env.API_URL + '/auth/refresh', method: 'post' },
-          user: { url: process.env.API_URL + '/auth/profile', method: 'get' },
+          login: {url: process.env.API_URL + '/auth/log-in', method: 'post'},
+          refresh: {url: process.env.API_URL + '/auth/refresh', method: 'post'},
+          user: {url: process.env.API_URL + '/auth/profile', method: 'get'},
           logout: false
         }
       }
@@ -238,33 +238,30 @@ export default defineNuxtConfig({
     }
   },
 
-  /**
-   * Also
-   * @see matomo.client.ts
-   */
-  partytown: {
-    forward: ['_paq.push']
-  },
-
   app: {
     head: {
+      bodyAttrs: {
+        class: 'cc--custom'
+      },
+      style: [
+        {
+          type: 'text/css',
+          cssText: 'html, body { background-color: black; }'
+        }
+      ],
       script: [
         // Matomo
         {
-          type: 'text/partytown',
-          children: `
-          var _paq = window._paq = window._paq || [];
-
-          _paq.push(["disableCookies"]);
-
-          _paq.push(['setTrackerUrl', 'https://matomo.akbal.dev/matomo.php']);
-          _paq.push(['setSiteId', '1']);
-        `
+          src: '/js/matomo.js',
+          type: 'text/plain',
+          'data-category': 'analytics',
+          'data-service': 'matomo'
         },
         {
-          type: 'text/partytown',
           src: 'https://matomo.akbal.dev/matomo.js',
-          async: true
+          type: 'text/plain',
+          'data-category': 'analytics',
+          'data-service': 'matomo'
         }
       ]
     }

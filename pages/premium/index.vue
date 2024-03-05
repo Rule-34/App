@@ -5,7 +5,10 @@
 
   const mainFeatures = [
     { title: 'No ads', additionalInfo: undefined },
-    { title: 'Access 7 additional Boorus (websites)', additionalInfo: '#additional-boorus' },
+    {
+      title: 'Access ' + (completeBooruList.length - defaultBooruList.length) + ' additional Boorus (websites)',
+      additionalInfo: '#additional-boorus'
+    },
     { title: 'Save posts', additionalInfo: '#save-posts' },
     { title: 'Download posts with one click', additionalInfo: '#download-posts' },
     { title: 'Find original source (artist) of posts', additionalInfo: '#find-source' },
@@ -98,7 +101,7 @@
               </svg>
             </div>
 
-            <span> Trusted by 1141+ customers</span>
+            <span> Trusted by 1203+ customers</span>
           </NuxtLink>
 
           <!-- TODO: Images of user profiles -->
@@ -185,7 +188,9 @@
                     <p class="text-4xl font-bold tracking-tight text-base-content-highlight">€4.9</p>
 
                     <div class="text-sm leading-5">
-                      <p class="text-base-content">EUR</p>
+                      <p class="text-base-content">
+                        EUR
+                      </p>
                       <p>Billed monthly</p>
                     </div>
                   </div>
@@ -207,11 +212,12 @@
                     class="focus-visible:focus-outline-util hover:hover-text-util rounded-md bg-primary-700 px-3 py-2 text-center text-sm font-semibold leading-6 text-base-content-highlight hover:bg-primary-600 focus-visible:ring-offset-2"
                     href="https://gum.co/Rule34App"
                     target="_blank"
+                    onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click'])"
                   >
                     Get Premium
                   </NuxtLink>
 
-                  <p class="text-center text-xs">
+                  <p class="text-center text-xs leading-6">
                     Cancel anytime, subscription managed by
 
                     <NuxtLink
@@ -221,6 +227,9 @@
                     >
                       Gumroad
                     </NuxtLink>
+
+                    <br />
+                    Discreet credit card statement
                   </p>
                 </div>
               </div>
