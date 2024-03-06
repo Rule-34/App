@@ -40,12 +40,12 @@
       case 'image': {
         // Return full image if its setting is enabled OR if low resolution file doesn't exist
         if (!props.post.low_res_file.url || userSettings.postFullSizeImages) {
-          data.file = props.post.high_res_file.url
+          data.file = 'https://imgproxy.permanent-link.com/pr:default/plain/' + props.post.high_res_file.url
           data.width = props.post.high_res_file.width
           data.height = props.post.high_res_file.height
         } else {
           // Return low res file
-          data.file = props.post.low_res_file.url
+          data.file = 'https://imgproxy.permanent-link.com/pr:default/plain/' + props.post.low_res_file.url
           data.width = props.post.low_res_file.width ?? props.post.high_res_file.width
           data.height = props.post.low_res_file.height ?? props.post.high_res_file.height
         }
@@ -58,7 +58,7 @@
         data.width = props.post.high_res_file.width
         data.height = props.post.high_res_file.height
 
-        data.posterFile = props.post.preview_file.url
+        data.posterFile = 'https://imgproxy.permanent-link.com/pr:default/plain/' + props.post.preview_file.url
         break
       }
 
