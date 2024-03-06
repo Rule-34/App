@@ -10,6 +10,7 @@
         style="writing-mode: vertical-lr; transform: rotate(180deg)"
         target="_blank"
         to="https://forms.gle/oHukbtLHdot6CuB98"
+        rel='nofollow noopener noreferrer'
       >
         <span class="text-sm"> Feedback </span>
 

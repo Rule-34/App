@@ -179,6 +179,7 @@ const premiumPromotions = [
     <NuxtLink
       :href="promo.link"
       :target="promo.link.startsWith('http') ? '_blank' : null"
+      rel="nofollow noopener noreferrer"
       class="focus-visible:focus-outline-util focus-visible:ring-inset"
     >
       <PostMedia

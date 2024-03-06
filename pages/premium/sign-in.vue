@@ -80,6 +80,7 @@
                   class="hover:hover-text-util focus-visible:focus-outline-util font-semibold"
                   href="https://app.gumroad.com/library?query=Rule+34+App"
                   target="_blank"
+                  rel='nofollow noopener noreferrer'
                 >
                   Forgot license?
                 </NuxtLink>

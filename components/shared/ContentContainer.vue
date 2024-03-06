@@ -44,6 +44,7 @@
         <NuxtLink
           :href="link.href"
           :target="link.target"
+          rel='nofollow noopener noreferrer'
           class="hover:hover-text-util focus-visible:focus-outline-util text-sm text-base-content underline"
         >
           {{ link.text }}

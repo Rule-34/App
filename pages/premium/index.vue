@@ -63,6 +63,7 @@
             class="focus-visible:focus-outline-util hover:hover-text-util mt-12 flex flex-col items-center justify-center gap-2.5 pb-4"
             href="https://gum.co/Rule34App#Ratings"
             target="_blank"
+            rel='nofollow noopener noreferrer'
           >
             <div class="flex items-center">
               <StarIcon
@@ -211,6 +212,7 @@
                     aria-describedby="premium-features"
                     class="focus-visible:focus-outline-util hover:hover-text-util rounded-md bg-primary-700 px-3 py-2 text-center text-sm font-semibold leading-6 text-base-content-highlight hover:bg-primary-600 focus-visible:ring-offset-2"
                     href="https://gum.co/Rule34App"
+                    rel='nofollow noopener noreferrer'
                     target="_blank"
                     onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click'])"
                   >
@@ -223,6 +225,7 @@
                     <NuxtLink
                       class="focus-visible:focus-outline-util hover:hover-text-util"
                       href="https://gumroad.com/discover"
+                      rel='nofollow noopener noreferrer'
                       target="_blank"
                     >
                       Gumroad
