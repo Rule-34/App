@@ -7,7 +7,7 @@
   import type { Ref } from 'vue'
   import { generatePostsRoute } from '~/assets/js/RouterHelper'
   import { tagArrayToTitle } from '~/assets/js/SeoHelper'
-  import { capitalize, cloneDeep } from 'lodash-es'
+  import { capitalize, startCase, cloneDeep } from 'lodash-es'
   import type { Domain } from '~/assets/js/domain'
   import type { IPostPage } from '~/assets/js/post'
   import { useInfiniteQuery } from '@tanstack/vue-query'
@@ -364,7 +364,7 @@
     window.location.reload()
   }
 
-  const title = computed(() => {
+  const completeTitle = computed(() => {
     let title = ''
 
     // Page
@@ -376,7 +376,7 @@
 
     // Tags
     if (selectedTags.value.length > 0) {
-      title += ` tagged ${tagArrayToTitle(selectedTags.value)} porn`
+      title += ` tagged ${tagArrayToTitle(selectedTags.value)} Hentai`
     }
 
     // Filters
@@ -389,27 +389,41 @@
     }
 
     if (selectedFilters.value.score) {
-      title += `, with a score of ${selectedFilters.value.score}`
+      title += `, score of ${selectedFilters.value.score}`
     }
 
     // Domain
     title += `, from ${selectedBooru.value.domain}`
 
     title = title.trim()
-    title = capitalize(title)
 
     return title
   })
 
+  const shortTitle = computed(() => {
+    let _title = completeTitle.value
+
+    _title = _title.replace(/Posts tagged/, '')
+    _title = _title.replace(/with /, '')
+    _title = _title.replace(/and ?without /, ' w/o ')
+    _title = _title.replace(/with a score of/, 'score')
+
+    _title = _title.trim()
+    // Capitalize first letter - https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
+    _title = _title.charAt(0).toUpperCase() + _title.slice(1)
+
+    return _title
+  })
+
   const titleForBody = computed(() => {
-    let _title = title.value
+    let _title = completeTitle.value
 
     // TODO: Show page number in body title
-    _title = _title.replace(/Page \d+ of /, '')
+    _title = _title.replace(/page \d+ of /i, '')
 
     _title = _title.replace(/posts/i, '')
 
-    _title = _title.replace(/ porn/, '')
+    _title = _title.replace(/ hentai, /i, ', ')
 
     _title = _title.replace(/, from .+$/, '')
 
@@ -419,9 +433,38 @@
     }
 
     _title = _title.trim()
-    _title = capitalize(_title)
+    // Capitalize first letter - https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
+    _title = _title.charAt(0).toUpperCase() + _title.slice(1)
 
     return _title
+  })
+
+  const description = computed(() => {
+    let description = `Stream and download ${tagArrayToTitle(selectedTags.value, false)} Hentai porn videos, GIFs and images`
+
+    description = description.replace('download with', 'download')
+
+    // Filters
+    if (selectedFilters.value.rating) {
+      description += `, rated ${selectedFilters.value.rating}`
+    }
+
+    if (selectedFilters.value.sort) {
+      description += `, sorted by ${selectedFilters.value.sort}`
+    }
+
+    if (selectedFilters.value.score) {
+      description += `, with a score of ${selectedFilters.value.score}`
+    }
+
+    description += `, from ${selectedBooru.value.domain}`
+
+    // TODO: Improve ending
+    description += '. Free anime hentai here on R34.app'
+
+    return description
+
+
   })
 
   // TODO: Think about setting a real canonical URL
@@ -430,23 +473,9 @@
   })
 
   useSeoMeta({
-    title,
+    title: shortTitle,
 
-    description: () => {
-      let description = 'Stream and download porn images, GIFs and videos'
-
-      if (selectedTags.value.length > 0) {
-        description += ` featuring ${tagArrayToTitle(selectedTags.value)}`
-      }
-
-      // TODO: Filters
-
-      description += ` from ${selectedBooru.value.domain}`
-
-      description += '. Fast and free anime hentai with the Rule 34 App.'
-
-      return description
-    },
+    description,
 
     referrer: 'no-referrer'
   })
@@ -569,7 +598,7 @@
 
       <!-- TODO: strip page -->
       <ShareButton
-        :title="title"
+        :title="completeTitle"
         :url="canonicalUrl"
         class="my-auto"
         text=""

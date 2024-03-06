@@ -1,6 +1,7 @@
 import Tag from '~/assets/js/tag.dto'
+import { toLower, startCase } from 'lodash-es'
 
-export function tagArrayToTitle(tags: Tag[]) {
+export function tagArrayToTitle(tags: Tag[], addWith: boolean = true, addWithout: boolean = true) {
   if (!tags.length) {
     return null
   }
@@ -21,15 +22,24 @@ export function tagArrayToTitle(tags: Tag[]) {
   let title = ''
 
   if (tagsThatStartWithNothing.length) {
-    title += `with ${ tagsThatStartWithNothing.join(', ') }`
+
+    if (addWith) {
+      title += 'with '
+    }
+
+    title += tagsThatStartWithNothing.join(', ')
   }
 
-  if (tagsThatStartWithNothing.length && tagsThatStartWithMinus.length) {
+  if (addWith && addWithout && tagsThatStartWithNothing.length && tagsThatStartWithMinus.length) {
     title += ', and'
   }
 
   if (tagsThatStartWithMinus.length) {
-    title += ` without ${ tagsThatStartWithMinus.join(', ') }`
+    if (addWithout) {
+      title += ' without '
+    }
+
+    title += tagsThatStartWithMinus.join(', ')
   }
 
   return title
@@ -40,17 +50,18 @@ export function normalizeStringForTitle(string: string) {
     return null
   }
 
-  string = string.trim()
+  let startsWithMinus = false
 
-  // Replace underscores with spaces
-  string = string.replace(/_/g, ' ')
+  if (string.startsWith('-')) {
+    startsWithMinus = true
+  }
 
-  // Delete parentheses
-  string = string.replace(/\(/g, '')
-  string = string.replace(/\)/g, '')
+  // Capitalize first letter of each word - https://stackoverflow.com/questions/38084396/lodash-title-case-uppercase-first-letter-of-every-word
+  string = startCase(toLower(string))
 
-  // Delete colons
-  string = string.replace(/:/g, '')
+  if (startsWithMinus) {
+    string = '-' + string
+  }
 
   return string
 }
