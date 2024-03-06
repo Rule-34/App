@@ -145,6 +145,7 @@
           <NuxtLink
             class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
             href="https://twitter.com/Rule34App"
+            rel='nofollow noopener noreferrer'
             target="_blank"
           >
             <svg
@@ -164,6 +165,7 @@
           <NuxtLink
             class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
             href="https://discord.gg/fUhYHSZ"
+            rel='nofollow noopener noreferrer'
             target="_blank"
           >
             <svg
