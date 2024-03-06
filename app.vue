@@ -7,7 +7,7 @@
     },
 
     titleTemplate: (titleChunk) => {
-      return titleChunk ? `${titleChunk} | Rule 34 App` : 'Rule 34 App'
+      return titleChunk ? `${titleChunk} | R34.app` : 'Rule 34 App | R34.app'
     },
 
     link: [
