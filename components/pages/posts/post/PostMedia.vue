@@ -38,8 +38,7 @@ const { isPremium } = useUserData()
       return
     }
 
-    // Try to load with proxy, only videos
-    if (!triedToLoadWithProxy.value && isVideo.value && isPremium.value) {
+    if (!triedToLoadWithProxy.value && isPremium.value) {
       triedToLoadWithProxy.value = true
 
       const { proxiedUrl } = useProxyHelper(localSrc.value)
