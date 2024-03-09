@@ -1,4 +1,4 @@
-import {sentryVitePlugin} from '@sentry/vite-plugin'
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 export default defineNuxtConfig({
   // TODO: Enable when SSR is enabled
@@ -17,24 +17,24 @@ export default defineNuxtConfig({
     },
 
     // Static pages are prerendered
-    '/': {prerender: true},
-    '/other-sites': {prerender: true},
-    '/legal': {prerender: true},
+    '/': { prerender: true },
+    '/other-sites': { prerender: true },
+    '/legal': { prerender: true },
 
-    '/settings': {ssr: false},
+    '/settings': { ssr: false },
 
     // TODO: Remove when A/B testing is finished @see 040.matomo.client.ts
-    '/premium': {ssr: false},
+    '/premium': { ssr: false },
     // '/premium': {prerender: true},
-    '/premium/sign-in': {prerender: true},
+    '/premium/sign-in': { prerender: true },
 
     // All premium pages are client-side rendered
-    '/premium/dashboard': {ssr: false},
-    '/premium/saved-posts/*': {ssr: false},
-    '/premium/tag-collections': {ssr: false},
-    '/premium/additional-boorus': {ssr: false},
-    '/premium/backup': {ssr: false},
-    '/premium/migrate-old-data': {ssr: false},
+    '/premium/dashboard': { ssr: false },
+    '/premium/saved-posts/*': { ssr: false },
+    '/premium/tag-collections': { ssr: false },
+    '/premium/additional-boorus': { ssr: false },
+    '/premium/backup': { ssr: false },
+    '/premium/migrate-old-data': { ssr: false },
 
     // Public assets
     '/img/**': {
@@ -101,18 +101,20 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css', '~/assets/css/cookieconsent.css'],
 
-  components: [{path: '~/components', pathPrefix: false}],
+  components: [{ path: '~/components', pathPrefix: false }],
 
   site: {
     url: `https://${process.env.APP_DOMAIN}`
   },
 
   modules: [
+    '@nuxt-alt/auth',
+
+    '@nuxt/image',
+
     'nuxt-headlessui',
 
     '@headlessui-float/nuxt',
-
-    '@nuxt-alt/auth',
 
     '@formkit/auto-animate/nuxt',
 
@@ -124,13 +126,19 @@ export default defineNuxtConfig({
   ],
 
   image: {
-    domains: [
-      //
-      process.env.APP_DOMAIN,
-      'localhost',
-      'localhost:8081',
-      'www.google.com'
-    ]
+    provider: 'imgproxy',
+
+    providers: {
+      imgproxy: {
+        name: 'imgproxy',
+        provider: '~~/assets/js/nuxt-image/imgproxy.provider',
+        options: {
+          baseURL: 'https://imgproxy.r34.app'
+        }
+      }
+    },
+
+    format: ['avif', 'webp']
   },
 
   /** @type {import('@nuxt-alt/auth').ModuleOptions} */
@@ -159,9 +167,9 @@ export default defineNuxtConfig({
           property: false
         },
         endpoints: {
-          login: {url: process.env.API_URL + '/auth/log-in', method: 'post'},
-          refresh: {url: process.env.API_URL + '/auth/refresh', method: 'post'},
-          user: {url: process.env.API_URL + '/auth/profile', method: 'get'},
+          login: { url: process.env.API_URL + '/auth/log-in', method: 'post' },
+          refresh: { url: process.env.API_URL + '/auth/refresh', method: 'post' },
+          user: { url: process.env.API_URL + '/auth/profile', method: 'get' },
           logout: false
         }
       }

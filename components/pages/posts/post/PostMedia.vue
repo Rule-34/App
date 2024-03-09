@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import {vIntersectionObserver} from '@vueuse/components'
-import type {IPost} from 'assets/js/post'
+  import { vIntersectionObserver } from '@vueuse/components'
+  import type { IPost } from 'assets/js/post'
 
-const { isPremium } = useUserData()
+  const { isPremium } = useUserData()
 
   export interface PostMediaProps {
     mediaSrc: string | null
@@ -16,6 +16,7 @@ const { isPremium } = useUserData()
   const props = defineProps<PostMediaProps>()
 
   const localSrc = shallowRef(props.mediaSrc)
+  const localPosterSrc = shallowRef(props.mediaPosterSrc)
 
   const mediaHasLoaded = ref(false)
 
@@ -32,20 +33,15 @@ const { isPremium } = useUserData()
       return
     }
 
-    // Skip if no src
-    // @see onIntersectionObserver method
-    if (!event.target?.src) {
-      return
-    }
-
-    if (!triedToLoadWithProxy.value && isPremium.value) {
+    // Proxy videos, images are already proxied
+    if (isVideo.value && !triedToLoadWithProxy.value && isPremium.value) {
       triedToLoadWithProxy.value = true
 
       const { proxiedUrl } = useProxyHelper(localSrc.value)
+      const { proxiedUrl: proxiedPosterUrl } = useProxyHelper(props.mediaPosterSrc)
 
       localSrc.value = proxiedUrl.value
-      // Fix: Inmediately set src to proxied url, since onIntersectionObserver method will not be called until out of viewport
-      event.target.src = proxiedUrl.value
+      localPosterSrc.value = proxiedPosterUrl.value
 
       return
     }
@@ -59,12 +55,11 @@ const { isPremium } = useUserData()
     error.value = null
 
     // Reload media
-    localSrc.value = ''
     localSrc.value = props.mediaSrc
+    localPosterSrc.value = props.mediaPosterSrc
   }
 
   function onMediaIntersectionObserver(entries: IntersectionObserverEntry[]) {
-
     // Skip on fullscreen
     if (document.fullscreenElement) {
       return
@@ -87,7 +82,7 @@ const { isPremium } = useUserData()
 
     const newSrc = entry.isIntersecting
       ? //
-        (mediaElement.getAttribute('data-src') as string)
+        localSrc.value
       : smallestMedia
 
     mediaElement.src = newSrc
@@ -97,7 +92,6 @@ const { isPremium } = useUserData()
    * Stops videos when they are out of the viewport
    */
   function onVideoIntersectionObserver(entries: IntersectionObserverEntry[]) {
-
     // Skip on fullscreen
     if (document.fullscreenElement) {
       return
@@ -170,25 +164,47 @@ const { isPremium } = useUserData()
     </template>
 
     <!-- Image -->
+    <!-- TODO: Fix very large images not being on screen so not loaded -->
     <div
       v-else-if="isImage"
       v-intersection-observer="[onMediaIntersectionObserver, { rootMargin: '1200px' }]"
+      class="transition-opacity duration-700 ease-in-out"
+      :class="mediaHasLoaded ? 'opacity-100' : 'opacity-0'"
     >
-      <!-- TODO: Fix very large images not being on screen so not loaded -->
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
-      <img
-        :alt="mediaAlt"
-        :class="[mediaHasLoaded ? 'opacity-100' : 'opacity-0']"
-        :data-src="localSrc"
-        :height="mediaSrcHeight"
-        :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
-        :width="mediaSrcWidth"
-        class="h-auto w-full rounded-t-md transition-opacity duration-700 ease-in-out"
-        decoding="async"
-        loading="lazy"
-        @error="onMediaError"
-        @load="onMediaLoad"
-      />
+      <template v-if="!isPremium">
+        <img
+          :alt="mediaAlt"
+          :src="localSrc"
+          :height="mediaSrcHeight"
+          :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
+          :width="mediaSrcWidth"
+          class="h-auto w-full rounded-t-md"
+          decoding="async"
+          loading="lazy"
+          @load="onMediaLoad"
+          @error="onMediaError"
+        />
+      </template>
+
+      <!-- Premium users get their media proxied and optimized -->
+      <template v-else>
+        <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
+        <NuxtPicture
+          :alt="mediaAlt"
+          :src="localSrc"
+          :height="mediaSrcHeight"
+          :width="mediaSrcWidth"
+          decoding="async"
+          loading="lazy"
+          :imgAttrs="{
+            class: 'h-auto w-full rounded-t-md',
+            style: 'aspect-ratio: ' + mediaSrcWidth + '/' + mediaSrcHeight
+          }"
+          @load="onMediaLoad"
+          @error="onMediaError"
+        />
+      </template>
     </div>
 
     <!-- Video -->
@@ -200,9 +216,9 @@ const { isPremium } = useUserData()
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <video
         v-intersection-observer="[onVideoIntersectionObserver, { rootMargin: '100px' }]"
-        :data-src="localSrc"
+        :src="localSrc"
         :height="mediaSrcHeight"
-        :poster="mediaPosterSrc"
+        :poster="localPosterSrc"
         :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
         :width="mediaSrcWidth"
         class="h-auto w-full rounded-t-md"
