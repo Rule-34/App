@@ -95,9 +95,7 @@ export default defineNuxtConfig({
 
       API_URL: process.env.API_URL,
 
-      PROXY_URL: process.env.PROXY_URL,
-
-      SENTRY_DSN: process.env.SENTRY_DSN,
+      SENTRY_DSN: process.env.SENTRY_DSN
     }
   },
 
