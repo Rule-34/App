@@ -25,13 +25,15 @@
 
   const userSettings = useUserSettings()
 
+  const areTagsOpen = ref(false)
+
   const mediaFile = computed(() => {
     const data = {
       file: null,
       width: null,
       height: null,
       posterFile: null,
-      alt: 'Post with tags: ' + tagsAsSingleArray.value.map((tag) => tag.name).join(', ')
+      alt: 'Post #' + props.post.id
     }
 
     switch (props.post.media_type) {
@@ -69,21 +71,9 @@
     return data
   })
 
-  /**
-   * Take in an object of tags like { character: ['tag1', 'tag2'], artist: ['tag3', 'tag4'] }
-   * and return an array of tags like [{ name: 'tag1', type: 'character' }, { name: 'tag2', type: 'character' }, { name: 'tag3', type: 'artist' }, { name: 'tag4', type: 'artist' }]
-   * @returns {Array<{ name: string, type: string }>}
-   */
-  const tagsAsSingleArray = computed(() => {
-    const tags = []
-
-    for (const [type, tagsArray] of Object.entries(props.post.tags)) {
-      for (const tag of tagsArray) {
-        tags.push({ name: tag, type })
-      }
-    }
-
-    return tags
+  // Only tagtypes that have at least one tag
+  const tagTypesWithTags = computed(() => {
+    return Object.keys(props.post.tags).filter((tagType) => props.post.tags[tagType].length > 0)
   })
 </script>
 
@@ -98,10 +88,7 @@
       :mediaType="post.media_type"
     />
 
-    <HeadlessDisclosure
-      v-slot="{ open }"
-      as="figcaption"
-    >
+    <figcaption>
       <!-- Actions -->
       <div class="flex items-center p-2">
         <PostSave
@@ -121,40 +108,59 @@
           :post-sources="post.sources"
         />
 
-        <HeadlessDisclosureButton
+        <button
           class="hover:hover-bg-util focus-visible:focus-outline-util group ml-auto flex items-center gap-1 rounded-md px-1.5 py-1"
           type="button"
+          @click="areTagsOpen = !areTagsOpen"
         >
           <span class="group-hover:hover-text-util text-sm text-base-content"> Tags </span>
 
           <ChevronDownIcon
             :class="{
-              'rotate-180 transform': open,
-              'rotate-0 transform': !open
+              'rotate-180 transform': areTagsOpen,
+              'rotate-0 transform': !areTagsOpen
             }"
             class="group-hover:hover-text-util h-5 w-5 text-base-content"
           />
-        </HeadlessDisclosureButton>
+        </button>
       </div>
 
       <!-- Tags -->
-      <HeadlessDisclosurePanel
-        as="ol"
-        class="flex flex-wrap gap-2 p-2"
-      >
-        <li
-          v-for="tag in tagsAsSingleArray"
-          :key="tag.name"
-        >
-          <PostTag
-            :selectedTags="selectedTags"
-            :tag="tag"
-            @addTag="emit('addTag', $event)"
-            @openTagInNewTab="emit('openTagInNewTab', $event)"
-            @setTag="emit('setTag', $event)"
-          />
-        </li>
-      </HeadlessDisclosurePanel>
-    </HeadlessDisclosure>
+      <BottomSheetWrapper v-model="areTagsOpen">
+        <!--  -->
+
+        <div class="space-y-2">
+          <!--  -->
+
+          <template v-for="tagType of tagTypesWithTags">
+            <!--  -->
+
+            <div>
+              <h3 class="text-lg font-bold leading-7 tracking-tight text-base-content-highlight">
+                {{ tagType.charAt(0).toUpperCase() + tagType.slice(1) }}
+              </h3>
+
+              <ol
+                as="ol"
+                class="flex flex-wrap gap-2 p-2"
+              >
+                <li
+                  v-for="tag in post.tags[tagType]"
+                  :key="tag"
+                >
+                  <PostTag
+                    :selectedTags="selectedTags"
+                    :tag="{ name: tag, type: tagType }"
+                    @addTag="emit('addTag', $event)"
+                    @openTagInNewTab="emit('openTagInNewTab', $event)"
+                    @setTag="emit('setTag', $event)"
+                  />
+                </li>
+              </ol>
+            </div>
+          </template>
+        </div>
+      </BottomSheetWrapper>
+    </figcaption>
   </figure>
 </template>

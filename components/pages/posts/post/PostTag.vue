@@ -40,6 +40,7 @@
       leave-from="transform opacity-100 scale-100"
       leave-to="transform opacity-0 scale-95"
       placement="bottom-start"
+      flip
       portal
       tailwindcss-origin-class
     >
