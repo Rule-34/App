@@ -12,7 +12,7 @@
   >
     <HeadlessDialog
       as="div"
-      class="relative z-30"
+      class="relative z-10"
       @close="toggleSearchMenu"
     >
       <!-- Background -->

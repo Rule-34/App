@@ -10,7 +10,7 @@
     >
       <HeadlessDialog
         as="div"
-        class="relative z-20"
+        class="relative z-10"
         @close="isOpen = false"
       >
         <!-- Background -->
