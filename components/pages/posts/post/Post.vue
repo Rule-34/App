@@ -150,7 +150,7 @@
                 >
                   <PostTag
                     :selectedTags="selectedTags"
-                    :tag="{ name: tag, type: tagType }"
+                    :tag="new Tag({ name: tag, type: tagType })"
                     @addTag="emit('addTag', $event)"
                     @openTagInNewTab="emit('openTagInNewTab', $event)"
                     @setTag="emit('setTag', $event)"
