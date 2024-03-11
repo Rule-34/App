@@ -1,11 +1,12 @@
 <script lang="ts" setup>
   import { BookmarkIcon } from '@heroicons/vue/24/outline'
   import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/vue/24/solid'
-  import { db } from '~/store/SavedPosts'
-  import { liveQuery } from 'dexie'
   import { useObservable } from '@vueuse/rxjs'
-  import type { IPost } from '~/assets/js/post'
+  import { liveQuery } from 'dexie'
+  import { cloneDeep } from 'lodash-es'
   import { toast } from 'vue-sonner'
+  import type { IPost } from '~/assets/js/post'
+  import { db } from '~/store/SavedPosts'
 
   // TODO: Load this component in <suspense>
 
@@ -57,12 +58,17 @@
   }
 
   async function savePost() {
+    const post = cloneDeep(props.post)
+
+    // Fix: remove virtualization data
+    delete post.current_page
+
     await db.posts.put({
-      original_id: toRaw(props.post.id),
+      original_id: props.post.id,
 
       original_domain: props.domain,
 
-      data: toRaw(props.post)
+      data: post
     })
   }
 
