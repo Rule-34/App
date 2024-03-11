@@ -232,7 +232,7 @@
     // AND there is a next page
     // AND it's not fetching
     // THEN load next page
-    if (lastItem.index >= allRows.value.length - 1 && hasNextPage && !isFetchingNextPage.value) {
+    if (lastItem.index >= allRows.value.length - 1 && hasNextPage.value && !isFetchingNextPage.value) {
       onLoadNextPostPage()
     }
   })
