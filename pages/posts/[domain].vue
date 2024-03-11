@@ -11,7 +11,7 @@
   import { generatePostsRoute } from '~/assets/js/RouterHelper'
   import { tagArrayToTitle } from '~/assets/js/SeoHelper'
   import type { Domain } from '~/assets/js/domain'
-  import type { IPostPage } from '~/assets/js/post'
+  import type { IPost, IPostPage } from '~/assets/js/post'
   import Tag from '~/assets/js/tag.dto'
   import { useBooruList } from '~/composables/useBooruList'
 
@@ -187,7 +187,7 @@
     await suspense()
   })
 
-  const allRows = computed(() => {
+  const allRows = computed<IPost[]>(() => {
     if (!data.value) {
       return []
     }
@@ -220,7 +220,7 @@
 
       scrollMargin: parentOffsetRef.value,
 
-      overscan: 3
+      overscan: 5
     }
   })
 
