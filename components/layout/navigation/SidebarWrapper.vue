@@ -79,7 +79,7 @@
 
               <!-- Sidebar -->
               <div class="flex grow flex-col overflow-y-auto bg-base-1000 px-6 ring-1 ring-base-0/10">
-                <slot v-if="isMenuActive" />
+                <slot />
               </div>
             </HeadlessDialogPanel>
           </HeadlessTransitionChild>
