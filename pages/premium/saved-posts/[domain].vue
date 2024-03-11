@@ -1,19 +1,22 @@
 <script lang="ts" setup>
-  import { db, type ISavedPost } from '~/store/SavedPosts'
   import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
-  import { useBooruList } from '~/composables/useBooruList'
-  import type { Domain } from '~/assets/js/domain'
-  import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-  import Tag from '~/assets/js/tag.dto'
   import { useInfiniteQuery } from '@tanstack/vue-query'
-  import { toast } from 'vue-sonner'
+  import { useWindowVirtualizer } from '@tanstack/vue-virtual'
+  import type { IPost, IPostPageMeta } from 'assets/js/post'
   import { generatePostsRoute } from 'assets/js/RouterHelper'
-  import type { IPostPageMeta } from 'assets/js/post'
-  import { capitalize } from 'lodash-es'
   import { tagArrayToTitle } from 'assets/js/SeoHelper'
+  import { capitalize } from 'lodash-es'
+  import { toast } from 'vue-sonner'
+  import type { Domain } from '~/assets/js/domain'
+  import Tag from '~/assets/js/tag.dto'
+  import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+  import { useBooruList } from '~/composables/useBooruList'
+  import { db, type ISavedPost } from '~/store/SavedPosts'
 
   const router = useRouter()
   const route = useRoute()
+
+  const userSettings = useUserSettings()
   const { booruList: _availableBooruList } = useBooruList()
 
   const booruNamesInDb = await db.posts.orderBy('original_domain').uniqueKeys()
@@ -100,8 +103,7 @@
   async function fetchPosts(options: any): Promise<ISavedPostPage> {
     const page = options.pageParam
 
-    // TODO: Use userSettings
-    const PAGE_SIZE = 30
+    const PAGE_SIZE = userSettings.postsPerPage
 
     const posts = await db.posts
       //
@@ -170,6 +172,82 @@
     // }
   })
 
+  const allRows = computed<IPost[]>(() => {
+    if (!data.value) {
+      return []
+    }
+
+    // Flatten pages, but add `current_page` to each post
+    return data.value.pages.flatMap((page) => {
+      return page.data.map((post) => {
+        return {
+          ...post.data,
+          current_page: page.meta.current_page
+        }
+      })
+    })
+  })
+
+  const parentRef = ref<HTMLElement | null>(null)
+  const parentOffsetRef = ref(0)
+
+  onMounted(() => {
+    parentOffsetRef.value = parentRef.value?.offsetTop ?? 0
+  })
+
+  const rowVirtualizerOptions = computed(() => {
+    return {
+      debug: false,
+
+      count: hasNextPage ? allRows.value.length + 1 : allRows.value.length,
+
+      estimateSize: () => 600,
+
+      scrollMargin: parentOffsetRef.value,
+
+      overscan: 5
+    }
+  })
+
+  const rowVirtualizer = useWindowVirtualizer(rowVirtualizerOptions)
+
+  const virtualRows = computed(() => rowVirtualizer.value.getVirtualItems())
+
+  const totalSize = computed(() => rowVirtualizer.value.getTotalSize())
+
+  // Next page loader
+  watchEffect(() => {
+    // Skip if there is no data
+    if (!data.value) {
+      return
+    }
+
+    const [lastItem] = [...virtualRows.value].reverse()
+
+    if (!lastItem) {
+      return
+    }
+
+    // IF last item is the last item in the list
+    // AND there is a next page
+    // AND it's not fetching
+    // THEN load next page
+    if (lastItem.index >= allRows.value.length - 1 && hasNextPage && !isFetchingNextPage.value) {
+      onLoadNextPostPage()
+    }
+  })
+
+  // FIX: Remove when this issue is fixed - https://github.com/TanStack/virtual/issues/619#issuecomment-1969516091
+  const measureElement = (el) => {
+    nextTick(() => {
+      if (!el) {
+        return
+      }
+
+      rowVirtualizer.value.measureElement(el)
+    })
+  }
+
   /**
    * `undefined` values mean that they will be replaced by default values
    */
@@ -232,6 +310,11 @@
 
   async function onPageIndicatorClick() {
     const pagePrompt = prompt('To which page do you want to go?')
+
+    if (pagePrompt == null) {
+      return
+    }
+
     const page = parseInt(pagePrompt, 10)
 
     if (isNaN(page)) {
@@ -411,67 +494,67 @@
       <!-- Posts -->
       <div
         v-else
-        class="space-y-4"
+        ref="parentRef"
       >
-        <!-- TODO: Previous page -->
+        <!-- TODO: Previous pagination -->
 
-        <!-- Pages -->
+        <!-- TODO: Animate adding posts https://vuejs.org/guide/built-ins/transition-group.html#staggering-list-transitions -->
+
         <div
-          v-for="(postsPage, postsPageIndex) in data.pages"
-          class="space-y-4"
-          data-testid="posts-list"
+          :style="{
+            height: `${totalSize}px`,
+            width: '100%',
+            position: 'relative'
+          }"
         >
-          <!-- Page indicator -->
-          <button
-            v-if="postsPageIndex !== 0"
-            class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util mx-auto block rounded-md px-1.5 py-1 text-sm"
-            type="button"
-            @click="onPageIndicatorClick"
+          <ol
+            :style="{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              transform: `translateY(${virtualRows[0]?.start - rowVirtualizer.options.scrollMargin ?? 0}px)`
+            }"
+            class="space-y-4"
           >
-            &dharl; Page {{ postsPage.meta.current_page }} &dharr;
-          </button>
-
-          <!-- TODO: Animate adding posts https://vuejs.org/guide/built-ins/transition-group.html#staggering-list-transitions -->
-          <ol class="space-y-4">
-            <template
-              v-for="(post, postIndex) in postsPage.data"
-              :key="`${post.original_domain}-${post.original_id}`"
+            <li
+              v-for="virtualRow in virtualRows"
+              :key="virtualRow.key"
+              :data-index="virtualRow.index"
+              :ref="measureElement"
             >
-              <li :data-testid="`${post.original_domain}-${post.original_id}`">
+              <!-- Next Pagination -->
+              <div
+                v-if="virtualRow.index > allRows.length - 1"
+                class="flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-base-content"
+              >
+                <span class="block rounded-md px-1.5 py-1">
+                  {{ hasNextPage ? 'Loading more...' : 'Nothing more to load' }}
+                </span>
+              </div>
+
+              <!-- Content -->
+              <template v-else>
+                <!-- Page indicator -->
+                <button
+                  v-if="virtualRow.index !== 0 && virtualRow.index % userSettings.postsPerPage === 0"
+                  class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util mx-auto mb-4 block rounded-md px-1.5 py-1 text-sm"
+                  type="button"
+                  @click="onPageIndicatorClick"
+                >
+                  &dharl; Page {{ allRows[virtualRow.index].current_page }} &dharl;
+                </button>
+
+                <!-- Post -->
                 <Post
-                  :domain="post.original_domain"
-                  :post="post.data"
+                  :domain="selectedBooru.domain"
+                  :post="allRows[virtualRow.index]"
                   :selected-tags="selectedTags"
                 />
-              </li>
-            </template>
+              </template>
+            </li>
           </ol>
         </div>
-
-        <!-- Next Pagination -->
-        <PostsPagination @load-next-page="onLoadNextPostPage">
-          <span
-            v-if="isFetchingNextPage"
-            class="block rounded-md px-1.5 py-1"
-          >
-            Loading more&hellip;
-          </span>
-
-          <button
-            v-else-if="hasNextPage"
-            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-md px-1.5 py-1"
-            @click="onLoadNextPostPage"
-          >
-            Scroll here or click me to load more
-          </button>
-
-          <span
-            v-else
-            class="block rounded-md px-1.5 py-1"
-          >
-            Nothing more to load
-          </span>
-        </PostsPagination>
       </div>
     </section>
   </main>
