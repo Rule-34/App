@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-  import { useUserSettings } from '~/composables/useUserSettings'
   import { ChevronDownIcon } from '@heroicons/vue/24/outline'
-  import Tag from '~/assets/js/tag.dto'
   import type { IPost } from '~/assets/js/post'
-  import { useAppStatistics } from '~/composables/useAppStatistics'
+  import Tag from '~/assets/js/tag.dto'
+  import { useUserSettings } from '~/composables/useUserSettings'
 
   const props = defineProps<{
     domain: string
@@ -25,7 +24,6 @@
   }>()
 
   const userSettings = useUserSettings()
-  const { tutorialLongClickTag } = useAppStatistics()
 
   const mediaFile = computed(() => {
     const data = {
