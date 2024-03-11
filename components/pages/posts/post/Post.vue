@@ -63,9 +63,7 @@
       }
 
       default:
-        data.file = props.post.high_res_file.url
-        data.width = props.post.high_res_file.width
-        data.height = props.post.high_res_file.height
+        throw new Error('Unknown media type: ' + props.post.media_type)
     }
 
     return data
