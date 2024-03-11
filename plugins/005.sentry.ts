@@ -35,6 +35,8 @@ export default defineNuxtPlugin({
     const config = useRuntimeConfig()
 
     Sentry.init({
+      enabled: config.public.NODE_ENV === 'production',
+
       app: vueApp,
       dsn: config.public.SENTRY_DSN,
       integrations: getSentryIntegrations(),
