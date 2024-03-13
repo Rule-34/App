@@ -307,10 +307,12 @@
         </button>
 
         <BottomSheetWrapper v-model="isTagCollectionsActive">
-          <LazyTagCollections
-            :selectedTags="selectedTags"
-            @updateSelectedTags="onTagCollectionsSetSelectedTags"
-          />
+          <div class="px-4 py-4">
+            <TagCollections
+              :selectedTags="selectedTags"
+              @updateSelectedTags="onTagCollectionsSetSelectedTags"
+            />
+          </div>
         </BottomSheetWrapper>
       </div>
 

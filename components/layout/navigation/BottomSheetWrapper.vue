@@ -37,10 +37,21 @@
             leave-from="translate-y-0"
             leave-to="translate-y-full"
           >
-            <HeadlessDialogPanel class="relative mx-auto flex max-h-[80vh] w-full max-w-2xl flex-1 self-end px-4">
+            <HeadlessDialogPanel class="relative mx-auto flex max-h-[90vh] w-full max-w-2xl flex-1 self-end">
               <!-- Sidebar -->
-              <div class="flex grow flex-col overflow-y-auto rounded-t-md bg-base-1000 px-4 py-4 ring-1 ring-base-0/10">
-                <slot />
+              <div class="flex grow flex-col gap-2 rounded-t-xl bg-base-1000 ring-1 ring-base-0/20">
+                <div class="grow overflow-y-auto">
+                  <slot />
+                </div>
+
+                <!-- Dismiss -->
+                <button
+                  type="button"
+                  @click="isOpen = false"
+                  class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto inline-flex w-full items-center justify-center border-t border-base-0/20 px-3 py-2 text-base"
+                >
+                  Dismiss
+                </button>
               </div>
             </HeadlessDialogPanel>
           </HeadlessTransitionChild>
