@@ -127,7 +127,7 @@
       <BottomSheetWrapper v-model="areTagsOpen">
         <!--  -->
 
-        <div class="space-y-2">
+        <div class="space-y-2 px-4 py-4">
           <!--  -->
 
           <template v-for="tagType of tagTypesWithTags">
