@@ -15,6 +15,8 @@
 
   const props = defineProps<PostMediaProps>()
 
+  const mediaElement = ref<HTMLElement | null>(null)
+
   const localSrc = shallowRef(props.mediaSrc)
   const localPosterSrc = shallowRef(props.mediaPosterSrc)
 
@@ -28,8 +30,33 @@
 
   const triedToLoadWithProxy = shallowRef(false)
 
+  onBeforeUnmount(() => {
+    let finalMediaElement = mediaElement.value
+
+    // If its a Vue component, get the actual element
+    if (finalMediaElement?.$el) {
+      finalMediaElement = finalMediaElement.$el
+    }
+
+    // If its a picture, get the img element
+    if (finalMediaElement.tagName === 'PICTURE') {
+      finalMediaElement = finalMediaElement.querySelector('img') as HTMLImageElement
+    }
+
+    // Cancel any pending media requests - https://stackoverflow.com/a/28060352
+    finalMediaElement?.removeAttribute('src')
+
+    if (isVideo.value) {
+      finalMediaElement?.load()
+    }
+  })
+
   function onMediaError(event: Event) {
     if (hasError.value) {
+      return
+    }
+
+    if (!event.target?.src) {
       return
     }
 
@@ -144,6 +171,7 @@
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <template v-if="!isPremium">
         <img
+          ref="mediaElement"
           :alt="mediaAlt"
           :src="localSrc"
           :height="mediaSrcHeight"
@@ -161,6 +189,7 @@
       <template v-else>
         <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
         <NuxtPicture
+          ref="mediaElement"
           :alt="mediaAlt"
           :src="localSrc"
           :height="mediaSrcHeight"
@@ -182,6 +211,7 @@
       <!-- TODO: Add load animation -->
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <video
+        ref="mediaElement"
         v-intersection-observer="[onVideoIntersectionObserver, { rootMargin: '100px' }]"
         :src="localSrc"
         :height="mediaSrcHeight"
