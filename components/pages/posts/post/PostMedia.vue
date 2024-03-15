@@ -33,9 +33,13 @@
   onBeforeUnmount(() => {
     let finalMediaElement = mediaElement.value
 
+    if (finalMediaElement == null) {
+      return
+    }
+
     // If its a Vue component, get the actual element
-    if (finalMediaElement?.$el) {
-      finalMediaElement = finalMediaElement.$el
+    if ('$el' in finalMediaElement) {
+      finalMediaElement = finalMediaElement.$el as HTMLElement
     }
 
     // If its a picture, get the img element
@@ -44,10 +48,10 @@
     }
 
     // Cancel any pending media requests - https://stackoverflow.com/a/28060352
-    finalMediaElement?.removeAttribute('src')
+    finalMediaElement.removeAttribute('src')
 
     if (isVideo.value) {
-      finalMediaElement?.load()
+      finalMediaElement.load()
     }
   })
 
