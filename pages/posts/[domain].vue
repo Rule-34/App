@@ -782,7 +782,9 @@
                 </button>
 
                 <!-- Post -->
+                <!-- Fix: use domain + post.id as unique key, since virtualRow.index could be the same on different Boorus/pages -->
                 <Post
+                  :key="selectedBooru.domain + '-' + allRows[virtualRow.index].id"
                   :domain="selectedBooru.domain"
                   :post="allRows[virtualRow.index]"
                   :selected-tags="selectedTags"
