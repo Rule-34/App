@@ -1,41 +1,12 @@
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 export default defineNuxtConfig({
-  // TODO: Enable when SSR is enabled
-  ssr: true,
+  ssr: false,
 
   /**
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
    */
   routeRules: {
-    '/posts/**': {
-      // TODO: Change when Cloudflare Pages supports ISR
-      // Incremental Static Regeneration for 5 minutes
-      // isr: 60 * 5,
-
-      ssr: false
-    },
-
-    // Static pages are prerendered
-    '/': { prerender: true },
-    '/other-sites': { prerender: true },
-    '/legal': { prerender: true },
-
-    '/settings': { ssr: false },
-
-    // TODO: Remove when A/B testing is finished @see 040.matomo.client.ts
-    '/premium': { ssr: false },
-    // '/premium': {prerender: true},
-    '/premium/sign-in': { prerender: true },
-
-    // All premium pages are client-side rendered
-    '/premium/dashboard': { ssr: false },
-    '/premium/saved-posts/*': { ssr: false },
-    '/premium/tag-collections': { ssr: false },
-    '/premium/additional-boorus': { ssr: false },
-    '/premium/backup': { ssr: false },
-    '/premium/migrate-old-data': { ssr: false },
-
     // Public assets
     '/img/**': {
       headers: {
@@ -45,7 +16,6 @@ export default defineNuxtConfig({
   },
 
   nitro: {
-    // TODO: Remove when SSR is enabled
     static: true,
 
     esbuild: {
