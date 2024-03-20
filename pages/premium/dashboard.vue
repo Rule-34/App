@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ArrowLeftOnRectangleIcon } from '@heroicons/vue/24/solid'
-  import { doesBrowserHaveOldVersionState } from '~/assets/js/BackupHelper'
   import { toast } from 'vue-sonner'
+  import { doesBrowserHaveOldVersionState } from '~/assets/js/BackupHelper'
 
   const { user, logout: _signOut } = useAuth()
 
@@ -37,8 +37,26 @@
   }
 
   async function signOut() {
-    await _signOut()
-    // window.location.reload()
+
+    let authCookie
+    authCookie = useCookie('auth.strategy')
+    authCookie.value = undefined
+
+    authCookie = useCookie('auth._token.local')
+    authCookie.value = undefined
+    authCookie = useCookie('auth._token_expiration.local')
+    authCookie.value = undefined
+
+    authCookie = useCookie('auth._refresh_token.local')
+    authCookie.value = undefined
+    authCookie = useCookie('auth._refresh_token_expiration.local')
+    authCookie.value = undefined
+
+    // Log out from API
+    // TODO: Restore when it works
+    // await _signOut()
+
+    window.location.reload()
   }
 
   onNuxtReady(() => {
@@ -117,7 +135,7 @@
         <NuxtLink
           class="hover:hover-bg-util focus-visible:focus-outline-util block max-w-[95%] rounded-md border border-base-0/20 px-4 py-3"
           href="https://forms.gle/9FAZRegzJ8VAzT5F9"
-          rel='nofollow noopener noreferrer'
+          rel="nofollow noopener noreferrer"
           target="_blank"
         >
           <h2 class="text-lg font-bold tracking-tight text-base-content-highlight">Feedback</h2>
@@ -133,7 +151,7 @@
         class="hover:hover-text-util focus-visible:focus-outline-util underline"
         href="https://app.gumroad.com/library?query=Rule+34+App"
         target="_blank"
-        rel='nofollow noopener noreferrer'
+        rel="nofollow noopener noreferrer"
       >
         Manage subscription
       </NuxtLink>
