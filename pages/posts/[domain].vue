@@ -220,7 +220,9 @@
 
       scrollMargin: parentOffsetRef.value,
 
-      overscan: 5
+      overscan: 5,
+
+      gap: 16
     }
   })
 
@@ -743,6 +745,7 @@
             position: 'relative'
           }"
         >
+          <!-- TODO: Remove `space-y-4` when virtualizer gap works -->
           <ol
             :style="{
               position: 'absolute',
