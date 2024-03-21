@@ -11,7 +11,7 @@
   import { generatePostsRoute } from '~/assets/js/RouterHelper'
   import { tagArrayToTitle } from '~/assets/js/SeoHelper'
   import type { Domain } from '~/assets/js/domain'
-  import type { IPost, IPostPage } from '~/assets/js/post'
+  import type { IPost, IPostPage } from '~/assets/js/post.dto'
   import Tag from '~/assets/js/tag.dto'
   import { useBooruList } from '~/composables/useBooruList'
 
@@ -197,6 +197,10 @@
       return page.data.map((post) => {
         return {
           ...post,
+
+          // TODO: Remove when API returns domain
+          domain: selectedBooru.value.domain,
+
           current_page: page.meta.current_page
         }
       })
@@ -786,9 +790,8 @@
 
                 <!-- Post -->
                 <!-- Fix: use domain + post.id as unique key, since virtualRow.index could be the same on different Boorus/pages -->
-                <Post
+                <PostComponent
                   :key="selectedBooru.domain + '-' + allRows[virtualRow.index].id"
-                  :domain="selectedBooru.domain"
                   :post="allRows[virtualRow.index]"
                   :selected-tags="selectedTags"
                   @addTag="onPostAddTag"

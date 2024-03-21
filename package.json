@@ -50,6 +50,7 @@
     "nuxt": "^3.11.1",
     "nuxt-headlessui": "^1.1.5",
     "nuxt-schema-org": "^3.3.6",
+    "pocketbase": "^0.21.1",
     "qs": "^6.12.0",
     "random-weighted-choice": "^0.1.4",
     "rxjs": "^7.8.1",

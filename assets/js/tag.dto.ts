@@ -1,4 +1,4 @@
-import type { IPostTags } from "./post"
+import type { IPostTags } from "./post.dto"
 
 export interface ITag {
   name: string
