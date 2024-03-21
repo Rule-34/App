@@ -1,6 +1,6 @@
 import Dexie, { type Table } from 'dexie'
+import type { IPost } from '~/assets/js/post.dto'
 import type { BooruObj } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-import type { IPost } from '~/assets/js/post'
 
 // TODO: Delay all activity until website is idle
 

@@ -4,6 +4,7 @@
   import { doesBrowserHaveOldVersionState } from '~/assets/js/BackupHelper'
 
   const { user, logout: _signOut } = useAuth()
+  const { $pocketBase } = useNuxtApp()
 
   const links = [
     {
@@ -37,6 +38,8 @@
   }
 
   async function signOut() {
+    // Log out from pocketbase
+    $pocketBase.authStore.clear()
 
     let authCookie
     authCookie = useCookie('auth.strategy')

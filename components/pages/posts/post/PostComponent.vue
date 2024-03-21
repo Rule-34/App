@@ -1,12 +1,10 @@
 <script lang="ts" setup>
   import { ChevronDownIcon } from '@heroicons/vue/24/outline'
-  import type { IPost } from '~/assets/js/post'
+  import type { IPost } from '~/assets/js/post.dto'
   import Tag from '~/assets/js/tag.dto'
   import { useUserSettings } from '~/composables/useUserSettings'
 
   const props = defineProps<{
-    domain: string
-
     post: IPost
 
     selectedTags: Tag[]
@@ -91,13 +89,12 @@
       <div class="flex items-center p-2">
         <PostSave
           v-if="mediaFile.file"
-          :domain="domain"
           :post="post"
         />
 
         <PostDownload
           v-if="mediaFile.file"
-          :mediaName="`${domain}-${post.id}`"
+          :mediaName="`${post.domain}-${post.id}`"
           :mediaUrl="mediaFile.file"
         />
 

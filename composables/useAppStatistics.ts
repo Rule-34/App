@@ -2,7 +2,6 @@ import { useStorage } from '@vueuse/core'
 
 let timesTheAppHasBeenOpened = ref<number>(0)
 
-let tutorialPostSave = ref<boolean>(false)
 let tutorialPostSource = ref<boolean>(false)
 
 let promptInstallPwa = ref<boolean>(false)
@@ -13,9 +12,6 @@ if (process.client) {
     writeDefaults: false
   })
 
-  tutorialPostSave = useStorage('tutorial-postSave', false, localStorage, {
-    writeDefaults: false
-  })
   tutorialPostSource = useStorage('tutorial-postSource', false, localStorage, {
     writeDefaults: false
   })
@@ -34,7 +30,6 @@ export function useAppStatistics() {
   return {
     timesTheAppHasBeenOpened,
 
-    tutorialPostSave,
     tutorialPostSource,
 
     promptInstallPwa,

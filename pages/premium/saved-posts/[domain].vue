@@ -2,34 +2,40 @@
   import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
-  import type { IPost, IPostPageMeta } from 'assets/js/post'
+  import type { IPost, IPostPage } from 'assets/js/post.dto'
   import { generatePostsRoute } from 'assets/js/RouterHelper'
   import { tagArrayToTitle } from 'assets/js/SeoHelper'
   import { capitalize } from 'lodash-es'
   import { toast } from 'vue-sonner'
   import type { Domain } from '~/assets/js/domain'
+  import type { IPocketbasePost } from '~/assets/js/pocketbase.dto'
+  import Post from '~/assets/js/post.dto'
   import Tag from '~/assets/js/tag.dto'
   import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
   import { useBooruList } from '~/composables/useBooruList'
-  import { db, type ISavedPost } from '~/store/SavedPosts'
 
-  const router = useRouter()
   const route = useRoute()
+
+  const { $pocketBase } = useNuxtApp()
 
   const userSettings = useUserSettings()
   const { booruList: _availableBooruList } = useBooruList()
+  const { savedPostList } = usePocketbase()
 
-  const booruNamesInDb = await db.posts.orderBy('original_domain').uniqueKeys()
+  const domainsFromPocketbase = await $pocketBase.collection('distinct_original_domain_from_posts').getFullList()
 
   const booruList = computed(() => {
     const _booruList: Domain[] = [
       {
         domain: 'r34.app',
         type: booruTypeList[0],
-        isPremium: false,
-        config: null
+        config: null,
+        isCustom: false,
+        isPremium: false
       }
     ]
+
+    const booruNamesInDb: string[] = domainsFromPocketbase.map((domain) => domain.original_domain)
 
     booruNamesInDb.forEach((booruNameInDb) => {
       const booru = _availableBooruList.value.find((availableBooru) => availableBooru.domain === booruNameInDb)
@@ -95,43 +101,57 @@
     }
   })
 
-  export interface ISavedPostPage {
-    data: ISavedPost[]
-    meta: IPostPageMeta
-  }
+  interface IPostPageFromPocketBase extends Omit<IPostPage, 'links'> {}
 
-  async function fetchPosts(options: any): Promise<ISavedPostPage> {
+  async function fetchPosts(options: any): Promise<IPostPageFromPocketBase> {
     const page = options.pageParam
 
     const PAGE_SIZE = userSettings.postsPerPage
 
-    const posts = await db.posts
-      //
-      // Filter by domain
-      .filter((post) => {
-        if (selectedBooru.value.domain !== 'r34.app') {
-          return post.original_domain === selectedBooru.value.domain
-        }
+    let pocketbaseRequestFilter = ''
 
-        return true
+    if (selectedBooru.value.domain !== 'r34.app') {
+      pocketbaseRequestFilter += $pocketBase.filter('original_domain = {:original_domain}', {
+        original_domain: selectedBooru.value.domain
       })
-      //
-      // .orderBy('created_at')
-      .reverse()
-      //
-      .offset(page * PAGE_SIZE)
-      .limit(PAGE_SIZE)
-      //
-      .toArray()
+    }
+
+    // TODO
+    // if (selectedTags.value.length > 0) {
+    // }
+
+    if (selectedFilters.value.rating) {
+      pocketbaseRequestFilter += $pocketBase.filter('rating = {:rating}', {
+        rating: selectedFilters.value.rating
+      })
+    }
+
+    // TODO
+    // if (selectedFilters.value.sort) {
+    // }
+
+    // TODO
+    // if (selectedFilters.value.score) {
+    // }
+
+    const pocketBasePostsResponse = await $pocketBase.collection('posts').getList<IPocketbasePost>(page, PAGE_SIZE, {
+      sort: '-created',
+      filter: pocketbaseRequestFilter,
+      skipTotal: true
+    })
+
+    const posts = pocketBasePostsResponse.items.map((item) => {
+      return Post.fromPocketbasePost(item)
+    })
 
     return {
       data: posts,
       meta: {
-        items_count: posts.length,
-        total_items: posts.length,
-        current_page: page,
-        total_pages: null,
-        items_per_page: PAGE_SIZE
+        items_count: pocketBasePostsResponse.items.length,
+        total_items: pocketBasePostsResponse.totalItems,
+        current_page: pocketBasePostsResponse.page,
+        total_pages: pocketBasePostsResponse.totalPages,
+        items_per_page: pocketBasePostsResponse.perPage
       }
     }
   }
@@ -149,7 +169,7 @@
     isPending,
     isError
   } = useInfiniteQuery({
-    queryKey: ['saved-posts', selectedBooru, selectedTags, selectedFilters],
+    queryKey: ['saved-posts', selectedBooru, selectedTags, selectedFilters, savedPostList.value.length],
     queryFn: fetchPosts,
     initialPageParam: selectedPage.value,
     getNextPageParam: (lastPage, allPages, lastPageParam) => {
@@ -181,7 +201,7 @@
     return data.value.pages.flatMap((page) => {
       return page.data.map((post) => {
         return {
-          ...post.data,
+          ...post,
           current_page: page.meta.current_page
         }
       })
@@ -549,8 +569,7 @@
                 </button>
 
                 <!-- Post -->
-                <Post
-                  :domain="selectedBooru.domain"
+                <PostComponent
                   :post="allRows[virtualRow.index]"
                   :selected-tags="selectedTags"
                 />
