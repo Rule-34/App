@@ -1,6 +1,6 @@
-import type {DehydratedState, VueQueryPluginOptions} from '@tanstack/vue-query'
-import {dehydrate, hydrate, QueryClient, VueQueryPlugin} from '@tanstack/vue-query'
-import {defineNuxtPlugin, useState} from '#imports'
+import { defineNuxtPlugin, useState } from '#imports'
+import type { DehydratedState, VueQueryPluginOptions } from '@tanstack/vue-query'
+import { QueryClient, VueQueryPlugin, dehydrate, hydrate } from '@tanstack/vue-query'
 
 /**
  * @see https://github.com/TanStack/query/blob/main/examples/vue/nuxt3/plugins/vue-query.ts
@@ -40,5 +40,9 @@ export default defineNuxtPlugin((nuxt) => {
     nuxt.hooks.hook('app:created', () => {
       hydrate(queryClient, vueQueryState.value)
     })
+  }
+
+  return {
+    parallel: true,
   }
 })
