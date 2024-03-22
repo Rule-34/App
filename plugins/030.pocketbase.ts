@@ -35,6 +35,8 @@ export default defineNuxtPlugin(async ({ app }) => {
     }
 
     return {
+        parallel: true,
+
         provide: { pocketBase: pb }
     }
 });

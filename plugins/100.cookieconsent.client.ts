@@ -1,6 +1,6 @@
-import 'vanilla-cookieconsent/dist/cookieconsent.css'
-import type {CookieConsentConfig} from 'vanilla-cookieconsent'
+import type { CookieConsentConfig } from 'vanilla-cookieconsent'
 import * as CookieConsent from 'vanilla-cookieconsent'
+import 'vanilla-cookieconsent/dist/cookieconsent.css'
 
 /**
  * @see https://cookieconsent.orestbida.com/
@@ -133,6 +133,8 @@ export default defineNuxtPlugin(async () => {
   await CookieConsent.run(config)
 
   return {
+    parallel: true,
+
     provide: {
       CC: CookieConsent,
     },

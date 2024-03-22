@@ -1,4 +1,4 @@
-import {defineNuxtPlugin} from '#imports'
+import { defineNuxtPlugin } from '#imports'
 
 /**
  * Track page view using Matomo
@@ -27,6 +27,10 @@ export default defineNuxtPlugin((nuxtApp) => {
       _paq.push(['enableLinkTracking'])
     })
   })
+
+  return {
+    parallel: true,
+  }
 })
 
 let hasAbTestingLoaded = false
