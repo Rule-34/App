@@ -15,7 +15,9 @@
     title: 'Migrate old data'
   })
 
-  definePageMeta({ middleware: 'auth' })
+  definePageMeta({
+    middleware: ['auth', 'auth-check']
+  })
 </script>
 
 <template>

@@ -1,11 +1,11 @@
 <script lang="ts" setup>
   import { ArrowUturnLeftIcon, Bars2Icon, PencilIcon, PlusIcon } from '@heroicons/vue/20/solid'
-  import Slideover from '~/components/layout/Slideover.vue'
   import { moveArrayElement, useSortable } from '@vueuse/integrations/useSortable'
   import type { ComputedRef, Ref } from 'vue'
   import { toast } from 'vue-sonner'
+  import { TagCollection, type ITagCollection } from '~/assets/js/tagCollection.dto'
+  import Slideover from '~/components/layout/Slideover.vue'
   import { useTagCollections } from '~/composables/useTagCollections'
-  import { type ITagCollection, TagCollection } from '~/assets/js/tagCollection.dto'
 
   const { tagCollections, resetTagCollections } = useTagCollections()
 
@@ -142,7 +142,9 @@
     title: 'Tag collections'
   })
 
-  definePageMeta({ middleware: 'auth' })
+  definePageMeta({
+    middleware: ['auth', 'auth-check']
+  })
 </script>
 
 <template>
