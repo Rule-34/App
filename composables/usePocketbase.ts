@@ -1,6 +1,13 @@
-import type { IPocketbasePost } from "~/assets/js/pocketbase";
+import { useStorage } from '@vueuse/core';
+import type { IPocketbasePost } from "~/assets/js/pocketbase.dto";
 
 let savedPostList = ref<IPocketbasePost[]>([])
+
+if (process.client) {
+    savedPostList = useStorage<IPocketbasePost[]>('pocketbase-savedPostList', [], localStorage, {
+        writeDefaults: false
+    })
+}
 
 
 export function usePocketbase() {
