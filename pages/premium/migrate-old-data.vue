@@ -1,29 +1,14 @@
 <script lang="ts" setup>
-  import PageHeader from '~/components/layout/PageHeader.vue'
-  import { migrateBrowserOldVersionState, removeBrowserOldVersionState } from '~/assets/js/BackupHelper'
   import { toast } from 'vue-sonner'
+  import { migrateSavedPostsToCloud } from '~/assets/js/BackupHelper'
+  import PageHeader from '~/components/layout/PageHeader.vue'
 
   async function migrateOldData() {
-    try {
-      await migrateBrowserOldVersionState()
-    } catch (error) {
-      // TODO: Sentry
-      console.error(error)
-      toast.error('Error migrating old data', {
-        description: error.message
-      })
-      return
-    }
+    toast.info('Migrating, this might take a long time, please wait')
 
-    window.location.href = '/premium/dashboard?message=Old data migrated successfully!'
-  }
+    await migrateSavedPostsToCloud()
 
-  function removeOldData() {
-    removeBrowserOldVersionState()
-
-    toast.success('Old data removed successfully!')
-
-    navigateTo('/premium/dashboard')
+    window.location.href = '/premium/dashboard?message=Saved posts migrated successfully!'
   }
 
   useSeoMeta({
@@ -41,26 +26,15 @@
       <template #title>Migrate old data</template>
       <template #text>
         <div class="text-sm">
-          With the new version of the app, the data structure has changed
+          Saved posts are now linked to your account!
+
           <br />
-          <br />
-          - If you want to keep your old saved posts, tag collections, settings, etc. you need to migrate your data
-          <br />
-          <br />
-          - If you want to start fresh, you can remove your old data (recommended, less prone to bugs)
+          Please migrate your local saved posts to the cloud to access them from any device
         </div>
       </template>
     </PageHeader>
 
     <section class="mt-8 flex justify-around">
-      <button
-        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium ring-1 ring-base-0/20"
-        type="button"
-        @click="removeOldData"
-      >
-        Remove old data
-      </button>
-
       <button
         class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium ring-1 ring-base-0/20"
         type="button"

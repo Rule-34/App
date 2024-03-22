@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ArrowLeftOnRectangleIcon } from '@heroicons/vue/24/solid'
   import { toast } from 'vue-sonner'
-  import { doesBrowserHaveOldVersionState } from '~/assets/js/BackupHelper'
+  import { doesBrowserHaveSavedPosts } from '~/assets/js/BackupHelper'
 
   const { user, logout: _signOut } = useAuth()
   const { $pocketBase } = useNuxtApp()
@@ -29,10 +29,10 @@
     }
   ]
 
-  if (doesBrowserHaveOldVersionState()) {
+  if (await doesBrowserHaveSavedPosts()) {
     links.unshift({
-      name: '⚠ Migrate old data ⚠',
-      description: 'Migrate your old saved posts, tag collections, etc',
+      name: '⚠ Migrate saved posts ⚠',
+      description: 'Migrate your saved posts to the cloud to access them from any device',
       href: '/premium/migrate-old-data'
     })
   }
