@@ -122,17 +122,6 @@
             Saved Posts
           </NuxtLink>
         </li>
-
-        <li class="-mr-2 ml-6">
-          <NuxtLink
-            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
-            exactActiveClass="bg-base-0/20 text-base-content-highlight"
-            href="/premium/backup"
-          >
-            <ArrowDownTrayIcon class="h-6 w-6 shrink-0 text-primary-500" />
-            Backup & Restore
-          </NuxtLink>
-        </li>
       </template>
 
       <!-- Bottom -->
@@ -145,7 +134,7 @@
           <NuxtLink
             class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
             href="https://twitter.com/Rule34App"
-            rel='nofollow noopener noreferrer'
+            rel="nofollow noopener noreferrer"
             target="_blank"
           >
             <svg
@@ -165,7 +154,7 @@
           <NuxtLink
             class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
             href="https://discord.gg/fUhYHSZ"
-            rel='nofollow noopener noreferrer'
+            rel="nofollow noopener noreferrer"
             target="_blank"
           >
             <svg
