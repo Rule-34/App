@@ -29,7 +29,7 @@
   async function onClick() {
     if (!isPremium.value) {
       toast.info('Premium feature', {
-        description: 'Save posts to your device and enjoy them later',
+        description: 'Save posts and enjoy them later',
         duration: 10000
       })
       return

@@ -9,7 +9,7 @@
   const links = [
     {
       name: 'Saved posts',
-      description: 'Save posts to your device and enjoy them later',
+      description: 'Save posts and enjoy them later',
       href: '/premium/saved-posts/r34.app'
     },
     {
