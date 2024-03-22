@@ -10,7 +10,7 @@
       title: 'Access ' + (completeBooruList.length - defaultBooruList.length) + ' additional Boorus (websites)',
       additionalInfo: '#additional-boorus'
     },
-    { title: 'Save posts', additionalInfo: '#save-posts' },
+    { title: 'Save posts, synchronized on any device', additionalInfo: '#save-posts' },
     { title: 'Download posts with one click', additionalInfo: '#download-posts' },
     { title: 'Find original source (artist) of posts', additionalInfo: '#find-source' },
     { title: 'Integrated history to resume browsing', additionalInfo: '#history' },
@@ -102,7 +102,7 @@
               </svg>
             </div>
 
-            <span> Trusted by 1203+ customers</span>
+            <span> Trusted by 1449+ customers</span>
           </NuxtLink>
 
           <!-- TODO: Images of user profiles -->
