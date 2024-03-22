@@ -423,7 +423,7 @@
   })
 
   definePageMeta({
-    middleware: 'auth',
+    middleware: ['auth', 'auth-check'],
 
     validate: async (route) => {
       const page = route.query.page
