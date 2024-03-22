@@ -10,12 +10,12 @@
       title: 'Access ' + (completeBooruList.length - defaultBooruList.length) + ' additional Boorus (websites)',
       additionalInfo: '#additional-boorus'
     },
-    { title: 'Save posts, synchronized on any device', additionalInfo: '#save-posts' },
+    { title: 'Save posts, synchronized on all devices', additionalInfo: '#save-posts' },
     { title: 'Download posts with one click', additionalInfo: '#download-posts' },
     { title: 'Find original source (artist) of posts', additionalInfo: '#find-source' },
     { title: 'Integrated history to resume browsing', additionalInfo: '#history' },
     { title: 'Create tag collections (blocklist)', additionalInfo: '#tag-collections' },
-    { title: 'Proxy to bypass Booru blocked in your country', additionalInfo: '#proxy' },
+    { title: 'Proxy to bypass Boorus blocked in your country', additionalInfo: '#proxy' },
     { title: 'Use on any device or browser', additionalInfo: undefined },
     { title: '“Premium” Discord role', additionalInfo: undefined },
     { title: 'Support the development', additionalInfo: '#support-development' }
