@@ -4,7 +4,7 @@ export default defineNuxtPlugin(async ({ app }) => {
 
     const config = useRuntimeConfig()
 
-    const pb = new PocketBase(config.public.POCKETBASE_URL)
+    const pb = new PocketBase('https://pocketbase.r34.app')
 
     const cookie = useCookie('pb_auth', {
         path: '/',
