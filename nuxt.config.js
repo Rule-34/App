@@ -90,7 +90,7 @@ export default defineNuxtConfig({
 
     '@vite-pwa/nuxt',
 
-    'nuxt-schema-org',
+    // 'nuxt-schema-org',
 
     '@nuxtjs/sitemap'
   ],
