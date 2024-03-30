@@ -45,7 +45,6 @@
     "@vueuse/core": "^10.9.0",
     "@vueuse/integrations": "^10.9.0",
     "@vueuse/rxjs": "^10.9.0",
-    "dexie": "4.0.1-beta.1",
     "js-abbreviation-number": "^1.4.0",
     "lodash-es": "^4.17.21",
     "nuxt": "^3.11.1",

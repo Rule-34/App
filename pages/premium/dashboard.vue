@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import { ArrowLeftOnRectangleIcon } from '@heroicons/vue/24/solid'
   import { toast } from 'vue-sonner'
-  import { doesBrowserHaveSavedPosts } from '~/assets/js/BackupHelper'
 
   const { user, logout: _signOut } = useAuth()
   const { $pocketBase } = useNuxtApp()
@@ -28,14 +27,6 @@
       href: '/premium/backup'
     }
   ]
-
-  if (await doesBrowserHaveSavedPosts()) {
-    links.unshift({
-      name: '⚠ Migrate saved posts ⚠',
-      description: 'Migrate your saved posts to the cloud to access them from any device',
-      href: '/premium/migrate-old-data'
-    })
-  }
 
   async function signOut() {
     // Log out from pocketbase
@@ -155,8 +146,8 @@
       <NuxtLink
         class="hover:hover-text-util focus-visible:focus-outline-util underline"
         href="https://app.gumroad.com/library?query=Rule+34+App"
-        target="_blank"
         rel="nofollow noopener noreferrer"
+        target="_blank"
       >
         Manage subscription
       </NuxtLink>
