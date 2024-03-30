@@ -71,9 +71,6 @@ dependencies:
   '@vueuse/rxjs':
     specifier: ^10.9.0
     version: 10.9.0(rxjs@7.8.1)(vue@3.4.21)
-  dexie:
-    specifier: 4.0.1-beta.1
-    version: 4.0.1-beta.1
   js-abbreviation-number:
     specifier: ^1.4.0
     version: 1.4.0
@@ -6443,10 +6440,6 @@ packages:
 
   /devalue@4.3.2:
     resolution: {integrity: sha512-KqFl6pOgOW+Y6wJgu80rHpo2/3H07vr8ntR9rkkFIRETewbf5GaYYcakYfiKz89K+sLsuPkQIZaXDMjUObZwWg==}
-    dev: false
-
-  /dexie@4.0.1-beta.1:
-    resolution: {integrity: sha512-+IAkY8U09pavDFecWFOfTkwVN3NTmIsWZN2wh+RQ+9ya35Kr6AicQp+Tt1NDCM4UG2P/PDFBq/Mp4dt151LmuQ==}
     dev: false
 
   /dfa@1.2.0:
