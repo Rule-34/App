@@ -78,23 +78,22 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    '@nuxt-alt/auth',
+    '@nuxtjs/sitemap',
+    // 'nuxt-schema-org',
+
+    '@vite-pwa/nuxt',
+
+    '@formkit/auto-animate/nuxt',
+
+    '@headlessui-float/nuxt',
+
+    'nuxt-headlessui',
 
     '@nuxt/image',
 
     '@nuxt/fonts',
 
-    'nuxt-headlessui',
-
-    '@headlessui-float/nuxt',
-
-    '@formkit/auto-animate/nuxt',
-
-    '@vite-pwa/nuxt',
-
-    // 'nuxt-schema-org',
-
-    '@nuxtjs/sitemap'
+    '@nuxt-alt/auth'
   ],
 
   image: {
