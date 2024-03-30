@@ -1,7 +1,8 @@
 .cc--custom {
   color-scheme: dark;
 
-  --cc-font-family: InterVariable, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  /* TODO: Change to inter var */
+  --cc-font-family: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
   --cc-bg: #000;
   /* .text-base-content-highlight */

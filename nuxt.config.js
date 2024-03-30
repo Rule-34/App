@@ -82,6 +82,8 @@ export default defineNuxtConfig({
 
     '@nuxt/image',
 
+    '@nuxt/fonts',
+
     'nuxt-headlessui',
 
     '@headlessui-float/nuxt',
