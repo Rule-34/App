@@ -51,6 +51,15 @@
     await navigateTo('/premium/dashboard')
   }
 
+  onNuxtReady(() => {
+    const route = useRoute()
+    const message = route.query.message
+
+    if (message) {
+      toast.info(message)
+    }
+  })
+
   useSeoMeta({
     title: 'Sign in',
 
@@ -92,8 +101,8 @@
                 <NuxtLink
                   class="hover:hover-text-util focus-visible:focus-outline-util font-semibold"
                   href="https://app.gumroad.com/library?query=Rule+34+App"
-                  target="_blank"
                   rel="nofollow noopener noreferrer"
+                  target="_blank"
                 >
                   Forgot license?
                 </NuxtLink>
