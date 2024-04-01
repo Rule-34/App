@@ -54,23 +54,23 @@ useSeoMeta({
   })
 })
 
-// useSchemaOrg([
-//   defineWebSite({
-//     name: 'Rule 34 App'
-//   }),
-//   defineWebPage(),
-//   defineOrganization({
-//     name: 'Rule 34 App',
-//     logo: '/icon.svg',
-//     sameAs: [
-//       'https://rule34.app',
-//       'https://twitter.com/Rule34App',
-//       'https://twitter.com/Rule34App',
-//       'https://discord.gg/fUhYHSZ',
-//       'https://github.com/Rule-34/App'
-//     ]
-//   })
-// ])
+  useSchemaOrg([
+    defineWebSite({
+      name: 'Rule 34 App'
+    }),
+    defineWebPage(),
+    defineOrganization({
+      name: 'Rule 34 App',
+      logo: '/icon.svg',
+      sameAs: [
+        'https://rule34.app',
+        'https://twitter.com/Rule34App',
+        'https://twitter.com/Rule34App',
+        'https://discord.gg/fUhYHSZ',
+        'https://github.com/Rule-34/App'
+      ]
+    })
+  ])
 </script>
 
 <template>
