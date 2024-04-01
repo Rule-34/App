@@ -1,8 +1,9 @@
 import {sentryVitePlugin} from '@sentry/vite-plugin'
 
 export default defineNuxtConfig({
-  // TODO: Enable when SSR is enabled
   ssr: true,
+
+  spaLoadingTemplate: true,
 
   /**
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
@@ -58,11 +59,6 @@ export default defineNuxtConfig({
       // Put the Sentry vite plugin after all other plugins
       sentryVitePlugin({
         authToken: process.env.SENTRY_AUTH_TOKEN,
-
-        release: {
-          name: process.env.GIT_REV ?? undefined
-        },
-
         org: 'alejandro-akbal',
         project: 'app',
         url: 'https://glitchtip.akbal.dev/'
@@ -71,12 +67,7 @@ export default defineNuxtConfig({
   },
 
   build: {
-    transpile: ['vue-sonner', 'dexie']
-  },
-
-  // TODO: Remove when I fix "Cannot stringify arbitrary non-POJOs error" - https://github.com/nuxt/nuxt/issues/20787
-  experimental: {
-    renderJsonPayloads: false
+    transpile: ['vue-sonner']
   },
 
   sourcemap: true,
@@ -98,9 +89,7 @@ export default defineNuxtConfig({
 
       API_URL: process.env.API_URL,
 
-      PROXY_URL: process.env.PROXY_URL,
-
-      SENTRY_DSN: process.env.SENTRY_DSN,
+      SENTRY_DSN: process.env.SENTRY_DSN
     }
   },
 
@@ -113,20 +102,39 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    'nuxt-headlessui',
-
-    '@headlessui-float/nuxt',
-
-    '@nuxt-alt/auth',
-
-    '@formkit/auto-animate/nuxt',
+    '@nuxtjs/sitemap',
+    // 'nuxt-schema-org',
 
     '@vite-pwa/nuxt',
 
-    'nuxt-schema-org',
+    '@formkit/auto-animate/nuxt',
 
-    '@nuxtjs/sitemap'
+    '@headlessui-float/nuxt',
+
+    'nuxt-headlessui',
+
+    '@nuxt/image',
+
+    '@nuxt/fonts',
+
+    '@nuxt-alt/auth'
   ],
+
+  image: {
+    provider: 'imgproxy',
+
+    providers: {
+      imgproxy: {
+        name: 'imgproxy',
+        provider: '~~/assets/js/nuxt-image/imgproxy.provider',
+        options: {
+          baseURL: 'https://imgproxy.r34.app'
+        }
+      }
+    },
+
+    format: ['avif', 'webp']
+  },
 
   /** @type {import('@nuxt-alt/auth').ModuleOptions} */
   auth: {
@@ -246,7 +254,7 @@ export default defineNuxtConfig({
       style: [
         {
           type: 'text/css',
-          cssText: 'html, body { background-color: black; }'
+          children: 'html { background-color: black; }'
         }
       ],
       script: [

@@ -50,7 +50,8 @@ module.exports = {
       },
 
       fontFamily: {
-        sans: ['InterVariable', ...defaultTheme.fontFamily.sans]
+        /* TODO: Change to inter var */
+        sans: ['Inter', ...defaultTheme.fontFamily.sans]
       }
     }
   },

@@ -1,7 +1,7 @@
 export function useProxyHelper(url: string) {
-  const config = useRuntimeConfig()
+  const PROXY_URL = 'https://cors-proxy.r34.app/?q='
 
-  const proxiedUrl = computed(() => config.public.PROXY_URL + encodeURIComponent(url))
+  const proxiedUrl = computed(() => PROXY_URL + encodeURIComponent(url))
 
   return {
     proxiedUrl

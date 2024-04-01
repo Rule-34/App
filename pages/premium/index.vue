@@ -5,18 +5,18 @@
 
   const mainFeatures = [
     { title: 'No ads', additionalInfo: undefined },
+    { title: 'Faster image loading', additionalInfo: '#image-proxy' },
     {
       title: 'Access ' + (completeBooruList.length - defaultBooruList.length) + ' additional Boorus (websites)',
       additionalInfo: '#additional-boorus'
     },
-    { title: 'Save posts', additionalInfo: '#save-posts' },
+    { title: 'Save posts, synchronized on all devices', additionalInfo: '#save-posts' },
     { title: 'Download posts with one click', additionalInfo: '#download-posts' },
     { title: 'Find original source (artist) of posts', additionalInfo: '#find-source' },
-    { title: 'Create tag collections', additionalInfo: '#tag-collections' },
     { title: 'Integrated history to resume browsing', additionalInfo: '#history' },
-    { title: 'Integrated proxy to bypass website blocks', additionalInfo: '#proxy' },
-    { title: 'Backup your data', additionalInfo: '#backup' },
-    { title: 'Enjoy on any device or browser', additionalInfo: undefined },
+    { title: 'Create tag collections (blocklist)', additionalInfo: '#tag-collections' },
+    { title: 'Proxy to bypass Boorus blocked in your country', additionalInfo: '#proxy' },
+    { title: 'Use on any device or browser', additionalInfo: undefined },
     { title: '“Premium” Discord role', additionalInfo: undefined },
     { title: 'Support the development', additionalInfo: '#support-development' }
   ]
@@ -63,6 +63,7 @@
             class="focus-visible:focus-outline-util hover:hover-text-util mt-12 flex flex-col items-center justify-center gap-2.5 pb-4"
             href="https://gum.co/Rule34App#Ratings"
             target="_blank"
+            rel="nofollow noopener noreferrer"
           >
             <div class="flex items-center">
               <StarIcon
@@ -101,7 +102,7 @@
               </svg>
             </div>
 
-            <span> Trusted by 1203+ customers</span>
+            <span> Trusted by 1449+ customers</span>
           </NuxtLink>
 
           <!-- TODO: Images of user profiles -->
@@ -185,12 +186,10 @@
                 >
                   <!-- Price -->
                   <div class="mt-10 flex items-center justify-center gap-x-4">
-                    <p class="text-4xl font-bold tracking-tight text-base-content-highlight">€4.9</p>
+                    <p class="text-4xl font-bold tracking-tight text-base-content-highlight">€7</p>
 
                     <div class="text-sm leading-5">
-                      <p class="text-base-content">
-                        EUR
-                      </p>
+                      <p class="text-base-content">EUR</p>
                       <p>Billed monthly</p>
                     </div>
                   </div>
@@ -211,6 +210,7 @@
                     aria-describedby="premium-features"
                     class="focus-visible:focus-outline-util hover:hover-text-util rounded-md bg-primary-700 px-3 py-2 text-center text-sm font-semibold leading-6 text-base-content-highlight hover:bg-primary-600 focus-visible:ring-offset-2"
                     href="https://gum.co/Rule34App"
+                    rel="nofollow noopener noreferrer"
                     target="_blank"
                     onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click'])"
                   >
@@ -223,6 +223,7 @@
                     <NuxtLink
                       class="focus-visible:focus-outline-util hover:hover-text-util"
                       href="https://gumroad.com/discover"
+                      rel="nofollow noopener noreferrer"
                       target="_blank"
                     >
                       Gumroad

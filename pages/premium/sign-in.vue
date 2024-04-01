@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-  import { toast } from 'vue-sonner'
   import { FetchError } from 'ofetch'
+  import { ClientResponseError } from 'pocketbase'
+  import { toast } from 'vue-sonner'
 
   const $auth = useAuth()
+  const { $pocketBase } = useNuxtApp()
 
   const formData = shallowRef({
     password: ''
@@ -15,6 +17,17 @@
       return
     }
 
+    // First, authenticate to pocketbase
+    try {
+      const authData = await $pocketBase.collection('users').authWithPassword(password, password)
+    } catch (error) {
+      if (error instanceof ClientResponseError) {
+        toast.error(`Error: "${error.message}", contact support if it keeps happening`)
+        return
+      }
+    }
+
+    // Then, authenticate to API
     try {
       await $auth.loginWith('local', {
         body: {
@@ -27,7 +40,7 @@
     } catch (error) {
       if (error instanceof FetchError) {
         if (error.status === 401) {
-          toast.error('Invalid license key: ' + error.data.message)
+          toast.error(`Error: "${error.message}"`)
           return
         }
       }
@@ -37,6 +50,15 @@
 
     await navigateTo('/premium/dashboard')
   }
+
+  onNuxtReady(() => {
+    const route = useRoute()
+    const message = route.query.message
+
+    if (message) {
+      toast.info(message)
+    }
+  })
 
   useSeoMeta({
     title: 'Sign in',
@@ -79,6 +101,7 @@
                 <NuxtLink
                   class="hover:hover-text-util focus-visible:focus-outline-util font-semibold"
                   href="https://app.gumroad.com/library?query=Rule+34+App"
+                  rel="nofollow noopener noreferrer"
                   target="_blank"
                 >
                   Forgot license?

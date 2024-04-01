@@ -1,12 +1,10 @@
 <script lang="ts" setup>
-  import { Bars3BottomRightIcon, EyeIcon, StarIcon, TagIcon } from '@heroicons/vue/24/outline'
   import { CheckIcon, ChevronUpDownIcon, MagnifyingGlassIcon, NoSymbolIcon, PlusIcon } from '@heroicons/vue/20/solid'
+  import { Bars3BottomRightIcon, EyeIcon, StarIcon, TagIcon } from '@heroicons/vue/24/outline'
   import { watchDebounced } from '@vueuse/core'
   import { abbreviateNumber } from 'js-abbreviation-number'
-  import Tag from '~/assets/js/tag.dto'
   import { cloneDeep, unionWith } from 'lodash-es'
-
-  const { isActive: isTagCollectionsActive, toggleIsActive: toggleTagCollections } = useTagCollections()
+  import Tag from '~/assets/js/tag.dto'
 
   const props = defineProps<{
     initialSelectedTags: Tag[]
@@ -34,6 +32,8 @@
       }
     ]
   }>()
+
+  const isTagCollectionsActive = ref(false)
 
   /**
    * Info: ShallowRef will only update when the entire value changes
@@ -125,7 +125,7 @@
   }
 
   function onTagCollectionsSetSelectedTags(tags: Tag[]) {
-    toggleTagCollections(false)
+    isTagCollectionsActive.value = false
 
     const uniqueMergedTags = unionWith(selectedTags.value, tags, (tagA, tagB) => tagA.name === tagB.name)
 
@@ -192,16 +192,6 @@
 </script>
 
 <template>
-  <TagCollectionsWrapper
-    :modelValue="isTagCollectionsActive"
-    @update:modelValue="toggleTagCollections"
-  >
-    <LazyTagCollections
-      :selectedTags="selectedTags"
-      @updateSelectedTags="onTagCollectionsSetSelectedTags"
-    />
-  </TagCollectionsWrapper>
-
   <!--  Search & Actions -->
   <section>
     <!-- Search -->
@@ -309,12 +299,21 @@
         <button
           class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util inline-flex items-center gap-x-1.5 rounded-md px-2 py-1 ring-1 ring-base-0/20"
           type="button"
-          @click="toggleTagCollections(true)"
+          @click="isTagCollectionsActive = !isTagCollectionsActive"
         >
           <TagIcon class="-ml-0.5 h-[1.15rem] w-[1.15rem]" />
 
           <span class="whitespace-nowrap text-sm font-medium">Collections</span>
         </button>
+
+        <BottomSheetWrapper v-model="isTagCollectionsActive">
+          <div class="px-4 py-4">
+            <TagCollections
+              :selectedTags="selectedTags"
+              @updateSelectedTags="onTagCollectionsSetSelectedTags"
+            />
+          </div>
+        </BottomSheetWrapper>
       </div>
 
       <!-- Sort Filter -->
@@ -346,10 +345,7 @@
       <p class="block text-lg font-medium text-base-content">Selected tags</p>
 
       <!-- Selected tags -->
-      <ol
-        v-auto-animate
-        class="mt-2 flex flex-wrap gap-2.5 rounded-md"
-      >
+      <ol class="mt-2 flex flex-wrap gap-2.5 rounded-md">
         <!-- -->
 
         <!-- TODO: Clear all button -->

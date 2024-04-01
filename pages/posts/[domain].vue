@@ -1,18 +1,19 @@
 <script lang="ts" setup>
-  import { useBooruList } from '~/composables/useBooruList'
-  import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
   import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
-  import { toast } from 'vue-sonner'
-  import Tag from '~/assets/js/tag.dto'
+  import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
+  import * as Sentry from '@sentry/vue'
+  import { useInfiniteQuery } from '@tanstack/vue-query'
+  import { useWindowVirtualizer } from '@tanstack/vue-virtual'
+  import { cloneDeep } from 'lodash-es'
+  import { FetchError } from 'ofetch'
   import type { Ref } from 'vue'
+  import { toast } from 'vue-sonner'
   import { generatePostsRoute } from '~/assets/js/RouterHelper'
   import { tagArrayToTitle } from '~/assets/js/SeoHelper'
-  import { capitalize, cloneDeep } from 'lodash-es'
   import type { Domain } from '~/assets/js/domain'
-  import type { IPostPage } from '~/assets/js/post'
-  import { useInfiniteQuery } from '@tanstack/vue-query'
-  import { FetchError } from 'ofetch'
-  import * as Sentry from '@sentry/vue'
+  import type { IPost, IPostPage } from '~/assets/js/post.dto'
+  import Tag from '~/assets/js/tag.dto'
+  import { useBooruList } from '~/composables/useBooruList'
 
   const router = useRouter()
   const route = useRoute()
@@ -186,7 +187,87 @@
     await suspense()
   })
 
-  // TODO: Virtualize posts or use a clever maxPages combination and scroll to last page end
+  const allRows = computed<IPost[]>(() => {
+    if (!data.value) {
+      return []
+    }
+
+    // Flatten pages, but add `current_page` to each post
+    return data.value.pages.flatMap((page) => {
+      return page.data.map((post) => {
+        return {
+          ...post,
+
+          // TODO: Remove when API returns domain
+          domain: selectedBooru.value.domain,
+
+          current_page: page.meta.current_page
+        }
+      })
+    })
+  })
+
+  const parentRef = ref<HTMLElement | null>(null)
+  const parentOffsetRef = ref(0)
+
+  onMounted(() => {
+    parentOffsetRef.value = parentRef.value?.offsetTop ?? 0
+  })
+
+  const rowVirtualizerOptions = computed(() => {
+    return {
+      debug: false,
+
+      count: hasNextPage ? allRows.value.length + 1 : allRows.value.length,
+
+      estimateSize: () => 600,
+
+      scrollMargin: parentOffsetRef.value,
+
+      overscan: 5,
+
+      gap: 16
+    }
+  })
+
+  const rowVirtualizer = useWindowVirtualizer(rowVirtualizerOptions)
+
+  const virtualRows = computed(() => rowVirtualizer.value.getVirtualItems())
+
+  const totalSize = computed(() => rowVirtualizer.value.getTotalSize())
+
+  // Next page loader
+  watchEffect(() => {
+    // Skip if there is no data
+    if (!data.value) {
+      return
+    }
+
+    const [lastItem] = [...virtualRows.value].reverse()
+
+    if (!lastItem) {
+      return
+    }
+
+    // IF last item is the last item in the list
+    // AND there is a next page
+    // AND it's not fetching
+    // THEN load next page
+    if (lastItem.index >= allRows.value.length - 1 && hasNextPage.value && !isFetchingNextPage.value) {
+      onLoadNextPostPage()
+    }
+  })
+
+  // FIX: Remove when this issue is fixed - https://github.com/TanStack/virtual/issues/619#issuecomment-1969516091
+  const measureElement = (el) => {
+    nextTick(() => {
+      if (!el) {
+        return
+      }
+
+      rowVirtualizer.value.measureElement(el)
+    })
+  }
 
   /**
    * `undefined` values mean that they will be replaced by default values
@@ -352,6 +433,11 @@
 
   async function onPageIndicatorClick() {
     const pagePrompt = prompt('To which page do you want to go?')
+
+    if (pagePrompt == null) {
+      return
+    }
+
     const page = parseInt(pagePrompt, 10)
 
     if (isNaN(page)) {
@@ -364,7 +450,7 @@
     window.location.reload()
   }
 
-  const title = computed(() => {
+  const completeTitle = computed(() => {
     let title = ''
 
     // Page
@@ -376,7 +462,7 @@
 
     // Tags
     if (selectedTags.value.length > 0) {
-      title += ` tagged ${tagArrayToTitle(selectedTags.value)} porn`
+      title += ` tagged ${tagArrayToTitle(selectedTags.value)} Hentai`
     }
 
     // Filters
@@ -389,27 +475,41 @@
     }
 
     if (selectedFilters.value.score) {
-      title += `, with a score of ${selectedFilters.value.score}`
+      title += `, score of ${selectedFilters.value.score}`
     }
 
     // Domain
     title += `, from ${selectedBooru.value.domain}`
 
     title = title.trim()
-    title = capitalize(title)
 
     return title
   })
 
+  const shortTitle = computed(() => {
+    let _title = completeTitle.value
+
+    _title = _title.replace(/Posts tagged/, '')
+    _title = _title.replace(/with /, '')
+    _title = _title.replace(/and ?without /, ' w/o ')
+    _title = _title.replace(/with a score of/, 'score')
+
+    _title = _title.trim()
+    // Capitalize first letter - https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
+    _title = _title.charAt(0).toUpperCase() + _title.slice(1)
+
+    return _title
+  })
+
   const titleForBody = computed(() => {
-    let _title = title.value
+    let _title = completeTitle.value
 
     // TODO: Show page number in body title
-    _title = _title.replace(/Page \d+ of /, '')
+    _title = _title.replace(/page \d+ of /i, '')
 
     _title = _title.replace(/posts/i, '')
 
-    _title = _title.replace(/ porn/, '')
+    _title = _title.replace(/ hentai, /i, ', ')
 
     _title = _title.replace(/, from .+$/, '')
 
@@ -419,9 +519,36 @@
     }
 
     _title = _title.trim()
-    _title = capitalize(_title)
+    // Capitalize first letter - https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
+    _title = _title.charAt(0).toUpperCase() + _title.slice(1)
 
     return _title
+  })
+
+  const description = computed(() => {
+    let description = `Stream and download ${tagArrayToTitle(selectedTags.value, false)} Hentai porn videos, GIFs and images`
+
+    description = description.replace('download with', 'download')
+
+    // Filters
+    if (selectedFilters.value.rating) {
+      description += `, rated ${selectedFilters.value.rating}`
+    }
+
+    if (selectedFilters.value.sort) {
+      description += `, sorted by ${selectedFilters.value.sort}`
+    }
+
+    if (selectedFilters.value.score) {
+      description += `, with a score of ${selectedFilters.value.score}`
+    }
+
+    description += `, from ${selectedBooru.value.domain}`
+
+    // TODO: Improve ending
+    description += '. Free anime hentai here on R34.app'
+
+    return description
   })
 
   // TODO: Think about setting a real canonical URL
@@ -430,23 +557,9 @@
   })
 
   useSeoMeta({
-    title,
+    title: shortTitle,
 
-    description: () => {
-      let description = 'Stream and download porn images, GIFs and videos'
-
-      if (selectedTags.value.length > 0) {
-        description += ` featuring ${tagArrayToTitle(selectedTags.value)}`
-      }
-
-      // TODO: Filters
-
-      description += ` from ${selectedBooru.value.domain}`
-
-      description += '. Fast and free anime hentai with the Rule 34 App.'
-
-      return description
-    },
+    description,
 
     referrer: 'no-referrer'
   })
@@ -569,7 +682,7 @@
 
       <!-- TODO: strip page -->
       <ShareButton
-        :title="title"
+        :title="completeTitle"
         :url="canonicalUrl"
         class="my-auto"
         text=""
@@ -623,77 +736,77 @@
       <!-- Posts -->
       <div
         v-else
-        class="space-y-4"
+        ref="parentRef"
       >
-        <!-- TODO: Previous page -->
+        <!-- TODO: Previous pagination -->
 
-        <!-- Pages -->
+        <!-- TODO: Animate adding posts https://vuejs.org/guide/built-ins/transition-group.html#staggering-list-transitions -->
+
         <div
-          v-for="(postsPage, postsPageIndex) in data.pages"
-          class="space-y-4"
-          data-testid="posts-list"
+          :style="{
+            height: `${totalSize}px`,
+            width: '100%',
+            position: 'relative'
+          }"
         >
-          <!-- Page indicator -->
-          <button
-            v-if="postsPageIndex !== 0"
-            class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util mx-auto block rounded-md px-1.5 py-1 text-sm"
-            type="button"
-            @click="onPageIndicatorClick"
+          <!-- TODO: Remove `space-y-4` when virtualizer gap works -->
+          <ol
+            :style="{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              transform: `translateY(${virtualRows[0]?.start - rowVirtualizer.options.scrollMargin ?? 0}px)`
+            }"
+            class="space-y-4"
           >
-            &dharl; Page {{ postsPage.meta.current_page }} &dharr;
-          </button>
-
-          <!-- TODO: Animate adding posts https://vuejs.org/guide/built-ins/transition-group.html#staggering-list-transitions -->
-          <ol class="space-y-4">
-            <template
-              v-for="(post, postIndex) in postsPage.data"
-              :key="`${selectedBooru.domain}-${post.id}`"
+            <li
+              v-for="virtualRow in virtualRows"
+              :key="virtualRow.key"
+              :data-index="virtualRow.index"
+              :ref="measureElement"
             >
-              <li :data-testid="`${selectedBooru.domain}-${post.id}`">
-                <Post
-                  :domain="selectedBooru.domain"
-                  :post="post"
+              <!-- Next Pagination -->
+              <div
+                v-if="virtualRow.index > allRows.length - 1"
+                class="flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-base-content"
+              >
+                <span class="block rounded-md px-1.5 py-1">
+                  {{ hasNextPage ? 'Loading more...' : 'Nothing more to load' }}
+                </span>
+              </div>
+
+              <!-- Content -->
+              <template v-else>
+                <!-- Page indicator -->
+                <button
+                  v-if="virtualRow.index !== 0 && virtualRow.index % userSettings.postsPerPage === 0"
+                  class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util mx-auto mb-4 block rounded-md px-1.5 py-1 text-sm"
+                  type="button"
+                  @click="onPageIndicatorClick"
+                >
+                  &dharl; Page {{ allRows[virtualRow.index].current_page }} &dharl;
+                </button>
+
+                <!-- Post -->
+                <!-- Fix: use domain + post.id as unique key, since virtualRow.index could be the same on different Boorus/pages -->
+                <PostComponent
+                  :key="selectedBooru.domain + '-' + allRows[virtualRow.index].id"
+                  :post="allRows[virtualRow.index]"
                   :selected-tags="selectedTags"
                   @addTag="onPostAddTag"
                   @openTagInNewTab="onPostOpenTagInNewTab"
                   @setTag="onPostSetTag"
                 />
-              </li>
 
-              <!-- Promoted content -->
-              <template v-if="!isPremium && postIndex !== 0 && postIndex % 7 === 0">
-                <li>
-                  <PromotedContent />
-                </li>
+                <!-- Promoted content -->
+                <template v-if="!isPremium && virtualRow.index !== 0 && virtualRow.index % 7 === 0">
+                  <PromotedContent class="mt-4" />
+                </template>
               </template>
-            </template>
+            </li>
           </ol>
         </div>
-
-        <!-- Next Pagination -->
-        <PostsPagination @load-next-page="onLoadNextPostPage">
-          <span
-            v-if="isFetchingNextPage"
-            class="block rounded-md px-1.5 py-1"
-          >
-            Loading more&hellip;
-          </span>
-
-          <button
-            v-else-if="hasNextPage"
-            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-md px-1.5 py-1"
-            @click="onLoadNextPostPage"
-          >
-            Scroll here or click me to load more
-          </button>
-
-          <span
-            v-else
-            class="block rounded-md px-1.5 py-1"
-          >
-            Nothing more to load
-          </span>
-        </PostsPagination>
       </div>
     </section>
   </main>

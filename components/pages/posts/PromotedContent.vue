@@ -1,7 +1,7 @@
 <script setup>
-import {default as random_weighted_choice} from 'random-weighted-choice'
+  import { default as random_weighted_choice } from 'random-weighted-choice'
 
-const premiumPromotions = [
+  const premiumPromotions = [
     // Premium
     {
       media: '/img/promo/premium/Additional Boorus.jpg',
@@ -59,14 +59,20 @@ const premiumPromotions = [
       mediaType: 'image',
       link: '/premium?utm_source=internal&utm_medium=promo-support-us'
     },
-  // TODO: Improve media
-    // {
-    //   media: '/img/promo/premium/Tag Collections.jpg',
-    //   mediaWidth: 1280,
-    //   mediaHeight: 1280,
-    //   mediaType: 'image',
-    //   link: '/premium?utm_source=internal&utm_medium=promo-tag-collections'
-    // }
+    {
+      media: '/img/promo/premium/Tag Collections.jpg',
+      mediaWidth: 1280,
+      mediaHeight: 1280,
+      mediaType: 'image',
+      link: '/premium?utm_source=internal&utm_medium=promo-tag-collections'
+    },
+    {
+      media: '/img/promo/premium/Faster Image Loading.jpg',
+      mediaWidth: 1280,
+      mediaHeight: 1280,
+      mediaType: 'image',
+      link: '/premium?utm_source=internal&utm_medium=promo-faster-image-loading'
+    }
   ]
 
   const otherPromotions = [
@@ -95,7 +101,7 @@ const premiumPromotions = [
       mediaHeight: 1200,
       mediaType: 'image',
       link: 'https://candy.ai?via=rule-3496'
-    },
+    }
     // dreamgf.ai
     // {
     //   media: '/img/promo/referrals/DreamGF-300x600-2.gif',
@@ -179,6 +185,7 @@ const premiumPromotions = [
     <NuxtLink
       :href="promo.link"
       :target="promo.link.startsWith('http') ? '_blank' : null"
+      rel="nofollow noopener noreferrer"
       class="focus-visible:focus-outline-util focus-visible:ring-inset"
     >
       <PostMedia

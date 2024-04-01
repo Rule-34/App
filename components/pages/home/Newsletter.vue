@@ -13,7 +13,7 @@
     </p>
 
     <form
-      action="https://mail.akbal.dev/subscribe/a97031df-b6c5-47f3-8c09-1d373fcc907d"
+      action="https://mailcoach.akbal.dev/subscribe/a97031df-b6c5-47f3-8c09-1d373fcc907d"
       class="mx-auto mt-10 flex max-w-md gap-x-4"
       method="post"
     >
