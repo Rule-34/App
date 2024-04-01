@@ -9,29 +9,29 @@ export default defineNuxtConfig({
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
    */
   routeRules: {
+
+    // TODO: prerender / but not if there are query params
+    '/': {},
+
     '/posts/**': {
       swr: 60 * 5
     },
 
     // Static pages are prerendered
-    '/': {prerender: true},
     '/other-sites': {prerender: true},
     '/legal': {prerender: true},
 
     '/settings': {ssr: false},
 
-    // TODO: Remove when A/B testing is finished @see 040.matomo.client.ts
-    '/premium': {ssr: false},
-    // '/premium': {prerender: true},
+    '/premium': {prerender: true},
     '/premium/sign-in': {prerender: true},
 
     // All premium pages are client-side rendered
     '/premium/dashboard': {ssr: false},
-    '/premium/saved-posts/*': {ssr: false},
+    '/premium/saved-posts': {ssr: false},
     '/premium/tag-collections': {ssr: false},
     '/premium/additional-boorus': {ssr: false},
     '/premium/backup': {ssr: false},
-    '/premium/migrate-old-data': {ssr: false},
 
     // Public assets
     '/img/**': {
