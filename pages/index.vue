@@ -100,10 +100,6 @@ definePageMeta({
      * Redirect to /posts/<domain> if query parameters [domain, page, tags] are set.
      */
     function (to, from) {
-      if (process.server) {
-        return
-      }
-
       if (!to) {
         return
       }
@@ -120,7 +116,7 @@ definePageMeta({
       searchParams.delete('domain')
 
       // Redirect
-      window.location.replace('/posts/' + to.query.domain + '?' + searchParams.toString())
+      return navigateTo('/posts/' + to.query.domain + '?' + searchParams.toString())
     }
   ]
 })
@@ -545,7 +541,7 @@ const featuredDomains = [
                 </span>
               </NuxtLink>
 
-<!--              <span class="ml-auto block text-xs">Scroll →</span>-->
+              <!--              <span class="ml-auto block text-xs">Scroll →</span>-->
             </div>
 
             <FeaturedTags
