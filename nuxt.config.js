@@ -10,11 +10,9 @@ export default defineNuxtConfig({
    */
   routeRules: {
     // TODO: prerender / but not if there are query params
-    '/': {},
+    '/': { swr: true },
 
-    '/posts/**': {
-      swr: 60 * 5
-    },
+    '/posts/**': { swr: true },
 
     // Static pages are prerendered
     '/other-sites': { prerender: true },
@@ -272,6 +270,10 @@ export default defineNuxtConfig({
         }
       ]
     }
+  },
+
+  schemaOrg: {
+    default: false
   },
 
   /** @type {import('@nuxtjs/sitemap').ModuleOptions} */
