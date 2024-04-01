@@ -1,4 +1,4 @@
-import type { IPostTags } from "./post.dto"
+import type {IPostTags} from './post.dto'
 
 export interface ITag {
   name: string
@@ -11,6 +11,10 @@ export class TagDTO implements ITag {
   name: ITag['name'] = ''
   type?: ITag['type']
   count?: ITag['count']
+
+  toJSON() {
+    return {...this}
+  }
 }
 
 export default class Tag extends TagDTO {
