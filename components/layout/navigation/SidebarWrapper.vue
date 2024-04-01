@@ -12,7 +12,7 @@
     >
       <HeadlessDialog
         as="div"
-        class="relative z-40"
+        class="relative z-10"
         @close="toggleMenu(false)"
       >
         <!-- Background -->
@@ -79,7 +79,7 @@
 
               <!-- Sidebar -->
               <div class="flex grow flex-col overflow-y-auto bg-base-1000 px-6 ring-1 ring-base-0/10">
-                <slot v-if="isMenuActive" />
+                <slot />
               </div>
             </HeadlessDialogPanel>
           </HeadlessTransitionChild>

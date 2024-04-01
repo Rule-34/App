@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { LinkIcon } from '@heroicons/vue/24/outline'
   import { toast } from 'vue-sonner'
-  import type { IPost } from '~/assets/js/post'
+  import type { IPost } from '~/assets/js/post.dto'
 
   const props = defineProps<{
     postSources: IPost['sources']

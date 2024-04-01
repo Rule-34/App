@@ -1,8 +1,8 @@
 <script lang="ts" setup>
   import { ArrowDownTrayIcon, ArrowUturnLeftIcon } from '@heroicons/vue/24/solid'
-  import PageHeader from '~/components/layout/PageHeader.vue'
   import { toast } from 'vue-sonner'
-  import { createBackupState, type IBackupState, tryToRestoreV2OrV3Backup } from '~/assets/js/BackupHelper'
+  import { createBackupState, tryToRestoreV2OrV3Backup, type IBackupState } from '~/assets/js/BackupHelper'
+  import PageHeader from '~/components/layout/PageHeader.vue'
 
   const fileInputElement = ref<HTMLInputElement | null>(null)
 
@@ -79,7 +79,9 @@
     title: 'Backup'
   })
 
-  definePageMeta({ middleware: 'auth' })
+  definePageMeta({
+    middleware: ['auth', 'auth-check']
+  })
 </script>
 
 <template>
@@ -90,7 +92,7 @@
       <template #title>Backup & Restore</template>
       <template #text>
         <div class="text-sm">
-          Backup your saved posts, tag collections and settings
+          Backup your tag collections and settings
 
           <span class="mt-3 block italic"> This is a manual process. Remember to backup your data regularly </span>
         </div>

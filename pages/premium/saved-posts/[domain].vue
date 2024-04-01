@@ -1,32 +1,41 @@
 <script lang="ts" setup>
-  import { db, type ISavedPost } from '~/store/SavedPosts'
   import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
-  import { useBooruList } from '~/composables/useBooruList'
-  import type { Domain } from '~/assets/js/domain'
-  import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-  import Tag from '~/assets/js/tag.dto'
   import { useInfiniteQuery } from '@tanstack/vue-query'
-  import { toast } from 'vue-sonner'
+  import { useWindowVirtualizer } from '@tanstack/vue-virtual'
+  import type { IPost, IPostPage } from 'assets/js/post.dto'
   import { generatePostsRoute } from 'assets/js/RouterHelper'
-  import type { IPostPageMeta } from 'assets/js/post'
-  import { capitalize } from 'lodash-es'
   import { tagArrayToTitle } from 'assets/js/SeoHelper'
+  import { capitalize } from 'lodash-es'
+  import { toast } from 'vue-sonner'
+  import type { Domain } from '~/assets/js/domain'
+  import type { IPocketbasePost } from '~/assets/js/pocketbase.dto'
+  import Post from '~/assets/js/post.dto'
+  import Tag from '~/assets/js/tag.dto'
+  import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+  import { useBooruList } from '~/composables/useBooruList'
 
-  const router = useRouter()
   const route = useRoute()
-  const { booruList: _availableBooruList } = useBooruList()
 
-  const booruNamesInDb = await db.posts.orderBy('original_domain').uniqueKeys()
+  const { $pocketBase } = useNuxtApp()
+
+  const userSettings = useUserSettings()
+  const { booruList: _availableBooruList } = useBooruList()
+  const { savedPostList } = usePocketbase()
+
+  const domainsFromPocketbase = await $pocketBase.collection('distinct_original_domain_from_posts').getFullList()
 
   const booruList = computed(() => {
     const _booruList: Domain[] = [
       {
         domain: 'r34.app',
         type: booruTypeList[0],
-        isPremium: false,
-        config: null
+        config: null,
+        isCustom: false,
+        isPremium: false
       }
     ]
+
+    const booruNamesInDb: string[] = domainsFromPocketbase.map((domain) => domain.original_domain)
 
     booruNamesInDb.forEach((booruNameInDb) => {
       const booru = _availableBooruList.value.find((availableBooru) => availableBooru.domain === booruNameInDb)
@@ -92,44 +101,57 @@
     }
   })
 
-  export interface ISavedPostPage {
-    data: ISavedPost[]
-    meta: IPostPageMeta
-  }
+  interface IPostPageFromPocketBase extends Omit<IPostPage, 'links'> {}
 
-  async function fetchPosts(options: any): Promise<ISavedPostPage> {
+  async function fetchPosts(options: any): Promise<IPostPageFromPocketBase> {
     const page = options.pageParam
 
-    // TODO: Use userSettings
-    const PAGE_SIZE = 30
+    const PAGE_SIZE = userSettings.postsPerPage
 
-    const posts = await db.posts
-      //
-      // Filter by domain
-      .filter((post) => {
-        if (selectedBooru.value.domain !== 'r34.app') {
-          return post.original_domain === selectedBooru.value.domain
-        }
+    let pocketbaseRequestFilter = ''
 
-        return true
+    if (selectedBooru.value.domain !== 'r34.app') {
+      pocketbaseRequestFilter += $pocketBase.filter('original_domain = {:original_domain}', {
+        original_domain: selectedBooru.value.domain
       })
-      //
-      // .orderBy('created_at')
-      .reverse()
-      //
-      .offset(page * PAGE_SIZE)
-      .limit(PAGE_SIZE)
-      //
-      .toArray()
+    }
+
+    // TODO
+    // if (selectedTags.value.length > 0) {
+    // }
+
+    if (selectedFilters.value.rating) {
+      pocketbaseRequestFilter += $pocketBase.filter('rating = {:rating}', {
+        rating: selectedFilters.value.rating
+      })
+    }
+
+    // TODO
+    // if (selectedFilters.value.sort) {
+    // }
+
+    // TODO
+    // if (selectedFilters.value.score) {
+    // }
+
+    const pocketBasePostsResponse = await $pocketBase.collection('posts').getList<IPocketbasePost>(page, PAGE_SIZE, {
+      sort: '-created',
+      filter: pocketbaseRequestFilter,
+      skipTotal: true
+    })
+
+    const posts = pocketBasePostsResponse.items.map((item) => {
+      return Post.fromPocketbasePost(item)
+    })
 
     return {
       data: posts,
       meta: {
-        items_count: posts.length,
-        total_items: posts.length,
-        current_page: page,
-        total_pages: null,
-        items_per_page: PAGE_SIZE
+        items_count: pocketBasePostsResponse.items.length,
+        total_items: pocketBasePostsResponse.totalItems,
+        current_page: pocketBasePostsResponse.page,
+        total_pages: pocketBasePostsResponse.totalPages,
+        items_per_page: pocketBasePostsResponse.perPage
       }
     }
   }
@@ -147,7 +169,7 @@
     isPending,
     isError
   } = useInfiniteQuery({
-    queryKey: ['saved-posts', selectedBooru, selectedTags, selectedFilters],
+    queryKey: ['saved-posts', selectedBooru, selectedTags, selectedFilters, savedPostList.value.length],
     queryFn: fetchPosts,
     initialPageParam: selectedPage.value,
     getNextPageParam: (lastPage, allPages, lastPageParam) => {
@@ -169,6 +191,84 @@
     //   return firstPageParam - 1
     // }
   })
+
+  const allRows = computed<IPost[]>(() => {
+    if (!data.value) {
+      return []
+    }
+
+    // Flatten pages, but add `current_page` to each post
+    return data.value.pages.flatMap((page) => {
+      return page.data.map((post) => {
+        return {
+          ...post,
+          current_page: page.meta.current_page
+        }
+      })
+    })
+  })
+
+  const parentRef = ref<HTMLElement | null>(null)
+  const parentOffsetRef = ref(0)
+
+  onMounted(() => {
+    parentOffsetRef.value = parentRef.value?.offsetTop ?? 0
+  })
+
+  const rowVirtualizerOptions = computed(() => {
+    return {
+      debug: false,
+
+      count: hasNextPage ? allRows.value.length + 1 : allRows.value.length,
+
+      estimateSize: () => 600,
+
+      scrollMargin: parentOffsetRef.value,
+
+      overscan: 5,
+
+      gap: 16
+    }
+  })
+
+  const rowVirtualizer = useWindowVirtualizer(rowVirtualizerOptions)
+
+  const virtualRows = computed(() => rowVirtualizer.value.getVirtualItems())
+
+  const totalSize = computed(() => rowVirtualizer.value.getTotalSize())
+
+  // Next page loader
+  watchEffect(() => {
+    // Skip if there is no data
+    if (!data.value) {
+      return
+    }
+
+    const [lastItem] = [...virtualRows.value].reverse()
+
+    if (!lastItem) {
+      return
+    }
+
+    // IF last item is the last item in the list
+    // AND there is a next page
+    // AND it's not fetching
+    // THEN load next page
+    if (lastItem.index >= allRows.value.length - 1 && hasNextPage.value && !isFetchingNextPage.value) {
+      onLoadNextPostPage()
+    }
+  })
+
+  // FIX: Remove when this issue is fixed - https://github.com/TanStack/virtual/issues/619#issuecomment-1969516091
+  const measureElement = (el) => {
+    nextTick(() => {
+      if (!el) {
+        return
+      }
+
+      rowVirtualizer.value.measureElement(el)
+    })
+  }
 
   /**
    * `undefined` values mean that they will be replaced by default values
@@ -232,6 +332,11 @@
 
   async function onPageIndicatorClick() {
     const pagePrompt = prompt('To which page do you want to go?')
+
+    if (pagePrompt == null) {
+      return
+    }
+
     const page = parseInt(pagePrompt, 10)
 
     if (isNaN(page)) {
@@ -318,7 +423,7 @@
   })
 
   definePageMeta({
-    middleware: 'auth',
+    middleware: ['auth', 'auth-check'],
 
     validate: async (route) => {
       const page = route.query.page
@@ -411,67 +516,67 @@
       <!-- Posts -->
       <div
         v-else
-        class="space-y-4"
+        ref="parentRef"
       >
-        <!-- TODO: Previous page -->
+        <!-- TODO: Previous pagination -->
 
-        <!-- Pages -->
+        <!-- TODO: Animate adding posts https://vuejs.org/guide/built-ins/transition-group.html#staggering-list-transitions -->
+
         <div
-          v-for="(postsPage, postsPageIndex) in data.pages"
-          class="space-y-4"
-          data-testid="posts-list"
+          :style="{
+            height: `${totalSize}px`,
+            width: '100%',
+            position: 'relative'
+          }"
         >
-          <!-- Page indicator -->
-          <button
-            v-if="postsPageIndex !== 0"
-            class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util mx-auto block rounded-md px-1.5 py-1 text-sm"
-            type="button"
-            @click="onPageIndicatorClick"
+          <!-- TODO: Remove `space-y-4` when virtualizer gap works -->
+          <ol
+            :style="{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              transform: `translateY(${virtualRows[0]?.start - rowVirtualizer.options.scrollMargin ?? 0}px)`
+            }"
+            class="space-y-4"
           >
-            &dharl; Page {{ postsPage.meta.current_page }} &dharr;
-          </button>
-
-          <!-- TODO: Animate adding posts https://vuejs.org/guide/built-ins/transition-group.html#staggering-list-transitions -->
-          <ol class="space-y-4">
-            <template
-              v-for="(post, postIndex) in postsPage.data"
-              :key="`${post.original_domain}-${post.original_id}`"
+            <li
+              v-for="virtualRow in virtualRows"
+              :key="virtualRow.key"
+              :data-index="virtualRow.index"
+              :ref="measureElement"
             >
-              <li :data-testid="`${post.original_domain}-${post.original_id}`">
-                <Post
-                  :domain="post.original_domain"
-                  :post="post.data"
+              <!-- Next Pagination -->
+              <div
+                v-if="virtualRow.index > allRows.length - 1"
+                class="flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-base-content"
+              >
+                <span class="block rounded-md px-1.5 py-1">
+                  {{ hasNextPage ? 'Loading more...' : 'Nothing more to load' }}
+                </span>
+              </div>
+
+              <!-- Content -->
+              <template v-else>
+                <!-- Page indicator -->
+                <button
+                  v-if="virtualRow.index !== 0 && virtualRow.index % userSettings.postsPerPage === 0"
+                  class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util mx-auto mb-4 block rounded-md px-1.5 py-1 text-sm"
+                  type="button"
+                  @click="onPageIndicatorClick"
+                >
+                  &dharl; Page {{ allRows[virtualRow.index].current_page }} &dharl;
+                </button>
+
+                <!-- Post -->
+                <PostComponent
+                  :post="allRows[virtualRow.index]"
                   :selected-tags="selectedTags"
                 />
-              </li>
-            </template>
+              </template>
+            </li>
           </ol>
         </div>
-
-        <!-- Next Pagination -->
-        <PostsPagination @load-next-page="onLoadNextPostPage">
-          <span
-            v-if="isFetchingNextPage"
-            class="block rounded-md px-1.5 py-1"
-          >
-            Loading more&hellip;
-          </span>
-
-          <button
-            v-else-if="hasNextPage"
-            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-md px-1.5 py-1"
-            @click="onLoadNextPostPage"
-          >
-            Scroll here or click me to load more
-          </button>
-
-          <span
-            v-else
-            class="block rounded-md px-1.5 py-1"
-          >
-            Nothing more to load
-          </span>
-        </PostsPagination>
       </div>
     </section>
   </main>

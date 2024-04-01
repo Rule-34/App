@@ -11,8 +11,8 @@
           return false
         }
 
-        // Show after 2 times
-        if (timesTheAppHasBeenOpened.value < 2) {
+        // Show after 3 times
+        if (timesTheAppHasBeenOpened.value < 3) {
           return false
         }
 
@@ -33,8 +33,8 @@
           return false
         }
 
-        // Show after 5 times
-        if (timesTheAppHasBeenOpened.value < 5) {
+        // Show after 6 times
+        if (timesTheAppHasBeenOpened.value < 6) {
           return false
         }
 

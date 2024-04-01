@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import {vIntersectionObserver} from '@vueuse/components'
-import type {IPost} from 'assets/js/post'
+  import { vIntersectionObserver } from '@vueuse/components'
+  import type { IPost } from 'assets/js/post'
 
-const { isPremium } = useUserData()
+  const { isPremium } = useUserData()
 
   export interface PostMediaProps {
     mediaSrc: string | null
@@ -15,7 +15,10 @@ const { isPremium } = useUserData()
 
   const props = defineProps<PostMediaProps>()
 
+  const mediaElement = ref<HTMLElement | null>(null)
+
   const localSrc = shallowRef(props.mediaSrc)
+  const localPosterSrc = shallowRef(props.mediaPosterSrc)
 
   const mediaHasLoaded = ref(false)
 
@@ -27,25 +30,49 @@ const { isPremium } = useUserData()
 
   const triedToLoadWithProxy = shallowRef(false)
 
+  onBeforeUnmount(() => {
+    let finalMediaElement = mediaElement.value
+
+    if (finalMediaElement == null) {
+      return
+    }
+
+    // If its a Vue component, get the actual element
+    if ('$el' in finalMediaElement) {
+      finalMediaElement = finalMediaElement.$el as HTMLElement
+    }
+
+    // If its a picture, get the img element
+    if (finalMediaElement.tagName === 'PICTURE') {
+      finalMediaElement = finalMediaElement.querySelector('img') as HTMLImageElement
+    }
+
+    // Cancel any pending media requests - https://stackoverflow.com/a/28060352
+    finalMediaElement.removeAttribute('src')
+
+    if (isVideo.value) {
+      finalMediaElement.load()
+    }
+  })
+
   function onMediaError(event: Event) {
     if (hasError.value) {
       return
     }
 
-    // Skip if no src
-    // @see onIntersectionObserver method
     if (!event.target?.src) {
       return
     }
 
-    if (!triedToLoadWithProxy.value && isPremium.value) {
+    // Proxy videos, images are already proxied
+    if (isVideo.value && !triedToLoadWithProxy.value && isPremium.value) {
       triedToLoadWithProxy.value = true
 
       const { proxiedUrl } = useProxyHelper(localSrc.value)
+      const { proxiedUrl: proxiedPosterUrl } = useProxyHelper(props.mediaPosterSrc)
 
       localSrc.value = proxiedUrl.value
-      // Fix: Inmediately set src to proxied url, since onIntersectionObserver method will not be called until out of viewport
-      event.target.src = proxiedUrl.value
+      localPosterSrc.value = proxiedPosterUrl.value
 
       return
     }
@@ -59,45 +86,14 @@ const { isPremium } = useUserData()
     error.value = null
 
     // Reload media
-    localSrc.value = ''
     localSrc.value = props.mediaSrc
-  }
-
-  function onMediaIntersectionObserver(entries: IntersectionObserverEntry[]) {
-
-    // Skip on fullscreen
-    if (document.fullscreenElement) {
-      return
-    }
-
-    // Smallest video & image possible - https://stackoverflow.com/a/36610159/11398632
-    const smallestImage =
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII='
-    const smallestVideo =
-      'data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAAAtJtZGF0AAACrQYF//+p3EXpvebZSLeWLNgg2SPu73gyNjQgLSBjb3JlIDE2NCByMzEwMyA5NDFjYWU2IC0gSC4yNjQvTVBFRy00IEFWQyBjb2RlYyAtIENvcHlsZWZ0IDIwMDMtMjAyMiAtIGh0dHA6Ly93d3cudmlkZW9sYW4ub3JnL3gyNjQuaHRtbCAtIG9wdGlvbnM6IGNhYmFjPTEgcmVmPTMgZGVibG9jaz0xOjA6MCBhbmFseXNlPTB4MzoweDExMyBtZT1oZXggc3VibWU9NyBwc3k9MSBwc3lfcmQ9MS4wMDowLjAwIG1peGVkX3JlZj0xIG1lX3JhbmdlPTE2IGNocm9tYV9tZT0xIHRyZWxsaXM9MSA4eDhkY3Q9MSBjcW09MCBkZWFkem9uZT0yMSwxMSBmYXN0X3Bza2lwPTEgY2hyb21hX3FwX29mZnNldD0tMiB0aHJlYWRzPTEgbG9va2FoZWFkX3RocmVhZHM9MSBzbGljZWRfdGhyZWFkcz0wIG5yPTAgZGVjaW1hdGU9MSBpbnRlcmxhY2VkPTAgYmx1cmF5X2NvbXBhdD0wIGNvbnN0cmFpbmVkX2ludHJhPTAgYmZyYW1lcz0zIGJfcHlyYW1pZD0yIGJfYWRhcHQ9MSBiX2JpYXM9MCBkaXJlY3Q9MSB3ZWlnaHRiPTEgb3Blbl9nb3A9MCB3ZWlnaHRwPTIga2V5aW50PTI1MCBrZXlpbnRfbWluPTEgc2NlbmVjdXQ9NDAgaW50cmFfcmVmcmVzaD0wIHJjX2xvb2thaGVhZD00MCByYz1jcmYgbWJ0cmVlPTEgY3JmPTIzLjAgcWNvbXA9MC42MCBxcG1pbj0wIHFwbWF4PTY5IHFwc3RlcD00IGlwX3JhdGlvPTEuNDAgYXE9MToxLjAwAIAAAAAVZYiEABX//vfJ78Cm6/X2tb9gAQD5AAADBm1vb3YAAABsbXZoZAAAAADgYBEw4GARMAAAA+gAAAPoAAEAAAEAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAIwdHJhawAAAFx0a2hkAAAAA+BgETDgYBEwAAAAAQAAAAAAAAPoAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAUAAAAFAAAAAAAJGVkdHMAAAAcZWxzdAAAAAAAAAABAAAD6AAAAAAAAQAAAAABqG1kaWEAAAAgbWRoZAAAAADgYBEw4GARMAAAQAAAAEAAVcQAAAAAAC1oZGxyAAAAAAAAAAB2aWRlAAAAAAAAAAAAAAAAVmlkZW9IYW5kbGVyAAAAAVNtaW5mAAAAFHZtaGQAAAABAAAAAAAAAAAAAAAkZGluZgAAABxkcmVmAAAAAAAAAAEAAAAMdXJsIAAAAAEAAAETc3RibAAAAK9zdHNkAAAAAAAAAAEAAACfYXZjMQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAUABQASAAAAEgAAAAAAAAAARVMYXZjNTkuNTYuMTAwIGxpYngyNjQAAAAAAAAAAAAAABj//wAAADVhdmNDAWQAM//hABhnZAAzrNlJeeeEAAADAAQAAAMACDxgxlgBAAZo6+PLIsD9+PgAAAAAFGJ0cnQAAAAAAAAWUAAAFlAAAAAYc3R0cwAAAAAAAAABAAAAAQAAQAAAAAAcc3RzYwAAAAAAAAABAAAAAQAAAAEAAAABAAAAFHN0c3oAAAAAAAACygAAAAEAAAAUc3RjbwAAAAAAAAABAAAAMAAAAGJ1ZHRhAAAAWm1ldGEAAAAAAAAAIWhkbHIAAAAAAAAAAG1kaXJhcHBsAAAAAAAAAAAAAAAALWlsc3QAAAAlqXRvbwAAAB1kYXRhAAAAAQAAAABMYXZmNTkuMzUuMTAw'
-
-    const smallestMedia = isImage.value
-      ? //
-        smallestImage
-      : smallestVideo
-
-    const entry = entries[0]
-
-    const mediaElement = entry.target.children[0] as HTMLImageElement | HTMLVideoElement
-
-    const newSrc = entry.isIntersecting
-      ? //
-        (mediaElement.getAttribute('data-src') as string)
-      : smallestMedia
-
-    mediaElement.src = newSrc
+    localPosterSrc.value = props.mediaPosterSrc
   }
 
   /**
    * Stops videos when they are out of the viewport
    */
   function onVideoIntersectionObserver(entries: IntersectionObserverEntry[]) {
-
     // Skip on fullscreen
     if (document.fullscreenElement) {
       return
@@ -170,39 +166,60 @@ const { isPremium } = useUserData()
     </template>
 
     <!-- Image -->
+    <!-- TODO: Fix very large images not being on screen so not loaded -->
     <div
       v-else-if="isImage"
-      v-intersection-observer="[onMediaIntersectionObserver, { rootMargin: '1200px' }]"
+      class="transition-opacity duration-700 ease-in-out"
+      :class="mediaHasLoaded ? 'opacity-100' : 'opacity-0'"
     >
-      <!-- TODO: Fix very large images not being on screen so not loaded -->
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
-      <img
-        :alt="mediaAlt"
-        :class="[mediaHasLoaded ? 'opacity-100' : 'opacity-0']"
-        :data-src="localSrc"
-        :height="mediaSrcHeight"
-        :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
-        :width="mediaSrcWidth"
-        class="h-auto w-full rounded-t-md transition-opacity duration-700 ease-in-out"
-        decoding="async"
-        loading="lazy"
-        @error="onMediaError"
-        @load="onMediaLoad"
-      />
+      <template v-if="!isPremium">
+        <img
+          ref="mediaElement"
+          :alt="mediaAlt"
+          :src="localSrc"
+          :height="mediaSrcHeight"
+          :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
+          :width="mediaSrcWidth"
+          class="h-auto w-full rounded-t-md"
+          decoding="async"
+          loading="lazy"
+          @load="onMediaLoad"
+          @error="onMediaError"
+        />
+      </template>
+
+      <!-- Premium users get their media proxied and optimized -->
+      <template v-else>
+        <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
+        <NuxtPicture
+          ref="mediaElement"
+          :alt="mediaAlt"
+          :src="localSrc"
+          :height="mediaSrcHeight"
+          :width="mediaSrcWidth"
+          decoding="async"
+          loading="lazy"
+          :imgAttrs="{
+            class: 'h-auto w-full rounded-t-md',
+            style: 'aspect-ratio: ' + mediaSrcWidth + '/' + mediaSrcHeight
+          }"
+          @load="onMediaLoad"
+          @error="onMediaError"
+        />
+      </template>
     </div>
 
     <!-- Video -->
-    <div
-      v-else-if="isVideo"
-      v-intersection-observer="[onMediaIntersectionObserver, { rootMargin: '1200px' }]"
-    >
+    <div v-else-if="isVideo">
       <!-- TODO: Add load animation -->
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <video
+        ref="mediaElement"
         v-intersection-observer="[onVideoIntersectionObserver, { rootMargin: '100px' }]"
-        :data-src="localSrc"
+        :src="localSrc"
         :height="mediaSrcHeight"
-        :poster="mediaPosterSrc"
+        :poster="localPosterSrc"
         :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
         :width="mediaSrcWidth"
         class="h-auto w-full rounded-t-md"

@@ -1,6 +1,6 @@
 <script setup>
-  import { useScroll } from '@vueuse/core'
   import { ArrowUpIcon } from '@heroicons/vue/24/solid'
+  import { useScroll } from '@vueuse/core'
 
   const showScrollTopButton = ref(false)
 
@@ -30,7 +30,7 @@
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport to="#teleports">
     <transition
       enter-active-class="transition ease-out duration-200"
       enter-from-class="transform opacity-0 scale-95"

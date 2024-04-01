@@ -1,5 +1,5 @@
 <script setup>
-  const config = useRuntimeConfig()
+  const route = useRoute()
 
   useHead({
     htmlAttrs: {
@@ -7,7 +7,7 @@
     },
 
     titleTemplate: (titleChunk) => {
-      return titleChunk ? `${titleChunk} | Rule 34 App` : 'Rule 34 App'
+      return titleChunk ? `${titleChunk} | R34.app` : 'Rule 34 App | R34.app'
     },
 
     link: [
@@ -44,25 +44,33 @@
     themeColor: '#000',
 
     monetization: '$ilp.uphold.com/Hf3zAn3pQ7fD'
+
+    // ogImage: () => ({
+    //   url:
+    //     'https://screenshot.akbal.dev/v1/capture?width=1200&height=630&url=' +
+    //     encodeURIComponent('https://r34.app' + route.fullPath),
+    //   width: 1200,
+    //   height: 630
+    // })
   })
 
-  useSchemaOrg([
-    defineWebSite({
-      name: 'Rule 34 App'
-    }),
-    defineWebPage(),
-    defineOrganization({
-      name: 'Rule 34 App',
-      logo: '/icon.svg',
-      sameAs: [
-        'https://rule34.app',
-        'https://twitter.com/Rule34App',
-        'https://twitter.com/Rule34App',
-        'https://discord.gg/fUhYHSZ',
-        'https://github.com/Rule-34/App'
-      ]
-    })
-  ])
+  // useSchemaOrg([
+  //   defineWebSite({
+  //     name: 'Rule 34 App'
+  //   }),
+  //   defineWebPage(),
+  //   defineOrganization({
+  //     name: 'Rule 34 App',
+  //     logo: '/icon.svg',
+  //     sameAs: [
+  //       'https://rule34.app',
+  //       'https://twitter.com/Rule34App',
+  //       'https://twitter.com/Rule34App',
+  //       'https://discord.gg/fUhYHSZ',
+  //       'https://github.com/Rule-34/App'
+  //     ]
+  //   })
+  // ])
 </script>
 
 <template>

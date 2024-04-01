@@ -1,14 +1,14 @@
 <script lang="ts" setup>
   import { ArrowLeftOnRectangleIcon } from '@heroicons/vue/24/solid'
-  import { doesBrowserHaveOldVersionState } from '~/assets/js/BackupHelper'
   import { toast } from 'vue-sonner'
 
   const { user, logout: _signOut } = useAuth()
+  const { $pocketBase } = useNuxtApp()
 
   const links = [
     {
       name: 'Saved posts',
-      description: 'Save posts to your device and enjoy them later',
+      description: 'Save posts and enjoy them later',
       href: '/premium/saved-posts/r34.app'
     },
     {
@@ -28,17 +28,29 @@
     }
   ]
 
-  if (doesBrowserHaveOldVersionState()) {
-    links.unshift({
-      name: '⚠ Migrate old data ⚠',
-      description: 'Migrate your old saved posts, tag collections, etc',
-      href: '/premium/migrate-old-data'
-    })
-  }
-
   async function signOut() {
-    await _signOut()
-    // window.location.reload()
+    // Log out from pocketbase
+    $pocketBase.authStore.clear()
+
+    let authCookie
+    authCookie = useCookie('auth.strategy')
+    authCookie.value = undefined
+
+    authCookie = useCookie('auth._token.local')
+    authCookie.value = undefined
+    authCookie = useCookie('auth._token_expiration.local')
+    authCookie.value = undefined
+
+    authCookie = useCookie('auth._refresh_token.local')
+    authCookie.value = undefined
+    authCookie = useCookie('auth._refresh_token_expiration.local')
+    authCookie.value = undefined
+
+    // Log out from API
+    // TODO: Restore when it works
+    // await _signOut()
+
+    window.location.reload()
   }
 
   onNuxtReady(() => {
@@ -54,7 +66,9 @@
     title: 'Premium dashboard'
   })
 
-  definePageMeta({ middleware: 'auth' })
+  definePageMeta({
+    middleware: ['auth', 'auth-check']
+  })
 </script>
 
 <template>
@@ -117,6 +131,7 @@
         <NuxtLink
           class="hover:hover-bg-util focus-visible:focus-outline-util block max-w-[95%] rounded-md border border-base-0/20 px-4 py-3"
           href="https://forms.gle/9FAZRegzJ8VAzT5F9"
+          rel="nofollow noopener noreferrer"
           target="_blank"
         >
           <h2 class="text-lg font-bold tracking-tight text-base-content-highlight">Feedback</h2>
@@ -131,6 +146,7 @@
       <NuxtLink
         class="hover:hover-text-util focus-visible:focus-outline-util underline"
         href="https://app.gumroad.com/library?query=Rule+34+App"
+        rel="nofollow noopener noreferrer"
         target="_blank"
       >
         Manage subscription

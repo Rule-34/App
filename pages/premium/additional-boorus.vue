@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-  import { moveArrayElement, useSortable } from '@vueuse/integrations/useSortable'
   import { ArrowUturnLeftIcon, Bars2Icon, PencilIcon, PlusIcon } from '@heroicons/vue/20/solid'
-  import Slideover from '~/components/layout/Slideover.vue'
-  import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+  import { ExclamationCircleIcon } from '@heroicons/vue/24/solid'
+  import { moveArrayElement, useSortable } from '@vueuse/integrations/useSortable'
   import type { Ref } from 'vue'
   import { toast } from 'vue-sonner'
-  import { ExclamationCircleIcon } from '@heroicons/vue/24/solid'
+  import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+  import Slideover from '~/components/layout/Slideover.vue'
 
   const { userBooruList, resetUserBooruList } = useBooruList()
 
@@ -175,7 +175,9 @@
     title: 'Additional Boorus'
   })
 
-  definePageMeta({ middleware: 'auth' })
+  definePageMeta({
+    middleware: ['auth', 'auth-check']
+  })
 </script>
 
 <template>

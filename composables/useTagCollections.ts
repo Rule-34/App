@@ -1,6 +1,6 @@
-import { useStorage, useToggle } from '@vueuse/core'
-import { TagCollection } from '~/assets/js/tagCollection.dto'
+import { useStorage } from '@vueuse/core'
 import { cloneDeep } from 'lodash-es'
+import { TagCollection } from '~/assets/js/tagCollection.dto'
 
 const defaultTagCollections: TagCollection[] = [
   {
@@ -48,8 +48,6 @@ const defaultTagCollections: TagCollection[] = [
   }
 ]
 
-const [value, toggle] = useToggle(false)
-
 let tagCollections = ref<TagCollection[]>(cloneDeep(defaultTagCollections))
 
 if (process.client) {
@@ -60,9 +58,6 @@ if (process.client) {
 
 export function useTagCollections() {
   return {
-    isActive: value,
-    toggleIsActive: toggle,
-
     tagCollections,
 
     resetTagCollections() {

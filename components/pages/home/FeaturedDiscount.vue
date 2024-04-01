@@ -39,6 +39,7 @@
     <NuxtLink
       class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util bg-util mt-4 block w-full rounded-lg p-2 text-center font-bold tracking-tight text-base-content-highlight ring-2 ring-base-0/20"
       target="_blank"
+      rel='nofollow noopener noreferrer'
       to="https://alejandroakbal.gumroad.com/l/Rule34App/LONELY_VALENTINES"
     >
       Get 20% Off

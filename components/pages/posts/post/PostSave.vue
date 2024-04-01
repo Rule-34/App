@@ -1,73 +1,57 @@
 <script lang="ts" setup>
   import { BookmarkIcon } from '@heroicons/vue/24/outline'
   import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/vue/24/solid'
-  import { db } from '~/store/SavedPosts'
-  import { liveQuery } from 'dexie'
-  import { useObservable } from '@vueuse/rxjs'
-  import type { IPost } from '~/assets/js/post'
   import { toast } from 'vue-sonner'
+  import { PocketbasePost } from '~/assets/js/pocketbase.dto'
+  import type { IPost } from '~/assets/js/post.dto'
 
   // TODO: Load this component in <suspense>
 
   const props = defineProps<{
-    domain: string
-
     post: IPost
   }>()
 
-  const { tutorialPostSave } = useAppStatistics()
+  const { $pocketBase } = useNuxtApp()
 
-  const postCount = useObservable(
-    //
-    liveQuery(() =>
-      // TODO: .counts() and .exists() are not optimized - https://github.com/dexie/Dexie.js/releases/tag/v4.0.1-alpha.17
-      db.posts.where('[original_domain+original_id]').equals([props.domain, props.post.id]).toArray()
-    ),
-    {
-      initialValue: []
-    }
-  )
+  const { savedPostList } = usePocketbase()
+  const { isPremium } = useUserData()
 
-  const isPostSaved = computed(() => postCount.value.length > 0)
+  const postInSavedList = computed(() => {
+    return savedPostList.value.find(
+      (savedPost) => savedPost.original_id === props.post.id && savedPost.original_domain === props.post.domain
+    )
+  })
+
+  const isPostSaved = computed(() => {
+    return !!postInSavedList.value
+  })
 
   async function onClick() {
-    if (!tutorialPostSave.value) {
-      toast.info('Saved post!', {
-        description: 'Save posts to your device and enjoy them later',
+    if (!isPremium.value) {
+      toast.info('Premium feature', {
+        description: 'Save posts and enjoy them later',
         duration: 10000
       })
-
-      tutorialPostSave.value = true
+      return
     }
 
-    switch (isPostSaved.value) {
-      case false: {
-        await savePost()
-        break
-      }
-
-      case true: {
-        await deletePost()
-        break
-      }
-
-      default:
-        throw new Error('Unknown isPostSaved value: ' + isPostSaved.value)
+    if (isPostSaved.value) {
+      await deletePost()
+    }
+    //
+    else {
+      await savePost()
     }
   }
 
   async function savePost() {
-    await db.posts.put({
-      original_id: toRaw(props.post.id),
-
-      original_domain: props.domain,
-
-      data: toRaw(props.post)
-    })
+    await $pocketBase
+      .collection('posts')
+      .create(PocketbasePost.fromPost(props.post, $pocketBase.authStore.baseModel.id))
   }
 
   async function deletePost() {
-    await db.posts.where('[original_domain+original_id]').equals([props.domain, props.post.id]).delete()
+    await $pocketBase.collection('posts').delete(postInSavedList.value.id)
   }
 </script>
 
@@ -80,7 +64,7 @@
     <span class="sr-only"> Save post </span>
 
     <SolidBookmarkIcon
-      v-if="isPostSaved > 0"
+      v-if="isPostSaved"
       class="group-hover:hover-text-util h-5 w-5 text-base-content-highlight"
     />
     <BookmarkIcon
