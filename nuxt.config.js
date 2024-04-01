@@ -1,4 +1,4 @@
-import {sentryVitePlugin} from '@sentry/vite-plugin'
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 export default defineNuxtConfig({
   ssr: true,
@@ -9,7 +9,6 @@ export default defineNuxtConfig({
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
    */
   routeRules: {
-
     // TODO: prerender / but not if there are query params
     '/': {},
 
@@ -18,20 +17,20 @@ export default defineNuxtConfig({
     },
 
     // Static pages are prerendered
-    '/other-sites': {prerender: true},
-    '/legal': {prerender: true},
+    '/other-sites': { prerender: true },
+    '/legal': { prerender: true },
 
-    '/settings': {ssr: false},
+    '/settings': { ssr: false },
 
-    '/premium': {prerender: true},
-    '/premium/sign-in': {prerender: true},
+    '/premium': { prerender: true },
+    '/premium/sign-in': { prerender: true },
 
     // All premium pages are client-side rendered
-    '/premium/dashboard': {ssr: false},
-    '/premium/saved-posts': {ssr: false},
-    '/premium/tag-collections': {ssr: false},
-    '/premium/additional-boorus': {ssr: false},
-    '/premium/backup': {ssr: false},
+    '/premium/dashboard': { ssr: false },
+    '/premium/saved-posts': { ssr: false },
+    '/premium/tag-collections': { ssr: false },
+    '/premium/additional-boorus': { ssr: false },
+    '/premium/backup': { ssr: false },
 
     // Public assets
     '/img/**': {
@@ -95,7 +94,7 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css', '~/assets/css/cookieconsent.css'],
 
-  components: [{path: '~/components', pathPrefix: false}],
+  components: [{ path: '~/components', pathPrefix: false }],
 
   site: {
     url: `https://${process.env.APP_DOMAIN}`
@@ -103,7 +102,7 @@ export default defineNuxtConfig({
 
   modules: [
     '@nuxtjs/sitemap',
-    // 'nuxt-schema-org',
+    'nuxt-schema-org',
 
     '@vite-pwa/nuxt',
 
@@ -162,9 +161,9 @@ export default defineNuxtConfig({
           property: false
         },
         endpoints: {
-          login: {url: process.env.API_URL + '/auth/log-in', method: 'post'},
-          refresh: {url: process.env.API_URL + '/auth/refresh', method: 'post'},
-          user: {url: process.env.API_URL + '/auth/profile', method: 'get'},
+          login: { url: process.env.API_URL + '/auth/log-in', method: 'post' },
+          refresh: { url: process.env.API_URL + '/auth/refresh', method: 'post' },
+          user: { url: process.env.API_URL + '/auth/profile', method: 'get' },
           logout: false
         }
       }
