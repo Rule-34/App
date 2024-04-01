@@ -4,8 +4,8 @@
 
   interface ShareButtonProps {
     title: string
-    text: string
-    url: string
+    text?: string
+    url?: string
   }
 
   const props = defineProps<ShareButtonProps>()
@@ -16,12 +16,14 @@
       return
     }
 
+    const url = props.url ?? window.location.href
+
     let text =
       //
       props.title +
       '\n' +
       //
-      props.url +
+      url +
       '\n\n' +
       //
       props.text +
@@ -41,7 +43,7 @@
       await window.navigator.share({
         title: props.title,
         text: text,
-        url: props.url
+        url: url
       })
     } catch (error) {
       Sentry.captureException(error)
