@@ -9,7 +9,8 @@ export default defineNuxtConfig({
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
    */
   routeRules: {
-    '/': { prerender: true },
+    // '/': { prerender: true },
+    '/': { ssr: false },
 
     // 5 minutes
     '/posts/**': { swr: 60 * 5 },
