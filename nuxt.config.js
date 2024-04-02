@@ -12,7 +12,8 @@ export default defineNuxtConfig({
     // TODO: prerender / but not if there are query params
     '/': { swr: true },
 
-    '/posts/**': { swr: true },
+    // 5 minutes
+    '/posts/**': { swr: 60 * 5 },
 
     // Static pages are prerendered
     '/other-sites': { prerender: true },
