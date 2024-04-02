@@ -21,7 +21,8 @@
     "release:publish": "git push --follow-tags origin main",
     "____": "",
     "postinstall": "nuxt prepare",
-    "build": "nuxt build"
+    "build": "nuxt build",
+    "generate": "nuxt generate"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",
