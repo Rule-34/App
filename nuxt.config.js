@@ -9,8 +9,7 @@ export default defineNuxtConfig({
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
    */
   routeRules: {
-    // TODO: prerender / but not if there are query params
-    '/': { swr: true },
+    '/': { prerender: true },
 
     // 5 minutes
     '/posts/**': { swr: 60 * 5 },
