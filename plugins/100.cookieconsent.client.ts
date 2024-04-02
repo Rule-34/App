@@ -1,4 +1,4 @@
-import type { CookieConsentConfig } from 'vanilla-cookieconsent'
+import type {CookieConsentConfig} from 'vanilla-cookieconsent'
 import * as CookieConsent from 'vanilla-cookieconsent'
 import 'vanilla-cookieconsent/dist/cookieconsent.css'
 
@@ -27,15 +27,14 @@ const config: CookieConsentConfig = {
   // disablePageInteraction: true,
 
   categories: {
-
     necessary: {
       readOnly: true,
 
       services: {
         auth: {
-          label: 'Authentication',
-        },
-      },
+          label: 'Authentication'
+        }
+      }
     },
 
     analytics: {
@@ -45,12 +44,11 @@ const config: CookieConsentConfig = {
           cookies: [
             {
               name: /^(_pk_)/
-            },
+            }
           ],
 
           onAccept: () => {
             // console.debug('Matomo accepted')
-
             // Reload the page to load the Matomo script
             // window.location.reload()
           },
@@ -76,8 +74,9 @@ const config: CookieConsentConfig = {
           revisionMessage: undefined,
 
           title: 'I want to create the best experience for you',
-          description: 'This website uses <strong>cookies</strong> to ensure I can craft the best experience. ' +
-            'I only use essential cookies required for the site to function, and third-party analytics cookies to' +
+          description:
+            'This website uses <strong>cookies</strong> to ensure I can craft the best experience. ' +
+            'I only use essential cookies required for the site to function, and first-party analytics cookies to' +
             ' understand the audience better. ' +
             'You can manage cookies anytime by visiting the “Consent Preferences Center” section in ' +
             'the “Legal” page.',
@@ -107,7 +106,8 @@ const config: CookieConsentConfig = {
             },
             {
               title: 'Essential Cookies <span class="pm__badge">Always Enabled</span>',
-              description: 'Necessary for the website to function and cannot be switched off in our systems as they enable core website functionality',
+              description:
+                'Necessary for the website to function and cannot be switched off in our systems as they enable core website functionality',
               linkedCategory: 'necessary'
             },
             {
@@ -117,13 +117,14 @@ const config: CookieConsentConfig = {
             },
             {
               title: 'More information',
-              description: 'For any query in relation to the policy on cookies and your choices, please read the <a class="cc__link" href="/legal">legal page</a> and its linked pages.'
+              description:
+                'For any query in relation to the policy on cookies and your choices, please read the <a class="cc__link" href="/legal">legal page</a> and its linked pages.'
             }
           ]
         }
       }
     }
-  },
+  }
 }
 
 /**
@@ -136,7 +137,7 @@ export default defineNuxtPlugin(async () => {
     parallel: true,
 
     provide: {
-      CC: CookieConsent,
-    },
+      CC: CookieConsent
+    }
   }
 })
