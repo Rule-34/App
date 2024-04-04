@@ -35,7 +35,7 @@
     "@nuxt/fonts": "^0.6.1",
     "@nuxt/image": "^1.5.0",
     "@nuxtjs/sitemap": "^5.1.2",
-    "@sentry/vite-plugin": "^2.16.0",
+    "@sentry/vite-plugin": "^2.16.1",
     "@sentry/vue": "^7.109.0",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.12",
@@ -58,7 +58,7 @@
     "rxjs": "^7.8.1",
     "sortablejs": "^1.15.2",
     "tailwindcss": "^3.4.3",
-    "vanilla-cookieconsent": "^3.0.0",
+    "vanilla-cookieconsent": "^3.0.1",
     "vue-safe-teleport": "^0.1.2",
     "vue-sonner": "^1.1.2"
   },
