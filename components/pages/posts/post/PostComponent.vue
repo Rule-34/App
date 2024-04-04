@@ -85,6 +85,19 @@
     />
 
     <figcaption>
+      <!-- Post description -->
+      <span class="sr-only">
+        {{ post.media_type }} #{{ post.id }}
+        <!--        -->
+        from {{ post.domain }}
+        <!--        -->
+        with a score of {{ post.score }},
+        <!--        -->
+        {{ post.rating }} rating,
+        <!--        -->
+        tagged with {{ Object.values(post.tags).flat().join(', ') }}
+      </span>
+
       <!-- Actions -->
       <div class="flex items-center p-2">
         <PostSave
