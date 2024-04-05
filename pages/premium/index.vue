@@ -7,7 +7,7 @@
     { title: 'No ads', additionalInfo: undefined },
     { title: 'Faster image loading', additionalInfo: '#image-proxy' },
     {
-      title: 'Access ' + (completeBooruList.length - defaultBooruList.length) + ' additional Boorus (websites)',
+      title: 'Access ' + (completeBooruList.length - defaultBooruList.length) + ' additional websites',
       additionalInfo: '#additional-boorus'
     },
     { title: 'Save posts, synchronized on all devices', additionalInfo: '#save-posts' },
@@ -15,16 +15,28 @@
     { title: 'Find original source (artist) of posts', additionalInfo: '#find-source' },
     { title: 'Integrated history to resume browsing', additionalInfo: '#history' },
     { title: 'Create tag collections (blocklist)', additionalInfo: '#tag-collections' },
-    { title: 'Proxy to bypass Boorus blocked in your country', additionalInfo: '#proxy' },
+    { title: 'Proxy to bypass website blocked in your country', additionalInfo: '#proxy' },
     { title: 'Use on any device or browser', additionalInfo: undefined },
+    { title: 'Cancel anytime', additionalInfo: undefined },
     { title: '“Premium” Discord role', additionalInfo: undefined },
     { title: 'Support the development', additionalInfo: '#support-development' }
   ]
 
-  useSeoMeta({
-    title: 'Premium',
+  useHead(
+    {
+      script: [
+        {
+          src: 'https://gumroad.com/js/gumroad.js'
+        }
+      ]
+    },
+    {
+      mode: 'client'
+    }
+  )
 
-    description: 'Enhance your experience with no ads and exclusive features'
+  useSeoMeta({
+    title: 'Premium'
   })
 </script>
 
@@ -43,73 +55,66 @@
 
   <main class="flex-1">
     <!-- Pricing -->
-    <section class="isolate overflow-hidden">
+    <div class="isolate overflow-hidden">
       <div class="flow-root overflow-hidden py-6 sm:py-16 lg:pb-0">
         <div class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
+          <!--          -->
+
           <!-- Header -->
           <div class="relative z-10">
             <!-- Title -->
-            <h1 class="mx-auto max-w-4xl text-center text-4xl font-bold tracking-tight text-base-content-highlight">
-              Premium
+            <h1 class="mx-auto max-w-4xl text-center text-2xl font-bold tracking-tight text-base-content-highlight">
+              Browse Ad-free & Save Posts
             </h1>
 
-            <p class="mx-auto mt-4 max-w-2xl text-center text-base leading-8 lg:mt-3">
-              Enhance your experience with no ads and exclusive features
+            <p class="mx-auto mt-3 max-w-3xl text-center text-lg font-medium leading-8 lg:mt-3">
+              Focus on Hentai without distractions, save posts to view them later, faster image loading and much more!
             </p>
+          </div>
+
+          <!-- CTA -->
+          <div class="mt-10 flex justify-center">
+            <NuxtLink
+              class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto inline-flex items-center justify-center rounded-lg px-6 py-2 text-lg font-medium text-base-content-highlight ring-1 ring-base-0/20"
+              href="#pricing"
+            >
+              Get Premium
+            </NuxtLink>
           </div>
 
           <!-- Rating -->
           <NuxtLink
-            class="focus-visible:focus-outline-util hover:hover-text-util mt-12 flex flex-col items-center justify-center gap-2.5 pb-4"
+            class="focus-visible:focus-outline-util hover:hover-text-util mt-10 flex flex-col items-center justify-center gap-2.5 pb-4"
             href="https://gum.co/Rule34App#Ratings"
-            target="_blank"
             rel="nofollow noopener noreferrer"
+            target="_blank"
           >
             <div class="flex items-center">
               <StarIcon
-                v-for="rating in [0, 1, 2, 3]"
+                v-for="rating in [0, 1, 2, 3, 4]"
                 :key="rating"
                 aria-hidden="true"
                 class="h-5 w-5 flex-shrink-0 text-base-content-highlight"
               />
-
-              <!-- Fix for half star https://github.com/tailwindlabs/heroicons/discussions/424 -->
-              <svg
-                aria-hidden="true"
-                class="h-5 w-5 flex-shrink-0"
-                fill="none"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <defs>
-                  <linearGradient id="something">
-                    <stop
-                      offset="70%"
-                      stop-color="#e5e7eb"
-                    />
-                    <stop
-                      offset="70%"
-                      stop-color="#9ca3af"
-                    />
-                  </linearGradient>
-                </defs>
-                <path
-                  clip-rule="evenodd"
-                  d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
-                  fill="url(#something)"
-                  fill-rule="evenodd"
-                />
-              </svg>
             </div>
 
-            <span> Trusted by 1449+ customers</span>
+            <!-- TODO: Images of user profiles -->
+            <span> Loved by 1524+ customers</span>
           </NuxtLink>
 
-          <!-- TODO: Images of user profiles -->
           <!-- TODO: Testimonials -->
+          <section></section>
 
-          <!-- Body -->
-          <div class="relative mx-auto my-10 grid max-w-md grid-cols-1 gap-y-8 lg:mx-0 lg:max-w-none">
+          <!-- Benefits -->
+          <section>
+            <!-- TODO: GIFs -->
+          </section>
+
+          <!-- Subscription -->
+          <section
+            id="pricing"
+            class="relative mx-auto my-10 grid max-w-md grid-cols-1 gap-y-8 lg:mx-0 lg:max-w-none"
+          >
             <!-- Background -->
             <svg
               aria-hidden="true"
@@ -140,10 +145,10 @@
                 <!-- -->
 
                 <div>
-                  <h2 class="text-2xl font-bold tracking-wide text-base-content-highlight">Premium</h2>
+                  <h3 class="text-2xl font-bold tracking-wide text-base-content-highlight">Premium</h3>
 
                   <p class="mt-2 text-sm leading-7">
-                    Get access to {{ completeBooruList.length - defaultBooruList.length }} additional Boorus, and
+                    Get access to {{ completeBooruList.length - defaultBooruList.length }} additional websites, and
                     {{ mainFeatures.length }} exclusive features!
                   </p>
                 </div>
@@ -203,22 +208,22 @@
                       60% Off
                     </span>
 
-                    in certain countries ✨
+                    in certain countries 👇
                   </div>
 
-                  <NuxtLink
+                  <a
                     aria-describedby="premium-features"
                     class="focus-visible:focus-outline-util hover:hover-text-util rounded-md bg-primary-700 px-3 py-2 text-center text-sm font-semibold leading-6 text-base-content-highlight hover:bg-primary-600 focus-visible:ring-offset-2"
                     href="https://gum.co/Rule34App"
+                    onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click'])"
                     rel="nofollow noopener noreferrer"
                     target="_blank"
-                    onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click'])"
                   >
                     Get Premium
-                  </NuxtLink>
+                  </a>
 
                   <p class="text-center text-xs leading-6">
-                    Cancel anytime, subscription managed by
+                    Subscription managed by
 
                     <NuxtLink
                       class="focus-visible:focus-outline-util hover:hover-text-util"
@@ -235,17 +240,12 @@
                 </div>
               </div>
             </div>
-          </div>
+          </section>
+
+          <!-- FAQ -->
+          <section></section>
         </div>
       </div>
-    </section>
-
-    <!-- Feature description -->
-    <section>
-      <!-- TODO: GIFs -->
-    </section>
-
-    <!-- Contact -->
-    <section></section>
+    </div>
   </main>
 </template>
