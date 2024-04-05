@@ -18,7 +18,7 @@
     },
     {
       name: 'Additional Boorus',
-      description: 'Browse posts from other Boorus',
+      description: 'Browse posts from additional websites',
       href: '/premium/additional-boorus'
     },
     {
@@ -143,6 +143,8 @@
 
     <!-- Manage subscription -->
     <section class="absolute inset-x-0 bottom-0 w-full p-4 text-center">
+      <!-- TODO: Contact support -->
+
       <NuxtLink
         class="hover:hover-text-util focus-visible:focus-outline-util underline"
         href="https://app.gumroad.com/library?query=Rule+34+App"

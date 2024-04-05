@@ -55,6 +55,7 @@
     const route = useRoute()
     const message = route.query.message
 
+    // TODO: Add action to contact support
     if (message) {
       toast.info(message)
     }
