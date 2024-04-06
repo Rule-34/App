@@ -6,6 +6,7 @@
 
   export interface PostMediaProps {
     mediaSrc: string | null
+    altMediaSrc: string | null
     mediaSrcHeight: number | null
     mediaSrcWidth: number | null
     mediaPosterSrc: string | null
@@ -29,6 +30,7 @@
   const isVideo = computed(() => props.mediaType === 'video')
 
   const triedToLoadWithProxy = shallowRef(false)
+  const triedToLoadAltMedia = shallowRef(false)
 
   onBeforeUnmount(() => {
     let finalMediaElement = mediaElement.value
@@ -51,6 +53,9 @@
     finalMediaElement.removeAttribute('src')
 
     if (isVideo.value) {
+      // Remove sources
+      finalMediaElement.innerHTML = ''
+
       finalMediaElement.load()
     }
   })
@@ -64,6 +69,19 @@
       return
     }
 
+    if (isVideo.value && !triedToLoadAltMedia.value) {
+      triedToLoadAltMedia.value = true
+
+      localSrc.value = props.altMediaSrc
+
+      if (!event.target.paused) {
+        nextTick(() => {
+          mediaElement.value?.play()
+        })
+      }
+      return
+    }
+
     // Proxy videos, images are already proxied
     if (isVideo.value && !triedToLoadWithProxy.value && isPremium.value) {
       triedToLoadWithProxy.value = true
@@ -74,6 +92,11 @@
       localSrc.value = proxiedUrl.value
       localPosterSrc.value = proxiedPosterUrl.value
 
+      if (!event.target.paused) {
+        nextTick(() => {
+          mediaElement.value?.play()
+        })
+      }
       return
     }
 
@@ -169,23 +192,23 @@
     <!-- TODO: Fix very large images not being on screen so not loaded -->
     <div
       v-else-if="isImage"
-      class="transition-opacity duration-700 ease-in-out"
       :class="mediaHasLoaded ? 'opacity-100' : 'opacity-0'"
+      class="transition-opacity duration-700 ease-in-out"
     >
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <template v-if="!isPremium">
         <img
           ref="mediaElement"
           :alt="mediaAlt"
-          :src="localSrc"
           :height="mediaSrcHeight"
+          :src="localSrc"
           :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
           :width="mediaSrcWidth"
           class="h-auto w-full rounded-t-md"
           decoding="async"
           loading="lazy"
-          @load="onMediaLoad"
           @error="onMediaError"
+          @load="onMediaLoad"
         />
       </template>
 
@@ -195,17 +218,17 @@
         <NuxtPicture
           ref="mediaElement"
           :alt="mediaAlt"
-          :src="localSrc"
           :height="mediaSrcHeight"
-          :width="mediaSrcWidth"
-          decoding="async"
-          loading="lazy"
           :imgAttrs="{
             class: 'h-auto w-full rounded-t-md',
             style: 'aspect-ratio: ' + mediaSrcWidth + '/' + mediaSrcHeight
           }"
-          @load="onMediaLoad"
+          :src="localSrc"
+          :width="mediaSrcWidth"
+          decoding="async"
+          loading="lazy"
           @error="onMediaError"
+          @load="onMediaLoad"
         />
       </template>
     </div>
@@ -217,9 +240,9 @@
       <video
         ref="mediaElement"
         v-intersection-observer="[onVideoIntersectionObserver, { rootMargin: '100px' }]"
-        :src="localSrc"
         :height="mediaSrcHeight"
         :poster="localPosterSrc"
+        :src="localSrc"
         :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
         :width="mediaSrcWidth"
         class="h-auto w-full rounded-t-md"

@@ -28,6 +28,7 @@
   const mediaFile = computed(() => {
     const data = {
       file: null,
+      altFile: null,
       width: null,
       height: null,
       posterFile: null,
@@ -53,6 +54,7 @@
 
       case 'video': {
         data.file = props.post.high_res_file.url
+        data.altFile = props.post.low_res_file.url
         data.width = props.post.high_res_file.width
         data.height = props.post.high_res_file.height
 
@@ -76,6 +78,7 @@
 <template>
   <figure class="rounded-md border border-base-0/20">
     <PostMedia
+      :altMediaSrc="mediaFile.altFile"
       :mediaAlt="mediaFile.alt"
       :mediaPosterSrc="mediaFile.posterFile"
       :mediaSrc="mediaFile.file"
