@@ -57,9 +57,9 @@ export default defineNuxtConfig({
       // Put the Sentry vite plugin after all other plugins
       sentryVitePlugin({
         authToken: process.env.SENTRY_AUTH_TOKEN,
-        org: 'alejandro-akbal',
-        project: 'app',
-        url: 'https://glitchtip.akbal.dev/'
+        org: process.env.SENTRY_ORG,
+        project: process.env.SENTRY_PROJECT,
+        url: process.env.SENTRY_URL
       })
     ]
   },
