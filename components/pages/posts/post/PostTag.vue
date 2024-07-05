@@ -32,6 +32,7 @@
   >
     <!-- TODO: Fix placement to be auto -->
     <Float
+      vue-transition
       :offset="6"
       enter="transition ease-out duration-100"
       enter-from="transform opacity-0 scale-95"
