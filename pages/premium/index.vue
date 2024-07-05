@@ -22,19 +22,6 @@
     { title: 'Support the development', additionalInfo: '#support-development' }
   ]
 
-  useHead(
-    {
-      script: [
-        {
-          src: 'https://gumroad.com/js/gumroad.js'
-        }
-      ]
-    },
-    {
-      mode: 'client'
-    }
-  )
-
   useSeoMeta({
     title: 'Premium'
   })
@@ -86,7 +73,7 @@
           <NuxtLink
             class="focus-visible:focus-outline-util hover:hover-text-util mt-10 flex flex-col items-center justify-center gap-2.5 pb-4"
             href="https://gum.co/Rule34App#Ratings"
-            rel="nofollow noopener noreferrer"
+            rel="nofollow noopener"
             target="_blank"
           >
             <div class="flex items-center">
@@ -99,7 +86,7 @@
             </div>
 
             <!-- TODO: Images of user profiles -->
-            <span> Loved by 1524+ customers</span>
+            <span> Loved by 2018+ customers</span>
           </NuxtLink>
 
           <!-- TODO: Testimonials -->
@@ -199,24 +186,12 @@
                     </div>
                   </div>
 
-                  <div class="mb-1 text-center text-sm leading-6">
-                    ✨ Cant afford it? Get up to
-
-                    <span
-                      class="inline-flex items-center gap-x-1.5 rounded-full bg-primary-400/20 px-2 py-0.5 font-medium leading-normal text-primary-400"
-                    >
-                      60% Off
-                    </span>
-
-                    in certain countries 👇
-                  </div>
-
                   <a
                     aria-describedby="premium-features"
                     class="focus-visible:focus-outline-util hover:hover-text-util rounded-md bg-primary-700 px-3 py-2 text-center text-sm font-semibold leading-6 text-base-content-highlight hover:bg-primary-600 focus-visible:ring-offset-2"
-                    href="https://gum.co/Rule34App"
+                    href="https://gum.co/Rule34App?wanted=true"
                     onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click'])"
-                    rel="nofollow noopener noreferrer"
+                    rel="nofollow noopener"
                     target="_blank"
                   >
                     Get Premium
@@ -228,7 +203,7 @@
                     <NuxtLink
                       class="focus-visible:focus-outline-util hover:hover-text-util"
                       href="https://gumroad.com/discover"
-                      rel="nofollow noopener noreferrer"
+                      rel="nofollow noopener"
                       target="_blank"
                     >
                       Gumroad
