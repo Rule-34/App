@@ -44,6 +44,7 @@
       leave-to="opacity-0"
       placement="bottom-start"
       tailwindcss-origin-class
+      vue-transition
     >
       <!-- Select -->
       <HeadlessListboxButton

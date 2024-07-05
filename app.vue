@@ -91,6 +91,8 @@
     :throttle="250"
   />
 
+  <NuxtRouteAnnouncer />
+
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>

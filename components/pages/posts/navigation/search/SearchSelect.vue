@@ -36,6 +36,7 @@
       placement="bottom-end"
       strategy="fixed"
       tailwindcss-origin-class
+      vue-transition
     >
       <!-- Button -->
       <div class="inline-flex divide-x divide-base-0/20 rounded-md ring-1 ring-base-0/20">
