@@ -30,8 +30,6 @@
     "@headlessui/tailwindcss": "^0.2.1",
     "@headlessui/vue": "^1.7.22",
     "@heroicons/vue": "^2.1.4",
-    "@nuxt-alt/auth": "^3.1.7",
-    "@nuxt-alt/http": "^1.7.10",
     "@nuxt/fonts": "^0.7.1",
     "@nuxt/image": "^1.7.0",
     "@nuxtjs/sitemap": "^5.3.2",

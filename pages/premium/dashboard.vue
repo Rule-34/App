@@ -2,8 +2,9 @@
   import { ArrowLeftOnRectangleIcon } from '@heroicons/vue/24/solid'
   import { toast } from 'vue-sonner'
 
-  const { user, logout: _signOut } = useAuth()
   const { $pocketBase } = useNuxtApp()
+
+  const { email, isPremium } = useUserData()
 
   const links = [
     {
@@ -32,25 +33,7 @@
     // Log out from pocketbase
     $pocketBase.authStore.clear()
 
-    let authCookie
-    authCookie = useCookie('auth.strategy')
-    authCookie.value = undefined
-
-    authCookie = useCookie('auth._token.local')
-    authCookie.value = undefined
-    authCookie = useCookie('auth._token_expiration.local')
-    authCookie.value = undefined
-
-    authCookie = useCookie('auth._refresh_token.local')
-    authCookie.value = undefined
-    authCookie = useCookie('auth._refresh_token_expiration.local')
-    authCookie.value = undefined
-
-    // Log out from API
-    // TODO: Restore when it works
-    // await _signOut()
-
-    window.location.reload()
+    window.location.href = '/premium/sign-in?message=Signed out successfully'
   }
 
   onNuxtReady(() => {
@@ -67,7 +50,7 @@
   })
 
   definePageMeta({
-    middleware: ['auth', 'auth-check']
+    middleware: ['auth']
   })
 </script>
 
@@ -100,11 +83,13 @@
           <span
             class="inline-flex items-center rounded-md bg-primary-400/10 px-2 py-1 text-sm font-medium text-primary-400 ring-1 ring-inset ring-primary-400/20"
           >
-            {{ user.email }}
+            {{ email }}
           </span>
         </p>
       </template>
     </PageHeader>
+
+    <!-- TODO: Show if the user is premium -->
 
     <!-- Links -->
     <section>

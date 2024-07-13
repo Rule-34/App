@@ -3,7 +3,7 @@
   import { moveArrayElement, useSortable } from '@vueuse/integrations/useSortable'
   import type { ComputedRef, Ref } from 'vue'
   import { toast } from 'vue-sonner'
-  import { TagCollection, type ITagCollection } from '~/assets/js/tagCollection.dto'
+  import { type ITagCollection, TagCollection } from '~/assets/js/tagCollection.dto'
   import Slideover from '~/components/layout/Slideover.vue'
   import { useTagCollections } from '~/composables/useTagCollections'
 
@@ -143,7 +143,7 @@
   })
 
   definePageMeta({
-    middleware: ['auth', 'auth-check']
+    middleware: ['auth']
   })
 </script>
 
@@ -237,7 +237,7 @@
     :is-open="dialogOpen"
     @close="dialogOpen = false"
   >
-    <template #title> {{ dialogMode === 'create' ? 'Create' : 'Edit' }} tag collection </template>
+    <template #title> {{ dialogMode === 'create' ? 'Create' : 'Edit' }} tag collection</template>
 
     <div class="divide-y divide-gray-200 px-4 sm:px-6">
       <!-- Form -->

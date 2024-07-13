@@ -423,7 +423,7 @@
   })
 
   definePageMeta({
-    middleware: ['auth', 'auth-check'],
+    middleware: ['auth'],
 
     validate: async (route) => {
       const page = route.query.page
@@ -543,8 +543,8 @@
             <li
               v-for="virtualRow in virtualRows"
               :key="virtualRow.key"
-              :data-index="virtualRow.index"
               :ref="measureElement"
+              :data-index="virtualRow.index"
             >
               <!-- Next Pagination -->
               <div

@@ -101,7 +101,6 @@ export default defineNuxtConfig({
 
     '@nuxt/fonts',
 
-    '@nuxt-alt/auth'
   ],
 
   image: {
@@ -118,41 +117,6 @@ export default defineNuxtConfig({
     },
 
     format: ['avif', 'webp']
-  },
-
-  /** @type {import('@nuxt-alt/auth').ModuleOptions} */
-  auth: {
-    redirect: {
-      login: '/premium/sign-in',
-      logout: '/premium',
-      home: '/premium/dashboard'
-    },
-
-    strategies: {
-      local: {
-        ssr: false,
-        scheme: 'refresh',
-        token: {
-          property: 'access_token',
-          maxAge: 60 * 60, // 60 minutes
-          global: false
-        },
-        refreshToken: {
-          property: 'refresh_token',
-          data: 'refresh_token',
-          maxAge: 60 * 60 * 24 * 90 // 90 days
-        },
-        user: {
-          property: false
-        },
-        endpoints: {
-          login: { url: process.env.API_URL + '/auth/log-in', method: 'post' },
-          refresh: { url: process.env.API_URL + '/auth/refresh', method: 'post' },
-          user: { url: process.env.API_URL + '/auth/profile', method: 'get' },
-          logout: false
-        }
-      }
-    }
   },
 
   /** @type {import('@vite-pwa/nuxt').ModuleOptions} */
