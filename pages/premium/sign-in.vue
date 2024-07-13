@@ -111,6 +111,16 @@
             </div>
 
             <div class="mt-2">
+              <!-- Fake username for password autofill -->
+              <input
+                id="username"
+                autocomplete="username"
+                name="username"
+                style="display: none"
+                type="text"
+                value="_"
+              />
+
               <input
                 id="license"
                 v-model.trim="formData.password"
