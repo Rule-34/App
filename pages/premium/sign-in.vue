@@ -8,7 +8,7 @@
     password: ''
   })
 
-  async function onSubmit(event: Event) {
+  async function onSubmit() {
     const password = formData.value.password
 
     if (!password) {
@@ -20,7 +20,7 @@
       const authData = await $pocketBase.collection('users').authWithPassword(password, password)
     } catch (error) {
       if (error instanceof ClientResponseError) {
-        toast.error(`Error: "${error.message}", contact support if it keeps happening`)
+        toast.error(error.message)
         return
       }
     }
@@ -31,10 +31,17 @@
   onNuxtReady(() => {
     const route = useRoute()
     const message = route.query.message
+    const license = route.query.license
 
     // TODO: Add action to contact support
     if (message) {
       toast.info(message)
+    }
+
+    if (license) {
+      formData.value.password = license
+
+      onSubmit()
     }
   })
 

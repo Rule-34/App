@@ -11,7 +11,7 @@ export default defineNuxtPlugin(async ({ app }) => {
     secure: true,
     sameSite: 'strict',
     httpOnly: false,
-    maxAge: 60 * 60 * 24 * 90 // 90 days
+    maxAge: 60 * 60 * 24 * 90 // 90 days // Same as PocketBase config?
   })
 
   // load the store data from the cookie value
