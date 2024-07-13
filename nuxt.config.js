@@ -101,6 +101,7 @@ export default defineNuxtConfig({
 
     '@nuxt/fonts',
 
+    '@nuxt/scripts'
   ],
 
   image: {

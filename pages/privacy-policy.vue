@@ -120,8 +120,8 @@ useSeoMeta({
         <p><strong>Sensitive Information.</strong> We do not process sensitive information.</p>
         <p><strong>Payment Data.</strong> We may collect data necessary to process your payment if you make purchases,
           such as your payment instrument number, and the security code associated with your payment instrument. All
-          payment data is stored by Gumroad. You may find their privacy notice link(s) here: <a
-            href="https://gumroad.com/privacy" target="_blank">https://gumroad.com/privacy</a>.
+          payment data is stored by Sellix. You may find their privacy notice link(s) here: <a
+            href="https://sellix.io/privacy" target="_blank">https://sellix.io/privacy</a>.
         </p>
         <div>All personal information that you provide to us must be true, complete, and accurate, and you must notify
           us of any changes to such personal information.
