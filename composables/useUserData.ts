@@ -1,26 +1,27 @@
 export function useUserData() {
-  const { loggedIn, user } = useAuth()
+  const { $pocketBase } = useNuxtApp()
+  const { active, email } = usePocketbase()
 
   return {
     isPremium: computed(
       //
       () => {
-        if (!loggedIn) {
+        if (!$pocketBase.authStore.isValid) {
           return false
         }
 
-        return user.is_subscription_valid
+        return active.value
       }
     ),
 
     email: computed(
       //
       () => {
-        if (!loggedIn) {
+        if (!$pocketBase.authStore.isValid) {
           return null
         }
 
-        return user.email
+        return email.value
       }
     )
   }

@@ -176,7 +176,7 @@
   })
 
   definePageMeta({
-    middleware: ['auth', 'auth-check']
+    middleware: ['auth']
   })
 </script>
 

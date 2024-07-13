@@ -1,9 +1,7 @@
 <script lang="ts" setup>
-  import { FetchError } from 'ofetch'
   import { ClientResponseError } from 'pocketbase'
   import { toast } from 'vue-sonner'
 
-  const $auth = useAuth()
   const { $pocketBase } = useNuxtApp()
 
   const formData = shallowRef({
@@ -17,7 +15,7 @@
       return
     }
 
-    // First, authenticate to pocketbase
+    // Authenticate to pocketbase
     try {
       const authData = await $pocketBase.collection('users').authWithPassword(password, password)
     } catch (error) {
@@ -25,27 +23,6 @@
         toast.error(`Error: "${error.message}", contact support if it keeps happening`)
         return
       }
-    }
-
-    // Then, authenticate to API
-    try {
-      await $auth.loginWith('local', {
-        body: {
-          username: '_',
-          password
-        }
-      })
-
-      // Handle errors
-    } catch (error) {
-      if (error instanceof FetchError) {
-        if (error.status === 401) {
-          toast.error(`Error: "${error.message}"`)
-          return
-        }
-      }
-
-      toast.error(error.message)
     }
 
     await navigateTo('/premium/dashboard')
@@ -68,7 +45,7 @@
   })
 
   definePageMeta({
-    middleware: 'auth'
+    middleware: 'auth-redirect-if-logged-in'
   })
 </script>
 

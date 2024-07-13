@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ArrowDownTrayIcon, ArrowUturnLeftIcon } from '@heroicons/vue/24/solid'
   import { toast } from 'vue-sonner'
-  import { createBackupState, tryToRestoreV2OrV3Backup, type IBackupState } from '~/assets/js/BackupHelper'
+  import { createBackupState, type IBackupState, tryToRestoreV2OrV3Backup } from '~/assets/js/BackupHelper'
   import PageHeader from '~/components/layout/PageHeader.vue'
 
   const fileInputElement = ref<HTMLInputElement | null>(null)
@@ -80,7 +80,7 @@
   })
 
   definePageMeta({
-    middleware: ['auth', 'auth-check']
+    middleware: ['auth']
   })
 </script>
 

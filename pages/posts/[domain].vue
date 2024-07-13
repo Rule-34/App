@@ -18,7 +18,6 @@
   const router = useRouter()
   const route = useRoute()
   const config = useRuntimeConfig()
-  const $authState = useState('auth-internal')
 
   const { toggle: toggleSearchMenu } = useSearchMenu()
   const userSettings = useUserSettings()
@@ -96,10 +95,6 @@
   async function fetchPosts(options: any) {
     if (options.pageParam) {
       return $fetch<IPostPage>(options.pageParam, {
-        headers: {
-          Authorization: $authState.value['_token.local'] ?? undefined
-        },
-
         retry: false
       })
     }
@@ -122,10 +117,6 @@
         rating: selectedFilters.value.rating,
         order: selectedFilters.value.sort,
         score: selectedFilters.value.score
-      },
-
-      headers: {
-        Authorization: $authState.value['_token.local'] ?? undefined
       },
 
       retry: false
@@ -327,10 +318,6 @@
         tag,
         order: 'count',
         limit: 20
-      },
-
-      headers: {
-        Authorization: $authState.value['_token.local'] ?? undefined
       }
     })
       //
