@@ -22,6 +22,29 @@
     { title: 'Support the development', additionalInfo: '#support-development' }
   ]
 
+  useHead(
+    {
+      link: [
+        {
+          rel: 'stylesheet',
+          href: 'https://cdn.sellix.io/static/css/embed.css'
+        }
+      ]
+    },
+    {
+      mode: 'client'
+    }
+  )
+  const { $script } = useScript('https://cdn.sellix.io/static/js/embed.js', {
+    use() {
+      return window.initializeSellixEmbed
+    }
+  })
+
+  $script.then((initializeSellixEmbed) => {
+    initializeSellixEmbed()
+  })
+
   useSeoMeta({
     title: 'Premium'
   })
@@ -173,9 +196,7 @@
                 </div>
 
                 <!-- CTA -->
-                <div
-                  class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between lg:flex-col lg:items-stretch"
-                >
+                <div class="flex flex-col gap-6 lg:flex-col lg:items-stretch">
                   <!-- Price -->
                   <div class="mt-10 flex items-center justify-center gap-x-4">
                     <p class="text-4xl font-bold tracking-tight text-base-content-highlight">€7</p>
@@ -186,27 +207,25 @@
                     </div>
                   </div>
 
-                  <a
+                  <button
                     aria-describedby="premium-features"
                     class="focus-visible:focus-outline-util hover:hover-text-util rounded-md bg-primary-700 px-3 py-2 text-center text-sm font-semibold leading-6 text-base-content-highlight hover:bg-primary-600 focus-visible:ring-offset-2"
-                    href="https://gum.co/Rule34App?wanted=true"
-                    onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click'])"
-                    rel="nofollow noopener"
-                    target="_blank"
+                    data-sellix-product="668f8f7c7c348"
+                    type="submit"
                   >
                     Get Premium
-                  </a>
+                  </button>
 
                   <p class="text-center text-xs leading-6">
                     Subscription managed by
 
                     <NuxtLink
                       class="focus-visible:focus-outline-util hover:hover-text-util"
-                      href="https://gumroad.com/discover"
+                      href="https://sellix.io"
                       rel="nofollow noopener"
                       target="_blank"
                     >
-                      Gumroad
+                      Sellix
                     </NuxtLink>
 
                     <br />
