@@ -9,7 +9,7 @@
     </h2>
 
     <p class="mx-auto mt-2 max-w-xl text-center text-lg leading-8">
-      Get notified about new features and future giveaways by subscribing to our newsletter
+      Join our newsletter to participate in our monthly giveaways!
     </p>
 
     <form
