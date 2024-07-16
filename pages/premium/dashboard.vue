@@ -56,17 +56,19 @@
 
 <template>
   <!-- Sign out -->
-  <SafeTeleport to="#navbar-actions">
-    <button
-      class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
-      type="button"
-      @click="signOut"
-    >
-      <span class="sr-only">Sign out</span>
+  <ClientOnly>
+    <Teleport to="#navbar-actions">
+      <button
+        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
+        type="button"
+        @click="signOut"
+      >
+        <span class="sr-only">Sign out</span>
 
-      <ArrowLeftOnRectangleIcon class="h-6 w-6 text-base-content-highlight" />
-    </button>
-  </SafeTeleport>
+        <ArrowLeftOnRectangleIcon class="h-6 w-6 text-base-content-highlight" />
+      </button>
+    </Teleport>
+  </ClientOnly>
 
   <main class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
     <!-- -->

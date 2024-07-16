@@ -1,67 +1,69 @@
 <script lang="ts" setup>
-  import { CheckIcon, StarIcon } from '@heroicons/vue/20/solid'
-  import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
-  import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+import {CheckIcon, StarIcon} from '@heroicons/vue/20/solid'
+import {ArrowRightOnRectangleIcon} from '@heroicons/vue/24/solid'
+import {completeBooruList, defaultBooruList} from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 
-  const mainFeatures = [
-    { title: 'No ads', additionalInfo: undefined },
-    { title: 'Faster image loading', additionalInfo: '#image-proxy' },
-    {
-      title: 'Access ' + (completeBooruList.length - defaultBooruList.length) + ' additional websites',
-      additionalInfo: '#additional-boorus'
-    },
-    { title: 'Save posts, synchronized on all devices', additionalInfo: '#save-posts' },
-    { title: 'Download posts with one click', additionalInfo: '#download-posts' },
-    { title: 'Find original source (artist) of posts', additionalInfo: '#find-source' },
-    { title: 'Integrated history to resume browsing', additionalInfo: '#history' },
-    { title: 'Create tag collections (blocklist)', additionalInfo: '#tag-collections' },
-    { title: 'Proxy to bypass website blocked in your country', additionalInfo: '#proxy' },
-    { title: 'Use on any device or browser', additionalInfo: undefined },
-    { title: 'Cancel anytime', additionalInfo: undefined },
-    { title: '“Premium” Discord role', additionalInfo: undefined },
-    { title: 'Support the development', additionalInfo: '#support-development' }
-  ]
+const mainFeatures = [
+  {title: 'No ads', additionalInfo: undefined},
+  {title: 'Faster image loading', additionalInfo: '#image-proxy'},
+  {
+    title: 'Access ' + (completeBooruList.length - defaultBooruList.length) + ' additional websites',
+    additionalInfo: '#additional-boorus'
+  },
+  {title: 'Save posts, synchronized on all devices', additionalInfo: '#save-posts'},
+  {title: 'Download posts with one click', additionalInfo: '#download-posts'},
+  {title: 'Find original source (artist) of posts', additionalInfo: '#find-source'},
+  {title: 'Integrated history to resume browsing', additionalInfo: '#history'},
+  {title: 'Create tag collections (blocklist)', additionalInfo: '#tag-collections'},
+  {title: 'Proxy to bypass website blocked in your country', additionalInfo: '#proxy'},
+  {title: 'Use on any device or browser', additionalInfo: undefined},
+  {title: 'Cancel anytime', additionalInfo: undefined},
+  {title: '“Premium” Discord role', additionalInfo: undefined},
+  {title: 'Support the development', additionalInfo: '#support-development'}
+]
 
-  useHead(
-    {
-      link: [
-        {
-          rel: 'stylesheet',
-          href: 'https://cdn.sellix.io/static/css/embed.css'
-        }
-      ]
-    },
-    {
-      mode: 'client'
-    }
-  )
-  const { $script } = useScript('https://cdn.sellix.io/static/js/embed.js', {
-    use() {
-      return window.initializeSellixEmbed
-    }
-  })
+useHead(
+  {
+    link: [
+      {
+        rel: 'stylesheet',
+        href: 'https://cdn.sellix.io/static/css/embed.css'
+      }
+    ]
+  },
+  {
+    mode: 'client'
+  }
+)
+const {$script} = useScript('https://cdn.sellix.io/static/js/embed.js', {
+  use() {
+    return window.initializeSellixEmbed
+  }
+})
 
-  $script.then((initializeSellixEmbed) => {
-    initializeSellixEmbed()
-  })
+$script.then((initializeSellixEmbed) => {
+  initializeSellixEmbed()
+})
 
-  useSeoMeta({
-    title: 'Premium'
-  })
+useSeoMeta({
+  title: 'Premium'
+})
 </script>
 
 <template>
   <!-- Sign in -->
-  <SafeTeleport to="#navbar-actions">
-    <NuxtLink
-      class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
-      href="/premium/sign-in"
-    >
-      <span class="sr-only">Sign in</span>
+  <ClientOnly>
+    <Teleport to="#navbar-actions">
+      <NuxtLink
+        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
+        href="/premium/sign-in"
+      >
+        <span class="sr-only">Sign in</span>
 
-      <ArrowRightOnRectangleIcon class="h-6 w-6 text-base-content-highlight" />
-    </NuxtLink>
-  </SafeTeleport>
+        <ArrowRightOnRectangleIcon class="h-6 w-6 text-base-content-highlight"/>
+      </NuxtLink>
+      </Teleport>
+  </ClientOnly>
 
   <main class="flex-1">
     <!-- Pricing -->
@@ -140,7 +142,7 @@
               />
               <defs>
                 <radialGradient id="d25c25d4-6d43-4bf9-b9ac-1842a30a4867">
-                  <stop stop-color="#7775D6" />
+                  <stop stop-color="#7775D6"/>
                   <stop
                     offset="1"
                     stop-color="#E935C1"
@@ -175,7 +177,7 @@
                       :key="mainFeature.title"
                       class="flex items-center gap-x-3 py-2"
                     >
-                      <CheckIcon class="h-6 w-5 flex-none text-primary-600" />
+                      <CheckIcon class="h-6 w-5 flex-none text-primary-600"/>
 
                       <span class="flex-auto text-sm leading-6 text-base-content-highlight">
                         {{ mainFeature.title }}
@@ -228,7 +230,7 @@
                       Sellix
                     </NuxtLink>
 
-                    <br />
+                    <br/>
                     Discreet credit card statement
                   </p>
                 </div>

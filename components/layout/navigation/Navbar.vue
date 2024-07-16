@@ -44,7 +44,7 @@
     <div
       :class="{
         '!fixed': isPostsPage,
-        'bg-base-1000/60 shadow-lg backdrop-blur-lg backdrop-saturate-200 md:border-b-2 ': isPostsPage && !isOnTop
+        'bg-base-1000/60 shadow-lg backdrop-blur-lg backdrop-saturate-200 md:border-b-2': isPostsPage && !isOnTop
       }"
       class="absolute inset-x-0 top-0 z-10 border-base-0/20 transition duration-200"
     >
@@ -98,7 +98,7 @@
         </div>
 
         <!-- Right side: Actions -->
-        <TeleportTarget
+        <div
           id="navbar-actions"
           class="absolute inset-y-0 right-0 flex flex-row-reverse items-center pr-2"
         />
