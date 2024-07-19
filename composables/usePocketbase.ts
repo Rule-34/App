@@ -2,7 +2,7 @@ import { useStorage } from '@vueuse/core'
 import type { IPocketbasePost } from '~/assets/js/pocketbase.dto'
 
 let email = ref<string | null>(null)
-let active = ref<boolean | null>(null)
+let subscription_expires_at = ref<string | null>(null)
 
 let savedPostList = ref<IPocketbasePost[]>([])
 
@@ -21,7 +21,7 @@ export function usePocketbase() {
     callOnce(async () => {
       //
       email.value = await $pocketBase.authStore.model.email
-      active.value = await $pocketBase.authStore.model.active
+      subscription_expires_at.value = await $pocketBase.authStore.model.subscription_expires_at
 
       savedPostList.value = await $pocketBase.collection('posts').getFullList<IPocketbasePost>({
         fields: 'id, original_id, original_domain',
@@ -56,7 +56,7 @@ export function usePocketbase() {
 
   return {
     email,
-    active,
+    subscription_expires_at,
 
     savedPostList
   }

@@ -1,6 +1,6 @@
 export function useUserData() {
   const { $pocketBase } = useNuxtApp()
-  const { active, email } = usePocketbase()
+  const { subscription_expires_at, email } = usePocketbase()
 
   return {
     isPremium: computed(
@@ -10,7 +10,11 @@ export function useUserData() {
           return false
         }
 
-        return active.value
+        if (!subscription_expires_at.value) {
+          return false
+        }
+        
+        return new Date(subscription_expires_at.value) > new Date()
       }
     ),
 
