@@ -14,7 +14,7 @@ export function useUserData() {
           return false
         }
         
-        return new Date(subscription_expires_at.value) > new Date()
+        return true
       }
     ),
 
