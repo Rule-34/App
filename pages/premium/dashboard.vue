@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ArrowLeftOnRectangleIcon } from '@heroicons/vue/24/solid'
+  import { ArrowLeftOnRectangleIcon, ExclamationTriangleIcon } from '@heroicons/vue/24/solid'
   import { toast } from 'vue-sonner'
 
   const { $pocketBase } = useNuxtApp()
@@ -85,13 +85,34 @@
           <span
             class="inline-flex items-center rounded-md bg-primary-400/10 px-2 py-1 text-sm font-medium text-primary-400 ring-1 ring-inset ring-primary-400/20"
           >
-            {{ email }}
+            {{ email || '?' }}
           </span>
         </p>
       </template>
     </PageHeader>
 
     <!-- TODO: Show if the user is premium -->
+    <div
+      v-if="!isPremium"
+      class="mt-4 text-pretty text-sm text-base-content-highlight"
+    >
+      <div class="mb-2 flex items-center gap-1">
+        <ExclamationTriangleIcon class="inline h-6 w-6 text-base-content-highlight" />
+
+        <h2 class="text-base underline">Your subscription has expired</h2>
+      </div>
+
+      <p>Your account is in a read-only state, you can still view your saved posts, but you can't create new ones</p>
+
+      <p>To continue enjoying Premium features, subscribe again</p>
+
+      <NuxtLink
+        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mt-4 flex items-center justify-center rounded-md px-3 py-1.5 text-base ring-1 ring-base-0/20 md:inline-flex"
+        href="/premium#pricing"
+      >
+        Subscribe now
+      </NuxtLink>
+    </div>
 
     <!-- Links -->
     <section>
@@ -116,7 +137,7 @@
         <!-- Feedback -->
         <!-- TODO: add more distinction -->
         <NuxtLink
-          class="hover:hover-bg-util focus-visible:focus-outline-util block max-w-[95%] rounded-md border border-base-0/20 px-4 py-3"
+          class="hover:hover-bg-util focus-visible:focus-outline-util block max-w-[95%] rounded-md rounded-br-3xl border border-base-0/20 px-4 py-3"
           href="https://forms.gle/9FAZRegzJ8VAzT5F9"
           rel="nofollow noopener noreferrer"
           target="_blank"
