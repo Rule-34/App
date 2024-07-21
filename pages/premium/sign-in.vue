@@ -39,6 +39,10 @@
     }
 
     if (license) {
+      if ($pocketBase.authStore.isValid) {
+        $pocketBase.authStore.clear()
+      }
+
       formData.value.password = license
 
       onSubmit()
