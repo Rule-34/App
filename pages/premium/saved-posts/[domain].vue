@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
+  import { Bars3BottomRightIcon, EyeIcon, PhotoIcon } from '@heroicons/vue/24/outline'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
   import type { IPost, IPostPage } from 'assets/js/post.dto'
@@ -13,11 +14,14 @@
   import Tag from '~/assets/js/tag.dto'
   import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
   import { useBooruList } from '~/composables/useBooruList'
+  import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
+  import type { Ref } from 'vue'
 
   const route = useRoute()
 
   const { $pocketBase } = useNuxtApp()
 
+  const { toggle: toggleSearchMenu } = useSearchMenu()
   const userSettings = useUserSettings()
   const { booruList: _availableBooruList } = useBooruList()
   const { savedPostList } = usePocketbase()
@@ -95,11 +99,51 @@
     // TODO: Validate
 
     return {
-      rating: route.query.filter?.rating ?? undefined,
+      type: route.query.filter?.type ?? undefined,
       sort: route.query.filter?.sort ?? undefined,
-      score: route.query.filter?.score ?? undefined
+      rating: route.query.filter?.rating ?? undefined
+      // score: route.query.filter?.score ?? undefined
     }
   })
+
+  const filterConfig = {
+    type: {
+      type: 'select' as const,
+      label: 'Type',
+      icon: PhotoIcon,
+      options: [
+        { label: 'Type', value: undefined },
+        { label: 'Image', value: 'image' },
+        { label: 'Video', value: 'video' }
+      ]
+    },
+    sort: {
+      type: 'select' as const,
+      label: 'Sort',
+      icon: Bars3BottomRightIcon,
+      options: [
+        { label: 'Sort', value: undefined },
+        { label: 'Score', value: 'score' },
+        { label: 'Score (asc)', value: 'score' },
+        { label: 'Created', value: '-created' },
+        { label: 'Created (asc)', value: 'created' },
+        { label: 'Random', value: '@random' }
+      ]
+    },
+    rating: {
+      type: 'select' as const,
+      label: 'Rating',
+      icon: EyeIcon,
+      options: [
+        { label: 'Rating', value: undefined },
+        { label: 'Safe', value: 'safe' },
+        { label: 'General', value: 'general' },
+        { label: 'Sensitive', value: 'sensitive' },
+        { label: 'Questionable', value: 'questionable' },
+        { label: 'Explicit', value: 'explicit' }
+      ]
+    }
+  }
 
   interface IPostPageFromPocketBase extends Omit<IPostPage, 'links'> {}
 
@@ -116,26 +160,40 @@
       })
     }
 
-    // TODO
-    // if (selectedTags.value.length > 0) {
-    // }
+    if (selectedFilters.value.type) {
+      if (pocketbaseRequestFilter !== '') {
+        pocketbaseRequestFilter += ' && '
+      }
+
+      pocketbaseRequestFilter += $pocketBase.filter('media_type = {:type}', {
+        type: selectedFilters.value.type
+      })
+    }
+
+    const pocketbaseRequestSort = selectedFilters.value.sort ?? '-created'
 
     if (selectedFilters.value.rating) {
+      if (pocketbaseRequestFilter !== '') {
+        pocketbaseRequestFilter += ' && '
+      }
+
       pocketbaseRequestFilter += $pocketBase.filter('rating = {:rating}', {
         rating: selectedFilters.value.rating
       })
     }
 
     // TODO
-    // if (selectedFilters.value.sort) {
+    // if (selectedTags.value.length > 0) {
     // }
 
-    // TODO
     // if (selectedFilters.value.score) {
+    //   pocketbaseRequestFilter += $pocketBase.filter('score = {:score}', {
+    //     score: selectedFilters.value.score
+    //   })
     // }
 
     const pocketBasePostsResponse = await $pocketBase.collection('posts').getList<IPocketbasePost>(page, PAGE_SIZE, {
-      sort: '-created',
+      sort: pocketbaseRequestSort,
       filter: pocketbaseRequestFilter,
       skipTotal: true
     })
@@ -315,8 +373,18 @@
     await navigateTo({ ...postsRoute }, { replace })
   }
 
+  const tagResults: Ref<Tag[]> = shallowRef([])
+
+  async function onSearchTag(tag: string) {
+    toast.error('Autocomplete not implemented')
+  }
+
   async function onDomainChange(domain: Domain) {
     await reflectChangesInUrl({ domain: domain.domain, page: null, tags: null, filters: null })
+  }
+
+  async function onSearchSubmit({ tags, filters }) {
+    await reflectChangesInUrl({ page: null, tags, filters })
   }
 
   async function onLoadNextPostPage() {
@@ -365,6 +433,11 @@
     }
 
     // Filters
+
+    if (selectedFilters.value.type) {
+      title += `, ${selectedFilters.value.type} only`
+    }
+
     if (selectedFilters.value.rating) {
       title += `, rated ${selectedFilters.value.rating}`
     }
@@ -446,7 +519,41 @@
 </script>
 
 <template>
-  <!--  TODO: Search -->
+  <!-- Search -->
+  <!-- TODO: Find a better way to embed search -->
+  <ClientOnly>
+    <Teleport to="#navbar-actions">
+      <button
+        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
+        type="button"
+        @click="toggleSearchMenu()"
+      >
+        <span class="sr-only">Search posts</span>
+
+        <MagnifyingGlassIcon class="h-6 w-6 text-base-content-highlight" />
+
+        <!-- Highlighter -->
+        <span
+          v-if="selectedTags.length || Object.values(selectedFilters).some((value) => value !== undefined)"
+          class="absolute right-0 top-0 flex h-2 w-2"
+        >
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-primary-600"></span>
+        </span>
+      </button>
+    </Teleport>
+  </ClientOnly>
+
+  <!-- Search menu -->
+  <SearchMenuWrapper>
+    <LazySearchMenu
+      :initial-selected-filters="selectedFilters"
+      :initial-selected-tags="selectedTags"
+      :filter-config="filterConfig"
+      :tag-results="tagResults"
+      @submit="onSearchSubmit"
+      @search-tag="onSearchTag"
+    />
+  </SearchMenuWrapper>
 
   <ScrollTopButton />
 

@@ -1,20 +1,23 @@
 <script lang="ts" setup>
   import { CheckIcon, ChevronUpDownIcon, MagnifyingGlassIcon, NoSymbolIcon, PlusIcon } from '@heroicons/vue/20/solid'
-  import { Bars3BottomRightIcon, EyeIcon, StarIcon, TagIcon } from '@heroicons/vue/24/outline'
+  import { TagIcon } from '@heroicons/vue/24/outline'
   import { watchDebounced } from '@vueuse/core'
   import { abbreviateNumber } from 'js-abbreviation-number'
   import { cloneDeep, unionWith } from 'lodash-es'
   import Tag from '~/assets/js/tag.dto'
+  import SearchSelect from './SearchSelect.vue'
 
   const props = defineProps<{
     initialSelectedTags: Tag[]
-
-    initialSelectedFilters: {
-      sort: string
-      rating: string
-      score: string
+    initialSelectedFilters: Record<string, any>
+    filterConfig: {
+      [key: string]: {
+        type: 'select'
+        label: string
+        options?: { label: string; value: any }[]
+        icon?: any
+      }
     }
-
     tagResults: Tag[]
   }>()
 
@@ -24,11 +27,7 @@
     submit: [
       payload: {
         tags: Tag[]
-        filters: {
-          sort: string
-          rating: string
-          score: string
-        }
+        filters: Record<string, any>
       }
     ]
   }>()
@@ -135,60 +134,30 @@
   function onSubmitted() {
     emit('submit', {
       tags: selectedTags.value,
-      filters: {
-        sort: selectedSortingOption.value.value,
-        rating: selectedRatingOption.value.value,
-        score: selectedScoreOption.value.value
-      }
+      filters: Object.fromEntries(
+        //
+        Object.entries(selectedFilters.value).map(([key, filter]) => [key, filter.value])
+      )
     })
   }
 
-  // Sorting
-  const sortingOptions = [
-    { title: 'Sort', value: undefined },
-    { title: 'Score', value: 'score' },
-    { title: 'Created', value: 'id' }
-  ]
-
-  const selectedSortingOption = shallowRef(
-    sortingOptions.find((option) => option.value === props.initialSelectedFilters.sort)
+  const selectedFilters = ref(
+    Object.fromEntries(
+      Object.entries(props.initialSelectedFilters).map(([initialFilterKey, initialFilterValue], index) => [
+        initialFilterKey,
+        props.filterConfig[initialFilterKey].options?.find((option) => option.value === initialFilterValue)
+      ])
+    )
   )
 
-  // Rating
-  const ratingOptions = [
-    { title: 'Rating', value: undefined },
-    { title: 'Safe', value: 'safe' },
-    { title: 'General', value: 'general' },
-    { title: 'Sensitive', value: 'sensitive' },
-    { title: 'Questionable', value: 'questionable' },
-    { title: 'Explicit', value: 'explicit' }
-  ]
-
-  const selectedRatingOption = shallowRef(
-    ratingOptions.find((option) => option.value === props.initialSelectedFilters.rating)
-  )
-
-  // Score
-  const scoreOptions = [
-    { title: 'Score', value: undefined },
-    { title: '>= 0', value: '>=0' },
-    { title: '>= 5', value: '>=5' },
-
-    { title: '>= 10', value: '>=10' },
-    { title: '>= 25', value: '>=25' },
-    { title: '>= 50', value: '>=50' },
-
-    { title: '>= 100', value: '>=100' },
-    { title: '>= 250', value: '>=250' },
-    { title: '>= 500', value: '>=500' },
-    { title: '>= 750', value: '>=750' },
-
-    { title: '>= 1000', value: '>=1000' }
-  ]
-
-  const selectedScoreOption = shallowRef(
-    scoreOptions.find((option) => option.value === props.initialSelectedFilters.score)
-  )
+  function getFilterComponent(type: string) {
+    switch (type) {
+      case 'select':
+        return SearchSelect
+      default:
+        throw new Error(`Unknown filter type: ${type}`)
+    }
+  }
 </script>
 
 <template>
@@ -316,26 +285,19 @@
         </BottomSheetWrapper>
       </div>
 
-      <!-- Sort Filter -->
-      <SearchSelect
-        v-model="selectedSortingOption"
-        :icon="Bars3BottomRightIcon"
-        :options="sortingOptions"
-      />
-
-      <!-- Rating filter -->
-      <SearchSelect
-        v-model="selectedRatingOption"
-        :icon="EyeIcon"
-        :options="ratingOptions"
-      />
-
-      <!-- Score filter -->
-      <SearchSelect
-        v-model="selectedScoreOption"
-        :icon="StarIcon"
-        :options="scoreOptions"
-      />
+      <!-- Dynamic Filters -->
+      <template
+        v-for="(filter, key, index) in props.filterConfig"
+        :key="key"
+      >
+        <component
+          :is="getFilterComponent(filter.type)"
+          v-model="selectedFilters[key]"
+          :label="filter.label"
+          :options="filter.options"
+          :icon="filter.icon"
+        />
+      </template>
     </section>
   </section>
 

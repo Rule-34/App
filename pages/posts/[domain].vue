@@ -1,591 +1,642 @@
 <script lang="ts" setup>
-import {MagnifyingGlassIcon} from '@heroicons/vue/24/outline'
-import {ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon} from '@heroicons/vue/24/solid'
-import * as Sentry from '@sentry/vue'
-import {useInfiniteQuery} from '@tanstack/vue-query'
-import {useWindowVirtualizer} from '@tanstack/vue-virtual'
-import {cloneDeep} from 'lodash-es'
-import {FetchError} from 'ofetch'
-import type {Ref} from 'vue'
-import {toast} from 'vue-sonner'
-import {generatePostsRoute} from '~/assets/js/RouterHelper'
-import {tagArrayToTitle} from '~/assets/js/SeoHelper'
-import type {Domain} from '~/assets/js/domain'
-import type {IPost, IPostPage} from '~/assets/js/post.dto'
-import Tag from '~/assets/js/tag.dto'
-import {useBooruList} from '~/composables/useBooruList'
+  import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
+  import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
+  import { Bars3BottomRightIcon, EyeIcon, StarIcon } from '@heroicons/vue/24/outline'
+  import * as Sentry from '@sentry/vue'
+  import { useInfiniteQuery } from '@tanstack/vue-query'
+  import { useWindowVirtualizer } from '@tanstack/vue-virtual'
+  import { cloneDeep } from 'lodash-es'
+  import { FetchError } from 'ofetch'
+  import type { Ref } from 'vue'
+  import { toast } from 'vue-sonner'
+  import { generatePostsRoute } from '~/assets/js/RouterHelper'
+  import { tagArrayToTitle } from '~/assets/js/SeoHelper'
+  import type { Domain } from '~/assets/js/domain'
+  import type { IPost, IPostPage } from '~/assets/js/post.dto'
+  import Tag from '~/assets/js/tag.dto'
+  import { useBooruList } from '~/composables/useBooruList'
 
-const router = useRouter()
-const route = useRoute()
-const config = useRuntimeConfig()
+  const router = useRouter()
+  const route = useRoute()
+  const config = useRuntimeConfig()
 
-const {toggle: toggleSearchMenu} = useSearchMenu()
-const userSettings = useUserSettings()
-const {isPremium} = useUserData()
-const {booruList} = useBooruList()
-const {addUrlToPageHistory} = usePageHistory()
+  const { toggle: toggleSearchMenu } = useSearchMenu()
+  const userSettings = useUserSettings()
+  const { isPremium } = useUserData()
+  const { booruList } = useBooruList()
+  const { addUrlToPageHistory } = usePageHistory()
 
-const unregisterRouterAfterEach = router.afterEach((to, from) => {
-  addUrlToPageHistory(to.fullPath)
-})
-
-onBeforeUnmount(() => {
-  unregisterRouterAfterEach()
-})
-
-const {selectedDomainFromStorage} = useSelectedDomainFromStorage()
-
-const selectedBooru = computed(() => {
-  let domain = route.params.domain
-
-  const booru = booruList.value.find((booru) => booru.domain === domain)
-
-  if (!booru) {
-    toast.error(`Booru "${domain}" not found`)
-    throw new Error(`Booru "${domain}" not found`)
-  }
-
-  // Save selected booru to storage
-  selectedDomainFromStorage.value = booru.domain
-
-  return booru
-})
-
-const selectedTags = computed(() => {
-  const tags = route.query.tags as string
-
-  if (!tags) {
-    return []
-  }
-
-  return tags
-    .split('|')
-    .map((tag) => decodeURIComponent(tag))
-    .map((tag) => new Tag({name: tag}).toJSON())
-})
-
-const selectedPage = computed(() => {
-  const page = parseInt(route.query.page as string)
-
-  if (!page) {
-    return selectedBooru.value.type.initialPageID
-  }
-
-  return page
-})
-
-const defaultFiltersByBooru = {
-  'rule34.xxx': {
-    rating: undefined,
-    sort: undefined,
-    score: '>=5'
-  }
-}
-
-const selectedFilters = computed(() => {
-  // TODO: Validate
-
-  return {
-    rating: route.query.filter?.rating ?? defaultFiltersByBooru[selectedBooru.value.domain]?.rating ?? undefined,
-    sort: route.query.filter?.sort ?? defaultFiltersByBooru[selectedBooru.value.domain]?.sort ?? undefined,
-    score: route.query.filter?.score ?? defaultFiltersByBooru[selectedBooru.value.domain]?.score ?? undefined
-  }
-})
-
-async function fetchPosts(options: any) {
-  if (options.pageParam) {
-    return $fetch<IPostPage>(options.pageParam, {
-      retry: false
-    })
-  }
-
-  const apiUrl = config.public.API_URL + '/booru/' + selectedBooru.value.type.type + '/posts'
-
-  const tags = selectedTags.value.map((tag) => tag.name).join('|')
-
-  return $fetch<IPostPage>(apiUrl, {
-    params: {
-      baseEndpoint: selectedBooru.value.domain,
-
-      limit: userSettings.postsPerPage,
-
-      pageID: selectedPage.value,
-
-      tags: tags.length > 0 ? tags : undefined,
-
-      // Filters
-      rating: selectedFilters.value.rating,
-      order: selectedFilters.value.sort,
-      score: selectedFilters.value.score
-    },
-
-    retry: false
+  const unregisterRouterAfterEach = router.afterEach((to, from) => {
+    addUrlToPageHistory(to.fullPath)
   })
-}
 
-// TODO: Should include page number in key, maybe an initial page number?
-const {
-  suspense,
-
-  data,
-  error,
-  refetch,
-  fetchNextPage,
-  fetchPreviousPage,
-  hasNextPage,
-  hasPreviousPage,
-  isFetching,
-  isFetchingNextPage,
-  isPending,
-  isError
-} = useInfiniteQuery({
-  queryKey: ['posts', selectedBooru, selectedTags, selectedFilters],
-  queryFn: fetchPosts,
-  select: (data) => {
-    // Delete all posts that have `media_type: 'unknown'`
-    data.pages.forEach((page) => {
-      page.data = page.data.filter((post) => post.media_type !== 'unknown')
-    })
-
-    return {
-      pages: data.pages,
-      pageParams: data.pageParams
-    }
-  },
-  initialPageParam: '',
-  getNextPageParam: (lastPage, allPages, lastPageParam) => {
-    if (lastPage.links.next == null) {
-      return undefined
-    }
-
-    // Skip if items are less than the limit
-    if (lastPage.meta.items_count !== lastPage.meta.items_per_page) {
-      return undefined
-    }
-
-    return lastPage.links.next
-  },
-  getPreviousPageParam: (firstPage, allPages, firstPageParam) => {
-    if (firstPage.links.prev == null) {
-      return undefined
-    }
-
-    return firstPage.links.prev
-  }
-})
-
-onServerPrefetch(async () => {
-  await suspense()
-})
-
-const allRows = computed<IPost[]>(() => {
-  if (!data.value) {
-    return []
-  }
-
-  // Flatten pages, but add `current_page` to each post
-  return data.value.pages.flatMap((page) => {
-    return page.data.map((post) => {
-      return {
-        ...post,
-
-        // TODO: Remove when API returns domain
-        domain: selectedBooru.value.domain,
-
-        current_page: page.meta.current_page
-      }
-    })
+  onBeforeUnmount(() => {
+    unregisterRouterAfterEach()
   })
-})
 
-const parentRef = ref<HTMLElement | null>(null)
-const parentOffsetRef = ref(0)
+  const { selectedDomainFromStorage } = useSelectedDomainFromStorage()
 
-onMounted(() => {
-  parentOffsetRef.value = parentRef.value?.offsetTop ?? 0
-})
-
-const rowVirtualizerOptions = computed(() => {
-  return {
-    debug: false,
-
-    count: hasNextPage ? allRows.value.length + 1 : allRows.value.length,
-
-    estimateSize: () => 600,
-
-    scrollMargin: parentOffsetRef.value,
-
-    overscan: 5,
-
-    gap: 16
-  }
-})
-
-const rowVirtualizer = useWindowVirtualizer(rowVirtualizerOptions)
-
-const virtualRows = computed(() => rowVirtualizer.value.getVirtualItems())
-
-const totalSize = computed(() => rowVirtualizer.value.getTotalSize())
-
-// Next page loader
-watchEffect(() => {
-  // Skip if there is no data
-  if (!data.value) {
-    return
-  }
-
-  const [lastItem] = [...virtualRows.value].reverse()
-
-  if (!lastItem) {
-    return
-  }
-
-  // IF last item is the last item in the list
-  // AND there is a next page
-  // AND it's not fetching
-  // THEN load next page
-  if (lastItem.index >= allRows.value.length - 1 && hasNextPage.value && !isFetchingNextPage.value) {
-    onLoadNextPostPage()
-  }
-})
-
-// FIX: Remove when this issue is fixed - https://github.com/TanStack/virtual/issues/619#issuecomment-1969516091
-const measureElement = (el) => {
-  nextTick(() => {
-    if (!el) {
-      return
-    }
-
-    rowVirtualizer.value.measureElement(el)
-  })
-}
-
-/**
- * `undefined` values mean that they will be replaced by default values
- */
-async function reflectChangesInUrl({
-                                     domain = undefined,
-
-                                     page = undefined,
-
-                                     tags = undefined,
-
-                                     filters = undefined,
-
-                                     replace = false
-                                   }: {
-  domain?: string | null
-
-  page?: number | null
-
-  tags?: Tag[] | null
-
-  filters?: Object | null
-
-  replace?: boolean
-}) {
-  if (domain === undefined) {
-    domain = selectedBooru.value.domain
-  }
-
-  if (page === undefined) {
-    page = selectedBooru.value.type.initialPageID
-  }
-
-  if (tags === undefined) {
-    tags = selectedTags.value
-  }
-
-  if (filters === undefined) {
-    filters = selectedFilters.value
-  }
-
-  const postsRoute = generatePostsRoute(undefined, domain, page, tags, filters)
-
-  await navigateTo({...postsRoute}, {replace})
-}
-
-const tagResults: Ref<Tag[]> = shallowRef([])
-
-async function onSearchTag(tag: string) {
-  const apiUrl = config.public.API_URL + '/booru/' + selectedBooru.value.type.type + '/tags'
-
-  // TODO: Use Booru options
-  const response = await $fetch(apiUrl, {
-    params: {
-      baseEndpoint: selectedBooru.value.domain,
-
-      tag,
-      order: 'count',
-      limit: 20
-    }
-  })
-    //
-    .catch((error) => {
-      Sentry.captureException(error)
-
-      return error
-    })
-
-  if (response instanceof FetchError) {
-    switch (response.status) {
-      case 404:
-        toast.error('No tags found for query "' + tag + '"')
-        break
-
-      default:
-        toast.error(`Failed to load tags: "${response.message}"`)
-        break
-    }
-
-    return
-  }
-
-  tagResults.value = response.data
-}
-
-async function onDomainChange(domain: Domain) {
-  await reflectChangesInUrl({domain: domain.domain, page: null, tags: null, filters: null})
-}
-
-async function onSearchSubmit({tags, filters}) {
-  await reflectChangesInUrl({page: null, tags, filters})
-}
-
-/**
- * Adds the tag, or removes it if it already exists
- */
-async function onPostAddTag(tag: string) {
-  const isTagNegative = tag.startsWith('-')
-
-  let newTags = cloneDeep(selectedTags.value)
-
-  // Remove tag if it already exists
-  const isTagAlreadySelected = newTags.some((selectedTag) => selectedTag.name === tag)
-
-  if (isTagAlreadySelected) {
-    newTags = newTags.filter((selectedTag) => selectedTag.name !== tag)
-
-    await reflectChangesInUrl({page: null, tags: newTags})
-    return
-  }
-
-  if (isTagNegative) {
-    const doesTagExistInPositive = newTags.some((selectedTag) => selectedTag.name === tag.slice(1))
-
-    if (doesTagExistInPositive) {
-      newTags = newTags.filter((selectedTag) => selectedTag.name !== tag.slice(1))
-    }
-  }
-
-  newTags.push(new Tag({name: tag}).toJSON())
-
-  await reflectChangesInUrl({page: null, tags: newTags})
-}
-
-/**
- * Sets tags to only the given tag
- */
-async function onPostSetTag(tag: string) {
-  await reflectChangesInUrl({page: null, tags: [new Tag({name: tag}).toJSON()]})
-}
-
-/**
- * Opens the tag in a new tab
- */
-async function onPostOpenTagInNewTab(tag: string) {
-  const tagUrl = generatePostsRoute(
-    undefined,
-    selectedBooru.value.domain,
-    undefined,
-    [new Tag({name: tag}).toJSON()],
-    undefined
-  )
-
-  const resolvedTagUrl = router.resolve(tagUrl).href
-
-  window.open(resolvedTagUrl, '_blank')
-}
-
-async function onLoadNextPostPage() {
-  // Skip if already fetching
-  if (isFetching.value || isFetchingNextPage.value) {
-    return
-  }
-
-  await reflectChangesInUrl({page: selectedPage.value + 1, replace: true})
-
-  await fetchNextPage()
-}
-
-async function onPageIndicatorClick() {
-  const pagePrompt = prompt('To which page do you want to go?')
-
-  if (pagePrompt == null) {
-    return
-  }
-
-  const page = parseInt(pagePrompt, 10)
-
-  if (isNaN(page)) {
-    toast.error('Invalid page number')
-    return
-  }
-
-  // TODO: Figure out a better way to reload page
-  await reflectChangesInUrl({page})
-  window.location.reload()
-}
-
-const completeTitle = computed(() => {
-  let title = ''
-
-  // Page
-  if (selectedPage.value !== selectedBooru.value.type.initialPageID) {
-    title += `Page ${selectedPage.value} of `
-  }
-
-  title += 'Posts'
-
-  // Tags
-  if (selectedTags.value.length > 0) {
-    title += ` tagged ${tagArrayToTitle(selectedTags.value)} Hentai`
-  }
-
-  // Filters
-  if (selectedFilters.value.rating) {
-    title += `, rated ${selectedFilters.value.rating}`
-  }
-
-  if (selectedFilters.value.sort) {
-    title += `, sorted by ${selectedFilters.value.sort}`
-  }
-
-  if (selectedFilters.value.score) {
-    title += `, score of ${selectedFilters.value.score}`
-  }
-
-  // Domain
-  title += `, from ${selectedBooru.value.domain}`
-
-  title = title.trim()
-
-  return title
-})
-
-const shortTitle = computed(() => {
-  let _title = completeTitle.value
-
-  _title = _title.replace(/Posts tagged/, '')
-  _title = _title.replace(/with /, '')
-  _title = _title.replace(/and ?without /, ' w/o ')
-  _title = _title.replace(/with a score of/, 'score')
-
-  _title = _title.trim()
-  // Capitalize first letter - https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
-  _title = _title.charAt(0).toUpperCase() + _title.slice(1)
-
-  return _title
-})
-
-const titleForBody = computed(() => {
-  let _title = completeTitle.value
-
-  // TODO: Show page number in body title
-  _title = _title.replace(/page \d+ of /i, '')
-
-  _title = _title.replace(/posts/i, '')
-
-  _title = _title.replace(/ hentai, /i, ', ')
-
-  _title = _title.replace(/, from .+$/, '')
-
-  // Edge case: ", sorted by" || ", rated" || ", with a score of"
-  if (_title.startsWith(', ')) {
-    _title = _title.slice(2)
-  }
-
-  _title = _title.trim()
-  // Capitalize first letter - https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
-  _title = _title.charAt(0).toUpperCase() + _title.slice(1)
-
-  return _title
-})
-
-const description = computed(() => {
-  let description = `Stream and download ${tagArrayToTitle(selectedTags.value, false)} Hentai porn videos, GIFs and images`
-
-  description = description.replace('download with', 'download')
-
-  // Filters
-  if (selectedFilters.value.rating) {
-    description += `, rated ${selectedFilters.value.rating}`
-  }
-
-  if (selectedFilters.value.sort) {
-    description += `, sorted by ${selectedFilters.value.sort}`
-  }
-
-  if (selectedFilters.value.score) {
-    description += `, with a score of ${selectedFilters.value.score}`
-  }
-
-  description += `, from ${selectedBooru.value.domain}`
-
-  // TODO: Improve ending
-  description += '. Free anime hentai here on R34.app'
-
-  return description
-})
-
-useSeoMeta({
-  title: shortTitle,
-
-  description,
-
-  referrer: 'no-referrer'
-})
-
-definePageMeta({
-  validate: async (route) => {
-    const {booruList} = useBooruList()
-
-    const domain = route.params.domain
+  const selectedBooru = computed(() => {
+    let domain = route.params.domain
 
     const booru = booruList.value.find((booru) => booru.domain === domain)
 
     if (!booru) {
-      return false
+      toast.error(`Booru "${domain}" not found`)
+      throw new Error(`Booru "${domain}" not found`)
     }
 
-    const {isPremium} = useUserData()
+    // Save selected booru to storage
+    selectedDomainFromStorage.value = booru.domain
 
-    if (!isPremium.value && booru.isPremium) {
+    return booru
+  })
+
+  const selectedTags = computed(() => {
+    const tags = route.query.tags as string
+
+    if (!tags) {
+      return []
+    }
+
+    return tags
+      .split('|')
+      .map((tag) => decodeURIComponent(tag))
+      .map((tag) => new Tag({ name: tag }).toJSON())
+  })
+
+  const selectedPage = computed(() => {
+    const page = parseInt(route.query.page as string)
+
+    if (!page) {
+      return selectedBooru.value.type.initialPageID
+    }
+
+    return page
+  })
+
+  const defaultFiltersByBooru = {
+    'rule34.xxx': {
+      rating: undefined,
+      sort: undefined,
+      score: '>=5'
+    }
+  }
+
+  const selectedFilters = computed(() => {
+    // TODO: Validate
+
+    return {
+      rating: route.query.filter?.rating ?? defaultFiltersByBooru[selectedBooru.value.domain]?.rating ?? undefined,
+      sort: route.query.filter?.sort ?? defaultFiltersByBooru[selectedBooru.value.domain]?.sort ?? undefined,
+      score: route.query.filter?.score ?? defaultFiltersByBooru[selectedBooru.value.domain]?.score ?? undefined
+    }
+  })
+
+  const filterConfig = {
+    sort: {
+      type: 'select' as const,
+      label: 'Sort',
+      icon: Bars3BottomRightIcon,
+      options: [
+        { label: 'Sort', value: undefined },
+        { label: 'Score', value: 'score' },
+        { label: 'Created', value: 'id' },
+        { label: 'Random', value: 'random' }
+      ]
+    },
+    rating: {
+      type: 'select' as const,
+      label: 'Rating',
+      icon: EyeIcon,
+      options: [
+        { label: 'Rating', value: undefined },
+        { label: 'Safe', value: 'safe' },
+        { label: 'General', value: 'general' },
+        { label: 'Sensitive', value: 'sensitive' },
+        { label: 'Questionable', value: 'questionable' },
+        { label: 'Explicit', value: 'explicit' }
+      ]
+    },
+    score: {
+      type: 'select' as const,
+      label: 'Score',
+      icon: StarIcon,
+      options: [
+        { label: 'Score', value: undefined },
+        { label: '>= 0', value: '>=0' },
+        { label: '>= 5', value: '>=5' },
+
+        { label: '>= 10', value: '>=10' },
+        { label: '>= 25', value: '>=25' },
+        { label: '>= 50', value: '>=50' },
+        { label: '>= 75', value: '>=75' },
+
+        { label: '>= 100', value: '>=100' },
+        { label: '>= 200', value: '>=200' },
+        { label: '>= 300', value: '>=300' },
+        { label: '>= 500', value: '>=500' },
+        { label: '>= 750', value: '>=750' },
+
+        { label: '>= 1000', value: '>=1000' }
+      ]
+    }
+  }
+
+  async function fetchPosts(options: any) {
+    if (options.pageParam) {
+      return $fetch<IPostPage>(options.pageParam, {
+        retry: false
+      })
+    }
+
+    const apiUrl = config.public.API_URL + '/booru/' + selectedBooru.value.type.type + '/posts'
+
+    const tags = selectedTags.value.map((tag) => tag.name).join('|')
+
+    return $fetch<IPostPage>(apiUrl, {
+      params: {
+        baseEndpoint: selectedBooru.value.domain,
+
+        limit: userSettings.postsPerPage,
+
+        pageID: selectedPage.value,
+
+        tags: tags.length > 0 ? tags : undefined,
+
+        // Filters
+        rating: selectedFilters.value.rating,
+        order: selectedFilters.value.sort,
+        score: selectedFilters.value.score
+      },
+
+      retry: false
+    })
+  }
+
+  // TODO: Should include page number in key, maybe an initial page number?
+  const {
+    suspense,
+
+    data,
+    error,
+    refetch,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+    isFetching,
+    isFetchingNextPage,
+    isPending,
+    isError
+  } = useInfiniteQuery({
+    queryKey: ['posts', selectedBooru, selectedTags, selectedFilters],
+    queryFn: fetchPosts,
+    select: (data) => {
+      // Delete all posts that have `media_type: 'unknown'`
+      data.pages.forEach((page) => {
+        page.data = page.data.filter((post) => post.media_type !== 'unknown')
+      })
+
       return {
-        statusCode: 401,
-        statusMessage: 'Unauthorized, please login to view this page'
+        pages: data.pages,
+        pageParams: data.pageParams
+      }
+    },
+    initialPageParam: '',
+    getNextPageParam: (lastPage, allPages, lastPageParam) => {
+      if (lastPage.links.next == null) {
+        return undefined
+      }
+
+      // Skip if items are less than the limit
+      if (lastPage.meta.items_count !== lastPage.meta.items_per_page) {
+        return undefined
+      }
+
+      return lastPage.links.next
+    },
+    getPreviousPageParam: (firstPage, allPages, firstPageParam) => {
+      if (firstPage.links.prev == null) {
+        return undefined
+      }
+
+      return firstPage.links.prev
+    }
+  })
+
+  onServerPrefetch(async () => {
+    await suspense()
+  })
+
+  const allRows = computed<IPost[]>(() => {
+    if (!data.value) {
+      return []
+    }
+
+    // Flatten pages, but add `current_page` to each post
+    return data.value.pages.flatMap((page) => {
+      return page.data.map((post) => {
+        return {
+          ...post,
+
+          // TODO: Remove when API returns domain
+          domain: selectedBooru.value.domain,
+
+          current_page: page.meta.current_page
+        }
+      })
+    })
+  })
+
+  const parentRef = ref<HTMLElement | null>(null)
+  const parentOffsetRef = ref(0)
+
+  onMounted(() => {
+    parentOffsetRef.value = parentRef.value?.offsetTop ?? 0
+  })
+
+  const rowVirtualizerOptions = computed(() => {
+    return {
+      debug: false,
+
+      count: hasNextPage ? allRows.value.length + 1 : allRows.value.length,
+
+      estimateSize: () => 600,
+
+      scrollMargin: parentOffsetRef.value,
+
+      overscan: 5,
+
+      gap: 16
+    }
+  })
+
+  const rowVirtualizer = useWindowVirtualizer(rowVirtualizerOptions)
+
+  const virtualRows = computed(() => rowVirtualizer.value.getVirtualItems())
+
+  const totalSize = computed(() => rowVirtualizer.value.getTotalSize())
+
+  // Next page loader
+  watchEffect(() => {
+    // Skip if there is no data
+    if (!data.value) {
+      return
+    }
+
+    const [lastItem] = [...virtualRows.value].reverse()
+
+    if (!lastItem) {
+      return
+    }
+
+    // IF last item is the last item in the list
+    // AND there is a next page
+    // AND it's not fetching
+    // THEN load next page
+    if (lastItem.index >= allRows.value.length - 1 && hasNextPage.value && !isFetchingNextPage.value) {
+      onLoadNextPostPage()
+    }
+  })
+
+  // FIX: Remove when this issue is fixed - https://github.com/TanStack/virtual/issues/619#issuecomment-1969516091
+  const measureElement = (el) => {
+    nextTick(() => {
+      if (!el) {
+        return
+      }
+
+      rowVirtualizer.value.measureElement(el)
+    })
+  }
+
+  /**
+   * `undefined` values mean that they will be replaced by default values
+   */
+  async function reflectChangesInUrl({
+    domain = undefined,
+
+    page = undefined,
+
+    tags = undefined,
+
+    filters = undefined,
+
+    replace = false
+  }: {
+    domain?: string | null
+
+    page?: number | null
+
+    tags?: Tag[] | null
+
+    filters?: Object | null
+
+    replace?: boolean
+  }) {
+    if (domain === undefined) {
+      domain = selectedBooru.value.domain
+    }
+
+    if (page === undefined) {
+      page = selectedBooru.value.type.initialPageID
+    }
+
+    if (tags === undefined) {
+      tags = selectedTags.value
+    }
+
+    if (filters === undefined) {
+      filters = selectedFilters.value
+    }
+
+    const postsRoute = generatePostsRoute(undefined, domain, page, tags, filters)
+
+    await navigateTo({ ...postsRoute }, { replace })
+  }
+
+  const tagResults: Ref<Tag[]> = shallowRef([])
+
+  async function onSearchTag(tag: string) {
+    const apiUrl = config.public.API_URL + '/booru/' + selectedBooru.value.type.type + '/tags'
+
+    // TODO: Use Booru options
+    const response = await $fetch(apiUrl, {
+      params: {
+        baseEndpoint: selectedBooru.value.domain,
+
+        tag,
+        order: 'count',
+        limit: 20
+      }
+    })
+      //
+      .catch((error) => {
+        Sentry.captureException(error)
+
+        return error
+      })
+
+    if (response instanceof FetchError) {
+      switch (response.status) {
+        case 404:
+          toast.error('No tags found for query "' + tag + '"')
+          break
+
+        default:
+          toast.error(`Failed to load tags: "${response.message}"`)
+          break
+      }
+
+      return
+    }
+
+    tagResults.value = response.data
+  }
+
+  async function onDomainChange(domain: Domain) {
+    await reflectChangesInUrl({ domain: domain.domain, page: null, tags: null, filters: null })
+  }
+
+  async function onSearchSubmit({ tags, filters }) {
+    await reflectChangesInUrl({ page: null, tags, filters })
+  }
+
+  /**
+   * Adds the tag, or removes it if it already exists
+   */
+  async function onPostAddTag(tag: string) {
+    const isTagNegative = tag.startsWith('-')
+
+    let newTags = cloneDeep(selectedTags.value)
+
+    // Remove tag if it already exists
+    const isTagAlreadySelected = newTags.some((selectedTag) => selectedTag.name === tag)
+
+    if (isTagAlreadySelected) {
+      newTags = newTags.filter((selectedTag) => selectedTag.name !== tag)
+
+      await reflectChangesInUrl({ page: null, tags: newTags })
+      return
+    }
+
+    if (isTagNegative) {
+      const doesTagExistInPositive = newTags.some((selectedTag) => selectedTag.name === tag.slice(1))
+
+      if (doesTagExistInPositive) {
+        newTags = newTags.filter((selectedTag) => selectedTag.name !== tag.slice(1))
       }
     }
 
-    const page = route.query.page
+    newTags.push(new Tag({ name: tag }).toJSON())
 
-    // Check if `page` query is not an array, not null, and is a number
-    if (!Array.isArray(page) && page != undefined) {
-      const parsedPage = parseInt(page)
+    await reflectChangesInUrl({ page: null, tags: newTags })
+  }
 
-      if (Number.isNaN(parsedPage) || parsedPage < 0) {
+  /**
+   * Sets tags to only the given tag
+   */
+  async function onPostSetTag(tag: string) {
+    await reflectChangesInUrl({ page: null, tags: [new Tag({ name: tag }).toJSON()] })
+  }
+
+  /**
+   * Opens the tag in a new tab
+   */
+  async function onPostOpenTagInNewTab(tag: string) {
+    const tagUrl = generatePostsRoute(
+      undefined,
+      selectedBooru.value.domain,
+      undefined,
+      [new Tag({ name: tag }).toJSON()],
+      undefined
+    )
+
+    const resolvedTagUrl = router.resolve(tagUrl).href
+
+    window.open(resolvedTagUrl, '_blank')
+  }
+
+  async function onLoadNextPostPage() {
+    // Skip if already fetching
+    if (isFetching.value || isFetchingNextPage.value) {
+      return
+    }
+
+    await reflectChangesInUrl({ page: selectedPage.value + 1, replace: true })
+
+    await fetchNextPage()
+  }
+
+  async function onPageIndicatorClick() {
+    const pagePrompt = prompt('To which page do you want to go?')
+
+    if (pagePrompt == null) {
+      return
+    }
+
+    const page = parseInt(pagePrompt, 10)
+
+    if (isNaN(page)) {
+      toast.error('Invalid page number')
+      return
+    }
+
+    // TODO: Figure out a better way to reload page
+    await reflectChangesInUrl({ page })
+    window.location.reload()
+  }
+
+  const completeTitle = computed(() => {
+    let title = ''
+
+    // Page
+    if (selectedPage.value !== selectedBooru.value.type.initialPageID) {
+      title += `Page ${selectedPage.value} of `
+    }
+
+    title += 'Posts'
+
+    // Tags
+    if (selectedTags.value.length > 0) {
+      title += ` tagged ${tagArrayToTitle(selectedTags.value)} Hentai`
+    }
+
+    // Filters
+    if (selectedFilters.value.rating) {
+      title += `, rated ${selectedFilters.value.rating}`
+    }
+
+    if (selectedFilters.value.sort) {
+      title += `, sorted by ${selectedFilters.value.sort}`
+    }
+
+    if (selectedFilters.value.score) {
+      title += `, score of ${selectedFilters.value.score}`
+    }
+
+    // Domain
+    title += `, from ${selectedBooru.value.domain}`
+
+    title = title.trim()
+
+    return title
+  })
+
+  const shortTitle = computed(() => {
+    let _title = completeTitle.value
+
+    _title = _title.replace(/Posts tagged/, '')
+    _title = _title.replace(/with /, '')
+    _title = _title.replace(/and ?without /, ' w/o ')
+    _title = _title.replace(/with a score of/, 'score')
+
+    _title = _title.trim()
+    // Capitalize first letter - https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
+    _title = _title.charAt(0).toUpperCase() + _title.slice(1)
+
+    return _title
+  })
+
+  const titleForBody = computed(() => {
+    let _title = completeTitle.value
+
+    // TODO: Show page number in body title
+    _title = _title.replace(/page \d+ of /i, '')
+
+    _title = _title.replace(/posts/i, '')
+
+    _title = _title.replace(/ hentai, /i, ', ')
+
+    _title = _title.replace(/, from .+$/, '')
+
+    // Edge case: ", sorted by" || ", rated" || ", with a score of"
+    if (_title.startsWith(', ')) {
+      _title = _title.slice(2)
+    }
+
+    _title = _title.trim()
+    // Capitalize first letter - https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
+    _title = _title.charAt(0).toUpperCase() + _title.slice(1)
+
+    return _title
+  })
+
+  const description = computed(() => {
+    let description = `Stream and download ${tagArrayToTitle(selectedTags.value, false)} Hentai porn videos, GIFs and images`
+
+    description = description.replace('download with', 'download')
+
+    // Filters
+    if (selectedFilters.value.rating) {
+      description += `, rated ${selectedFilters.value.rating}`
+    }
+
+    if (selectedFilters.value.sort) {
+      description += `, sorted by ${selectedFilters.value.sort}`
+    }
+
+    if (selectedFilters.value.score) {
+      description += `, with a score of ${selectedFilters.value.score}`
+    }
+
+    description += `, from ${selectedBooru.value.domain}`
+
+    // TODO: Improve ending
+    description += '. Free anime hentai here on R34.app'
+
+    return description
+  })
+
+  useSeoMeta({
+    title: shortTitle,
+
+    description,
+
+    referrer: 'no-referrer'
+  })
+
+  definePageMeta({
+    validate: async (route) => {
+      const { booruList } = useBooruList()
+
+      const domain = route.params.domain
+
+      const booru = booruList.value.find((booru) => booru.domain === domain)
+
+      if (!booru) {
         return false
       }
+
+      const { isPremium } = useUserData()
+
+      if (!isPremium.value && booru.isPremium) {
+        return {
+          statusCode: 401,
+          statusMessage: 'Unauthorized, please login to view this page'
+        }
+      }
+
+      const page = route.query.page
+
+      // Check if `page` query is not an array, not null, and is a number
+      if (!Array.isArray(page) && page != undefined) {
+        const parsedPage = parseInt(page)
+
+        if (Number.isNaN(parsedPage) || parsedPage < 0) {
+          return false
+        }
+      }
+
+      // Validate `tags` query
+      // Validate `filters` query
+
+      return true
     }
+  })
 
-    // Validate `tags` query
-    // Validate `filters` query
-
-    return true
-  }
-})
-
-// TODO: Create schema.org breadcrumb for posts page
+  // TODO: Create schema.org breadcrumb for posts page
 </script>
 
 <template>
@@ -600,7 +651,7 @@ definePageMeta({
       >
         <span class="sr-only">Search posts</span>
 
-        <MagnifyingGlassIcon class="h-6 w-6 text-base-content-highlight"/>
+        <MagnifyingGlassIcon class="h-6 w-6 text-base-content-highlight" />
 
         <!-- Highlighter -->
         <span
@@ -610,7 +661,7 @@ definePageMeta({
           <span class="relative inline-flex h-2 w-2 rounded-full bg-primary-600"></span>
         </span>
       </button>
-      </Teleport>
+    </Teleport>
   </ClientOnly>
 
   <!-- Search menu -->
@@ -618,13 +669,14 @@ definePageMeta({
     <LazySearchMenu
       :initial-selected-filters="selectedFilters"
       :initial-selected-tags="selectedTags"
+      :filter-config="filterConfig"
       :tag-results="tagResults"
       @submit="onSearchSubmit"
       @search-tag="onSearchTag"
     />
   </SearchMenuWrapper>
 
-  <ScrollTopButton/>
+  <ScrollTopButton />
 
   <!-- Container -->
   <main class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
@@ -667,7 +719,7 @@ definePageMeta({
           class="flex h-80 w-full animate-pulse flex-col items-center justify-center gap-4 text-lg"
           data-testid="posts-loader"
         >
-          <ArrowPathIcon class="h-12 w-12 animate-spin"/>
+          <ArrowPathIcon class="h-12 w-12 animate-spin" />
 
           <h3>Loading posts&hellip;</h3>
         </div>
@@ -676,7 +728,7 @@ definePageMeta({
       <!-- Error -->
       <template v-else-if="isError">
         <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-center text-lg">
-          <ExclamationCircleIcon class="h-12 w-12"/>
+          <ExclamationCircleIcon class="h-12 w-12" />
 
           <template v-if="error.status === 404">
             <h3>No posts found</h3>
@@ -696,7 +748,7 @@ definePageMeta({
       <!-- No results -->
       <template v-else-if="!data.pages[0]?.data.length">
         <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-lg">
-          <QuestionMarkCircleIcon class="h-12 w-12"/>
+          <QuestionMarkCircleIcon class="h-12 w-12" />
 
           <h3>No results</h3>
 
@@ -772,7 +824,7 @@ definePageMeta({
 
                 <!-- Promoted content -->
                 <template v-if="!isPremium && virtualRow.index !== 0 && virtualRow.index % 7 === 0">
-                  <PromotedContent class="mt-4"/>
+                  <PromotedContent class="mt-4" />
                 </template>
               </template>
             </li>

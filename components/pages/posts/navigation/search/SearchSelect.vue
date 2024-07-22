@@ -7,6 +7,11 @@
       required: true
     },
 
+    label: {
+      type: String,
+      required: true
+    },
+
     options: {
       type: Array,
       required: true
@@ -47,14 +52,14 @@
             class="-ml-0.5 h-5 w-5"
           />
 
-          <span class="whitespace-nowrap text-sm font-medium">{{ modelValue.title }}</span>
+          <span class="whitespace-nowrap text-sm font-medium">{{ modelValue.label }}</span>
         </div>
 
         <!-- Right side -->
         <HeadlessListboxButton
           class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util inline-flex items-center rounded-l-none rounded-r-md px-2 py-1"
         >
-          <span class="sr-only">Change published status</span>
+          <span class="sr-only">Change {{ label }}</span>
 
           <ChevronDownIcon class="-ml-0.5 h-5 w-5" />
         </HeadlessListboxButton>
@@ -65,7 +70,7 @@
       >
         <HeadlessListboxOption
           v-for="option in options"
-          :key="option.title"
+          :key="option.label"
           v-slot="{ active, selected }"
           :value="option"
         >
@@ -75,7 +80,7 @@
           >
             <div class="flex flex-col">
               <div class="flex justify-between">
-                <p :class="selected ? 'font-medium' : 'font-normal'">{{ option.title }}</p>
+                <p :class="selected ? 'font-medium' : 'font-normal'">{{ option.label }}</p>
 
                 <!-- Check icon -->
                 <span
