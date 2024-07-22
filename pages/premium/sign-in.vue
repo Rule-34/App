@@ -89,7 +89,7 @@
               <div class="text-sm">
                 <NuxtLink
                   class="hover:hover-text-util focus-visible:focus-outline-util font-semibold"
-                  href="https://r34app.mysellix.io/customer/auth"
+                  href="https://alejandroakbal.mysellix.io/customer/auth"
                   rel="nofollow noopener noreferrer"
                   target="_blank"
                 >
