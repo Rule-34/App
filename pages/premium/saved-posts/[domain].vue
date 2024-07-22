@@ -384,7 +384,30 @@
   }
 
   async function onSearchSubmit({ tags, filters }) {
-    await reflectChangesInUrl({ page: null, tags, filters })
+    await reflectChangesInUrl({ page: null, filters })
+    // TODO: Tags
+    //    await reflectChangesInUrl({ page: null, tags, filters })
+  }
+
+  /**
+   * Adds the tag, or removes it if it already exists
+   */
+  async function onPostAddTag(tag: string) {
+    toast.error('Not implemented')
+  }
+
+  /**
+   * Sets tags to only the given tag
+   */
+  async function onPostSetTag(tag: string) {
+    toast.error('Not implemented')
+  }
+
+  /**
+   * Opens the tag in a new tab
+   */
+  async function onPostOpenTagInNewTab(tag: string) {
+    toast.error('Not implemented')
   }
 
   async function onLoadNextPostPage() {
@@ -679,6 +702,9 @@
                 <PostComponent
                   :post="allRows[virtualRow.index]"
                   :selected-tags="selectedTags"
+                  @addTag="onPostAddTag"
+                  @openTagInNewTab="onPostOpenTagInNewTab"
+                  @setTag="onPostSetTag"
                 />
               </template>
             </li>
