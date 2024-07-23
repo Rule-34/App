@@ -157,9 +157,12 @@
         tags: tags.length > 0 ? tags : undefined,
 
         // Filters
-        rating: selectedFilters.value.rating,
         order: selectedFilters.value.sort,
-        score: selectedFilters.value.score
+        rating: selectedFilters.value.rating,
+        score: selectedFilters.value.score,
+
+        // Booru options
+        httpScheme: selectedBooru.value.config?.options?.HTTPScheme ?? undefined
       },
 
       retry: false
@@ -353,14 +356,16 @@
   async function onSearchTag(tag: string) {
     const apiUrl = config.public.API_URL + '/booru/' + selectedBooru.value.type.type + '/tags'
 
-    // TODO: Use Booru options
     const response = await $fetch(apiUrl, {
       params: {
         baseEndpoint: selectedBooru.value.domain,
 
         tag,
         order: 'count',
-        limit: 20
+        limit: 20,
+
+        // Booru options
+        httpScheme: selectedBooru.value.config?.options?.HTTPScheme ?? undefined
       }
     })
       //

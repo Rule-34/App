@@ -51,9 +51,13 @@
     const response = await $fetch(apiUrl, {
       params: {
         baseEndpoint: selectedBooru.value.domain,
+
         tag,
         order: 'count',
-        limit: 20
+        limit: 20,
+
+        // Booru options
+        httpScheme: selectedBooru.value.config?.options?.HTTPScheme ?? undefined
       }
     })
       //
