@@ -82,7 +82,7 @@
     return tags
       .split('|')
       .map((tag) => decodeURIComponent(tag))
-      .map((tag) => new Tag({ name: tag }))
+      .map((tag) => new Tag({ name: tag }).toJSON())
   })
 
   const selectedPage = computed(() => {
@@ -123,7 +123,7 @@
       icon: Bars3BottomRightIcon,
       options: [
         { label: 'Sort', value: undefined },
-        { label: 'Score', value: 'score' },
+        { label: 'Score', value: '-score' },
         { label: 'Score (asc)', value: 'score' },
         { label: 'Created', value: '-created' },
         { label: 'Created (asc)', value: 'created' },
@@ -215,6 +215,8 @@
   }
 
   const {
+    suspense,
+
     data,
     error,
     refetch,
@@ -248,6 +250,10 @@
     //
     //   return firstPageParam - 1
     // }
+  })
+
+  onServerPrefetch(async () => {
+    await suspense()
   })
 
   const allRows = computed<IPost[]>(() => {
@@ -699,7 +705,9 @@
                 </button>
 
                 <!-- Post -->
+                <!-- Fix: use domain + post.id as unique key, since virtualRow.index could be the same on different Boorus/pages -->
                 <PostComponent
+                  :key="allRows[virtualRow.index].domain + '-' + allRows[virtualRow.index].id"
                   :post="allRows[virtualRow.index]"
                   :selected-tags="selectedTags"
                   @addTag="onPostAddTag"
