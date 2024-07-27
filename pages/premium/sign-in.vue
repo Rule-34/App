@@ -1,63 +1,63 @@
 <script lang="ts" setup>
-  import { ClientResponseError } from 'pocketbase'
-  import { toast } from 'vue-sonner'
+import {ClientResponseError} from 'pocketbase'
+import {toast} from 'vue-sonner'
 
-  const { $pocketBase } = useNuxtApp()
+const {$pocketBase} = useNuxtApp()
 
-  const formData = shallowRef({
-    password: ''
-  })
+const formData = shallowRef({
+  password: ''
+})
 
-  async function onSubmit() {
-    const password = formData.value.password
+async function onSubmit() {
+  const password = formData.value.password
 
-    if (!password) {
-      return
-    }
-
-    // Authenticate to pocketbase
-    try {
-      const authData = await $pocketBase.collection('users').authWithPassword(password, password)
-    } catch (error) {
-      if (error instanceof ClientResponseError) {
-        toast.error(error.message)
-        return
-      }
-    }
-
-    await navigateTo('/premium/dashboard')
+  if (!password) {
+    return
   }
 
-  onNuxtReady(() => {
-    const route = useRoute()
-    const message = route.query.message
-    const license = route.query.license
+  // Authenticate to pocketbase
+  try {
+    const authData = await $pocketBase.collection('users').authWithPassword(password, password)
+  } catch (error) {
+    if (error instanceof ClientResponseError) {
+      toast.error(error.message)
+      return
+    }
+  }
 
-    // TODO: Add action to contact support
-    if (message) {
-      toast.info(message)
+  await navigateTo('/premium/dashboard')
+}
+
+onNuxtReady(() => {
+  const route = useRoute()
+  const message = route.query.message
+  const license = route.query.license
+
+  // TODO: Add action to contact support
+  if (message) {
+    toast.info(message)
+  }
+
+  if (license) {
+    if ($pocketBase.authStore.isValid) {
+      $pocketBase.authStore.clear()
     }
 
-    if (license) {
-      if ($pocketBase.authStore.isValid) {
-        $pocketBase.authStore.clear()
-      }
+    formData.value.password = license
 
-      formData.value.password = license
+    onSubmit()
+  }
+})
 
-      onSubmit()
-    }
-  })
+useSeoMeta({
+  title: 'Sign in',
 
-  useSeoMeta({
-    title: 'Sign in',
+  description: 'Sign in to the Rule 34 App.'
+})
 
-    description: 'Sign in to the Rule 34 App.'
-  })
-
-  definePageMeta({
-    middleware: 'auth-redirect-if-logged-in'
-  })
+definePageMeta({
+  middleware: 'auth-redirect-if-logged-in'
+})
 </script>
 
 <template>
@@ -89,7 +89,7 @@
               <div class="text-sm">
                 <NuxtLink
                   class="hover:hover-text-util focus-visible:focus-outline-util font-semibold"
-                  href="https://alejandroakbal.mysellix.io/customer/auth"
+                  href="mailto:contact@r34.app?subject=Forgot license&body=I forgot my license, this is the email address I used to purchase it: CHANGE-ME"
                   rel="nofollow noopener noreferrer"
                   target="_blank"
                 >
