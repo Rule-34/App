@@ -22,23 +22,14 @@
     { title: 'Support the development', additionalInfo: '#support-development' }
   ]
 
-  useHead(
-    {
-      link: [
-        {
-          rel: 'stylesheet',
-          href: 'https://cdn.sellix.io/static/css/embed.css'
-        }
-      ]
-    },
-    {
-      mode: 'client'
-    }
-  )
+  const visibleEl = ref<HTMLElement | null>(null)
+
   const { $script } = useScript('https://cdn.sellix.io/static/js/embed.js', {
     use() {
       return window.initializeSellixEmbed
-    }
+    },
+
+    trigger: useScriptTriggerElement({ trigger: 'visible', el: visibleEl })
   })
 
   $script.then((initializeSellixEmbed) => {
@@ -97,7 +88,7 @@
           <!-- Rating -->
           <NuxtLink
             class="focus-visible:focus-outline-util hover:hover-text-util mt-10 flex flex-col items-center justify-center gap-2.5 pb-4"
-            href="https://gum.co/Rule34App#Ratings"
+            href="https://www.trustpilot.com/review/r34.app"
             rel="nofollow noopener"
             target="_blank"
           >
@@ -111,7 +102,7 @@
             </div>
 
             <!-- TODO: Images of user profiles -->
-            <span> Loved by 2018+ customers</span>
+            <span> Loved by 2163+ customers</span>
           </NuxtLink>
 
           <!-- TODO: Testimonials -->
@@ -209,14 +200,26 @@
                     </div>
                   </div>
 
-                  <button
+                  <NuxtLink
                     aria-describedby="premium-features"
                     class="focus-visible:focus-outline-util hover:hover-text-util rounded-md bg-primary-700 px-3 py-2 text-center text-sm font-semibold leading-6 text-base-content-highlight hover:bg-primary-600 focus-visible:ring-offset-2"
-                    data-sellix-product="668f8f7c7c348"
                     onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click'])"
-                    type="button"
+                    rel="noopener nofollow"
+                    target="_blank"
+                    to="https://www.patreon.com/bePatron?u=135693332"
                   >
                     Get Premium
+                  </NuxtLink>
+
+                  <button
+                    ref="visibleEl"
+                    aria-describedby="premium-features"
+                    class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 hover:bg-primary-600 focus-visible:ring-offset-2"
+                    data-sellix-product="668f8f7c7c348"
+                    onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click', 'Crypto'])"
+                    type="button"
+                  >
+                    Get Premium with Crypto
                   </button>
 
                   <p class="text-center text-xs leading-6">
@@ -224,15 +227,16 @@
 
                     <NuxtLink
                       class="focus-visible:focus-outline-util hover:hover-text-util"
-                      href="https://sellix.io"
+                      href="https://www.patreon.com"
                       rel="nofollow noopener"
                       target="_blank"
                     >
-                      Sellix
+                      Patreon
                     </NuxtLink>
 
                     <br />
-                    Discreet credit card statement
+
+                    Discreet “PATREON” credit card statement
                   </p>
                 </div>
               </div>

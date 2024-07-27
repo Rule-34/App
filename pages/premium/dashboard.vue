@@ -4,7 +4,7 @@
 
   const { $pocketBase } = useNuxtApp()
 
-  const { email, isPremium } = useUserData()
+  const { email, license, isPremium } = useUserData()
 
   const links = [
     {
@@ -24,7 +24,7 @@
     },
     {
       name: 'Backup & Restore',
-      description: 'Backup your saved posts, tag collections and settings',
+      description: 'Backup your tag collections and settings',
       href: '/premium/backup'
     }
   ]
@@ -33,8 +33,48 @@
     // Log out from pocketbase
     $pocketBase.authStore.clear()
 
-    window.location.href = '/premium/sign-in?message=Signed out successfully'
+    window.location.href = '/premium/sign-in'
   }
+
+  const platformOfPurchase = computed(() => {
+    if (!license.value) {
+      return null
+    }
+
+    switch (true) {
+      case license.value.startsWith('SLX-'):
+        return 'Sellix'
+
+      case license.value.startsWith('PATREON-'):
+        return 'Patreon'
+
+      case license.value.length === 35:
+        return 'Gumroad'
+
+      default:
+        throw new Error('Unknown license origin')
+    }
+  })
+
+  const manageSubscriptionLink = computed(() => {
+    if (!platformOfPurchase.value) {
+      return null
+    }
+
+    switch (platformOfPurchase.value) {
+      case 'Sellix':
+        return 'https://alejandroakbal.mysellix.io/customer/auth'
+
+      case 'Patreon':
+        return 'https://www.patreon.com/r34app/membership'
+
+      case 'Gumroad':
+        return 'https://app.gumroad.com/library?query=Rule+34+App'
+
+      default:
+        throw new Error('Unknown platform of purchase')
+    }
+  })
 
   onNuxtReady(() => {
     const route = useRoute()
@@ -150,12 +190,22 @@
     </section>
 
     <!-- Manage subscription -->
-    <section class="absolute inset-x-0 bottom-0 w-full p-4 text-center">
-      <!-- TODO: Contact support -->
-
+    <section class="absolute inset-x-0 bottom-0 w-full space-x-2 p-4 text-center">
       <NuxtLink
         class="hover:hover-text-util focus-visible:focus-outline-util underline"
-        href="https://alejandroakbal.mysellix.io/customer/auth"
+        href="mailto:contact@r34.app"
+        rel="nofollow noopener noreferrer"
+        target="_blank"
+      >
+        <!-- @formatter:off -->
+        Contact support</NuxtLink
+      >
+
+      <span> &middot; </span>
+
+      <NuxtLink
+        :href="manageSubscriptionLink"
+        class="hover:hover-text-util focus-visible:focus-outline-util underline"
         rel="nofollow noopener noreferrer"
         target="_blank"
       >
