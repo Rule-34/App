@@ -214,7 +214,7 @@
                   <button
                     ref="visibleEl"
                     aria-describedby="premium-features"
-                    class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 hover:bg-primary-600 focus-visible:ring-offset-2"
+                    class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-md px-3 py-2 text-center text-sm font-medium text-base-content ring-1 ring-base-0/20 focus-visible:ring-offset-2"
                     data-sellix-product="668f8f7c7c348"
                     onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click', 'Crypto'])"
                     type="button"
