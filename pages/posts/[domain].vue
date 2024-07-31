@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-  import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
+  import { Bars3BottomRightIcon, EyeIcon, MagnifyingGlassIcon, StarIcon } from '@heroicons/vue/24/outline'
   import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
-  import { Bars3BottomRightIcon, EyeIcon, StarIcon } from '@heroicons/vue/24/outline'
   import * as Sentry from '@sentry/vue'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
@@ -664,9 +663,9 @@
   <!-- Search menu -->
   <SearchMenuWrapper>
     <LazySearchMenu
+      :filter-config="filterConfig"
       :initial-selected-filters="selectedFilters"
       :initial-selected-tags="selectedTags"
-      :filter-config="filterConfig"
       :tag-results="tagResults"
       @submit="onSearchSubmit"
       @search-tag="onSearchTag"
@@ -724,21 +723,48 @@
 
       <!-- Error -->
       <template v-else-if="isError">
-        <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-center text-lg">
-          <ExclamationCircleIcon class="h-12 w-12" />
+        <div class="mt-12 text-center">
+          <ExclamationCircleIcon class="mx-auto mb-1 h-12 w-12" />
 
-          <template v-if="error.status === 404">
-            <h3>No posts found</h3>
-          </template>
+          <div v-if="error.status === 404">
+            <h3 class="text-lg font-semibold leading-10">No posts found</h3>
 
-          <template v-else>
-            <h3>Failed to load posts</h3>
+            <span class="w-full overflow-x-auto"> Try changing the tags or filters </span>
+          </div>
+
+          <div v-else-if="error.status === 429">
+            <h3 class="text-lg font-semibold leading-10">Too many requests</h3>
+
+            <span class="w-full overflow-x-auto text-pretty">
+              You sent too many requests in a short period of time. Use the button below to continue using the R34 App
+            </span>
+
+            <NuxtLink
+              :href="config.public.API_URL + '/status'"
+              class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto mt-4 block w-fit rounded-md px-6 py-1.5 text-base ring-1 ring-base-0/20 focus-visible:ring-offset-2"
+              rel="nofollow noopener noreferrer"
+              target="_blank"
+            >
+              Verify I am not a Bot
+            </NuxtLink>
+          </div>
+
+          <div v-else>
+            <h3 class="text-lg font-semibold leading-10">Failed to load posts</h3>
+
             <span class="w-full overflow-x-auto text-base">
               {{ error.data?.message ?? error.message }}
             </span>
-          </template>
+          </div>
 
-          <!-- TODO: Retry button -->
+          <!-- Retry button -->
+          <button
+            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto mt-6 block w-fit rounded-md px-6 py-1.5 text-base ring-1 ring-base-0/20 focus-visible:ring-offset-2"
+            type="button"
+            @click="refetch()"
+          >
+            Retry
+          </button>
         </div>
       </template>
 
