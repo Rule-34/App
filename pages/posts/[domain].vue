@@ -380,6 +380,16 @@
           toast.error('No tags found for query "' + tag + '"')
           break
 
+        case 429:
+          toast.error(response.statusText, {
+            description: 'You sent too many requests in a short period of time',
+            action: {
+              label: 'Verify I am not a Bot',
+              onClick: () => window.open(config.public.API_URL + '/status', '_blank')
+            }
+          })
+          break
+
         default:
           toast.error(`Failed to load tags: "${response.message}"`)
           break
@@ -481,6 +491,10 @@
 
     // TODO: Figure out a better way to reload page
     await reflectChangesInUrl({ page })
+    window.location.reload()
+  }
+
+  function onRetryClick() {
     window.location.reload()
   }
 
@@ -761,7 +775,7 @@
           <button
             class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto mt-6 block w-fit rounded-md px-6 py-1.5 text-base ring-1 ring-base-0/20 focus-visible:ring-offset-2"
             type="button"
-            @click="refetch()"
+            @click="onRetryClick"
           >
             Retry
           </button>
@@ -775,7 +789,7 @@
 
           <h3>No results</h3>
 
-          <span class="text-base">Try changing the domain or the tags</span>
+          <span class="text-base">Try changing the tags or filters</span>
         </div>
       </template>
 

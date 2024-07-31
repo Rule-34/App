@@ -73,6 +73,16 @@
           toast.error('No tags found for query "' + tag + '"')
           break
 
+        case 429:
+          toast.error(response.statusText, {
+            description: 'You sent too many requests in a short period of time',
+            action: {
+              label: 'Verify I am not a Bot',
+              onClick: () => window.open(config.public.API_URL + '/status', '_blank')
+            }
+          })
+          break
+
         default:
           toast.error(`Failed to load tags: "${response.message}"`)
           break
