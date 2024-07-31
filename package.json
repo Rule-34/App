@@ -1,6 +1,6 @@
 {
   "name": "rule-34-app",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "private": true,
   "description": "Stream and download Rule 34 porn videos, GIFs, and images from multiple Boorus in a mobile-first web app",
   "author": "Alejandro Akbal",
