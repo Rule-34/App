@@ -185,10 +185,11 @@
     <NuxtLink
       :href="promo.link"
       :target="promo.link.startsWith('http') ? '_blank' : null"
-      rel="nofollow noopener noreferrer"
       class="focus-visible:focus-outline-util focus-visible:ring-inset"
+      rel="nofollow noopener"
     >
       <PostMedia
+        :alt-media-src="null"
         :media-alt="'Promoted content'"
         :media-poster-src="null"
         :media-src="promo.media"
