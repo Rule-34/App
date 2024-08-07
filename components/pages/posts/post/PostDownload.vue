@@ -18,13 +18,10 @@
 
   async function downloadMedia() {
     if (!isPremium.value) {
-      toast.info('Premium feature', {
-        description: 'Automatically download media with the correct name & extension: rule34.xxx-123.png',
-        action: {
-          label: 'Subscribe',
-          onClick: () => navigateTo('/premium?utm_source=internal&utm_medium=premium-download-media')
-        }
-      })
+      const { open: promptPremium, currentIndex } = usePremiumDialog()
+
+      currentIndex.value = 5
+      promptPremium.value = true
       return
     }
 

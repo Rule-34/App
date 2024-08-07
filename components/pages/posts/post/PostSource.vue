@@ -69,6 +69,14 @@
   }
 
   function openSourceFinder(url: string) {
+    if (!isPremium.value) {
+      const { open: promptPremium, currentIndex } = usePremiumDialog()
+
+      currentIndex.value = 7
+      promptPremium.value = true
+      return
+    }
+
     window.open(url, '_blank')
   }
 
@@ -78,7 +86,7 @@
     }
 
     toast.info('Post Source', {
-      description: 'Find the source (artist) of posts with SauceNAO, IQDB, Google, Yandex, Bing, and many more!',
+      description: 'Go to the source (artist) if it exists, or find it with reverse image search',
       duration: 10000
     })
 
@@ -92,7 +100,6 @@
     class="relative inline-block text-left"
   >
     <Float
-      vue-transition
       :offset="6"
       enter="transition ease-out duration-100"
       enter-from="transform opacity-0 scale-95"
@@ -103,6 +110,7 @@
       placement="bottom-start"
       portal
       tailwindcss-origin-class
+      vue-transition
     >
       <HeadlessMenuButton
         class="hover:hover-bg-util focus-visible:focus-outline-util group flex items-center rounded-md px-1.5 py-1"
@@ -169,7 +177,6 @@
           <HeadlessMenuItem
             v-for="service in imageAnimeRelatedServiceOptions"
             v-slot="{ active }"
-            :disabled="!isPremium"
           >
             <button
               :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
@@ -196,7 +203,6 @@
           <HeadlessMenuItem
             v-for="service in imageRelatedServiceOptions"
             v-slot="{ active }"
-            :disabled="!isPremium"
           >
             <button
               :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"

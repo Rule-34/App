@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import { BookmarkIcon } from '@heroicons/vue/24/outline'
   import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/vue/24/solid'
-  import { toast } from 'vue-sonner'
   import { PocketbasePost } from '~/assets/js/pocketbase.dto'
   import type { IPost } from '~/assets/js/post.dto'
 
@@ -28,10 +27,10 @@
 
   async function onClick() {
     if (!isPremium.value) {
-      toast.info('Premium feature', {
-        description: 'Save posts and enjoy them later',
-        duration: 10000
-      })
+      const { open: promptPremium, currentIndex } = usePremiumDialog()
+
+      currentIndex.value = 2
+      promptPremium.value = true
       return
     }
 

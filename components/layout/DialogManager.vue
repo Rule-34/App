@@ -1,5 +1,15 @@
 <script lang="ts" setup>
-  const open = ref(false)
+  function sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+  }
+
+  const isNuxtReady = ref(false)
+
+  onNuxtReady(() => {
+    isNuxtReady.value = true
+  })
+
+  const isDialogReady = ref(false)
 
   const dialogs = [
     // PWA prompt
@@ -20,10 +30,22 @@
           return false
         }
 
+        sleep(1000 * 3) // 3 seconds
+          .then(() => {
+            isDialogReady.value = true
+          })
+
         return true
+      },
+      close: () => {
+        const { promptInstallPwa } = useAppStatistics()
+
+        isDialogReady.value = false
+        promptInstallPwa.value = true
       },
       component: defineAsyncComponent(() => import('~/components/layout/modal/PwaPrompt.vue'))
     },
+
     // Feedback prompt
     {
       condition: () => {
@@ -38,31 +60,62 @@
           return false
         }
 
+        sleep(1000 * 3) // 3 seconds
+          .then(() => {
+            isDialogReady.value = true
+          })
+
         return true
+      },
+      close: () => {
+        const { promptFeedback } = useAppStatistics()
+
+        isDialogReady.value = false
+        promptFeedback.value = true
       },
       component: defineAsyncComponent(() => import('~/components/layout/modal/FeedbackPrompt.vue'))
     },
+
+    // Premium Prompt
+    {
+      condition: () => {
+        const { open: promptPremium } = usePremiumDialog()
+
+        if (!promptPremium.value) {
+          return false
+        }
+
+        isDialogReady.value = true
+        return true
+      },
+      close: () => {
+        const { open } = usePremiumDialog()
+
+        isDialogReady.value = false
+        open.value = false
+      },
+      component: defineAsyncComponent(() => import('~/components/layout/modal/PremiumPrompt.vue'))
+    }
   ]
 
-  const dialog = dialogs.find((dialog) => dialog.condition())?.component
+  const dialog = computed(() => {
+    if (!isNuxtReady.value) {
+      return
+    }
 
-  if (dialog) {
-    // Show after X seconds
-    setTimeout(() => {
-      open.value = true
-    }, 1000 * 1.33)
-  }
+    return dialogs.find((dialog) => dialog.condition())
+  })
 </script>
 
 <template>
   <HeadlessTransitionRoot
-    :show="open"
+    :show="dialog != undefined && isDialogReady"
     as="template"
   >
     <HeadlessDialog
       as="div"
       class="relative z-10"
-      @close="open = false"
+      @close="dialog?.close()"
     >
       <!-- Background -->
       <HeadlessTransitionChild
@@ -90,11 +143,11 @@
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <HeadlessDialogPanel
-              class="relative transform overflow-hidden rounded-lg bg-base-1000 px-4 pb-4 pt-5 text-left shadow-xl ring-1 ring-base-0/10 transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+              class="relative w-full transform overflow-hidden rounded-lg bg-base-1000 px-4 pb-4 pt-5 text-left shadow-xl ring-1 ring-base-0/10 transition-all sm:my-8 sm:max-w-lg sm:p-6"
             >
               <component
-                :is="dialog"
-                v-model="open"
+                :is="dialog?.component"
+                :close="dialog?.close"
               />
             </HeadlessDialogPanel>
           </HeadlessTransitionChild>

@@ -103,6 +103,8 @@
     })
   }
 
+  // TODO: Listen to router
+
   definePageMeta({
     middleware: [
       /**

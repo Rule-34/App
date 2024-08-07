@@ -1,17 +1,10 @@
 <script lang="ts" setup>
   import { HomeIcon } from '@heroicons/vue/24/outline'
-  import { watchOnce } from '@vueuse/core'
   import { ArrowPathIcon } from '@heroicons/vue/24/solid'
 
-  const open = defineModel<boolean>()
-
-  watchOnce(open, () => {
-    if (!open.value) {
-      const { promptInstallPwa } = useAppStatistics()
-
-      promptInstallPwa.value = true
-    }
-  })
+  defineProps<{
+    close: () => void
+  }>()
 
   const isIframeLoaded = ref(false)
 </script>
@@ -40,7 +33,7 @@
           <!--          -->
           it doesnt need any permissions,
           <!--          -->
-<!--          is automatically updated,-->
+          <!--          is automatically updated,-->
           <!--          -->
           and it doesn't take any storage!
         </p>
@@ -74,7 +67,7 @@
     <button
       class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-base-0/20"
       type="button"
-      @click="open = false"
+      @click="close()"
     >
       Dismiss
     </button>

@@ -1,6 +1,5 @@
 <script lang="ts" setup>
   import { formatTimeAgo } from '@vueuse/core'
-  import { toast } from 'vue-sonner'
   import { XMarkIcon } from '@heroicons/vue/20/solid'
 
   const { isPremium } = useUserData()
@@ -36,13 +35,10 @@
 
   function onHistoryItemClick(path: string) {
     if (!isPremium.value) {
-      toast.info('Premium feature', {
-        description: 'Page history is only available for Premium users',
-        action: {
-          label: 'Subscribe',
-          onClick: () => navigateTo('/premium?utm_source=internal&utm_medium=premium-page-history')
-        }
-      })
+      const { open: promptPremium, currentIndex } = usePremiumDialog()
+
+      currentIndex.value = 3
+      promptPremium.value = true
       return
     }
 

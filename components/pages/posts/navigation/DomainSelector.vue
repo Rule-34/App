@@ -20,6 +20,18 @@
 
   const { isPremium } = useUserData()
 
+  function onModelValueChange(domain: Domain) {
+    if (domain.isPremium && !isPremium.value) {
+      const { open: promptPremium, currentIndex } = usePremiumDialog()
+
+      currentIndex.value = 4
+      promptPremium.value = true
+      return
+    }
+
+    emit('update:modelValue', domain)
+  }
+
   function shouldBooruBeDisabled(booru: Domain) {
     if (booru.isPremium && !isPremium.value) {
       return true
@@ -33,7 +45,7 @@
   <HeadlessListbox
     :modelValue="props.modelValue"
     as="template"
-    @update:modelValue="emit('update:modelValue', $event)"
+    @update:modelValue="onModelValueChange"
   >
     <Float
       :offset="16"
@@ -89,15 +101,11 @@
           v-for="booru in props.boorus"
           :key="booru.domain"
           v-slot="{ active, selected }"
-          :disabled="shouldBooruBeDisabled(booru)"
           :value="booru"
           as="template"
         >
           <li
-            :class="[
-              active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content',
-              shouldBooruBeDisabled(booru) ? 'cursor-not-allowed opacity-50' : ''
-            ]"
+            :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
             class="relative cursor-default select-none py-2 pl-3 pr-14"
           >
             <div class="flex items-center">
