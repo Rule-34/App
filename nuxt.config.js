@@ -99,9 +99,7 @@ export default defineNuxtConfig({
 
     '@nuxt/image',
 
-    '@nuxt/fonts',
-
-    '@nuxt/scripts'
+    '@nuxt/fonts'
   ],
 
   image: {
