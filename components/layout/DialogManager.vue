@@ -76,6 +76,36 @@
       component: defineAsyncComponent(() => import('~/components/layout/modal/FeedbackPrompt.vue'))
     },
 
+    // Review prompt
+    {
+      condition: () => {
+        const { timesTheAppHasBeenOpened, promptReview } = useAppStatistics()
+
+        if (promptReview.value) {
+          return false
+        }
+
+        // Show after 9 times
+        if (timesTheAppHasBeenOpened.value < 9) {
+          return false
+        }
+
+        sleep(1000 * 3) // 3 seconds
+          .then(() => {
+            isDialogReady.value = true
+          })
+
+        return true
+      },
+      close: () => {
+        const { promptReview } = useAppStatistics()
+
+        isDialogReady.value = false
+        promptReview.value = true
+      },
+      component: defineAsyncComponent(() => import('~/components/layout/modal/ReviewPrompt.vue'))
+    },
+
     // Premium Prompt
     {
       condition: () => {
