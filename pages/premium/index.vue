@@ -178,10 +178,10 @@
                 <div class="flex flex-col gap-6 lg:flex-col lg:items-stretch">
                   <!-- Price -->
                   <div class="mt-10 flex items-center justify-center gap-x-4">
-                    <p class="text-4xl font-bold tracking-tight text-base-content-highlight">€7</p>
+                    <p class="text-4xl font-bold tracking-tight text-base-content-highlight">$7</p>
 
                     <div class="text-sm leading-5">
-                      <p class="text-base-content">EUR</p>
+                      <p class="text-base-content">USD</p>
                       <p>Billed monthly</p>
                     </div>
                   </div>
