@@ -7,12 +7,14 @@ export default defineSitemapEventHandler(async () => {
   // TODO: Fetch more data
   const popularSiteSearchKeywords = await getPopularSiteSearchKeywordsFromMatomoApi()
 
-  return popularSiteSearchKeywords.map((keyword) => ({
-    loc: `/posts/rule34.xxx?tags=${keyword.label}`,
-    changefreq: 'always',
-    priority: 0.8,
-    _sitemap: 'pages'
-  }))
+  return popularSiteSearchKeywords.map((keyword) =>
+    asSitemapUrl({
+      loc: `/posts/rule34.xxx?tags=${keyword.label}`,
+      changefreq: 'always',
+      priority: 0.8,
+      _sitemap: 'pages'
+    })
+  )
 })
 
 interface MatomoResponse {
