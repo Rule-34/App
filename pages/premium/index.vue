@@ -22,6 +22,34 @@
     { title: 'Support the development', additionalInfo: '#support-development' }
   ]
 
+  const testimonials = [
+    {
+      name: 'Anon',
+      text: 'Its just the better option, you skip all the browsing and focus on the porn',
+      from: 'Gumroad'
+    },
+    {
+      name: 'Anon',
+      text: 'Basically THE porn search engine for mobile',
+      from: 'Feedback'
+    },
+    {
+      name: 'Deadpool (asleep)',
+      text: 'Downloading videos is the best, and saving them for later is even better',
+      from: 'Discord'
+    },
+    {
+      name: 'Anon',
+      text: 'I wanted to check out a more user-friendly version of realbooru. Your app works VERY well for iOS devices. Especially turning the browser into a home screen app.',
+      from: 'Feedback'
+    },
+    {
+      name: 'Cody',
+      text: 'I love my Premium subscription',
+      from: 'Gumroad'
+    }
+  ]
+
   useSeoMeta({
     title: 'Premium'
   })
@@ -56,7 +84,7 @@
               Browse Ad-free & Save Posts
             </h1>
 
-            <p class="mx-auto mt-3 max-w-3xl text-center text-lg font-medium leading-8 lg:mt-3">
+            <p class="mx-auto mt-3 max-w-3xl text-center text-lg font-medium leading-7 lg:mt-3">
               Focus on Hentai without distractions, save posts to view them later, faster image loading and much more!
             </p>
           </div>
@@ -73,7 +101,7 @@
 
           <!-- Rating -->
           <NuxtLink
-            class="focus-visible:focus-outline-util hover:hover-text-util mt-10 flex flex-col items-center justify-center gap-2.5 pb-4"
+            class="focus-visible:focus-outline-util hover:hover-text-util mt-16 flex flex-col items-center justify-center gap-2.5 pb-4"
             href="https://www.trustpilot.com/review/r34.app"
             rel="nofollow noopener"
             target="_blank"
@@ -88,11 +116,44 @@
             </div>
 
             <!-- TODO: Images of user profiles -->
-            <span> Loved by 2163+ customers</span>
+            <span> Loved by 2216+ customers</span>
           </NuxtLink>
 
-          <!-- TODO: Testimonials -->
-          <section></section>
+          <!-- Testimonials -->
+          <section>
+            <ol class="mt-3 space-y-6 px-6">
+              <li
+                v-for="testimonial in testimonials"
+                :key="testimonial.text"
+              >
+                “<!---->
+                <p class="inline text-base-content-highlight">{{ testimonial.text }}</p>
+                <!---->”
+
+                <div class="mt-1.5 flex items-center gap-x-2 text-xs">
+                  <span>
+                    <span class="sr-only">user name</span>
+                    {{ testimonial.name }}
+                  </span>
+
+                  &ndash;
+
+                  <span>
+                    {{ testimonial.from }}
+                  </span>
+                </div>
+              </li>
+            </ol>
+
+            <NuxtLink
+              class="focus-visible:focus-outline-util hover:hover-text-util mx-auto mt-10 flex w-full max-w-fit gap-2.5 text-sm underline"
+              href="https://www.trustpilot.com/review/r34.app"
+              rel="nofollow noopener"
+              target="_blank"
+            >
+              And many more
+            </NuxtLink>
+          </section>
 
           <!-- Benefits -->
           <section>
