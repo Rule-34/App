@@ -2,13 +2,8 @@
   const newsList = [
     {
       name: 'Get the best Hentai on social media! 📱',
-      text:
-        "We're on Twitter, Mastodon, and Telegram",
+      text: "We're on Mastodon and Telegram",
       links: [
-        {
-          text: 'Twitter',
-          href: 'https://twitter.com/Rule34_Pokebot'
-        },
         {
           text: 'Mastodon',
           href: 'https://mastodon.social/@r34'
@@ -16,7 +11,7 @@
         {
           text: 'Telegram',
           href: 'https://t.me/Rule_34_Hentai'
-        },
+        }
       ]
     },
     {
