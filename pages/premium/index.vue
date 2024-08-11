@@ -101,17 +101,17 @@
 
           <!-- Rating -->
           <NuxtLink
-            class="focus-visible:focus-outline-util hover:hover-text-util mt-16 flex flex-col items-center justify-center gap-2.5 pb-4"
+            class="focus-visible:focus-outline-util hover:hover-text-util mt-16 flex flex-col items-center justify-center gap-3 pb-4"
             href="https://www.trustpilot.com/review/r34.app"
             rel="nofollow noopener"
             target="_blank"
           >
-            <div class="flex items-center">
+            <div class="flex items-center gap-0.5">
               <StarIcon
                 v-for="rating in [0, 1, 2, 3, 4]"
                 :key="rating"
                 aria-hidden="true"
-                class="h-5 w-5 flex-shrink-0 text-base-content-highlight"
+                class="h-6 w-6 flex-shrink-0 text-base-content-highlight"
               />
             </div>
 
@@ -121,7 +121,7 @@
 
           <!-- Testimonials -->
           <section>
-            <ol class="mt-3 space-y-6 px-6">
+            <ol class="mt-4 space-y-6 px-6">
               <li
                 v-for="testimonial in testimonials"
                 :key="testimonial.text"
