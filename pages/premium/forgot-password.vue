@@ -1,58 +1,42 @@
 <script lang="ts" setup>
-  import { ClientResponseError } from 'pocketbase'
   import { toast } from 'vue-sonner'
 
   const { $pocketBase } = useNuxtApp()
 
   const formData = shallowRef({
-    password: ''
+    email: ''
   })
 
   async function onSubmit() {
-    const password = formData.value.password
+    const email = formData.value.email
 
-    if (!password) {
+    const cleanEmail = email.trim().toLowerCase()
+
+    if (!cleanEmail) {
       return
     }
 
-    // Authenticate to pocketbase
     try {
-      const authData = await $pocketBase.collection('users').authWithPassword(password, password)
-    } catch (error) {
-      if (error instanceof ClientResponseError) {
-        toast.error(error.message)
-        return
-      }
-    }
+      const response = await $fetch('https://n8n.akbal.dev/webhook/r34/pocketbase/forgot-password', {
+        method: 'POST',
+        body: {
+          email: cleanEmail
+        }
+      })
 
-    await navigateTo('/premium/dashboard')
+      toast.success(response.message, {
+        duration: 1000 * 30 // 30 seconds
+      })
+    } catch (error) {
+      toast.error(`Failed to send email: ${error}`)
+      return
+    }
   }
 
-  onNuxtReady(() => {
-    const route = useRoute()
-    const message = route.query.message
-    const license = route.query.license
-
-    // TODO: Add action to contact support
-    if (message) {
-      toast.info(message)
-    }
-
-    if (license) {
-      if ($pocketBase.authStore.isValid) {
-        $pocketBase.authStore.clear()
-      }
-
-      formData.value.password = license
-
-      onSubmit()
-    }
-  })
-
   useSeoMeta({
-    title: 'Sign in',
+    title: 'Forgot license',
 
-    description: 'Sign in to the Rule 34 App.'
+    description: 'Recover your Rule 34 App license key.'
   })
 
   definePageMeta({
@@ -68,7 +52,8 @@
     <section class="-mt-12 flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div class="sm:mx-auto sm:w-full sm:max-w-sm">
         <PageHeader class="text-center">
-          <template #title>Sign in</template>
+          <template #title>Forgot license?</template>
+          <template #text>Enter your email and we'll send it to you</template>
         </PageHeader>
       </div>
 
@@ -78,44 +63,25 @@
           @submit.prevent="onSubmit"
         >
           <div>
-            <!-- License key-->
+            <!-- Email-->
             <div class="flex items-center justify-between">
               <label
                 class="block text-sm font-medium leading-6 text-base-content-highlight"
-                for="license"
+                for="email"
               >
-                License
+                Email
               </label>
-              <div class="text-sm">
-                <NuxtLink
-                  class="hover:hover-text-util focus-visible:focus-outline-util font-semibold"
-                  href="/premium/forgot-password"
-                  rel="noopener"
-                >
-                  Forgot license?
-                </NuxtLink>
-              </div>
             </div>
 
             <div class="mt-2">
-              <!-- Fake username for password autofill -->
               <input
-                id="username"
-                autocomplete="username"
-                name="username"
-                style="display: none"
-                type="text"
-                value="_"
-              />
-
-              <input
-                id="license"
-                v-model.trim="formData.password"
-                autocomplete="current-password"
+                id="email"
+                v-model.trim="formData.email"
+                autocomplete="email"
                 class="focus-visible:focus-outline-util block w-full rounded-md border-0 bg-transparent py-1.5 text-base-content-highlight shadow-sm ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
-                name="password"
+                name="email"
                 required
-                type="password"
+                type="email"
               />
             </div>
           </div>
@@ -125,21 +91,21 @@
               class="focus-visible:focus-outline-util hover:hover-text-util flex w-full justify-center rounded-md bg-primary-500 px-3 py-1.5 text-sm font-semibold leading-6 text-base-content-highlight shadow-sm hover:bg-primary-400"
               type="submit"
             >
-              Sign in
+              Send license
             </button>
           </div>
         </form>
 
         <p class="mt-10 text-center text-sm">
-          Not a Premium member?
+          Got your license key?
 
           {{ ' ' }}
 
           <NuxtLink
             class="focus-visible:focus-outline-util font-semibold leading-6 text-primary-400 hover:text-primary-300"
-            href="/premium"
+            href="/premium/sign-in"
           >
-            Subscribe now
+            Sign in
           </NuxtLink>
         </p>
       </div>

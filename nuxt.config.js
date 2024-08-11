@@ -21,6 +21,7 @@ export default defineNuxtConfig({
 
     '/premium': { prerender: true },
     '/premium/sign-in': { prerender: true },
+    '/premium/forgot-password': { prerender: true },
 
     // All premium pages are client-side rendered
     '/premium/dashboard': { ssr: false },

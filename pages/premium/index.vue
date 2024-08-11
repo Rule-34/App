@@ -32,10 +32,10 @@
   <ClientOnly>
     <Teleport to="#navbar-actions">
       <NuxtLink
-        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
+        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative flex items-center gap-x-2 rounded-md p-2"
         href="/premium/sign-in"
       >
-        <span class="sr-only">Sign in</span>
+        <span class="text-sm text-base-content">Sign in</span>
 
         <ArrowRightOnRectangleIcon class="h-6 w-6 text-base-content-highlight" />
       </NuxtLink>
