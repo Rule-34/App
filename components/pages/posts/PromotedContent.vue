@@ -16,10 +16,10 @@
       id: 'otherPromotions',
       weight: 1
     },
-    {
-      weight: 1,
-      id: 'referralPromotions'
-    },
+    // {
+    //   weight: 1,
+    //   id: 'referralPromotions'
+    // },
     {
       weight: 3,
       id: 'advertisementPromotions'
