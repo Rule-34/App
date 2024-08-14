@@ -137,3 +137,30 @@ export const referralPromotions = [
   //   link: 'https://ehentai.ai/?a=5Zwcn730LArsRN'
   // },
 ]
+
+export const advertisementPromotions = [
+  // Mobile Banner
+  {
+    media: '//a.magsrv.com/iframe.php?idzone=5386082&size=300x250',
+    mediaWidth: 300,
+    mediaHeight: 250,
+    mediaType: 'iframe',
+    link: null
+  },
+  // Banner
+  {
+    media: '//a.magsrv.com/iframe.php?idzone=5386192&size=300x500',
+    mediaWidth: 300,
+    mediaHeight: 500,
+    mediaType: 'iframe',
+    link: null
+  },
+  // Banner Vertical
+  {
+    media: '//a.magsrv.com/iframe.php?idzone=5386194&size=160x600',
+    mediaWidth: 160,
+    mediaHeight: 600,
+    mediaType: 'iframe',
+    link: null
+  }
+]

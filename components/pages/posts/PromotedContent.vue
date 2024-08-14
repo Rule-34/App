@@ -1,5 +1,10 @@
 <script setup>
-  import { otherPromotions, premiumPromotions, referralPromotions } from '~/assets/js/promotions'
+  import {
+    advertisementPromotions,
+    otherPromotions,
+    premiumPromotions,
+    referralPromotions
+  } from '~/assets/js/promotions'
   import { default as random_weighted_choice } from 'random-weighted-choice'
 
   const weightedPromotions = [
@@ -14,6 +19,10 @@
     {
       weight: 1,
       id: 'referralPromotions'
+    },
+    {
+      weight: 3,
+      id: 'advertisementPromotions'
     }
   ]
 
@@ -31,6 +40,9 @@
     case 'referralPromotions':
       selectedPromotions = referralPromotions
       break
+    case 'advertisementPromotions':
+      selectedPromotions = advertisementPromotions
+      break
     default:
       throw new Error('Invalid promotion type')
   }
@@ -42,8 +54,23 @@
   <figure class="-mx-1 rounded-md border border-base-0/20">
     <!-- -->
 
+    <template v-if="promo.mediaType === 'iframe'">
+      <iframe
+        :height="promo.mediaHeight"
+        :src="promo.media"
+        :width="promo.mediaWidth"
+        class="mx-auto"
+        frameborder="0"
+        loading="lazy"
+        marginheight="0"
+        marginwidth="0"
+        scrolling="no"
+      />
+    </template>
+
     <!-- Media -->
     <NuxtLink
+      v-else
       :href="promo.link"
       :target="promo.link.startsWith('http') ? '_blank' : null"
       class="focus-visible:focus-outline-util focus-visible:ring-inset"
