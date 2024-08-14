@@ -36,6 +36,11 @@
       {
         rel: 'canonical',
         href: canonicalUrl
+      },
+      // Preconnect to API
+      {
+        rel: 'preconnect',
+        href: config.public.API_URL
       }
     ]
   })
