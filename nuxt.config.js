@@ -3,6 +3,44 @@ export default defineNuxtConfig({
 
   spaLoadingTemplate: true,
 
+  app: {
+    head: {
+      bodyAttrs: {
+        class: 'cc--custom'
+      },
+
+      meta: [
+        {
+          name: 'juicyads-site-verification',
+          content: '188e6b59c1a952cf701494e5dd2905bf'
+        }
+      ],
+
+      style: [
+        {
+          type: 'text/css',
+          children: 'html { background-color: black; }'
+        }
+      ],
+
+      script: [
+        // Matomo
+        {
+          src: '/js/matomo.js',
+          type: 'text/plain',
+          'data-category': 'analytics',
+          'data-service': 'matomo'
+        },
+        {
+          src: 'https://matomo.akbal.dev/matomo.js',
+          type: 'text/plain',
+          'data-category': 'analytics',
+          'data-service': 'matomo'
+        }
+      ]
+    }
+  },
+
   /**
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
    */
@@ -191,35 +229,6 @@ export default defineNuxtConfig({
       suppressWarnings: true,
       navigateFallbackAllowlist: [/^\/$/],
       type: 'module'
-    }
-  },
-
-  app: {
-    head: {
-      bodyAttrs: {
-        class: 'cc--custom'
-      },
-      style: [
-        {
-          type: 'text/css',
-          children: 'html { background-color: black; }'
-        }
-      ],
-      script: [
-        // Matomo
-        {
-          src: '/js/matomo.js',
-          type: 'text/plain',
-          'data-category': 'analytics',
-          'data-service': 'matomo'
-        },
-        {
-          src: 'https://matomo.akbal.dev/matomo.js',
-          type: 'text/plain',
-          'data-category': 'analytics',
-          'data-service': 'matomo'
-        }
-      ]
     }
   },
 
