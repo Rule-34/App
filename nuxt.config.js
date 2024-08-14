@@ -9,13 +9,6 @@ export default defineNuxtConfig({
         class: 'cc--custom'
       },
 
-      meta: [
-        {
-          name: 'juicyads-site-verification',
-          content: '188e6b59c1a952cf701494e5dd2905bf'
-        }
-      ],
-
       style: [
         {
           type: 'text/css',
