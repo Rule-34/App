@@ -6,7 +6,6 @@
 
   export interface PostMediaProps {
     mediaSrc: string | null
-    altMediaSrc: string | null
     mediaSrcHeight: number | null
     mediaSrcWidth: number | null
     mediaPosterSrc: string | null
@@ -30,7 +29,6 @@
   const isVideo = computed(() => props.mediaType === 'video')
 
   const triedToLoadWithProxy = shallowRef(false)
-  const triedToLoadAltMedia = shallowRef(false)
 
   onBeforeUnmount(() => {
     let finalMediaElement = mediaElement.value
