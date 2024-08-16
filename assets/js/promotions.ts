@@ -187,9 +187,29 @@ export const advertisementPromotions = [
     link: null
   },
   // Banner
+  // {
+  //   media: '//adserver.juicyads.com/adshow.php?adzone=1064589',
+  //   mediaWidth: 250,
+  //   mediaHeight: 250,
+  //   mediaType: 'iframe',
+  //   link: null
+  // },
+
+  /**
+   * Clickadu
+   */
+  // Banner
   {
-    media: '//adserver.juicyads.com/adshow.php?adzone=1064589',
-    mediaWidth: 250,
+    media: '//brittlesturdyunlovable.com/lvesnk.html?zoneid=2034752',
+    mediaWidth: 300,
+    mediaHeight: 100,
+    mediaType: 'iframe',
+    link: null
+  },
+  // Banner
+  {
+    media: '//brittlesturdyunlovable.com/lvesnk.html?zoneid=2034751',
+    mediaWidth: 300,
     mediaHeight: 250,
     mediaType: 'iframe',
     link: null
