@@ -96,8 +96,7 @@
 
         loop: true,
 
-        allowTheatre: false,
-        allowDownload: false
+        allowTheatre: false
       }
     }
 
