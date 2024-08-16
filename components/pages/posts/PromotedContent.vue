@@ -60,10 +60,12 @@
         :src="promo.media"
         :width="promo.mediaWidth"
         class="mx-auto"
+        credentialless="true"
         frameborder="0"
         loading="lazy"
         marginheight="0"
         marginwidth="0"
+        sandbox="allow-scripts allow-same-origin"
         scrolling="no"
       />
     </template>
