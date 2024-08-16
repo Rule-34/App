@@ -1,6 +1,8 @@
 <script lang="ts" setup>
+  import type { IPost } from '~/assets/js/post'
   import { vIntersectionObserver } from '@vueuse/components'
-  import type { IPost } from 'assets/js/post'
+  import fluidPlayer from 'fluid-player'
+  import 'fluid-player/src/css/fluidplayer.css'
 
   const { isPremium } = useUserData()
 
@@ -30,6 +32,20 @@
 
   const triedToLoadWithProxy = shallowRef(false)
 
+  let videoPlayer: FluidPlayerInstance | undefined
+
+  onMounted(() => {
+    if (!mediaElement.value) {
+      return
+    }
+
+    if (!isVideo.value) {
+      return
+    }
+
+    createVideoPlayer()
+  })
+
   onBeforeUnmount(() => {
     let finalMediaElement = mediaElement.value
 
@@ -51,12 +67,96 @@
     finalMediaElement.removeAttribute('src')
 
     if (isVideo.value) {
+      // TODO: Test this
       // Remove sources
       finalMediaElement.innerHTML = ''
 
       finalMediaElement.load()
+
+      destroyVideoPlayer()
     }
   })
+
+  function createVideoPlayer() {
+    if (!mediaElement.value) {
+      throw new Error('Media element not found')
+    }
+
+    if (!isVideo.value) {
+      throw new Error('Media is not a video')
+    }
+
+    const fluidPlayerOptions: Partial<FluidPlayerOptions> = {
+      layoutControls: {
+        primaryColor: 'rgba(0, 0, 0, 0.7)',
+
+        fillToContainer: true,
+
+        preload: 'none',
+
+        loop: true,
+
+        allowTheatre: false,
+        allowDownload: false
+      }
+    }
+
+    if (!isPremium.value) {
+      fluidPlayerOptions.vastOptions = {
+        // TODO: Make it work
+        // allowVPAID: true,
+
+        adText: 'Get Premium and never see ads again!',
+
+        vastAdvanced: {
+          vastVideoSkippedCallback() {
+            // TODO: Inform user about Premium
+          }
+        },
+
+        adList: [
+          /**
+           * ExoClick
+           */
+          // In-Video Banner
+          {
+            roll: 'onPauseRoll',
+            vastTag: 'https://s.magsrv.com/splash.php?idzone=5386214'
+          }
+          // In-Stream Video
+          // {
+          //   roll: 'preRoll',
+          //   vastTag: 'https://s.magsrv.com/splash.php?idzone=5386496',
+          //   adText: 'Get Premium and never see ads again!'
+          // }
+
+          /**
+           * Clickadu
+           */
+          // In-Stream Video
+          // {
+          //   roll: 'preRoll',
+          //   vastTag: 'https://engineexplicitfootrest.com/ceef/gdt3g0/tbt/2034767/tlk.xml'
+          // }
+        ]
+      }
+    }
+
+    videoPlayer = fluidPlayer(mediaElement.value as HTMLVideoElement, fluidPlayerOptions)
+  }
+
+  function destroyVideoPlayer() {
+    if (!videoPlayer) {
+      throw new Error('Player not found')
+    }
+
+    videoPlayer.destroy()
+  }
+
+  function reloadVideoPlayer() {
+    destroyVideoPlayer()
+    createVideoPlayer()
+  }
 
   function onMediaError(event: Event) {
     if (hasError.value) {
@@ -64,19 +164,6 @@
     }
 
     if (!event.target?.src) {
-      return
-    }
-
-    if (isVideo.value && !triedToLoadAltMedia.value) {
-      triedToLoadAltMedia.value = true
-
-      localSrc.value = props.altMediaSrc
-
-      if (!event.target.paused) {
-        nextTick(() => {
-          mediaElement.value?.play()
-        })
-      }
       return
     }
 
@@ -92,7 +179,10 @@
 
       if (!event.target.paused) {
         nextTick(() => {
-          mediaElement.value?.play()
+          // TODO: Handle player errors?
+          reloadVideoPlayer()
+
+          videoPlayer?.play()
         })
       }
       return
@@ -109,6 +199,10 @@
     // Reload media
     localSrc.value = props.mediaSrc
     localPosterSrc.value = props.mediaPosterSrc
+
+    nextTick(() => {
+      reloadVideoPlayer()
+    })
   }
 
   /**
@@ -122,10 +216,8 @@
 
     const entry = entries[0]
 
-    const videoElement = entry.target as HTMLVideoElement
-
     if (!entry.isIntersecting) {
-      videoElement.pause()
+      videoPlayer?.pause()
     }
   }
 
@@ -236,6 +328,7 @@
       <!-- TODO: Add load animation -->
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <video
+        :key="localSrc"
         ref="mediaElement"
         v-intersection-observer="[onVideoIntersectionObserver, { rootMargin: '100px' }]"
         :height="mediaSrcHeight"

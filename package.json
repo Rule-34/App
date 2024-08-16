@@ -45,6 +45,7 @@
     "@vueuse/core": "^10.11.0",
     "@vueuse/integrations": "^10.11.0",
     "@vueuse/rxjs": "^10.11.0",
+    "fluid-player": "^3.35.0",
     "js-abbreviation-number": "^1.4.0",
     "lodash-es": "^4.17.21",
     "nuxt-headlessui": "^1.2.0",
