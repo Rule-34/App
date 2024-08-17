@@ -42,11 +42,6 @@
       name: 'Anon',
       text: 'I wanted to check out a more user-friendly version of realbooru. Your app works VERY well for iOS devices. Especially turning the browser into a home screen app.',
       from: 'Feedback'
-    },
-    {
-      name: 'Cody',
-      text: 'I love my Premium subscription',
-      from: 'Gumroad'
     }
   ]
 
