@@ -107,9 +107,9 @@
         />
 
         <PostDownload
-          v-if="props.post.high_res_file.url"
+          v-if="mediaFile.file"
           :mediaName="`${post.domain}-${post.id}`"
-          :mediaUrl="props.post.high_res_file.url"
+          :mediaUrl="mediaFile.file"
         />
 
         <PostSource
