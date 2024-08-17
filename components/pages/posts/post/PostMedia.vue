@@ -96,7 +96,30 @@
 
         loop: true,
 
-        allowTheatre: false
+        playbackRateEnabled: true,
+
+        allowTheatre: false,
+
+        controlBar: {
+          autoHide: true,
+
+          playbackRates: ['x2', 'x1.5', 'x1', 'x0.75', 'x0.5', 'x0.25']
+        },
+
+        contextMenu: {
+          controls: true,
+
+          links: [
+            {
+              label: 'Remove ads',
+              href: '/premium?utm_source=internal&utm_medium=player-context-menu'
+            }
+          ]
+        },
+
+        miniPlayer: {
+          enabled: false
+        }
       }
     }
 
@@ -345,3 +368,15 @@
     </div>
   </div>
 </template>
+
+<style>
+  /* Hide volume controls */
+  .fluid_control_volume_container {
+    display: none !important;
+  }
+
+  /* Fix duration position */
+  .fluid_video_wrapper.fluid_player_layout_default .fluid_controls_container .fluid_fluid_control_duration {
+    left: 32px !important;
+  }
+</style>
