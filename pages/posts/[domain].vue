@@ -203,8 +203,7 @@
         return undefined
       }
 
-      // Skip if items are less than the limit
-      if (lastPage.meta.items_count !== lastPage.meta.items_per_page) {
+      if (lastPage.meta.items_count === 0) {
         return undefined
       }
 
