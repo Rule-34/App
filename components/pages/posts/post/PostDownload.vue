@@ -1,6 +1,7 @@
-<script setup>
+<script lang="ts" setup>
   import { ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
   import { toast } from 'vue-sonner'
+  import type { FetchError } from 'ofetch'
 
   const props = defineProps({
     mediaName: {
@@ -27,20 +28,29 @@
 
     const { proxiedUrl } = useProxyHelper(props.mediaUrl)
 
-    const response = await $fetch.raw(proxiedUrl.value, {
-      responseType: 'blob',
+    toast.promise(
+      $fetch.raw(proxiedUrl.value, {
+        responseType: 'blob'
+      }),
 
-      onResponseError(context) {
-        toast.error(`Failed to download media: ${context.error.message}`)
-        throw context.error
+      {
+        loading: `Downloading "${props.mediaName}"…`,
+
+        success(response) {
+          const FILE_EXTENSION = response.headers.get('content-type').split('/')[1]
+
+          const FILE_NAME = props.mediaName + '.' + FILE_EXTENSION
+
+          downloadBlobToDevice(response._data, FILE_NAME)
+
+          return `Downloaded "${props.mediaName}"`
+        },
+
+        error(error: FetchError) {
+          return `Failed to download "${props.mediaName}": ${error.message}`
+        }
       }
-    })
-
-    const FILE_EXTENSION = response.headers.get('content-type').split('/')[1]
-
-    const FILE_NAME = props.mediaName + '.' + FILE_EXTENSION
-
-    downloadBlobToDevice(response._data, FILE_NAME)
+    )
   }
 
   function downloadBlobToDevice(blob, fileName) {
