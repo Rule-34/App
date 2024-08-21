@@ -165,27 +165,27 @@ export const advertisementPromotions = [
     mediaHeight: 600,
     mediaType: 'iframe',
     link: null
-  },
+  }
 
   /**
    * JuicyAds
    */
   // Banner
-  {
-    media: '//adserver.juicyads.com/adshow.php?adzone=1064535',
-    mediaWidth: 300,
-    mediaHeight: 250,
-    mediaType: 'iframe',
-    link: null
-  },
+  // {
+  //   media: '//adserver.juicyads.com/adshow.php?adzone=1064535',
+  //   mediaWidth: 300,
+  //   mediaHeight: 250,
+  //   mediaType: 'iframe',
+  //   link: null
+  // },
   // Banner Skyscraper
-  {
-    media: '//adserver.juicyads.com/adshow.php?adzone=1064588',
-    mediaWidth: 160,
-    mediaHeight: 600,
-    mediaType: 'iframe',
-    link: null
-  },
+  // {
+  //   media: '//adserver.juicyads.com/adshow.php?adzone=1064588',
+  //   mediaWidth: 160,
+  //   mediaHeight: 600,
+  //   mediaType: 'iframe',
+  //   link: null
+  // },
   // Banner
   // {
   //   media: '//adserver.juicyads.com/adshow.php?adzone=1064589',
@@ -199,19 +199,39 @@ export const advertisementPromotions = [
    * Clickadu
    */
   // Banner
-  {
-    media: '//brittlesturdyunlovable.com/lvesnk.html?zoneid=2034752',
-    mediaWidth: 300,
-    mediaHeight: 100,
-    mediaType: 'iframe',
-    link: null
-  },
+  // {
+  //   media: '//brittlesturdyunlovable.com/lvesnk.html?zoneid=2034752',
+  //   mediaWidth: 300,
+  //   mediaHeight: 100,
+  //   mediaType: 'iframe',
+  //   link: null
+  // },
   // Banner
-  {
-    media: '//brittlesturdyunlovable.com/lvesnk.html?zoneid=2034751',
-    mediaWidth: 300,
-    mediaHeight: 250,
-    mediaType: 'iframe',
-    link: null
-  }
+  // {
+  //   media: '//brittlesturdyunlovable.com/lvesnk.html?zoneid=2034751',
+  //   mediaWidth: 300,
+  //   mediaHeight: 250,
+  //   mediaType: 'iframe',
+  //   link: null
+  // }
+
+  /**
+   * Traffic Stars
+   */
+  // Banner
+  // {
+  //   media: '//tsyndicate.com/iframes2/9f1ad3ea132b475dbc63f38aa049b5fb.html',
+  //   mediaWidth: 300,
+  //   mediaHeight: 250,
+  //   mediaType: 'iframe',
+  //   link: null
+  // },
+  // // Banner
+  // {
+  //   media: '//tsyndicate.com/iframes2/b7c3325ce7c94ec1905bfe0dd553163e.html',
+  //   mediaWidth: 315,
+  //   mediaHeight: 300,
+  //   mediaType: 'iframe',
+  //   link: null
+  // }
 ]
