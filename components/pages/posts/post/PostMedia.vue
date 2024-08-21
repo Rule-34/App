@@ -113,6 +113,10 @@
             {
               label: 'Remove ads',
               href: '/premium?utm_source=internal&utm_medium=player-context-menu'
+            },
+            {
+              label: 'Download',
+              href: localSrc.value
             }
           ]
         },
