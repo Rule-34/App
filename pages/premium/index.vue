@@ -248,7 +248,7 @@
                     onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click'])"
                     rel="noopener nofollow noreferrer"
                     target="_blank"
-                    to="https://www.patreon.com/bePatron?u=135693332"
+                    to="https://www.patreon.com/R34App"
                   >
                     Get Premium
                   </NuxtLink>
