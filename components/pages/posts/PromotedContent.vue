@@ -21,7 +21,7 @@
     //   id: 'referralPromotions'
     // },
     {
-      weight: 5,
+      weight: 2,
       id: 'advertisementPromotions'
     }
   ]
