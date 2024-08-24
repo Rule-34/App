@@ -1,7 +1,15 @@
 import { useStorage } from '@vueuse/core'
 
-export function useExperiments() {
+let experimentPriceCurrency = ref('$')
 
+if (process.client) {
+  experimentPriceCurrency = useStorage('experiment-price', '$', sessionStorage, {
+    writeDefaults: false
+  })
+}
+
+export function useExperiments() {
   return {
+    experimentPriceCurrency
   }
 }

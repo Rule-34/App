@@ -1,4 +1,4 @@
-import { defineNuxtPlugin } from '#imports'
+import {defineNuxtPlugin} from '#imports'
 
 /**
  * Track page view using Matomo
@@ -29,17 +29,42 @@ export default defineNuxtPlugin((nuxtApp) => {
   })
 
   return {
-    parallel: true,
+    parallel: true
   }
 })
 
 let hasAbTestingLoaded = false
 
 function loadAbTesting(_paq) {
-
   if (hasAbTestingLoaded) {
     return
   }
+
+  const { experimentPriceCurrency } = useExperiments()
+
+  _paq.push([
+    'AbTesting::create',
+    {
+      name: 'PriceCurrencyV2',
+      percentage: 100,
+      includedTargets: [{ attribute: 'path', inverted: '0', type: 'equals_simple', value: '/premium' }],
+      excludedTargets: [],
+      variations: [
+        {
+          name: 'original',
+          activate: function (event) {
+            // usually nothing needs to be done here
+          }
+        },
+        {
+          name: 'euro',
+          activate: function (event) {
+            experimentPriceCurrency.value = '€'
+          }
+        }
+      ]
+    }
+  ])
 
   hasAbTestingLoaded = true
 }
