@@ -2,6 +2,7 @@
   import { usePremiumDialog } from '~/composables/usePremiumDialog'
   import { useCycleList } from '@vueuse/core'
   import { premiumPromotions } from '~/assets/js/promotions'
+  import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/vue/24/outline'
 
   defineProps<{
     close: () => void
@@ -36,21 +37,31 @@
       <!-- Controls -->
       <div class="absolute bottom-[6%] left-4">
         <button
-          class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-full bg-base-1000/80 px-2.5 py-1.5 font-semibold ring-1 ring-base-0/20"
+          class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-full bg-base-1000/80 p-2 font-semibold ring-1 ring-base-0/20"
           type="button"
           @click="prev()"
         >
-          &larr;
+          <span class="sr-only"> Previous </span>
+
+          <ArrowLeftIcon
+            aria-hidden="true"
+            class="h-5 w-5"
+          />
         </button>
       </div>
 
       <div class="absolute bottom-[6%] right-4">
         <button
-          class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-full bg-base-1000/80 px-2.5 py-1.5 font-semibold ring-1 ring-base-0/20"
+          class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-full bg-base-1000/80 p-2 font-semibold ring-1 ring-base-0/20"
           type="button"
           @click="next()"
         >
-          &rarr;
+          <span class="sr-only"> Next </span>
+
+          <ArrowRightIcon
+            aria-hidden="true"
+            class="h-5 w-5"
+          />
         </button>
       </div>
     </div>
