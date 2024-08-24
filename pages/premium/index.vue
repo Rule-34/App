@@ -16,31 +16,26 @@
     { title: 'Integrated history to resume browsing', additionalInfo: '#history' },
     { title: 'Create tag collections (blocklist)', additionalInfo: '#tag-collections' },
     { title: 'Proxy to bypass website blocked in your country', additionalInfo: '#proxy' },
-    { title: 'Use on any device or browser', additionalInfo: undefined },
-    { title: 'Cancel anytime', additionalInfo: undefined },
     { title: '“Premium” Discord role', additionalInfo: undefined },
-    { title: 'Support the development', additionalInfo: '#support-development' }
+    { title: 'Support the development', additionalInfo: '#support-development' },
+    { title: 'Cancel anytime', additionalInfo: undefined }
   ]
 
   const testimonials = [
     {
-      name: 'Anon',
-      text: 'Its just the better option, you skip all the browsing and focus on the porn',
-      from: 'Gumroad'
+      text: 'You skip all the ads and focus on the porn',
+      from: 'Discord'
     },
     {
-      name: 'Anon',
-      text: 'Basically THE porn search engine for mobile',
+      text: 'Basically THE hentai search engine for mobile',
       from: 'Feedback'
     },
     {
-      name: 'Deadpool (asleep)',
       text: 'Downloading videos is the best, and saving them for later is even better',
       from: 'Discord'
     },
     {
-      name: 'Anon',
-      text: 'I wanted to check out a more user-friendly version of realbooru. Your app works VERY well for iOS devices. Especially turning the browser into a home screen app.',
+      text: "The extra websites make a difference, I've discovered so many new artists and content",
       from: 'Feedback'
     }
   ]
@@ -121,21 +116,12 @@
                 v-for="testimonial in testimonials"
                 :key="testimonial.text"
               >
-                “<!---->
+                <span>“</span>
                 <p class="inline text-base-content-highlight">{{ testimonial.text }}</p>
-                <!---->”
+                <span>”</span>
 
                 <div class="mt-1.5 flex items-center gap-x-2 text-xs">
-                  <span>
-                    <span class="sr-only">user name</span>
-                    {{ testimonial.name }}
-                  </span>
-
-                  &ndash;
-
-                  <span>
-                    {{ testimonial.from }}
-                  </span>
+                  <span> from {{ testimonial.from }} </span>
                 </div>
               </li>
             </ol>
