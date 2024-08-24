@@ -129,32 +129,37 @@
 
     if (!isPremium.value) {
       fluidPlayerOptions.vastOptions = {
-        // TODO: Make it work
-        // allowVPAID: true,
-
         adText: 'Get Premium and never see ads again!',
 
         vastAdvanced: {
-          vastVideoSkippedCallback() {
-            // TODO: Inform user about Premium
+          /**
+           * Handle empty VAST
+           */
+          vastVideoEndedCallback() {
+            if (!mediaElement.value.src.endsWith('/null')) {
+              return
+            }
+
+            mediaElement.value.src = localSrc.value
+            videoPlayer?.play()
           }
         },
 
         adList: [
           /**
            * ExoClick
+           * @see https://docs.exoclick.com/docs/tutorials/publishers-tutorials/how-implement-in-stream-part3/
            */
           // In-Video Banner
           {
             roll: 'onPauseRoll',
             vastTag: 'https://s.magsrv.com/splash.php?idzone=5386214'
-          }
+          },
           // In-Stream Video
-          // {
-          //   roll: 'preRoll',
-          //   vastTag: 'https://s.magsrv.com/splash.php?idzone=5386496',
-          //   adText: 'Get Premium and never see ads again!'
-          // }
+          {
+            roll: 'preRoll',
+            vastTag: 'https://s.magsrv.com/splash.php?idzone=5386496'
+          }
 
           /**
            * Clickadu
