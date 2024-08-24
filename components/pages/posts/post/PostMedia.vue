@@ -129,7 +129,7 @@
 
     if (!isPremium.value) {
       fluidPlayerOptions.vastOptions = {
-        adText: 'Get Premium and never see ads again!',
+        adText: 'Only one ad per hour. Never see ads again with Premium!',
 
         vastAdvanced: {
           /**
