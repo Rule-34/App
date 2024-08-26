@@ -5,6 +5,7 @@
   import 'fluid-player/src/css/fluidplayer.css'
 
   const { isPremium } = useUserData()
+  let { timesVideoHasRendered } = useEthics()
 
   export interface PostMediaProps {
     mediaSrc: string | null
@@ -128,6 +129,8 @@
     }
 
     if (!isPremium.value) {
+      timesVideoHasRendered.value++
+
       fluidPlayerOptions.vastOptions = {
         adText: 'Only one ad per hour. Never see ads again with Premium!',
 
@@ -145,31 +148,29 @@
           }
         },
 
-        adList: [
-          /**
-           * ExoClick
-           * @see https://docs.exoclick.com/docs/tutorials/publishers-tutorials/how-implement-in-stream-part3/
-           */
+        adList: []
+      }
+
+      // Only show pause roll ads on even videos
+      if (timesVideoHasRendered.value % 2 === 0) {
+        fluidPlayerOptions.vastOptions.adList.push(
           // In-Video Banner
           {
             roll: 'onPauseRoll',
             vastTag: 'https://s.magsrv.com/splash.php?idzone=5386214'
-          },
+          }
+        )
+      }
+
+      // Only show preroll ads after 5 videos
+      if (timesVideoHasRendered.value > 5) {
+        fluidPlayerOptions.vastOptions.adList.push(
           // In-Stream Video
           {
             roll: 'preRoll',
             vastTag: 'https://s.magsrv.com/splash.php?idzone=5386496'
           }
-
-          /**
-           * Clickadu
-           */
-          // In-Stream Video
-          // {
-          //   roll: 'preRoll',
-          //   vastTag: 'https://engineexplicitfootrest.com/ceef/gdt3g0/tbt/2034767/tlk.xml'
-          // }
-        ]
+        )
       }
     }
 
