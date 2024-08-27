@@ -336,7 +336,15 @@ export default defineNuxtConfig({
     headers: {
       contentSecurityPolicy: {
         // Fix: enable any origin for images
-        'img-src': ["'self'", 'http:', 'https:', 'data:', 'blob:']
+        'img-src': ["'self'", 'http:', 'https:', 'data:', 'blob:'],
+
+        // @see https://nuxt-security.vercel.app/documentation/advanced/faq#cloudflare
+        // @see https://nuxt-security.vercel.app/documentation/getting-started/configuration#defaults
+        'script-src': ["'self'", 'https:', "'unsafe-inline'", "'strict-dynamic'", "'nonce-{{nonce}}'", "'unsafe-eval'"]
+      },
+      permissionsPolicy: {
+        // Fix: enable full-screen
+        fullscreen: ['self']
       }
     }
   },
