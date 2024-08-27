@@ -218,9 +218,7 @@
     }
   })
 
-  onServerPrefetch(async () => {
-    await suspense()
-  })
+  onServerPrefetch(suspense)
 
   const allRows = computed<IPost[]>(() => {
     if (!data.value) {
@@ -253,9 +251,21 @@
     return {
       debug: false,
 
-      count: hasNextPage ? allRows.value.length + 1 : allRows.value.length,
+      // Fix: In SSR allRows.value is undefined, so we use double the overscan value
+      count: import.meta.server
+        ? // TODO: Use correct value
+          10
+        : hasNextPage
+          ? allRows.value.length + 1
+          : allRows.value.length,
 
       estimateSize: () => 600,
+
+      // For SSR
+      initialRect: {
+        width: 800,
+        height: 600
+      },
 
       scrollMargin: parentOffsetRef.value,
 
