@@ -256,6 +256,25 @@
   function onMediaLoad(event: Event) {
     mediaHasLoaded.value = true
   }
+
+  /**
+   * Fix: Handle SSR case where media has loaded but this script hasn't run yet
+   */
+  onMounted(() => {
+    if (!isImage.value) {
+      return
+    }
+
+    if (!mediaElement.value) {
+      return
+    }
+
+    if (!mediaElement.value.complete) {
+      return
+    }
+
+    mediaHasLoaded.value = true
+  })
 </script>
 
 <template>
