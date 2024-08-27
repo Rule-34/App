@@ -39,9 +39,10 @@
       :class="{ invisible: !isIframeLoaded }"
       border="0"
       class="mt-5 h-screen max-h-[60vh] w-full rounded-md sm:mt-6"
+      credentialless
       loading="eager"
       src="https://docs.google.com/forms/d/e/1FAIpQLSeJLEq12Z2T8nqOh9hqMAnKGKo0G3Zy-J6eBKVIlZAwS5kfSg/viewform?embedded=true"
-      title="Feedback form iframe"
+      title="Feedback form"
       @load="isIframeLoaded = true"
     />
 
