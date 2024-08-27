@@ -38,34 +38,116 @@ export default defineNuxtConfig({
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
    */
   routeRules: {
-    // '/': { prerender: true },
-    '/': { ssr: false },
+    '/': {
+      prerender: true,
+      headers: {
+        'Cache-Control': 'max-age=300, s-maxage=600, stale-while-revalidate=300'
+      }
+    },
 
-    // 5 minutes
-    // TODO: Reactivate once memory fix is found
-    // '/posts/**': { swr: 60 * 5 },
+    '/posts/**': {
+      // TODO: Reactivate SWR once memory fix is found
+      headers: {
+        'Cache-Control': 'max-age=300, s-maxage=600, stale-while-revalidate=300'
+      }
+    },
 
     // Static pages are prerendered
-    '/other-sites': { prerender: true },
-    '/legal': { prerender: true },
+    '/other-sites': {
+      prerender: true,
+      headers: {
+        'Cache-Control': 'max-age=300, s-maxage=600, stale-while-revalidate=300'
+      }
+    },
+    '/legal': {
+      prerender: true,
+      headers: {
+        'Cache-Control': 'max-age=300, s-maxage=600, stale-while-revalidate=300'
+      }
+    },
 
-    '/settings': { ssr: false },
+    '/settings': {
+      ssr: false,
+      headers: {
+        'Cache-Control': 'max-age=300, s-maxage=600, stale-while-revalidate=300'
+      }
+    },
 
-    '/premium': { prerender: true },
-    '/premium/sign-in': { prerender: true },
-    '/premium/forgot-password': { prerender: true },
+    '/premium': {
+      prerender: true,
+      headers: {
+        'Cache-Control': 'max-age=300, s-maxage=600, stale-while-revalidate=300'
+      }
+    },
+    '/premium/sign-in': {
+      prerender: true,
+      headers: {
+        'Cache-Control': 'max-age=300, s-maxage=600, stale-while-revalidate=300'
+      }
+    },
+    '/premium/forgot-password': {
+      prerender: true,
+      headers: {
+        'Cache-Control': 'max-age=300, s-maxage=600, stale-while-revalidate=300'
+      }
+    },
 
     // All premium pages are client-side rendered
-    '/premium/dashboard': { ssr: false },
-    '/premium/saved-posts': { ssr: false },
-    '/premium/tag-collections': { ssr: false },
-    '/premium/additional-boorus': { ssr: false },
-    '/premium/backup': { ssr: false },
+    '/premium/dashboard': {
+      ssr: false,
+      headers: {
+        'Cache-Control': 'max-age=300, s-maxage=600, stale-while-revalidate=300'
+      }
+    },
+    '/premium/saved-posts': {
+      ssr: false,
+      headers: {
+        'Cache-Control': 'max-age=300, s-maxage=600, stale-while-revalidate=300'
+      }
+    },
+    '/premium/tag-collections': {
+      ssr: false,
+      headers: {
+        'Cache-Control': 'max-age=300, s-maxage=600, stale-while-revalidate=300'
+      }
+    },
+    '/premium/additional-boorus': {
+      ssr: false,
+      headers: {
+        'Cache-Control': 'max-age=300, s-maxage=600, stale-while-revalidate=300'
+      }
+    },
+    '/premium/backup': {
+      ssr: false,
+      headers: {
+        'Cache-Control': 'max-age=300, s-maxage=600, stale-while-revalidate=300'
+      }
+    },
 
-    // Public assets
+    /**
+     * Public assets
+     */
+    '/icon.svg': {
+      headers: {
+        'Cache-Control': 'max-age=31536000, immutable'
+      }
+    },
+
+    '/favicon.ico': {
+      headers: {
+        'Cache-Control': 'max-age=31536000, immutable'
+      }
+    },
+
     '/img/**': {
       headers: {
-        'Cache-Control': 'public, max-age=31536000, immutable'
+        'Cache-Control': 'max-age=31536000, immutable'
+      }
+    },
+
+    '/js/**': {
+      headers: {
+        'Cache-Control': 'max-age=86400'
       }
     }
   },
