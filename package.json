@@ -28,7 +28,6 @@
     "@formkit/auto-animate": "^0.8.2",
     "@headlessui-float/nuxt": "^0.14.2",
     "@headlessui/tailwindcss": "^0.2.1",
-    "@headlessui/vue": "^1.7.22",
     "@heroicons/vue": "^2.1.5",
     "@nuxt/fonts": "^0.7.2",
     "@nuxt/image": "^1.7.0",
@@ -60,7 +59,6 @@
     "vue-sonner": "^1.1.4"
   },
   "devDependencies": {
-    "@nuxt/test-utils": "^3.14.1",
     "@types/lodash-es": "^4.17.12",
     "@types/qs": "^6.9.15",
     "autoprefixer": "^10.4.20",
@@ -73,5 +71,8 @@
     "prettier-plugin-tailwindcss": "^0.6.6",
     "standard-version": "^9.5.0",
     "vitest": "^2.0.5"
+  },
+  "overrides": {
+    "vue": "^3"
   }
 }
