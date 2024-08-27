@@ -42,7 +42,8 @@ export default defineNuxtConfig({
     '/': { ssr: false },
 
     // 5 minutes
-    '/posts/**': { swr: 60 * 5 },
+    // TODO: Reactivate once memory fix is found
+    // '/posts/**': { swr: 60 * 5 },
 
     // Static pages are prerendered
     '/other-sites': { prerender: true },
@@ -117,21 +118,24 @@ export default defineNuxtConfig({
     url: `https://${process.env.APP_DOMAIN}`
   },
 
+  /**
+   * Loaded in order
+   */
   modules: [
-    '@nuxtjs/sitemap',
-    'nuxt-schema-org',
-
-    '@vite-pwa/nuxt',
-
-    '@formkit/auto-animate/nuxt',
+    'nuxt-headlessui',
 
     '@headlessui-float/nuxt',
 
-    'nuxt-headlessui',
-
     '@nuxt/image',
 
-    '@nuxt/fonts'
+    '@nuxt/fonts',
+
+    '@formkit/auto-animate/nuxt',
+
+    '@vite-pwa/nuxt',
+
+    '@nuxtjs/sitemap',
+    'nuxt-schema-org'
   ],
 
   image: {
