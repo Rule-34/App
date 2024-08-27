@@ -46,6 +46,10 @@ export default defineNuxtConfig({
     },
 
     '/posts/**': {
+      // @see https://github.com/Baroshem/nuxt-security/issues/364
+      security: {
+        xssValidator: false
+      },
       // TODO: Reactivate SWR once memory fix is found
       headers: {
         'Cache-Control': 'max-age=300, s-maxage=600, stale-while-revalidate=300'
