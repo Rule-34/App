@@ -332,7 +332,7 @@ export default defineNuxtConfig({
     headers: {
       contentSecurityPolicy: {
         // Fix: enable any origin for images
-        'img-src': ['*']
+        'img-src': ["'self'", 'http:', 'https:', 'data:', 'blob:']
       }
     }
   },
