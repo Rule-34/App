@@ -601,9 +601,7 @@
   useSeoMeta({
     title: shortTitle,
 
-    description,
-
-    referrer: 'no-referrer'
+    description
   })
 
   definePageMeta({

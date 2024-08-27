@@ -136,6 +136,7 @@ export default defineNuxtConfig({
 
     '@nuxtjs/sitemap',
     'nuxt-schema-org'
+    'nuxt-security'
   ],
 
   image: {
@@ -249,6 +250,15 @@ export default defineNuxtConfig({
     experimentalWarmUp: true,
 
     credits: false
+  },
+
+  security: {
+    headers: {
+      contentSecurityPolicy: {
+        // Fix: enable any origin for images
+        'img-src': ['*']
+      }
+    }
   },
 
   devtools: {

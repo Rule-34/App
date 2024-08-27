@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
-  import { Bars3BottomRightIcon, EyeIcon, PhotoIcon } from '@heroicons/vue/24/outline'
+  import { Bars3BottomRightIcon, EyeIcon, MagnifyingGlassIcon, PhotoIcon } from '@heroicons/vue/24/outline'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
   import type { IPost, IPostPage } from 'assets/js/post.dto'
@@ -14,7 +14,6 @@
   import Tag from '~/assets/js/tag.dto'
   import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
   import { useBooruList } from '~/composables/useBooruList'
-  import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
   import type { Ref } from 'vue'
 
   const route = useRoute()
@@ -512,16 +511,7 @@
   })
 
   useSeoMeta({
-    title,
-
-    referrer: () => {
-      // Include referrer for specific Boorus
-      if (!['danbooru.donmai.us'].includes(selectedBooru.value.domain)) {
-        return 'no-referrer'
-      }
-
-      return 'strict-origin-when-cross-origin'
-    }
+    title
   })
 
   definePageMeta({
@@ -575,9 +565,9 @@
   <!-- Search menu -->
   <SearchMenuWrapper>
     <LazySearchMenu
+      :filter-config="filterConfig"
       :initial-selected-filters="selectedFilters"
       :initial-selected-tags="selectedTags"
-      :filter-config="filterConfig"
       :tag-results="tagResults"
       @submit="onSearchSubmit"
       @search-tag="onSearchTag"
