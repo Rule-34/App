@@ -1,4 +1,6 @@
 <script setup>
+  provideHeadlessUseId(() => useId())
+
   const route = useRoute()
   const config = useRuntimeConfig()
 
