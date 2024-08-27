@@ -123,19 +123,13 @@ export default defineNuxtConfig({
    */
   modules: [
     'nuxt-headlessui',
-
     '@headlessui-float/nuxt',
-
     '@nuxt/image',
-
     '@nuxt/fonts',
-
     '@formkit/auto-animate/nuxt',
-
     '@vite-pwa/nuxt',
-
     '@nuxtjs/sitemap',
-    'nuxt-schema-org'
+    'nuxt-schema-org',
     'nuxt-security'
   ],
 
