@@ -9,6 +9,10 @@ const config: CookieConsentConfig = {
   // TODO: Change when changing categories
   revision: 2,
 
+  cookie: {
+    useLocalStorage: true
+  },
+
   guiOptions: {
     consentModal: {
       layout: 'bar',
