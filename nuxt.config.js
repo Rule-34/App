@@ -344,7 +344,10 @@ export default defineNuxtConfig({
         'script-src': ["'self'", 'https:', "'unsafe-inline'", "'strict-dynamic'", "'nonce-{{nonce}}'", "'unsafe-eval'"],
 
         // Fix: enable inline execution
-        'script-src-attr': ["'unsafe-inline'"]
+        'script-src-attr': ["'unsafe-inline'"],
+
+        // Fix: enable form submission
+        'form-action': ["'self'", 'https:']
       },
 
       permissionsPolicy: {
