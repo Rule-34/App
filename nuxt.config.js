@@ -41,7 +41,7 @@ export default defineNuxtConfig({
     '/': {
       prerender: true,
       headers: {
-        'Cache-Control': 'public, max-age=300, s-maxage=600, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
       }
     },
 
@@ -52,7 +52,7 @@ export default defineNuxtConfig({
       },
       // TODO: Reactivate SWR once memory fix is found
       headers: {
-        'Cache-Control': 'public, max-age=300, s-maxage=600, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
       }
     },
 
@@ -60,39 +60,39 @@ export default defineNuxtConfig({
     '/other-sites': {
       prerender: true,
       headers: {
-        'Cache-Control': 'public, max-age=300, s-maxage=600, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
       }
     },
     '/legal': {
       prerender: true,
       headers: {
-        'Cache-Control': 'public, max-age=300, s-maxage=600, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
       }
     },
 
     '/settings': {
       ssr: false,
       headers: {
-        'Cache-Control': 'public, max-age=300, s-maxage=600, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
       }
     },
 
     '/premium': {
       prerender: true,
       headers: {
-        'Cache-Control': 'public, max-age=300, s-maxage=600, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
       }
     },
     '/premium/sign-in': {
       prerender: true,
       headers: {
-        'Cache-Control': 'public, max-age=300, s-maxage=600, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
       }
     },
     '/premium/forgot-password': {
       prerender: true,
       headers: {
-        'Cache-Control': 'public, max-age=300, s-maxage=600, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
       }
     },
 
@@ -100,31 +100,31 @@ export default defineNuxtConfig({
     '/premium/dashboard': {
       ssr: false,
       headers: {
-        'Cache-Control': 'public, max-age=300, s-maxage=600, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
       }
     },
     '/premium/saved-posts': {
       ssr: false,
       headers: {
-        'Cache-Control': 'public, max-age=300, s-maxage=600, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
       }
     },
     '/premium/tag-collections': {
       ssr: false,
       headers: {
-        'Cache-Control': 'public, max-age=300, s-maxage=600, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
       }
     },
     '/premium/additional-boorus': {
       ssr: false,
       headers: {
-        'Cache-Control': 'public, max-age=300, s-maxage=600, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
       }
     },
     '/premium/backup': {
       ssr: false,
       headers: {
-        'Cache-Control': 'public, max-age=300, s-maxage=600, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
       }
     },
 
