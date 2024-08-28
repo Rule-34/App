@@ -139,7 +139,7 @@
            * Handle empty VAST
            */
           vastVideoEndedCallback() {
-            if (!mediaElement.value.src.endsWith('/null')) {
+            if (!mediaElement.value?.src.endsWith('/null')) {
               return
             }
 
