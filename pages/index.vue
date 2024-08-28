@@ -132,6 +132,16 @@
     ]
   })
 
+  useSchemaOrg([
+    defineWebSite({
+      potentialAction: [
+        defineSearchAction({
+          target: '/posts/rule34.xxx?tags={search_term_string}'
+        })
+      ]
+    })
+  ])
+
   const featuredDomains = [
     {
       domain: 'rule34.xxx',

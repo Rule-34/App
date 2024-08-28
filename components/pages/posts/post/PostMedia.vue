@@ -275,6 +275,22 @@
 
     mediaHasLoaded.value = true
   })
+
+  useSchemaOrg([
+    isImage.value
+      ? defineImage({
+          url: props.mediaSrc,
+          height: props.mediaSrcHeight,
+          width: props.mediaSrcWidth
+        })
+      : defineVideo({
+          url: props.mediaSrc,
+          height: props.mediaSrcHeight,
+          width: props.mediaSrcWidth,
+          thumbnailUrl: props.mediaPosterSrc,
+          isFamilyFriendly: false
+        })
+  ])
 </script>
 
 <template>

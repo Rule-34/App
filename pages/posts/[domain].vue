@@ -615,6 +615,26 @@
     description
   })
 
+  useSchemaOrg([
+    defineWebPage({
+      // @see https://unhead.unjs.io/schema-org/recipes/site-search#define-your-search-results-page
+      '@type': ['CollectionPage', 'SearchResultsPage']
+    }),
+
+    defineBreadcrumb({
+      itemListElement: [
+        {
+          name: 'Home',
+          item: '/'
+        },
+        {
+          name: `Posts from ${selectedBooru.value.domain}`,
+          item: route.path
+        }
+      ]
+    })
+  ])
+
   definePageMeta({
     validate: async (route) => {
       const { booruList } = useBooruList()
@@ -653,8 +673,6 @@
       return true
     }
   })
-
-  // TODO: Create schema.org breadcrumb for posts page
 </script>
 
 <template>
