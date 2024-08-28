@@ -584,9 +584,9 @@
   })
 
   const description = computed(() => {
-    let description = `Stream and download ${tagArrayToTitle(selectedTags.value, false)} Hentai porn videos, GIFs and images`
+    const tagsTitle = tagArrayToTitle(selectedTags.value, false)
 
-    description = description.replace('download with', 'download')
+    let description = `Stream and download ${tagsTitle ?? 'various'} Hentai porn videos, GIFs and images`
 
     // Filters
     if (selectedFilters.value.rating) {
