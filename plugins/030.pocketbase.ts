@@ -6,6 +6,7 @@ export default defineNuxtPlugin(async ({ app }) => {
 
   const pb = new PocketBase('https://pocketbase.r34.app')
 
+  // TODO: Store in localStorage for better caching
   const cookie = useCookie('pb_auth', {
     path: '/',
     secure: true,

@@ -390,6 +390,7 @@
           break
 
         case 429:
+          // TODO: Cant always check if 429 is the status code, always show?
           toast.error(response.statusText, {
             description: 'You sent too many requests in a short period of time',
             action: {
