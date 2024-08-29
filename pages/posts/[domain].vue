@@ -615,7 +615,44 @@
     description
   })
 
-  useSchemaOrg([
+  const firstPostsPageAsSchema = computed(() => {
+    if (!data.value?.pages[0]?.data.length) {
+      return []
+    }
+
+    return data.value?.pages[0].data.map((post) => {
+      switch (post.media_type) {
+        case 'image':
+          return defineImage({
+            url: post.high_res_file.url,
+
+            height: post.high_res_file.height,
+            width: post.high_res_file.width
+
+            // author: post.tags.artist.map((tag) => tag.name).join(', ')
+          })
+
+        case 'video':
+          return defineVideo({
+            url: post.high_res_file.url,
+
+            thumbnailUrl: post.preview_file.url,
+
+            height: post.high_res_file.height,
+            width: post.high_res_file.width,
+
+            // Unknown, so default to 0
+            uploadDate: '1970-01-01',
+
+            isFamilyFriendly: false
+          })
+        default:
+          return
+      }
+    })
+  })
+
+  useSchemaOrg(() => [
     defineWebPage({
       // @see https://unhead.unjs.io/schema-org/recipes/site-search#define-your-search-results-page
       '@type': ['CollectionPage', 'SearchResultsPage']
@@ -632,7 +669,9 @@
           item: route.path
         }
       ]
-    })
+    }),
+
+    ...firstPostsPageAsSchema.value
   ])
 
   definePageMeta({
