@@ -170,6 +170,16 @@
           </template>
         </div>
       </BottomSheetWrapper>
+
+      <!-- Internal Links for Search Engines-->
+      <div class="hidden">
+        Tags:
+        <template v-for="tagType in tagTypesWithTags">
+          <template v-for="tag in post.tags[tagType]">
+            <a :href="`/posts/${post.domain}?tags=${encodeURIComponent(tag)}`">{{ tag }}</a>
+          </template>
+        </template>
+      </div>
     </figcaption>
   </figure>
 </template>
