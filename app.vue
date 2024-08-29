@@ -73,15 +73,11 @@
 
   useSchemaOrg([
     defineWebSite({
-      name: 'Rule 34 App',
-      // @see https://www.trustpilot.com/review/r34.app
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: '4.5',
-        ratingCount: '81'
-      }
+      name: 'Rule 34 App'
     }),
+
     defineWebPage(),
+
     defineOrganization({
       name: 'Rule 34 App',
       logo: '/icon.svg',
@@ -92,6 +88,15 @@
         'https://discord.gg/fUhYHSZ',
         'https://github.com/Rule-34/App'
       ]
+    }),
+
+    defineProduct({
+      name: 'Rule 34 App',
+      // @see https://www.trustpilot.com/review/r34.app
+      aggregateRating: {
+        ratingValue: 4.7,
+        ratingCount: 81
+      }
     })
   ])
 </script>
