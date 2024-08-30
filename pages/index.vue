@@ -148,6 +148,12 @@
       path: '/posts/rule34.xxx',
       isPremium: false,
       tags: [
+        // Native referral
+        {
+          name: 'Create your AI Slut',
+          path: 'https://a.candyai.love/e4b82d93-6384-4c7d-9275-5e6f80609c88?creative=cumnoriz',
+          images: ['/img/promo/referrals/candy_ai.jpg']
+        },
         {
           name: 'Top posts',
           path: '/posts/rule34.xxx?filter%5Bsort%5D=score',

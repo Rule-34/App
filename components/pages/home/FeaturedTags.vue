@@ -32,6 +32,8 @@
     >
       <NuxtLink
         :href="tag.path"
+        :rel="tag.path.startsWith('http') ? 'noopener noreferrer nofollow' : ''"
+        :target="tag.path.startsWith('http') ? '_blank' : ''"
         class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util block rounded-md"
       >
         <figure>
