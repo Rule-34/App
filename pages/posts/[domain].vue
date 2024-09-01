@@ -520,7 +520,7 @@
 
     // Tags
     if (selectedTags.value.length > 0) {
-      title += ` tagged ${tagArrayToTitle(selectedTags.value)} Hentai`
+      title += ` tagged ${tagArrayToTitle(selectedTags.value)} Hentai videos, GIFs, and images`
     }
 
     // Filters
@@ -552,6 +552,10 @@
     _title = _title.replace(/and ?without /, ' w/o ')
     _title = _title.replace(/with a score of/, 'score')
 
+    if (selectedTags.value.length > 0) {
+      _title = _title.replace(/, from .+$/, '')
+    }
+
     _title = _title.trim()
     // Capitalize first letter - https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
     _title = _title.charAt(0).toUpperCase() + _title.slice(1)
@@ -567,7 +571,7 @@
 
     _title = _title.replace(/posts/i, '')
 
-    _title = _title.replace(/ hentai, /i, ', ')
+    _title = _title.replace(/ hentai videos, GIFs, and images/i, '')
 
     _title = _title.replace(/, from .+$/, '')
 
