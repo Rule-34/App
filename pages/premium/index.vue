@@ -240,7 +240,7 @@
                     onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click'])"
                     rel="noopener nofollow noreferrer"
                     target="_blank"
-                    to="https://www.patreon.com/R34App"
+                    to="https://alejandroakbal.mysellix.io/pay/b8f600-93367cd0c2-1bdc50"
                   >
                     Get Premium
                   </NuxtLink>
@@ -248,29 +248,18 @@
                   <NuxtLink
                     aria-describedby="premium-features"
                     class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-md px-3 py-2 text-center text-sm font-medium text-base-content ring-1 ring-base-0/20 focus-visible:ring-offset-2"
-                    onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click', 'Crypto'])"
+                    onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click', 'Patreon'])"
                     rel="noopener nofollow noreferrer"
                     target="_blank"
-                    to="https://alejandroakbal.mysellix.io/pay/b8f600-93367cd0c2-1bdc50"
+                    to="https://www.patreon.com/R34App"
                   >
-                    Pay with Crypto
+                    Pay with Patreon
                   </NuxtLink>
 
                   <p class="text-center text-xs leading-6">
-                    Subscription managed by
-
-                    <NuxtLink
-                      class="focus-visible:focus-outline-util hover:hover-text-util"
-                      href="https://www.patreon.com"
-                      rel="nofollow noopener"
-                      target="_blank"
-                    >
-                      Patreon
-                    </NuxtLink>
-
+                    Cancel anytime
                     <br />
-
-                    Discreet “PATREON” credit card statement
+                    Discreet credit card statement
                   </p>
                 </div>
               </div>
