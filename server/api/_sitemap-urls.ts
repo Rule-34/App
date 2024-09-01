@@ -10,7 +10,7 @@ export default defineSitemapEventHandler(async () => {
   return popularSiteSearchKeywords.map((keyword) =>
     asSitemapUrl({
       loc: `/posts/rule34.xxx?tags=${keyword.label}`,
-      changefreq: 'always',
+      changefreq: 'daily',
       priority: 0.8,
       _sitemap: 'pages'
     })
