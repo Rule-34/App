@@ -4,7 +4,7 @@
   import * as Sentry from '@sentry/vue'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
-  import { cloneDeep } from 'lodash-es'
+  import { cloneDeep, throttle } from 'lodash-es'
   import { FetchError } from 'ofetch'
   import type { Ref } from 'vue'
   import { toast } from 'vue-sonner'
@@ -19,22 +19,18 @@
   const route = useRoute()
   const config = useRuntimeConfig()
 
-  const { toggle: toggleSearchMenu } = useSearchMenu()
   const userSettings = useUserSettings()
   const { isPremium } = useUserData()
   const { booruList } = useBooruList()
+  const { selectedBlockList } = useBlockLists()
   const { addUrlToPageHistory } = usePageHistory()
-
-  const unregisterRouterAfterEach = router.afterEach((to, from) => {
-    addUrlToPageHistory(to.fullPath)
-  })
-
-  onBeforeUnmount(() => {
-    unregisterRouterAfterEach()
-  })
+  const { toggle: toggleSearchMenu } = useSearchMenu()
 
   const { selectedDomainFromStorage } = useSelectedDomainFromStorage()
 
+  /**
+   * URL
+   */
   const selectedBooru = computed(() => {
     let domain = route.params.domain
 
@@ -116,6 +112,7 @@
       options: [
         { label: 'Score', value: undefined },
         { label: '>= 0', value: '>=0' },
+
         { label: '>= 5', value: '>=5' },
 
         { label: '>= 10', value: '>=10' },
@@ -134,185 +131,18 @@
     }
   }
 
-  async function fetchPosts(options: any) {
-    if (options.pageParam) {
-      return $fetch<IPostPage>(options.pageParam, {
-        retry: false
-      })
-    }
-
-    const apiUrl = config.public.API_URL + '/booru/' + selectedBooru.value.type.type + '/posts'
-
-    const tags = selectedTags.value.map((tag) => tag.name).join('|')
-
-    return $fetch<IPostPage>(apiUrl, {
-      params: {
-        baseEndpoint: selectedBooru.value.domain,
-
-        limit: userSettings.postsPerPage,
-
-        pageID: selectedPage.value,
-
-        tags: tags.length > 0 ? tags : undefined,
-
-        // Filters
-        order: selectedFilters.value.sort,
-        rating: selectedFilters.value.rating,
-        score: selectedFilters.value.score,
-
-        // Booru options
-        httpScheme: selectedBooru.value.config?.options?.HTTPScheme ?? undefined
-      },
-
-      retry: false
-    })
-  }
-
-  // TODO: Should include page number in key, maybe an initial page number?
-  const {
-    suspense,
-
-    data,
-    error,
-    refetch,
-    fetchNextPage,
-    fetchPreviousPage,
-    hasNextPage,
-    hasPreviousPage,
-    isFetching,
-    isFetchingNextPage,
-    isPending,
-    isError
-  } = useInfiniteQuery({
-    queryKey: ['posts', selectedBooru, selectedTags, selectedFilters],
-    queryFn: fetchPosts,
-    select: (data) => {
-      // Delete all posts that have `media_type: 'unknown'`
-      data.pages.forEach((page) => {
-        page.data = page.data.filter((post) => post.media_type !== 'unknown')
-      })
-
-      return {
-        pages: data.pages,
-        pageParams: data.pageParams
-      }
-    },
-    initialPageParam: '',
-    getNextPageParam: (lastPage, allPages, lastPageParam) => {
-      if (lastPage.links.next == null) {
-        return undefined
-      }
-
-      if (lastPage.meta.items_count === 0) {
-        return undefined
-      }
-
-      return lastPage.links.next
-    },
-    getPreviousPageParam: (firstPage, allPages, firstPageParam) => {
-      if (firstPage.links.prev == null) {
-        return undefined
-      }
-
-      return firstPage.links.prev
-    }
+  /**
+   * Misc
+   */
+  const unregisterRouterAfterEach = router.afterEach((to, from) => {
+    addUrlToPageHistory(to.fullPath)
   })
 
-  onServerPrefetch(suspense)
-
-  const allRows = computed<IPost[]>(() => {
-    if (!data.value) {
-      return []
-    }
-
-    // Flatten pages, but add `current_page` to each post
-    return data.value.pages.flatMap((page) => {
-      return page.data.map((post) => {
-        return {
-          ...post,
-
-          // TODO: Remove when API returns domain
-          domain: selectedBooru.value.domain,
-
-          current_page: page.meta.current_page
-        }
-      })
-    })
+  onBeforeUnmount(() => {
+    unregisterRouterAfterEach()
   })
 
-  const parentRef = ref<HTMLElement | null>(null)
-  const parentOffsetRef = ref(0)
-
-  onMounted(() => {
-    parentOffsetRef.value = parentRef.value?.offsetTop ?? 0
-  })
-
-  const rowVirtualizerOptions = computed(() => {
-    return {
-      debug: false,
-
-      // Fix: In SSR allRows.value is undefined, so we use double the overscan value
-      count: import.meta.server
-        ? // TODO: Use correct value
-          10
-        : hasNextPage
-          ? allRows.value.length + 1
-          : allRows.value.length,
-
-      estimateSize: () => 600,
-
-      // For SSR
-      initialRect: {
-        width: 800,
-        height: 600
-      },
-
-      scrollMargin: parentOffsetRef.value,
-
-      overscan: 5,
-
-      gap: 16
-    }
-  })
-
-  const rowVirtualizer = useWindowVirtualizer(rowVirtualizerOptions)
-
-  const virtualRows = computed(() => rowVirtualizer.value.getVirtualItems())
-
-  const totalSize = computed(() => rowVirtualizer.value.getTotalSize())
-
-  // Next page loader
-  watchEffect(() => {
-    // Skip if there is no data
-    if (!data.value) {
-      return
-    }
-
-    const [lastItem] = [...virtualRows.value].reverse()
-
-    if (!lastItem) {
-      return
-    }
-
-    // IF last item is the last item in the list
-    // AND there is a next page
-    // AND it's not fetching
-    // THEN load next page
-    if (lastItem.index >= allRows.value.length - 1 && hasNextPage.value && !isFetchingNextPage.value) {
-      onLoadNextPostPage()
-    }
-  })
-
-  // FIX: Remove when this issue is fixed - https://github.com/TanStack/virtual/issues/619#issuecomment-1969516091
-  const measureElement = (el) => {
-    nextTick(() => {
-      if (!el) {
-        return
-      }
-
-      rowVirtualizer.value.measureElement(el)
-    })
-  }
+  const tagResults: Ref<Tag[]> = shallowRef([])
 
   /**
    * `undefined` values mean that they will be replaced by default values
@@ -359,8 +189,9 @@
     await navigateTo({ ...postsRoute }, { replace })
   }
 
-  const tagResults: Ref<Tag[]> = shallowRef([])
-
+  /**
+   * Listeners
+   */
   async function onSearchTag(tag: string) {
     const apiUrl = config.public.API_URL + '/booru/' + selectedBooru.value.type.type + '/tags'
 
@@ -485,6 +316,10 @@
     await fetchNextPage()
   }
 
+  const debouncedOnLoadNextPostPage = throttle(onLoadNextPostPage, 1000, {
+    trailing: false
+  })
+
   async function onPageIndicatorClick() {
     const pagePrompt = prompt('To which page do you want to go?')
 
@@ -508,6 +343,240 @@
     window.location.reload()
   }
 
+  /**
+   * Data fetching
+   */
+  async function fetchPosts(options: any): Promise<IPostPage> {
+    // Return early if selectedTags is in blocklist
+    if (
+      selectedBlockList.value.length > 0 &&
+      //
+      // selectedTags.value.some((tag) => selectedBlockList.value.includes(tag.name)) &&
+      selectedBlockList.value.some((blocklistTag) => selectedTags.value.map((tag) => tag.name).includes(blocklistTag))
+    ) {
+      throw new Error('One of your selected tags is in the tag block list')
+    }
+
+    if (options.pageParam) {
+      return $fetch<IPostPage>(options.pageParam, {
+        retry: false
+      })
+    }
+
+    const apiUrl = config.public.API_URL + '/booru/' + selectedBooru.value.type.type + '/posts'
+
+    const tags = selectedTags.value.map((tag) => tag.name).join('|')
+
+    return $fetch<IPostPage>(apiUrl, {
+      params: {
+        baseEndpoint: selectedBooru.value.domain,
+
+        limit: userSettings.postsPerPage,
+
+        pageID: selectedPage.value,
+
+        tags: tags.length > 0 ? tags : undefined,
+
+        // Filters
+        order: selectedFilters.value.sort,
+        rating: selectedFilters.value.rating,
+        score: selectedFilters.value.score,
+
+        // Booru options
+        httpScheme: selectedBooru.value.config?.options?.HTTPScheme ?? undefined
+      },
+
+      retry: false
+    })
+  }
+
+  // TODO: Should include page number in key, maybe an initial page number?
+  const {
+    suspense,
+
+    data,
+    error,
+    refetch,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+    isFetching,
+    isFetchingNextPage,
+    isPending,
+    isError
+  } = useInfiniteQuery({
+    queryKey: ['posts', selectedBooru, selectedTags, selectedFilters],
+    queryFn: fetchPosts,
+    select: (data) => {
+      //
+
+      // Only execute for the last page
+      const page = data.pages.at(-1)
+
+      if (!page) {
+        return data
+      }
+
+      page.data = page.data.filter((post) => {
+        //
+
+        // Delete all posts that have `media_type: 'unknown'`
+        if (post.media_type === 'unknown') {
+          return false
+        }
+
+        return true
+      })
+
+      return {
+        pages: data.pages,
+        pageParams: data.pageParams
+      }
+    },
+    initialPageParam: '',
+    getNextPageParam: (lastPage, allPages, lastPageParam) => {
+      if (lastPage.links.next == null) {
+        return undefined
+      }
+
+      if (lastPage.meta.items_count === 0) {
+        return undefined
+      }
+
+      return lastPage.links.next
+    },
+    getPreviousPageParam: (firstPage, allPages, firstPageParam) => {
+      if (firstPage.links.prev == null) {
+        return undefined
+      }
+
+      return firstPage.links.prev
+    }
+  })
+
+  onServerPrefetch(suspense)
+
+  /**
+   * Virtualization
+   */
+  const allRows = computed<IPost[]>(() => {
+    if (!data.value) {
+      return []
+    }
+
+    // Flatten pages, but add `current_page` to each post
+    return data.value.pages.flatMap((page) => {
+      //
+
+      return page.data.flatMap((post) => {
+        // TODO: Optimize performance
+
+        // Skip all posts that have a blocklisted tag
+        if (selectedBlockList.value.length > 0) {
+          const postTags = post.tags.meta.concat(
+            post.tags.general,
+            post.tags.artist,
+            post.tags.character,
+            post.tags.copyright
+          )
+
+          const foundBlockedTag = selectedBlockList.value.some((blocklistTag) => postTags.includes(blocklistTag))
+
+          if (foundBlockedTag) {
+            return []
+          }
+        }
+
+        return {
+          ...post,
+
+          // TODO: Remove when API returns domain
+          domain: selectedBooru.value.domain,
+
+          current_page: page.meta.current_page
+        }
+      })
+    })
+  })
+
+  const parentRef = ref<HTMLElement | null>(null)
+  const parentOffsetRef = ref(0)
+
+  onMounted(() => {
+    parentOffsetRef.value = parentRef.value?.offsetTop ?? 0
+  })
+
+  const rowVirtualizerOptions = computed(() => {
+    return {
+      debug: false,
+
+      // Fix: In SSR allRows.value is undefined, so we use double the overscan value
+      count: import.meta.server
+        ? // TODO: Use correct value
+          10
+        : hasNextPage
+          ? allRows.value.length + 1
+          : allRows.value.length,
+
+      estimateSize: () => 600,
+
+      // For SSR
+      initialRect: {
+        width: 800,
+        height: 600
+      },
+
+      scrollMargin: parentOffsetRef.value,
+
+      overscan: 5,
+
+      gap: 16
+    }
+  })
+
+  const rowVirtualizer = useWindowVirtualizer(rowVirtualizerOptions)
+
+  const virtualRows = computed(() => rowVirtualizer.value.getVirtualItems())
+
+  const totalSize = computed(() => rowVirtualizer.value.getTotalSize())
+
+  // Next page loader
+  watchEffect(() => {
+    // Skip if there is no data
+    if (!data.value) {
+      return
+    }
+
+    const [lastItem] = [...virtualRows.value].reverse()
+
+    if (!lastItem) {
+      return
+    }
+
+    // IF last item is the last item in the list
+    // AND there is a next page
+    // AND it's not fetching
+    // THEN load next page automatically
+    if (lastItem.index >= allRows.value.length - 1 && hasNextPage.value && !isFetchingNextPage.value) {
+      debouncedOnLoadNextPostPage()
+    }
+  })
+
+  // FIX: Remove when this issue is fixed - https://github.com/TanStack/virtual/issues/619#issuecomment-1969516091
+  const measureElement = (el) => {
+    nextTick(() => {
+      if (!el) {
+        return
+      }
+
+      rowVirtualizer.value.measureElement(el)
+    })
+  }
+
+  /**
+   * SEO
+   */
   const completeTitle = computed(() => {
     let title = ''
 

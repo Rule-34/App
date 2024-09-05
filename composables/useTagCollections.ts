@@ -4,47 +4,16 @@ import { TagCollection } from '~/assets/js/tagCollection.dto'
 
 const defaultTagCollections: TagCollection[] = [
   {
-    name: 'Indecencies Blocklist',
-    tags: ['-scat', '-shitting', '-diaper', '-pee', '-peeing', '-peeing_self', '-fart', '-shitpost', '-gore', '-vore']
+    name: 'Animated (video or GIFs)',
+    tags: ['animated']
   },
   {
-    name: 'Furry Blocklist',
-    tags: [
-      '-furry',
-      '-furry_only',
-      '-fur',
-      '-canid',
-      '-canine',
-      '-dragon',
-      '-anthro',
-      '-anthrofied',
-      '-anthro_on_anthro',
-      '-scaly',
-      '-scales',
-      '-accipitrid',
-      '-accipitriform',
-      '-animal_genitalia',
-      '-ferrettre',
-      '-rodent',
-      '-equine'
-    ]
+    name: 'Videos with sound',
+    tags: ['video', 'sound']
   },
   {
-    name: 'Gay Blocklist',
-    tags: [
-      '-gay',
-      '-gay_sex',
-      '-solo_male',
-      '-male_only',
-      '-male_focus',
-      '-male/male',
-      '-male_penetrated',
-      '-male_penetrating_male'
-    ]
-  },
-  {
-    name: 'AI Blocklist',
-    tags: ['-ai_generated', '-ai-generated', '-stable_diffusion']
+    name: 'Long videos with sound',
+    tags: ['video', 'sound', 'longer_than_30_seconds']
   }
 ]
 
