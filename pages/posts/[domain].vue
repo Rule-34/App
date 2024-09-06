@@ -465,11 +465,11 @@
       return []
     }
 
-    // Flatten pages, but add `current_page` to each post
+    // Flatten pages
     return data.value.pages.flatMap((page) => {
       //
 
-      return page.data.flatMap((post) => {
+      return page.data.flatMap((post, index) => {
         // TODO: Optimize performance
 
         // Skip all posts that have a blocklisted tag
@@ -491,10 +491,12 @@
         return {
           ...post,
 
+          // Custom meta data
           // TODO: Remove when API returns domain
           domain: selectedBooru.value.domain,
 
-          current_page: page.meta.current_page
+          current_page: page.meta.current_page,
+          isFirstPost: index === 0
         }
       })
     })
@@ -978,12 +980,12 @@
               <template v-else>
                 <!-- Page indicator -->
                 <button
-                  v-if="virtualRow.index !== 0 && virtualRow.index % userSettings.postsPerPage === 0"
+                  v-if="virtualRow.index !== 0 && allRows[virtualRow.index].isFirstPost"
                   class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util mx-auto mb-4 block rounded-md px-1.5 py-1 text-sm"
                   type="button"
                   @click="onPageIndicatorClick"
                 >
-                  &dharl; Page {{ allRows[virtualRow.index].current_page }} &dharl;
+                  &dharl; Page {{ allRows[virtualRow.index].current_page }} &dharr;
                 </button>
 
                 <!-- Post -->
