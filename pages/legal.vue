@@ -1,9 +1,9 @@
 <script setup>
-useSeoMeta({
-  title: 'Legal',
+  useSeoMeta({
+    title: 'Legal',
 
-  description: 'Legal information about the Rule 34 App'
-})
+    description: 'Legal information about the Rule 34 App'
+  })
 </script>
 
 <template>
@@ -13,7 +13,6 @@ useSeoMeta({
     </PageHeader>
 
     <ol class="mx-2 mt-4 space-y-4">
-
       <!-- Privacy policy -->
       <li>
         <ContentContainer
@@ -25,6 +24,20 @@ useSeoMeta({
           ]"
           text="You can find the privacy policy in the next link"
           title="Privacy policy"
+        />
+      </li>
+
+      <!-- Terms of Service -->
+      <li>
+        <ContentContainer
+          :links="[
+            {
+              text: 'Terms of service',
+              href: '/terms-of-service'
+            }
+          ]"
+          text="You can find the terms of service in the next link"
+          title="Terms of service"
         />
       </li>
 
@@ -49,25 +62,26 @@ useSeoMeta({
           title="Consent Preferences Center"
         >
           <button
-            class='hover:hover-text-util focus-visible:focus-outline-util text-sm text-base-content underline'
+            class="hover:hover-text-util focus-visible:focus-outline-util text-sm text-base-content underline"
             type="button"
-            @click='$CC.showPreferences()'>
+            @click="$CC.showPreferences()"
+          >
             Open Preferences Center
           </button>
         </ContentContainer>
       </li>
 
-      <!-- Terms of Service -->
+      <!-- DMCA -->
       <li>
         <ContentContainer
           :links="[
             {
-              text: 'Terms of service',
-              href: '/terms-of-service'
+              text: 'DMCA',
+              href: '/dmca'
             }
           ]"
-          text="You can find the terms of service in the next link"
-          title="Terms of service"
+          text="Want to submit a takedown request? You can find more information in the next link"
+          title="DMCA Notice"
         />
       </li>
 

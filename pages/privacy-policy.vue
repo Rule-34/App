@@ -861,7 +861,7 @@ useSeoMeta({
                                                                               THIS NOTICE?</strong></p>
                                                                             <div>If you have questions or comments about
                                                                               this notice, you may email us at
-                                                                              contact@akbal.dev or&nbsp;contact us by
+                                                                              contact@r34.app or&nbsp;contact us by
                                                                               post at:
                                                                             </div>
                                                                             <div>Rule 34 App</div>

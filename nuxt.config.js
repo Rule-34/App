@@ -63,7 +63,36 @@ export default defineNuxtConfig({
         'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
       }
     },
+
     '/legal': {
+      prerender: true,
+      headers: {
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+      }
+    },
+
+    '/privacy-policy': {
+      prerender: true,
+      headers: {
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+      }
+    },
+
+    '/terms-of-service': {
+      prerender: true,
+      headers: {
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+      }
+    },
+
+    '/cookie-policy': {
+      prerender: true,
+      headers: {
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+      }
+    },
+
+    '/dmca': {
       prerender: true,
       headers: {
         'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
