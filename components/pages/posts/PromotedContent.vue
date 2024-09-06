@@ -15,15 +15,15 @@
     {
       id: 'otherPromotions',
       weight: 1
-    }
+    },
     // {
     //   weight: 1,
     //   id: 'referralPromotions'
     // },
-    // {
-    //   weight: 2,
-    //   id: 'advertisementPromotions'
-    // }
+    {
+      weight: 2,
+      id: 'advertisementPromotions'
+    }
   ]
 
   const selectedPromotionsName = random_weighted_choice(weightedPromotions)

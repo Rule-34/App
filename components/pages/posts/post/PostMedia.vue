@@ -128,51 +128,51 @@
       }
     }
 
-    // if (!isPremium.value) {
-    //   timesVideoHasRendered.value++
-    //
-    //   fluidPlayerOptions.vastOptions = {
-    //     adText: 'Only one ad per hour. Never see ads again with Premium!',
-    //
-    //     vastAdvanced: {
-    //       /**
-    //        * Handle empty VAST
-    //        */
-    //       vastVideoEndedCallback() {
-    //         if (!mediaElement.value?.src.endsWith('/null')) {
-    //           return
-    //         }
-    //
-    //         mediaElement.value.src = localSrc.value
-    //         videoPlayer?.play()
-    //       }
-    //     },
-    //
-    //     adList: []
-    //   }
-    //
-    //   // Only show pause roll ads on even videos
-    //   if (timesVideoHasRendered.value % 2 === 0) {
-    //     fluidPlayerOptions.vastOptions.adList.push(
-    //       // In-Video Banner
-    //       {
-    //         roll: 'onPauseRoll',
-    //         vastTag: 'https://s.magsrv.com/splash.php?idzone=5386214'
-    //       }
-    //     )
-    //   }
-    //
-    //   // Only show preroll ads after 5 videos
-    //   if (timesVideoHasRendered.value > 5) {
-    //     fluidPlayerOptions.vastOptions.adList.push(
-    //       // In-Stream Video
-    //       {
-    //         roll: 'preRoll',
-    //         vastTag: 'https://s.magsrv.com/splash.php?idzone=5386496'
-    //       }
-    //     )
-    //   }
-    // }
+    if (!isPremium.value) {
+      timesVideoHasRendered.value++
+
+      fluidPlayerOptions.vastOptions = {
+        adText: 'Only one ad per hour. Never see ads again with Premium!',
+
+        vastAdvanced: {
+          /**
+           * Handle empty VAST
+           */
+          vastVideoEndedCallback() {
+            if (!mediaElement.value?.src.endsWith('/null')) {
+              return
+            }
+
+            mediaElement.value.src = localSrc.value
+            videoPlayer?.play()
+          }
+        },
+
+        adList: []
+      }
+
+      // Only show pause roll ads on even videos
+      if (timesVideoHasRendered.value % 2 === 0) {
+        fluidPlayerOptions.vastOptions.adList.push(
+          // In-Video Banner
+          {
+            roll: 'onPauseRoll',
+            vastTag: 'https://s.magsrv.com/splash.php?idzone=5386214'
+          }
+        )
+      }
+
+      // Only show preroll ads after 5 videos
+      if (timesVideoHasRendered.value > 5) {
+        fluidPlayerOptions.vastOptions.adList.push(
+          // In-Stream Video
+          {
+            roll: 'preRoll',
+            vastTag: 'https://s.magsrv.com/splash.php?idzone=5386496'
+          }
+        )
+      }
+    }
 
     videoPlayer = fluidPlayer(mediaElement.value as HTMLVideoElement, fluidPlayerOptions)
   }
