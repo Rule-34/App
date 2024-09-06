@@ -5,7 +5,15 @@
   const config = useRuntimeConfig()
 
   const canonicalUrl = computed(() => {
-    return 'https://' + config.public.APP_DOMAIN + route.fullPath
+    const url = 'https://' + config.public.APP_DOMAIN + route.fullPath
+
+    const parsedUrl = new URL(url)
+
+    // Remove query params: page or cursor
+    parsedUrl.searchParams.delete('page')
+    parsedUrl.searchParams.delete('cursor')
+
+    return parsedUrl.href
   })
 
   useHead({
