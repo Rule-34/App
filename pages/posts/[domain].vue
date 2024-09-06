@@ -544,7 +544,7 @@
   // Next page loader
   watchEffect(() => {
     // Skip if there is no data
-    if (!data.value) {
+    if (!allRows.value) {
       return
     }
 
@@ -689,11 +689,11 @@
   })
 
   const firstPostsPageAsSchema = computed(() => {
-    if (!data.value?.pages[0]?.data.length) {
+    if (!allRows.value.length) {
       return []
     }
 
-    return data.value?.pages[0].data.map((post) => {
+    return allRows.value.map((post) => {
       switch (post.media_type) {
         case 'image':
           return defineImage({
@@ -921,7 +921,7 @@
       </template>
 
       <!-- No results -->
-      <template v-else-if="!data.pages[0]?.data.length">
+      <template v-else-if="!allRows.length">
         <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-lg">
           <QuestionMarkCircleIcon class="h-12 w-12" />
 
