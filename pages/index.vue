@@ -255,53 +255,6 @@
       ]
     },
     {
-      domain: 'gelbooru.com',
-      path: '/posts/gelbooru.com',
-      isPremium: false,
-      tags: [
-        {
-          name: 'Top posts',
-          path: '/posts/gelbooru.com?filter%5Bsort%5D=score&filter%5Brating%5D=explicit',
-          media: [
-            { type: 'image', src: '/img/featured/gelbooru.com/top-1.jpeg' },
-            { type: 'image', src: '/img/featured/gelbooru.com/top-2.jpeg' },
-            { type: 'image', src: '/img/featured/gelbooru.com/top-3.jpeg' },
-            { type: 'image', src: '/img/featured/gelbooru.com/top-4.jpeg' }
-          ]
-        },
-        {
-          name: 'Popular posts',
-          path: '/posts/gelbooru.com?filter%5Bscore%5D=>%3D50',
-          media: [
-            { type: 'image', src: '/img/featured/gelbooru.com/top-5.jpeg' },
-            { type: 'image', src: '/img/featured/gelbooru.com/top-6.jpeg' },
-            { type: 'image', src: '/img/featured/gelbooru.com/top-7.jpeg' },
-            { type: 'image', src: '/img/featured/gelbooru.com/top-8.jpeg' }
-          ]
-        },
-        {
-          name: 'Animated (video)',
-          path: '/posts/gelbooru.com?tags=animated',
-          media: [{ type: 'image', src: '/img/featured/gelbooru.com/animated.jpeg' }]
-        },
-        {
-          name: 'Pokemon',
-          path: '/posts/gelbooru.com?tags=pokemon',
-          media: [{ type: 'image', src: '/img/featured/gelbooru.com/pokemon.jpeg' }]
-        },
-        {
-          name: '3D',
-          path: '/posts/gelbooru.com?tags=3d',
-          media: [{ type: 'image', src: '/img/featured/gelbooru.com/3d.jpeg' }]
-        },
-        {
-          name: 'Furry',
-          path: '/posts/gelbooru.com?tags=furry',
-          media: [{ type: 'image', src: '/img/featured/gelbooru.com/furry.jpeg' }]
-        }
-      ]
-    },
-    {
       domain: 'e621.net',
       path: '/posts/e621.net',
       isPremium: false,
