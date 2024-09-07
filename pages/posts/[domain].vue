@@ -979,6 +979,7 @@
               <!-- Content -->
               <template v-else>
                 <!-- Page indicator -->
+                <!-- TODO: Show individually, not attached to a post-->
                 <button
                   v-if="virtualRow.index !== 0 && allRows[virtualRow.index].isFirstPost"
                   class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util mx-auto mb-4 block rounded-md px-1.5 py-1 text-sm"
