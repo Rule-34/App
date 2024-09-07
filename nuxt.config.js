@@ -39,7 +39,8 @@ export default defineNuxtConfig({
    */
   routeRules: {
     '/': {
-      prerender: true,
+      // Not prerendered because it needs to redirect old URLs
+      // prerender: true,
       headers: {
         'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
       }

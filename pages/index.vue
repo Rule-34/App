@@ -105,33 +105,6 @@
 
   // TODO: Listen to router
 
-  definePageMeta({
-    middleware: [
-      /**
-       * Redirect to /posts/<domain> if query parameters [domain, page, tags] are set.
-       */
-      function (to, from) {
-        if (!to) {
-          return
-        }
-
-        if (Object.keys(to.query).length === 0) {
-          return
-        }
-
-        if (to.query.domain == null) {
-          return
-        }
-
-        const searchParams = new URLSearchParams(to.query)
-        searchParams.delete('domain')
-
-        // Redirect
-        return navigateTo('/posts/' + to.query.domain + '?' + searchParams.toString())
-      }
-    ]
-  })
-
   useSchemaOrg([
     defineWebSite({
       potentialAction: [
