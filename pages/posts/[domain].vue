@@ -591,7 +591,7 @@
 
     // Tags
     if (selectedTags.value.length > 0) {
-      title += ` tagged ${tagArrayToTitle(selectedTags.value)} Hentai videos, GIFs, and images`
+      title += ` tagged ${tagArrayToTitle(selectedTags.value)} hentai videos, GIFs, and images`
     }
 
     // Filters
@@ -642,7 +642,9 @@
 
     _title = _title.replace(/posts/i, '')
 
-    _title = _title.replace(/ hentai videos, GIFs, and images/i, '')
+    _title = _title.replace(/tagged with/i, '')
+
+    _title = _title.replace(/hentai videos, GIFs, and images/i, 'rule 34 hentai')
 
     _title = _title.replace(/, from .+$/, '')
 
@@ -841,17 +843,20 @@
     </section>
 
     <div class="flex">
-      <PageHeader class="flex-1">
+      <PageHeader
+        as="h2"
+        class="flex-1"
+      >
         <template #title>Posts</template>
         <template
           v-if="titleForBody"
           #text
         >
-          <h2 class="text-sm">
+          <h1 class="text-sm">
             <!-- TODO: Make tags and filters clickable so they open search menu, maybe reference the button, like a form does -->
 
             {{ titleForBody }}
-          </h2>
+          </h1>
         </template>
       </PageHeader>
 
