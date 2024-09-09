@@ -232,9 +232,11 @@
     localSrc.value = props.mediaSrc
     localPosterSrc.value = props.mediaPosterSrc
 
-    nextTick(() => {
-      reloadVideoPlayer()
-    })
+    if (isVideo.value) {
+      nextTick(() => {
+        reloadVideoPlayer()
+      })
+    }
   }
 
   /**
