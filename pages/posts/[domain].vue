@@ -452,10 +452,13 @@
       }
 
       return firstPage.links.prev
-    }
+    },
+    maxPages: 5
   })
 
-  onServerPrefetch(suspense)
+  onServerPrefetch(async () => {
+    await suspense()
+  })
 
   /**
    * Virtualization
