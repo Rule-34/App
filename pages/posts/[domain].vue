@@ -456,9 +456,13 @@
     maxPages: 5
   })
 
-  onServerPrefetch(async () => {
+  // TODO: Find a better way to prefetch on server?
+  // onServerPrefetch(async () => {
+  //   await suspense()
+  // })
+  if (import.meta.server) {
     await suspense()
-  })
+  }
 
   /**
    * Virtualization
@@ -514,15 +518,7 @@
 
   const rowVirtualizerOptions = computed(() => {
     return {
-      debug: false,
-
-      // Fix: In SSR allRows.value is undefined, so we use double the overscan value
-      count: import.meta.server
-        ? // TODO: Use correct value
-          10
-        : hasNextPage
-          ? allRows.value.length + 1
-          : allRows.value.length,
+      count: hasNextPage.value ? allRows.value.length + 1 : allRows.value.length,
 
       estimateSize: () => 600,
 
