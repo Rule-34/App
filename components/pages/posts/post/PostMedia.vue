@@ -316,18 +316,6 @@
 
           <span> to bypass website blocks</span>
         </div>
-
-        <div class="text-sm text-base-content">
-          <span> Media not loading? </span>
-
-          <NuxtLink
-            class="hover:hover-text-util focus-visible:focus-outline-util underline"
-            href="https://docs.r34.app/frequently-asked-questions#74cfdf0316b04111b0c65b7f8502dfda"
-            target="_blank"
-          >
-            Learn more
-          </NuxtLink>
-        </div>
       </div>
     </template>
 
