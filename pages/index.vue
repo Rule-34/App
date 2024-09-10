@@ -5,7 +5,7 @@
   import { useBooruList } from '~/composables/useBooruList'
   import type { Domain } from '~/assets/js/domain'
   import { ArrowRightIcon } from '@heroicons/vue/24/solid'
-  import * as Sentry from '@sentry/vue'
+  import * as Sentry from '@sentry/nuxt'
   import { FetchError } from 'ofetch'
 
   const config = useRuntimeConfig()

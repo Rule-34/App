@@ -233,6 +233,7 @@ export default defineNuxtConfig({
    * Loaded in order
    */
   modules: [
+    '@sentry/nuxt/module',
     'nuxt-headlessui',
     '@headlessui-float/nuxt',
     '@nuxt/image',

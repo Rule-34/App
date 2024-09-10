@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { Bars3BottomRightIcon, EyeIcon, MagnifyingGlassIcon, StarIcon } from '@heroicons/vue/24/outline'
   import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
-  import * as Sentry from '@sentry/vue'
+  import * as Sentry from '@sentry/nuxt'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
   import { cloneDeep, throttle } from 'lodash-es'
