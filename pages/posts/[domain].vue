@@ -458,7 +458,7 @@
 
       return firstPage.links.prev
     },
-    maxPages: 5
+    maxPages: 10
   })
 
   // TODO: Find a better way to prefetch on server?
@@ -958,7 +958,7 @@
             position: 'relative'
           }"
         >
-          <!-- TODO: Remove `space-y-4` when virtualizer gap works -->
+          <!-- TODO: Fix SSR mismatches -->
           <ol
             :style="{
               position: 'absolute',
