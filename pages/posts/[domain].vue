@@ -336,6 +336,11 @@
 
     // TODO: Figure out a better way to reload page
     await reflectChangesInUrl({ page })
+
+    window.scrollTo({
+      top: 0
+    })
+
     window.location.reload()
   }
 
