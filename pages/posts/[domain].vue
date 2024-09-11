@@ -563,7 +563,7 @@
       return
     }
 
-    const [lastItem] = [...virtualRows.value].reverse()
+    const lastItem = virtualRows.value.at(-1)
 
     if (!lastItem) {
       return
