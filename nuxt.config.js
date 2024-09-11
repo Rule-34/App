@@ -240,6 +240,7 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@formkit/auto-animate/nuxt',
     '@vite-pwa/nuxt',
+    '@nuxt/scripts',
     '@nuxtjs/sitemap',
     'nuxt-schema-org',
     'nuxt-security'
