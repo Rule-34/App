@@ -18,9 +18,6 @@ export default defineNuxtPlugin((nuxt) => {
         refetchIntervalInBackground: false,
         refetchInterval: false,
 
-        // Stale after 5 minutes
-        // staleTime: 1000 * 60 * 5,
-
         // Disable retries, it is handled by Nuxt
         retry: false
       }

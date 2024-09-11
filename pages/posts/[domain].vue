@@ -421,7 +421,16 @@
       //
       userSettings.postsPerPage
     ],
+
     queryFn: fetchPosts,
+
+    // Stale after 5 minutes
+    // Same as Nuxt route rules
+    // @see nuxt.config.js
+    staleTime: 1000 * 60 * 5,
+
+    maxPages: 10,
+
     select: (data) => {
       //
 
@@ -448,7 +457,9 @@
         pageParams: data.pageParams
       }
     },
+
     initialPageParam: '',
+
     getNextPageParam: (lastPage, allPages, lastPageParam) => {
       if (lastPage.links.next == null) {
         return undefined
@@ -460,14 +471,14 @@
 
       return lastPage.links.next
     },
+
     getPreviousPageParam: (firstPage, allPages, firstPageParam) => {
       if (firstPage.links.prev == null) {
         return undefined
       }
 
       return firstPage.links.prev
-    },
-    maxPages: 10
+    }
   })
 
   // TODO: Find a better way to prefetch on server?
