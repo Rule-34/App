@@ -793,6 +793,18 @@
       return true
     }
   })
+
+  /**
+   * Show popunders for non-premium users
+   */
+  onMounted(() => {
+    if (isPremium.value) {
+      return
+    }
+
+    useScript({ src: '/js/popunder.js', async: false, defer: true })
+    useScript({ src: 'https://a.pemsrv.com/popunder1000.js', async: false, defer: true })
+  })
 </script>
 
 <template>
