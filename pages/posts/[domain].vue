@@ -395,7 +395,6 @@
     })
   }
 
-  // TODO: Should include page number in key, maybe an initial page number?
   const {
     suspense,
 
@@ -411,7 +410,17 @@
     isPending,
     isError
   } = useInfiniteQuery({
-    queryKey: ['posts', selectedBooru, selectedTags, selectedFilters],
+    queryKey: [
+      //
+      'posts',
+      selectedBooru,
+      selectedTags,
+      selectedFilters,
+      //
+      selectedPage.value,
+      //
+      userSettings.postsPerPage
+    ],
     queryFn: fetchPosts,
     select: (data) => {
       //
