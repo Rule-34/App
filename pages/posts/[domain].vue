@@ -558,6 +558,11 @@
 
   // Next page loader
   watchEffect(() => {
+    // Only run on client
+    if (!import.meta.client) {
+      return
+    }
+
     // Skip if there is no data
     if (!allRows.value) {
       return
