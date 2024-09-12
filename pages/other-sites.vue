@@ -19,7 +19,8 @@
           :links="[
             {
               text: 'hentaiporn.app',
-              href: 'https://hentaiporn.app/?utm_source=r34.app&utm_medium=friends'
+              href: 'https://hentaiporn.app/?utm_source=r34.app&utm_medium=friends',
+              target: '_blank'
             }
           ]"
           text="Sister site of the Rule 34 App, has the best high-quality hentai images and videos"
@@ -31,21 +32,9 @@
         <ContentContainer
           :links="[
             {
-              text: 'kurosearch.com',
-              href: 'https://kurosearch.com/?utm_source=r34.app&utm_medium=friends'
-            }
-          ]"
-          text="Simple and powerful Rule34.xxx browsing site with a focus on simplicity and user experience"
-          title="Kurosearch"
-        />
-      </li>
-
-      <li>
-        <ContentContainer
-          :links="[
-            {
               text: 'theporndude.com',
-              href: 'https://theporndude.com'
+              href: 'https://theporndude.com',
+              target: '_blank'
             }
           ]"
           text="The Porn Dude lists the world's best porn sites"
