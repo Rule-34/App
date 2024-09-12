@@ -1,30 +1,36 @@
 <script lang="ts" setup>
+  import { Bars3BottomRightIcon, EyeIcon, MagnifyingGlassIcon, PhotoIcon, StarIcon } from '@heroicons/vue/24/outline'
   import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
-  import { Bars3BottomRightIcon, EyeIcon, MagnifyingGlassIcon, PhotoIcon } from '@heroicons/vue/24/outline'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
+  import { throttle } from 'lodash-es'
+  import type { Ref } from 'vue'
+  import { toast } from 'vue-sonner'
+  import type { Domain } from '~/assets/js/domain'
+  import Post from '~/assets/js/post.dto'
+  import Tag from '~/assets/js/tag.dto'
+  import { useBooruList } from '~/composables/useBooruList'
+  import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
   import type { IPost, IPostPage } from 'assets/js/post.dto'
   import { generatePostsRoute } from 'assets/js/RouterHelper'
   import { tagArrayToTitle } from 'assets/js/SeoHelper'
-  import { capitalize } from 'lodash-es'
-  import { toast } from 'vue-sonner'
-  import type { Domain } from '~/assets/js/domain'
   import type { IPocketbasePost } from '~/assets/js/pocketbase.dto'
-  import Post from '~/assets/js/post.dto'
-  import Tag from '~/assets/js/tag.dto'
-  import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-  import { useBooruList } from '~/composables/useBooruList'
-  import type { Ref } from 'vue'
 
+  const router = useRouter()
   const route = useRoute()
+  const config = useRuntimeConfig()
 
   const { $pocketBase } = useNuxtApp()
 
-  const { toggle: toggleSearchMenu } = useSearchMenu()
   const userSettings = useUserSettings()
+  const { toggle: toggleSearchMenu } = useSearchMenu()
+
   const { booruList: _availableBooruList } = useBooruList()
   const { savedPostList } = usePocketbase()
 
+  /**
+   * URL
+   */
   const domainsFromPocketbase = await $pocketBase.collection('distinct_original_domain_from_posts').getFullList()
 
   const booruList = computed(() => {
@@ -88,7 +94,7 @@
     const page = parseInt(route.query.page as string)
 
     if (!page) {
-      return 0
+      return 1
     }
 
     return page
@@ -99,9 +105,9 @@
 
     return {
       type: route.query.filter?.type ?? undefined,
+      rating: route.query.filter?.rating ?? undefined,
       sort: route.query.filter?.sort ?? undefined,
-      rating: route.query.filter?.rating ?? undefined
-      // score: route.query.filter?.score ?? undefined
+      score: route.query.filter?.score ?? undefined
     }
   })
 
@@ -141,197 +147,37 @@
         { label: 'Questionable', value: 'questionable' },
         { label: 'Explicit', value: 'explicit' }
       ]
+    },
+    score: {
+      type: 'select' as const,
+      label: 'Score',
+      icon: StarIcon,
+      options: [
+        { label: 'Score', value: undefined },
+        { label: '>= 0', value: 0 },
+
+        { label: '>= 5', value: 5 },
+
+        { label: '>= 10', value: 10 },
+        { label: '>= 25', value: 25 },
+        { label: '>= 50', value: 50 },
+        { label: '>= 75', value: 75 },
+
+        { label: '>= 100', value: 100 },
+        { label: '>= 200', value: 200 },
+        { label: '>= 300', value: 300 },
+        { label: '>= 500', value: 500 },
+        { label: '>= 750', value: 750 },
+
+        { label: '>= 1000', value: 1000 }
+      ]
     }
   }
 
-  interface IPostPageFromPocketBase extends Omit<IPostPage, 'links'> {}
-
-  async function fetchPosts(options: any): Promise<IPostPageFromPocketBase> {
-    const page = options.pageParam
-
-    const PAGE_SIZE = userSettings.postsPerPage
-
-    let pocketbaseRequestFilter = ''
-
-    if (selectedBooru.value.domain !== 'r34.app') {
-      pocketbaseRequestFilter += $pocketBase.filter('original_domain = {:original_domain}', {
-        original_domain: selectedBooru.value.domain
-      })
-    }
-
-    if (selectedFilters.value.type) {
-      if (pocketbaseRequestFilter !== '') {
-        pocketbaseRequestFilter += ' && '
-      }
-
-      pocketbaseRequestFilter += $pocketBase.filter('media_type = {:type}', {
-        type: selectedFilters.value.type
-      })
-    }
-
-    const pocketbaseRequestSort = selectedFilters.value.sort ?? '-created'
-
-    if (selectedFilters.value.rating) {
-      if (pocketbaseRequestFilter !== '') {
-        pocketbaseRequestFilter += ' && '
-      }
-
-      pocketbaseRequestFilter += $pocketBase.filter('rating = {:rating}', {
-        rating: selectedFilters.value.rating
-      })
-    }
-
-    // TODO
-    // if (selectedTags.value.length > 0) {
-    // }
-
-    // if (selectedFilters.value.score) {
-    //   pocketbaseRequestFilter += $pocketBase.filter('score = {:score}', {
-    //     score: selectedFilters.value.score
-    //   })
-    // }
-
-    const pocketBasePostsResponse = await $pocketBase.collection('posts').getList<IPocketbasePost>(page, PAGE_SIZE, {
-      sort: pocketbaseRequestSort,
-      filter: pocketbaseRequestFilter,
-      skipTotal: true
-    })
-
-    const posts = pocketBasePostsResponse.items.map((item) => {
-      return Post.fromPocketbasePost(item)
-    })
-
-    return {
-      data: posts,
-      meta: {
-        items_count: pocketBasePostsResponse.items.length,
-        total_items: pocketBasePostsResponse.totalItems,
-        current_page: pocketBasePostsResponse.page,
-        total_pages: pocketBasePostsResponse.totalPages,
-        items_per_page: pocketBasePostsResponse.perPage
-      }
-    }
-  }
-
-  const {
-    suspense,
-
-    data,
-    error,
-    refetch,
-    fetchNextPage,
-    fetchPreviousPage,
-    hasNextPage,
-    hasPreviousPage,
-    isFetching,
-    isFetchingNextPage,
-    isPending,
-    isError
-  } = useInfiniteQuery({
-    queryKey: ['saved-posts', selectedBooru, selectedTags, selectedFilters, savedPostList.value.length],
-    queryFn: fetchPosts,
-    initialPageParam: selectedPage.value,
-    getNextPageParam: (lastPage, allPages, lastPageParam) => {
-      // If items are less than the limit, the end has been reached
-      if (lastPage.meta.items_count !== lastPage.meta.items_per_page) {
-        return undefined
-      }
-
-      // TODO: Use selectedPage.value instead of lastPageParam
-
-      return lastPageParam + 1
-    }
-    // getPreviousPageParam: (firstPage, allPages, firstPageParam) => {
-    //   // Skip if page is 0 or less
-    //   if (firstPageParam <= 0) {
-    //     return undefined
-    //   }
-    //
-    //   return firstPageParam - 1
-    // }
-  })
-
-  onServerPrefetch(async () => {
-    await suspense()
-  })
-
-  const allRows = computed<IPost[]>(() => {
-    if (!data.value) {
-      return []
-    }
-
-    // Flatten pages, but add `current_page` to each post
-    return data.value.pages.flatMap((page) => {
-      return page.data.map((post) => {
-        return {
-          ...post,
-          current_page: page.meta.current_page
-        }
-      })
-    })
-  })
-
-  const parentRef = ref<HTMLElement | null>(null)
-  const parentOffsetRef = ref(0)
-
-  onMounted(() => {
-    parentOffsetRef.value = parentRef.value?.offsetTop ?? 0
-  })
-
-  const rowVirtualizerOptions = computed(() => {
-    return {
-      debug: false,
-
-      count: hasNextPage ? allRows.value.length + 1 : allRows.value.length,
-
-      estimateSize: () => 600,
-
-      scrollMargin: parentOffsetRef.value,
-
-      overscan: 5,
-
-      gap: 16
-    }
-  })
-
-  const rowVirtualizer = useWindowVirtualizer(rowVirtualizerOptions)
-
-  const virtualRows = computed(() => rowVirtualizer.value.getVirtualItems())
-
-  const totalSize = computed(() => rowVirtualizer.value.getTotalSize())
-
-  // Next page loader
-  watchEffect(() => {
-    // Skip if there is no data
-    if (!data.value) {
-      return
-    }
-
-    const [lastItem] = [...virtualRows.value].reverse()
-
-    if (!lastItem) {
-      return
-    }
-
-    // IF last item is the last item in the list
-    // AND there is a next page
-    // AND it's not fetching
-    // THEN load next page
-    if (lastItem.index >= allRows.value.length - 1 && hasNextPage.value && !isFetchingNextPage.value) {
-      onLoadNextPostPage()
-    }
-  })
-
-  // FIX: Remove when this issue is fixed - https://github.com/TanStack/virtual/issues/619#issuecomment-1969516091
-  const measureElement = (el) => {
-    nextTick(() => {
-      if (!el) {
-        return
-      }
-
-      rowVirtualizer.value.measureElement(el)
-    })
-  }
+  /**
+   * Misc
+   */
+  const tagResults: Ref<Tag[]> = shallowRef([])
 
   /**
    * `undefined` values mean that they will be replaced by default values
@@ -378,8 +224,9 @@
     await navigateTo({ ...postsRoute }, { replace })
   }
 
-  const tagResults: Ref<Tag[]> = shallowRef([])
-
+  /**
+   * Listeners
+   */
   async function onSearchTag(tag: string) {
     toast.error('Autocomplete not implemented')
   }
@@ -389,9 +236,8 @@
   }
 
   async function onSearchSubmit({ tags, filters }) {
-    await reflectChangesInUrl({ page: null, filters })
     // TODO: Tags
-    //    await reflectChangesInUrl({ page: null, tags, filters })
+    await reflectChangesInUrl({ page: null, filters })
   }
 
   /**
@@ -426,6 +272,10 @@
     await fetchNextPage()
   }
 
+  const debouncedOnLoadNextPostPage = throttle(onLoadNextPostPage, 1000, {
+    trailing: false
+  })
+
   async function onPageIndicatorClick() {
     const pagePrompt = prompt('To which page do you want to go?')
 
@@ -442,10 +292,255 @@
 
     // TODO: Figure out a better way to reload page
     await reflectChangesInUrl({ page })
+
+    window.scrollTo({
+      top: 0
+    })
+
     window.location.reload()
   }
 
-  const title = computed(() => {
+  function onRetryClick() {
+    window.location.reload()
+  }
+
+  /**
+   * Data fetching
+   */
+  interface IPostPageFromPocketBase extends Omit<IPostPage, 'links'> {}
+
+  async function fetchPosts(options: any): Promise<IPostPageFromPocketBase> {
+    const page = options.pageParam
+
+    const PAGE_SIZE = userSettings.postsPerPage
+
+    let pocketbaseRequestFilter = ''
+
+    if (selectedBooru.value.domain !== 'r34.app') {
+      pocketbaseRequestFilter += $pocketBase.filter('original_domain = {:original_domain}', {
+        original_domain: selectedBooru.value.domain
+      })
+    }
+
+    if (selectedFilters.value.type) {
+      if (pocketbaseRequestFilter !== '') {
+        pocketbaseRequestFilter += ' && '
+      }
+
+      pocketbaseRequestFilter += $pocketBase.filter('media_type = {:type}', {
+        type: selectedFilters.value.type
+      })
+    }
+
+    const pocketbaseRequestSort = selectedFilters.value.sort ?? '-created'
+
+    if (selectedFilters.value.rating) {
+      if (pocketbaseRequestFilter !== '') {
+        pocketbaseRequestFilter += ' && '
+      }
+
+      pocketbaseRequestFilter += $pocketBase.filter('rating = {:rating}', {
+        rating: selectedFilters.value.rating
+      })
+    }
+
+    // TODO
+    // if (selectedTags.value.length > 0) {
+    // }
+
+    if (selectedFilters.value.score) {
+      pocketbaseRequestFilter += $pocketBase.filter('score >= {:score}', {
+        score: selectedFilters.value.score
+      })
+    }
+
+    const pocketBasePostsResponse = await $pocketBase.collection('posts').getList<IPocketbasePost>(page, PAGE_SIZE, {
+      sort: pocketbaseRequestSort,
+      filter: pocketbaseRequestFilter,
+      skipTotal: true
+    })
+
+    const posts = pocketBasePostsResponse.items.map((item) => {
+      return Post.fromPocketbasePost(item)
+    })
+
+    return {
+      data: posts,
+      meta: {
+        items_count: pocketBasePostsResponse.items.length,
+        total_items: pocketBasePostsResponse.totalItems,
+        current_page: pocketBasePostsResponse.page,
+        total_pages: pocketBasePostsResponse.totalPages,
+        items_per_page: pocketBasePostsResponse.perPage
+      }
+    }
+  }
+
+  const {
+    suspense,
+
+    data,
+    error,
+    refetch,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+    isFetching,
+    isFetchingNextPage,
+    isPending,
+    isError
+  } = useInfiniteQuery({
+    queryKey: [
+      //
+      'saved-posts',
+      //
+      selectedBooru,
+      selectedTags,
+      selectedFilters,
+      //
+      selectedPage.value,
+      //
+      userSettings.postsPerPage,
+      //
+      savedPostList.value.length
+    ],
+
+    queryFn: fetchPosts,
+
+    // Stale after 5 minutes
+    // Same as Nuxt route rules
+    // @see nuxt.config.js
+    staleTime: 1000 * 60 * 5,
+
+    maxPages: 10,
+
+    initialPageParam: selectedPage.value,
+
+    getNextPageParam: (lastPage, allPages, lastPageParam) => {
+      // If items are less than the limit, the end has been reached
+      if (lastPage.meta.items_count !== lastPage.meta.items_per_page) {
+        return undefined
+      }
+
+      // TODO: Use selectedPage.value instead of lastPageParam
+
+      return lastPageParam + 1
+    }
+  })
+
+  // TODO: Find a better way to prefetch on server?
+  // onServerPrefetch(async () => {
+  //   await suspense()
+  // })
+  if (import.meta.server) {
+    await suspense()
+  }
+
+  /**
+   * Virtualization
+   */
+  const allRows = computed<IPost[]>(() => {
+    if (!data.value) {
+      return []
+    }
+
+    // Flatten pages
+    return data.value.pages.flatMap((page) => {
+      //
+
+      return page.data.flatMap((post, index) => {
+        // TODO: Optimize performance
+
+        return {
+          ...post,
+
+          // Custom meta data
+          // TODO: Remove when API returns domain
+          domain: selectedBooru.value.domain,
+
+          current_page: page.meta.current_page,
+          isFirstPost: index === 0
+        }
+      })
+    })
+  })
+
+  const parentRef = ref<HTMLElement | null>(null)
+  const parentOffsetRef = ref(0)
+
+  onMounted(() => {
+    parentOffsetRef.value = parentRef.value?.offsetTop ?? 0
+  })
+
+  const rowVirtualizerOptions = computed(() => {
+    return {
+      count: hasNextPage.value ? allRows.value.length + 1 : allRows.value.length,
+
+      estimateSize: () => 600,
+
+      // For SSR
+      initialRect: {
+        width: 800,
+        height: 600
+      },
+
+      scrollMargin: parentOffsetRef.value,
+
+      overscan: 5,
+
+      gap: 16
+    }
+  })
+
+  const rowVirtualizer = useWindowVirtualizer(rowVirtualizerOptions)
+
+  const virtualRows = computed(() => rowVirtualizer.value.getVirtualItems())
+
+  const totalSize = computed(() => rowVirtualizer.value.getTotalSize())
+
+  // Next page loader
+  watchEffect(() => {
+    // Only run on client
+    if (!import.meta.client) {
+      return
+    }
+
+    // Skip if there is no data
+    if (!allRows.value) {
+      return
+    }
+
+    const lastItem = virtualRows.value.at(-1)
+
+    if (!lastItem) {
+      return
+    }
+
+    // IF last item is the last item in the list
+    // AND there is a next page
+    // AND it's not fetching
+    // THEN load next page automatically
+    if (lastItem.index >= allRows.value.length - 1 && hasNextPage.value && !isFetchingNextPage.value) {
+      debouncedOnLoadNextPostPage()
+    }
+  })
+
+  // FIX: Remove when this issue is fixed - https://github.com/TanStack/virtual/issues/619#issuecomment-1969516091
+  const measureElement = (el) => {
+    nextTick(() => {
+      if (!el) {
+        return
+      }
+
+      rowVirtualizer.value.measureElement(el)
+    })
+  }
+
+  /**
+   * SEO
+   */
+  const completeTitle = computed(() => {
     let title = ''
 
     // Page
@@ -456,12 +551,12 @@
     title += 'Saved Posts'
 
     // Tags
+
     if (selectedTags.value.length > 0) {
-      title += ` tagged ${tagArrayToTitle(selectedTags.value)} porn`
+      title += ` tagged ${tagArrayToTitle(selectedTags.value)} hentai videos, GIFs, and images`
     }
 
     // Filters
-
     if (selectedFilters.value.type) {
       title += `, ${selectedFilters.value.type} only`
     }
@@ -475,27 +570,47 @@
     }
 
     if (selectedFilters.value.score) {
-      title += `, with a score of ${selectedFilters.value.score}`
+      title += `, score of ${selectedFilters.value.score}`
     }
 
     // Domain
     title += `, from ${selectedBooru.value.domain}`
 
     title = title.trim()
-    title = capitalize(title)
 
     return title
   })
 
+  const shortTitle = computed(() => {
+    let _title = completeTitle.value
+
+    _title = _title.replace(/Posts tagged/, '')
+    _title = _title.replace(/with /, '')
+    _title = _title.replace(/and ?without /, ' w/o ')
+    _title = _title.replace(/with a score of/, 'score')
+
+    if (selectedTags.value.length > 0) {
+      _title = _title.replace(/, from .+$/, '')
+    }
+
+    _title = _title.trim()
+    // Capitalize first letter - https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
+    _title = _title.charAt(0).toUpperCase() + _title.slice(1)
+
+    return _title
+  })
+
   const titleForBody = computed(() => {
-    let _title = title.value
+    let _title = completeTitle.value
 
     // TODO: Show page number in body title
-    _title = _title.replace(/Page \d+ of /, '')
+    _title = _title.replace(/page \d+ of /i, '')
 
     _title = _title.replace(/saved posts/i, '')
 
-    _title = _title.replace(/ porn/, '')
+    _title = _title.replace(/tagged with/i, '')
+
+    _title = _title.replace(/hentai videos, GIFs, and images/i, 'rule 34 hentai')
 
     _title = _title.replace(/, from .+$/, '')
 
@@ -505,13 +620,14 @@
     }
 
     _title = _title.trim()
-    _title = capitalize(_title)
+    // Capitalize first letter - https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
+    _title = _title.charAt(0).toUpperCase() + _title.slice(1)
 
     return _title
   })
 
   useSeoMeta({
-    title
+    title: shortTitle
   })
 
   definePageMeta({
@@ -589,17 +705,20 @@
     </section>
 
     <div class="flex">
-      <PageHeader class="flex-1">
+      <PageHeader
+        as="h2"
+        class="flex-1"
+      >
         <template #title>Saved Posts</template>
         <template
           v-if="titleForBody"
           #text
         >
-          <h2 class="text-sm">
+          <h1 class="text-sm">
             <!-- TODO: Make tags and filters clickable so they open search menu, maybe reference the button, like a form does -->
 
             {{ titleForBody }}
-          </h2>
+          </h1>
         </template>
       </PageHeader>
     </div>
@@ -619,23 +738,59 @@
 
       <!-- Error -->
       <template v-else-if="isError">
-        <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-lg">
-          <ExclamationCircleIcon class="h-12 w-12" />
+        <div class="mt-12 text-center">
+          <ExclamationCircleIcon class="mx-auto mb-1 h-12 w-12" />
 
-          <h3>Failed to load posts</h3>
+          <div v-if="error.status === 404">
+            <h3 class="text-lg font-semibold leading-10">No posts found</h3>
 
-          <span class="w-full overflow-x-auto text-base">{{ error.message }}</span>
+            <span class="w-full overflow-x-auto"> Try changing the tags or filters </span>
+          </div>
+
+          <div v-else-if="error.status === 429">
+            <h3 class="text-lg font-semibold leading-10">Too many requests</h3>
+
+            <span class="w-full overflow-x-auto text-pretty">
+              You sent too many requests in a short period of time. Use the button below to continue using the R34 App
+            </span>
+
+            <NuxtLink
+              :href="config.public.API_URL + '/status'"
+              class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto mt-4 block w-fit rounded-md px-6 py-1.5 text-base ring-1 ring-base-0/20 focus-visible:ring-offset-2"
+              rel="nofollow noopener noreferrer"
+              target="_blank"
+            >
+              Verify I am not a Bot
+            </NuxtLink>
+          </div>
+
+          <div v-else>
+            <h3 class="text-lg font-semibold leading-10">Failed to load posts</h3>
+
+            <span class="w-full overflow-x-auto text-base">
+              {{ error.data?.message ?? error.message }}
+            </span>
+          </div>
+
+          <!-- Retry button -->
+          <button
+            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto mt-6 block w-fit rounded-md px-6 py-1.5 text-base ring-1 ring-base-0/20 focus-visible:ring-offset-2"
+            type="button"
+            @click="onRetryClick"
+          >
+            Retry
+          </button>
         </div>
       </template>
 
       <!-- No results -->
-      <template v-else-if="!data.pages[0]?.data.length">
+      <template v-else-if="!allRows.length">
         <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-lg">
           <QuestionMarkCircleIcon class="h-12 w-12" />
 
           <h3>No results</h3>
 
-          <span class="text-base">Try changing the domain or the tags</span>
+          <span class="text-base">Try changing the tags or filters</span>
         </div>
       </template>
 
@@ -655,7 +810,7 @@
             position: 'relative'
           }"
         >
-          <!-- TODO: Remove `space-y-4` when virtualizer gap works -->
+          <!-- TODO: Fix SSR mismatches -->
           <ol
             :style="{
               position: 'absolute',
@@ -685,13 +840,14 @@
               <!-- Content -->
               <template v-else>
                 <!-- Page indicator -->
+                <!-- TODO: Show individually, not attached to a post-->
                 <button
-                  v-if="virtualRow.index !== 0 && virtualRow.index % userSettings.postsPerPage === 0"
+                  v-if="virtualRow.index !== 0 && allRows[virtualRow.index].isFirstPost"
                   class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util mx-auto mb-4 block rounded-md px-1.5 py-1 text-sm"
                   type="button"
                   @click="onPageIndicatorClick"
                 >
-                  &dharl; Page {{ allRows[virtualRow.index].current_page }} &dharl;
+                  &dharl; Page {{ allRows[virtualRow.index].current_page }} &dharr;
                 </button>
 
                 <!-- Post -->

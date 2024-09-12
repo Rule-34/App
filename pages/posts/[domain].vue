@@ -413,6 +413,7 @@
     queryKey: [
       //
       'posts',
+      //
       selectedBooru,
       selectedTags,
       selectedFilters,

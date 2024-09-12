@@ -133,7 +133,7 @@ export default defineNuxtConfig({
         'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
       }
     },
-    '/premium/saved-posts': {
+    '/premium/saved-posts/**': {
       ssr: false,
       headers: {
         'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
