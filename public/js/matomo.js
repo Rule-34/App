@@ -1,12 +1,12 @@
-var _paq = window._paq = window._paq || []
+var _paq = (window._paq = window._paq || [])
 
 /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-_paq.push(["setDomains", ["*.r34.app","*.alt.r34.app","*.dev.r34.app"]]);
-_paq.push(["enableCrossDomainLinking"]);
+_paq.push(['setDomains', ['*.r34.app', '*.alt2.r34.app', '*.dev.r34.app']])
+_paq.push(['enableCrossDomainLinking'])
 
-_paq.push(['setExcludedQueryParams', ['page', 'cursor']]);
+_paq.push(['setExcludedQueryParams', ['page', 'cursor']])
 
-(function () {
+;(function () {
   var u = 'https://matomo.akbal.dev/'
 
   _paq.push(['setTrackerUrl', u + 'matomo.php'])

@@ -16,8 +16,8 @@
       text: 'Access the Rule 34 App without restrictions, with the alternative site',
       links: [
         {
-          text: 'alt.r34.app',
-          href: 'https://alt.r34.app',
+          text: 'alt2.r34.app',
+          href: 'https://alt2.r34.app',
           target: '_blank'
         }
       ]
