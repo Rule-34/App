@@ -1,16 +1,18 @@
 import Tag from '~/assets/js/tag.dto'
-import { toLower, startCase } from 'lodash-es'
+import { startCase, toLower } from 'lodash-es'
 
 export function tagArrayToTitle(tags: Tag[], addWith: boolean = true, addWithout: boolean = true) {
   if (!tags.length) {
     return null
   }
 
-  const cleanedTags = tags
+  const cleanedTags: string[] = tags
     //
     .map((tag) => tag.name)
     //
     .map((tag) => normalizeStringForTitle(tag))
+    // Remove null
+    .filter((tag) => tag != null)
 
   const tagsThatStartWithNothing = cleanedTags.filter((tag) => !tag.startsWith('-'))
 
@@ -22,7 +24,6 @@ export function tagArrayToTitle(tags: Tag[], addWith: boolean = true, addWithout
   let title = ''
 
   if (tagsThatStartWithNothing.length) {
-
     if (addWith) {
       title += 'with '
     }
