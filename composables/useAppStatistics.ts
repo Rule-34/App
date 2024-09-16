@@ -1,36 +1,38 @@
-import { useStorage } from '@vueuse/core'
+import { useLocalStorage } from '@vueuse/core'
 
-let timesTheAppHasBeenOpened = ref<number>(0)
+export default function () {
+  let timesTheAppHasBeenOpened = ref<number>(0)
 
-let tutorialPostSource = ref<boolean>(false)
+  let tutorialPostSource = ref<boolean>(false)
 
-let promptInstallPwa = ref<boolean>(false)
-let promptFeedback = ref<boolean>(false)
-let promptReview = ref<boolean>(false)
+  let promptInstallPwa = ref<boolean>(false)
+  let promptFeedback = ref<boolean>(false)
+  let promptReview = ref<boolean>(false)
 
-if (process.client) {
-  timesTheAppHasBeenOpened = useStorage('statistics-appOpenedCount', 0, localStorage, {
-    writeDefaults: false
+  onMounted(() => {
+    timesTheAppHasBeenOpened = useLocalStorage('statistics-appOpenedCount', 0, {
+      writeDefaults: false
+    })
+
+    tutorialPostSource = useLocalStorage('tutorial-postSource', false, {
+      writeDefaults: false
+    })
+
+    promptInstallPwa = useLocalStorage('prompt-installPwa', false, {
+      writeDefaults: false
+    })
+    promptFeedback = useLocalStorage('prompt-feedback', false, {
+      writeDefaults: false
+    })
+    promptReview = useLocalStorage('prompt-review', false, {
+      writeDefaults: false
+    })
+
+    callOnce('statistics-appOpenedCount', async () => {
+      timesTheAppHasBeenOpened.value++
+    })
   })
 
-  tutorialPostSource = useStorage('tutorial-postSource', false, localStorage, {
-    writeDefaults: false
-  })
-
-  promptInstallPwa = useStorage('prompt-installPwa', false, localStorage, {
-    writeDefaults: false
-  })
-  promptFeedback = useStorage('prompt-feedback', false, localStorage, {
-    writeDefaults: false
-  })
-  promptReview = useStorage('prompt-review', false, localStorage, {
-    writeDefaults: false
-  })
-}
-
-timesTheAppHasBeenOpened.value++
-
-export function useAppStatistics() {
   return {
     timesTheAppHasBeenOpened,
 

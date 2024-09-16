@@ -1,4 +1,4 @@
-export function useUserData() {
+export default function () {
   const { $pocketBase } = useNuxtApp()
   const { subscription_expires_at, license, email } = usePocketbase()
 

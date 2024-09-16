@@ -2,7 +2,6 @@
   import { ChevronDownIcon } from '@heroicons/vue/24/outline'
   import type { IPost } from '~/assets/js/post.dto'
   import Tag from '~/assets/js/tag.dto'
-  import { useUserSettings } from '~/composables/useUserSettings'
 
   const props = defineProps<{
     post: IPost

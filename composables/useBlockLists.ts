@@ -1,4 +1,4 @@
-import { useStorage } from '@vueuse/core'
+import { useLocalStorage } from '@vueuse/core'
 
 const defaultBlockList: readonly string[] = Object.freeze([
   //
@@ -13,27 +13,27 @@ const defaultBlockList: readonly string[] = Object.freeze([
   // 'vore'
 ])
 
-let customBlockList = ref<string[]>([])
-
 export enum blockListOptions {
   Default = 'default',
   Custom = 'custom',
   None = 'none'
 }
 
-let selectedList = ref<blockListOptions>(blockListOptions.Default)
+export default function () {
+  let customBlockList = ref<string[]>([])
 
-if (process.client) {
-  customBlockList = useStorage('user-customBlocklist', [], localStorage, {
-    writeDefaults: false
+  let selectedList = ref<blockListOptions>(blockListOptions.Default)
+
+  onMounted(() => {
+    customBlockList = useLocalStorage('user-customBlocklist', [], {
+      writeDefaults: false
+    })
+
+    selectedList = useLocalStorage<blockListOptions>('user-selectedList', blockListOptions.Default, {
+      writeDefaults: false
+    })
   })
 
-  selectedList = useStorage<blockListOptions>('user-selectedList', blockListOptions.Default, localStorage, {
-    writeDefaults: false
-  })
-}
-
-export function useBlockLists() {
   return {
     selectedList,
     selectedBlockList: computed(() => {

@@ -1,5 +1,5 @@
 import { booruTypeList, completeBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-import { useStorage } from '@vueuse/core'
+import { useLocalStorage } from '@vueuse/core'
 import type { Domain } from '~/assets/js/domain'
 
 const defaultBooruList: Domain[] = completeBooruList.map((booruObj, index) => {
@@ -20,15 +20,15 @@ const defaultBooruList: Domain[] = completeBooruList.map((booruObj, index) => {
   } as Domain
 })
 
-let userBooruList = ref<Domain[]>([])
+export default function () {
+  let userBooruList = ref<Domain[]>([])
 
-if (process.client) {
-  userBooruList = useStorage<Domain[]>('user-booruList-2', [], localStorage, {
-    writeDefaults: false
+  onMounted(() => {
+    userBooruList = useLocalStorage<Domain[]>('user-booruList-2', [], {
+      writeDefaults: false
+    })
   })
-}
 
-export function useBooruList() {
   return {
     booruList: computed(() => {
       return [...defaultBooruList, ...userBooruList.value]

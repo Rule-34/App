@@ -1,6 +1,6 @@
-const timesVideoHasRendered = ref(0)
+export default function () {
+  const timesVideoHasRendered = useState('times-video-has-rendered', () => 0)
 
-export function useEthics() {
   return {
     timesVideoHasRendered
   }

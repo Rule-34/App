@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-  import { usePremiumDialog } from '~/composables/usePremiumDialog'
   import { useCycleList } from '@vueuse/core'
   import { premiumPromotions } from '~/assets/js/promotions'
   import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/vue/24/outline'

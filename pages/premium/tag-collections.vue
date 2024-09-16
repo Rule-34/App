@@ -5,7 +5,6 @@
   import { toast } from 'vue-sonner'
   import { type ITagCollection, TagCollection } from '~/assets/js/tagCollection.dto'
   import Slideover from '~/components/layout/Slideover.vue'
-  import { useTagCollections } from '~/composables/useTagCollections'
 
   const { tagCollections, resetTagCollections } = useTagCollections()
 

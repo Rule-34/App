@@ -2,7 +2,6 @@
   import { toast } from 'vue-sonner'
   import type { Ref } from 'vue'
   import Tag from '~/assets/js/tag.dto'
-  import { useBooruList } from '~/composables/useBooruList'
   import type { Domain } from '~/assets/js/domain'
   import { ArrowRightIcon } from '@heroicons/vue/24/solid'
   import * as Sentry from '@sentry/nuxt'

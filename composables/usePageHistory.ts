@@ -1,18 +1,9 @@
-import { useStorage } from '@vueuse/core'
+import { useLocalStorage } from '@vueuse/core'
 
 interface PageHistory {
   path: string
 
   date: Date
-}
-
-let pageHistory = ref<PageHistory[]>([])
-
-if (process.client) {
-  pageHistory = useStorage<PageHistory[]>('settings-pageHistory', [], localStorage, {
-    writeDefaults: false
-  })
-  // TODO: Serialize Date
 }
 
 /**
@@ -37,7 +28,16 @@ function isUrlPreviousPage(url1: string, url2: string): boolean {
   return isSameUrlWithoutPage && isPreviousPage
 }
 
-export function usePageHistory() {
+export default function () {
+  let pageHistory = ref<PageHistory[]>([])
+
+  // TODO: Serialize Date
+  onMounted(() => {
+    pageHistory = useLocalStorage<PageHistory[]>('settings-pageHistory', [], {
+      writeDefaults: false
+    })
+  })
+
   /**
    * Adds a relative URL to the page history
    * With a maximum of 10 pages

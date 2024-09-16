@@ -1,4 +1,4 @@
-import { useStorage } from '@vueuse/core'
+import { useLocalStorage } from '@vueuse/core'
 import { cloneDeep } from 'lodash-es'
 import { TagCollection } from '~/assets/js/tagCollection.dto'
 
@@ -17,15 +17,15 @@ const defaultTagCollections: TagCollection[] = [
   }
 ]
 
-let tagCollections = ref<TagCollection[]>(cloneDeep(defaultTagCollections))
+export default function () {
+  let tagCollections = ref<TagCollection[]>(cloneDeep(defaultTagCollections))
 
-if (process.client) {
-  tagCollections = useStorage('user-tagCollections', cloneDeep(defaultTagCollections), localStorage, {
-    writeDefaults: false
+  onMounted(() => {
+    tagCollections = useLocalStorage('user-tagCollections', cloneDeep(defaultTagCollections), {
+      writeDefaults: false
+    })
   })
-}
 
-export function useTagCollections() {
   return {
     tagCollections,
 

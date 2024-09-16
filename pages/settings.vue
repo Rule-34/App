@@ -1,8 +1,6 @@
 <script lang="ts" setup>
   import { version } from '~/package.json'
-  import { useUserSettings } from '~/composables/useUserSettings'
   import { ExclamationTriangleIcon } from '@heroicons/vue/20/solid'
-  import { blockListOptions } from '~/composables/useBlocklists'
   import { toast } from 'vue-sonner'
 
   useSeoMeta({

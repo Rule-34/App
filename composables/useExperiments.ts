@@ -1,14 +1,14 @@
-import { useStorage } from '@vueuse/core'
+import { useSessionStorage } from '@vueuse/core'
 
-let experimentPriceCurrency = ref('$')
+export default function () {
+  let experimentPriceCurrency = ref('$')
 
-if (process.client) {
-  experimentPriceCurrency = useStorage('experiment-price', '$', sessionStorage, {
-    writeDefaults: false
+  onMounted(() => {
+    experimentPriceCurrency = useSessionStorage('experiment-price', '$', {
+      writeDefaults: false
+    })
   })
-}
 
-export function useExperiments() {
   return {
     experimentPriceCurrency
   }

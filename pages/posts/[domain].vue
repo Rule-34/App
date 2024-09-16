@@ -13,7 +13,6 @@
   import type { Domain } from '~/assets/js/domain'
   import type { IPost, IPostPage } from '~/assets/js/post.dto'
   import Tag from '~/assets/js/tag.dto'
-  import { useBooruList } from '~/composables/useBooruList'
 
   const router = useRouter()
   const route = useRoute()
