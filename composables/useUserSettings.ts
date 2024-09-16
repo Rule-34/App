@@ -13,8 +13,8 @@ export default function () {
     })
   })
 
-  return reactive({
+  return {
     postFullSizeImages,
     postsPerPage
-  })
+  }
 }

@@ -37,7 +37,7 @@
     switch (props.post.media_type) {
       case 'image': {
         // Return full image if its setting is enabled OR if low resolution file doesn't exist
-        if (!props.post.low_res_file.url || userSettings.postFullSizeImages) {
+        if (!props.post.low_res_file.url || userSettings.postFullSizeImages.value) {
           data.file = props.post.high_res_file.url
           data.width = props.post.high_res_file.width
           data.height = props.post.high_res_file.height

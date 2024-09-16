@@ -375,7 +375,7 @@
       params: {
         baseEndpoint: selectedBooru.value.domain,
 
-        limit: userSettings.postsPerPage,
+        limit: userSettings.postsPerPage.value,
 
         pageID: selectedPage.value,
 
@@ -419,7 +419,7 @@
       //
       selectedPage.value,
       //
-      userSettings.postsPerPage
+      userSettings.postsPerPage.value
     ],
 
     queryFn: fetchPosts,

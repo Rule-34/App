@@ -50,11 +50,11 @@ async function restoreV3Backup(backupState: IBackupState) {
     const userSettings = useUserSettings()
 
     if (backupState.settings.postFullSizeImages) {
-      userSettings.postFullSizeImages = backupState.settings.postFullSizeImages
+      userSettings.postFullSizeImages.value = backupState.settings.postFullSizeImages
     }
 
     if (backupState.settings.postsPerPage) {
-      userSettings.postsPerPage = backupState.settings.postsPerPage
+      userSettings.postsPerPage.value = backupState.settings.postsPerPage
     }
   }
 }

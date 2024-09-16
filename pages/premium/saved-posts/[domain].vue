@@ -311,7 +311,7 @@
   async function fetchPosts(options: any): Promise<IPostPageFromPocketBase> {
     const page = options.pageParam
 
-    const PAGE_SIZE = userSettings.postsPerPage
+    const PAGE_SIZE = userSettings.postsPerPage.value
 
     let pocketbaseRequestFilter = ''
 
@@ -400,7 +400,7 @@
       //
       selectedPage.value,
       //
-      userSettings.postsPerPage,
+      userSettings.postsPerPage.value,
       //
       savedPostList.value.length
     ],
