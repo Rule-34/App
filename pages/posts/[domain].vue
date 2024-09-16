@@ -18,7 +18,7 @@
   const route = useRoute()
   const config = useRuntimeConfig()
 
-  const userSettings = useUserSettings()
+  const { postFullSizeImages, postsPerPage } = useUserSettings()
   const { isPremium } = useUserData()
   const { booruList } = useBooruList()
   const { selectedBlockList } = useBlockLists()
@@ -375,7 +375,7 @@
       params: {
         baseEndpoint: selectedBooru.value.domain,
 
-        limit: userSettings.postsPerPage.value,
+        limit: postsPerPage.value,
 
         pageID: selectedPage.value,
 
@@ -419,7 +419,7 @@
       //
       selectedPage.value,
       //
-      userSettings.postsPerPage.value
+      postsPerPage.value
     ],
 
     queryFn: fetchPosts,

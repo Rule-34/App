@@ -21,7 +21,7 @@
 
   const { $pocketBase } = useNuxtApp()
 
-  const userSettings = useUserSettings()
+  const { postFullSizeImages, postsPerPage } = useUserSettings()
   const { toggle: toggleSearchMenu } = useSearchMenu()
 
   const { booruList: _availableBooruList } = useBooruList()
@@ -311,7 +311,7 @@
   async function fetchPosts(options: any): Promise<IPostPageFromPocketBase> {
     const page = options.pageParam
 
-    const PAGE_SIZE = userSettings.postsPerPage.value
+    const PAGE_SIZE = postsPerPage.value
 
     let pocketbaseRequestFilter = ''
 
@@ -400,7 +400,7 @@
       //
       selectedPage.value,
       //
-      userSettings.postsPerPage.value,
+      postsPerPage.value,
       //
       savedPostList.value.length
     ],

@@ -11,7 +11,7 @@
 
   const appVersion = version
 
-  const userSettings = useUserSettings()
+  const { postFullSizeImages, postsPerPage } = useUserSettings()
   const { isPremium } = useUserData()
   const { selectedList, defaultBlockList, customBlockList, resetCustomBlockList } = useBlockLists()
 
@@ -120,7 +120,7 @@
       <ol class="space-y-4">
         <!-- postFullSizeImages -->
         <li>
-          <SettingSwitch v-model="userSettings.postFullSizeImages">
+          <SettingSwitch v-model="postFullSizeImages">
             <template #name> Full size images</template>
 
             <template #description>
@@ -132,7 +132,7 @@
         <!-- postsPerPage -->
         <li>
           <SettingNumber
-            v-model.number="userSettings.postsPerPage"
+            v-model.number="postsPerPage"
             :max="100"
             :min="1"
           >
