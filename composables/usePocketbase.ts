@@ -1,24 +1,24 @@
-import { useStorage } from '@vueuse/core'
+import { useLocalStorage } from '@vueuse/core'
 import type { IPocketbasePost } from '~/assets/js/pocketbase.dto'
 
 export default function () {
   const { $pocketBase } = useNuxtApp()
 
-  let email = ref<string | null>(null)
-  let license = ref<string | null>(null)
-  let subscription_expires_at = ref<string | null>(null)
+  const email = useState<string | null>('pocketbase-email', () => null)
+  const license = useState<string | null>('pocketbase-license', () => null)
+  const subscription_expires_at = useState<string | null>('pocketbase-subscription_expires_at', () => null)
 
   let savedPostList = ref<IPocketbasePost[]>([])
 
   if (import.meta.client) {
-    savedPostList = useStorage<IPocketbasePost[]>('pocketbase-savedPostList', [], localStorage, {
+    savedPostList = useLocalStorage<IPocketbasePost[]>('pocketbase-savedPostList', [], {
       writeDefaults: false
     })
 
     if ($pocketBase.authStore.isValid) {
       //
 
-      callOnce(async () => {
+      callOnce('pocketbase-initial-data', async () => {
         //
         email.value = await $pocketBase.authStore.model.email
         license.value = await $pocketBase.authStore.model.username

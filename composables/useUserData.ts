@@ -6,6 +6,7 @@ export default function () {
     isPremium: computed(
       //
       () => {
+        // TODO: Check why this changes so many times
         if (!$pocketBase.authStore.isValid) {
           return false
         }
