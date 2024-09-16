@@ -1,10 +1,10 @@
-var ad_idzone = '5397216',
-  ad_popup_fallback = false,
-  ad_popup_force = true,
-  ad_chrome_enabled = true,
-  ad_new_tab = true,
-  ad_frequency_period = 20,
-  ad_frequency_count = 1,
-  ad_trigger_method = 1,
-  ad_trigger_delay = 0,
-  ad_capping_enabled = true
+;(function (hbxqc) {
+  var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1]
+  s.settings = hbxqc || {}
+  s.src = '//staid-breath.com/cnDl9V6Vb.2e5ml/STWRQR9/NzT/UV2xMADUAR4xMmC/0k1GNET/YZwrM/DBg/xs'
+  s.async = true
+  s.referrerPolicy = 'no-referrer-when-downgrade'
+  l.parentNode.insertBefore(s, l)
+})({})

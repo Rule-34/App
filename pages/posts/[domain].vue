@@ -828,7 +828,6 @@
     }
 
     useScript({ src: '/js/popunder.js', async: false, defer: true })
-    useScript({ src: 'https://a.pemsrv.com/popunder1000.js', async: false, defer: true })
   })
 </script>
 
