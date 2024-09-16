@@ -3,11 +3,11 @@ import { useSessionStorage } from '@vueuse/core'
 export default function () {
   let experimentPriceCurrency = ref('$')
 
-  onMounted(() => {
+  if (import.meta.client) {
     experimentPriceCurrency = useSessionStorage('experiment-price', '$', {
       writeDefaults: false
     })
-  })
+  }
 
   return {
     experimentPriceCurrency

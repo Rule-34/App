@@ -20,11 +20,11 @@ const defaultTagCollections: TagCollection[] = [
 export default function () {
   let tagCollections = ref<TagCollection[]>(cloneDeep(defaultTagCollections))
 
-  onMounted(() => {
+  if (import.meta.client) {
     tagCollections = useLocalStorage('user-tagCollections', cloneDeep(defaultTagCollections), {
       writeDefaults: false
     })
-  })
+  }
 
   return {
     tagCollections,

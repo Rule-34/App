@@ -9,7 +9,7 @@ export default function () {
   let promptFeedback = ref<boolean>(false)
   let promptReview = ref<boolean>(false)
 
-  onMounted(() => {
+  if (import.meta.client) {
     timesTheAppHasBeenOpened = useLocalStorage('statistics-appOpenedCount', 0, {
       writeDefaults: false
     })
@@ -31,7 +31,7 @@ export default function () {
     callOnce('statistics-appOpenedCount', async () => {
       timesTheAppHasBeenOpened.value++
     })
-  })
+  }
 
   return {
     timesTheAppHasBeenOpened,

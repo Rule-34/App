@@ -10,7 +10,7 @@ export default function () {
 
   let savedPostList = ref<IPocketbasePost[]>([])
 
-  onMounted(() => {
+  if (import.meta.client) {
     savedPostList = useStorage<IPocketbasePost[]>('pocketbase-savedPostList', [], localStorage, {
       writeDefaults: false
     })
@@ -54,7 +54,7 @@ export default function () {
         )
       })
     }
-  })
+  }
 
   return {
     email,

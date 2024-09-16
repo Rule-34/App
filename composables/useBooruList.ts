@@ -23,11 +23,11 @@ const defaultBooruList: Domain[] = completeBooruList.map((booruObj, index) => {
 export default function () {
   let userBooruList = ref<Domain[]>([])
 
-  onMounted(() => {
+  if (import.meta.client) {
     userBooruList = useLocalStorage<Domain[]>('user-booruList-2', [], {
       writeDefaults: false
     })
-  })
+  }
 
   return {
     booruList: computed(() => {

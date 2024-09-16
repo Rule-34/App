@@ -32,11 +32,11 @@ export default function () {
   let pageHistory = ref<PageHistory[]>([])
 
   // TODO: Serialize Date
-  onMounted(() => {
+  if (import.meta.client) {
     pageHistory = useLocalStorage<PageHistory[]>('settings-pageHistory', [], {
       writeDefaults: false
     })
-  })
+  }
 
   /**
    * Adds a relative URL to the page history

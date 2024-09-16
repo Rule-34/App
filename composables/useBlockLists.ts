@@ -24,7 +24,7 @@ export default function () {
 
   let selectedList = ref<blockListOptions>(blockListOptions.Default)
 
-  onMounted(() => {
+  if (import.meta.client) {
     customBlockList = useLocalStorage('user-customBlocklist', [], {
       writeDefaults: false
     })
@@ -32,7 +32,7 @@ export default function () {
     selectedList = useLocalStorage<blockListOptions>('user-selectedList', blockListOptions.Default, {
       writeDefaults: false
     })
-  })
+  }
 
   return {
     selectedList,
