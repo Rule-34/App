@@ -455,8 +455,8 @@
           ...post,
 
           // Custom meta data
-          // TODO: Remove when API returns domain
-          domain: selectedBooru.value.domain,
+          // Domain comes from the API
+          // domain: selectedBooru.value.domain,
 
           current_page: page.meta.current_page,
           isFirstPost: index === 0
