@@ -8,9 +8,11 @@ Sentry.init({
 
   dsn: config.public.SENTRY_DSN,
 
-  tracesSampleRate: 1.0,
+  tracesSampleRate: 0.2,
 
-  replaysSessionSampleRate: 1.0,
+  integrations: [Sentry.replayIntegration()],
+
+  replaysSessionSampleRate: 0,
   replaysOnErrorSampleRate: 1.0,
 
   beforeSend(event, hint) {
