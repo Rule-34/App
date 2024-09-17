@@ -37,7 +37,7 @@
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
     "@tanstack/vue-query": "^5.56.2",
-    "@tanstack/vue-virtual": "^3.10.7",
+    "@tanstack/vue-virtual": "^3.10.8",
     "@vite-pwa/assets-generator": "^0.2.6",
     "@vite-pwa/nuxt": "^0.10.5",
     "@vueuse/components": "^11.1.0",
@@ -55,7 +55,7 @@
     "random-weighted-choice": "^0.1.4",
     "rxjs": "^7.8.1",
     "sortablejs": "^1.15.3",
-    "tailwindcss": "^3.4.11",
+    "tailwindcss": "^3.4.12",
     "vanilla-cookieconsent": "^3.0.1",
     "vue-sonner": "^1.1.5"
   },
