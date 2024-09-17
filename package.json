@@ -5,7 +5,7 @@
   "description": "Stream and download Rule 34 porn videos, GIFs, and images from multiple Boorus in a mobile-first web app",
   "author": "Alejandro Akbal",
   "engines": {
-    "node": "^20"
+    "node": "^22"
   },
   "scripts": {
     "start": "node .output/server/index.mjs",
