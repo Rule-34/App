@@ -1,11 +1,12 @@
 import * as Sentry from '@sentry/nuxt'
+import { useRuntimeConfig } from '#imports'
+
+const config = useRuntimeConfig()
 
 Sentry.init({
   enabled: !import.meta.dev,
 
-  // debug: import.meta.dev,
-
-  dsn: 'https://524f36d2b7b43e642e02b3d5a2466496@o4507950921809920.ingest.de.sentry.io/4507968987070544',
+  dsn: config.public.SENTRY_DSN,
 
   tracesSampleRate: 1.0,
 
@@ -64,7 +65,7 @@ Sentry.init({
 
     // Safari extensions.
     /safari-web-extension:/i,
-    /safari-extension:/i,
+    /safari-extension:/i
   ],
 
   ignoreErrors: [
@@ -87,7 +88,7 @@ Sentry.init({
     // Random plugins and extensions.
     // http://blog.errorception.com/2012/03/tale-of-unfindable-js-error.html
     'atomicFindClose',
-    'Can\'t find variable: ZiteReader',
+    "Can't find variable: ZiteReader",
     'canvas.contentDocument',
     'ComboSearch is not defined',
     'http://loading.retry.widdit.com/',
@@ -142,7 +143,7 @@ Sentry.init({
 
     // Firefox freeing add-on memory.
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Dead_object
-    'can\'t access dead object',
+    "can't access dead object",
 
     // Nuance Dragon Web Extension.
     'plugin.setSuspendState',

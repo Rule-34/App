@@ -210,6 +210,10 @@ export default defineNuxtConfig({
   runtimeConfig: {
     MATOMO_API_KEY: process.env.MATOMO_API_KEY,
 
+    SENTRY_ORG: process.env.SENTRY_ORG,
+    SENTRY_PROJECT: process.env.SENTRY_PROJECT,
+    SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
+
     public: {
       NODE_ENV: process.env.NODE_ENV,
 
@@ -245,6 +249,14 @@ export default defineNuxtConfig({
     'nuxt-schema-org',
     'nuxt-security'
   ],
+
+  sentry: {
+    sourceMapsUploadOptions: {
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      authToken: process.env.SENTRY_AUTH_TOKEN
+    }
+  },
 
   image: {
     provider: 'imgproxy',
