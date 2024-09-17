@@ -5,10 +5,7 @@ Sentry.init({
 
   // debug: import.meta.dev,
 
-  dsn: 'https://6f669156efcc4255a1fb2725b8313083@glitchtip.akbal.dev/1',
-
-  // TODO: https://gitlab.com/glitchtip/glitchtip-backend/-/issues/206
-  autoSessionTracking: false,
+  dsn: 'https://524f36d2b7b43e642e02b3d5a2466496@o4507950921809920.ingest.de.sentry.io/4507968987070544',
 
   tracesSampleRate: 1.0,
 
@@ -68,17 +65,10 @@ Sentry.init({
     // Safari extensions.
     /safari-web-extension:/i,
     /safari-extension:/i,
-
-    // Woopra.
-    /eatdifferent\.com\.woopra-ns\.com/i,
-    /static\.woopra\.com\/js\/woopra\.js/i
   ],
 
   ignoreErrors: [
     // Build
-    'Unable to preload CSS',
-    'Failed to fetch dynamically imported module',
-    'Importing a module script failed',
 
     // Media
     'AbortError',
@@ -88,13 +78,8 @@ Sentry.init({
     'NotSupportedError: The operation is not supported', // Safari not compatible video - https://stackoverflow.com/a/47976124
 
     // Network
-    // TODO: Handle these errors
-    'FetchError: [GET]',
 
     // - Misc -
-    'native code',
-    'Background Sync is disabled',
-    'ResizeObserver loop limit exceeded',
 
     /**
      * @see https://github.com/fdev/sentry-ignores
@@ -102,7 +87,7 @@ Sentry.init({
     // Random plugins and extensions.
     // http://blog.errorception.com/2012/03/tale-of-unfindable-js-error.html
     'atomicFindClose',
-    "Can't find variable: ZiteReader",
+    'Can\'t find variable: ZiteReader',
     'canvas.contentDocument',
     'ComboSearch is not defined',
     'http://loading.retry.widdit.com/',
@@ -157,7 +142,7 @@ Sentry.init({
 
     // Firefox freeing add-on memory.
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Dead_object
-    "can't access dead object",
+    'can\'t access dead object',
 
     // Nuance Dragon Web Extension.
     'plugin.setSuspendState',
