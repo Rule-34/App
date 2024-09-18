@@ -83,6 +83,7 @@ Sentry.init({
     // Network
 
     // - Misc -
+    'ResizeObserver loop limit exceeded',
 
     /**
      * @see https://github.com/fdev/sentry-ignores
