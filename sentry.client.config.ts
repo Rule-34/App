@@ -12,7 +12,8 @@ Sentry.init({
 
   integrations: [
     Sentry.replayIntegration({
-      maskAllText: false
+      maskAllText: false,
+      unblock: ['svg']
     })
   ],
 
@@ -85,6 +86,9 @@ Sentry.init({
     'NotSupportedError: The operation is not supported', // Safari not compatible video - https://stackoverflow.com/a/47976124
 
     // Network
+
+    // Service worker
+    'Registration failed - no active Service Worker',
 
     // - Misc -
     'ResizeObserver loop limit exceeded',
