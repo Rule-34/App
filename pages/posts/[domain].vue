@@ -435,7 +435,7 @@
       //
 
       // Only execute for the last page
-      const page = data.pages.at(-1)
+      const [page] = [...data.pages].reverse()
 
       if (!page) {
         return data
@@ -579,7 +579,7 @@
       return
     }
 
-    const lastItem = virtualRows.value.at(-1)
+    const [lastItem] = [...virtualRows.value].reverse()
 
     if (!lastItem) {
       return
