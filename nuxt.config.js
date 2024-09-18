@@ -3,6 +3,11 @@ export default defineNuxtConfig({
 
   spaLoadingTemplate: true,
 
+  experimental: {
+    // @see https://github.com/nuxt/nuxt/issues/23612
+    emitRouteChunkError: 'automatic-immediate'
+  },
+
   app: {
     head: {
       bodyAttrs: {
