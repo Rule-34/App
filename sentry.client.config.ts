@@ -10,7 +10,11 @@ Sentry.init({
 
   tracesSampleRate: 0.2,
 
-  integrations: [Sentry.replayIntegration()],
+  integrations: [
+    Sentry.replayIntegration({
+      maskAllText: false
+    })
+  ],
 
   replaysSessionSampleRate: 0,
   replaysOnErrorSampleRate: 1.0,
