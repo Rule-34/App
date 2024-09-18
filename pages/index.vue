@@ -231,16 +231,16 @@
       path: '/posts/gelbooru.com',
       isPremium: false,
       tags: [
-        {
-          name: 'Top posts',
-          path: '/posts/gelbooru.com?filter%5Bsort%5D=score&filter%5Brating%5D=explicit',
-          media: [
-            { type: 'image', src: '/img/featured/gelbooru.com/top-1.jpeg' },
-            { type: 'image', src: '/img/featured/gelbooru.com/top-2.jpeg' },
-            { type: 'image', src: '/img/featured/gelbooru.com/top-3.jpeg' },
-            { type: 'image', src: '/img/featured/gelbooru.com/top-4.jpeg' }
-          ]
-        },
+        // {
+        //   name: 'Top posts',
+        //   path: '/posts/gelbooru.com?filter%5Bsort%5D=score&filter%5Brating%5D=explicit',
+        //   media: [
+        //     { type: 'image', src: '/img/featured/gelbooru.com/top-1.jpeg' },
+        //     { type: 'image', src: '/img/featured/gelbooru.com/top-2.jpeg' },
+        //     { type: 'image', src: '/img/featured/gelbooru.com/top-3.jpeg' },
+        //     { type: 'image', src: '/img/featured/gelbooru.com/top-4.jpeg' }
+        //   ]
+        // },
         {
           name: 'Popular posts',
           path: '/posts/gelbooru.com?filter%5Bscore%5D=>%3D50',
