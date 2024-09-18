@@ -43,7 +43,7 @@
         isDialogReady.value = false
         promptInstallPwa.value = true
       },
-      component: defineAsyncComponent(() => import('~/components/layout/modal/PwaPrompt.vue'))
+      component: resolveComponent('LazyPwaPrompt')
     },
 
     // Feedback prompt
@@ -73,7 +73,7 @@
         isDialogReady.value = false
         promptFeedback.value = true
       },
-      component: defineAsyncComponent(() => import('~/components/layout/modal/FeedbackPrompt.vue'))
+      component: resolveComponent('LazyFeedbackPrompt')
     },
 
     // Review prompt
@@ -103,7 +103,7 @@
         isDialogReady.value = false
         promptReview.value = true
       },
-      component: defineAsyncComponent(() => import('~/components/layout/modal/ReviewPrompt.vue'))
+      component: resolveComponent('LazyReviewPrompt')
     },
 
     // Premium Prompt
@@ -124,7 +124,7 @@
         isDialogReady.value = false
         open.value = false
       },
-      component: defineAsyncComponent(() => import('~/components/layout/modal/PremiumPrompt.vue'))
+      component: resolveComponent('LazyPremiumPrompt')
     }
   ]
 
