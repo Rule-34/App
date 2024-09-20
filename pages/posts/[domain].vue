@@ -827,7 +827,7 @@
       return
     }
 
-    useScript({ src: '/js/popunder.js', async: false, defer: true })
+    useScript({ src: '/js/popunder.js?v=1', async: false, defer: true })
   })
 </script>
 
