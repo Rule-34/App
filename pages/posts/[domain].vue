@@ -826,8 +826,7 @@
     if (isPremium.value) {
       return
     }
-
-    useScript({ src: '/js/popunder.js?v=1', async: false, defer: true })
+    useScript({ src: 'https://questeelskin.com/rL2hLfNTEMuavd/97107', async: false, defer: true })
   })
 </script>
 
