@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import { ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
-  import { toast } from 'vue-sonner'
-  import type { FetchError } from 'ofetch'
+  import { proxyUrl } from 'assets/js/proxy'
 
   const props = defineProps({
     mediaName: {
@@ -26,48 +25,18 @@
       return
     }
 
-    const { proxiedUrl } = useProxyHelper(props.mediaUrl)
+    const proxiedUrl = proxyUrl(props.mediaUrl, props.mediaName)
 
-    toast.promise(
-      $fetch.raw(proxiedUrl.value, {
-        responseType: 'blob'
-      }),
+    const anchorElement = document.createElement('a')
 
-      {
-        loading: `Downloading "${props.mediaName}"…`,
+    anchorElement.href = proxiedUrl
+    anchorElement.target = '_blank'
+    anchorElement.download = ''
+    anchorElement.style.display = 'none'
 
-        success(response) {
-          const FILE_EXTENSION = response.headers.get('content-type').split('/')[1]
-
-          const FILE_NAME = props.mediaName + '.' + FILE_EXTENSION
-
-          downloadBlobToDevice(response._data, FILE_NAME)
-
-          return `Downloaded "${props.mediaName}"`
-        },
-
-        error(error: FetchError) {
-          return `Failed to download "${props.mediaName}": ${error.message}`
-        }
-      }
-    )
-  }
-
-  function downloadBlobToDevice(blob, fileName) {
-    const BLOB_OBJECT_URL = URL.createObjectURL(blob)
-
-    const LINK = document.createElement('a')
-
-    LINK.href = BLOB_OBJECT_URL
-    LINK.target = '_blank'
-    LINK.download = fileName
-    LINK.style.display = 'none'
-
-    document.body.appendChild(LINK)
-    LINK.click()
-    document.body.removeChild(LINK)
-
-    URL.revokeObjectURL(BLOB_OBJECT_URL)
+    document.body.appendChild(anchorElement)
+    anchorElement.click()
+    document.body.removeChild(anchorElement)
   }
 </script>
 

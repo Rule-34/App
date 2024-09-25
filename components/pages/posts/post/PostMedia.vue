@@ -3,6 +3,7 @@
   import { vIntersectionObserver } from '@vueuse/components'
   import fluidPlayer from 'fluid-player'
   import 'fluid-player/src/css/fluidplayer.css'
+  import { proxyUrl } from 'assets/js/proxy'
 
   const { isPremium } = useUserData()
   let { timesVideoHasRendered } = useEthics()
@@ -201,11 +202,11 @@
 
     // Proxy videos and GIFs, images are already proxied
     if (!triedToLoadWithProxy.value && isPremium.value && (isVideo.value || props.mediaSrc.endsWith('.gif'))) {
-      const { proxiedUrl } = useProxyHelper(localSrc.value)
-      const { proxiedUrl: proxiedPosterUrl } = useProxyHelper(props.mediaPosterSrc)
+      const proxiedUrl = proxyUrl(props.mediaSrc)
+      const proxiedPosterUrl = proxyUrl(props.mediaPosterSrc)
 
       if (props.mediaSrc.endsWith('.gif')) {
-        localSrc.value = proxiedUrl.value
+        localSrc.value = proxiedUrl
       }
 
       //
@@ -215,8 +216,8 @@
         destroyVideoPlayer()
 
         nextTick(() => {
-          localSrc.value = proxiedUrl.value
-          localPosterSrc.value = proxiedPosterUrl.value
+          localSrc.value = proxiedUrl
+          localPosterSrc.value = proxiedPosterUrl
 
           nextTick(() => {
             createVideoPlayer()
