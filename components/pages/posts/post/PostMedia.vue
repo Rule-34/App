@@ -203,20 +203,28 @@
     if (isVideo.value && !triedToLoadWithProxy.value && isPremium.value) {
       triedToLoadWithProxy.value = true
 
+      const wasPaused = event.target.paused
+
       const { proxiedUrl } = useProxyHelper(localSrc.value)
       const { proxiedUrl: proxiedPosterUrl } = useProxyHelper(props.mediaPosterSrc)
 
-      localSrc.value = proxiedUrl.value
-      localPosterSrc.value = proxiedPosterUrl.value
+      destroyVideoPlayer()
 
-      if (!event.target.paused) {
+      nextTick(() => {
+        localSrc.value = proxiedUrl.value
+        localPosterSrc.value = proxiedPosterUrl.value
+
         nextTick(() => {
-          // TODO: Handle player errors?
-          reloadVideoPlayer()
+          createVideoPlayer()
 
-          videoPlayer?.play()
+          if (!wasPaused) {
+            nextTick(() => {
+              videoPlayer.play()
+            })
+          }
         })
-      }
+      })
+
       return
     }
 
