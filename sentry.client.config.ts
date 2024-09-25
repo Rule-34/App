@@ -32,6 +32,9 @@ Sentry.init({
     /**
      * @see https://github.com/fdev/sentry-ignores
      */
+    // Specific files
+    /\/js\/popunder\.js/,
+
     // Random plugins and extensions.
     /^resource:\/\//i,
     /127\.0\.0\.1:4001\/isrunning/i,
