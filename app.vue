@@ -22,7 +22,7 @@
     },
 
     titleTemplate: (titleChunk) => {
-      return titleChunk ? `${titleChunk} | R34.app` : 'Rule 34 App | R34.app'
+      return titleChunk ? `${titleChunk} | R34.app` : 'Rule 34 porn videos, GIFs and images at R34.app'
     },
 
     link: [
