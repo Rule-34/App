@@ -199,32 +199,38 @@
       return
     }
 
-    // Proxy videos, images are already proxied
-    if (isVideo.value && !triedToLoadWithProxy.value && isPremium.value) {
-      triedToLoadWithProxy.value = true
-
-      const wasPaused = event.target.paused
-
+    // Proxy videos and GIFs, images are already proxied
+    if (!triedToLoadWithProxy.value && isPremium.value && (isVideo.value || props.mediaSrc.endsWith('.gif'))) {
       const { proxiedUrl } = useProxyHelper(localSrc.value)
       const { proxiedUrl: proxiedPosterUrl } = useProxyHelper(props.mediaPosterSrc)
 
-      destroyVideoPlayer()
-
-      nextTick(() => {
+      if (props.mediaSrc.endsWith('.gif')) {
         localSrc.value = proxiedUrl.value
-        localPosterSrc.value = proxiedPosterUrl.value
+      }
+
+      //
+      else if (isVideo.value) {
+        const wasPaused = event.target.paused
+
+        destroyVideoPlayer()
 
         nextTick(() => {
-          createVideoPlayer()
+          localSrc.value = proxiedUrl.value
+          localPosterSrc.value = proxiedPosterUrl.value
 
-          if (!wasPaused) {
-            nextTick(() => {
-              videoPlayer.play()
-            })
-          }
+          nextTick(() => {
+            createVideoPlayer()
+
+            if (!wasPaused) {
+              nextTick(() => {
+                videoPlayer.play()
+              })
+            }
+          })
         })
-      })
+      }
 
+      triedToLoadWithProxy.value = true
       return
     }
 
