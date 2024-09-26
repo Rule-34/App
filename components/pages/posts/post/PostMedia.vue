@@ -31,6 +31,7 @@
 
   const isImage = computed(() => props.mediaType === 'image')
   const isVideo = computed(() => props.mediaType === 'video')
+  const isGif = computed(() => props.mediaType === 'image' && props.mediaSrc.endsWith('.gif'))
 
   const triedToLoadWithProxy = shallowRef(false)
 
@@ -55,26 +56,23 @@
       return
     }
 
-    // If its a Vue component, get the actual element
-    if ('$el' in finalMediaElement) {
-      finalMediaElement = finalMediaElement.$el as HTMLElement
+    if (isImage.value) {
+      // If its a Vue component, get the actual element
+      if ('$el' in finalMediaElement) {
+        finalMediaElement = finalMediaElement.$el as HTMLElement
+      }
+
+      // If its a picture, get the img element
+      if (finalMediaElement.tagName === 'PICTURE') {
+        finalMediaElement = finalMediaElement.querySelector('img') as HTMLImageElement
+      }
+
+      // Cancel any pending media requests - https://stackoverflow.com/a/28060352
+      finalMediaElement.removeAttribute('src')
     }
 
-    // If its a picture, get the img element
-    if (finalMediaElement.tagName === 'PICTURE') {
-      finalMediaElement = finalMediaElement.querySelector('img') as HTMLImageElement
-    }
-
-    // Cancel any pending media requests - https://stackoverflow.com/a/28060352
-    finalMediaElement.removeAttribute('src')
-
-    if (isVideo.value) {
-      // TODO: Test this
-      // Remove sources
-      finalMediaElement.innerHTML = ''
-
-      finalMediaElement.load()
-
+    //
+    else if (isVideo.value) {
       destroyVideoPlayer()
     }
   })
@@ -200,36 +198,27 @@
       return
     }
 
-    // Proxy videos and GIFs, images are already proxied
-    if (!triedToLoadWithProxy.value && isPremium.value && (isVideo.value || props.mediaSrc.endsWith('.gif'))) {
-      const proxiedUrl = proxyUrl(props.mediaSrc)
-      const proxiedPosterUrl = proxyUrl(props.mediaPosterSrc)
+    // Skip first Video error since it will automatically try next <source>
+    if (
+      isPremium.value &&
+      !triedToLoadWithProxy.value &&
+      isVideo.value &&
+      event.target.getAttribute('data-is-premium') !== 'true'
+    ) {
+      triedToLoadWithProxy.value = true
+      return
+    }
 
-      if (props.mediaSrc.endsWith('.gif')) {
-        localSrc.value = proxiedUrl
-      }
-
+    // Proxy GIFs, since they are not proxied with imgproxy
+    if (
       //
-      else if (isVideo.value) {
-        const wasPaused = event.target.paused
+      isPremium.value &&
+      !triedToLoadWithProxy.value &&
+      isGif.value
+    ) {
+      const proxiedUrl = proxyUrl(props.mediaSrc)
 
-        destroyVideoPlayer()
-
-        nextTick(() => {
-          localSrc.value = proxiedUrl
-          localPosterSrc.value = proxiedPosterUrl
-
-          nextTick(() => {
-            createVideoPlayer()
-
-            if (!wasPaused) {
-              nextTick(() => {
-                videoPlayer.play()
-              })
-            }
-          })
-        })
-      }
+      localSrc.value = proxiedUrl
 
       triedToLoadWithProxy.value = true
       return
@@ -384,12 +373,10 @@
       <!-- TODO: Add load animation -->
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <video
-        :key="localSrc"
         ref="mediaElement"
         v-intersection-observer="[onVideoIntersectionObserver, { rootMargin: '100px' }]"
         :height="mediaSrcHeight"
         :poster="localPosterSrc"
-        :src="localSrc"
         :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
         :width="mediaSrcWidth"
         class="h-auto w-full rounded-t-md"
@@ -398,7 +385,21 @@
         playsinline
         preload="none"
         @error="onMediaError"
-      />
+      >
+        <source
+          :src="localSrc"
+          type="video/mp4"
+          @error="onMediaError"
+        />
+
+        <source
+          v-if="isPremium"
+          :src="proxyUrl(localSrc)"
+          data-is-premium="true"
+          type="video/mp4"
+          @error="onMediaError"
+        />
+      </video>
     </div>
   </div>
 </template>
