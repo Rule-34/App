@@ -40,31 +40,31 @@ function loadAbTesting(_paq) {
     return
   }
 
-  const { experimentPriceCurrency } = useExperiments()
-
-  _paq.push([
-    'AbTesting::create',
-    {
-      name: 'PriceCurrencyV2',
-      percentage: 100,
-      includedTargets: [{ attribute: 'path', inverted: '0', type: 'equals_simple', value: '/premium' }],
-      excludedTargets: [],
-      variations: [
-        {
-          name: 'original',
-          activate: function (event) {
-            // usually nothing needs to be done here
-          }
-        },
-        {
-          name: 'euro',
-          activate: function (event) {
-            experimentPriceCurrency.value = '€'
-          }
-        }
-      ]
-    }
-  ])
+  // const { } = useExperiments()
+  //
+  // _paq.push([
+  //   'AbTesting::create',
+  //   {
+  //     name: 'PriceCurrencyV2',
+  //     percentage: 100,
+  //     includedTargets: [{ attribute: 'path', inverted: '0', type: 'equals_simple', value: '/premium' }],
+  //     excludedTargets: [],
+  //     variations: [
+  //       {
+  //         name: 'original',
+  //         activate: function (event) {
+  //           // usually nothing needs to be done here
+  //         }
+  //       },
+  //       {
+  //         name: 'euro',
+  //         activate: function (event) {
+  //           experimentPriceCurrency.value = '€'
+  //         }
+  //       }
+  //     ]
+  //   }
+  // ])
 
   hasAbTestingLoaded = true
 }
