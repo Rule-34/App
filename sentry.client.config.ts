@@ -18,7 +18,7 @@ Sentry.init({
   ],
 
   replaysSessionSampleRate: 0,
-  replaysOnErrorSampleRate: 1.0,
+  replaysOnErrorSampleRate: 0.5,
 
   beforeSend(event, hint) {
     if (isInjectedCode(event)) {
