@@ -1,4 +1,3 @@
-import { useLocalStorage } from '@vueuse/core'
 import type { IPocketbasePost } from '~/assets/js/pocketbase.dto'
 
 export default function () {
@@ -8,13 +7,9 @@ export default function () {
   const license = useState<string | null>('pocketbase-license', () => null)
   const subscription_expires_at = useState<string | null>('pocketbase-subscription_expires_at', () => null)
 
-  let savedPostList = ref<IPocketbasePost[]>([])
+  const savedPostList = useLocalState<IPocketbasePost[]>('pocketbase-savedPostList', [])
 
   if (import.meta.client) {
-    savedPostList = useLocalStorage<IPocketbasePost[]>('pocketbase-savedPostList', [], {
-      writeDefaults: false
-    })
-
     if ($pocketBase.authStore.isValid) {
       //
 
