@@ -22,14 +22,14 @@ export enum blockListOptions {
 export default function () {
   let customBlockList = ref<string[]>([])
 
-  let selectedList = ref<blockListOptions>(blockListOptions.Default)
+  let selectedList = ref<blockListOptions>(blockListOptions.None)
 
   if (import.meta.client) {
     customBlockList = useLocalStorage('user-customBlocklist', [], {
       writeDefaults: false
     })
 
-    selectedList = useLocalStorage<blockListOptions>('user-selectedList', blockListOptions.Default, {
+    selectedList = useLocalStorage<blockListOptions>('user-selectedList', blockListOptions.None, {
       writeDefaults: false
     })
   }
