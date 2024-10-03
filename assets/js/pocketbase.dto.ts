@@ -1,7 +1,6 @@
-import type Post from "./post.dto"
+import type Post from './post.dto'
 
 export interface IPocketbasePost {
-
   id?: string
 
   // Relations
@@ -10,7 +9,6 @@ export interface IPocketbasePost {
   // Default fields
   created?: string
   updated?: string
-
 
   // Fields
   original_id: number
@@ -39,6 +37,13 @@ export interface IPocketbasePost {
   rating: string
 
   media_type: 'image' | 'video'
+}
+
+export interface ISimplePocketbasePost {
+  id: string
+
+  original_domain: string
+  original_id: number
 }
 
 export class PocketbasePostDTO implements IPocketbasePost {
@@ -75,7 +80,6 @@ export class PocketbasePost extends PocketbasePostDTO {
   }
 
   static fromPost(post: Post, user_id: string): PocketbasePost {
-
     return new PocketbasePost({
       original_id: post.id,
 

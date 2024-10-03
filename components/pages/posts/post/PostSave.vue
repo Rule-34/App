@@ -44,13 +44,24 @@
   }
 
   async function savePost() {
-    await $pocketBase
+    const response = await $pocketBase
       .collection('posts')
       .create(PocketbasePost.fromPost(props.post, $pocketBase.authStore.baseModel.id))
+
+    savedPostList.value.push({
+      id: response.id,
+
+      original_domain: response.original_domain,
+      original_id: response.original_id
+    })
   }
 
   async function deletePost() {
-    await $pocketBase.collection('posts').delete(postInSavedList.value.id)
+    const response = await $pocketBase.collection('posts').delete(postInSavedList.value.id)
+
+    if (response === true) {
+      savedPostList.value = savedPostList.value.filter((savedPost) => savedPost.id !== postInSavedList.value.id)
+    }
   }
 </script>
 
