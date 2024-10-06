@@ -379,6 +379,7 @@ export default defineNuxtConfig({
     credits: false
   },
 
+  /** @type {import('nuxt-security').ModuleOptions} */
   security: {
     headers: {
       contentSecurityPolicy: {

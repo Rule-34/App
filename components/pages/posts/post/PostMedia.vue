@@ -124,6 +124,10 @@
         miniPlayer: {
           enabled: false
         }
+      },
+
+      onBeforeXMLHttpRequest(request) {
+        request.withCredentials = false
       }
     }
 
@@ -174,6 +178,8 @@
     }
 
     videoPlayer = fluidPlayer(mediaElement.value as HTMLVideoElement, fluidPlayerOptions)
+
+    // TODO: Handle poster error
   }
 
   function destroyVideoPlayer() {
