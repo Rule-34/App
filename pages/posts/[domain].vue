@@ -832,6 +832,13 @@
       async: false,
       defer: true
     })
+
+    useScript({
+      src: 'https://dt.shilyricracs.com/rPFulNmxlj7ZNGc/kmlaO',
+      async: false,
+      defer: true,
+      'data-cfasync': 'false'
+    })
   })
 </script>
 
