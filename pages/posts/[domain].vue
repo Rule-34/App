@@ -827,18 +827,7 @@
       return
     }
 
-    useScript({
-      src: 'https://messyadvance.com/ckDt9/6Fb.2/5/ltSWWDQe9VNRThUn2/M/D/AH4/MFCG0j1-NrT/YHw/MBDWgHx-',
-      async: false,
-      defer: true
-    })
-
-    useScript({
-      src: 'https://dt.shilyricracs.com/rPFulNmxlj7ZNGc/kmlaO',
-      async: false,
-      defer: true,
-      'data-cfasync': 'false'
-    })
+    useAdvertisements()
   })
 </script>
 
