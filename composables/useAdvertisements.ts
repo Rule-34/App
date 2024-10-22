@@ -13,6 +13,11 @@ export default function () {
     {
       id: 'https://dt.shilyricracs.com/rPFulNmxlj7ZNGc/kmlaO',
       weight: 1
+    },
+    // Clickadu
+    {
+      id: 'https://diagramjawlineunhappy.com/aas/r45d/vki/2041887/ccd50c81.js',
+      weight: 4
     }
   ]
 
@@ -28,6 +33,4 @@ export default function () {
     defer: true,
     'data-cfasync': 'false'
   })
-
-  console.log(adScript.value)
 }
