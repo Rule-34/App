@@ -33,7 +33,9 @@
   const isVideo = computed(() => props.mediaType === 'video')
   const isGif = computed(() => props.mediaType === 'image' && props.mediaSrc.endsWith('.gif'))
 
+  const triedToLoadWithWebM = shallowRef(false) // Fix: iOS needs the media type to be correct or will fail to load
   const triedToLoadWithProxy = shallowRef(false)
+  const triedToLoadWithProxyAndWebM = shallowRef(false)
 
   let videoPlayer: FluidPlayerInstance | undefined
 
@@ -204,11 +206,36 @@
       return
     }
 
-    // Skip first Video error since it will automatically try next <source>
+    console.log(event.target.src, event.target.getAttribute('type'))
+
+    // If WebM not tried yet, skip error and continue with next <source>
     if (
+      //
+      isVideo.value &&
+      !triedToLoadWithWebM.value &&
+      event.target.getAttribute('type') !== 'video/webm'
+    ) {
+      triedToLoadWithWebM.value = true
+      return
+    }
+
+    // If proxy and WebM not tried yet, skip error and continue with next <source>
+    if (
+      isVideo.value &&
+      isPremium.value &&
+      !triedToLoadWithProxyAndWebM.value &&
+      event.target.getAttribute('data-is-premium') !== 'true' &&
+      event.target.getAttribute('type') !== 'video/webm'
+    ) {
+      triedToLoadWithProxyAndWebM.value = true
+      return
+    }
+
+    // If proxy not tried yet, skip error and continue with next <source>
+    if (
+      isVideo.value &&
       isPremium.value &&
       !triedToLoadWithProxy.value &&
-      isVideo.value &&
       event.target.getAttribute('data-is-premium') !== 'true'
     ) {
       triedToLoadWithProxy.value = true
@@ -218,9 +245,9 @@
     // Proxy GIFs, since they are not proxied with imgproxy
     if (
       //
+      isGif.value &&
       isPremium.value &&
-      !triedToLoadWithProxy.value &&
-      isGif.value
+      !triedToLoadWithProxy.value
     ) {
       const proxiedUrl = proxyUrl(props.mediaSrc)
 
@@ -235,7 +262,9 @@
 
   function manuallyReloadMedia() {
     // Reset state
+    triedToLoadWithWebM.value = false
     triedToLoadWithProxy.value = false
+    triedToLoadWithProxyAndWebM.value = false
     error.value = null
 
     // Reload media
@@ -394,7 +423,21 @@
       >
         <source
           :src="localSrc"
+          type="video/webm"
+          @error="onMediaError"
+        />
+
+        <source
+          :src="localSrc"
           type="video/mp4"
+          @error="onMediaError"
+        />
+
+        <source
+          v-if="isPremium"
+          :src="proxyUrl(localSrc)"
+          data-is-premium="true"
+          type="video/webm"
           @error="onMediaError"
         />
 
