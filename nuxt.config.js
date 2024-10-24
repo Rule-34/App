@@ -383,6 +383,9 @@ export default defineNuxtConfig({
   security: {
     headers: {
       contentSecurityPolicy: {
+        // Fix: disable HTTPS upgrade on development, otherwise Safari will fail to load the page
+        'upgrade-insecure-requests': process.env.NODE_ENV === 'production',
+
         // Fix: enable any origin for images
         'img-src': ["'self'", 'http:', 'https:', 'data:', 'blob:'],
 
