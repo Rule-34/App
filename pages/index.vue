@@ -474,13 +474,13 @@
         </div>
       </section>
 
-      <!-- Discounts -->
-      <!--      <section>-->
-      <!--        <FeaturedDiscount class='mt-4 m-2'/>-->
-      <!--      </section>-->
-
-      <!-- History -->
       <ClientOnly>
+        <!-- Discounts -->
+        <section>
+          <FeaturedDiscount class="m-2 mt-4" />
+        </section>
+
+        <!-- History -->
         <section v-if="pageHistory.length">
           <PageHeader as="h2">
             <template #title>History</template>

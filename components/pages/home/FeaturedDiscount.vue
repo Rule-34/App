@@ -26,23 +26,22 @@
       <XMarkIcon class="h-6 w-6" />
     </button>
 
-    <h2 class="text-xl font-bold leading-8 tracking-normal text-base-content-highlight">Alone in Valentine's Day?</h2>
+    <h2 class="text-xl font-bold leading-8 tracking-normal text-base-content-highlight">Alone in Halloween?</h2>
 
-    <p class="">
+    <p class="text-pretty">
       The Rule 34 App has your back!
       <br />
-      Get a discount and enjoy the day with your favorite characters, without ads
+      Get 30 days of Premium features for <b>half the usual price</b> with the code "HALLOWEENIE" 🌭
     </p>
 
-    <p class="mt-2 text-xs">Only available until February 16th</p>
+    <p class="mt-2 text-xs">Only available until November 1st</p>
 
     <NuxtLink
-      class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util bg-util mt-4 block w-full rounded-lg p-2 text-center font-bold tracking-tight text-base-content-highlight ring-2 ring-base-0/20"
-      target="_blank"
-      rel='nofollow noopener noreferrer'
-      to="https://alejandroakbal.gumroad.com/l/Rule34App/LONELY_VALENTINES"
+      class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util bg-util mt-4 block w-full text-pretty rounded-lg p-2 text-center font-bold tracking-tight text-base-content-highlight ring-2 ring-base-0/20"
+      rel="nofollow noopener noreferrer"
+      to="/premium"
     >
-      Get 20% Off
+      Use HALLOWEENIE for 50% off
     </NuxtLink>
   </div>
 </template>
