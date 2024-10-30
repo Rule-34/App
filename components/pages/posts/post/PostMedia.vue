@@ -33,9 +33,7 @@
   const isVideo = computed(() => props.mediaType === 'video')
   const isGif = computed(() => props.mediaType === 'image' && props.mediaSrc.endsWith('.gif'))
 
-  const triedToLoadWithWebM = shallowRef(false) // Fix: iOS needs the media type to be correct or will fail to load
   const triedToLoadWithProxy = shallowRef(false)
-  const triedToLoadWithProxyAndWebM = shallowRef(false)
 
   let videoPlayer: FluidPlayerInstance | undefined
 
@@ -192,9 +190,22 @@
     videoPlayer.destroy()
   }
 
-  function reloadVideoPlayer() {
-    destroyVideoPlayer()
-    createVideoPlayer()
+  function reloadVideoPlayer(shouldPlay: boolean = false) {
+    nextTick(() => {
+      destroyVideoPlayer()
+
+      nextTick(() => {
+        createVideoPlayer()
+
+        if (!shouldPlay) {
+          return
+        }
+
+        nextTick(() => {
+          videoPlayer?.play()
+        })
+      })
+    })
   }
 
   function onMediaError(event: Event) {
@@ -206,38 +217,12 @@
       return
     }
 
-    console.log(event.target.src, event.target.getAttribute('type'))
+    // Proxy videos
+    if (isVideo.value && isPremium.value && !triedToLoadWithProxy.value) {
+      localSrc.value = proxyUrl(props.mediaSrc)
 
-    // If WebM not tried yet, skip error and continue with next <source>
-    if (
-      //
-      isVideo.value &&
-      !triedToLoadWithWebM.value &&
-      event.target.getAttribute('type') !== 'video/webm'
-    ) {
-      triedToLoadWithWebM.value = true
-      return
-    }
+      reloadVideoPlayer(true)
 
-    // If proxy and WebM not tried yet, skip error and continue with next <source>
-    if (
-      isVideo.value &&
-      isPremium.value &&
-      !triedToLoadWithProxyAndWebM.value &&
-      event.target.getAttribute('data-is-premium') !== 'true' &&
-      event.target.getAttribute('type') !== 'video/webm'
-    ) {
-      triedToLoadWithProxyAndWebM.value = true
-      return
-    }
-
-    // If proxy not tried yet, skip error and continue with next <source>
-    if (
-      isVideo.value &&
-      isPremium.value &&
-      !triedToLoadWithProxy.value &&
-      event.target.getAttribute('data-is-premium') !== 'true'
-    ) {
       triedToLoadWithProxy.value = true
       return
     }
@@ -249,9 +234,7 @@
       isPremium.value &&
       !triedToLoadWithProxy.value
     ) {
-      const proxiedUrl = proxyUrl(props.mediaSrc)
-
-      localSrc.value = proxiedUrl
+      localSrc.value = proxyUrl(props.mediaSrc)
 
       triedToLoadWithProxy.value = true
       return
@@ -262,9 +245,7 @@
 
   function manuallyReloadMedia() {
     // Reset state
-    triedToLoadWithWebM.value = false
     triedToLoadWithProxy.value = false
-    triedToLoadWithProxyAndWebM.value = false
     error.value = null
 
     // Reload media
@@ -404,7 +385,10 @@
     </div>
 
     <!-- Video -->
-    <div v-else-if="isVideo">
+    <div
+      v-else-if="isVideo"
+      :key="localSrc"
+    >
       <!-- TODO: Add load animation -->
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <video
@@ -412,6 +396,7 @@
         v-intersection-observer="[onVideoIntersectionObserver, { rootMargin: '100px' }]"
         :height="mediaSrcHeight"
         :poster="localPosterSrc"
+        :src="localSrc"
         :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
         :width="mediaSrcWidth"
         class="h-auto w-full rounded-t-md"
@@ -420,35 +405,7 @@
         playsinline
         preload="none"
         @error="onMediaError"
-      >
-        <source
-          :src="localSrc"
-          type="video/webm"
-          @error="onMediaError"
-        />
-
-        <source
-          :src="localSrc"
-          type="video/mp4"
-          @error="onMediaError"
-        />
-
-        <source
-          v-if="isPremium"
-          :src="proxyUrl(localSrc)"
-          data-is-premium="true"
-          type="video/webm"
-          @error="onMediaError"
-        />
-
-        <source
-          v-if="isPremium"
-          :src="proxyUrl(localSrc)"
-          data-is-premium="true"
-          type="video/mp4"
-          @error="onMediaError"
-        />
-      </video>
+      />
     </div>
   </div>
 </template>
