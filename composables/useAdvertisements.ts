@@ -8,17 +8,7 @@ export default function () {
     {
       id: 'https://messyadvance.com/ckDt9/6Fb.2/5/ltSWWDQe9VNRThUn2/M/D/AH4/MFCG0j1-NrT/YHw/MBDWgHx-',
       weight: 10
-    },
-    // Galaksion
-    {
-      id: 'https://dt.shilyricracs.com/rPFulNmxlj7ZNGc/kmlaO',
-      weight: 1
     }
-    // Clickadu
-    // {
-    //   id: 'https://diagramjawlineunhappy.com/aas/r45d/vki/2041887/ccd50c81.js',
-    //   weight: 4
-    // }
   ]
 
   if (!adScript.value) {
