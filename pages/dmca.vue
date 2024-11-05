@@ -22,33 +22,12 @@
       <ol>
         <li>
           <strong>Identify the Website Hosting the Content</strong>: Locate the specific website that is hosting the
-          allegedly infringing content. The Rule 34 App does not host any content directly.
+          allegedly infringing content, its usually indicated on the top of the page, or at the URL.
         </li>
         <li>
           <strong>Contact the Website Owner</strong>: As we do not host the content, you will need to contact the owner
           or administrator of the website hosting the content to request its removal. Most websites have a DMCA or
           copyright infringement process outlined on their site.
-        </li>
-        <li>
-          <strong>Provide Proper Notice</strong>: When contacting the website owner, provide a proper DMCA notice that
-          includes the following information:
-          <ul>
-            <li>Your contact information (name, address, email, phone number)</li>
-            <li>Identification of the copyrighted work(s) that you claim have been infringed</li>
-            <li>The specific URL(s) where the infringing content is located</li>
-            <li>
-              A statement that you have a good faith belief that the use of the material is not authorized by the
-              copyright owner, its agent, or the law
-            </li>
-            <li>
-              A statement that the information in the notification is accurate, and under penalty of perjury, that you
-              are authorized to act on behalf of the copyright owner
-            </li>
-          </ul>
-        </li>
-        <li>
-          <strong>Follow Up with the Website Owner</strong>: If the website owner fails to respond or remove the
-          infringing content, you may need to pursue further legal action directly against them.
         </li>
       </ol>
 
