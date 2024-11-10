@@ -1,12 +1,12 @@
 <script lang="ts" setup>
   const newsList = [
     {
-      name: 'Install the App',
-      text: 'Learn how to install the Rule 34 App, in 3 simple steps',
+      name: 'Feedback website',
+      text: 'Now you can vote, discuss and share ideas 💡 to improve the Rule 34 App',
       links: [
         {
-          text: 'Install the App',
-          href: 'https://www.installpwa.com/from/r34.app',
+          text: 'feedback.r34.app',
+          href: 'https://feedback.r34.app',
           target: '_blank'
         }
       ]

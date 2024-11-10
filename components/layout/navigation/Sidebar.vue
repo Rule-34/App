@@ -22,24 +22,10 @@
       isExternal: false
     },
     {
-      name: 'F.A.Q.',
-      icon: QuestionMarkCircleIcon,
-
-      href: 'https://docs.r34.app/frequently-asked-questions',
-      isExternal: true
-    },
-    {
       name: 'Other sites',
       icon: UserGroupIcon,
 
       href: '/other-sites',
-      isExternal: false
-    },
-    {
-      name: 'Legal',
-      icon: BuildingLibraryIcon,
-
-      href: '/legal',
       isExternal: false
     },
     {
@@ -48,6 +34,20 @@
 
       href: 'https://www.installpwa.com/from/r34.app',
       isExternal: true
+    },
+    {
+      name: 'F.A.Q.',
+      icon: QuestionMarkCircleIcon,
+
+      href: 'https://docs.r34.app/frequently-asked-questions',
+      isExternal: true
+    },
+    {
+      name: 'Legal',
+      icon: BuildingLibraryIcon,
+
+      href: '/legal',
+      isExternal: false
     },
     {
       name: 'Settings',
