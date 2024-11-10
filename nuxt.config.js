@@ -186,6 +186,11 @@ export default defineNuxtConfig({
     }
   },
 
+  experimental: {
+    // @see https://nuxt.com/docs/guide/going-further/experimental-features#emitroutechunkerror
+    emitRouteChunkError: 'automatic-immediate'
+  },
+
   nitro: {
     esbuild: {
       options: {
