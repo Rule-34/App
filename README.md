@@ -31,8 +31,8 @@ This app can browse the following Boorus.
 
 Links to useful information.
 
-- [Frequently Asked Questions](https://docs.r34.app/frequently-asked-questions)
-- [How to install the App](https://docs.r34.app/app-installation)
+- [Frequently Asked Questions](https://rule34.app/frequently-asked-questions)
+- [How to install the App](https://www.installpwa.com/from/r34.app)
 
 ## Social
 
@@ -55,7 +55,7 @@ This project has various costs: domain, email, hosting, Cloudflare worker, maint
 
 I am a student, so I'm not really in a position to maintain everything from my pocket...
 
-So if you want to help me continue working on the App, you can [make a donation](https://docs.r34.app/donations).
+So if you want to help me continue working on the App, you can [make a donation](https://rule34.app/donations).
 
 ## Technicalities
 

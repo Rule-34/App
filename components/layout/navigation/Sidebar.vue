@@ -39,7 +39,7 @@
       name: 'F.A.Q.',
       icon: QuestionMarkCircleIcon,
 
-      href: 'https://docs.r34.app/frequently-asked-questions',
+      href: 'https://rule34.app/frequently-asked-questions',
       isExternal: true
     },
     {
