@@ -9,15 +9,18 @@ export default function () {
 
   const savedPostList = useLocalState<ISimplePocketbasePost[]>('pocketbase-savedPostList', [])
 
-  if (import.meta.client) {
-    if ($pocketBase.authStore.isValid) {
+  if ($pocketBase.authStore.isValid) {
+    //
+
+    email.value = $pocketBase.authStore.model.email
+    license.value = $pocketBase.authStore.model.username
+    subscription_expires_at.value = $pocketBase.authStore.model.subscription_expires_at
+
+    if (import.meta.client) {
       //
 
       callOnce('pocketbase-initial-data', async () => {
         //
-        email.value = await $pocketBase.authStore.model.email
-        license.value = await $pocketBase.authStore.model.username
-        subscription_expires_at.value = await $pocketBase.authStore.model.subscription_expires_at
 
         savedPostList.value = await $pocketBase.collection('posts').getFullList<ISimplePocketbasePost>({
           fields: 'id, original_id, original_domain',
