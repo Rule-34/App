@@ -70,13 +70,11 @@
 
     monetization: '$ilp.uphold.com/Hf3zAn3pQ7fD',
 
-    ogImage: () => ({
-      url:
-        'https://screenshot.akbal.dev/v1/capture?width=1200&height=630&url=' +
-        encodeURIComponent('https://r34.app' + route.fullPath),
+    ogImage: {
+      url: '/social.jpg',
       width: 1200,
       height: 630
-    })
+    }
   })
 
   useSchemaOrg([
