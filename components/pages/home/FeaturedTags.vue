@@ -27,36 +27,50 @@
 </script>
 
 <template>
-  <ol class="scrollbar-hide flex gap-x-4 overflow-x-auto">
+  <ol class="scrollbar-hide grid grid-flow-col gap-4 overflow-x-auto">
     <li
       v-for="(tag, index) in preselectedTags"
       :key="tag.name"
-      class="max-w-[8rem] flex-shrink-0"
+      class="w-36"
     >
-      <figure>
-        <template v-if="tag.media[0].type === 'iframe'">
-          <iframe
-            :loading="index > 5 ? 'lazy' : 'eager'"
-            :src="tag.media[0].src"
-            allow="autoplay"
-            class="h-auto w-full overflow-hidden rounded-t-md"
-            credentialless="true"
-            frameborder="0"
-            height="600"
-            marginheight="0"
-            marginwidth="0"
-            sandbox="allow-scripts allow-same-origin allow-popups"
-            scrolling="no"
-            width="400"
-          />
+      <!-- -->
 
-          <!-- Fix(not taking available width because of truncate): use negative margin -->
-          <figcaption class="truncate py-1.5 text-center text-sm font-medium">
-            {{ tag.name }}
-          </figcaption>
+      <figure class="h-full">
+        <!-- -->
+
+        <!-- Iframe -->
+        <template v-if="tag.media[0].type === 'iframe'">
+          <!-- -->
+
+          <div class="flex h-full flex-col">
+            <!-- -->
+
+            <iframe
+              :loading="index > 5 ? 'lazy' : 'eager'"
+              :src="tag.media[0].src"
+              allow="autoplay"
+              class="h-auto w-full flex-grow rounded-t-md"
+              credentialless="true"
+              frameborder="0"
+              height="600"
+              marginheight="0"
+              marginwidth="0"
+              sandbox="allow-scripts allow-same-origin allow-popups"
+              scrolling="no"
+              width="400"
+            />
+
+            <!-- Fix(not taking available width because of truncate): use negative margin -->
+            <figcaption class="truncate py-1.5 text-center text-sm font-medium">
+              {{ tag.name }}
+            </figcaption>
+          </div>
         </template>
 
+        <!-- Image -->
         <template v-else>
+          <!-- -->
+
           <NuxtLink
             :href="tag.path"
             :rel="tag.path.startsWith('http') ? 'noopener noreferrer nofollow' : ''"
