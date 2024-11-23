@@ -1,2 +1,9 @@
 [phases.setup]
-nixPkgs = ['...', 'python3']
+# Bun version - https://github.com/NixOS/nixpkgs/commit/bf9ac322e12334be3e9114e49df21e60db899134
+nixpkgsArchive = 'bf9ac322e12334be3e9114e49df21e60db899134'
+
+[phases.build]
+cmds = ["bun --bun run build"]
+
+[start]
+cmd = "bun --bun run start"

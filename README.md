@@ -75,8 +75,7 @@ This App uses an [API](https://github.com/Rule-34/API) to communicate with all t
 
 ### Requirements
 
-- NodeJS >= 12
-- NPM
+- [Bun](https://bun.sh)
 
 ### Setup
 
