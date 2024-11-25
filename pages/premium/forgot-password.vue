@@ -17,18 +17,15 @@
     }
 
     try {
-      const response = await $fetch('https://n8n.akbal.dev/webhook/r34/pocketbase/forgot-password', {
-        method: 'POST',
-        body: {
-          email: cleanEmail
-        }
-      })
+      await $pocketBase.collection('users').requestPasswordReset(cleanEmail)
 
-      toast.success(response.message, {
+      toast.success('Email sent', {
+        description:
+          'If your email exists, you will receive an email with your current license. \nIf you do not receive an email, check your spam folder',
         duration: 1000 * 30 // 30 seconds
       })
     } catch (error) {
-      toast.error(`Failed to send email: ${error}`)
+      toast.error(`Failed to send email: ${error.response.data.email.message}`)
       return
     }
   }
