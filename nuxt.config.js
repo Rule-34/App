@@ -245,6 +245,7 @@ export default defineNuxtConfig({
     '@sentry/nuxt/module',
     'nuxt-headlessui',
     '@headlessui-float/nuxt',
+    'vue-sonner/nuxt',
     '@nuxt/image',
     '@nuxt/fonts',
     '@formkit/auto-animate/nuxt',
