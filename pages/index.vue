@@ -496,9 +496,9 @@
 
       <ClientOnly>
         <!-- Discounts -->
-        <!--        <section>-->
-        <!--          <FeaturedDiscount class="m-2 mt-4" />-->
-        <!--        </section>-->
+        <section>
+          <FeaturedDiscount class="m-2 mt-4" />
+        </section>
 
         <!-- History -->
         <section v-if="pageHistory.length">

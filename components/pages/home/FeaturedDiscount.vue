@@ -1,10 +1,20 @@
 <script lang="ts" setup>
   import { XMarkIcon } from '@heroicons/vue/20/solid'
-  import { useSessionStorage } from '@vueuse/core'
+  import { useSessionStorage, useTimeAgo } from '@vueuse/core'
+  import { computed } from 'vue'
+
+  const SALE_END_DATE = new Date('2024-12-02T23:59:59')
+  const timeAgo = useTimeAgo(SALE_END_DATE)
+
+  const isActive = computed(() => {
+    return new Date() < SALE_END_DATE
+  })
 
   const showFeaturedDiscount = useSessionStorage('featuredDiscount', true, {
     writeDefaults: false
   })
+
+  const shouldShow = computed(() => showFeaturedDiscount.value && isActive.value)
 
   function closeBanner() {
     showFeaturedDiscount.value = false
@@ -13,7 +23,7 @@
 
 <template>
   <div
-    v-if="showFeaturedDiscount"
+    v-if="shouldShow"
     class="relative mx-auto max-w-sm rounded-lg p-4 ring-2 ring-base-0/20"
   >
     <button
@@ -26,22 +36,22 @@
       <XMarkIcon class="h-6 w-6" />
     </button>
 
-    <h2 class="text-xl font-bold leading-8 tracking-normal text-base-content-highlight">Alone in Halloween?</h2>
+    <h2 class="text-xl font-bold leading-8 tracking-normal text-base-content-highlight">Black Friday Sale! 🎉</h2>
 
     <p class="text-pretty">
-      The Rule 34 App has your back!
-      <br />
-      Get 30 days of Premium features for <b>half the usual price</b> with the code "HALLOWEENIE" 🌭
+      <!-- Treat yourself this Black Friday!
+      <br /> -->
+      Get 30 days of Premium features for <b>HALF THE PRICE</b> with code "BLACKFRIDAY" 💰
     </p>
 
-    <p class="mt-2 text-xs">Only available until November 1st</p>
+    <p class="mt-2 text-xs">Offer ends {{ timeAgo }}</p>
 
     <NuxtLink
       class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util bg-util mt-4 block w-full text-pretty rounded-lg p-2 text-center font-bold tracking-tight text-base-content-highlight ring-2 ring-base-0/20"
       rel="nofollow noopener noreferrer"
-      to="/premium"
+      to="/premium#pricing"
     >
-      Use HALLOWEENIE for 50% off
+      Use BLACKFRIDAY for 50% off
     </NuxtLink>
   </div>
 </template>
