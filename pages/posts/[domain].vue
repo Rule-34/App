@@ -20,6 +20,7 @@
 
   const { postFullSizeImages, postsPerPage } = useUserSettings()
   const { isPremium } = useUserData()
+  const { hasInteracted } = useInteractionDetector()
   const { booruList } = useBooruList()
   const { selectedBlockList } = useBlockLists()
   const { addUrlToPageHistory } = usePageHistory()
@@ -827,7 +828,13 @@
       return
     }
 
-    useAdvertisements()
+    watch(hasInteracted, (hasInteracted) => {
+      if (!hasInteracted) {
+        return
+      }
+
+      useAdvertisements()
+    })
   })
 </script>
 

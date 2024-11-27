@@ -9,6 +9,9 @@
 
   const config = useRuntimeConfig()
 
+  const { isPremium } = useUserData()
+  const { hasInteracted } = useInteractionDetector()
+
   const { pageHistory } = usePageHistory()
 
   const { booruList } = useBooruList()
@@ -113,6 +116,23 @@
       ]
     })
   ])
+
+  /**
+   * Show popunders for non-premium users
+   */
+  onMounted(() => {
+    if (isPremium.value) {
+      return
+    }
+
+    watch(hasInteracted, (hasInteracted) => {
+      if (!hasInteracted) {
+        return
+      }
+
+      useAdvertisements()
+    })
+  })
 
   const featuredDomains = [
     {
