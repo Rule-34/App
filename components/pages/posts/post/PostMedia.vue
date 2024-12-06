@@ -100,6 +100,9 @@
 
         allowTheatre: false,
 
+        // Fix: Opening in fullscreen when searching something with "F"
+        keyboardControl: false,
+
         controlBar: {
           autoHide: true,
 
