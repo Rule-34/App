@@ -450,6 +450,22 @@
           return false
         }
 
+        // Delete all posts that have a blocklisted tag
+        if (selectedBlockList.value.length > 0) {
+          const postTags = post.tags.meta.concat(
+            post.tags.general,
+            post.tags.artist,
+            post.tags.character,
+            post.tags.copyright
+          )
+
+          const foundBlockedTag = selectedBlockList.value.some((blocklistTag) => postTags.includes(blocklistTag))
+
+          if (foundBlockedTag) {
+            return false
+          }
+        }
+
         return true
       })
 
@@ -503,23 +519,7 @@
       //
 
       return page.data.flatMap((post, index) => {
-        // TODO: Optimize performance
-
-        // Skip all posts that have a blocklisted tag
-        if (selectedBlockList.value.length > 0) {
-          const postTags = post.tags.meta.concat(
-            post.tags.general,
-            post.tags.artist,
-            post.tags.character,
-            post.tags.copyright
-          )
-
-          const foundBlockedTag = selectedBlockList.value.some((blocklistTag) => postTags.includes(blocklistTag))
-
-          if (foundBlockedTag) {
-            return []
-          }
-        }
+        //
 
         return {
           ...post,
