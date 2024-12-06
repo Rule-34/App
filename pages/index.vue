@@ -151,7 +151,7 @@
           ]
         },
         {
-          name: 'Popular posts',
+          name: 'Trending posts',
           path: '/posts/rule34.xxx?filter%5Bscore%5D=>%3D50',
           media: [
             { type: 'image', src: '/img/featured/rule34.xxx/top-5.jpg' },
@@ -251,7 +251,7 @@
           ]
         },
         {
-          name: 'Popular posts',
+          name: 'Trending posts',
           path: '/posts/gelbooru.com?filter%5Bscore%5D=>%3D50',
           media: [
             { type: 'image', src: '/img/featured/gelbooru.com/top-5.jpeg' },
@@ -298,7 +298,7 @@
           ]
         },
         {
-          name: 'Popular posts',
+          name: 'Trending posts',
           path: '/posts/e621.net?filter%5Bscore%5D=>%3D50',
           media: [
             { type: 'image', src: '/img/featured/e621.net/top-5.jpeg' },
@@ -340,7 +340,7 @@
           ]
         },
         {
-          name: 'Popular posts',
+          name: 'Trending posts',
           path: '/posts/realbooru.com?filter%5Bscore%5D=>%3D50',
           media: [
             { type: 'image', src: '/img/featured/realbooru.com/top-5.jpeg' },
