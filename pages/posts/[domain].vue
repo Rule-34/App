@@ -18,7 +18,7 @@
   const route = useRoute()
   const config = useRuntimeConfig()
 
-  const { postFullSizeImages, postsPerPage } = useUserSettings()
+  const { postsPerPage } = useUserSettings()
   const { isPremium } = useUserData()
   const { hasInteracted } = useInteractionDetector()
   const { booruList } = useBooruList()
@@ -724,11 +724,11 @@
   })
 
   const firstPostsPageAsSchema = computed(() => {
-    if (!allRows.value.length) {
+    if (!data.value?.pages.length) {
       return []
     }
 
-    return allRows.value.map((post) => {
+    return data.value?.pages[0].data.map((post) => {
       switch (post.media_type) {
         case 'image':
           return defineImage({
@@ -1025,7 +1025,12 @@
                 class="flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-base-content"
               >
                 <span class="block rounded-md px-1.5 py-1">
-                  {{ hasNextPage ? 'Loading more...' : 'Nothing more to load' }}
+                  <template v-if="isFetching"> Loading more... </template>
+
+                  <template v-else-if="hasNextPage"> Reach here to load more </template>
+
+                  <!-- TODO: Show nothing more to load -->
+                  <template v-else> Nothing more to load </template>
                 </span>
               </div>
 
