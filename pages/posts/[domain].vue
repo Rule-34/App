@@ -430,7 +430,8 @@
     // @see nuxt.config.js
     staleTime: 1000 * 60 * 5,
 
-    maxPages: 10,
+    // Fix: Never set maxPages to avoid scroll issues
+    // maxPages: 10,
 
     select: (data) => {
       //
