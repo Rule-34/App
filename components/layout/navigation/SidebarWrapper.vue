@@ -1,5 +1,6 @@
 <script setup>
   import { XMarkIcon } from '@heroicons/vue/24/outline'
+  import { sidebarNavigation } from 'assets/js/sidebarLinks'
 
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
 </script>
@@ -86,5 +87,21 @@
         </div>
       </HeadlessDialog>
     </HeadlessTransitionRoot>
+
+    <!-- Links for Search Engines -->
+    <!-- TODO: Detect if its a Search Engine -->
+    <div class="hidden">
+      <template
+        v-for="link in sidebarNavigation"
+        :key="link.name"
+      >
+        <a
+          :href="link.href"
+          :rel="link.isExternal ? 'noopener noreferrer nofollow' : ''"
+        >
+          {{ link.name }}
+        </a>
+      </template>
+    </div>
   </div>
 </template>

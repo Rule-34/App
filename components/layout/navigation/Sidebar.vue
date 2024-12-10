@@ -1,62 +1,9 @@
 <script setup>
-  import {
-    ArrowDownTrayIcon,
-    BookmarkIcon,
-    BuildingLibraryIcon,
-    Cog6ToothIcon,
-    HomeIcon,
-    QuestionMarkCircleIcon,
-    SparklesIcon,
-    UserGroupIcon
-  } from '@heroicons/vue/24/outline'
+  import { BookmarkIcon, SparklesIcon } from '@heroicons/vue/24/outline'
+  import { sidebarNavigation } from 'assets/js/sidebarLinks'
 
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
   const { isPremium } = useUserData()
-
-  const navigation = [
-    {
-      name: 'Home',
-      icon: HomeIcon,
-
-      href: '/',
-      isExternal: false
-    },
-    {
-      name: 'Other sites',
-      icon: UserGroupIcon,
-
-      href: '/other-sites',
-      isExternal: false
-    },
-    {
-      name: 'Install App',
-      icon: ArrowDownTrayIcon,
-
-      href: 'https://www.installpwa.com/from/r34.app',
-      isExternal: true
-    },
-    {
-      name: 'F.A.Q.',
-      icon: QuestionMarkCircleIcon,
-
-      href: 'https://rule34.app/frequently-asked-questions',
-      isExternal: true
-    },
-    {
-      name: 'Legal',
-      icon: BuildingLibraryIcon,
-
-      href: '/legal',
-      isExternal: false
-    },
-    {
-      name: 'Settings',
-      icon: Cog6ToothIcon,
-
-      href: '/settings',
-      isExternal: false
-    }
-  ]
 </script>
 
 <template>
@@ -81,7 +28,7 @@
       role="list"
     >
       <li
-        v-for="item in navigation"
+        v-for="item in sidebarNavigation"
         :key="item.name"
         class="-mx-2"
       >
