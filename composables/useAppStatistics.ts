@@ -7,6 +7,7 @@ export default function () {
 
   let promptInstallPwa = ref<boolean>(false)
   let promptFeedback = ref<boolean>(false)
+  let promptNewsletter = ref<boolean>(false)
   let promptReview = ref<boolean>(false)
 
   if (import.meta.client) {
@@ -24,10 +25,13 @@ export default function () {
     promptFeedback = useLocalStorage('prompt-feedback', false, {
       writeDefaults: false
     })
+    promptNewsletter = useLocalStorage('prompt-newsletter', false, {
+      writeDefaults: false
+    })
     promptReview = useLocalStorage('prompt-review', false, {
       writeDefaults: false
     })
-
+    
     callOnce('statistics-appOpenedCount', async () => {
       timesTheAppHasBeenOpened.value++
     })
@@ -40,6 +44,7 @@ export default function () {
 
     promptInstallPwa,
     promptFeedback,
+    promptNewsletter,
     promptReview
   }
 }

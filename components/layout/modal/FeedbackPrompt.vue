@@ -28,7 +28,7 @@
       </HeadlessDialogTitle>
 
       <div class="mt-2">
-        <p class="text-sm">Let me know what you think about the app and how I can improve it</p>
+        <p class="text-sm">Let me know what you think about R34.app and how I can improve it</p>
       </div>
     </div>
   </div>

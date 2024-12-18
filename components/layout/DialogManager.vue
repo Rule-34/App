@@ -76,6 +76,36 @@
       component: resolveComponent('LazyFeedbackPrompt')
     },
 
+    // Newsletter Prompt
+    {
+      condition: () => {
+        const { timesTheAppHasBeenOpened, promptNewsletter } = useAppStatistics()
+
+        if (promptNewsletter.value) {
+          return false
+        }
+
+        // Show after 9 times
+        if (timesTheAppHasBeenOpened.value < 9) {
+          return false
+        }
+
+        sleep(1000 * 3) // 3 seconds
+          .then(() => {
+            isDialogReady.value = true
+          })
+
+        return true
+      },
+      close: () => {
+        const { promptNewsletter } = useAppStatistics()
+
+        isDialogReady.value = false
+        promptNewsletter.value = true
+      },
+      component: resolveComponent('LazyNewsletterPrompt')
+    },
+
     // Review prompt
     {
       condition: () => {
@@ -85,8 +115,8 @@
           return false
         }
 
-        // Show after 9 times
-        if (timesTheAppHasBeenOpened.value < 9) {
+        // Show after 12 times
+        if (timesTheAppHasBeenOpened.value < 12) {
           return false
         }
 

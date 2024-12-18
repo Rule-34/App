@@ -16,6 +16,7 @@
       action="https://mailcoach.akbal.dev/subscribe/a97031df-b6c5-47f3-8c09-1d373fcc907d"
       class="mx-auto mt-10 flex max-w-md gap-x-4"
       method="post"
+      target="_blank"
     >
       <label
         class="sr-only"
@@ -29,7 +30,7 @@
         class="focus-visible:focus-outline-util min-w-0 flex-auto rounded-md border-0 bg-base-0/10 px-3.5 py-2 text-base-content-highlight ring-1 ring-inset ring-base-0/10 sm:text-sm sm:leading-6"
         name="email"
         placeholder="Enter your email"
-        required=""
+        required
         type="email"
       />
 
