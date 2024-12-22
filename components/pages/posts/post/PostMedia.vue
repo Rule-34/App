@@ -100,6 +100,8 @@
 
         allowTheatre: false,
 
+        autoRotateFullScreen: true,
+
         // Fix: Opening in fullscreen when searching something with "F"
         keyboardControl: false,
 
