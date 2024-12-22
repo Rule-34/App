@@ -3,20 +3,21 @@
     return new Promise((resolve) => setTimeout(resolve, ms))
   }
 
+  const { timesTheAppHasBeenOpened, promptInstallPwa, promptFeedback, promptNewsletter, promptReview } =
+    useAppStatistics()
+
+  const isDialogReady = ref(false)
+
   const isNuxtReady = ref(false)
 
   onNuxtReady(() => {
     isNuxtReady.value = true
   })
 
-  const isDialogReady = ref(false)
-
   const dialogs = [
     // PWA prompt
     {
       condition: () => {
-        const { timesTheAppHasBeenOpened, promptInstallPwa } = useAppStatistics()
-
         if (promptInstallPwa.value) {
           return false
         }
@@ -38,8 +39,6 @@
         return true
       },
       close: () => {
-        const { promptInstallPwa } = useAppStatistics()
-
         isDialogReady.value = false
         promptInstallPwa.value = true
       },
@@ -50,8 +49,6 @@
     // Feedback prompt
     {
       condition: () => {
-        const { timesTheAppHasBeenOpened, promptFeedback } = useAppStatistics()
-
         if (promptFeedback.value) {
           return false
         }
@@ -69,8 +66,6 @@
         return true
       },
       close: () => {
-        const { promptFeedback } = useAppStatistics()
-
         isDialogReady.value = false
         promptFeedback.value = true
       },
@@ -81,8 +76,6 @@
     // Newsletter Prompt
     {
       condition: () => {
-        const { timesTheAppHasBeenOpened, promptNewsletter } = useAppStatistics()
-
         if (promptNewsletter.value) {
           return false
         }
@@ -100,8 +93,6 @@
         return true
       },
       close: () => {
-        const { promptNewsletter } = useAppStatistics()
-
         isDialogReady.value = false
         promptNewsletter.value = true
       },
@@ -112,8 +103,6 @@
     // Review prompt
     {
       condition: () => {
-        const { timesTheAppHasBeenOpened, promptReview } = useAppStatistics()
-
         if (promptReview.value) {
           return false
         }
@@ -131,8 +120,6 @@
         return true
       },
       close: () => {
-        const { promptReview } = useAppStatistics()
-
         isDialogReady.value = false
         promptReview.value = true
       },
