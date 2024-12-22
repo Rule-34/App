@@ -41,10 +41,15 @@
 }
 
 @layer components {
-
 }
 
 @layer utilities {
+
+  /* Like .truncate but with overflow-clip */
+  .truncate-clip {
+    @apply overflow-clip whitespace-nowrap text-ellipsis;
+  }
+
 
   /* Fix for elements jumping around because flex default min-width is auto */
   /*.flex > * {*/
