@@ -48,7 +48,7 @@
       .collection('posts')
       .create(PocketbasePost.fromPost(props.post, $pocketBase.authStore.baseModel.id))
 
-    savedPostList.value.push({
+    savedPostList.value = savedPostList.value.concat({
       id: response.id,
 
       original_domain: response.original_domain,
