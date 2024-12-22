@@ -43,7 +43,8 @@
         isDialogReady.value = false
         promptInstallPwa.value = true
       },
-      component: resolveComponent('LazyPwaPrompt')
+      component: resolveComponent('LazyPwaPrompt'),
+      closeableFromBackground: false
     },
 
     // Feedback prompt
@@ -73,7 +74,8 @@
         isDialogReady.value = false
         promptFeedback.value = true
       },
-      component: resolveComponent('LazyFeedbackPrompt')
+      component: resolveComponent('LazyFeedbackPrompt'),
+      closeableFromBackground: false
     },
 
     // Newsletter Prompt
@@ -103,7 +105,8 @@
         isDialogReady.value = false
         promptNewsletter.value = true
       },
-      component: resolveComponent('LazyNewsletterPrompt')
+      component: resolveComponent('LazyNewsletterPrompt'),
+      closeableFromBackground: false
     },
 
     // Review prompt
@@ -133,7 +136,8 @@
         isDialogReady.value = false
         promptReview.value = true
       },
-      component: resolveComponent('LazyReviewPrompt')
+      component: resolveComponent('LazyReviewPrompt'),
+      closeableFromBackground: false
     },
 
     // Premium Prompt
@@ -154,7 +158,8 @@
         isDialogReady.value = false
         open.value = false
       },
-      component: resolveComponent('LazyPremiumPrompt')
+      component: resolveComponent('LazyPremiumPrompt'),
+      closeableFromBackground: true
     }
   ]
 
@@ -175,7 +180,7 @@
     <HeadlessDialog
       as="div"
       class="relative z-10"
-      @close="dialog?.close()"
+      @close="dialog?.closeableFromBackground ? dialog?.close() : null"
     >
       <!-- Background -->
       <HeadlessTransitionChild
