@@ -4,7 +4,7 @@
   import * as Sentry from '@sentry/nuxt'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
-  import { cloneDeep, throttle } from 'lodash-es'
+  import { cloneDeep, throttle } from 'es-toolkit'
   import { FetchError } from 'ofetch'
   import type { Ref } from 'vue'
   import { toast } from 'vue-sonner'

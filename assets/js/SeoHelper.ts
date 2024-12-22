@@ -1,5 +1,5 @@
 import Tag from '~/assets/js/tag.dto'
-import { startCase, toLower } from 'lodash-es'
+import { lowerCase, startCase } from 'es-toolkit'
 
 export function tagArrayToTitle(tags: Tag[], addWith: boolean = true, addWithout: boolean = true) {
   if (!tags.length) {
@@ -58,7 +58,7 @@ export function normalizeStringForTitle(string: string) {
   }
 
   // Capitalize first letter of each word - https://stackoverflow.com/questions/38084396/lodash-title-case-uppercase-first-letter-of-every-word
-  string = startCase(toLower(string))
+  string = startCase(lowerCase(string))
 
   if (startsWithMinus) {
     string = '-' + string

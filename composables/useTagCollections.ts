@@ -1,5 +1,5 @@
 import { useLocalStorage } from '@vueuse/core'
-import { cloneDeep } from 'lodash-es'
+import { cloneDeep } from 'es-toolkit'
 import { TagCollection } from '~/assets/js/tagCollection.dto'
 
 const defaultTagCollections: TagCollection[] = [

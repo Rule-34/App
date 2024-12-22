@@ -3,7 +3,7 @@
   import { TagIcon } from '@heroicons/vue/24/outline'
   import { watchDebounced } from '@vueuse/core'
   import { abbreviateNumber } from 'js-abbreviation-number'
-  import { cloneDeep, unionWith } from 'lodash-es'
+  import { cloneDeep, unionWith } from 'es-toolkit'
   import Tag from '~/assets/js/tag.dto'
   import SearchSelect from './SearchSelect.vue'
 

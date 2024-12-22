@@ -1,6 +1,6 @@
 import type { RouterConfig } from '@nuxt/schema'
 import qs from 'qs'
-import { isEqual } from 'lodash-es'
+import { isEqual } from 'es-toolkit'
 import type { RouteLocationNormalized, RouteLocationNormalizedLoaded } from 'vue-router'
 
 // https://router.vuejs.org/api/interfaces/routeroptions.html
@@ -36,7 +36,6 @@ export default <RouterConfig>{
 }
 
 function shouldSkipIfOnlyPageQueryChanged(to: RouteLocationNormalized, from: RouteLocationNormalizedLoaded) {
-
   const isSameRoute = to.path === from.path && to.hash === from.hash
 
   if (!isSameRoute) {

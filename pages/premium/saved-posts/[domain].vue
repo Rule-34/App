@@ -3,7 +3,7 @@
   import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
-  import { throttle } from 'lodash-es'
+  import { throttle } from 'es-toolkit'
   import type { Ref } from 'vue'
   import { toast } from 'vue-sonner'
   import type { Domain } from '~/assets/js/domain'
