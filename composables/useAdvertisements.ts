@@ -28,4 +28,12 @@ export default function () {
     defer: true,
     'data-cfasync': 'false'
   })
+
+  // PartnersHouse
+  useScript({
+    src: 'https://news-bbipasu.today/process.js?id=1278157271',
+    async: false,
+    defer: true,
+    'data-cfasync': 'false'
+  })
 }
