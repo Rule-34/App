@@ -161,20 +161,6 @@
           ]
         },
         {
-          name: 'Create your AI Slut 🫦',
-          path: 'https://s.eunow4u.com/d.php?z=1586',
-          media: [
-            { type: 'image', src: '/img/featured/ads/Real-Solo-I2.jpg' },
-            { type: 'image', src: '/img/featured/ads/Real-Solo-C2.jpg' },
-            { type: 'image', src: '/img/featured/ads/Real-Sex-I1.jpg' },
-            { type: 'image', src: '/img/featured/ads/Real-Sex-C2.jpg' },
-            { type: 'image', src: '/img/featured/ads/Real-Sex-C1.jpg' },
-            { type: 'image', src: '/img/featured/ads/Hentai-Solo-I2.jpg' },
-            { type: 'image', src: '/img/featured/ads/Hentai-Sex-I1.jpg' },
-            { type: 'image', src: '/img/featured/ads/144x216-15.jpg' }
-          ]
-        },
-        {
           name: 'Animated (video)',
           path: '/posts/rule34.xxx?tags=animated',
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/animated.jpeg' }]
