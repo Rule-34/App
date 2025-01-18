@@ -34,6 +34,7 @@ Sentry.init({
      */
     // Specific files
     /\/js\/popunder\.js/,
+    /\/fluid-player\//i,
 
     // Random plugins and extensions.
     /^resource:\/\//i,
@@ -86,6 +87,7 @@ Sentry.init({
     'Request aborted',
     'Picture-in-Picture',
     'webkitExitFullScreen',
+    'webkitExitFullscreen',
     'NotSupportedError: The operation is not supported', // Safari not compatible video - https://stackoverflow.com/a/47976124
 
     // Network
