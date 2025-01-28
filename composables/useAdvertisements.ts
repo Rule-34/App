@@ -33,11 +33,11 @@ export default function () {
       weight: 1,
       provider: 'EvaDav'
     },
-    {
-      id: 'https://imdcn.inppcdn.com/ipp.js?id=fEDzW8oY_k6ti_MQVUi94w',
-      weight: 1,
-      provider: 'TacoLoco'
-    }
+    // {
+    //   id: 'https://imdcn.inppcdn.com/ipp.js?id=fEDzW8oY_k6ti_MQVUi94w',
+    //   weight: 1,
+    //   provider: 'TacoLoco'
+    // }
   ]
 
   // Load popunder ad if not already loaded
