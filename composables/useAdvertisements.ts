@@ -1,48 +1,75 @@
-import { default as random_weighted_choice } from 'random-weighted-choice'
+import { default as randomWeightedChoice } from 'random-weighted-choice'
 
 export default function () {
-  const adScript = useState<string>('adScript', () => '')
+  const popunderScript = useState<string>('popunder-script', () => '')
+  const pushScript = useState<string>('push-notification-script', () => '')
 
-  const weightedAds = [
-    // Adsession - Popunder
+  const popunderAds = [
     {
       id: '/js/popunder.js?v=7',
-      weight: 1
+      weight: 1,
+      provider: 'Adsession'
     },
-
-    // Hilltopads - Popunder
     // {
     //   id: 'https://messyadvance.com/ckDt9/6Fb.2/5/ltSWWDQe9VNRThUn2/M/D/AH4/MFCG0j1-NrT/YHw/MBDWgHx-',
-    //   weight: 1
+    //   weight: 1,
+    //   provider: 'Hilltopads'
     // }
+    {
+      id: 'https://diagramjawlineunhappy.com/aas/r45d/vki/2051965/6934bdaa.js',
+      weight: 1,
+      provider: 'Clickadu'
+    }
   ]
 
-  if (!adScript.value) {
-    const selectedAd = random_weighted_choice(weightedAds)
+  const pushAds = [
+    // {
+    //   id: 'https://news-bbipasu.today/process.js?id=1278157271',
+    //   weight: 1,
+    //   provider: 'PartnersHouse'
+    // },
+    {
+      id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
+      weight: 1,
+      provider: 'EvaDav'
+    },
+    {
+      id: 'https://imdcn.inppcdn.com/ipp.js?id=fEDzW8oY_k6ti_MQVUi94w',
+      weight: 1,
+      provider: 'TacoLoco'
+    }
+  ]
 
-    adScript.value = selectedAd
+  // Load popunder ad if not already loaded
+  if (!popunderScript.value) {
+    const selectedPopunder = randomWeightedChoice(popunderAds)
+    popunderScript.value = selectedPopunder
   }
 
-  useScript({
-    src: adScript.value,
+  // Load push notification ad if not already loaded
+  if (!pushScript.value) {
+    const selectedPush = randomWeightedChoice(pushAds)
+    pushScript.value = selectedPush
+  }
+
+  // Common script configuration
+  const scriptConfig = {
     async: false,
     defer: true,
-    'data-cfasync': 'false'
+    'data-cfasync': 'false',
+
+    // Fix for CORS issues - https://unhead.unjs.io/usage/composables/use-script#referrerpolicy-and-crossorigin
+    crossorigin: false
+  }
+
+  // Load selected ads
+  useScript({
+    ...scriptConfig,
+    src: popunderScript.value
   })
 
-  // PartnersHouse - InPage Push
-  // useScript({
-  //   src: 'https://news-bbipasu.today/process.js?id=1278157271',
-  //   async: false,
-  //   defer: true,
-  //   'data-cfasync': 'false'
-  // })
-
-  // EvaDav - InPage Push
   useScript({
-    src: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
-    async: false,
-    defer: true,
-    'data-cfasync': 'false'
+    ...scriptConfig,
+    src: pushScript.value
   })
 }
