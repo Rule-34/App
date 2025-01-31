@@ -237,10 +237,10 @@
                   <NuxtLink
                     aria-describedby="premium-features"
                     class="focus-visible:focus-outline-util hover:hover-text-util rounded-md bg-primary-700 px-3 py-2 text-center text-sm font-semibold leading-6 text-base-content-highlight hover:bg-primary-600 focus-visible:ring-offset-2"
-                    onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click'])"
+                    onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click', 'Ko-fi'])"
                     rel="noopener nofollow noreferrer"
                     target="_blank"
-                    to="https://alejandroakbal.mysellix.io/pay/b8f600-93367cd0c2-1bdc50"
+                    to="https://ko-fi.com/alejandro_akbal/tiers"
                   >
                     Get Premium
                   </NuxtLink>
