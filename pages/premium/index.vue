@@ -3,8 +3,6 @@
   import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
   import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 
-  const { experimentPriceCurrency } = useExperiments()
-
   const mainFeatures = [
     { title: 'No ads', additionalInfo: undefined },
     { title: 'Faster image loading', additionalInfo: '#image-proxy' },
@@ -223,12 +221,12 @@
                   <!-- Price -->
                   <div class="mt-10 flex items-center justify-center gap-x-4">
                     <p class="text-4xl font-bold tracking-tight text-base-content-highlight">
-                      {{ experimentPriceCurrency }}7
+                      $7
                     </p>
 
                     <div class="text-sm leading-5">
                       <p class="text-base-content">
-                        {{ experimentPriceCurrency === '$' ? 'USD' : 'EUR' }}
+                        USD
                       </p>
                       <p>Billed monthly</p>
                     </div>
