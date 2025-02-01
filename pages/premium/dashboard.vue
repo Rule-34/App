@@ -48,6 +48,9 @@
       case license.value.startsWith('PATREON-'):
         return 'Patreon'
 
+      case license.value.startsWith('KOFI-'):
+        return 'Ko-Fi'
+
       case license.value.length === 35:
         return 'Gumroad'
 
@@ -70,6 +73,9 @@
 
       case 'Gumroad':
         return 'https://app.gumroad.com/library?query=Rule+34+App'
+
+      case 'Ko-Fi':
+        return 'https://ko-fi.com/alejandro_akbal/tiers'
 
       default:
         throw new Error('Unknown platform of purchase')
