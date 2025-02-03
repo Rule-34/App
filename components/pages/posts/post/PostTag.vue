@@ -4,13 +4,14 @@
     MagnifyingGlassIcon,
     MinusIcon,
     NoSymbolIcon,
-    PlusIcon
+    PlusIcon,
+    ShieldExclamationIcon
   } from '@heroicons/vue/24/outline'
+  import { toast } from 'vue-sonner'
   import type Tag from '~/assets/js/tag.dto'
 
   const props = defineProps<{
     tag: Tag
-
     selectedTags: Tag[]
   }>()
 
@@ -20,8 +21,39 @@
     openTagInNewTab: [tag: string]
   }>()
 
+  const { isPremium } = useUserData()
+  const { customBlockList, selectedList } = useBlockLists()
+  const { tutorialBlocklist } = useAppStatistics()
+
   function isTagInSelectedTags(tag: Tag): boolean {
     return props.selectedTags.some((selectedTag) => selectedTag.name === tag.name)
+  }
+
+  function isTagBlocked(tag: Tag): boolean {
+    return customBlockList.value.includes(tag.name)
+  }
+
+  async function toggleBlockedTag(tag: Tag) {
+    if (!isPremium.value) {
+      const { open: promptPremium, currentIndex } = usePremiumDialog()
+      currentIndex.value = 6
+      promptPremium.value = true
+      return
+    }
+
+    if (!tutorialBlocklist.value) {
+      toast.info('Tag Blocklisted', {
+        description: 'It will take effect after a new search',
+        duration: 10000
+      })
+      tutorialBlocklist.value = true
+    }
+
+    if (isTagBlocked(tag)) {
+      customBlockList.value = customBlockList.value.filter((t) => t !== tag.name)
+    } else {
+      customBlockList.value = [...customBlockList.value, tag.name]
+    }
   }
 </script>
 
@@ -63,7 +95,7 @@
       </HeadlessMenuButton>
 
       <HeadlessMenuItems
-        class="w-40 divide-y divide-base-0/20 rounded-md bg-base-1000 ring-1 ring-base-0/20 focus:outline-none"
+        class="divide-y divide-base-0/20 rounded-md bg-base-1000 ring-1 ring-base-0/20 focus:outline-none"
       >
         <!-- Add or Remove tag -->
         <div class="py-1">
@@ -112,6 +144,21 @@
               <MagnifyingGlassIcon class="mr-3 h-4 w-4 flex-shrink-0 rounded" />
 
               Set tag
+            </button>
+          </HeadlessMenuItem>
+        </div>
+
+        <!-- Blocklist Management (Premium only) -->
+        <div class="py-1">
+          <HeadlessMenuItem v-slot="{ active }">
+            <button
+              :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+              class="group flex w-full items-center px-2.5 py-1 text-sm"
+              type="button"
+              @click="toggleBlockedTag(tag)"
+            >
+              <ShieldExclamationIcon class="mr-3 h-4 w-4 flex-shrink-0 rounded" />
+              {{ isTagBlocked(tag) ? 'Remove from blocklist' : 'Add to blocklist' }}
             </button>
           </HeadlessMenuItem>
         </div>
