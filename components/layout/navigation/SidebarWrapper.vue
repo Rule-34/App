@@ -90,7 +90,10 @@
 
     <!-- Links for Search Engines -->
     <!-- TODO: Detect if its a Search Engine -->
-    <div class="hidden">
+    <div
+      class="hidden"
+      data-allow-mismatch
+    >
       <template
         v-for="link in sidebarNavigation"
         :key="link.name"

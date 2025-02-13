@@ -23,13 +23,19 @@ export const sidebarNavigation = [
     href: '/other-sites',
     isExternal: false
   },
-  {
-    name: 'Install App',
-    icon: ArrowDownTrayIcon,
 
-    href: 'https://www.installpwa.com/from/r34.app',
-    isExternal: true
-  },
+  // Hide "Install App" when in standalone mode
+  ...(import.meta.client && window.matchMedia('(display-mode: standalone)').matches
+    ? []
+    : [
+        {
+          name: 'Install App',
+          icon: ArrowDownTrayIcon,
+          href: 'https://www.installpwa.com/from/r34.app',
+          isExternal: true
+        }
+      ]),
+
   {
     name: 'F.A.Q.',
     icon: QuestionMarkCircleIcon,
