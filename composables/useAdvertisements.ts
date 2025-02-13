@@ -16,7 +16,7 @@ export default function () {
     //   provider: 'Hilltopads'
     // }
     {
-      id: 'https://diagramjawlineunhappy.com/aas/r45d/vki/2051965/6934bdaa.js',
+      id: '/js/popunder2.js?v=1',
       weight: 1,
       provider: 'Clickadu'
     }
