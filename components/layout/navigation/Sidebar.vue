@@ -1,5 +1,5 @@
 <script setup>
-  import { BookmarkIcon, SparklesIcon, VideoCameraIcon } from '@heroicons/vue/24/outline'
+  import { BookmarkIcon, ChatBubbleLeftEllipsisIcon, SparklesIcon, VideoCameraIcon } from '@heroicons/vue/24/outline'
   import { sidebarNavigation } from 'assets/js/sidebarLinks'
 
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
@@ -73,15 +73,34 @@
 
       <!-- Advertisements -->
       <template v-if="!isPremium">
-        <a
-          class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
-          href="https://t.trcktr.com/c1/772ee70b-8cf3-4bca-93e1-9af2586afed2?externalId={impressionId}&cv1={impressionId}&cv2={userId}&cv3={device}&cv4={creativeId}&cv5={campaignId}&cv6={language}&cv7=%SLAVA_KPSS%&cv8={browser}&cv9={siteId}&cv10={creativeName}"
-          rel="nofollow noopener noreferrer"
-          target="_blank"
-        >
-          <VideoCameraIcon class="h-6 w-6 shrink-0" />
-          Live Sex Cams
-        </a>
+        <!-- Separator -->
+        <!-- <li class="my-0.5 px-2">
+          <hr class="border-t border-base-0/20" />
+        </li> -->
+
+        <li class="-mx-2">
+          <a
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
+            href="https://t.trcktr.com/c1/772ee70b-8cf3-4bca-93e1-9af2586afed2?externalId={impressionId}&cv1={impressionId}&cv2={userId}&cv3={device}&cv4={creativeId}&cv5={campaignId}&cv6={language}&cv7=%SLAVA_KPSS%&cv8={browser}&cv9={siteId}&cv10={creativeName}"
+            rel="nofollow noopener noreferrer"
+            target="_blank"
+          >
+            <VideoCameraIcon class="h-6 w-6 shrink-0" />
+            Live Sex Cams
+          </a>
+        </li>
+
+        <li class="-mx-2">
+          <a
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
+            href="https://aichattings.com/?via=r34-menu"
+            rel="nofollow noopener noreferrer"
+            target="_blank"
+          >
+            <ChatBubbleLeftEllipsisIcon class="h-6 w-6 shrink-0" />
+            AI Sex Chat
+          </a>
+        </li>
       </template>
 
       <!-- Bottom -->
