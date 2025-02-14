@@ -93,12 +93,12 @@
         <li class="-mx-2">
           <a
             class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
-            href="https://aichattings.com/?via=r34-menu"
+            href="https://golove.ai/anonAuth?ref=r34app"
             rel="nofollow noopener noreferrer"
             target="_blank"
           >
             <ChatBubbleLeftEllipsisIcon class="h-6 w-6 shrink-0" />
-            AI Sex Chat
+            AI Sex Tinder
           </a>
         </li>
       </template>
