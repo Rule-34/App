@@ -32,11 +32,6 @@ export default function () {
       id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
       weight: 1,
       provider: 'EvaDav'
-    },
-    {
-      id: 'https://imdcn.inppcdn.com/ipp.js?id=fEDzW8oY_k6ti_MQVUi94w',
-      weight: 1,
-      provider: 'TacoLoco'
     }
   ]
 
