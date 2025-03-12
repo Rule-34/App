@@ -1,6 +1,6 @@
 import { default as randomWeightedChoice } from 'random-weighted-choice'
 
-export default function () {
+export default function (loadAdScripts: Ref<boolean>) {
   const popunderScript = useState<string>('popunder-script', () => '')
   const pushScript = useState<string>('push-notification-script', () => '')
 
@@ -58,13 +58,23 @@ export default function () {
   }
 
   // Load selected ads
-  useScript({
-    ...scriptConfig,
-    src: popunderScript.value
-  })
+  useScript(
+    {
+      ...scriptConfig,
+      src: popunderScript.value
+    },
+    {
+      trigger: loadAdScripts
+    }
+  )
 
-  useScript({
-    ...scriptConfig,
-    src: pushScript.value
-  })
+  useScript(
+    {
+      ...scriptConfig,
+      src: pushScript.value
+    },
+    {
+      trigger: loadAdScripts
+    }
+  )
 }

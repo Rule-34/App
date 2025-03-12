@@ -125,13 +125,7 @@
       return
     }
 
-    watch(hasInteracted, (hasInteracted) => {
-      if (!hasInteracted) {
-        return
-      }
-
-      useAdvertisements()
-    })
+    useAdvertisements(hasInteracted)
   })
 
   const featuredDomains = [
@@ -323,7 +317,7 @@
           media: [{ type: 'image', src: '/img/featured/e621.net/pokemon.jpeg' }]
         }
       ]
-    },
+    }
     // {
     //   domain: 'realbooru.com',
     //   path: '/posts/realbooru.com',
@@ -428,13 +422,13 @@
     <!-- Header -->
     <div class="-mt-3 text-center">
       <h1
-        class="flex justify-center gap-2 text-2xl font-bold uppercase leading-10 tracking-tight text-base-content-highlight"
+        class="text-base-content-highlight flex justify-center gap-2 text-2xl leading-10 font-bold tracking-tight uppercase"
       >
         R34
 
         <img
           alt="Icon"
-          class="flip-vertical-fwd h-6 w-6 text-base-content-highlight"
+          class="flip-vertical-fwd text-base-content-highlight h-6 w-6"
           height="16"
           loading="eager"
           src="/icon.svg"
@@ -481,7 +475,7 @@
           />
 
           <button
-            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-full border-0 bg-transparent p-2.5 ring-1 ring-inset ring-base-0/20 sm:text-sm"
+            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 rounded-full border-0 bg-transparent p-2.5 ring-1 ring-inset sm:text-sm"
             @click="onSearchSubmit()"
           >
             <span class="sr-only">Go to selected Booru</span>
@@ -545,7 +539,7 @@
 
                 <span
                   v-if="featuredDomain.isPremium"
-                  class="inline-flex items-center rounded-full border-2 border-primary-500/60 px-2.5 py-0.5 text-xs font-medium text-base-content-highlight"
+                  class="border-primary-500/60 text-base-content-highlight inline-flex items-center rounded-full border-2 px-2.5 py-0.5 text-xs font-medium"
                 >
                   Premium
                 </span>
