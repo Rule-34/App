@@ -80,19 +80,7 @@
 
         <li class="-mx-2">
           <a
-            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
-            href="https://t.trcktr.com/c1/772ee70b-8cf3-4bca-93e1-9af2586afed2?externalId={impressionId}&cv1={impressionId}&cv2={userId}&cv3={device}&cv4={creativeId}&cv5={campaignId}&cv6={language}&cv7=%SLAVA_KPSS%&cv8={browser}&cv9={siteId}&cv10={creativeName}"
-            rel="nofollow noopener noreferrer"
-            target="_blank"
-          >
-            <VideoCameraIcon class="h-6 w-6 shrink-0" />
-            Live Sex Cams
-          </a>
-        </li>
-
-        <li class="-mx-2">
-          <a
-            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
             href="https://golove.ai/anonAuth?ref=r34app"
             rel="nofollow noopener noreferrer"
             target="_blank"
