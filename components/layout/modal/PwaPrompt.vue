@@ -66,7 +66,7 @@
   <!-- Actions -->
   <div class="mt-5 sm:mt-6">
     <button
-      class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-base-0/20"
+      class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-xs ring-1 ring-inset ring-base-0/20"
       type="button"
       @click="close()"
     >

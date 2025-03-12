@@ -174,7 +174,7 @@
 
           <!-- Tag Length -->
           <div
-            class="flex h-5 w-8 flex-shrink-0 items-center justify-center overflow-x-hidden rounded-full bg-base-0/20 px-2 text-sm tabular-nums"
+            class="flex h-5 w-8 shrink-0 items-center justify-center overflow-x-hidden rounded-full bg-base-0/20 px-2 text-sm tabular-nums"
           >
             {{ tagCollection.tags.length }}
 

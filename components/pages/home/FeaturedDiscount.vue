@@ -28,7 +28,7 @@
   >
     <button
       aria-label="Close banner"
-      class="hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util hover:hover-text-util absolute -right-4 -top-4 rounded-full p-1.5 text-2xl font-bold ring-2 ring-inset ring-base-0/20 backdrop-blur sm:text-sm"
+      class="hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util hover:hover-text-util absolute -right-4 -top-4 rounded-full p-1.5 text-2xl font-bold ring-2 ring-inset ring-base-0/20 backdrop-blur-sm sm:text-sm"
       type="button"
       @click="closeBanner"
     >

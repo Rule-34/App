@@ -18,7 +18,7 @@
     class="flex flex-row items-center justify-between gap-4"
     @update:modelValue="emit('update:modelValue', $event)"
   >
-    <span class="flex flex-grow flex-col">
+    <span class="flex grow flex-col">
       <HeadlessListboxLabel
         as="span"
         class="font-medium leading-8 text-base-content-highlight"
@@ -50,7 +50,7 @@
       </HeadlessListboxButton>
 
       <HeadlessListboxOptions
-        class="w-36 divide-y divide-base-0/20 overflow-hidden rounded-md bg-base-1000 ring-1 ring-inset ring-base-0/20 focus:outline-none"
+        class="w-36 divide-y divide-base-0/20 overflow-hidden rounded-md bg-base-1000 ring-1 ring-inset ring-base-0/20 focus:outline-hidden"
       >
         <HeadlessListboxOption
           v-for="option in options"

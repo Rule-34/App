@@ -1,6 +1,7 @@
+import tailwindcss from '@tailwindcss/vite'
+
 export default defineNuxtConfig({
   ssr: true,
-
   spaLoadingTemplate: true,
 
   app: {
@@ -203,14 +204,13 @@ export default defineNuxtConfig({
     transpile: ['vue-sonner']
   },
 
-  sourcemap: true,
-
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-      autoprefixer: {}
-    }
+  vite: {
+    plugins: [
+      tailwindcss(),
+    ],
   },
+
+  sourcemap: true,
 
   runtimeConfig: {
     MATOMO_API_KEY: process.env.MATOMO_API_KEY,
@@ -231,7 +231,6 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css', '~/assets/css/cookieconsent.css'],
-
   components: [{ path: '~/components', pathPrefix: false }],
 
   site: {
@@ -413,5 +412,6 @@ export default defineNuxtConfig({
     enabled: false
   },
 
-  telemetry: false
+  telemetry: false,
+  compatibilityDate: '2025-03-12'
 })

@@ -30,7 +30,7 @@
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 bg-base-1000/80 backdrop-blur transition-opacity" />
+        <div class="fixed inset-0 bg-base-1000/80 backdrop-blur-sm transition-opacity" />
       </HeadlessTransitionChild>
 
       <div class="fixed inset-0 overflow-hidden">
@@ -106,7 +106,7 @@
 
                   <!-- Footer -->
                   <!-- Actions -->
-                  <div class="flex flex-shrink-0 justify-end gap-4 px-4 py-4">
+                  <div class="flex shrink-0 justify-end gap-4 px-4 py-4">
                     <slot name="actions" />
                   </div>
                 </div>

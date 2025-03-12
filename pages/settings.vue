@@ -170,7 +170,7 @@
               <textarea
                 :placeholder="'One tag per line:\n' + defaultBlockList.join('\n')"
                 :value="customBlockList.join('\n')"
-                class="focus-visible:focus-outline-util hover:hover-bg-util block w-full rounded-md border-0 bg-transparent py-1.5 text-sm text-base-content-highlight shadow-sm ring-1 ring-inset ring-base-0/20 placeholder:text-base-content sm:leading-6"
+                class="focus-visible:focus-outline-util hover:hover-bg-util block w-full rounded-md border-0 bg-transparent py-1.5 text-sm text-base-content-highlight shadow-xs ring-1 ring-inset ring-base-0/20 placeholder:text-base-content sm:leading-6"
                 name="customBlockList"
                 rows="4"
               />

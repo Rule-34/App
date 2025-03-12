@@ -85,7 +85,7 @@
           'hover:hover-bg-util': tag.type === 'general' || tag.type === 'meta',
 
           // Mark tag as selected
-          'hover-bg-util hover-text-util !ring-base-0/20': selectedTags.some(
+          'hover-bg-util hover-text-util ring-base-0/20!': selectedTags.some(
             (selectedTag) => selectedTag.name === tag.name
           )
         }"
@@ -95,7 +95,7 @@
       </HeadlessMenuButton>
 
       <HeadlessMenuItems
-        class="divide-y divide-base-0/20 rounded-md bg-base-1000 ring-1 ring-base-0/20 focus:outline-none"
+        class="divide-y divide-base-0/20 rounded-md bg-base-1000 ring-1 ring-base-0/20 focus:outline-hidden"
       >
         <!-- Add or Remove tag -->
         <div class="py-1">
@@ -108,7 +108,7 @@
             >
               <component
                 :is="isTagInSelectedTags(tag) ? MinusIcon : PlusIcon"
-                class="mr-3 h-4 w-4 flex-shrink-0 rounded"
+                class="mr-3 h-4 w-4 shrink-0 rounded-sm"
               />
 
               {{ isTagInSelectedTags(tag) ? 'Remove tag' : 'Add tag' }}
@@ -125,7 +125,7 @@
               type="button"
               @click="emit('addTag', '-' + props.tag.name)"
             >
-              <NoSymbolIcon class="mr-3 h-4 w-4 flex-shrink-0 rounded" />
+              <NoSymbolIcon class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
 
               Exclude tag
             </button>
@@ -141,7 +141,7 @@
               type="button"
               @click="emit('setTag', props.tag.name)"
             >
-              <MagnifyingGlassIcon class="mr-3 h-4 w-4 flex-shrink-0 rounded" />
+              <MagnifyingGlassIcon class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
 
               Set tag
             </button>
@@ -157,7 +157,7 @@
               type="button"
               @click="toggleBlockedTag(tag)"
             >
-              <ShieldExclamationIcon class="mr-3 h-4 w-4 flex-shrink-0 rounded" />
+              <ShieldExclamationIcon class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
               {{ isTagBlocked(tag) ? 'Remove from blocklist' : 'Add to blocklist' }}
             </button>
           </HeadlessMenuItem>
@@ -172,7 +172,7 @@
               type="button"
               @click="emit('openTagInNewTab', props.tag.name)"
             >
-              <ArrowTopRightOnSquareIcon class="mr-3 h-4 w-4 flex-shrink-0 rounded" />
+              <ArrowTopRightOnSquareIcon class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
 
               Open in new tab
             </button>

@@ -66,7 +66,7 @@
       </div>
 
       <HeadlessListboxOptions
-        class="w-44 divide-y divide-base-0/20 overflow-hidden rounded-md bg-base-1000 ring-1 ring-inset ring-base-0/20 focus:outline-none"
+        class="w-44 divide-y divide-base-0/20 overflow-hidden rounded-md bg-base-1000 ring-1 ring-inset ring-base-0/20 focus:outline-hidden"
       >
         <HeadlessListboxOption
           v-for="option in options"

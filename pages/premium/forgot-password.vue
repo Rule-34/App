@@ -75,7 +75,7 @@
                 id="email"
                 v-model.trim="formData.email"
                 autocomplete="email"
-                class="focus-visible:focus-outline-util block w-full rounded-md border-0 bg-transparent py-1.5 text-base-content-highlight shadow-sm ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
+                class="focus-visible:focus-outline-util block w-full rounded-md border-0 bg-transparent py-1.5 text-base-content-highlight shadow-xs ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
                 name="email"
                 required
                 type="email"
@@ -85,7 +85,7 @@
 
           <div>
             <button
-              class="focus-visible:focus-outline-util hover:hover-text-util flex w-full justify-center rounded-md bg-primary-500 px-3 py-1.5 text-sm font-semibold leading-6 text-base-content-highlight shadow-sm hover:bg-primary-400"
+              class="focus-visible:focus-outline-util hover:hover-text-util flex w-full justify-center rounded-md bg-primary-500 px-3 py-1.5 text-sm font-semibold leading-6 text-base-content-highlight shadow-xs hover:bg-primary-400"
               type="submit"
             >
               Send license

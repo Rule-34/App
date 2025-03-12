@@ -1,6 +1,50 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@config '../../tailwind.config.js';
+
+
+@utility truncate-clip {
+  /* Like .truncate but with overflow-clip */
+  @apply overflow-clip whitespace-nowrap text-ellipsis;
+}
+
+@utility focus-outline-util {
+  /* Fix for elements jumping around because flex default min-width is auto */
+  /*.flex > * {*/
+  /*  min-width: 0;*/
+  /*  min-height: 0;*/
+  /*}*/
+  /*
+  * NOT TO BE USED DIRECTLY AS CSS
+  * IN CLASSES IT SHOULD BE USED AS `focus-visible:focus-outline-util`
+  */
+  @apply outline outline-2 outline-offset-2 outline-base-content-highlight;
+}
+
+@utility hover-text-util {
+  /*
+  * NOT TO BE USED DIRECTLY AS CSS
+  * IN CLASSES IT SHOULD BE USED AS `hover:hover-text-util`
+  */
+  @apply text-base-content-hover;
+}
+
+@utility hover-bg-util {
+  /*
+  * NOT TO BE USED DIRECTLY AS CSS
+  * IN CLASSES IT SHOULD BE USED AS `hover:hover-bg-util`
+   */
+  @apply bg-base-0/20;
+}
+
+@utility scrollbar-hide {
+  /* https://github.com/reslear/tailwind-scrollbar-hide/blob/main/src/index.js */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
 /* Improved defaults */
 @layer base {
@@ -37,57 +81,6 @@
   /* Fix for elements jumping around with overflow-auto */
   * {
     scrollbar-gutter: stable;
-  }
-}
-
-@layer components {
-}
-
-@layer utilities {
-
-  /* Like .truncate but with overflow-clip */
-  .truncate-clip {
-    @apply overflow-clip whitespace-nowrap text-ellipsis;
-  }
-
-
-  /* Fix for elements jumping around because flex default min-width is auto */
-  /*.flex > * {*/
-  /*  min-width: 0;*/
-  /*  min-height: 0;*/
-  /*}*/
-  /*
-  * NOT TO BE USED DIRECTLY AS CSS
-  * IN CLASSES IT SHOULD BE USED AS `focus-visible:focus-outline-util`
-  */
-  .focus-outline-util {
-    @apply outline outline-2 outline-offset-2 outline-base-content-highlight;
-  }
-
-  /*
-  * NOT TO BE USED DIRECTLY AS CSS
-  * IN CLASSES IT SHOULD BE USED AS `hover:hover-text-util`
-  */
-  .hover-text-util {
-    @apply text-base-content-hover;
-  }
-
-  /*
-  * NOT TO BE USED DIRECTLY AS CSS
-  * IN CLASSES IT SHOULD BE USED AS `hover:hover-bg-util`
-   */
-  .hover-bg-util {
-    @apply bg-base-0/20;
-  }
-
-  /* https://github.com/reslear/tailwind-scrollbar-hide/blob/main/src/index.js */
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
   }
 }
 

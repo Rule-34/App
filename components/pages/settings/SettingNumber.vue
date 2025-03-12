@@ -12,7 +12,7 @@
 <template>
   <div class="flex flex-row items-center justify-between gap-2">
     <!-- TODO: Generate random label ID -->
-    <label class="flex flex-grow flex-col">
+    <label class="flex grow flex-col">
       <span class="font-medium leading-8 text-base-content-highlight">
         <slot name="name" />
       </span>

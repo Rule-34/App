@@ -12,7 +12,7 @@
       <div class="flex items-center">
         <CloudArrowDownIcon
           aria-hidden="true"
-          class="me-2 h-6 w-6 flex-shrink-0"
+          class="me-2 h-6 w-6 shrink-0"
         />
         <span class="sr-only">Info</span>
 

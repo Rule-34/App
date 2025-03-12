@@ -220,7 +220,7 @@
             <img
               :src="`https://icons.duckduckgo.com/ip2/${booru.domain}.ico`"
               alt="Favicon"
-              class="h-5 w-5 flex-shrink-0 rounded"
+              class="h-5 w-5 shrink-0 rounded-sm"
               height="128"
               loading="eager"
               width="128"
@@ -302,7 +302,7 @@
             Domain
           </label>
 
-          <div class="mt-2 flex rounded-md shadow-sm ring-1 ring-inset ring-base-0/20">
+          <div class="mt-2 flex rounded-md shadow-xs ring-1 ring-inset ring-base-0/20">
             <span class="inline-flex items-center px-3 sm:text-sm">https://</span>
 
             <input

@@ -25,7 +25,7 @@
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 bg-base-1000/80 backdrop-blur" />
+        <div class="fixed inset-0 bg-base-1000/80 backdrop-blur-sm" />
       </HeadlessTransitionChild>
 
       <div class="fixed inset-0 flex flex-row-reverse">

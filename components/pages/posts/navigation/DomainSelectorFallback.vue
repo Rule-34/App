@@ -14,7 +14,7 @@
 
 <template>
   <div
-    :class="[props.compact ? 'flex w-auto items-stretch !rounded-full !p-2.5' : 'w-56']"
+    :class="[props.compact ? 'flex w-auto items-stretch rounded-full! p-2.5!' : 'w-56']"
     class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util relative cursor-default rounded-md bg-transparent py-1.5 pl-3 pr-10 text-left ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
     v-bind="$attrs"
   >
@@ -22,7 +22,7 @@
       <img
         :src="`https://icons.duckduckgo.com/ip2/r34.app.ico`"
         alt="Favicon"
-        class="h-5 w-5 flex-shrink-0 rounded"
+        class="h-5 w-5 shrink-0 rounded-sm"
         height="128"
         loading="eager"
         width="128"

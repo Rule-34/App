@@ -48,7 +48,7 @@
             :loading="index > 5 ? 'lazy' : 'eager'"
             :src="tag.media[0].src"
             allow="autoplay"
-            class="h-auto w-full flex-grow rounded-t-md"
+            class="h-auto w-full grow rounded-t-md"
             credentialless="true"
             frameborder="0"
             height="600"

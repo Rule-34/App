@@ -311,7 +311,7 @@
       <div class="flex h-full flex-col items-center space-y-4 py-4">
         <div class="flex flex-1 flex-col items-center justify-center gap-4">
           <span
-            class="rounded-md bg-gradient-to-l from-base-950 via-base-900 to-base-900 px-4 py-1.5 text-center text-base-content-highlight"
+            class="rounded-md bg-linear-to-l from-base-950 via-base-900 to-base-900 px-4 py-1.5 text-center text-base-content-highlight"
           >
             {{ error?.message }}
           </span>

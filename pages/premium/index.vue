@@ -101,7 +101,7 @@
                 v-for="rating in [0, 1, 2, 3, 4]"
                 :key="rating"
                 aria-hidden="true"
-                class="h-6 w-6 flex-shrink-0 text-base-content-highlight"
+                class="h-6 w-6 shrink-0 text-base-content-highlight"
               />
             </div>
 
@@ -171,7 +171,7 @@
             </svg>
 
             <!-- Tier -->
-            <div class="relative rounded-2xl bg-base-1000/70 ring-1 ring-base-0/10 backdrop-blur">
+            <div class="relative rounded-2xl bg-base-1000/70 ring-1 ring-base-0/10 backdrop-blur-sm">
               <div class="p-8 lg:pt-12 xl:p-10">
                 <!-- -->
 

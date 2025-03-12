@@ -43,7 +43,7 @@
 
     <div
       :class="{
-        '!fixed': isPostsPage,
+        'fixed!': isPostsPage,
         'bg-base-1000/60 shadow-lg backdrop-blur-lg backdrop-saturate-200 md:border-b-2': isPostsPage && !isOnTop
       }"
       class="absolute inset-x-0 top-0 z-10 border-base-0/20 transition duration-200"
@@ -83,7 +83,7 @@
         <div class="flex flex-1 items-center justify-center">
           <NuxtLink
             v-if="!isPageWithLogoDisabled"
-            class="focus-visible:focus-outline-util flex-shrink-0"
+            class="focus-visible:focus-outline-util shrink-0"
             to="/"
           >
             <img

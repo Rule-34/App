@@ -531,7 +531,7 @@
                 <img
                   :src="`https://icons.duckduckgo.com/ip2/${featuredDomain.domain}.ico`"
                   alt="Favicon"
-                  class="h-5 w-5 rounded"
+                  class="h-5 w-5 rounded-sm"
                   height="128"
                   loading="eager"
                   width="128"

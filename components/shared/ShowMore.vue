@@ -41,7 +41,7 @@
       <!--  TODO: Fix problem with overflow, as it doesnt take full width -->
       <div
         v-if="shouldBeExpanded"
-        class="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-base-1000 via-transparent"
+        class="pointer-events-none absolute inset-0 z-10 bg-linear-to-t from-base-1000 via-transparent"
       />
     </div>
 

@@ -122,7 +122,7 @@
       </HeadlessMenuButton>
 
       <HeadlessMenuItems
-        class="w-56 divide-y divide-base-0/20 rounded-md bg-base-1000 ring-1 ring-base-0/20 focus:outline-none"
+        class="w-56 divide-y divide-base-0/20 rounded-md bg-base-1000 ring-1 ring-base-0/20 focus:outline-hidden"
       >
         <!-- No source found -->
         <div
@@ -152,7 +152,7 @@
                 <img
                   :src="`https://icons.duckduckgo.com/ip2/${getHostnameFromUrl(source)}.ico`"
                   alt="Favicon"
-                  class="mr-3 h-5 w-5 flex-shrink-0 rounded"
+                  class="mr-3 h-5 w-5 shrink-0 rounded-sm"
                   height="128"
                   loading="eager"
                   width="128"
@@ -187,7 +187,7 @@
               <img
                 :src="`https://icons.duckduckgo.com/ip2/${getHostnameFromUrl(service.link)}.ico`"
                 alt="Favicon"
-                class="mr-3 h-5 w-5 flex-shrink-0 rounded"
+                class="mr-3 h-5 w-5 shrink-0 rounded-sm"
                 height="128"
                 loading="eager"
                 width="128"
@@ -213,7 +213,7 @@
               <img
                 :src="`https://icons.duckduckgo.com/ip2/${getHostnameFromUrl(service.link)}.ico`"
                 alt="Favicon"
-                class="mr-3 h-5 w-5 flex-shrink-0 rounded"
+                class="mr-3 h-5 w-5 shrink-0 rounded-sm"
                 height="128"
                 loading="eager"
                 width="128"

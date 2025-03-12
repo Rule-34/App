@@ -60,7 +60,7 @@
     >
       <!-- Select -->
       <HeadlessListboxButton
-        :class="[props.compact ? 'flex w-auto items-stretch !rounded-full !p-2.5' : 'w-56']"
+        :class="[props.compact ? 'flex w-auto items-stretch rounded-full! p-2.5!' : 'w-56']"
         class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util relative cursor-default rounded-md bg-transparent py-1.5 pl-3 pr-10 text-left ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
         v-bind="$attrs"
       >
@@ -68,7 +68,7 @@
           <img
             :src="`https://icons.duckduckgo.com/ip2/${props.modelValue.domain}.ico`"
             alt="Favicon"
-            class="h-5 w-5 flex-shrink-0 rounded"
+            class="h-5 w-5 shrink-0 rounded-sm"
             height="128"
             loading="eager"
             width="128"
@@ -94,7 +94,7 @@
 
       <!-- Menu -->
       <HeadlessListboxOptions
-        class="max-h-[23rem] w-full max-w-sm overflow-auto rounded-md bg-base-1000 py-1 ring-1 ring-base-0/20 focus:outline-none sm:text-sm"
+        class="max-h-[23rem] w-full max-w-sm overflow-auto rounded-md bg-base-1000 py-1 ring-1 ring-base-0/20 focus:outline-hidden sm:text-sm"
       >
         <!-- Options -->
         <HeadlessListboxOption
@@ -112,7 +112,7 @@
               <img
                 :src="`https://icons.duckduckgo.com/ip2/${booru.domain}.ico`"
                 alt="Favicon"
-                class="h-5 w-5 flex-shrink-0 rounded"
+                class="h-5 w-5 shrink-0 rounded-sm"
                 height="128"
                 loading="eager"
                 width="128"
@@ -145,7 +145,7 @@
 
         <!-- Add more button -->
         <div class="hover:hover-text-util hover:hover-bg-util group flex items-center px-3 py-2">
-          <PlusIcon class="group-hover:hover-text-util h-5 w-5 rounded" />
+          <PlusIcon class="group-hover:hover-text-util h-5 w-5 rounded-sm" />
 
           <NuxtLink
             :href="isPremium ? '/premium/additional-boorus' : '/premium'"
