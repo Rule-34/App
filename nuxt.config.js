@@ -1,5 +1,3 @@
-import tailwindcss from '@tailwindcss/vite'
-
 export default defineNuxtConfig({
   ssr: true,
   spaLoadingTemplate: true,
@@ -200,16 +198,6 @@ export default defineNuxtConfig({
     }
   },
 
-  build: {
-    transpile: ['vue-sonner']
-  },
-
-  vite: {
-    plugins: [
-      tailwindcss(),
-    ],
-  },
-
   sourcemap: true,
 
   runtimeConfig: {
@@ -242,11 +230,8 @@ export default defineNuxtConfig({
    */
   modules: [
     '@sentry/nuxt/module',
-    'nuxt-headlessui',
-    '@headlessui-float/nuxt',
-    'vue-sonner/nuxt',
+    '@nuxt/ui-pro',
     '@nuxt/image',
-    '@nuxt/fonts',
     '@formkit/auto-animate/nuxt',
     '@vite-pwa/nuxt',
     '@nuxt/scripts',

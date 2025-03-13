@@ -1,12 +1,10 @@
-<script lang="ts" setup>
-  import { CloudArrowDownIcon } from '@heroicons/vue/24/solid'
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <ClientOnly>
     <div
       v-if="$pwa?.needRefresh"
-      class="container mx-auto mb-4 max-w-3xl border-x border-b border-base-0/20 bg-transparent p-4"
+      class="border-base-0/20 container mx-auto mb-4 max-w-3xl border-x border-b bg-transparent p-4"
       role="alert"
     >
       <div class="flex items-center">
@@ -16,14 +14,14 @@
         />
         <span class="sr-only">Info</span>
 
-        <h3 class="text-lg font-medium text-base-content-highlight">There is a new update</h3>
+        <h3 class="text-base-content-highlight text-lg font-medium">There is a new update</h3>
       </div>
 
-      <div class="mb-4 mt-2 text-sm">Refresh or click the button below to apply the update</div>
+      <div class="mt-2 mb-4 text-sm">Refresh or click the button below to apply the update</div>
 
       <div class="flex">
         <button
-          class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util w-full items-center rounded-md border border-base-0/20 px-3 py-2 text-center text-center text-sm font-medium text-base-content-highlight"
+          class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util border-base-0/20 text-base-content-highlight w-full items-center rounded-md border px-3 py-2 text-center text-sm font-medium"
           type="button"
           @click="$pwa.updateServiceWorker()"
         >
@@ -36,7 +34,7 @@
 
 <style>
   .pwa-toast {
-    @apply fixed bottom-0 right-0 z-50 m-4 rounded-md border border-base-0/20 p-3 text-left;
+    @apply border-base-0/20 fixed right-0 bottom-0 z-50 m-4 rounded-md border p-3 text-left;
   }
 
   .pwa-toast .message {
@@ -44,6 +42,6 @@
   }
 
   .pwa-toast button {
-    @apply mr-2 rounded-md border border-base-0/20 px-3 py-1 outline-none;
+    @apply border-base-0/20 mr-2 rounded-md border px-3 py-1 outline-none;
   }
 </style>

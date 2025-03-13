@@ -1,8 +1,9 @@
 <script setup>
-  provideHeadlessUseId(() => useId())
-
   const route = useRoute()
   const config = useRuntimeConfig()
+  const colorMode = useColorMode()
+
+  const color = computed(() => (colorMode.value === 'dark' ? 'black' : 'white'))
 
   const canonicalUrl = computed(() => {
     const url = 'https://' + config.public.APP_DOMAIN + route.fullPath
@@ -65,8 +66,8 @@
 
     rating: 'adult',
 
-    colorScheme: 'dark',
-    themeColor: '#000',
+    colorScheme: colorMode.value,
+    themeColor: color,
 
     monetization: '$ilp.uphold.com/Hf3zAn3pQ7fD',
 
@@ -108,16 +109,18 @@
 </script>
 
 <template>
-  <VitePwaManifest />
+  <UApp>
+    <VitePwaManifest />
 
-  <NuxtLoadingIndicator
-    :height="5"
-    :throttle="250"
-  />
+    <NuxtLoadingIndicator
+      :height="5"
+      :throttle="250"
+    />
 
-  <NuxtRouteAnnouncer />
+    <NuxtRouteAnnouncer />
 
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+  </UApp>
 </template>

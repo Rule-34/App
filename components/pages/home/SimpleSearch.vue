@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-  import { CheckIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
   import { watchDebounced } from '@vueuse/core'
   import { abbreviateNumber } from 'js-abbreviation-number'
   import Tag from '~/assets/js/tag.dto'
@@ -76,13 +75,13 @@
       <div class="group relative">
         <!-- Icon -->
         <div class="group pointer-events-none absolute inset-y-0 left-0 flex items-center rounded-l-md px-2">
-          <MagnifyingGlassIcon class="h-5 w-5 text-base-content group-hover:text-base-content-hover" />
+          <MagnifyingGlassIcon class="text-base-content group-hover:text-base-content-hover h-5 w-5" />
         </div>
 
         <!-- Input -->
         <HeadlessComboboxInput
           :displayValue="(tag) => tag?.name"
-          class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util w-full rounded-full border-0 bg-transparent px-9 py-2 text-base-content-highlight ring-1 ring-inset ring-base-0/20 sm:text-sm"
+          class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util text-base-content-highlight ring-base-0/20 w-full rounded-full border-0 bg-transparent px-9 py-2 ring-1 ring-inset sm:text-sm"
           placeholder="Search for tags: genshin_impact"
           @change="onComboboxInputChange"
         />
@@ -94,7 +93,7 @@
 
         <!-- Options -->
         <HeadlessComboboxOptions
-          class="absolute z-20 mt-2 max-h-72 w-full overflow-auto rounded-md bg-base-1000 py-1 text-base ring-1 ring-base-0/20 sm:text-sm"
+          class="bg-base-1000 ring-base-0/20 absolute z-20 mt-2 max-h-72 w-full overflow-auto rounded-md py-1 text-base ring-1 sm:text-sm"
         >
           <!-- Custom option -->
           <!-- TODO: History based -->
@@ -106,7 +105,7 @@
           >
             <div
               :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-              class="relative cursor-default select-none py-2 pl-8"
+              class="relative cursor-default py-2 pl-8 select-none"
             >
               <span :class="['block truncate', selected && 'font-semibold']">
                 Search “{{ customTagFromQuery.name }}” tag
@@ -114,7 +113,7 @@
 
               <span
                 v-if="selected"
-                class="absolute inset-y-0 left-0 flex items-center pl-1.5 text-base-content-highlight"
+                class="text-base-content-highlight absolute inset-y-0 left-0 flex items-center pl-1.5"
               >
                 <CheckIcon class="h-5 w-5" />
               </span>
@@ -130,12 +129,12 @@
           >
             <div
               :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-              class="relative cursor-default select-none py-2 pl-8 pr-12"
+              class="relative cursor-default py-2 pr-12 pl-8 select-none"
             >
               <!-- Check icon -->
               <span
                 v-if="selected"
-                class="absolute inset-y-0 left-0 flex items-center pl-1.5 text-base-content-highlight"
+                class="text-base-content-highlight absolute inset-y-0 left-0 flex items-center pl-1.5"
               >
                 <CheckIcon class="h-5 w-5" />
               </span>

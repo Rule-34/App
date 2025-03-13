@@ -1,5 +1,4 @@
 <script setup>
-  import { ArrowUpIcon } from '@heroicons/vue/24/solid'
   import { useScroll } from '@vueuse/core'
 
   const showScrollTopButton = ref(false)
@@ -41,7 +40,7 @@
     >
       <button
         v-show="showScrollTopButton"
-        class="hover:hover-text-util hover:hover-bg-util fixed bottom-4 right-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-base-1000/60 text-base-content-highlight ring-2 ring-base-0/20 backdrop-blur-lg backdrop-saturate-200"
+        class="hover:hover-text-util hover:hover-bg-util bg-base-1000/60 text-base-content-highlight ring-base-0/20 fixed right-4 bottom-4 z-10 flex h-12 w-12 items-center justify-center rounded-full ring-2 backdrop-blur-lg backdrop-saturate-200"
         type="button"
         @click="scrollToTop"
       >

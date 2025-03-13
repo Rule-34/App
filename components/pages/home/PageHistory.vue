@@ -1,6 +1,5 @@
 <script lang="ts" setup>
   import { formatTimeAgo } from '@vueuse/core'
-  import { XMarkIcon } from '@heroicons/vue/20/solid'
 
   const { isPremium } = useUserData()
   const { pageHistory } = usePageHistory()
@@ -64,20 +63,20 @@
       <div
         :class="[
           index === pageHistory.length - 1 ? 'h-6' : '-bottom-6',
-          'absolute left-0 top-0 flex w-6 justify-center'
+          'absolute top-0 left-0 flex w-6 justify-center'
         ]"
       >
-        <div class="w-px bg-base-0/20" />
+        <div class="bg-base-0/20 w-px" />
       </div>
 
       <!-- Icon (dot) -->
-      <div class="relative flex h-6 w-6 flex-none items-center justify-center bg-base-1000">
-        <div class="h-1.5 w-1.5 rounded-full bg-base-0/10 ring-1 ring-base-0/20" />
+      <div class="bg-base-1000 relative flex h-6 w-6 flex-none items-center justify-center">
+        <div class="bg-base-0/10 ring-base-0/20 h-1.5 w-1.5 rounded-full ring-1" />
       </div>
 
       <!-- Text -->
       <button
-        class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util flex-auto whitespace-pre-wrap rounded-md px-1 py-0.5 text-left text-xs leading-5"
+        class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util flex-auto rounded-md px-1 py-0.5 text-left text-xs leading-5 whitespace-pre-wrap"
         type="button"
         @click="onHistoryItemClick(historyItem.path)"
       >

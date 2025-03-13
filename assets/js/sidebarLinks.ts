@@ -1,27 +1,13 @@
-import {
-  ArrowDownTrayIcon,
-  BuildingLibraryIcon,
-  Cog6ToothIcon,
-  HomeIcon,
-  NewspaperIcon,
-  QuestionMarkCircleIcon,
-  UserGroupIcon
-} from '@heroicons/vue/24/outline'
-
 export const sidebarNavigation = [
   {
-    name: 'Home',
-    icon: HomeIcon,
-
-    href: '/',
-    isExternal: false
+    label: 'Home',
+    icon: 'i-heroicons-home',
+    to: '/'
   },
   {
-    name: 'Other sites',
-    icon: UserGroupIcon,
-
-    href: '/other-sites',
-    isExternal: false
+    label: 'Other sites',
+    icon: 'i-heroicons-user-group',
+    to: '/other-sites'
   },
 
   // Hide "Install App" when in standalone mode
@@ -29,39 +15,38 @@ export const sidebarNavigation = [
     ? []
     : [
         {
-          name: 'Install App',
-          icon: ArrowDownTrayIcon,
-          href: 'https://www.installpwa.com/from/r34.app',
-          isExternal: true
+          label: 'Install App',
+          icon: 'i-heroicons-arrow-down-tray',
+          to: 'https://www.installpwa.com/from/r34.app',
+          target: '_blank'
         }
       ]),
 
   {
-    name: 'F.A.Q.',
-    icon: QuestionMarkCircleIcon,
-
-    href: 'https://rule34.app/frequently-asked-questions',
-    isExternal: true
+    label: 'Feedback',
+    icon: 'i-heroicons-pencil-square',
+    to: 'https://feedback.r34.app',
+    target: '_blank'
   },
   {
-    name: 'Blog',
-    icon: NewspaperIcon,
-
-    href: 'https://r34.app/blog',
-    isExternal: false
+    label: 'F.A.Q.',
+    icon: 'i-heroicons-question-mark-circle',
+    to: 'https://rule34.app/frequently-asked-questions',
+    target: '_blank'
   },
   {
-    name: 'Legal',
-    icon: BuildingLibraryIcon,
-
-    href: '/legal',
-    isExternal: false
+    label: 'Blog',
+    icon: 'i-heroicons-newspaper',
+    to: 'https://r34.app/blog'
   },
   {
-    name: 'Settings',
-    icon: Cog6ToothIcon,
-
-    href: '/settings',
-    isExternal: false
+    label: 'Legal',
+    icon: 'i-heroicons-building-library',
+    to: '/legal'
+  },
+  {
+    label: 'Settings',
+    icon: 'i-heroicons-cog-6-tooth',
+    to: '/settings'
   }
 ]

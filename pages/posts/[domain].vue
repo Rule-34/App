@@ -1,13 +1,11 @@
 <script lang="ts" setup>
-  import { Bars3BottomRightIcon, EyeIcon, MagnifyingGlassIcon, StarIcon } from '@heroicons/vue/24/outline'
-  import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
   import * as Sentry from '@sentry/nuxt'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
   import { cloneDeep, throttle } from 'es-toolkit'
   import { FetchError } from 'ofetch'
   import type { Ref } from 'vue'
-  import { toast } from 'vue-sonner'
+
   import { generatePostsRoute } from '~/assets/js/RouterHelper'
   import { tagArrayToTitle } from '~/assets/js/SeoHelper'
   import type { Domain } from '~/assets/js/domain'

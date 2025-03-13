@@ -1,6 +1,4 @@
-<script lang="ts" setup>
-  import { BookmarkIcon } from '@heroicons/vue/24/outline'
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <button
@@ -9,6 +7,6 @@
   >
     <span class="sr-only"> Save post </span>
 
-    <BookmarkIcon class="group-hover:hover-text-util h-5 w-5 text-base-content" />
+    <BookmarkIcon class="group-hover:hover-text-util text-base-content h-5 w-5" />
   </button>
 </template>

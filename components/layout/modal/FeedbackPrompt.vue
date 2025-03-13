@@ -1,7 +1,4 @@
 <script lang="ts" setup>
-  import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline'
-  import { ArrowPathIcon } from '@heroicons/vue/24/solid'
-
   defineProps<{
     close: () => void
   }>()
@@ -22,7 +19,7 @@
     <div class="mt-3 text-center sm:mt-5">
       <HeadlessDialogTitle
         as="h3"
-        class="text-base font-semibold leading-6 text-base-content-highlight"
+        class="text-base-content-highlight text-base leading-6 font-semibold"
       >
         Got a minute?
       </HeadlessDialogTitle>
@@ -58,7 +55,7 @@
   <!-- Actions -->
   <div class="mt-5 sm:mt-6">
     <button
-      class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-xs ring-1 ring-inset ring-base-0/20"
+      class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-xs ring-1 ring-inset"
       type="button"
       @click="close()"
     >

@@ -1,13 +1,4 @@
 <script lang="ts" setup>
-  import {
-    ArrowTopRightOnSquareIcon,
-    MagnifyingGlassIcon,
-    MinusIcon,
-    NoSymbolIcon,
-    PlusIcon,
-    ShieldExclamationIcon
-  } from '@heroicons/vue/24/outline'
-  import { toast } from 'vue-sonner'
   import type Tag from '~/assets/js/tag.dto'
 
   const props = defineProps<{
@@ -64,18 +55,18 @@
   >
     <!-- TODO: Fix placement to be auto -->
     <Float
-      vue-transition
       :offset="6"
       enter="transition ease-out duration-100"
       enter-from="transform opacity-0 scale-95"
       enter-to="transform opacity-100 scale-100"
+      flip
       leave="transition ease-in duration-75"
       leave-from="transform opacity-100 scale-100"
       leave-to="transform opacity-0 scale-95"
       placement="bottom-start"
-      flip
       portal
       tailwindcss-origin-class
+      vue-transition
     >
       <HeadlessMenuButton
         :class="{
@@ -89,13 +80,13 @@
             (selectedTag) => selectedTag.name === tag.name
           )
         }"
-        class="focus-visible:focus-outline-util hover:hover-text-util select-none items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset ring-base-0/20"
+        class="focus-visible:focus-outline-util hover:hover-text-util ring-base-0/20 items-center rounded-full px-2 py-1 text-xs font-medium ring-1 select-none ring-inset"
       >
         {{ tag.name }}
       </HeadlessMenuButton>
 
       <HeadlessMenuItems
-        class="divide-y divide-base-0/20 rounded-md bg-base-1000 ring-1 ring-base-0/20 focus:outline-hidden"
+        class="divide-base-0/20 bg-base-1000 ring-base-0/20 divide-y rounded-md ring-1 focus:outline-hidden"
       >
         <!-- Add or Remove tag -->
         <div class="py-1">

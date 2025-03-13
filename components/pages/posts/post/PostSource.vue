@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-  import { LinkIcon } from '@heroicons/vue/24/outline'
-  import { toast } from 'vue-sonner'
   import type { IPost } from '~/assets/js/post.dto'
 
   const props = defineProps<{
@@ -118,11 +116,11 @@
       >
         <span class="sr-only"> Open post source options </span>
 
-        <LinkIcon class="group-hover:hover-text-util h-5 w-5 text-base-content" />
+        <LinkIcon class="group-hover:hover-text-util text-base-content h-5 w-5" />
       </HeadlessMenuButton>
 
       <HeadlessMenuItems
-        class="w-56 divide-y divide-base-0/20 rounded-md bg-base-1000 ring-1 ring-base-0/20 focus:outline-hidden"
+        class="divide-base-0/20 bg-base-1000 ring-base-0/20 w-56 divide-y rounded-md ring-1 focus:outline-hidden"
       >
         <!-- No source found -->
         <div
@@ -165,7 +163,7 @@
             </template>
 
             <template v-else>
-              <span class="block break-words px-4 py-2 text-sm">
+              <span class="block px-4 py-2 text-sm break-words">
                 {{ source }}
               </span>
             </template>
@@ -180,7 +178,7 @@
           >
             <button
               :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-              class="group flex w-full items-center px-4 py-2 text-sm ui-disabled:cursor-not-allowed ui-disabled:opacity-50"
+              class="group ui-disabled:cursor-not-allowed ui-disabled:opacity-50 flex w-full items-center px-4 py-2 text-sm"
               type="button"
               @click="openSourceFinder(service.link)"
             >
@@ -206,7 +204,7 @@
           >
             <button
               :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-              class="group flex w-full items-center px-4 py-2 text-sm ui-disabled:cursor-not-allowed ui-disabled:opacity-50"
+              class="group ui-disabled:cursor-not-allowed ui-disabled:opacity-50 flex w-full items-center px-4 py-2 text-sm"
               type="button"
               @click="openSourceFinder(service.link)"
             >

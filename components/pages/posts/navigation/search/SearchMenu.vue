@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-  import { CheckIcon, ChevronUpDownIcon, MagnifyingGlassIcon, NoSymbolIcon, PlusIcon } from '@heroicons/vue/20/solid'
-  import { TagIcon } from '@heroicons/vue/24/outline'
   import { watchDebounced } from '@vueuse/core'
   import { abbreviateNumber } from 'js-abbreviation-number'
   import { cloneDeep, unionWith } from 'es-toolkit'
@@ -169,19 +167,19 @@
       by="name"
       multiple
     >
-      <HeadlessComboboxLabel class="block text-center text-3xl font-semibold tracking-wide text-base-content-highlight">
+      <HeadlessComboboxLabel class="text-base-content-highlight block text-center text-3xl font-semibold tracking-wide">
         Search
       </HeadlessComboboxLabel>
 
       <div class="group relative mt-4">
         <!-- Icon -->
         <div class="group pointer-events-none absolute inset-y-0 left-0 flex items-center rounded-l-md px-2">
-          <MagnifyingGlassIcon class="h-5 w-5 text-base-content group-hover:text-base-content-hover" />
+          <MagnifyingGlassIcon class="text-base-content group-hover:text-base-content-hover h-5 w-5" />
         </div>
 
         <!-- Input -->
         <HeadlessComboboxInput
-          class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util w-full rounded-full border-0 bg-base-1000 px-9 py-2 text-base-content-highlight ring-1 ring-inset ring-base-0/20 sm:text-sm"
+          class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util bg-base-1000 text-base-content-highlight ring-base-0/20 w-full rounded-full border-0 px-9 py-2 ring-1 ring-inset sm:text-sm"
           placeholder="Search for tags"
           @change="onComboboxInputChange"
         />
@@ -191,13 +189,13 @@
           ref="comboboxButtonRef"
           class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2"
         >
-          <ChevronUpDownIcon class="h-5 w-5 text-base-content group-hover:text-base-content-hover" />
+          <ChevronUpDownIcon class="text-base-content group-hover:text-base-content-hover h-5 w-5" />
         </HeadlessComboboxButton>
 
         <!-- Options -->
         <HeadlessComboboxOptions
           ref="comboboxOptionsRef"
-          class="absolute z-10 mt-2 max-h-72 w-full overflow-auto rounded-md bg-base-1000 py-1 text-base ring-1 ring-base-0/20 sm:text-sm"
+          class="bg-base-1000 ring-base-0/20 absolute z-10 mt-2 max-h-72 w-full overflow-auto rounded-md py-1 text-base ring-1 sm:text-sm"
         >
           <!-- Custom option -->
           <!-- TODO: History based -->
@@ -208,7 +206,7 @@
           >
             <div
               :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-              class="relative cursor-default select-none py-2 pl-8"
+              class="relative cursor-default py-2 pl-8 select-none"
             >
               <span :class="['block truncate', selected && 'font-semibold']">
                 Create “{{ customTagFromQuery.name }}” tag
@@ -216,7 +214,7 @@
 
               <span
                 v-if="selected"
-                class="absolute inset-y-0 left-0 flex items-center pl-1.5 text-base-content-highlight"
+                class="text-base-content-highlight absolute inset-y-0 left-0 flex items-center pl-1.5"
               >
                 <CheckIcon class="h-5 w-5" />
               </span>
@@ -232,12 +230,12 @@
           >
             <div
               :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-              class="relative cursor-default select-none py-2 pl-8 pr-12"
+              class="relative cursor-default py-2 pr-12 pl-8 select-none"
             >
               <!-- Check icon -->
               <span
                 v-if="selected"
-                class="absolute inset-y-0 left-0 flex items-center pl-1.5 text-base-content-highlight"
+                class="text-base-content-highlight absolute inset-y-0 left-0 flex items-center pl-1.5"
               >
                 <CheckIcon class="h-5 w-5" />
               </span>
@@ -266,13 +264,13 @@
       <!-- Tag Collections Toggler -->
       <div>
         <button
-          class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util inline-flex items-center gap-x-1.5 rounded-md px-2 py-1 ring-1 ring-base-0/20"
+          class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util ring-base-0/20 inline-flex items-center gap-x-1.5 rounded-md px-2 py-1 ring-1"
           type="button"
           @click="isTagCollectionsActive = !isTagCollectionsActive"
         >
           <TagIcon class="-ml-0.5 h-[1.15rem] w-[1.15rem]" />
 
-          <span class="whitespace-nowrap text-sm font-medium">Collections</span>
+          <span class="text-sm font-medium whitespace-nowrap">Collections</span>
         </button>
 
         <BottomSheetWrapper v-model="isTagCollectionsActive">
@@ -293,9 +291,9 @@
         <component
           :is="getFilterComponent(filter.type)"
           v-model="selectedFilters[key]"
+          :icon="filter.icon"
           :label="filter.label"
           :options="filter.options"
-          :icon="filter.icon"
         />
       </template>
     </section>
@@ -304,7 +302,7 @@
   <!-- Tags -->
   <section class="flex-1 overflow-y-auto">
     <div v-if="selectedTags.length">
-      <p class="block text-lg font-medium text-base-content">Selected tags</p>
+      <p class="text-base-content block text-lg font-medium">Selected tags</p>
 
       <!-- Selected tags -->
       <ol class="mt-2 flex flex-wrap gap-2.5 rounded-md">
@@ -322,7 +320,7 @@
             :class="{
               'line-through': isTagExcluded(tag.name)
             }"
-            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util group inline-flex items-center rounded-l-full border border-r-0 border-base-0/20 py-1 pl-2.5 pr-1.5 focus-visible:ring-inset"
+            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util group border-base-0/20 inline-flex items-center rounded-l-full border border-r-0 py-1 pr-1.5 pl-2.5 focus-visible:ring-inset"
             type="button"
             @click="removeTagFromSelectedTags(index)"
           >
@@ -333,7 +331,7 @@
 
           <!-- Exclude button -->
           <button
-            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util group inline-flex h-full items-center rounded-r-full border border-base-0/20 py-1 pl-1.5 pr-2.5 focus-visible:ring-inset"
+            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util group border-base-0/20 inline-flex h-full items-center rounded-r-full border py-1 pr-2.5 pl-1.5 focus-visible:ring-inset"
             type="button"
             @click="toggleSelectedTagAsExcluded(index)"
           >
@@ -366,7 +364,7 @@
     </p>
 
     <button
-      class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto inline-flex w-full items-center justify-center rounded-md px-3 py-1 text-base ring-1 ring-base-0/20"
+      class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 mx-auto inline-flex w-full items-center justify-center rounded-md px-3 py-1 text-base ring-1"
       type="submit"
       @click="onSubmitted"
     >

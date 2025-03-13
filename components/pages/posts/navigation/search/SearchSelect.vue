@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-  import { CheckIcon, ChevronDownIcon } from '@heroicons/vue/20/solid'
-
   const props = defineProps({
     modelValue: {
       type: Object,
@@ -44,15 +42,15 @@
       vue-transition
     >
       <!-- Button -->
-      <div class="inline-flex divide-x divide-base-0/20 rounded-md ring-1 ring-base-0/20">
+      <div class="divide-base-0/20 ring-base-0/20 inline-flex divide-x rounded-md ring-1">
         <!-- Left side -->
-        <div class="inline-flex items-center gap-x-1.5 rounded-l-md px-2 py-1 text-base-content">
+        <div class="text-base-content inline-flex items-center gap-x-1.5 rounded-l-md px-2 py-1">
           <component
             :is="icon"
             class="-ml-0.5 h-5 w-5"
           />
 
-          <span class="whitespace-nowrap text-sm font-medium">{{ modelValue.label }}</span>
+          <span class="text-sm font-medium whitespace-nowrap">{{ modelValue.label }}</span>
         </div>
 
         <!-- Right side -->
@@ -66,7 +64,7 @@
       </div>
 
       <HeadlessListboxOptions
-        class="w-44 divide-y divide-base-0/20 overflow-hidden rounded-md bg-base-1000 ring-1 ring-inset ring-base-0/20 focus:outline-hidden"
+        class="divide-base-0/20 bg-base-1000 ring-base-0/20 w-44 divide-y overflow-hidden rounded-md ring-1 ring-inset focus:outline-hidden"
       >
         <HeadlessListboxOption
           v-for="option in options"
@@ -76,7 +74,7 @@
         >
           <div
             :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-            class="cursor-default select-none px-4 py-2.5 text-sm"
+            class="cursor-default px-4 py-2.5 text-sm select-none"
           >
             <div class="flex flex-col">
               <div class="flex justify-between">

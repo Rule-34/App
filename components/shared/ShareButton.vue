@@ -1,6 +1,5 @@
 <script lang="ts" setup>
   import * as Sentry from '@sentry/nuxt'
-  import { ShareIcon } from '@heroicons/vue/24/outline'
 
   interface ShareButtonProps {
     title: string

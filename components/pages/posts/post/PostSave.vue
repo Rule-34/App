@@ -1,8 +1,6 @@
 <script lang="ts" setup>
-  import { BookmarkIcon } from '@heroicons/vue/24/outline'
-  import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/vue/24/solid'
   import { PocketbasePost } from '~/assets/js/pocketbase.dto'
-  import type { IPost } from '~/assets/js/post.dto'
+  import type { IPost } from '~/assets/js/post.dto' // TODO: Load this component in <suspense>
 
   // TODO: Load this component in <suspense>
 
@@ -75,11 +73,11 @@
 
     <SolidBookmarkIcon
       v-if="isPostSaved"
-      class="group-hover:hover-text-util h-5 w-5 text-base-content-highlight"
+      class="group-hover:hover-text-util text-base-content-highlight h-5 w-5"
     />
     <BookmarkIcon
       v-else
-      class="group-hover:hover-text-util h-5 w-5 text-base-content"
+      class="group-hover:hover-text-util text-base-content h-5 w-5"
     />
   </button>
 </template>

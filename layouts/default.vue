@@ -1,6 +1,6 @@
 <script setup>
   import { useEventListener } from '@vueuse/core'
-  import { toast, Toaster } from 'vue-sonner'
+  import { sidebarNavigation } from 'assets/js/sidebarLinks'
 
   useAppStatistics()
 
@@ -21,7 +21,6 @@
     toast.error(error.message)
   })
 
-
   // Restore scroll position after fullscreen
   useEventListener('fullscreenchange', async (event) => {
     const isInFullscreen = document.fullscreenElement !== null
@@ -36,10 +35,9 @@
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-
         event.target.scrollIntoView({
           block: 'center',
-          inline: 'center',
+          inline: 'center'
         })
       })
     })
@@ -64,7 +62,7 @@
       class="absolute inset-x-0 -z-10 flex transform-gpu justify-center blur-xl md:blur-3xl"
     >
       <div
-        class="aspect-1108/632 w-full flex-none bg-linear-to-l from-primary-300 to-accent-700 opacity-25"
+        class="aspect-1108/632 w-full flex-none bg-linear-to-l from-sky-300 to-violet-700 opacity-25"
         style="
           clip-path: polygon(
             100% 0%,
@@ -80,28 +78,109 @@
       />
     </div>
 
-    <!-- TODO: Restore when needed -->
-    <!--    <PwaUpdater />-->
-
     <ClientOnly>
-      <Toaster
-        :expand="true"
-        close-button
-        position="top-center"
-        theme="dark"
-      />
-
-      <DialogManager />
+      <!--      <DialogManager />-->
     </ClientOnly>
 
-    <SidebarWrapper>
-      <LazySidebar />
-    </SidebarWrapper>
+    <UDashboardGroup
+      :persistent="false"
+      storage="local"
+    >
+      <UDashboardSidebar
+        :max-size="20"
+        :ui="{
+          root: 'divide-y-none',
+          footer: 'justify-between'
+        }"
+      >
+        <template #default="{ collapsed }">
+          <UNavigationMenu
+            :collapsed="collapsed"
+            :items="sidebarNavigation"
+            orientation="vertical"
+          />
+        </template>
 
-    <Navbar />
+        <template #footer="{ collapsed }">
+          <UButton
+            :ui="{
+              leadingIcon: 'group-hover:text-[#5865F2]'
+            }"
+            aria-label="Discord"
+            class="group flex-col text-sm"
+            icon="fa6-brands:discord"
+            target="_blank"
+            to="https://discord.gg/fUhYHSZ"
+            variant="ghost"
+          >
+            Discord
+          </UButton>
 
-    <!-- Layout content -->
-    <!-- Use `flex-1` to take all remaining space -->
-    <slot />
+          <UButton
+            aria-label="GitHub"
+            class="flex-col text-sm"
+            icon="fa6-brands:github"
+            target="_blank"
+            to="https://github.com/Rule-34/App"
+            variant="ghost"
+          >
+            GitHub
+          </UButton>
+
+          <UButton
+            :ui="{
+              leadingIcon: 'group-hover:text-[#1DA1F2]'
+            }"
+            aria-label="Twitter"
+            class="group flex-col text-sm"
+            icon="fa6-brands:twitter"
+            target="_blank"
+            to="https://twitter.com/Rule34App"
+            variant="ghost"
+          >
+            Twitter
+          </UButton>
+        </template>
+      </UDashboardSidebar>
+
+      <UDashboardPanel id="navbar">
+        <template #header>
+          <UDashboardNavbar
+            :toggle="{
+              class: 'hover:bg-(--ui-primary)/10 focus-visible:bg-(--ui-primary)/10'
+            }"
+            :ui="{
+              root: 'border-none'
+            }"
+          >
+            <!-- -->
+
+            <template #leading>
+              <UButton
+                class="gap-1 font-medium uppercase"
+                to="/"
+                variant="ghost"
+              >
+                R34.App
+              </UButton>
+            </template>
+
+            <template #right>
+              <UDashboardSearchButton
+                :kbds="[]"
+                class="hover:bg-(--ui-primary)/10 focus-visible:bg-(--ui-primary)/10"
+                label="Search"
+                variant="ghost"
+              >
+              </UDashboardSearchButton>
+            </template>
+          </UDashboardNavbar>
+        </template>
+
+        <template #body>
+          <slot />
+        </template>
+      </UDashboardPanel>
+    </UDashboardGroup>
   </div>
 </template>

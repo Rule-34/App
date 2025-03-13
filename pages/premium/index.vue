@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-  import { CheckIcon, StarIcon } from '@heroicons/vue/20/solid'
-  import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
   import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 
   const mainFeatures = [
@@ -53,9 +51,9 @@
         class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative flex items-center gap-x-2 rounded-md p-2"
         href="/premium/sign-in"
       >
-        <span class="text-sm text-base-content">Sign in</span>
+        <span class="text-base-content text-sm">Sign in</span>
 
-        <ArrowRightOnRectangleIcon class="h-6 w-6 text-base-content-highlight" />
+        <ArrowRightOnRectangleIcon class="text-base-content-highlight h-6 w-6" />
       </NuxtLink>
     </Teleport>
   </ClientOnly>
@@ -70,11 +68,11 @@
           <!-- Header -->
           <div class="relative z-10">
             <!-- Title -->
-            <h1 class="mx-auto max-w-4xl text-center text-2xl font-bold tracking-tight text-base-content-highlight">
+            <h1 class="text-base-content-highlight mx-auto max-w-4xl text-center text-2xl font-bold tracking-tight">
               Browse Ad-free & Save Posts
             </h1>
 
-            <p class="mx-auto mt-3 max-w-3xl text-center text-lg font-medium leading-7 lg:mt-3">
+            <p class="mx-auto mt-3 max-w-3xl text-center text-lg leading-7 font-medium lg:mt-3">
               Focus on Hentai without distractions, save posts to view them later, faster image loading and much more!
             </p>
           </div>
@@ -82,7 +80,7 @@
           <!-- CTA -->
           <div class="mt-10 flex justify-center">
             <NuxtLink
-              class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto inline-flex items-center justify-center rounded-lg px-6 py-2 text-lg font-medium text-base-content-highlight ring-1 ring-base-0/20"
+              class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util text-base-content-highlight ring-base-0/20 mx-auto inline-flex items-center justify-center rounded-lg px-6 py-2 text-lg font-medium ring-1"
               href="#pricing"
             >
               Get Premium
@@ -101,7 +99,7 @@
                 v-for="rating in [0, 1, 2, 3, 4]"
                 :key="rating"
                 aria-hidden="true"
-                class="h-6 w-6 shrink-0 text-base-content-highlight"
+                class="text-base-content-highlight h-6 w-6 shrink-0"
               />
             </div>
 
@@ -117,7 +115,7 @@
                 :key="testimonial.text"
               >
                 <span>“</span>
-                <p class="inline text-base-content-highlight">{{ testimonial.text }}</p>
+                <p class="text-base-content-highlight inline">{{ testimonial.text }}</p>
                 <span>”</span>
 
                 <div class="mt-1.5 flex items-center gap-x-2 text-xs">
@@ -171,12 +169,12 @@
             </svg>
 
             <!-- Tier -->
-            <div class="relative rounded-2xl bg-base-1000/70 ring-1 ring-base-0/10 backdrop-blur-sm">
+            <div class="bg-base-1000/70 ring-base-0/10 relative rounded-2xl ring-1 backdrop-blur-sm">
               <div class="p-8 lg:pt-12 xl:p-10">
                 <!-- -->
 
                 <div>
-                  <h3 class="text-2xl font-bold tracking-wide text-base-content-highlight">Premium</h3>
+                  <h3 class="text-base-content-highlight text-2xl font-bold tracking-wide">Premium</h3>
 
                   <p class="mt-2 text-sm leading-7">
                     Get access to {{ completeBooruList.length - defaultBooruList.length }} additional websites, and
@@ -196,9 +194,9 @@
                       :key="mainFeature.title"
                       class="flex items-center gap-x-3 py-2"
                     >
-                      <CheckIcon class="h-6 w-5 flex-none text-primary-600" />
+                      <CheckIcon class="text-primary-600 h-6 w-5 flex-none" />
 
-                      <span class="flex-auto text-sm leading-6 text-base-content-highlight">
+                      <span class="text-base-content-highlight flex-auto text-sm leading-6">
                         {{ mainFeature.title }}
                       </span>
 
@@ -220,7 +218,7 @@
                 <div class="flex flex-col gap-6 lg:flex-col lg:items-stretch">
                   <!-- Price -->
                   <div class="mt-10 flex items-center justify-center gap-x-4">
-                    <p class="text-4xl font-bold tracking-tight text-base-content-highlight">7</p>
+                    <p class="text-base-content-highlight text-4xl font-bold tracking-tight">7</p>
 
                     <div class="text-sm leading-5">
                       <p class="text-base-content">EUR</p>
@@ -230,7 +228,7 @@
 
                   <NuxtLink
                     aria-describedby="premium-features"
-                    class="focus-visible:focus-outline-util hover:hover-text-util rounded-md bg-primary-700 px-3 py-2 text-center text-sm font-semibold leading-6 text-base-content-highlight hover:bg-primary-600 focus-visible:ring-offset-2"
+                    class="focus-visible:focus-outline-util hover:hover-text-util bg-primary-700 text-base-content-highlight hover:bg-primary-600 rounded-md px-3 py-2 text-center text-sm leading-6 font-semibold focus-visible:ring-offset-2"
                     onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click', 'Ko-fi'])"
                     rel="noopener nofollow noreferrer"
                     target="_blank"
@@ -241,7 +239,7 @@
 
                   <NuxtLink
                     aria-describedby="premium-features"
-                    class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-md px-3 py-2 text-center text-sm font-medium text-base-content ring-1 ring-base-0/20 focus-visible:ring-offset-2"
+                    class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util text-base-content ring-base-0/20 rounded-md px-3 py-2 text-center text-sm font-medium ring-1 focus-visible:ring-offset-2"
                     onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click', 'Patreon'])"
                     rel="noopener nofollow noreferrer"
                     target="_blank"

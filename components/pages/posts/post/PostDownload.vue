@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-  import { ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
   import { proxyUrl } from 'assets/js/proxy'
 
   const props = defineProps({
@@ -48,6 +47,6 @@
   >
     <span class="sr-only"> Download post </span>
 
-    <ArrowDownTrayIcon class="group-hover:hover-text-util h-5 w-5 text-base-content" />
+    <ArrowDownTrayIcon class="group-hover:hover-text-util text-base-content h-5 w-5" />
   </button>
 </template>

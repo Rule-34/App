@@ -1,11 +1,9 @@
 <script lang="ts" setup>
-  import { Bars3BottomRightIcon, EyeIcon, MagnifyingGlassIcon, PhotoIcon, StarIcon } from '@heroicons/vue/24/outline'
-  import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
   import { throttle } from 'es-toolkit'
   import type { Ref } from 'vue'
-  import { toast } from 'vue-sonner'
+
   import type { Domain } from '~/assets/js/domain'
   import Post from '~/assets/js/post.dto'
   import Tag from '~/assets/js/tag.dto'
@@ -664,14 +662,14 @@
       >
         <span class="sr-only">Search posts</span>
 
-        <MagnifyingGlassIcon class="h-6 w-6 text-base-content-highlight" />
+        <MagnifyingGlassIcon class="text-base-content-highlight h-6 w-6" />
 
         <!-- Highlighter -->
         <span
           v-if="selectedTags.length || Object.values(selectedFilters).some((value) => value !== undefined)"
-          class="absolute right-0 top-0 flex h-2 w-2"
+          class="absolute top-0 right-0 flex h-2 w-2"
         >
-          <span class="relative inline-flex h-2 w-2 rounded-full bg-primary-600"></span>
+          <span class="bg-primary-600 relative inline-flex h-2 w-2 rounded-full"></span>
         </span>
       </button>
     </Teleport>
@@ -741,13 +739,13 @@
           <ExclamationCircleIcon class="mx-auto mb-1 h-12 w-12" />
 
           <div v-if="error.status === 404">
-            <h3 class="text-lg font-semibold leading-10">No posts found</h3>
+            <h3 class="text-lg leading-10 font-semibold">No posts found</h3>
 
             <span class="w-full overflow-x-auto"> Try changing the tags or filters </span>
           </div>
 
           <div v-else-if="error.status === 429">
-            <h3 class="text-lg font-semibold leading-10">Too many requests</h3>
+            <h3 class="text-lg leading-10 font-semibold">Too many requests</h3>
 
             <span class="w-full overflow-x-auto text-pretty">
               You sent too many requests in a short period of time. Use the button below to continue using the R34 App
@@ -755,7 +753,7 @@
 
             <NuxtLink
               :href="config.public.API_URL + '/status'"
-              class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto mt-4 block w-fit rounded-md px-6 py-1.5 text-base ring-1 ring-base-0/20 focus-visible:ring-offset-2"
+              class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 mx-auto mt-4 block w-fit rounded-md px-6 py-1.5 text-base ring-1 focus-visible:ring-offset-2"
               rel="nofollow noopener noreferrer"
               target="_blank"
             >
@@ -764,7 +762,7 @@
           </div>
 
           <div v-else>
-            <h3 class="text-lg font-semibold leading-10">Failed to load posts</h3>
+            <h3 class="text-lg leading-10 font-semibold">Failed to load posts</h3>
 
             <span class="w-full overflow-x-auto text-base">
               {{ error.data?.message ?? error.message }}
@@ -773,7 +771,7 @@
 
           <!-- Retry button -->
           <button
-            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto mt-6 block w-fit rounded-md px-6 py-1.5 text-base ring-1 ring-base-0/20 focus-visible:ring-offset-2"
+            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 mx-auto mt-6 block w-fit rounded-md px-6 py-1.5 text-base ring-1 focus-visible:ring-offset-2"
             type="button"
             @click="onRetryClick"
           >
@@ -829,7 +827,7 @@
               <!-- Next Pagination -->
               <div
                 v-if="virtualRow.index > allRows.length - 1"
-                class="flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-base-content"
+                class="text-base-content flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
               >
                 <span class="block rounded-md px-1.5 py-1">
                   {{ hasNextPage ? 'Loading more...' : 'Nothing more to load' }}
