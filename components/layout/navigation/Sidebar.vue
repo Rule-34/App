@@ -72,24 +72,20 @@
       </template>
 
       <!-- Advertisements -->
-      <template v-if="!isPremium">
-        <!-- Separator -->
-        <!-- <li class="my-0.5 px-2">
-          <hr class="border-t border-base-0/20" />
-        </li> -->
+      <!--      <template v-if="!isPremium">-->
 
-        <li class="-mx-2">
-          <a
-            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
-            href="https://golove.ai/anonAuth?ref=r34app"
-            rel="nofollow noopener noreferrer"
-            target="_blank"
-          >
-            <ChatBubbleLeftEllipsisIcon class="h-6 w-6 shrink-0" />
-            AI Sex Tinder
-          </a>
-        </li>
-      </template>
+      <!--        <li class="-mx-2">-->
+      <!--          <a-->
+      <!--            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"-->
+      <!--            href="https://golove.ai/anonAuth?ref=r34app"-->
+      <!--            rel="nofollow noopener noreferrer"-->
+      <!--            target="_blank"-->
+      <!--          >-->
+      <!--            <ChatBubbleLeftEllipsisIcon class="h-6 w-6 shrink-0" />-->
+      <!--            AI Sex Tinder-->
+      <!--          </a>-->
+      <!--        </li>-->
+      <!--      </template>-->
 
       <!-- Bottom -->
       <li class="flex flex-1 flex-col">
