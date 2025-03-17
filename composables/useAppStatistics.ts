@@ -26,7 +26,7 @@ export default function () {
     promptInstallPwa = useLocalStorage('prompt-installPwa', false, {
       writeDefaults: false
     })
-    promptFeedback = useLocalStorage('prompt-feedback', false, {
+    promptFeedback = useLocalStorage('prompt-feedback-v2', false, {
       writeDefaults: false
     })
     promptNewsletter = useLocalStorage('prompt-newsletter', false, {
