@@ -25,7 +25,9 @@
       </HeadlessDialogTitle>
 
       <div class="mt-2">
-        <p class="text-sm">Vote on new features, report bugs, and share your ideas to make R34.app even better</p>
+        <p class="text-nice text-pretty">
+          Vote on new features, report bugs, and share your ideas to make R34.app even better
+        </p>
       </div>
     </div>
   </div>
@@ -57,7 +59,7 @@
       target="_blank"
       class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-xs ring-1 ring-inset"
     >
-      Give Feedback
+      Go to Feedback page
     </NuxtLink>
 
     <button
