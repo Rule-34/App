@@ -3,6 +3,9 @@
   import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
   import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
   import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+  import { useCountdown } from '@vueuse/core'
+
+  const customerCount = 2363
 
   const mainFeatures = [
     { title: 'No ads', additionalInfo: undefined },
@@ -73,7 +76,7 @@
       ]
     },
     {
-      name: 'Annual',
+      name: 'Yearly',
       description: 'Billed as €70.56',
       price: 5.88,
       originalPrice: 12.99,
@@ -102,7 +105,17 @@
   ]
 
   const selectedPaymentInterval = ref(paymentIntervals[0])
+
   const isPaymentDialogOpen = ref(false)
+
+  // Countdown: 7 minutes
+  const { remaining, start } = useCountdown(7 * 60, {
+    onComplete() {
+      // Reset the countdown when it completes
+      start()
+    },
+    immediate: true
+  })
 
   function onIntervalClick(interval: (typeof paymentIntervals)[0]) {
     selectedPaymentInterval.value = interval
@@ -153,6 +166,7 @@
           <!--          -->
 
           <!-- Header -->
+
           <div class="relative z-10">
             <!-- Title -->
             <h1 class="text-base-content-highlight mx-auto max-w-4xl text-center text-2xl font-bold tracking-tight">
@@ -191,7 +205,7 @@
             </div>
 
             <!-- TODO: Images of user profiles -->
-            <span> Loved by 2363+ customers</span>
+            <span> Loved by {{ customerCount }}+ customers</span>
           </NuxtLink>
 
           <!-- Testimonials -->
@@ -256,8 +270,6 @@
             </svg>
 
             <h2 class="text-base-content-highlight text-center text-2xl font-bold tracking-wide">Premium Plans</h2>
-
-            <!-- TODO: Countdown -->
 
             <!-- Tier -->
             <div
@@ -333,6 +345,28 @@
               </div>
             </div>
 
+            <!-- Countdown Timer -->
+            <div class="text-center tabular-nums">
+              <div class="text-base-content mb-2 text-lg font-semibold">Offer ends in</div>
+
+              <div class="flex justify-center gap-4 text-2xl font-bold">
+                <div class="flex flex-col items-center">
+                  <span class="text-base-content-highlight">{{ Math.floor(remaining / 3600) }}</span>
+                  <span class="text-sm font-normal">Hours</span>
+                </div>
+
+                <div class="flex flex-col items-center">
+                  <span class="text-base-content-highlight">{{ Math.floor((remaining % 3600) / 60) }}</span>
+                  <span class="text-sm font-normal">Minutes</span>
+                </div>
+
+                <div class="flex flex-col items-center">
+                  <span class="text-base-content-highlight">{{ remaining % 60 }}</span>
+                  <span class="text-sm font-normal">Seconds</span>
+                </div>
+              </div>
+            </div>
+
             <div class="bg-base-1000/70 ring-base-0/10 relative rounded-2xl ring-2 backdrop-blur-sm">
               <div class="p-8 lg:pt-12 xl:p-10">
                 <!-- -->
@@ -392,8 +426,21 @@
 
                   <p class="text-center text-xs leading-6">
                     Cancel anytime
+
                     <br />
-                    Discreet credit card statement
+
+                    Safe and discreet billing
+
+                    <br />
+
+                    <NuxtLink
+                      class="focus-visible:focus-outline-util hover:hover-text-util"
+                      href="https://www.trustpilot.com/review/r34.app"
+                      rel="nofollow noopener"
+                      target="_blank"
+                    >
+                      Trusted by {{ customerCount }}+ customers
+                    </NuxtLink>
                   </p>
                 </div>
               </div>
