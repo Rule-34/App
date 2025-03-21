@@ -2,7 +2,17 @@
   import { CheckIcon, StarIcon } from '@heroicons/vue/20/solid'
   import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
   import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-  import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+  import {
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionChild,
+    TransitionRoot,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel
+  } from '@headlessui/vue'
+  import { ChevronUpIcon } from '@heroicons/vue/20/solid'
   import { useCountdown } from '@vueuse/core'
 
   const customerCount = 2363
@@ -11,15 +21,15 @@
     { title: 'No ads', additionalInfo: undefined },
     { title: 'Faster image loading', additionalInfo: '#image-proxy' },
     {
-      title: 'Access ' + (completeBooruList.length - defaultBooruList.length) + ' additional websites',
+      title: 'Access to ' + (completeBooruList.length - defaultBooruList.length) + ' additional websites',
       additionalInfo: '#additional-boorus'
     },
     { title: 'Save posts, synchronized on all devices', additionalInfo: '#save-posts' },
     { title: 'Download posts with one click', additionalInfo: '#download-posts' },
-    { title: 'Find original source (artist) of posts', additionalInfo: '#find-source' },
+    { title: 'Find the source (artist) of a post', additionalInfo: '#find-source' },
     { title: 'Integrated history to resume browsing', additionalInfo: '#history' },
     { title: 'Create tag collections', additionalInfo: '#tag-collections' },
-    { title: 'Create tag blocklist', additionalInfo: '#tag-blocklist' },
+    { title: 'Block tags to filter out posts', additionalInfo: '#tag-blocklist' },
     { title: 'Proxy to bypass website blocked in your country', additionalInfo: '#proxy' },
     { title: '“Premium” Discord role', additionalInfo: undefined },
     { title: 'Support the development', additionalInfo: '#support-development' }
@@ -104,6 +114,32 @@
     }
   ]
 
+  const faqs = [
+    {
+      question: 'How do I get access after payment?',
+      answer:
+        "After payment, you'll receive an email with instructions to sign in to your Premium account.\n\nFor Ko-fi payments, this is instant.\nFor Patreon, it may take up to 24 hours.\n\nChoose the platform that works best for you."
+    },
+    {
+      question: 'What payment methods are accepted?',
+      answer: 'We accept credit/debit cards and PayPal through Ko-fi and Patreon.'
+    },
+    {
+      question: 'Can I cancel my subscription?',
+      answer:
+        "Yes, you can cancel your subscription anytime.\nFor subscriptions through Patreon or Ko-fi, cancel directly on their platform.\nOne-time purchases don't need cancellation."
+    },
+    {
+      question: 'What happens after I cancel?',
+      answer:
+        "You'll keep Premium access until the end of your paid period.\n\nAfter subscription, your account will be left in a read-only state."
+    },
+    {
+      question: 'Is the lifetime access really forever?',
+      answer: 'Yes! Lifetime means you get permanent access to Premium features for as long as the R34 app exists.'
+    }
+  ]
+
   const selectedPaymentInterval = ref(paymentIntervals[0])
 
   const isPaymentDialogOpen = ref(false)
@@ -118,6 +154,8 @@
   })
 
   function onIntervalClick(interval: (typeof paymentIntervals)[0]) {
+    window._paq?.push(['trackEvent', 'Premium', 'Subscribe Plan', interval.name])
+
     selectedPaymentInterval.value = interval
 
     // If there's only one payment option and no instructions, directly open the link
@@ -216,7 +254,7 @@
                 :key="testimonial.text"
               >
                 <span>“</span>
-                <p class="text-base-content-highlight inline">{{ testimonial.text }}</p>
+                <p class="text-base-content-highlight inline text-pretty">{{ testimonial.text }}</p>
                 <span>”</span>
 
                 <div class="mt-1.5 flex items-center gap-x-2 text-xs">
@@ -248,7 +286,7 @@
             <!-- Background -->
             <svg
               aria-hidden="true"
-              class="absolute -bottom-48 left-1/2 h-[64rem] -translate-x-1/2 translate-y-1/2 [mask-image:radial-gradient(closest-side,white,transparent)]"
+              class="absolute -bottom-48 left-1/2 h-[64rem] -translate-x-1/2 translate-y-1/2 [clip-path:inset(0_0_63%_0)] [mask-image:radial-gradient(closest-side,white,transparent)]"
               viewBox="0 0 1208 1024"
             >
               <ellipse
@@ -330,13 +368,13 @@
                     <p class="ml-2 inline text-sm leading-5">/{{ interval.interval }}</p>
                   </div>
 
+                  <!-- TODO: Media that attracts the attention of the user -->
                   <button
                     :class="{
                       'bg-primary-700 hover:bg-primary-600! ring-0!': interval.name === selectedPaymentInterval.name
                     }"
                     aria-describedby="premium-features"
                     class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util text-base-content-highlight ring-base-0/20 rounded-lg px-3 py-2 text-center text-sm font-medium ring-1"
-                    onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Interval', interval.name])"
                     @click="onIntervalClick(interval)"
                   >
                     Get Premium
@@ -448,7 +486,38 @@
           </section>
 
           <!-- FAQ -->
-          <section></section>
+          <section class="mt-24">
+            <h2 class="text-base-content-highlight text-center text-2xl font-bold">Frequently Asked Questions</h2>
+
+            <dl class="divide-base-0/10 mt-8 divide-y">
+              <Disclosure
+                v-for="(faq, index) in faqs"
+                :key="index"
+                v-slot="{ open }"
+                as="div"
+                class="bg-1000 hover:bg-900 transition-colors duration-200"
+              >
+                <dt>
+                  <DisclosureButton class="group flex w-full items-center justify-between gap-2 p-4">
+                    <span class="group-hover:text-base-content-highlight font-medium">{{ faq.question }}</span>
+
+                    <ChevronUpIcon
+                      :class="!open ? 'rotate-180' : ''"
+                      class="group-hover:text-base-content-highlight h-5 w-5 transition-transform duration-200"
+                    />
+                  </DisclosureButton>
+                </dt>
+
+                <DisclosurePanel
+                  :unmount="false"
+                  as="dd"
+                  class="px-4 pb-4 text-sm whitespace-pre-line"
+                >
+                  {{ faq.answer }}
+                </DisclosurePanel>
+              </Disclosure>
+            </dl>
+          </section>
         </div>
       </div>
     </div>
