@@ -2,23 +2,37 @@
   import { CheckIcon, StarIcon } from '@heroicons/vue/20/solid'
   import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
   import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+  import {
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionChild,
+    TransitionRoot,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel
+  } from '@headlessui/vue'
+  import { ChevronUpIcon } from '@heroicons/vue/20/solid'
+  import { useCountdown } from '@vueuse/core'
+
+  const customerCount = 2363
 
   const mainFeatures = [
     { title: 'No ads', additionalInfo: undefined },
     { title: 'Faster image loading', additionalInfo: '#image-proxy' },
     {
-      title: 'Access ' + (completeBooruList.length - defaultBooruList.length) + ' additional websites',
+      title: 'Access to ' + (completeBooruList.length - defaultBooruList.length) + ' additional websites',
       additionalInfo: '#additional-boorus'
     },
     { title: 'Save posts, synchronized on all devices', additionalInfo: '#save-posts' },
     { title: 'Download posts with one click', additionalInfo: '#download-posts' },
-    { title: 'Find original source (artist) of posts', additionalInfo: '#find-source' },
+    { title: 'Find the source (artist) of a post', additionalInfo: '#find-source' },
     { title: 'Integrated history to resume browsing', additionalInfo: '#history' },
-    { title: 'Create tag collections (blocklist)', additionalInfo: '#tag-collections' },
+    { title: 'Create tag collections', additionalInfo: '#tag-collections' },
+    { title: 'Block tags to filter out posts', additionalInfo: '#tag-blocklist' },
     { title: 'Proxy to bypass website blocked in your country', additionalInfo: '#proxy' },
     { title: '“Premium” Discord role', additionalInfo: undefined },
-    { title: 'Support the development', additionalInfo: '#support-development' },
-    { title: 'Cancel anytime', additionalInfo: undefined }
+    { title: 'Support the development', additionalInfo: '#support-development' }
   ]
 
   const testimonials = [
@@ -40,6 +54,128 @@
     }
   ]
 
+  const paymentIntervals = [
+    {
+      name: 'Monthly',
+      description: 'Billed monthly',
+      price: 7,
+      originalPrice: 12.99,
+      interval: 'month',
+      links: [
+        {
+          name: 'Ko-fi',
+          url: 'https://ko-fi.com/alejandro_akbal/tiers'
+        },
+        {
+          name: 'Patreon',
+          url: 'https://www.patreon.com/R34App'
+        }
+      ]
+    },
+    {
+      name: '30 days access',
+      description: 'One time payment',
+      price: 12.99,
+      originalPrice: undefined,
+      interval: 'once',
+      links: [
+        {
+          name: 'Ko-fi',
+          url: 'https://ko-fi.com/s/4ff7beebad'
+        }
+      ]
+    },
+    {
+      name: 'Yearly',
+      description: 'Billed as €70.56',
+      price: 5.88,
+      originalPrice: 12.99,
+      interval: 'month',
+      links: [
+        {
+          name: 'Patreon',
+          url: 'https://www.patreon.com/R34App',
+          instructions: ['Make sure to select "Pay annually" on the Patreon page']
+        }
+      ]
+    },
+    {
+      name: 'Lifetime',
+      description: 'One time payment',
+      price: 199.99,
+      originalPrice: 699.99,
+      interval: 'once',
+      links: [
+        {
+          name: 'Ko-fi',
+          url: 'https://ko-fi.com/s/4fa1d3781c'
+        }
+      ]
+    }
+  ]
+
+  const faqs = [
+    {
+      question: 'How do I get access after payment?',
+      answer:
+        "After payment, you'll receive an email with instructions to sign in to your Premium account.\n\nFor Ko-fi payments, this is instant.\nFor Patreon, it may take up to 24 hours.\n\nChoose the platform that works best for you."
+    },
+    {
+      question: 'What payment methods are accepted?',
+      answer: 'We accept credit/debit cards and PayPal through Ko-fi and Patreon.'
+    },
+    {
+      question: 'Can I cancel my subscription?',
+      answer:
+        "Yes, you can cancel your subscription anytime.\nFor subscriptions through Patreon or Ko-fi, cancel directly on their platform.\nOne-time purchases don't need cancellation."
+    },
+    {
+      question: 'What happens after I cancel?',
+      answer:
+        "You'll keep Premium access until the end of your paid period.\n\nAfter subscription, your account will be left in a read-only state."
+    },
+    {
+      question: 'Is the lifetime access really forever?',
+      answer: 'Yes! Lifetime means you get permanent access to Premium features for as long as the R34 app exists.'
+    }
+  ]
+
+  const selectedPaymentInterval = ref(paymentIntervals[0])
+
+  const isPaymentDialogOpen = ref(false)
+
+  // Countdown: 7 minutes
+  const { remaining, start } = useCountdown(7 * 60, {
+    onComplete() {
+      // Reset the countdown when it completes
+      start()
+    },
+    immediate: true
+  })
+
+  function onIntervalClick(interval: (typeof paymentIntervals)[0]) {
+    window._paq?.push(['trackEvent', 'Premium', 'Subscribe Plan', interval.name])
+
+    selectedPaymentInterval.value = interval
+
+    // If there's only one payment option and no instructions, directly open the link
+    if (interval.links.length === 1 && !interval.links[0].instructions) {
+      window.open(interval.links[0].url, '_blank', 'noreferrer noopener')
+      return
+    }
+
+    isPaymentDialogOpen.value = true
+  }
+
+  function getFaviconUrl(url: string) {
+    try {
+      const hostname = new URL(url).hostname
+      return `https://icons.duckduckgo.com/ip2/${hostname}.ico`
+    } catch {
+      return ''
+    }
+  }
+
   useSeoMeta({
     title: 'Premium'
   })
@@ -53,9 +189,9 @@
         class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative flex items-center gap-x-2 rounded-md p-2"
         href="/premium/sign-in"
       >
-        <span class="text-sm text-base-content">Sign in</span>
+        <span class="text-base-content text-sm">Sign in</span>
 
-        <ArrowRightOnRectangleIcon class="h-6 w-6 text-base-content-highlight" />
+        <ArrowRightOnRectangleIcon class="text-base-content-highlight h-6 w-6" />
       </NuxtLink>
     </Teleport>
   </ClientOnly>
@@ -68,13 +204,14 @@
           <!--          -->
 
           <!-- Header -->
+
           <div class="relative z-10">
             <!-- Title -->
-            <h1 class="mx-auto max-w-4xl text-center text-2xl font-bold tracking-tight text-base-content-highlight">
+            <h1 class="text-base-content-highlight mx-auto max-w-4xl text-center text-2xl font-bold tracking-tight">
               Browse Ad-free & Save Posts
             </h1>
 
-            <p class="mx-auto mt-3 max-w-3xl text-center text-lg font-medium leading-7 lg:mt-3">
+            <p class="mx-auto mt-3 max-w-3xl text-center text-lg leading-7 font-medium lg:mt-3">
               Focus on Hentai without distractions, save posts to view them later, faster image loading and much more!
             </p>
           </div>
@@ -82,7 +219,7 @@
           <!-- CTA -->
           <div class="mt-10 flex justify-center">
             <NuxtLink
-              class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto inline-flex items-center justify-center rounded-lg px-6 py-2 text-lg font-medium text-base-content-highlight ring-1 ring-base-0/20"
+              class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util text-base-content-highlight ring-base-0/20 mx-auto inline-flex items-center justify-center rounded-lg px-6 py-2 text-lg font-medium ring-1"
               href="#pricing"
             >
               Get Premium
@@ -101,12 +238,12 @@
                 v-for="rating in [0, 1, 2, 3, 4]"
                 :key="rating"
                 aria-hidden="true"
-                class="h-6 w-6 shrink-0 text-base-content-highlight"
+                class="text-base-content-highlight h-6 w-6 shrink-0"
               />
             </div>
 
             <!-- TODO: Images of user profiles -->
-            <span> Loved by 2216+ customers</span>
+            <span> Loved by {{ customerCount }}+ customers</span>
           </NuxtLink>
 
           <!-- Testimonials -->
@@ -117,7 +254,7 @@
                 :key="testimonial.text"
               >
                 <span>“</span>
-                <p class="inline text-base-content-highlight">{{ testimonial.text }}</p>
+                <p class="text-base-content-highlight inline text-pretty">{{ testimonial.text }}</p>
                 <span>”</span>
 
                 <div class="mt-1.5 flex items-center gap-x-2 text-xs">
@@ -149,7 +286,7 @@
             <!-- Background -->
             <svg
               aria-hidden="true"
-              class="absolute -bottom-48 left-1/2 h-[64rem] -translate-x-1/2 translate-y-1/2 [mask-image:radial-gradient(closest-side,white,transparent)]"
+              class="absolute -bottom-48 left-1/2 h-[64rem] -translate-x-1/2 translate-y-1/2 [clip-path:inset(0_0_63%_0)] [mask-image:radial-gradient(closest-side,white,transparent)]"
               viewBox="0 0 1208 1024"
             >
               <ellipse
@@ -170,16 +307,115 @@
               </defs>
             </svg>
 
+            <h2 class="text-base-content-highlight text-center text-2xl font-bold tracking-wide">Premium Plans</h2>
+
             <!-- Tier -->
-            <div class="relative rounded-2xl bg-base-1000/70 ring-1 ring-base-0/10 backdrop-blur-sm">
+            <div
+              v-for="interval in paymentIntervals"
+              :key="interval.name"
+              :class="{
+                'ring-primary-700': interval.name === selectedPaymentInterval.name
+              }"
+              class="bg-base-1000/70 ring-base-0/10 relative rounded-2xl ring-2 backdrop-blur-sm"
+            >
+              <div class="p-6">
+                <!-- -->
+
+                <!-- Badge -->
+                <div
+                  v-if="interval.originalPrice"
+                  class="absolute top-0 right-1/8"
+                >
+                  <div
+                    :class="{
+                      'bg-primary-700': interval.name === selectedPaymentInterval.name
+                    }"
+                    class="bg-base-0/10 rounded-b-2xl px-2 pt-6 pb-4"
+                  >
+                    <span class="text-base-content-highlight font-medium">
+                      -{{ Math.round(((interval.originalPrice - interval.price) / interval.originalPrice) * 100) }}%
+                    </span>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 class="text-base-content-highlight text-xl font-semibold tracking-wide">
+                    {{ interval.name }}
+                  </h3>
+
+                  <p class="mt-2 text-sm leading-3">
+                    {{ interval.description }}
+                  </p>
+                </div>
+
+                <!-- CTA -->
+                <div class="flex flex-col gap-6 lg:flex-col lg:items-stretch">
+                  <!-- Price -->
+                  <div class="mt-10">
+                    <p
+                      v-if="interval.originalPrice"
+                      class="text-base-content text-sm line-through"
+                    >
+                      €{{ interval.originalPrice }}
+                    </p>
+
+                    <div class="inline">
+                      <p class="text-base-content-highlight inline text-4xl font-bold tracking-tight">
+                        €{{ interval.price }}
+                      </p>
+                    </div>
+
+                    <p class="ml-2 inline text-sm leading-5">/{{ interval.interval }}</p>
+                  </div>
+
+                  <!-- TODO: Media that attracts the attention of the user -->
+                  <button
+                    :class="{
+                      'bg-primary-700 hover:bg-primary-600! ring-0!': interval.name === selectedPaymentInterval.name
+                    }"
+                    aria-describedby="premium-features"
+                    class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util text-base-content-highlight ring-base-0/20 rounded-lg px-3 py-2 text-center text-sm font-medium ring-1"
+                    @click="onIntervalClick(interval)"
+                  >
+                    Get Premium
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Countdown Timer -->
+            <div class="text-center tabular-nums">
+              <div class="text-base-content mb-2 text-lg font-semibold">Offer ends in</div>
+
+              <div class="flex justify-center gap-4 text-2xl font-bold">
+                <div class="flex flex-col items-center">
+                  <span class="text-base-content-highlight">{{ Math.floor(remaining / 3600) }}</span>
+                  <span class="text-sm font-normal">Hours</span>
+                </div>
+
+                <div class="flex flex-col items-center">
+                  <span class="text-base-content-highlight">{{ Math.floor((remaining % 3600) / 60) }}</span>
+                  <span class="text-sm font-normal">Minutes</span>
+                </div>
+
+                <div class="flex flex-col items-center">
+                  <span class="text-base-content-highlight">{{ remaining % 60 }}</span>
+                  <span class="text-sm font-normal">Seconds</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-base-1000/70 ring-base-0/10 relative rounded-2xl ring-2 backdrop-blur-sm">
               <div class="p-8 lg:pt-12 xl:p-10">
                 <!-- -->
 
                 <div>
-                  <h3 class="text-2xl font-bold tracking-wide text-base-content-highlight">Premium</h3>
+                  <h3 class="text-base-content-highlight text-2xl font-bold tracking-wide">
+                    All plans include&hellip;
+                  </h3>
 
                   <p class="mt-2 text-sm leading-7">
-                    Get access to {{ completeBooruList.length - defaultBooruList.length }} additional websites, and
+                    Access to {{ completeBooruList.length - defaultBooruList.length }} additional websites, and
                     {{ mainFeatures.length }} exclusive features!
                   </p>
                 </div>
@@ -196,9 +432,9 @@
                       :key="mainFeature.title"
                       class="flex items-center gap-x-3 py-2"
                     >
-                      <CheckIcon class="h-6 w-5 flex-none text-primary-600" />
+                      <CheckIcon class="text-primary-600 h-6 w-5 flex-none" />
 
-                      <span class="flex-auto text-sm leading-6 text-base-content-highlight">
+                      <span class="text-base-content-highlight flex-auto text-sm leading-6">
                         {{ mainFeature.title }}
                       </span>
 
@@ -217,43 +453,32 @@
                 </div>
 
                 <!-- CTA -->
-                <div class="flex flex-col gap-6 lg:flex-col lg:items-stretch">
-                  <!-- Price -->
-                  <div class="mt-10 flex items-center justify-center gap-x-4">
-                    <p class="text-4xl font-bold tracking-tight text-base-content-highlight">7</p>
-
-                    <div class="text-sm leading-5">
-                      <p class="text-base-content">EUR</p>
-                      <p>Billed monthly</p>
-                    </div>
-                  </div>
-
+                <div class="mt-10 flex flex-col gap-6 lg:flex-col lg:items-stretch">
                   <NuxtLink
                     aria-describedby="premium-features"
-                    class="focus-visible:focus-outline-util hover:hover-text-util rounded-md bg-primary-700 px-3 py-2 text-center text-sm font-semibold leading-6 text-base-content-highlight hover:bg-primary-600 focus-visible:ring-offset-2"
-                    onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click', 'Ko-fi'])"
-                    rel="noopener nofollow noreferrer"
-                    target="_blank"
-                    to="https://ko-fi.com/alejandro_akbal/tiers"
+                    class="focus-visible:focus-outline-util hover:hover-text-util bg-primary-700 text-base-content-highlight hover:bg-primary-600 rounded-md px-3 py-2 text-center text-sm leading-6 font-semibold focus-visible:ring-offset-2"
+                    to="#pricing"
                   >
                     Get Premium
                   </NuxtLink>
 
-                  <NuxtLink
-                    aria-describedby="premium-features"
-                    class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util rounded-md px-3 py-2 text-center text-sm font-medium text-base-content ring-1 ring-base-0/20 focus-visible:ring-offset-2"
-                    onclick="window._paq?.push(['trackEvent', 'Premium', 'Subscribe Link Click', 'Patreon'])"
-                    rel="noopener nofollow noreferrer"
-                    target="_blank"
-                    to="https://www.patreon.com/R34App"
-                  >
-                    Pay with Patreon
-                  </NuxtLink>
-
                   <p class="text-center text-xs leading-6">
                     Cancel anytime
+
                     <br />
-                    Discreet credit card statement
+
+                    Safe and discreet billing
+
+                    <br />
+
+                    <NuxtLink
+                      class="focus-visible:focus-outline-util hover:hover-text-util"
+                      href="https://www.trustpilot.com/review/r34.app"
+                      rel="nofollow noopener"
+                      target="_blank"
+                    >
+                      Trusted by {{ customerCount }}+ customers
+                    </NuxtLink>
                   </p>
                 </div>
               </div>
@@ -261,9 +486,145 @@
           </section>
 
           <!-- FAQ -->
-          <section></section>
+          <section class="mt-24">
+            <h2 class="text-base-content-highlight text-center text-2xl font-bold">Frequently Asked Questions</h2>
+
+            <dl class="divide-base-0/10 mt-8 divide-y">
+              <Disclosure
+                v-for="(faq, index) in faqs"
+                :key="index"
+                v-slot="{ open }"
+                as="div"
+                class="bg-1000 hover:bg-900 transition-colors duration-200"
+              >
+                <dt>
+                  <DisclosureButton class="group flex w-full items-center justify-between gap-2 p-4">
+                    <span class="group-hover:text-base-content-highlight font-medium">{{ faq.question }}</span>
+
+                    <ChevronUpIcon
+                      :class="!open ? 'rotate-180' : ''"
+                      class="group-hover:text-base-content-highlight h-5 w-5 transition-transform duration-200"
+                    />
+                  </DisclosureButton>
+                </dt>
+
+                <DisclosurePanel
+                  :unmount="false"
+                  as="dd"
+                  class="px-4 pb-4 text-sm whitespace-pre-line"
+                >
+                  {{ faq.answer }}
+                </DisclosurePanel>
+              </Disclosure>
+            </dl>
+          </section>
         </div>
       </div>
     </div>
   </main>
+
+  <!-- Payment Dialog -->
+  <TransitionRoot
+    :show="isPaymentDialogOpen"
+    as="template"
+  >
+    <Dialog
+      as="div"
+      class="relative z-10"
+      @close="isPaymentDialogOpen = false"
+    >
+      <!-- Background -->
+      <TransitionChild
+        as="template"
+        enter="ease-out duration-300"
+        enter-from="opacity-0"
+        enter-to="opacity-100"
+        leave="ease-in duration-200 transition-opacity"
+        leave-from="opacity-100"
+        leave-to="opacity-0"
+      >
+        <div class="bg-base-1000/80 fixed inset-0 backdrop-blur-sm" />
+      </TransitionChild>
+
+      <div class="fixed inset-0 z-10 overflow-y-auto">
+        <div class="flex min-h-full items-center justify-center p-4 text-center">
+          <TransitionChild
+            as="template"
+            enter="ease-out duration-300"
+            enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            enter-to="opacity-100 translate-y-0 sm:scale-100"
+            leave="ease-in duration-200"
+            leave-from="opacity-100 translate-y-0 sm:scale-100"
+            leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          >
+            <DialogPanel
+              class="bg-base-1000 ring-base-0/10 relative w-full transform overflow-hidden rounded-lg px-4 pt-5 pb-4 text-left shadow-xl ring-1 transition-all sm:my-8 sm:max-w-lg sm:p-6"
+            >
+              <DialogTitle
+                as="h3"
+                class="text-base-content-highlight text-lg leading-6 font-medium"
+              >
+                Payment Instructions - {{ selectedPaymentInterval.name }}
+              </DialogTitle>
+
+              <p
+                v-if="selectedPaymentInterval.links.length > 1"
+                class="text-base-content mt-2 text-sm text-pretty"
+              >
+                Choose one payment option to continue
+              </p>
+
+              <div class="mt-4 space-y-6">
+                <div
+                  v-for="link in selectedPaymentInterval.links"
+                  :key="link.name"
+                  class="space-y-4"
+                >
+                  <div class="flex items-center gap-3">
+                    <img
+                      :src="getFaviconUrl(link.url)"
+                      :alt="`${link.name} favicon`"
+                      class="h-5 w-5 shrink-0 rounded-sm"
+                      height="128"
+                      loading="eager"
+                      width="128"
+                    />
+                    <h4 class="text-base-content-highlight font-medium">{{ link.name }}</h4>
+                  </div>
+                  <ol class="text-base-content list-decimal space-y-2 pl-4 text-sm">
+                    <li
+                      v-for="(instruction, index) in link.instructions"
+                      :key="index"
+                    >
+                      {{ instruction }}
+                    </li>
+                  </ol>
+
+                  <a
+                    :href="link.url"
+                    class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util text-base-content-highlight ring-base-0/20 rounded-lg px-3 py-2 text-center text-sm font-medium ring-1"
+                    rel="nofollow noopener noreferrer"
+                    target="_blank"
+                  >
+                    Continue to {{ link.name }}
+                  </a>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="mt-6 sm:mt-8">
+                <button
+                  class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-xs ring-1 ring-inset"
+                  type="button"
+                  @click="isPaymentDialogOpen = false"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </DialogPanel>
+          </TransitionChild>
+        </div>
+      </div>
+    </Dialog>
+  </TransitionRoot>
 </template>
