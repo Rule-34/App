@@ -5,70 +5,70 @@ export const premiumPromotions = [
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-no-ads'
+    link: '/premium?utm_source=internal&utm_medium=promo-no-ads#pricing'
   },
   {
     media: '/img/promo/premium/Faster Image Loading.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-faster-image-loading'
+    link: '/premium?utm_source=internal&utm_medium=promo-faster-image-loading#pricing'
   },
   {
     media: '/img/promo/premium/Save Posts.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-save-posts'
+    link: '/premium?utm_source=internal&utm_medium=promo-save-posts#pricing'
   },
   {
     media: '/img/promo/premium/History.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-history'
+    link: '/premium?utm_source=internal&utm_medium=promo-history#pricing'
   },
   {
     media: '/img/promo/premium/Additional Boorus.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-additional-boorus'
+    link: '/premium?utm_source=internal&utm_medium=promo-additional-boorus#pricing'
   },
   {
     media: '/img/promo/premium/One-Click Downloads.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-one-click-downloads'
+    link: '/premium?utm_source=internal&utm_medium=promo-one-click-downloads#pricing'
   },
   {
     media: '/img/promo/premium/Tag Collections.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-tag-collections'
+    link: '/premium?utm_source=internal&utm_medium=promo-tag-collections#pricing'
   },
   {
     media: '/img/promo/premium/Source Finder.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-source-finder'
+    link: '/premium?utm_source=internal&utm_medium=promo-source-finder#pricing'
   },
   {
     media: '/img/promo/premium/Discord Role.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-discord-role'
+    link: '/premium?utm_source=internal&utm_medium=promo-discord-role#pricing'
   },
   {
     media: '/img/promo/premium/Support Us.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-support-us'
+    link: '/premium?utm_source=internal&utm_medium=promo-support-us#pricing'
   }
 ]
 
