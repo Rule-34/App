@@ -82,6 +82,11 @@
         {
           name: 'Ko-fi',
           url: 'https://ko-fi.com/s/4ff7beebad'
+        },
+        {
+          name: 'SellApp (Crypto)',
+          url: 'https://akbal.sell.app/product/premium-30-days-access',
+          faviconDomain: 'https://sell.app'
         }
       ]
     },
@@ -109,6 +114,11 @@
         {
           name: 'Ko-fi',
           url: 'https://ko-fi.com/s/4fa1d3781c'
+        },
+        {
+          name: 'SellApp (Crypto)',
+          url: 'https://akbal.sell.app/product/premium-lifetime',
+          faviconDomain: 'https://sell.app'
         }
       ]
     }
@@ -121,8 +131,9 @@
         "After payment, you'll receive an email with instructions to sign in to your Premium account.\n\nFor Ko-fi payments, this is instant.\nFor Patreon, it may take up to 24 hours.\n\nChoose the platform that works best for you."
     },
     {
-      question: 'What payment methods are accepted?',
-      answer: 'We accept credit/debit cards and PayPal through Ko-fi and Patreon.'
+      question: 'What payment options are accepted?',
+      answer:
+        'We accept credit/debit cards and PayPal through Ko-fi and Patreon.\nWe also accept cryptocurrency payments through Sell.app.'
     },
     {
       question: 'Can I cancel my subscription?',
@@ -582,7 +593,7 @@
                 >
                   <div class="flex items-center gap-3">
                     <img
-                      :src="getFaviconUrl(link.url)"
+                      :src="getFaviconUrl(link.faviconDomain ?? link.url)"
                       :alt="`${link.name} favicon`"
                       class="h-5 w-5 shrink-0 rounded-sm"
                       height="128"
