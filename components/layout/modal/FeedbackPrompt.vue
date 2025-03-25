@@ -21,7 +21,7 @@
         as="h3"
         class="text-base-content-highlight text-base leading-6 font-semibold"
       >
-        Got Ideas?
+        Got a minute?
       </HeadlessDialogTitle>
 
       <div class="mt-2">
@@ -35,18 +35,18 @@
   <!-- Body -->
   <div class="mt-5 sm:mt-6">
     <NuxtLink
-      to="https://feedback.r34.app"
-      target="_blank"
       class="focus-visible:focus-outline-util relative block overflow-hidden rounded-lg"
+      target="_blank"
+      to="https://feedback.r34.app"
     >
       <img
-        src="https://screenshot.akbal.dev/v1/capture?width=720&height=1080&url=https://feedback.r34.app/"
         alt="Feedback website preview"
         class="h-auto max-h-[50svh] w-full object-cover"
-        height="1080"
-        width="720"
-        loading="eager"
         decoding="async"
+        height="1080"
+        loading="eager"
+        src="https://screenshot.akbal.dev/v1/capture?width=720&height=1080&url=https://feedback.r34.app/"
+        width="720"
       />
       <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
     </NuxtLink>
@@ -55,9 +55,9 @@
   <!-- Actions -->
   <div class="mt-5 space-y-3 sm:mt-6">
     <NuxtLink
-      to="https://feedback.r34.app"
-      target="_blank"
       class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-xs ring-1 ring-inset"
+      target="_blank"
+      to="https://feedback.r34.app"
     >
       Go to Feedback page
     </NuxtLink>
