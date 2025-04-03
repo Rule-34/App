@@ -1,18 +1,17 @@
 <script lang="ts" setup>
-  import { CheckIcon, StarIcon } from '@heroicons/vue/20/solid'
+  import { CheckIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/20/solid'
   import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
   import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
   import {
     Dialog,
     DialogPanel,
     DialogTitle,
-    TransitionChild,
-    TransitionRoot,
     Disclosure,
     DisclosureButton,
-    DisclosurePanel
+    DisclosurePanel,
+    TransitionChild,
+    TransitionRoot
   } from '@headlessui/vue'
-  import { ChevronUpIcon } from '@heroicons/vue/20/solid'
   import { useCountdown } from '@vueuse/core'
 
   const customerCount = 2363
@@ -320,7 +319,109 @@
 
             <h2 class="text-base-content-highlight text-center text-2xl font-bold tracking-wide">Premium Plans</h2>
 
-            <!-- Tier -->
+            <!-- Features -->
+            <div class="bg-base-1000/70 ring-base-0/10 relative rounded-2xl ring-2 backdrop-blur-sm">
+              <div class="p-8 lg:pt-12 xl:p-10">
+                <!-- -->
+
+                <div>
+                  <h3 class="text-base-content-highlight text-2xl font-bold tracking-wide">
+                    All plans include&hellip;
+                  </h3>
+
+                  <p class="mt-2 text-sm leading-7">
+                    Access to {{ completeBooruList.length - defaultBooruList.length }} additional websites, and
+                    {{ mainFeatures.length }} exclusive features!
+                  </p>
+                </div>
+
+                <!-- Features -->
+                <div class="mt-4 flow-root sm:mt-8">
+                  <ol
+                    id="premium-features"
+                    class="space-y-1"
+                    role="list"
+                  >
+                    <li
+                      v-for="mainFeature in mainFeatures"
+                      :key="mainFeature.title"
+                      class="flex items-center gap-x-3 py-2"
+                    >
+                      <CheckIcon class="text-primary-600 h-6 w-5 flex-none" />
+
+                      <span class="text-base-content-highlight flex-auto text-sm leading-6">
+                        {{ mainFeature.title }}
+                      </span>
+
+                      <!-- TODO: Better linking -->
+                      <!--                      <a-->
+                      <!--                        v-if="mainFeature.additionalInfo"-->
+                      <!--                        :href="mainFeature.additionalInfo"-->
+                      <!--                        class="focus-visible:focus-outline-util hover:hover-text-util text-base-content"-->
+                      <!--                      >-->
+                      <!--                        <span class="sr-only">Learn more about this feature</span>-->
+
+                      <!--                        <QuestionMarkCircleIcon class="h-5 w-5 flex-none" />-->
+                      <!--                      </a>-->
+                    </li>
+                  </ol>
+                </div>
+
+                <!-- CTA -->
+                <div class="mt-10 flex flex-col gap-6 lg:flex-col lg:items-stretch">
+                  <!--                  <NuxtLink-->
+                  <!--                    aria-describedby="premium-features"-->
+                  <!--                    class="focus-visible:focus-outline-util hover:hover-text-util bg-primary-700 text-base-content-highlight hover:bg-primary-600 rounded-md px-3 py-2 text-center text-sm leading-6 font-semibold focus-visible:ring-offset-2"-->
+                  <!--                    to="#pricing"-->
+                  <!--                  >-->
+                  <!--                    Get Premium-->
+                  <!--                  </NuxtLink>-->
+
+                  <p class="text-center text-xs leading-6">
+                    Cancel anytime
+
+                    <br />
+
+                    Safe and discreet billing
+
+                    <br />
+
+                    <NuxtLink
+                      class="focus-visible:focus-outline-util hover:hover-text-util"
+                      href="https://www.trustpilot.com/review/r34.app"
+                      rel="nofollow noopener"
+                      target="_blank"
+                    >
+                      Trusted by {{ customerCount }}+ customers
+                    </NuxtLink>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Countdown Timer -->
+            <div class="text-center tabular-nums">
+              <div class="text-base-content mb-2 text-lg font-semibold">Offer ends in</div>
+
+              <div class="flex justify-center gap-4 text-2xl font-bold">
+                <div class="flex flex-col items-center">
+                  <span class="text-base-content-highlight">{{ Math.floor(remaining / 3600) }}</span>
+                  <span class="text-sm font-normal">Hours</span>
+                </div>
+
+                <div class="flex flex-col items-center">
+                  <span class="text-base-content-highlight">{{ Math.floor((remaining % 3600) / 60) }}</span>
+                  <span class="text-sm font-normal">Minutes</span>
+                </div>
+
+                <div class="flex flex-col items-center">
+                  <span class="text-base-content-highlight">{{ remaining % 60 }}</span>
+                  <span class="text-sm font-normal">Seconds</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tiers -->
             <div
               v-for="interval in paymentIntervals"
               :key="interval.name"
@@ -390,107 +491,6 @@
                   >
                     Get Premium
                   </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Countdown Timer -->
-            <div class="text-center tabular-nums">
-              <div class="text-base-content mb-2 text-lg font-semibold">Offer ends in</div>
-
-              <div class="flex justify-center gap-4 text-2xl font-bold">
-                <div class="flex flex-col items-center">
-                  <span class="text-base-content-highlight">{{ Math.floor(remaining / 3600) }}</span>
-                  <span class="text-sm font-normal">Hours</span>
-                </div>
-
-                <div class="flex flex-col items-center">
-                  <span class="text-base-content-highlight">{{ Math.floor((remaining % 3600) / 60) }}</span>
-                  <span class="text-sm font-normal">Minutes</span>
-                </div>
-
-                <div class="flex flex-col items-center">
-                  <span class="text-base-content-highlight">{{ remaining % 60 }}</span>
-                  <span class="text-sm font-normal">Seconds</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="bg-base-1000/70 ring-base-0/10 relative rounded-2xl ring-2 backdrop-blur-sm">
-              <div class="p-8 lg:pt-12 xl:p-10">
-                <!-- -->
-
-                <div>
-                  <h3 class="text-base-content-highlight text-2xl font-bold tracking-wide">
-                    All plans include&hellip;
-                  </h3>
-
-                  <p class="mt-2 text-sm leading-7">
-                    Access to {{ completeBooruList.length - defaultBooruList.length }} additional websites, and
-                    {{ mainFeatures.length }} exclusive features!
-                  </p>
-                </div>
-
-                <!-- Features -->
-                <div class="mt-4 flow-root sm:mt-8">
-                  <ol
-                    id="premium-features"
-                    class="space-y-1"
-                    role="list"
-                  >
-                    <li
-                      v-for="mainFeature in mainFeatures"
-                      :key="mainFeature.title"
-                      class="flex items-center gap-x-3 py-2"
-                    >
-                      <CheckIcon class="text-primary-600 h-6 w-5 flex-none" />
-
-                      <span class="text-base-content-highlight flex-auto text-sm leading-6">
-                        {{ mainFeature.title }}
-                      </span>
-
-                      <!-- TODO: Better linking -->
-                      <!--                      <a-->
-                      <!--                        v-if="mainFeature.additionalInfo"-->
-                      <!--                        :href="mainFeature.additionalInfo"-->
-                      <!--                        class="focus-visible:focus-outline-util hover:hover-text-util text-base-content"-->
-                      <!--                      >-->
-                      <!--                        <span class="sr-only">Learn more about this feature</span>-->
-
-                      <!--                        <QuestionMarkCircleIcon class="h-5 w-5 flex-none" />-->
-                      <!--                      </a>-->
-                    </li>
-                  </ol>
-                </div>
-
-                <!-- CTA -->
-                <div class="mt-10 flex flex-col gap-6 lg:flex-col lg:items-stretch">
-                  <NuxtLink
-                    aria-describedby="premium-features"
-                    class="focus-visible:focus-outline-util hover:hover-text-util bg-primary-700 text-base-content-highlight hover:bg-primary-600 rounded-md px-3 py-2 text-center text-sm leading-6 font-semibold focus-visible:ring-offset-2"
-                    to="#pricing"
-                  >
-                    Get Premium
-                  </NuxtLink>
-
-                  <p class="text-center text-xs leading-6">
-                    Cancel anytime
-
-                    <br />
-
-                    Safe and discreet billing
-
-                    <br />
-
-                    <NuxtLink
-                      class="focus-visible:focus-outline-util hover:hover-text-util"
-                      href="https://www.trustpilot.com/review/r34.app"
-                      rel="nofollow noopener"
-                      target="_blank"
-                    >
-                      Trusted by {{ customerCount }}+ customers
-                    </NuxtLink>
-                  </p>
                 </div>
               </div>
             </div>
@@ -593,8 +593,8 @@
                 >
                   <div class="flex items-center gap-3">
                     <img
-                      :src="getFaviconUrl(link.faviconDomain ?? link.url)"
                       :alt="`${link.name} favicon`"
+                      :src="getFaviconUrl(link.faviconDomain ?? link.url)"
                       class="h-5 w-5 shrink-0 rounded-sm"
                       height="128"
                       loading="eager"
