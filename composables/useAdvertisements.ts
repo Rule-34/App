@@ -23,14 +23,14 @@ export default function (loadAdScripts: Ref<boolean>) {
   ]
 
   const pushAds = [
-    // {
-    //   id: 'https://news-bbipasu.today/process.js?id=1278157271',
-    //   weight: 1,
-    //   provider: 'PartnersHouse'
-    // },
+    {
+      id: 'https://hotbjijale.cc/process.js?id=1278157271&p1=sub1&p2=sub2&p3=sub3&p4=sub4',
+      weight: 0.3,
+      provider: 'PartnersHouse'
+    },
     {
       id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
-      weight: 1,
+      weight: 0.7,
       provider: 'EvaDav'
     }
   ]
