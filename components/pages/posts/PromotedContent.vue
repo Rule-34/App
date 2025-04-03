@@ -51,7 +51,7 @@
 </script>
 
 <template>
-  <figure class="border-base-0/20 -mx-1 rounded-md border">
+  <figure class="-mx-1 rounded-md border border-base-0/20">
     <!-- -->
 
     <template v-if="promo.mediaType === 'iframe'">
@@ -90,10 +90,10 @@
     </NuxtLink>
 
     <!-- Body -->
-    <figcaption class="px-1 py-3 text-center text-sm whitespace-normal">
+    <figcaption class="whitespace-normal px-1 py-3 text-center text-sm">
       <NuxtLink
         class="hover:hover-text-util focus-visible:focus-outline-util underline"
-        href="/premium?utm_source=internal&utm_medium=promo#pricing"
+        href="/premium?utm_source=internal&utm_medium=promo"
         >Get Premium<!----></NuxtLink
       ><!---->: No ads + exclusive features
     </figcaption>

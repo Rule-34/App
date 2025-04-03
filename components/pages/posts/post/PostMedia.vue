@@ -117,7 +117,7 @@
           links: [
             {
               label: 'Remove ads',
-              href: '/premium?utm_source=internal&utm_medium=player-context-menu#pricing'
+              href: '/premium?utm_source=internal&utm_medium=player-context-menu'
             },
             {
               label: 'Download',
@@ -311,13 +311,13 @@
       <div class="flex h-full flex-col items-center space-y-4 py-4">
         <div class="flex flex-1 flex-col items-center justify-center gap-4">
           <span
-            class="from-base-950 via-base-900 to-base-900 text-base-content-highlight rounded-md bg-linear-to-l px-4 py-1.5 text-center"
+            class="rounded-md bg-linear-to-l from-base-950 via-base-900 to-base-900 px-4 py-1.5 text-center text-base-content-highlight"
           >
             {{ error?.message }}
           </span>
 
           <button
-            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 mx-auto inline-flex items-center justify-center rounded-md px-2 py-1 text-sm ring-1"
+            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto inline-flex items-center justify-center rounded-md px-2 py-1 text-sm ring-1 ring-base-0/20"
             type="button"
             @click="manuallyReloadMedia"
           >
@@ -329,11 +329,11 @@
         <!-- TODO: Improve style -->
         <div
           v-if="!isPremium"
-          class="text-base-content text-xs"
+          class="text-xs text-base-content"
         >
           <NuxtLink
             class="hover:hover-text-util focus-visible:focus-outline-util underline"
-            href="/premium?utm_source=internal&utm_medium=media-error#pricing"
+            href="/premium?utm_source=internal&utm_medium=media-error"
           >
             <!-- @formatter:off -->
             Get Premium</NuxtLink
