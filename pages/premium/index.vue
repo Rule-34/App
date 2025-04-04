@@ -63,11 +63,15 @@
       links: [
         {
           name: 'Ko-fi',
-          url: 'https://ko-fi.com/alejandro_akbal/tiers'
+          url: 'https://ko-fi.com/alejandro_akbal/tiers',
+          category: 'creditCard',
+          cta: 'Subscribe with Credit Card & PayPal'
         },
         {
           name: 'Patreon',
-          url: 'https://www.patreon.com/R34App'
+          url: 'https://www.patreon.com/R34App',
+          category: 'creditCard',
+          cta: 'Subscribe with Patreon'
         }
       ]
     },
@@ -80,25 +84,31 @@
       links: [
         {
           name: 'Ko-fi',
-          url: 'https://ko-fi.com/s/4ff7beebad'
+          url: 'https://ko-fi.com/s/4ff7beebad',
+          category: 'creditCard',
+          cta: 'Pay with Credit Card & PayPal'
         },
         {
-          name: 'SellApp (Crypto)',
+          name: 'SellApp',
           url: 'https://akbal.sell.app/product/premium-30-days-access',
-          faviconDomain: 'https://sell.app'
+          faviconDomain: 'https://sell.app',
+          category: 'crypto',
+          cta: 'Pay with Crypto'
         }
       ]
     },
     {
       name: 'Yearly',
-      description: 'Billed as €70.56',
-      price: 5.88,
+      description: 'Billed as €59.64; Save 4 months',
+      price: 4.97,
       originalPrice: 12.99,
       interval: 'month',
       links: [
         {
           name: 'Patreon',
           url: 'https://www.patreon.com/R34App',
+          category: 'patreon',
+          cta: 'Subscribe with Patreon',
           instructions: ['Make sure to select "Pay annually" on the Patreon page']
         }
       ]
@@ -112,12 +122,16 @@
       links: [
         {
           name: 'Ko-fi',
-          url: 'https://ko-fi.com/s/4fa1d3781c'
+          url: 'https://ko-fi.com/s/4fa1d3781c',
+          category: 'creditCard',
+          cta: 'Pay with Credit Card & PayPal'
         },
         {
-          name: 'SellApp (Crypto)',
+          name: 'SellApp',
           url: 'https://akbal.sell.app/product/premium-lifetime',
-          faviconDomain: 'https://sell.app'
+          faviconDomain: 'https://sell.app',
+          category: 'crypto',
+          cta: 'Pay with Crypto'
         }
       ]
     }
@@ -127,7 +141,7 @@
     {
       question: 'How do I get access after payment?',
       answer:
-        "After payment, you'll receive an email with instructions to sign in to your Premium account.\n\nFor Ko-fi payments, this is instant.\nFor Patreon, it may take up to 24 hours.\n\nChoose the platform that works best for you."
+        "After payment, you'll receive an email with instructions to sign in to your Premium account.\n\nFor Ko-fi payments, this is instant.\nFor Patreon, it may take up to 24 hours.\n\nChoose the payment method that works best for you."
     },
     {
       question: 'What payment options are accepted?',
@@ -168,13 +182,15 @@
 
     selectedPaymentInterval.value = interval
 
-    // If there's only one payment option and no instructions, directly open the link
-    if (interval.links.length === 1 && !interval.links[0].instructions) {
-      window.open(interval.links[0].url, '_blank', 'noreferrer noopener')
-      return
-    }
-
     isPaymentDialogOpen.value = true
+  }
+
+  // Payment methods categorization
+  const paymentMethods = {
+    creditCard: { name: 'Credit Card', icon: 'https://icons.duckduckgo.com/ip2/mastercard.us.ico' },
+    crypto: { name: 'Cryptocurrency', icon: 'https://icons.duckduckgo.com/ip2/bitcoin.org.ico' },
+    patreon: { name: 'Patreon', icon: 'https://icons.duckduckgo.com/ip2/patreon.com.ico' },
+    kofi: { name: 'Ko-fi', icon: 'https://icons.duckduckgo.com/ip2/ko-fi.com.ico' }
   }
 
   function getFaviconUrl(url: string) {
@@ -436,16 +452,21 @@
                 <!-- Badge -->
                 <div
                   v-if="interval.originalPrice"
-                  class="absolute top-0 right-1/8"
+                  class="absolute top-0 right-1/10"
                 >
                   <div
                     :class="{
                       'bg-primary-700': interval.name === selectedPaymentInterval.name
                     }"
-                    class="bg-base-0/10 rounded-b-2xl px-2 pt-6 pb-4"
+                    class="bg-base-0/10 rounded-b-2xl px-2 pt-3 pb-4"
                   >
-                    <span class="text-base-content-highlight font-medium">
-                      -{{ Math.round(((interval.originalPrice - interval.price) / interval.originalPrice) * 100) }}%
+                    <span
+                      class="text-base-content-highlight text-sm"
+                      :class="{
+                        'font-medium': interval.name === selectedPaymentInterval.name
+                      }"
+                    >
+                      Save {{ Math.round(((interval.originalPrice - interval.price) / interval.originalPrice) * 100) }}%
                     </span>
                   </div>
                 </div>
@@ -578,48 +599,76 @@
                 Payment Instructions - {{ selectedPaymentInterval.name }}
               </DialogTitle>
 
-              <p
-                v-if="selectedPaymentInterval.links.length > 1"
-                class="text-base-content mt-2 text-sm text-pretty"
-              >
-                Choose one payment option to continue
-              </p>
+              <p class="text-base-content mt-2 text-sm text-pretty">Choose your preferred payment method</p>
 
-              <div class="mt-4 space-y-6">
-                <div
-                  v-for="link in selectedPaymentInterval.links"
-                  :key="link.name"
-                  class="space-y-4"
+              <div class="mt-6 space-y-8">
+                <!-- Group links by category -->
+                <template
+                  v-for="category in Object.keys(paymentMethods) as Array<keyof typeof paymentMethods>"
+                  :key="category"
                 >
-                  <div class="flex items-center gap-3">
-                    <img
-                      :alt="`${link.name} favicon`"
-                      :src="getFaviconUrl(link.faviconDomain ?? link.url)"
-                      class="h-5 w-5 shrink-0 rounded-sm"
-                      height="128"
-                      loading="eager"
-                      width="128"
-                    />
-                    <h4 class="text-base-content-highlight font-medium">{{ link.name }}</h4>
-                  </div>
-                  <ol class="text-base-content list-decimal space-y-2 pl-4 text-sm">
-                    <li
-                      v-for="(instruction, index) in link.instructions"
-                      :key="index"
-                    >
-                      {{ instruction }}
-                    </li>
-                  </ol>
-
-                  <a
-                    :href="link.url"
-                    class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util text-base-content-highlight ring-base-0/20 rounded-lg px-3 py-2 text-center text-sm font-medium ring-1"
-                    rel="nofollow noopener noreferrer"
-                    target="_blank"
+                  <!-- Only show section if links exist for this category -->
+                  <div
+                    v-if="selectedPaymentInterval.links.some((link) => link.category === category)"
+                    class="space-y-4"
                   >
-                    Continue to {{ link.name }}
-                  </a>
-                </div>
+                    <!-- Section header -->
+                    <div class="flex items-center gap-3">
+                      <img
+                        :src="paymentMethods[category].icon"
+                        class="h-6 w-6 shrink-0 rounded-sm"
+                        height="128"
+                        loading="eager"
+                        width="128"
+                        :alt="`${paymentMethods[category].name} icon`"
+                      />
+                      <h4 class="text-base-content-highlight text-lg font-medium">
+                        {{ paymentMethods[category].name }}
+                      </h4>
+                    </div>
+
+                    <!-- Payment links -->
+                    <div class="grid gap-3 sm:grid-cols-2">
+                      <a
+                        v-for="link in selectedPaymentInterval.links.filter((link) => link.category === category)"
+                        :key="link.name"
+                        :href="link.url"
+                        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util text-base-content-highlight ring-base-0/20 flex items-center gap-2 rounded-lg px-3 py-2 text-center text-sm font-medium ring-1"
+                        rel="nofollow noopener noreferrer"
+                        target="_blank"
+                      >
+                        <img
+                          :alt="`${link.name} favicon`"
+                          :src="getFaviconUrl(link.faviconDomain ?? link.url)"
+                          class="h-5 w-5 shrink-0 rounded-sm"
+                          height="128"
+                          loading="eager"
+                          width="128"
+                        />
+                        <span>
+                          {{ link.cta }}
+                        </span>
+                      </a>
+                    </div>
+
+                    <!-- Instructions (only for links that have them) -->
+                    <template
+                      v-for="link in selectedPaymentInterval.links"
+                      :key="`${link.name}-instructions`"
+                    >
+                      <div v-if="link.category === category && 'instructions' in link && link.instructions">
+                        <ol class="text-base-content mt-2 list-decimal space-y-2 pl-4 text-sm">
+                          <li
+                            v-for="(instruction, index) in link.instructions"
+                            :key="index"
+                          >
+                            {{ instruction }}
+                          </li>
+                        </ol>
+                      </div>
+                    </template>
+                  </div>
+                </template>
               </div>
 
               <!-- Actions -->
