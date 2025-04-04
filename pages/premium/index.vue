@@ -400,26 +400,26 @@
             </div>
 
             <!-- Countdown Timer -->
-            <div class="text-center tabular-nums">
-              <div class="text-base-content mb-2 text-lg font-semibold">Offer ends in</div>
+            <!--            <div class="text-center tabular-nums">-->
+            <!--              <div class="text-base-content mb-2 text-lg font-semibold">Offer ends in</div>-->
 
-              <div class="flex justify-center gap-4 text-2xl font-bold">
-                <div class="flex flex-col items-center">
-                  <span class="text-base-content-highlight">{{ Math.floor(remaining / 3600) }}</span>
-                  <span class="text-sm font-normal">Hours</span>
-                </div>
+            <!--              <div class="flex justify-center gap-4 text-2xl font-bold">-->
+            <!--                <div class="flex flex-col items-center">-->
+            <!--                  <span class="text-base-content-highlight">{{ Math.floor(remaining / 3600) }}</span>-->
+            <!--                  <span class="text-sm font-normal">Hours</span>-->
+            <!--                </div>-->
 
-                <div class="flex flex-col items-center">
-                  <span class="text-base-content-highlight">{{ Math.floor((remaining % 3600) / 60) }}</span>
-                  <span class="text-sm font-normal">Minutes</span>
-                </div>
+            <!--                <div class="flex flex-col items-center">-->
+            <!--                  <span class="text-base-content-highlight">{{ Math.floor((remaining % 3600) / 60) }}</span>-->
+            <!--                  <span class="text-sm font-normal">Minutes</span>-->
+            <!--                </div>-->
 
-                <div class="flex flex-col items-center">
-                  <span class="text-base-content-highlight">{{ remaining % 60 }}</span>
-                  <span class="text-sm font-normal">Seconds</span>
-                </div>
-              </div>
-            </div>
+            <!--                <div class="flex flex-col items-center">-->
+            <!--                  <span class="text-base-content-highlight">{{ remaining % 60 }}</span>-->
+            <!--                  <span class="text-sm font-normal">Seconds</span>-->
+            <!--                </div>-->
+            <!--              </div>-->
+            <!--            </div>-->
 
             <!-- Tiers -->
             <div
