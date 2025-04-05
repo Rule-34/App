@@ -178,7 +178,7 @@
   })
 
   function onIntervalClick(interval: (typeof paymentIntervals)[0]) {
-    window._paq?.push(['trackEvent', 'Premium', 'Subscribe Plan', interval.name])
+    window._paq?.push(['trackEvent', 'Premium', 'Plan Click', interval.name])
 
     selectedPaymentInterval.value = interval
 
