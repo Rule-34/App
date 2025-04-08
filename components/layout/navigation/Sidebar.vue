@@ -1,5 +1,5 @@
 <script setup>
-  import { BookmarkIcon, ChatBubbleLeftEllipsisIcon, SparklesIcon, VideoCameraIcon } from '@heroicons/vue/24/outline'
+  import { BookmarkIcon, ChatBubbleLeftEllipsisIcon, SparklesIcon } from '@heroicons/vue/24/outline'
   import { sidebarNavigation } from 'assets/js/sidebarLinks'
 
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
@@ -18,7 +18,7 @@
       width="16"
     />
 
-    <span class="text-2xl font-bold text-base-content-highlight">Rule 34 App</span>
+    <span class="text-base-content-highlight text-2xl font-bold">Rule 34 App</span>
   </div>
 
   <!-- Content -->
@@ -35,7 +35,7 @@
         <NuxtLink
           :href="item.href"
           :target="item.isExternal ? '_blank' : undefined"
-          class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
+          class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
           exactActiveClass="bg-base-0/20 text-base-content-highlight"
         >
           <component
@@ -50,10 +50,10 @@
       <li class="-mx-2">
         <NuxtLink
           :href="isPremium ? '/premium/dashboard' : '/premium'"
-          class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 underline decoration-primary-500 decoration-2 underline-offset-8"
+          class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group decoration-primary-500 flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold underline decoration-2 underline-offset-8"
           exactActiveClass="bg-base-0/20 text-base-content-highlight"
         >
-          <SparklesIcon class="h-6 w-6 shrink-0 text-primary-500" />
+          <SparklesIcon class="text-primary-500 h-6 w-6 shrink-0" />
           Premium
         </NuxtLink>
       </li>
@@ -61,31 +61,30 @@
       <template v-if="isPremium">
         <li class="-mr-2 ml-6">
           <NuxtLink
-            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
             exactActiveClass="bg-base-0/20 text-base-content-highlight"
             href="/premium/saved-posts/r34.app"
           >
-            <BookmarkIcon class="h-6 w-6 shrink-0 text-primary-500" />
+            <BookmarkIcon class="text-primary-500 h-6 w-6 shrink-0" />
             Saved Posts
           </NuxtLink>
         </li>
       </template>
 
       <!-- Advertisements -->
-      <!--      <template v-if="!isPremium">-->
-
-      <!--        <li class="-mx-2">-->
-      <!--          <a-->
-      <!--            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"-->
-      <!--            href="https://golove.ai/anonAuth?ref=r34app"-->
-      <!--            rel="nofollow noopener noreferrer"-->
-      <!--            target="_blank"-->
-      <!--          >-->
-      <!--            <ChatBubbleLeftEllipsisIcon class="h-6 w-6 shrink-0" />-->
-      <!--            AI Sex Tinder-->
-      <!--          </a>-->
-      <!--        </li>-->
-      <!--      </template>-->
+      <template v-if="!isPremium">
+        <li class="-mx-2">
+          <a
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+            href="https://candyai.gg/home2?via=rule-3496"
+            rel="nofollow noopener noreferrer"
+            target="_blank"
+          >
+            <ChatBubbleLeftEllipsisIcon class="h-6 w-6 shrink-0" />
+            AI Chat
+          </a>
+        </li>
+      </template>
 
       <!-- Bottom -->
       <li class="flex flex-1 flex-col">
