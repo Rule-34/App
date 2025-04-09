@@ -6,32 +6,21 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      bodyAttrs: {
-        class: 'cc--custom'
-      },
-
       style: [
         {
           type: 'text/css',
           children: 'html { background-color: black; }'
         }
-      ],
-
-      script: [
-        // Matomo
-        {
-          src: '/js/matomo.js',
-          type: 'text/plain',
-          'data-category': 'analytics',
-          'data-service': 'matomo'
-        },
-        {
-          src: 'https://matomo.akbal.dev/matomo.js',
-          type: 'text/plain',
-          'data-category': 'analytics',
-          'data-service': 'matomo'
-        }
       ]
+    }
+  },
+
+  scripts: {
+    registry: {
+      matomoAnalytics: {
+        matomoUrl: 'https://matomo.akbal.dev',
+        siteId: 1
+      }
     }
   },
 
@@ -205,9 +194,7 @@ export default defineNuxtConfig({
   },
 
   vite: {
-    plugins: [
-      tailwindcss(),
-    ],
+    plugins: [tailwindcss()]
   },
 
   sourcemap: true,
@@ -230,7 +217,7 @@ export default defineNuxtConfig({
     }
   },
 
-  css: ['~/assets/css/main.css', '~/assets/css/cookieconsent.css'],
+  css: ['~/assets/css/main.css'],
   components: [{ path: '~/components', pathPrefix: false }],
 
   site: {

@@ -1,48 +1,34 @@
 <script setup>
-useSeoMeta({
-  title: 'Cookie Policy',
+  useSeoMeta({
+    title: 'Cookie Policy',
 
-  description: 'Cookie policy of the Rule 34 App'
-})
+    description: 'Cookie policy of the Rule 34 App'
+  })
 </script>
 
 <template>
-  <main class="container prose prose-invert mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
+  <main class="prose prose-invert container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
     <PageHeader>
       <template #title>Cookie Policy</template>
     </PageHeader>
 
     <div>
       <div>
-        <strong>
-          Last updated February 18, 2024
-        </strong>
+        <strong> Last updated April 9, 2025 </strong>
       </div>
       <div>
         This Cookie Policy explains how Rule 34 App ("
-        <strong>
-          Company
-        </strong>
+        <strong> Company </strong>
         ," "
-        <strong>
-          we
-        </strong>
+        <strong> we </strong>
         ," "
-        <strong>
-          us
-        </strong>
+        <strong> us </strong>
         ," and "
-        <strong>
-          our
-        </strong>
+        <strong> our </strong>
         ") uses cookies and similar technologies to recognize you when you visit our website at
-        <a href="https://r34.app">
-          https://r34.app
-        </a>
+        <a href="https://r34.app"> https://r34.app </a>
         ("
-        <strong>
-          Website
-        </strong>
+        <strong> Website </strong>
         "). It explains what these technologies are and why we use them, as well as your rights to control our use of
         them.
       </div>
@@ -51,9 +37,7 @@ useSeoMeta({
         combine it with other information.
       </div>
       <div>
-        <strong>
-          What are cookies?
-        </strong>
+        <strong> What are cookies? </strong>
       </div>
       <div>
         Cookies are small data files that are placed on your computer or mobile device when you visit a website. Cookies
@@ -63,48 +47,28 @@ useSeoMeta({
       <div>
         Cookies set by the website owner (in this case, Rule 34 App) are called "first-party cookies." Cookies set by
         parties other than the website owner are called "third-party cookies." Third-party cookies enable third-party
-        features or functionality to be provided on or through the website (e.g., advertising, interactive content, and
-        analytics). The parties that set these third-party cookies can recognize your computer both when it visits the
-        website in question and also when it visits certain other websites.
+        features or functionality to be provided on or through the website (e.g., advertising, interactive content). The
+        parties that set these third-party cookies can recognize your computer both when it visits the website in
+        question and also when it visits certain other websites.
       </div>
       <div>
-        <strong>
-          Why do we use cookies?
-        </strong>
+        <strong> Why do we use cookies? </strong>
       </div>
       <div>
-        We use first- and third-party cookies for several reasons. Some cookies are required for technical reasons in
-        order for our Website to operate, and we refer to these as "essential" or "strictly necessary" cookies. Other
-        cookies also enable us to track and target the interests of our users to enhance the experience on our Online
-        Properties. Third parties serve cookies through our Website for advertising, analytics, and other purposes. This
-        is described in more detail below.
+        We use first party cookies for several reasons. Some cookies are required for technical reasons in order for our
+        Website to operate, and we refer to these as "essential" or "strictly necessary" cookies. Other cookies also
+        enable us to track and target the interests of our users to enhance the experience on our Online Properties.
+        Third parties serve cookies through our Website for advertising, and other purposes. This is described in more
+        detail below.
       </div>
       <div>
-        <strong>
-          How can I control cookies?
-        </strong>
-      </div>
-      <div>
-        You have the right to decide whether to accept or reject cookies. You can exercise your cookie rights by setting
-        your preferences in the Consent Preferences Center. The Consent Preferences Center allows you to select which
-        categories
-        of cookies you accept or reject. Essential cookies cannot be rejected as they are strictly necessary to provide
-        you with services.
-      </div>
-      <div>
-        The Consent Preferences Center can be found in the notification popup and on the Legal page in our website. If
-        you choose to reject cookies, you may still use our website though your access to some functionality and areas
-        of our website may be restricted. You may also set or amend your web browser controls to accept or refuse
-        cookies.
-      </div>
-      <div>
-        The specific types of first- and third-party cookies served through our Website and the purposes they perform
-        are described in the table below (please note that the specific&nbsp;cookies served may vary depending on the
-        specific Online Properties you visit):
+        The specific types of first-party cookies served through our Website and the purposes they perform are described
+        in the table below (please note that the specific&nbsp;cookies served may vary depending on the specific Online
+        Properties you visit):
         <strong>
           <u>
-            <br/>
-            <br/>
+            <br />
+            <br />
             Essential website cookies:
           </u>
         </strong>
@@ -118,54 +82,30 @@ useSeoMeta({
           <div>
             <table>
               <tbody>
-              <tr>
-                <td>
-                  Name:
-                </td>
-                <td>
-                  localStorage
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Purpose:
-                </td>
-                <td>
-                  Used to save preferences and offer app functionality.
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Provider:
-                </td>
-                <td>
-                  r34.app
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Service:
-                </td>
-                <td>
-                  __________
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Type:
-                </td>
-                <td>
-                  html_local_storage
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Expires in:
-                </td>
-                <td>
-                  __________
-                </td>
-              </tr>
+                <tr>
+                  <td>Name:</td>
+                  <td>localStorage</td>
+                </tr>
+                <tr>
+                  <td>Purpose:</td>
+                  <td>Used to save preferences and offer app functionality.</td>
+                </tr>
+                <tr>
+                  <td>Provider:</td>
+                  <td>r34.app</td>
+                </tr>
+                <tr>
+                  <td>Service:</td>
+                  <td>__________</td>
+                </tr>
+                <tr>
+                  <td>Type:</td>
+                  <td>html_local_storage</td>
+                </tr>
+                <tr>
+                  <td>Expires in:</td>
+                  <td>__________</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -174,54 +114,30 @@ useSeoMeta({
           <div>
             <table>
               <tbody>
-              <tr>
-                <td>
-                  Name:
-                </td>
-                <td>
-                  auth.*
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Purpose:
-                </td>
-                <td>
-                  Used to authenticate with the API and get access to Premium features.
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Provider:
-                </td>
-                <td>
-                  r34.app
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Service:
-                </td>
-                <td>
-                  __________
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Type:
-                </td>
-                <td>
-                  http_cookie
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Expires in:
-                </td>
-                <td>
-                  __________
-                </td>
-              </tr>
+                <tr>
+                  <td>Name:</td>
+                  <td>auth.*</td>
+                </tr>
+                <tr>
+                  <td>Purpose:</td>
+                  <td>Used to authenticate with the API and get access to Premium features.</td>
+                </tr>
+                <tr>
+                  <td>Provider:</td>
+                  <td>r34.app</td>
+                </tr>
+                <tr>
+                  <td>Service:</td>
+                  <td>__________</td>
+                </tr>
+                <tr>
+                  <td>Type:</td>
+                  <td>http_cookie</td>
+                </tr>
+                <tr>
+                  <td>Expires in:</td>
+                  <td>__________</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -231,7 +147,7 @@ useSeoMeta({
         <div>
           <strong>
             <u>
-              <br/>
+              <br />
               Analytics and customization cookies:
             </u>
           </strong>
@@ -245,54 +161,30 @@ useSeoMeta({
             <div>
               <table>
                 <tbody>
-                <tr>
-                  <td>
-                    Name:
-                  </td>
-                  <td>
-                    _pk_*
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Purpose:
-                  </td>
-                  <td>
-                    Analytics
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Provider:
-                  </td>
-                  <td>
-                    Matomo
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Service:
-                  </td>
-                  <td>
-                    __________
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Type:
-                  </td>
-                  <td>
-                    http_cookie
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Expires in:
-                  </td>
-                  <td>
-                    __________
-                  </td>
-                </tr>
+                  <tr>
+                    <td>Name:</td>
+                    <td>_pk_*</td>
+                  </tr>
+                  <tr>
+                    <td>Purpose:</td>
+                    <td>Analytics</td>
+                  </tr>
+                  <tr>
+                    <td>Provider:</td>
+                    <td>r34.app</td>
+                  </tr>
+                  <tr>
+                    <td>Service:</td>
+                    <td>__________</td>
+                  </tr>
+                  <tr>
+                    <td>Type:</td>
+                    <td>http_cookie</td>
+                  </tr>
+                  <tr>
+                    <td>Expires in:</td>
+                    <td>__________</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -300,9 +192,7 @@ useSeoMeta({
         </div>
       </div>
       <div>
-        <strong>
-          How can I control cookies on my browser?
-        </strong>
+        <strong> How can I control cookies on my browser? </strong>
       </div>
       <div>
         As the means by which you can refuse cookies through your web browser controls vary from browser to browser, you
@@ -311,37 +201,34 @@ useSeoMeta({
       </div>
       <ul>
         <li>
-          <a href="https://support.google.com/chrome/answer/95647#zippy=%2Callow-or-block-cookies">
-            Chrome
-          </a>
+          <a href="https://support.google.com/chrome/answer/95647#zippy=%2Callow-or-block-cookies"> Chrome </a>
         </li>
         <li>
           <a
-            href="https://support.microsoft.com/en-us/windows/delete-and-manage-cookies-168dab11-0753-043d-7c16-ede5947fc64d">
+            href="https://support.microsoft.com/en-us/windows/delete-and-manage-cookies-168dab11-0753-043d-7c16-ede5947fc64d"
+          >
             Internet Explorer
           </a>
         </li>
         <li>
           <a
-            href="https://support.mozilla.org/en-US/kb/enhanced-tracking-protection-firefox-desktop?redirectslug=enable-and-disable-cookies-website-preferences&amp;redirectlocale=en-US">
+            href="https://support.mozilla.org/en-US/kb/enhanced-tracking-protection-firefox-desktop?redirectslug=enable-and-disable-cookies-website-preferences&amp;redirectlocale=en-US"
+          >
             Firefox
           </a>
         </li>
         <li>
-          <a href="https://support.apple.com/en-ie/guide/safari/sfri11471/mac">
-            Safari
-          </a>
+          <a href="https://support.apple.com/en-ie/guide/safari/sfri11471/mac"> Safari </a>
         </li>
         <li>
           <a
-            href="https://support.microsoft.com/en-us/windows/microsoft-edge-browsing-data-and-privacy-bb8174ba-9d73-dcf2-9b4a-c582b4e640dd">
+            href="https://support.microsoft.com/en-us/windows/microsoft-edge-browsing-data-and-privacy-bb8174ba-9d73-dcf2-9b4a-c582b4e640dd"
+          >
             Edge
           </a>
         </li>
         <li>
-          <a href="https://help.opera.com/en/latest/web-preferences/">
-            Opera
-          </a>
+          <a href="https://help.opera.com/en/latest/web-preferences/"> Opera </a>
         </li>
       </ul>
       <div>
@@ -350,25 +237,17 @@ useSeoMeta({
       </div>
       <ul>
         <li>
-          <a href="http://www.aboutads.info/choices/">
-            Digital Advertising Alliance
-          </a>
+          <a href="http://www.aboutads.info/choices/"> Digital Advertising Alliance </a>
         </li>
         <li>
-          <a href="https://youradchoices.ca/">
-            Digital Advertising Alliance of Canada
-          </a>
+          <a href="https://youradchoices.ca/"> Digital Advertising Alliance of Canada </a>
         </li>
         <li>
-          <a href="http://www.youronlinechoices.com/">
-            European Interactive Digital Advertising Alliance
-          </a>
+          <a href="http://www.youronlinechoices.com/"> European Interactive Digital Advertising Alliance </a>
         </li>
       </ul>
       <div>
-        <strong>
-          What about other tracking technologies, like web beacons?
-        </strong>
+        <strong> What about other tracking technologies, like web beacons? </strong>
       </div>
       <div>
         Cookies are not the only way&nbsp;to recognize or track visitors to a website. We may use other, similar
@@ -381,9 +260,7 @@ useSeoMeta({
         reliant on cookies to function properly, and so declining cookies will impair their functioning.
       </div>
       <div>
-        <strong>
-          Do you use Flash cookies or Local Shared Objects?
-        </strong>
+        <strong> Do you use Flash cookies or Local Shared Objects? </strong>
       </div>
       <div>
         Websites may also use so-called "Flash Cookies" (also known as Local Shared Objects or "LSOs") to, among other
@@ -411,9 +288,7 @@ useSeoMeta({
         our services or online content.
       </div>
       <div>
-        <strong>
-          Do you serve targeted advertising?
-        </strong>
+        <strong> Do you serve targeted advertising? </strong>
       </div>
       <div>
         Third parties may serve cookies on your computer or mobile device to serve advertising through our Website.
@@ -426,40 +301,25 @@ useSeoMeta({
         to provide these.
       </div>
       <div>
-        <strong>
-          How often will you update this Cookie Policy?
-        </strong>
+        <strong> How often will you update this Cookie Policy? </strong>
       </div>
       <div>
         We may update&nbsp;this Cookie Policy from time to time in order to reflect, for example, changes to the cookies
         we use or for other operational, legal, or regulatory reasons. Please therefore revisit this Cookie Policy
         regularly to stay informed about our use of cookies and related technologies.
       </div>
+      <div>The date at the top of this Cookie Policy indicates when it was last updated.</div>
       <div>
-        The date at the top of this Cookie Policy indicates when it was last updated.
-      </div>
-      <div>
-        <strong>
-          Where can I get further information?
-        </strong>
+        <strong> Where can I get further information? </strong>
       </div>
       <div>
         If you have any questions about our use of cookies or other technologies, please email us at contact@r34.app or
         by post to:
       </div>
-      <div>
-        Rule 34 App
-      </div>
-      <div>
-        __________
-      </div>
-      <div>
-        __________
-      </div>
-      <div>
-        Spain
-      </div>
+      <div>Rule 34 App</div>
+      <div>__________</div>
+      <div>__________</div>
+      <div>Spain</div>
     </div>
-
   </main>
 </template>

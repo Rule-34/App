@@ -55,22 +55,6 @@
         />
       </li>
 
-      <!-- Consent -->
-      <li>
-        <ContentContainer
-          text="Manage your cookies consent in the next link"
-          title="Consent Preferences Center"
-        >
-          <button
-            class="hover:hover-text-util focus-visible:focus-outline-util text-sm text-base-content underline"
-            type="button"
-            @click="$CC.showPreferences()"
-          >
-            Open Preferences Center
-          </button>
-        </ContentContainer>
-      </li>
-
       <!-- DMCA -->
       <li>
         <ContentContainer

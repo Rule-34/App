@@ -9,8 +9,6 @@ export function useInteractionDetector() {
 
   const interactionEvents = ['mousedown', 'touchstart']
   const ignoreSelectors = [
-    // Cookie Consent
-    '#cc-main',
     // Dialogs
     '[role="dialog"]'
   ]
