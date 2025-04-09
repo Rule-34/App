@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { ArrowLeftOnRectangleIcon, ExclamationTriangleIcon } from '@heroicons/vue/24/solid'
   import { toast } from 'vue-sonner'
+  import { Platform, PLATFORM_URLS, detectPlatform } from '~/types/enums/Platform'
 
   const { $pocketBase } = useNuxtApp()
 
@@ -36,51 +37,18 @@
     window.location.href = '/premium/sign-in'
   }
 
-  const platformOfPurchase = computed(() => {
-    if (!license.value) {
-      return null
-    }
+  const platformOfPurchase = computed<Platform | undefined>(() => detectPlatform(license.value))
 
-    switch (true) {
-      case license.value.startsWith('SLX-'):
-        return 'Sellix'
-
-      case license.value.startsWith('PATREON-'):
-        return 'Patreon'
-
-      case license.value.startsWith('KOFI-'):
-        return 'Ko-Fi'
-
-      case license.value.length === 35:
-        return 'Gumroad'
-
-      default:
-        throw new Error('Unknown license origin')
-    }
-  })
-
-  const manageSubscriptionLink = computed(() => {
+  function onManageSubscriptionClick() {
     if (!platformOfPurchase.value) {
-      return null
+      toast.error('Cant find the platform where you purchased your subscription')
+      return
     }
 
-    switch (platformOfPurchase.value) {
-      case 'Sellix':
-        return 'https://alejandroakbal.mysellix.io/customer/auth'
+    window.open(PLATFORM_URLS[platformOfPurchase.value], '_blank', 'noopener,noreferrer')
 
-      case 'Patreon':
-        return 'https://www.patreon.com/r34app/membership'
-
-      case 'Gumroad':
-        return 'https://app.gumroad.com/library?query=Rule+34+App'
-
-      case 'Ko-Fi':
-        return 'https://ko-fi.com/alejandro_akbal/tiers'
-
-      default:
-        throw new Error('Unknown platform of purchase')
-    }
-  })
+    window._paq?.push(['trackEvent', 'Premium', 'Click "Manage subscription"', platformOfPurchase.value])
+  }
 
   onNuxtReady(() => {
     const route = useRoute()
@@ -112,7 +80,7 @@
       return
     }
 
-    window._paq?.push(['trackEvent', 'Premium', 'Subscribed'])
+    window._paq?.push(['trackEvent', 'Premium', 'Subscribed', platformOfPurchase.value])
     // <--- Event Tracking ---
   })
 
@@ -234,14 +202,13 @@
 
       <span> &middot; </span>
 
-      <NuxtLink
-        :href="manageSubscriptionLink"
+      <button
         class="hover:hover-text-util focus-visible:focus-outline-util underline"
-        rel="nofollow noopener noreferrer"
-        target="_blank"
+        type="button"
+        @click="onManageSubscriptionClick"
       >
         Manage subscription
-      </NuxtLink>
+      </button>
     </section>
   </main>
 </template>
