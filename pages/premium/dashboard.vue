@@ -2,6 +2,7 @@
   import { ArrowLeftOnRectangleIcon, ExclamationTriangleIcon } from '@heroicons/vue/24/solid'
   import { toast } from 'vue-sonner'
   import { Platform, PLATFORM_URLS, detectPlatform } from '~/types/enums/Platform'
+  import formbricks from '~/assets/js/formbricks'
 
   const { $pocketBase } = useNuxtApp()
 
@@ -40,6 +41,9 @@
   const platformOfPurchase = computed<Platform | undefined>(() => detectPlatform(license.value))
 
   function onManageSubscriptionClick() {
+    // TODO: Only continue if form finished
+    formbricks.track('cancel_subscription_click_on_dashboard')
+
     if (!platformOfPurchase.value) {
       toast.error('Cant find the platform where you purchased your subscription')
       return

@@ -25,6 +25,7 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@formbricks/js": "^4.1.0",
     "@formkit/auto-animate": "^0.8.2",
     "@headlessui-float/nuxt": "^0.15.0",
     "@headlessui/tailwindcss": "^0.2.2",
