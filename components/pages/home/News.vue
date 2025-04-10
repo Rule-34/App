@@ -35,8 +35,12 @@
     },
     {
       name: 'Get the best Hentai on social media! 📱',
-      text: "We're on Mastodon and Telegram",
+      text: "We're on Bluesky, Mastodon and Telegram",
       links: [
+        {
+          text: 'Bluesky',
+          href: 'https://bsky.app/profile/r34app.bsky.social'
+        },
         {
           text: 'Mastodon',
           href: 'https://mastodon.social/@r34'
