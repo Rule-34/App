@@ -9,6 +9,7 @@
   } from '@heroicons/vue/24/outline'
   import { toast } from 'vue-sonner'
   import type Tag from '~/assets/js/tag.dto'
+  import { blockListOptions } from '~/composables/useBlockLists'
 
   const props = defineProps<{
     tag: Tag
@@ -23,7 +24,6 @@
 
   const { isPremium } = useUserData()
   const { customBlockList, selectedList } = useBlockLists()
-  const { tutorialBlocklist } = useAppStatistics()
 
   function isTagInSelectedTags(tag: Tag): boolean {
     return props.selectedTags.some((selectedTag) => selectedTag.name === tag.name)
@@ -41,18 +41,20 @@
       return
     }
 
-    if (!tutorialBlocklist.value) {
-      toast.info('Tag Blocklisted', {
-        description: 'It will take effect after a new search',
-        duration: 10000
-      })
-      tutorialBlocklist.value = true
-    }
-
     if (isTagBlocked(tag)) {
       customBlockList.value = customBlockList.value.filter((t) => t !== tag.name)
     } else {
       customBlockList.value = [...customBlockList.value, tag.name]
+
+      // Automatically enable custom blocklist when adding a tag
+      if (selectedList.value !== blockListOptions.Custom) {
+        selectedList.value = blockListOptions.Custom
+      }
+
+      toast.info('Tag added to blocklist', {
+        description: 'To see the effect, reload the website or make a new search',
+        duration: 10000 // 10 seconds
+      })
     }
   }
 </script>
@@ -64,18 +66,18 @@
   >
     <!-- TODO: Fix placement to be auto -->
     <Float
-      vue-transition
       :offset="6"
       enter="transition ease-out duration-100"
       enter-from="transform opacity-0 scale-95"
       enter-to="transform opacity-100 scale-100"
+      flip
       leave="transition ease-in duration-75"
       leave-from="transform opacity-100 scale-100"
       leave-to="transform opacity-0 scale-95"
       placement="bottom-start"
-      flip
       portal
       tailwindcss-origin-class
+      vue-transition
     >
       <HeadlessMenuButton
         :class="{
@@ -89,13 +91,13 @@
             (selectedTag) => selectedTag.name === tag.name
           )
         }"
-        class="focus-visible:focus-outline-util hover:hover-text-util select-none items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset ring-base-0/20"
+        class="focus-visible:focus-outline-util hover:hover-text-util ring-base-0/20 items-center rounded-full px-2 py-1 text-xs font-medium ring-1 select-none ring-inset"
       >
         {{ tag.name }}
       </HeadlessMenuButton>
 
       <HeadlessMenuItems
-        class="divide-y divide-base-0/20 rounded-md bg-base-1000 ring-1 ring-base-0/20 focus:outline-hidden"
+        class="divide-base-0/20 bg-base-1000 ring-base-0/20 divide-y rounded-md ring-1 focus:outline-hidden"
       >
         <!-- Add or Remove tag -->
         <div class="py-1">

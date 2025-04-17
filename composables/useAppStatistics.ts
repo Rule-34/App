@@ -4,7 +4,6 @@ export default function () {
   let timesTheAppHasBeenOpened = ref<number>(0)
 
   let tutorialPostSource = ref<boolean>(false)
-  let tutorialBlocklist = ref<boolean>(false)
 
   let promptInstallPwa = ref<boolean>(false)
   let promptFeedback = ref<boolean>(false)
@@ -17,9 +16,6 @@ export default function () {
     })
 
     tutorialPostSource = useLocalStorage('tutorial-postSource', false, {
-      writeDefaults: false
-    })
-    tutorialBlocklist = useLocalStorage('tutorial-blocklist', false, {
       writeDefaults: false
     })
 
@@ -45,7 +41,6 @@ export default function () {
     timesTheAppHasBeenOpened,
 
     tutorialPostSource,
-    tutorialBlocklist,
     promptInstallPwa,
     promptFeedback,
     promptNewsletter,
