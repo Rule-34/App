@@ -10,15 +10,20 @@ export default function (loadAdScripts: Ref<boolean>) {
     //   weight: 1,
     //   provider: 'Adsession'
     // },
-    {
-      id: 'https:////ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
-      weight: 1,
-      provider: 'Hilltopads'
-    },
+    // {
+    //   id: 'https:////ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
+    //   weight: 1,
+    //   provider: 'Hilltopads'
+    // },
     {
       id: '/js/popunder2.js?v=1',
       weight: 1,
       provider: 'Clickadu'
+    },
+    {
+      id: 'https://d3pk1qkob3uzgp.cloudfront.net/?kqkpd=1171073',
+      weight: 1,
+      provider: 'AdMaven'
     }
   ]
 
