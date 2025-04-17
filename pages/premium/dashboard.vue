@@ -1,33 +1,49 @@
 <script lang="ts" setup>
-  import { ArrowLeftOnRectangleIcon, ExclamationTriangleIcon } from '@heroicons/vue/24/solid'
+  import {
+    ArchiveBoxIcon,
+    ArrowLeftOnRectangleIcon,
+    BookmarkIcon,
+    ChatBubbleBottomCenterTextIcon,
+    ExclamationTriangleIcon,
+    GlobeAltIcon,
+    HeartIcon,
+    TagIcon
+  } from '@heroicons/vue/24/solid'
   import { toast } from 'vue-sonner'
-  import { Platform, PLATFORM_URLS, detectPlatform } from '~/types/enums/Platform'
+  import { detectPlatform, Platform, PLATFORM_URLS } from '~/types/enums/Platform'
   import formbricks from '~/assets/js/formbricks'
 
   const { $pocketBase } = useNuxtApp()
+  const route = useRoute()
 
   const { email, license, isPremium } = useUserData()
+
+  const isInitialLogin = computed(() => Boolean(route.query.initialLogin))
 
   const links = [
     {
       name: 'Saved posts',
       description: 'Save posts and enjoy them later',
-      href: '/premium/saved-posts/r34.app'
+      href: '/premium/saved-posts/r34.app',
+      icon: BookmarkIcon
     },
     {
       name: 'Tag collections',
       description: 'Create lists of tags to quickly search or filter posts',
-      href: '/premium/tag-collections'
+      href: '/premium/tag-collections',
+      icon: TagIcon
     },
     {
       name: 'Additional Boorus',
       description: 'Browse posts from additional websites',
-      href: '/premium/additional-boorus'
+      href: '/premium/additional-boorus',
+      icon: GlobeAltIcon
     },
     {
       name: 'Backup & Restore',
       description: 'Backup your tag collections and settings',
-      href: '/premium/backup'
+      href: '/premium/backup',
+      icon: ArchiveBoxIcon
     }
   ]
 
@@ -63,7 +79,7 @@
     }
 
     // --- Event Tracking: user subscribed --- >
-    if (!import.meta.client || !route.query.initialLogin) {
+    if (!import.meta.client || !isInitialLogin) {
       return
     }
 
@@ -117,10 +133,8 @@
     <!-- -->
 
     <!-- Status -->
-    <!-- TODO: Add thank you note -->
-
     <PageHeader>
-      <template #title>Premium dashboard</template>
+      <template #title>Dashboard</template>
       <template #text>
         <p class="truncate">
           Signed in as
@@ -134,20 +148,33 @@
       </template>
     </PageHeader>
 
-    <!-- TODO: Show if the user is premium -->
+    <!-- Premium Status -->
+    <div
+      v-if="isInitialLogin"
+      class="bg-primary-400/10 text-primary-400 ring-primary-400/20 mt-4 rounded-md p-4 text-sm text-pretty ring-1 ring-inset"
+    >
+      <div class="mb-2 flex items-center gap-2">
+        <HeartIcon class="text-primary-400 h-6 w-6" />
+
+        <h2 class="text-base font-medium">Thank you for your support</h2>
+      </div>
+
+      <p>Enjoy ad-free browsing, saving posts and all Premium features!</p>
+    </div>
+
+    <!-- Expired Subscription Warning -->
     <div
       v-if="!isPremium"
-      class="text-base-content-highlight mt-4 text-sm text-pretty"
+      class="border-base-0/20 mt-4 rounded-md border p-4 text-sm text-pretty"
     >
-      <div class="mb-2 flex items-center gap-1">
-        <ExclamationTriangleIcon class="text-base-content-highlight inline h-6 w-6" />
-
-        <h2 class="text-base underline">Your subscription has expired</h2>
+      <div class="mb-2 flex items-center gap-2">
+        <ExclamationTriangleIcon class="h-6 w-6 text-yellow-400" />
+        <h2 class="text-base font-medium">Your subscription has expired</h2>
       </div>
 
       <p>Your account is in a read-only state, you can still view your saved posts, but you can't create new ones</p>
 
-      <p>To continue enjoying Premium features, subscribe again</p>
+      <p class="mt-2">To continue enjoying Premium features, subscribe again</p>
 
       <NuxtLink
         class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 mt-4 flex items-center justify-center rounded-md px-3 py-1.5 text-base ring-1 md:inline-flex"
@@ -157,62 +184,70 @@
       </NuxtLink>
     </div>
 
-    <!-- Links -->
-    <section>
-      <ol class="mt-6 space-y-4">
-        <!-- -->
-
+    <!-- Premium Features -->
+    <section class="mt-8">
+      <h2 class="text-base-content-highlight mb-4 text-xl font-bold">Premium Features</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
         <NuxtLink
           v-for="link in links"
           :key="link.name"
           :href="link.href"
-          class="hover:hover-bg-util focus-visible:focus-outline-util border-base-0/20 block w-full rounded-md border px-4 py-3"
+          class="hover:hover-bg-util focus-visible:focus-outline-util border-base-0/20 flex flex-col rounded-md border p-4 transition-all duration-200 hover:shadow-md"
         >
-          <h2 class="text-base-content-highlight text-lg font-bold tracking-tight">
-            {{ link.name }}
-          </h2>
-
+          <div class="mb-2 flex items-center gap-2">
+            <component
+              :is="link.icon"
+              class="text-primary-400 h-6 w-6"
+            />
+            <h3 class="text-base-content-highlight text-lg font-bold tracking-tight">
+              {{ link.name }}
+            </h3>
+          </div>
           <p class="text-sm">
             {{ link.description }}
           </p>
         </NuxtLink>
-
-        <!-- Feedback -->
-        <!-- TODO: add more distinction -->
-        <NuxtLink
-          class="hover:hover-bg-util focus-visible:focus-outline-util border-base-0/20 block max-w-[95%] rounded-md rounded-br-3xl border px-4 py-3"
-          href="https://forms.gle/9FAZRegzJ8VAzT5F9"
-          rel="nofollow noopener noreferrer"
-          target="_blank"
-        >
-          <h2 class="text-base-content-highlight text-lg font-bold tracking-tight">Feedback</h2>
-
-          <p class="text-sm">Have a suggestion or found a bug? Let me know!</p>
-        </NuxtLink>
-      </ol>
+      </div>
     </section>
 
-    <!-- Manage subscription -->
-    <section class="absolute inset-x-0 bottom-0 w-full space-x-2 p-4 text-center">
+    <!-- Feedback -->
+    <section class="mt-8">
       <NuxtLink
-        class="hover:hover-text-util focus-visible:focus-outline-util underline"
-        href="mailto:contact@r34.app"
+        class="hover:hover-bg-util focus-visible:focus-outline-util bg-base-0/5 border-base-0/20 flex items-start rounded-md border p-4 transition-all duration-200 hover:shadow-md"
+        href="https://feedback.r34.app"
         rel="nofollow noopener noreferrer"
         target="_blank"
       >
-        <!-- @formatter:off -->
-        Contact support</NuxtLink
-      >
+        <ChatBubbleBottomCenterTextIcon class="text-primary-400 mt-1 mr-3 h-6 w-6 flex-shrink-0" />
+        <div>
+          <h2 class="text-base-content-highlight text-lg font-bold tracking-tight">Feedback</h2>
+          <p class="text-sm">
+            Have a suggestion or found a bug? Let me know! Your feedback helps improve the app for everyone.
+          </p>
+        </div>
+      </NuxtLink>
+    </section>
 
-      <span> &middot; </span>
+    <!-- Support & Subscription Management -->
+    <section class="border-base-0/10 mt-4 mb-3 border-t pt-6">
+      <div class="flex flex-row items-center justify-center gap-4">
+        <NuxtLink
+          class="hover:hover-bg-util focus-visible:focus-outline-util border-base-0/20 flex items-center gap-2 rounded-md border px-4 py-2 transition-all duration-200"
+          href="mailto:contact@r34.app"
+          rel="nofollow noopener noreferrer"
+          target="_blank"
+        >
+          <span class="text-sm font-medium">Contact Support</span>
+        </NuxtLink>
 
-      <button
-        class="hover:hover-text-util focus-visible:focus-outline-util underline"
-        type="button"
-        @click="onManageSubscriptionClick"
-      >
-        Manage subscription
-      </button>
+        <button
+          class="hover:hover-bg-util focus-visible:focus-outline-util border-base-0/20 flex items-center gap-2 rounded-md border px-4 py-2 transition-all duration-200"
+          type="button"
+          @click="onManageSubscriptionClick"
+        >
+          <span class="text-sm font-medium">Manage Subscription</span>
+        </button>
+      </div>
     </section>
   </main>
 </template>
