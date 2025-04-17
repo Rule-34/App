@@ -4,6 +4,7 @@ export default function () {
   let timesTheAppHasBeenOpened = ref<number>(0)
 
   let tutorialPostSource = ref<boolean>(false)
+  let tutorialDomainSwitcher = ref<boolean>(false)
 
   let promptInstallPwa = ref<boolean>(false)
   let promptFeedback = ref<boolean>(false)
@@ -16,6 +17,10 @@ export default function () {
     })
 
     tutorialPostSource = useLocalStorage('tutorial-postSource', false, {
+      writeDefaults: false
+    })
+
+    tutorialDomainSwitcher = useLocalStorage('tutorial-domainSwitcher', false, {
       writeDefaults: false
     })
 
@@ -41,6 +46,7 @@ export default function () {
     timesTheAppHasBeenOpened,
 
     tutorialPostSource,
+    tutorialDomainSwitcher,
     promptInstallPwa,
     promptFeedback,
     promptNewsletter,

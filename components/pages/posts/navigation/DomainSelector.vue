@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
   import { PlusIcon } from '@heroicons/vue/24/solid'
+  import { toast } from 'vue-sonner'
   import type { Domain } from '~/assets/js/domain'
 
   defineOptions({
@@ -19,6 +20,7 @@
   const emit = defineEmits(['update:modelValue'])
 
   const { isPremium } = useUserData()
+  const { tutorialDomainSwitcher } = useAppStatistics()
 
   function onModelValueChange(domain: Domain) {
     if (domain.isPremium && !isPremium.value) {
@@ -38,6 +40,19 @@
     }
 
     return false
+  }
+
+  function onDomainSelectorClick() {
+    if (tutorialDomainSwitcher.value) {
+      return
+    }
+
+    toast.info('Domain Switcher', {
+      description: 'Switch between Booru websites: each one has unique content, find the one you like the most!',
+      duration: 10000
+    })
+
+    tutorialDomainSwitcher.value = true
   }
 </script>
 
@@ -61,8 +76,9 @@
       <!-- Select -->
       <HeadlessListboxButton
         :class="[props.compact ? 'flex w-auto items-stretch rounded-full! p-2.5!' : 'w-56']"
-        class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util relative cursor-default rounded-md bg-transparent py-1.5 pl-3 pr-10 text-left ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
+        class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util ring-base-0/20 relative cursor-default rounded-md bg-transparent py-1.5 pr-10 pl-3 text-left ring-1 ring-inset sm:text-sm sm:leading-6"
         v-bind="$attrs"
+        @click="onDomainSelectorClick"
       >
         <span class="flex items-center">
           <img
@@ -94,7 +110,7 @@
 
       <!-- Menu -->
       <HeadlessListboxOptions
-        class="max-h-[23rem] w-full max-w-sm overflow-auto rounded-md bg-base-1000 py-1 ring-1 ring-base-0/20 focus:outline-hidden sm:text-sm"
+        class="bg-base-1000 ring-base-0/20 max-h-[23rem] w-full max-w-sm overflow-auto rounded-md py-1 ring-1 focus:outline-hidden sm:text-sm"
       >
         <!-- Options -->
         <HeadlessListboxOption
@@ -106,7 +122,7 @@
         >
           <li
             :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-            class="relative cursor-default select-none py-2 pl-3 pr-14"
+            class="relative cursor-default py-2 pr-14 pl-3 select-none"
           >
             <div class="flex items-center">
               <img
@@ -125,7 +141,7 @@
               <!-- Premium badge-->
               <span
                 v-if="shouldBooruBeDisabled(booru)"
-                class="ml-2 inline-flex items-center rounded-full border-2 border-primary-500/60 px-2.5 py-0.5 text-xs font-medium text-base-content-highlight"
+                class="border-primary-500/60 text-base-content-highlight ml-2 inline-flex items-center rounded-full border-2 px-2.5 py-0.5 text-xs font-medium"
               >
                 Premium
               </span>
