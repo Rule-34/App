@@ -46,6 +46,10 @@
           href: 'https://mastodon.social/@r34'
         },
         {
+          text: 'Lemmy',
+          href: 'https://lemmynsfw.com/c/r34'
+        },
+        {
           text: 'Telegram',
           href: 'https://t.me/Rule_34_Hentai'
         }
