@@ -311,13 +311,13 @@
       <div class="flex h-full flex-col items-center space-y-4 py-4">
         <div class="flex flex-1 flex-col items-center justify-center gap-4">
           <span
-            class="rounded-md bg-linear-to-l from-base-950 via-base-900 to-base-900 px-4 py-1.5 text-center text-base-content-highlight"
+            class="from-base-950 via-base-900 to-base-900 text-base-content-highlight rounded-md bg-linear-to-l px-4 py-1.5 text-center"
           >
             {{ error?.message }}
           </span>
 
           <button
-            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto inline-flex items-center justify-center rounded-md px-2 py-1 text-sm ring-1 ring-base-0/20"
+            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 mx-auto inline-flex items-center justify-center rounded-md px-2 py-1 text-sm ring-1"
             type="button"
             @click="manuallyReloadMedia"
           >
@@ -329,7 +329,7 @@
         <!-- TODO: Improve style -->
         <div
           v-if="!isPremium"
-          class="text-xs text-base-content"
+          class="text-base-content text-xs"
         >
           <NuxtLink
             class="hover:hover-text-util focus-visible:focus-outline-util underline"
@@ -414,15 +414,3 @@
     </div>
   </div>
 </template>
-
-<style>
-  /* Hide volume controls */
-  .fluid_control_volume_container {
-    display: none !important;
-  }
-
-  /* Fix duration position */
-  .fluid_video_wrapper.fluid_player_layout_default .fluid_controls_container .fluid_fluid_control_duration {
-    left: 32px !important;
-  }
-</style>
