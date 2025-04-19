@@ -19,12 +19,17 @@ export default function (loadAdScripts: Ref<boolean>) {
       id: '/js/popunder2.js?v=1',
       weight: 1,
       provider: 'Clickadu'
-    },
-    {
-      id: 'https://d3pk1qkob3uzgp.cloudfront.net/?kqkpd=1171073',
-      weight: 1,
-      provider: 'AdMaven'
     }
+    // {
+    //   id: 'https://d3pk1qkob3uzgp.cloudfront.net/?kqkpd=1171073',
+    //   weight: 1,
+    //   provider: 'AdMaven'
+    // },
+    // {
+    //   id: 'https://hp.scrannyplacebo.com/rMGqiS1acWcIq4LyI/oQRmJ',
+    //   weight: 1,
+    //   provider: 'AdScarat'
+    // }
   ]
 
   const pushAds = [
