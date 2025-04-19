@@ -5,34 +5,76 @@ export default function (loadAdScripts: Ref<boolean>) {
   const pushScript = useState<string>('push-notification-script', () => '')
 
   const popunderAds = [
+    /**
+     * Pros:
+     * Cons:
+     */
+    // {
+    //   id: '',
+    //   weight: 1,
+    //   provider: 'ExoClick'
+    // },
+    /**
+     * Pros:
+     * Cons:
+     */
     // {
     //   id: '/js/popunder.js?v=7',
     //   weight: 1,
     //   provider: 'Adsession'
     // },
-    // {
-    //   id: 'https:////ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
-    //   weight: 1,
-    //   provider: 'Hilltopads'
-    // },
+    /**
+     * Pros:
+     * Cons: Not fixed CPM, Low CPM
+     */
     {
-      id: '/js/popunder2.js?v=1',
+      id: 'https:////ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
       weight: 1,
-      provider: 'Clickadu'
+      provider: 'HilltopAds'
     },
+    /**
+     * Pros: Good CPM
+     * Cons: Does not count visits well
+     */
+    // {
+    //   id: '/js/popunder2.js?v=8',
+    //   weight: 1,
+    //   provider: 'Clickadu'
+    // }
+    /**
+     * Pros:
+     * Cons: Does not open in a new tab, Possible malware: ads open requests to social media login??
+     */
+    // {
+    //   id: 'https://d3pk1qkob3uzgp.cloudfront.net/?kqkpd=1171073',
+    //   weight: 1,
+    //   provider: 'AdMaven'
+    // },
+    /**
+     * Pros: Great CPM
+     * Cons: Reloads website once?
+     */
     {
-      id: 'https://d3pk1qkob3uzgp.cloudfront.net/?kqkpd=1171073',
+      id: 'https://hp.scrannyplacebo.com/rMGqiS1acWcIq4LyI/oQRmJ',
       weight: 1,
-      provider: 'AdMaven'
+      provider: 'AdsCarat'
     }
   ]
 
   const pushAds = [
+    /**
+     * Pros:
+     * Cons: Very low revenue
+     */
     {
       id: 'https://hotbcetici.today/process.js?id=1300335215&p1=sub1&p2=sub2&p3=sub3&p4=sub4',
       weight: 0.3,
       provider: 'PartnersHouse'
     },
+    /**
+     * Pros: Fixed weekly pay
+     * Cons:
+     */
     {
       id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
       weight: 0.7,
