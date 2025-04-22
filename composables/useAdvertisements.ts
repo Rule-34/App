@@ -52,7 +52,7 @@ export default function (loadAdScripts: Ref<boolean>) {
     // },
     /**
      * Pros: Great CPM
-     * Cons: Reloads website once?
+     * Cons: Does not count visits well | Reloads website once?
      */
     {
       id: 'https://hp.scrannyplacebo.com/rMGqiS1acWcIq4LyI/oQRmJ',
@@ -66,10 +66,28 @@ export default function (loadAdScripts: Ref<boolean>) {
      * Pros:
      * Cons: Very low revenue
      */
+    // {
+    //   id: 'https://hotbcetici.today/process.js?id=1300335215&p1=sub1&p2=sub2&p3=sub3&p4=sub4',
+    //   weight: 0.3,
+    //   provider: 'PartnersHouse'
+    // },
+    /**
+     * Pros:
+     * Cons:
+     */
     {
-      id: 'https://hotbcetici.today/process.js?id=1300335215&p1=sub1&p2=sub2&p3=sub3&p4=sub4',
-      weight: 0.3,
-      provider: 'PartnersHouse'
+      id: '\\/\\/ellipticaltrack.com\\/b\\/XeV.sad\\/GJlb0jYvWxcR\\/HewmG9ou\\/ZWUXlukZPMTJY_yMOQTBQe5VMsjVI\\/tuNbjOIh5MNDDpkryvMSwO',
+      weight: 0.15,
+      provider: 'HilltopAds'
+    },
+    /**
+     * Pros:
+     * Cons:
+     */
+    {
+      id: '//guidepaparazzisurface.com/bultykh/ipp24/7/bazinga/2065744',
+      weight: 0.15,
+      provider: 'Clickadu'
     },
     /**
      * Pros: Fixed weekly pay
@@ -77,7 +95,7 @@ export default function (loadAdScripts: Ref<boolean>) {
      */
     {
       id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
-      weight: 0.7,
+      weight: 1,
       provider: 'EvaDav'
     }
   ]

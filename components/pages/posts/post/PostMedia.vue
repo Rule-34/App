@@ -163,24 +163,33 @@
         adList: []
       }
 
-      // Only show pause roll ads on even videos
+      // Only show pause roll ads every 2 videos
       if (timesVideoHasRendered.value % 2 === 0) {
         fluidPlayerOptions.vastOptions.adList.push(
           // In-Video Banner
           {
             roll: 'onPauseRoll',
-            vastTag: 'https://s.magsrv.com/splash.php?idzone=5386214'
+            vastTag:
+              // ExoClick
+              'https://s.magsrv.com/splash.php?idzone=5386214'
           }
         )
       }
+      //
 
-      // Only show preroll ads after 5 videos
-      if (timesVideoHasRendered.value > 5) {
+      // Only show preroll ads after 3 videos, and every 3 videos
+      if (timesVideoHasRendered.value > 3 && timesVideoHasRendered.value % 3 === 0) {
         fluidPlayerOptions.vastOptions.adList.push(
           // In-Stream Video
           {
             roll: 'preRoll',
-            vastTag: 'https://s.magsrv.com/splash.php?idzone=5386496'
+            vastTag:
+              // ExoClick
+              // 'https://s.magsrv.com/splash.php?idzone=5386496'
+              // HilltopAds
+              'https://ellipticaltrack.com/dCm.FXz/doGMNPv/Z-GhUX/OermX9/u-ZqUEltk/PYTgYBy/ODTZQI5oNHDDEHtdNbjLIS5eNvDhk/0uMGgu?limit=1'
+            // Clickadu
+            // 'https://anewfeedliberty.com/ceef/gdt3g0/tbt/2034767/tlk.xml'
           }
         )
       }
