@@ -9,9 +9,9 @@
   let { timesVideoHasRendered } = useEthics()
 
   export interface PostMediaProps {
-    mediaSrc: string | null
-    mediaSrcHeight: number | null
-    mediaSrcWidth: number | null
+    mediaSrc: IPost['high_res_file']['url']
+    mediaSrcHeight: IPost['high_res_file']['height'] | null
+    mediaSrcWidth: IPost['high_res_file']['width'] | null
     mediaPosterSrc: string | null
     mediaType: IPost['media_type']
     mediaAlt: string
@@ -31,7 +31,9 @@
 
   const isImage = computed(() => props.mediaType === 'image')
   const isVideo = computed(() => props.mediaType === 'video')
-  const isGif = computed(() => props.mediaType === 'image' && props.mediaSrc.endsWith('.gif'))
+  const isGif = computed(
+    () => props.mediaType === 'animated' || (props.mediaType === 'image' && props.mediaSrc.endsWith('.gif'))
+  )
 
   const triedToLoadWithProxy = shallowRef(false)
 
@@ -346,8 +348,9 @@
 
     <!-- Image -->
     <!-- TODO: Fix very large images not being on screen so not loaded -->
+    <!-- TODO: Separate GIFs into their own player -->
     <div
-      v-else-if="isImage"
+      v-else-if="isImage || isGif"
       :class="mediaHasLoaded ? 'opacity-100' : 'opacity-0'"
       class="transition-opacity duration-700 ease-in-out"
     >

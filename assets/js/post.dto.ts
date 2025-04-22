@@ -1,4 +1,4 @@
-import type { IPocketbasePost } from "./pocketbase.dto"
+import type { IPocketbasePost } from './pocketbase.dto'
 
 export interface IPostPage {
   data: IPost[]
@@ -7,39 +7,26 @@ export interface IPostPage {
 }
 
 export interface IPost {
-
   domain: string
 
   id: number
 
   score?: number | null
 
-  high_res_file: IPostHighResFile
-  low_res_file: IPostLowResFile
-  preview_file: IPostPreviewFile
+  high_res_file: IPostFile
+  low_res_file: IPostFile
+  preview_file: IPostFile
 
   tags: IPostTags
 
   sources: string[]
 
-  rating: string
+  rating: string | null
 
-  media_type: 'image' | 'video' | 'unknown'
+  media_type: 'image' | 'animated' | 'video' | null
 }
 
-export interface IPostHighResFile {
-  url: string
-  width: number
-  height: number
-}
-
-export interface IPostLowResFile {
-  url: string | null
-  width: number | null
-  height: number | null
-}
-
-export interface IPostPreviewFile {
+export interface IPostFile {
   url: string | null
   width: number | null
   height: number | null
@@ -77,19 +64,19 @@ export class PostDTO implements IPost {
   score?: IPost['score']
 
   high_res_file: IPost['high_res_file'] = {
-    url: '',
-    width: 0,
-    height: 0,
+    url: null,
+    width: null,
+    height: null
   }
   low_res_file: IPost['low_res_file'] = {
     url: null,
     width: null,
-    height: null,
+    height: null
   }
   preview_file: IPost['preview_file'] = {
     url: null,
     width: null,
-    height: null,
+    height: null
   }
 
   tags: IPost['tags'] = {
@@ -97,14 +84,14 @@ export class PostDTO implements IPost {
     character: [],
     copyright: [],
     general: [],
-    meta: [],
+    meta: []
   }
 
   sources: IPost['sources'] = []
 
-  rating: IPost['rating'] = 'unknown'
+  rating: IPost['rating'] = null
 
-  media_type: IPost['media_type'] = 'unknown'
+  media_type: IPost['media_type'] = null
 }
 
 export default class Post extends PostDTO {
@@ -114,7 +101,6 @@ export default class Post extends PostDTO {
   }
 
   static fromPocketbasePost(post: IPocketbasePost): Post {
-
     return new Post({
       id: post.original_id,
 
@@ -122,18 +108,18 @@ export default class Post extends PostDTO {
 
       high_res_file: {
         url: post.high_res_file,
-        width: post.high_res_file_width,
-        height: post.high_res_file_height
+        width: post.high_res_file_width ?? null,
+        height: post.high_res_file_height ?? null
       },
       low_res_file: {
-        url: post.low_res_file,
-        width: post.low_res_file_width,
-        height: post.low_res_file_height
+        url: post.low_res_file ?? null,
+        width: post.low_res_file_width ?? null,
+        height: post.low_res_file_height ?? null
       },
       preview_file: {
-        url: post.preview_file,
-        width: post.preview_file_width,
-        height: post.preview_file_height
+        url: post.preview_file ?? null,
+        width: post.preview_file_width ?? null,
+        height: post.preview_file_height ?? null
       },
       tags: {
         artist: post.tags_artist ?? [],
@@ -144,8 +130,8 @@ export default class Post extends PostDTO {
       },
       score: post.score,
       sources: post.sources,
-      rating: post.rating,
-      media_type: post.media_type
+      rating: post.rating ?? null,
+      media_type: post.media_type ?? null
     })
   }
 }

@@ -448,7 +448,7 @@
         //
 
         // Delete all posts that have `media_type: 'unknown'`
-        if (post.media_type === 'unknown') {
+        if (!post.media_type || post.media_type === 'unknown') {
           return false
         }
 
@@ -732,6 +732,7 @@
     return data.value?.pages[0].data.map((post) => {
       switch (post.media_type) {
         case 'image':
+        case 'animated':
           return defineImage({
             url: post.high_res_file.url,
 

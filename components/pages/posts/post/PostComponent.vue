@@ -25,9 +25,14 @@
   const areTagsOpen = ref(false)
 
   const mediaFile = computed(() => {
-    const data = {
+    const data: {
+      file: IPost['high_res_file']['url']
+      width: IPost['high_res_file']['width'] | null
+      height: IPost['high_res_file']['height'] | null
+      posterFile: IPost['preview_file']['url']
+      alt: string
+    } = {
       file: null,
-      altFile: null,
       width: null,
       height: null,
       posterFile: null,
@@ -48,6 +53,13 @@
           data.height = props.post.low_res_file.height ?? props.post.high_res_file.height
         }
 
+        break
+      }
+
+      case 'animated': {
+        data.file = props.post.high_res_file.url
+        data.width = props.post.high_res_file.width
+        data.height = props.post.high_res_file.height
         break
       }
 
@@ -74,7 +86,7 @@
 </script>
 
 <template>
-  <figure class="rounded-md border border-base-0/20">
+  <figure class="border-base-0/20 rounded-md border">
     <PostMedia
       :mediaAlt="mediaFile.alt"
       :mediaPosterSrc="mediaFile.posterFile"
@@ -112,7 +124,7 @@
         />
 
         <PostSource
-          :post-file-url="post.media_type === 'image' ? mediaFile.file : mediaFile.posterFile"
+          :post-file-url="post.media_type === 'video' ? mediaFile.posterFile : mediaFile.file"
           :post-sources="post.sources"
         />
 
@@ -121,14 +133,14 @@
           type="button"
           @click="areTagsOpen = !areTagsOpen"
         >
-          <span class="group-hover:hover-text-util text-sm text-base-content"> Tags </span>
+          <span class="group-hover:hover-text-util text-base-content text-sm"> Tags </span>
 
           <ChevronDownIcon
             :class="{
               'rotate-180 transform': areTagsOpen,
               'rotate-0 transform': !areTagsOpen
             }"
-            class="group-hover:hover-text-util h-5 w-5 text-base-content"
+            class="group-hover:hover-text-util text-base-content h-5 w-5"
           />
         </button>
       </div>
@@ -144,7 +156,7 @@
             <!--  -->
 
             <div>
-              <h3 class="text-lg font-bold leading-7 tracking-tight text-base-content-highlight">
+              <h3 class="text-base-content-highlight text-lg leading-7 font-bold tracking-tight">
                 {{ tagType.charAt(0).toUpperCase() + tagType.slice(1) }}
               </h3>
 

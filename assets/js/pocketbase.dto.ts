@@ -34,9 +34,9 @@ export interface IPocketbasePost {
 
   sources: string[]
 
-  rating: string
+  rating?: string
 
-  media_type: 'image' | 'video'
+  media_type?: 'image' | 'animated' | 'video'
 }
 
 export interface ISimplePocketbasePost {
@@ -69,8 +69,8 @@ export class PocketbasePostDTO implements IPocketbasePost {
   tags_meta: IPocketbasePost['tags_meta'] = []
   score: IPocketbasePost['score'] = undefined
   sources: IPocketbasePost['sources'] = []
-  rating: IPocketbasePost['rating'] = 'unknown'
-  media_type: IPocketbasePost['media_type'] = 'image'
+  rating: IPocketbasePost['rating'] = undefined
+  media_type: IPocketbasePost['media_type'] = undefined
 }
 
 export class PocketbasePost extends PocketbasePostDTO {

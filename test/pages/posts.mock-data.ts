@@ -3780,7 +3780,7 @@ export const mockPostsPageWithUnknownMedia = {
       },
       sources: [],
       rating: 'questionable',
-      media_type: 'unknown'
+      media_type: null
     }
   ],
   meta: { items_count: 1, total_items: null, current_page: 0, total_pages: null, items_per_page: 30 },
