@@ -60,6 +60,8 @@
         data.file = props.post.high_res_file.url
         data.width = props.post.high_res_file.width
         data.height = props.post.high_res_file.height
+
+        data.posterFile = props.post.preview_file.url
         break
       }
 

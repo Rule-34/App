@@ -24,6 +24,7 @@
   const localSrc = shallowRef(props.mediaSrc)
   const localPosterSrc = shallowRef(props.mediaPosterSrc)
 
+  const isAnimatedMediaPlaying = ref(false)
   const mediaHasLoaded = ref(false)
 
   const error = ref<Error | null>(null)
@@ -36,6 +37,7 @@
   )
 
   const triedToLoadWithProxy = shallowRef(false)
+  const triedToLoadPosterWithProxy = shallowRef(false)
 
   let videoPlayer: FluidPlayerInstance | undefined
 
@@ -58,7 +60,7 @@
       return
     }
 
-    if (isImage.value) {
+    if (isImage.value || isGif.value) {
       // If its a Vue component, get the actual element
       if ('$el' in finalMediaElement) {
         finalMediaElement = finalMediaElement.$el as HTMLElement
@@ -220,12 +222,19 @@
       return
     }
 
-    if (!event.target?.src) {
+    const target = event.target as HTMLImageElement | HTMLVideoElement | null
+
+    if (!target?.src) {
       return
     }
 
     // Proxy videos
-    if (isVideo.value && isPremium.value && !triedToLoadWithProxy.value) {
+    if (
+      isVideo.value &&
+      isPremium.value &&
+      //
+      !triedToLoadWithProxy.value
+    ) {
       localSrc.value = proxyUrl(props.mediaSrc)
 
       reloadVideoPlayer(true)
@@ -234,17 +243,34 @@
       return
     }
 
-    // Proxy GIFs, since they are not proxied with imgproxy
-    if (
+    // Proxy GIFs
+    if (isGif.value && isPremium.value) {
       //
-      isGif.value &&
-      isPremium.value &&
-      !triedToLoadWithProxy.value
-    ) {
-      localSrc.value = proxyUrl(props.mediaSrc)
 
-      triedToLoadWithProxy.value = true
-      return
+      // Case 1: The poster image failed to load
+      if (
+        !isAnimatedMediaPlaying.value &&
+        target.src === localPosterSrc.value &&
+        //
+        !triedToLoadPosterWithProxy.value
+      ) {
+        localPosterSrc.value = proxyUrl(props.mediaPosterSrc)
+
+        triedToLoadPosterWithProxy.value = true
+        return
+      }
+
+      // Case 2: The actual GIF failed to load
+      if (
+        isAnimatedMediaPlaying.value &&
+        //
+        !triedToLoadWithProxy.value
+      ) {
+        localSrc.value = proxyUrl(props.mediaSrc)
+
+        triedToLoadWithProxy.value = true
+        return
+      }
     }
 
     error.value = new Error('Error loading media')
@@ -253,6 +279,7 @@
   function manuallyReloadMedia() {
     // Reset state
     triedToLoadWithProxy.value = false
+    triedToLoadPosterWithProxy.value = false
     error.value = null
 
     // Reload media
@@ -290,6 +317,7 @@
    * Fix: Handle SSR case where media has loaded but this script hasn't run yet
    */
   onMounted(() => {
+    // Only apply to regular images, not GIFs (we want GIFs to show the poster first)
     if (!isImage.value) {
       return
     }
@@ -348,9 +376,8 @@
 
     <!-- Image -->
     <!-- TODO: Fix very large images not being on screen so not loaded -->
-    <!-- TODO: Separate GIFs into their own player -->
     <div
-      v-else-if="isImage || isGif"
+      v-else-if="isImage"
       :class="mediaHasLoaded ? 'opacity-100' : 'opacity-0'"
       class="transition-opacity duration-700 ease-in-out"
     >
@@ -390,6 +417,46 @@
           @load="onMediaLoad"
         />
       </template>
+    </div>
+
+    <!-- Animated (GIF) -->
+    <div
+      v-else-if="isGif"
+      class="relative"
+    >
+      <!-- Single image element for both poster and GIF -->
+      <img
+        ref="mediaElement"
+        :alt="mediaAlt"
+        :height="mediaSrcHeight"
+        :src="isAnimatedMediaPlaying ? localSrc : localPosterSrc"
+        :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
+        :width="mediaSrcWidth"
+        class="h-auto w-full rounded-t-md"
+        decoding="async"
+        loading="lazy"
+        @error="onMediaError"
+        @load="onMediaLoad"
+      />
+
+      <!-- Play button overlay -->
+      <button
+        v-if="!isAnimatedMediaPlaying"
+        class="absolute inset-0 flex items-center justify-center rounded-t-md bg-black/20"
+        type="button"
+        @click="isAnimatedMediaPlaying = true"
+      >
+        <span class="rounded-full bg-black/65 p-2">
+          <svg
+            class="h-12 w-12 text-white"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </span>
+      </button>
     </div>
 
     <!-- Video -->
