@@ -1066,7 +1066,7 @@
     </section>
 
     <PostsPageFooter
-      v-if="!isPending"
+      v-if="!isPending && !isError && allRows.length > 0"
       :selected-booru="selectedBooru"
       :selected-tags="selectedTags"
       :selected-filters="selectedFilters"

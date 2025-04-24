@@ -44,7 +44,7 @@
 
   // Hardcoded related tags based on common combinations
   // These would be general enough to exist on most booru sites
-  const hardcodedRelatedTags = ['highres', 'animated', 'cum', 'pov', '1girl', '1boy']
+  const hardcodedRelatedTags = ['highres', 'animated', 'cum', 'big_breasts', '1girl', '1boy']
 
   const formattedRelatedTags = computed(() => {
     return hardcodedRelatedTags.map((tag) => normalizeStringForTitle(tag))
@@ -59,13 +59,13 @@
 
         <section>
           <h3 v-if="selectedTags.length > 0">
-            Exclusive {{ formattedTagsString }} Rule 34 {{ selectedBooru.domain }} gallery
+            Exclusive {{ formattedTagsString }} Rule 34 gallery from {{ selectedBooru.domain }}
           </h3>
           <p>
             Browse our extensive collection of high-quality
             {{ formattedTagsString }} hentai, Rule 34, and anime parody artwork from {{ selectedBooru.domain }}. Our
             optimized platform provides real-time access to the latest lewd images, porn videos, and adult gifs directly
-            from trusted sources, with advanced filtering and search capabilities for the ultimate browsing experience.
+            from popular sources, with advanced filtering and search capabilities for the ultimate browsing experience.
             <template v-if="selectedTags.length > 0">
               Our library includes {{ selectedFilters.rating || 'explicit' }} rated adult media with
               {{ selectedFilters.sort ? `sorting by ${selectedFilters.sort}` : 'the most popular uploads' }}.
@@ -98,7 +98,7 @@
               :key="tag"
               :to="`/posts/${selectedBooru.domain}?tags=${encodeURIComponent(tag)}`"
               class="text-primary text-sm hover:underline"
-              :title="`Browse ${formattedRelatedTags[index]} ${formattedTagsString} hentai and Rule 34 images`"
+              :title="`Browse ${formattedRelatedTags[index]} hentai and Rule 34 images`"
             >
               {{ formattedRelatedTags[index] }}
             </NuxtLink>
@@ -133,7 +133,7 @@
           <h3>{{ formattedTagsString }} Rule 34 updates - always fresh hentai artwork</h3>
           <p>
             As a dedicated hentai viewer application, R34.app doesn't host adult media - we connect directly to
-            {{ selectedBooru.domain }} and other trusted Rule 34 sources. This means you're always seeing the newest
+            {{ selectedBooru.domain }} and other popular Rule 34 sources. This means you're always seeing the newest
             {{ formattedTagsString }} porn images and adult videos in real-time, without any delay. New hentai artwork
             is refreshed instantly as it appears on the original sites, ensuring you never miss new additions to your
             favorite parody tags and anime categories.
