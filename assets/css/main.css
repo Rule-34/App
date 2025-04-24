@@ -42,6 +42,7 @@
   &::-webkit-scrollbar {
     display: none;
   }
+
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -69,6 +70,14 @@
   html, body, #__nuxt {
     @apply h-full;
   }
+
+  /* Add cursor to buttons */
+  @layer base {
+    button:not([disabled]), [role='button']:not([disabled]) {
+      cursor: pointer;
+    }
+  }
+
 
   /* Disable arrows on Number input - https://stackoverflow.com/a/74043438 */
   input[type='number']::-webkit-outer-spin-button,
