@@ -141,6 +141,8 @@ export const referralPromotions = [
 export const advertisementPromotions = [
   /**
    * ExoClick
+   * Pros:
+   * Cons: Low revenue (5)
    */
   // Mobile Banner
   {

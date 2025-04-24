@@ -6,97 +6,106 @@ export default function (loadAdScripts: Ref<boolean>) {
 
   const popunderAds = [
     /**
+     * ExoClick
      * Pros:
      * Cons:
      */
     // {
     //   id: '',
     //   weight: 1,
-    //   provider: 'ExoClick'
     // },
     /**
+     * Adsession
      * Pros:
      * Cons:
      */
     // {
     //   id: '/js/popunder.js?v=7',
     //   weight: 1,
-    //   provider: 'Adsession'
     // },
     /**
-     * Pros:
-     * Cons: Not fixed CPM, Low CPM
+     * HilltopAds
+     * Pros: Good min payout
+     * Cons: Not fixed CPM, Low Revenue (70)
      */
     {
       id: 'https:////ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
-      weight: 1,
-      provider: 'HilltopAds'
+      weight: 1
     },
     /**
+     * Clickadu
      * Pros: Good CPM
      * Cons: Does not count visits well
      */
     // {
     //   id: '/js/popunder2.js?v=8',
     //   weight: 1,
-    //   provider: 'Clickadu'
     // }
     /**
+     * AdMaven
      * Pros:
      * Cons: Does not open in a new tab, Possible malware: ads open requests to social media login??
      */
     // {
     //   id: 'https://d3pk1qkob3uzgp.cloudfront.net/?kqkpd=1171073',
     //   weight: 1,
-    //   provider: 'AdMaven'
     // },
     /**
+     * AdsCarat
      * Pros: Great CPM
-     * Cons: Does not count visits well | Reloads website once?
+     * Cons: Low Revenue (25) | Does not count visits well | Reloads website once?
      */
     {
       id: 'https://hp.scrannyplacebo.com/rMGqiS1acWcIq4LyI/oQRmJ',
-      weight: 1,
-      provider: 'AdsCarat'
+      weight: 1
     }
   ]
 
   const pushAds = [
     /**
+     * PartnersHouse
      * Pros:
-     * Cons: Very low revenue
+     * Cons: Low revenue (17)
      */
     // {
     //   id: 'https://hotbcetici.today/process.js?id=1300335215&p1=sub1&p2=sub2&p3=sub3&p4=sub4',
-    //   weight: 0.3,
-    //   provider: 'PartnersHouse'
+    //   weight: 0.3
     // },
     /**
+     * HilltopAds
+     * Pros:
+     * Cons: Very Low Revenue (1.96)
+     */
+    // {
+    //   id: '\\/\\/ellipticaltrack.com\\/b\\/XeV.sad\\/GJlb0jYvWxcR\\/HewmG9ou\\/ZWUXlukZPMTJY_yMOQTBQe5VMsjVI\\/tuNbjOIh5MNDDpkryvMSwO',
+    //   weight: 0.15,
+    // },
+    /**
+     * Clickadu
+     * Pros:
+     * Cons: Low Revenue (4.64)
+     */
+    // {
+    //   id: '//guidepaparazzisurface.com/bultykh/ipp24/7/bazinga/2065744',
+    //   weight: 0.15,
+    // },
+    /**
+     * AdsCarat
      * Pros:
      * Cons:
      */
     {
-      id: '\\/\\/ellipticaltrack.com\\/b\\/XeV.sad\\/GJlb0jYvWxcR\\/HewmG9ou\\/ZWUXlukZPMTJY_yMOQTBQe5VMsjVI\\/tuNbjOIh5MNDDpkryvMSwO',
-      weight: 0.15,
-      provider: 'HilltopAds'
+      id: '//jn.astelicbanes.com/sgC9H1j3tpX/121206',
+      weight: 0.15
     },
     /**
-     * Pros:
-     * Cons:
-     */
-    {
-      id: '//guidepaparazzisurface.com/bultykh/ipp24/7/bazinga/2065744',
-      weight: 0.15,
-      provider: 'Clickadu'
-    },
-    /**
-     * Pros: Fixed weekly pay
+     * EvaDav
+     * Pros: Fixed weekly pay ()
      * Cons:
      */
     {
       id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
-      weight: 1,
-      provider: 'EvaDav'
+      weight: 1
     }
   ]
 

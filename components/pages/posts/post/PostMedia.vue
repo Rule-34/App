@@ -170,7 +170,11 @@
           {
             roll: 'onPauseRoll',
             vastTag:
-              // ExoClick
+              /**
+               * ExoClick
+               * Pros:
+               * Cons: Low revenue (7)
+               */
               'https://s.magsrv.com/splash.php?idzone=5386214'
           }
         )
@@ -184,11 +188,25 @@
           {
             roll: 'preRoll',
             vastTag:
-              // ExoClick
-              // 'https://s.magsrv.com/splash.php?idzone=5386496'
-              // HilltopAds
-              'https://ellipticaltrack.com/dCm.FXz/doGMNPv/Z-GhUX/OermX9/u-ZqUEltk/PYTgYBy/ODTZQI5oNHDDEHtdNbjLIS5eNvDhk/0uMGgu?limit=1'
-            // Clickadu
+              /**
+               * ExoClick
+               * Pros:
+               * Cons: Low revenue (9)
+               */
+              'https://s.magsrv.com/splash.php?idzone=5386496'
+
+            /**
+             * HilltopAds
+             * Pros:
+             * Cons: Low revenue (4)
+             */
+            // 'https://ellipticaltrack.com/dCm.FXz/doGMNPv/Z-GhUX/OermX9/u-ZqUEltk/PYTgYBy/ODTZQI5oNHDDEHtdNbjLIS5eNvDhk/0uMGgu?limit=1'
+
+            /**
+             * Clickadu
+             * Pros:
+             * Cons:
+             */
             // 'https://anewfeedliberty.com/ceef/gdt3g0/tbt/2034767/tlk.xml'
           }
         )
