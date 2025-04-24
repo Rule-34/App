@@ -54,7 +54,7 @@
 <template>
   <footer class="border-base-300/30 mt-5 border-t pt-8">
     <ShowMore :max-height-in-rem="16">
-      <article class="prose prose-sm dark:prose-invert max-w-none">
+      <article class="prose prose-sm prose-invert">
         <h2>Rule 34 {{ formattedTagsString }} hentai images and videos</h2>
 
         <section>
@@ -96,9 +96,9 @@
             <NuxtLink
               v-for="(tag, index) in hardcodedRelatedTags"
               :key="tag"
+              :title="`Browse ${formattedRelatedTags[index]} hentai and Rule 34 images`"
               :to="`/posts/${selectedBooru.domain}?tags=${encodeURIComponent(tag)}`"
               class="text-primary text-sm hover:underline"
-              :title="`Browse ${formattedRelatedTags[index]} hentai and Rule 34 images`"
             >
               {{ formattedRelatedTags[index] }}
             </NuxtLink>
@@ -119,8 +119,8 @@
                 :key="booru.domain"
               >
                 <NuxtLink
-                  :to="`/posts/${booru.domain}${selectedTags.length ? '?tags=' + selectedTags.map((t) => encodeURIComponent(t.name)).join('|') : ''}`"
                   :title="`Browse ${formattedTagsString} Rule 34 hentai on ${booru.domain}`"
+                  :to="`/posts/${booru.domain}${selectedTags.length ? '?tags=' + selectedTags.map((t) => encodeURIComponent(t.name)).join('|') : ''}`"
                 >
                   {{ booru.domain }}
                 </NuxtLink>
