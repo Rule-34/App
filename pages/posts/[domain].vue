@@ -1064,5 +1064,14 @@
         </div>
       </div>
     </section>
+
+    <PostsPageFooter
+      v-if="!isPending && !isError && allRows.length > 0"
+      :selected-booru="selectedBooru"
+      :selected-tags="selectedTags"
+      :selected-filters="selectedFilters"
+      :posts-count="allRows.length"
+      :page-title="titleForBody"
+    />
   </main>
 </template>
