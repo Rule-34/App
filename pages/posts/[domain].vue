@@ -907,7 +907,7 @@
       <!-- TODO: strip page -->
       <ShareButton
         :title="completeTitle"
-        class="my-auto"
+        class="my-auto p-3"
       />
     </div>
 
