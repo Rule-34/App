@@ -17,7 +17,7 @@ export interface IBackupState {
 export async function createBackupState(): Promise<IBackupState> {
   const { userBooruList } = useBooruList()
   const { tagCollections } = useTagCollections()
-  const { postFullSizeImages, postsPerPage } = useUserSettings()
+  const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia } = useUserSettings()
 
   // TODO: Only save data that is not defaulted
 
@@ -29,7 +29,8 @@ export async function createBackupState(): Promise<IBackupState> {
 
     settings: {
       postFullSizeImages: postFullSizeImages.value,
-      postsPerPage: postsPerPage.value
+      postsPerPage: postsPerPage.value,
+      autoplayAnimatedMedia: autoplayAnimatedMedia.value
     }
   }
 
@@ -50,7 +51,7 @@ async function restoreV3Backup(backupState: IBackupState) {
   }
 
   if (backupState.settings) {
-    const { postFullSizeImages, postsPerPage } = useUserSettings()
+    const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia } = useUserSettings()
 
     if (backupState.settings.postFullSizeImages != null) {
       postFullSizeImages.value = backupState.settings.postFullSizeImages
@@ -58,6 +59,10 @@ async function restoreV3Backup(backupState: IBackupState) {
 
     if (backupState.settings.postsPerPage != null) {
       postsPerPage.value = backupState.settings.postsPerPage
+    }
+
+    if (backupState.settings.autoplayAnimatedMedia != null) {
+      autoplayAnimatedMedia.value = backupState.settings.autoplayAnimatedMedia
     }
   }
 }
