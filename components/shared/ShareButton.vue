@@ -16,18 +16,19 @@
 
     let text =
       //
-      props.title +
-      '\n' +
-      //
-      url
+      props.title
 
     if (props.text) {
       text += '\n\n' + props.text
     }
 
     if ('share' in window.navigator) {
+      text += '\n\n'
+
       await shareViaNavigator(props.title, text, url)
     } else {
+      text += '\n\n' + url
+
       await copyToClipboard(text)
     }
   }
@@ -41,20 +42,20 @@
     }
   }
 
-async function shareViaNavigator(title: string, text: string, url: string) {
-  try {
-    await window.navigator.share({
-      title,
-      text,
-      url
-    })
-  } catch (err) {
-    // Ignore AbortError which happens when user cancels the share dialog
-    if (!(err instanceof DOMException && err.name === 'AbortError')) {
-      throw err
+  async function shareViaNavigator(title: string, text: string, url: string) {
+    try {
+      await window.navigator.share({
+        title,
+        text,
+        url
+      })
+    } catch (err) {
+      // Ignore AbortError which happens when user cancels the share dialog
+      if (!(err instanceof DOMException && err.name === 'AbortError')) {
+        throw err
+      }
     }
   }
-}
 </script>
 
 <template>
