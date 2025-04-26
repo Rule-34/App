@@ -11,7 +11,7 @@
 
   const appVersion = version
 
-  const { postFullSizeImages, postsPerPage } = useUserSettings()
+  const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia } = useUserSettings()
   const { isPremium } = useUserData()
   const { selectedList, defaultBlockList, customBlockList, resetCustomBlockList } = useBlockLists()
 
@@ -118,6 +118,15 @@
     <!-- Settings -->
     <section class="mx-2 mt-4 flex-auto">
       <ol class="space-y-4">
+        <!-- autoplayAnimatedMedia -->
+        <li>
+          <SettingSwitch v-model="autoplayAnimatedMedia">
+            <template #name> Autoplay GIFs</template>
+
+            <template #description> Automatically play animated GIFs without requiring a click </template>
+          </SettingSwitch>
+        </li>
+
         <!-- postFullSizeImages -->
         <li>
           <SettingSwitch v-model="postFullSizeImages">
@@ -156,7 +165,7 @@
 
           <p
             v-if="selectedList === blockListOptions.Default"
-            class="mt-2 text-xs text-base-content"
+            class="text-base-content mt-2 text-xs"
           >
             Tags blocked by default:
             {{ defaultBlockList.join(', ') }}
@@ -170,13 +179,13 @@
               <textarea
                 :placeholder="'One tag per line:\n' + defaultBlockList.join('\n')"
                 :value="customBlockList.join('\n')"
-                class="focus-visible:focus-outline-util hover:hover-bg-util block w-full rounded-md border-0 bg-transparent py-1.5 text-sm text-base-content-highlight shadow-xs ring-1 ring-inset ring-base-0/20 placeholder:text-base-content sm:leading-6"
+                class="focus-visible:focus-outline-util hover:hover-bg-util text-base-content-highlight ring-base-0/20 placeholder:text-base-content block w-full rounded-md border-0 bg-transparent py-1.5 text-sm shadow-xs ring-1 ring-inset sm:leading-6"
                 name="customBlockList"
                 rows="4"
               />
 
               <button
-                class="hover:hover-bg-util focus-visible:focus-outline-util hover:hover-text-util self-end rounded-lg px-3 py-1.5 text-sm font-medium ring-1 ring-base-0/20 transition-colors focus-visible:ring-inset"
+                class="hover:hover-bg-util focus-visible:focus-outline-util hover:hover-text-util ring-base-0/20 self-end rounded-lg px-3 py-1.5 text-sm font-medium ring-1 transition-colors focus-visible:ring-inset"
                 type="submit"
               >
                 Save
@@ -190,7 +199,7 @@
     <!-- Reset -->
     <section class="mx-2 mt-24 flex flex-row items-center justify-between gap-2">
       <label for="reset">
-        <span class="font-medium leading-8 text-base-content-highlight">
+        <span class="text-base-content-highlight leading-8 font-medium">
           Reset
           <ExclamationTriangleIcon class="inline-block h-4 w-4" />
         </span>
@@ -200,7 +209,7 @@
 
       <button
         id="reset"
-        class="hover:hover-bg-util focus-visible:focus-outline-util hover:hover-text-util rounded-lg px-3 py-1.5 text-sm font-medium ring-1 ring-base-0/20 transition-colors focus-visible:ring-inset"
+        class="hover:hover-bg-util focus-visible:focus-outline-util hover:hover-text-util ring-base-0/20 rounded-lg px-3 py-1.5 text-sm font-medium ring-1 transition-colors focus-visible:ring-inset"
         type="button"
         @click="removeAllData"
       >
@@ -209,7 +218,7 @@
     </section>
 
     <footer class="mt-2">
-      <span class="block text-center text-sm text-base-content-highlight"> v{{ appVersion }} </span>
+      <span class="text-base-content-highlight block text-center text-sm"> v{{ appVersion }} </span>
     </footer>
   </main>
 </template>

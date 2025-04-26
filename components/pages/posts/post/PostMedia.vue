@@ -6,6 +6,7 @@
   import { proxyUrl } from 'assets/js/proxy'
 
   const { isPremium } = useUserData()
+  const { autoplayAnimatedMedia } = useUserSettings()
   let { timesVideoHasRendered } = useEthics()
 
   export interface PostMediaProps {
@@ -24,15 +25,12 @@
   const localSrc = shallowRef(props.mediaSrc)
   const localPosterSrc = shallowRef(props.mediaPosterSrc)
 
-  const isAnimatedMediaPlaying = ref(false)
-  const mediaHasLoaded = ref(false)
-
   const error = ref<Error | null>(null)
   const hasError = computed(() => error.value !== null)
 
   const isImage = computed(() => props.mediaType === 'image')
   const isVideo = computed(() => props.mediaType === 'video')
-  const isGif = computed(
+  const isAnimatedMedia = computed(
     () => props.mediaType === 'animated' || (props.mediaType === 'image' && props.mediaSrc.endsWith('.gif'))
   )
 
@@ -41,16 +39,26 @@
 
   let videoPlayer: FluidPlayerInstance | undefined
 
+  const isAnimatedMediaLoading = ref(false)
+  const isAnimatedMediaPlaying = ref(false)
+  const mediaHasLoaded = ref(false)
+
   onMounted(() => {
     if (!mediaElement.value) {
       return
     }
 
-    if (!isVideo.value) {
-      return
-    }
+    switch (true) {
+      case isVideo.value:
+        createVideoPlayer()
+        break
 
-    createVideoPlayer()
+      case isAnimatedMedia.value:
+        if (autoplayAnimatedMedia.value && !isAnimatedMediaPlaying.value) {
+          startPlayingAnimatedMedia()
+        }
+        break
+    }
   })
 
   onBeforeUnmount(() => {
@@ -60,7 +68,7 @@
       return
     }
 
-    if (isImage.value || isGif.value) {
+    if (isImage.value || isAnimatedMedia.value) {
       // If its a Vue component, get the actual element
       if ('$el' in finalMediaElement) {
         finalMediaElement = finalMediaElement.$el as HTMLElement
@@ -244,6 +252,11 @@
     })
   }
 
+  function startPlayingAnimatedMedia() {
+    isAnimatedMediaLoading.value = true
+    isAnimatedMediaPlaying.value = true
+  }
+
   function onMediaError(event: Event) {
     if (hasError.value) {
       return
@@ -270,8 +283,13 @@
       return
     }
 
+    // Reset loading state if there's an error with GIF
+    if (isAnimatedMedia.value && isAnimatedMediaPlaying.value) {
+      isAnimatedMediaLoading.value = false
+    }
+
     // Proxy GIFs
-    if (isGif.value && isPremium.value) {
+    if (isAnimatedMedia.value && isPremium.value) {
       //
 
       // Case 1: The poster image failed to load
@@ -338,6 +356,11 @@
 
   function onMediaLoad(event: Event) {
     mediaHasLoaded.value = true
+
+    // Clear loading state if it's a GIF
+    if (isAnimatedMedia.value && isAnimatedMediaPlaying.value) {
+      isAnimatedMediaLoading.value = false
+    }
   }
 
   /**
@@ -448,10 +471,9 @@
 
     <!-- Animated (GIF) -->
     <div
-      v-else-if="isGif"
+      v-else-if="isAnimatedMedia"
       class="relative"
     >
-      <!-- Single image element for both poster and GIF -->
       <img
         ref="mediaElement"
         :alt="mediaAlt"
@@ -466,12 +488,41 @@
         @load="onMediaLoad"
       />
 
-      <!-- Play button overlay -->
+      <!-- Loading indicator for GIFs -->
+      <div
+        v-if="isAnimatedMediaLoading && isAnimatedMediaPlaying"
+        class="absolute inset-0 flex items-center justify-center rounded-t-md bg-black/20"
+      >
+        <span class="rounded-full bg-black/65 p-2">
+          <svg
+            class="h-12 w-12 animate-spin text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              fill="currentColor"
+            ></path>
+          </svg>
+        </span>
+      </div>
+
+      <!-- Play button overlay - only shown when GIF is not playing -->
       <button
         v-if="!isAnimatedMediaPlaying"
         class="absolute inset-0 flex items-center justify-center rounded-t-md bg-black/20"
         type="button"
-        @click="isAnimatedMediaPlaying = true"
+        @click="startPlayingAnimatedMedia"
       >
         <span class="rounded-full bg-black/65 p-2">
           <svg

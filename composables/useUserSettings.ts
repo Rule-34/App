@@ -3,6 +3,7 @@ import { useLocalStorage } from '@vueuse/core'
 export default function () {
   let postFullSizeImages = ref<boolean>(false)
   let postsPerPage = ref<number>(29)
+  let autoplayAnimatedMedia = ref<boolean>(false)
 
   if (import.meta.client) {
     postFullSizeImages = useLocalStorage('settings-postFullSizeImages', false, {
@@ -11,10 +12,14 @@ export default function () {
     postsPerPage = useLocalStorage('settings-postsPerPage', 29, {
       writeDefaults: false
     })
+    autoplayAnimatedMedia = useLocalStorage('settings-autoplayAnimatedMedia', false, {
+      writeDefaults: false
+    })
   }
 
   return {
     postFullSizeImages,
-    postsPerPage
+    postsPerPage,
+    autoplayAnimatedMedia
   }
 }
