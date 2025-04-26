@@ -1,17 +1,6 @@
 <script lang="ts" setup>
   const newsList = [
     {
-      name: 'AI Chatbot',
-      text: 'Chat with an AI that send pics, videos and much more 😉',
-      links: [
-        {
-          text: 'Chat with AI',
-          href: 'https://candyai.gg/home2?via=rule-3496',
-          target: '_blank'
-        }
-      ]
-    },
-    {
       name: 'Feedback website',
       text: 'Now you can vote, discuss and share ideas 💡 to improve the Rule 34 App',
       links: [
