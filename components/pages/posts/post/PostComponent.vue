@@ -20,6 +20,8 @@
     openTagInNewTab: [tag: string]
   }>()
 
+  const currentUrl = useRequestURL()
+
   const { postFullSizeImages } = useUserSettings()
 
   const areTagsOpen = ref(false)
@@ -128,6 +130,13 @@
         <PostSource
           :post-file-url="post.media_type === 'video' ? mediaFile.posterFile : mediaFile.file"
           :post-sources="post.sources"
+        />
+
+        <ShareButton
+          class="px-1.5 py-1"
+          :title="`Post #${post.id} from ${post.domain}`"
+          :text="`Found on Rule 34 App: ${currentUrl.href}`"
+          :url="mediaFile.file ?? undefined"
         />
 
         <button

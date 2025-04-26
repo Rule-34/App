@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import * as Sentry from '@sentry/nuxt'
   import { ShareIcon } from '@heroicons/vue/24/outline'
+  import { toast } from 'vue-sonner'
 
   interface ShareButtonProps {
     title: string
@@ -11,11 +12,6 @@
   const props = defineProps<ShareButtonProps>()
 
   async function share() {
-    if (!window.navigator.share) {
-      console.debug('Share is not supported on this browser')
-      return
-    }
-
     const url = props.url ?? window.location.href
 
     let text =
@@ -23,37 +19,47 @@
       props.title +
       '\n' +
       //
-      url +
-      '\n\n' +
-      //
-      props.text +
-      '\n\n'
+      url
 
-    // Should look like this:
-    /**
-     *  <title>
-     *  <url>
-     *
-     *  <text>
-     *
-     *  <url>
-     */
+    if (props.text) {
+      text += '\n\n' + props.text
+    }
 
-    try {
-      await window.navigator.share({
-        title: props.title,
-        text: text,
-        url: url
-      })
-    } catch (error) {
-      Sentry.captureException(error)
+    if ('share' in window.navigator) {
+      await shareViaNavigator(props.title, text, url)
+    } else {
+      await copyToClipboard(text)
     }
   }
+
+  async function copyToClipboard(text: string) {
+    try {
+      await navigator.clipboard.writeText(text)
+      toast.success('Link copied to clipboard!')
+    } catch (err) {
+      toast.error('Failed to copy link to clipboard')
+    }
+  }
+
+async function shareViaNavigator(title: string, text: string, url: string) {
+  try {
+    await window.navigator.share({
+      title,
+      text,
+      url
+    })
+  } catch (err) {
+    // Ignore AbortError which happens when user cancels the share dialog
+    if (!(err instanceof DOMException && err.name === 'AbortError')) {
+      throw err
+    }
+  }
+}
 </script>
 
 <template>
   <button
-    class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util rounded-md p-3"
+    class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util rounded-md"
     type="button"
     @click="share"
   >
