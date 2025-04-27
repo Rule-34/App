@@ -278,7 +278,9 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
   },
 
   image: {
-    provider: 'imgproxy',
+    ipx: {
+      maxAge: 60 * 60 * 24 * 365 // 1 year
+    },
 
     providers: {
       imgproxy: {

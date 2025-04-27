@@ -463,6 +463,7 @@
           :width="mediaSrcWidth"
           decoding="async"
           loading="lazy"
+          provider="imgproxy"
           @error="onMediaError"
           @load="onMediaLoad"
         />
