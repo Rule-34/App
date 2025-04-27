@@ -1054,7 +1054,8 @@
                 <PostComponent
                   :key="selectedBooru.domain + '-' + allRows[virtualRow.index].id"
                   :post="allRows[virtualRow.index]"
-                  :selected-tags="selectedTags"
+                  :postIndex="virtualRow.index"
+                  :selectedTags="selectedTags"
                   @addTag="onPostAddTag"
                   @openTagInNewTab="onPostOpenTagInNewTab"
                   @setTag="onPostSetTag"

@@ -447,7 +447,6 @@
           alt="Icon"
           class="flip-vertical-fwd text-base-content-highlight h-6 w-6"
           height="16"
-          loading="eager"
           src="/icon.svg"
           width="16"
         />
@@ -544,7 +543,6 @@
                   alt="Favicon"
                   class="h-5 w-5 rounded-sm"
                   height="128"
-                  loading="eager"
                   width="128"
                 />
 

@@ -78,9 +78,11 @@
         >
           <figure>
             <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
-            <img
+            <NuxtPicture
               :alt="'Featured tag: ' + tag.name"
-              :loading="index > 5 ? 'lazy' : 'eager'"
+              :decoding="index <= 4 ? undefined : 'async'"
+              :loading="index <= 4 ? undefined : 'lazy'"
+              :preload="index <= 4"
               :src="tag.media[0].src"
               class="h-auto w-full rounded-t-md"
               height="600"

@@ -10,6 +10,8 @@
   let { timesVideoHasRendered } = useEthics()
 
   export interface PostMediaProps {
+    postIndex: number
+
     mediaSrc: IPost['high_res_file']['url']
     mediaSrcHeight: IPost['high_res_file']['height'] | null
     mediaSrcWidth: IPost['high_res_file']['width'] | null
@@ -433,16 +435,17 @@
     >
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <template v-if="!isPremium">
-        <img
+        <NuxtImg
           ref="mediaElement"
           :alt="mediaAlt"
+          :decoding="postIndex <= 2 ? undefined : 'async'"
           :height="mediaSrcHeight"
+          :loading="postIndex <= 2 ? undefined : 'lazy'"
+          :preload="postIndex <= 2"
           :src="localSrc"
           :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
           :width="mediaSrcWidth"
           class="h-auto w-full rounded-t-md"
-          decoding="async"
-          loading="lazy"
           @error="onMediaError"
           @load="onMediaLoad"
         />
@@ -454,15 +457,17 @@
         <NuxtPicture
           ref="mediaElement"
           :alt="mediaAlt"
+          :decoding="postIndex <= 2 ? undefined : 'async'"
           :height="mediaSrcHeight"
           :imgAttrs="{
             class: 'h-auto w-full rounded-t-md',
             style: 'aspect-ratio: ' + mediaSrcWidth + '/' + mediaSrcHeight
           }"
+          :loading="postIndex <= 2 ? undefined : 'lazy'"
+          :preload="postIndex <= 2"
           :src="localSrc"
           :width="mediaSrcWidth"
-          decoding="async"
-          loading="lazy"
+          provider="imgproxy"
           @error="onMediaError"
           @load="onMediaLoad"
         />
@@ -474,16 +479,17 @@
       v-else-if="isAnimatedMedia"
       class="relative"
     >
-      <img
+      <NuxtImg
         ref="mediaElement"
         :alt="mediaAlt"
+        :decoding="postIndex <= 2 ? undefined : 'async'"
         :height="mediaSrcHeight"
+        :loading="postIndex <= 2 ? undefined : 'lazy'"
+        :preload="postIndex <= 2"
         :src="isAnimatedMediaPlaying ? localSrc : localPosterSrc"
         :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
         :width="mediaSrcWidth"
         class="h-auto w-full rounded-t-md"
-        decoding="async"
-        loading="lazy"
         @error="onMediaError"
         @load="onMediaLoad"
       />

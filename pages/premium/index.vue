@@ -312,7 +312,7 @@
             <!-- Background -->
             <svg
               aria-hidden="true"
-              class="absolute -bottom-48 left-1/2 h-[64rem] -translate-x-1/2 translate-y-1/2 [clip-path:inset(0_0_63%_0)] [mask-image:radial-gradient(closest-side,white,transparent)]"
+              class="absolute -bottom-48 left-1/2 h-[64rem] -translate-x-1/2 translate-y-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] [clip-path:inset(0_0_63%_0)]"
               viewBox="0 0 1208 1024"
             >
               <ellipse
@@ -461,10 +461,10 @@
                     class="bg-base-0/10 rounded-b-2xl px-2 pt-3 pb-4"
                   >
                     <span
-                      class="text-base-content-highlight text-sm"
                       :class="{
                         'font-medium': interval.name === selectedPaymentInterval.name
                       }"
+                      class="text-base-content-highlight text-sm"
                     >
                       Save {{ Math.round(((interval.originalPrice - interval.price) / interval.originalPrice) * 100) }}%
                     </span>
@@ -615,12 +615,11 @@
                     <!-- Section header -->
                     <div class="flex items-center gap-3">
                       <img
+                        :alt="`${paymentMethods[category].name} icon`"
                         :src="paymentMethods[category].icon"
                         class="h-6 w-6 shrink-0 rounded-sm"
                         height="128"
-                        loading="eager"
                         width="128"
-                        :alt="`${paymentMethods[category].name} icon`"
                       />
                       <h4 class="text-base-content-highlight text-lg font-medium">
                         {{ paymentMethods[category].name }}
@@ -642,7 +641,6 @@
                           :src="getFaviconUrl(link.faviconDomain ?? link.url)"
                           class="h-5 w-5 shrink-0 rounded-sm"
                           height="128"
-                          loading="eager"
                           width="128"
                         />
                         <span>
