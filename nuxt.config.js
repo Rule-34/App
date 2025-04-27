@@ -11,16 +11,40 @@ export default defineNuxtConfig({
           type: 'text/css',
           children: 'html { background-color: black; }'
         }
-      ]
-    }
-  },
+      ],
 
-  scripts: {
-    registry: {
-      matomoAnalytics: {
-        matomoUrl: 'https://matomo.akbal.dev',
-        siteId: 1
-      }
+      script: [
+        /**
+         * Matomo
+         */
+        {
+          type: 'text/partytown',
+          innerHTML: `
+var _paq = (window._paq = window._paq || [])
+
+_paq.push(['setDomains', ['*.r34.app']])
+_paq.push(['enableCrossDomainLinking'])
+
+_paq.push(['setExcludedQueryParams', ['page', 'cursor']])
+
+;(function () {
+  var u = 'https://matomo.akbal.dev/'
+
+  _paq.push(['setTrackerUrl', u + 'matomo.php'])
+  _paq.push(['setSiteId', '1'])
+})()`
+        },
+        { src: 'https://matomo.akbal.dev/matomo.js', type: 'text/partytown', async: true, defer: true },
+        /**
+         * Formbricks
+         */
+        {
+          type: 'text/partytown',
+          innerHTML: `
+!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://app.formbricks.com/js/formbricks.umd.cjs",t.onload=function(){window.formbricks?window.formbricks.setup({environmentId:"cm6gbkjeq0008l7036ckdvtnm",appUrl:"https://app.formbricks.com"}):console.error("Formbricks library failed to load properly. The formbricks object is not available.");};var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)}();
+`
+        }
+      ]
     }
   },
 
@@ -237,6 +261,7 @@ export default defineNuxtConfig({
     '@formkit/auto-animate/nuxt',
     '@vite-pwa/nuxt',
     '@nuxt/scripts',
+    '@nuxtjs/partytown',
     '@nuxtjs/sitemap',
     'nuxt-schema-org',
     'nuxt-security'
@@ -346,6 +371,15 @@ export default defineNuxtConfig({
 
   schemaOrg: {
     default: false
+  },
+
+  partytown: {
+    forward: [
+      // Matomo
+      '_paq.push',
+      // Formbricks
+      'formbricks.track'
+    ]
   },
 
   /** @type {import('@nuxtjs/sitemap').ModuleOptions} */
