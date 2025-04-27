@@ -125,7 +125,13 @@
       return
     }
 
-    useAdvertisements(hasInteracted)
+    watch(hasInteracted, (hasInteracted) => {
+      if (!hasInteracted) {
+        return
+      }
+
+      useAdvertisements()
+    })
   })
 
   const featuredDomains = [

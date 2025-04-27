@@ -260,7 +260,6 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
     '@nuxt/fonts',
     '@formkit/auto-animate/nuxt',
     '@vite-pwa/nuxt',
-    '@nuxt/scripts',
     '@nuxtjs/partytown',
     '@nuxtjs/sitemap',
     'nuxt-schema-org',
