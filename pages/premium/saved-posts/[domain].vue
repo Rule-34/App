@@ -855,6 +855,7 @@
                 <PostComponent
                   :key="allRows[virtualRow.index].domain + '-' + allRows[virtualRow.index].id"
                   :post="allRows[virtualRow.index]"
+                  :postIndex="virtualRow.index"
                   :selected-tags="selectedTags"
                   @addTag="onPostAddTag"
                   @openTagInNewTab="onPostOpenTagInNewTab"
