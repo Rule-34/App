@@ -1,6 +1,6 @@
 import { default as randomWeightedChoice } from 'random-weighted-choice'
 
-export default function (loadAdScripts: Ref<boolean>) {
+export default function () {
   const popunderScript = useState<string>('popunder-script', () => '')
   const pushScript = useState<string>('push-notification-script', () => '')
 
@@ -121,34 +121,24 @@ export default function (loadAdScripts: Ref<boolean>) {
     pushScript.value = selectedPush
   }
 
-  // Common script configuration
-  const scriptConfig = {
-    async: false,
-    defer: true,
-    'data-cfasync': 'false',
-
-    // Fix for CORS issues - https://unhead.unjs.io/usage/composables/use-script#referrerpolicy-and-crossorigin
-    crossorigin: false
-  }
-
   // Load selected ads
-  useScript(
-    {
-      ...scriptConfig,
-      src: popunderScript.value
-    },
-    {
-      trigger: loadAdScripts
-    }
-  )
+  useHead({
+    script: [
+      {
+        src: popunderScript.value,
+        async: false,
+        defer: true,
 
-  useScript(
-    {
-      ...scriptConfig,
-      src: pushScript.value
-    },
-    {
-      trigger: loadAdScripts
-    }
-  )
+        // Fix for CORS issues - https://unhead.unjs.io/usage/composables/use-script#referrerpolicy-and-crossorigin
+        crossorigin: 'anonymous'
+      },
+      {
+        src: pushScript.value,
+        async: false,
+        defer: true,
+
+        crossorigin: 'anonymous'
+      }
+    ]
+  })
 }

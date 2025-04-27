@@ -11,7 +11,6 @@
   } from '@heroicons/vue/24/solid'
   import { toast } from 'vue-sonner'
   import { detectPlatform, Platform, PLATFORM_URLS } from '~/types/enums/Platform'
-  import formbricks from '~/assets/js/formbricks'
 
   const { $pocketBase } = useNuxtApp()
   const route = useRoute()
@@ -58,7 +57,7 @@
 
   function onManageSubscriptionClick() {
     // TODO: Only continue if form finished
-    formbricks.track('cancel_subscription_click_on_dashboard')
+    window.formbricks?.track('cancel_subscription_click_on_dashboard')
 
     if (!platformOfPurchase.value) {
       toast.error('Cant find the platform where you purchased your subscription')
