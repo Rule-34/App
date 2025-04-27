@@ -48,7 +48,6 @@
       border="0"
       class="mt-5 h-screen max-h-[60vh] w-full rounded-md sm:mt-6"
       credentialless
-      loading="eager"
       src="https://www.installpwa.com/from/r34.app/embed?theme=dark"
       title="Install PWA"
       @load="isIframeLoaded = true"

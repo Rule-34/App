@@ -13,7 +13,6 @@
       alt="Logo"
       class="h-24 w-full opacity-95"
       height="16"
-      loading="eager"
       src="/icon.svg"
       width="16"
     />

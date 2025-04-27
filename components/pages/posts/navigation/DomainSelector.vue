@@ -106,7 +106,6 @@
             alt="Favicon"
             class="h-5 w-5 shrink-0 rounded-sm"
             height="128"
-            loading="eager"
             width="128"
           />
 
@@ -150,7 +149,6 @@
                 alt="Favicon"
                 class="h-5 w-5 shrink-0 rounded-sm"
                 height="128"
-                loading="eager"
                 width="128"
               />
 

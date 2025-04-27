@@ -42,9 +42,7 @@
       <img
         alt="Feedback website preview"
         class="h-auto max-h-[50svh] w-full object-cover"
-        decoding="async"
         height="1080"
-        loading="eager"
         src="https://screenshot.akbal.dev/v1/capture?width=720&height=1080&url=https://feedback.r34.app/"
         width="720"
       />
