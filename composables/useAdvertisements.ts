@@ -67,10 +67,10 @@ export default function () {
      * Pros:
      * Cons: Low revenue (17)
      */
-    // {
-    //   id: 'https://hotbcetici.today/process.js?id=1300335215&p1=sub1&p2=sub2&p3=sub3&p4=sub4',
-    //   weight: 0.3
-    // },
+    {
+      id: 'https://hotbcetici.today/process.js?id=1300335215&p1=sub1&p2=sub2&p3=sub3&p4=sub4',
+      weight: 0.3
+    },
     /**
      * HilltopAds
      * Pros:
@@ -92,12 +92,12 @@ export default function () {
     /**
      * AdsCarat
      * Pros:
-     * Cons:
+     * Cons: Extremely low revenue (0.50)
      */
-    {
-      id: '//jn.astelicbanes.com/sgC9H1j3tpX/121206',
-      weight: 0.15
-    },
+    // {
+    //   id: '//jn.astelicbanes.com/sgC9H1j3tpX/121206',
+    //   weight: 0.15
+    // },
     /**
      * EvaDav
      * Pros: Fixed weekly pay ()
