@@ -4,6 +4,8 @@
   import Tag from '~/assets/js/tag.dto'
 
   const props = defineProps<{
+    postIndex: number
+
     post: IPost
 
     selectedTags: Tag[]
@@ -98,6 +100,7 @@
       :mediaSrcHeight="mediaFile.height"
       :mediaSrcWidth="mediaFile.width"
       :mediaType="post.media_type"
+      :postIndex="props.postIndex"
     />
 
     <figcaption>
@@ -133,10 +136,10 @@
         />
 
         <ShareButton
-          class="px-1.5 py-1"
-          :title="`Post #${post.id} from ${post.domain}`"
           :text="`Found on Rule 34 App: ${currentUrl.href}`"
+          :title="`Post #${post.id} from ${post.domain}`"
           :url="mediaFile.file ?? undefined"
+          class="px-1.5 py-1"
         />
 
         <button
