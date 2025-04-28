@@ -123,7 +123,7 @@
           v-if="!props.compact"
           class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2"
         >
-          <ChevronUpDownIcon class="h-5 w-5" />
+          <ChevronUpDownIcon aria-hidden="true" class="h-5 w-5" />
         </span>
       </HeadlessListboxButton>
 
@@ -171,7 +171,7 @@
                 v-if="selected"
                 class="text-base-content-highlight"
               >
-                <CheckIcon class="h-5 w-5" />
+                <CheckIcon aria-hidden="true" class="h-5 w-5" />
               </span>
             </div>
           </li>
@@ -179,7 +179,7 @@
 
         <!-- Add more button -->
         <div class="hover:hover-text-util hover:hover-bg-util group flex items-center px-3 py-2">
-          <PlusIcon class="group-hover:hover-text-util h-5 w-5 rounded-sm" />
+          <PlusIcon aria-hidden="true" class="group-hover:hover-text-util h-5 w-5 rounded-sm" />
 
           <NuxtLink
             :href="isPremium ? '/premium/additional-boorus' : '/premium'"

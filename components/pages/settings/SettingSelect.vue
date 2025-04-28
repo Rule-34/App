@@ -46,7 +46,7 @@
       >
         {{ modelValue }}
 
-        <ChevronDownIcon class="-mr-0.5 h-5 w-5 text-base-content" />
+        <ChevronDownIcon aria-hidden="true" class="-mr-0.5 h-5 w-5 text-base-content" />
       </HeadlessListboxButton>
 
       <HeadlessListboxOptions
@@ -71,7 +71,7 @@
                   v-if="selected"
                   :class="active ? 'text-base-content-highlight' : 'text-base-content'"
                 >
-                  <CheckIcon class="h-5 w-5" />
+                  <CheckIcon aria-hidden="true" class="h-5 w-5" />
                 </span>
               </div>
             </div>

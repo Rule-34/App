@@ -201,7 +201,7 @@
       <label for="reset">
         <span class="text-base-content-highlight leading-8 font-medium">
           Reset
-          <ExclamationTriangleIcon class="inline-block h-4 w-4" />
+          <ExclamationTriangleIcon aria-hidden="true" class="inline-block h-4 w-4" />
         </span>
 
         <span class="block text-sm"> Clear settings, cookies, and all other app data </span>

@@ -76,7 +76,7 @@
       <div class="group relative">
         <!-- Icon -->
         <div class="group pointer-events-none absolute inset-y-0 left-0 flex items-center rounded-l-md px-2">
-          <MagnifyingGlassIcon class="h-5 w-5 text-base-content group-hover:text-base-content-hover" />
+          <MagnifyingGlassIcon aria-hidden="true" class="h-5 w-5 text-base-content group-hover:text-base-content-hover" />
         </div>
 
         <!-- Input -->
@@ -116,7 +116,7 @@
                 v-if="selected"
                 class="absolute inset-y-0 left-0 flex items-center pl-1.5 text-base-content-highlight"
               >
-                <CheckIcon class="h-5 w-5" />
+                <CheckIcon aria-hidden="true" class="h-5 w-5" />
               </span>
             </div>
           </HeadlessComboboxOption>
@@ -137,7 +137,7 @@
                 v-if="selected"
                 class="absolute inset-y-0 left-0 flex items-center pl-1.5 text-base-content-highlight"
               >
-                <CheckIcon class="h-5 w-5" />
+                <CheckIcon aria-hidden="true" class="h-5 w-5" />
               </span>
 
               <!-- Tag -->

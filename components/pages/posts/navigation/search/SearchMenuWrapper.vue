@@ -56,7 +56,7 @@
                   type="button"
                   @click="toggleSearchMenu(false)"
                 >
-                  <XMarkIcon class="hover:hover-text-util text-base-content-highlight h-6 w-6" />
+                  <XMarkIcon aria-hidden="true" class="hover:hover-text-util text-base-content-highlight h-6 w-6" />
                 </button>
               </div>
             </HeadlessTransitionChild>

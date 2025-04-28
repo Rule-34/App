@@ -176,7 +176,7 @@
       <div class="group relative mt-4">
         <!-- Icon -->
         <div class="group pointer-events-none absolute inset-y-0 left-0 flex items-center rounded-l-md px-2">
-          <MagnifyingGlassIcon class="text-base-content group-hover:text-base-content-hover h-5 w-5" />
+          <MagnifyingGlassIcon aria-hidden="true" class="text-base-content group-hover:text-base-content-hover h-5 w-5" />
         </div>
 
         <!-- Input -->
@@ -191,7 +191,7 @@
           ref="comboboxButtonRef"
           class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2"
         >
-          <ChevronUpDownIcon class="text-base-content group-hover:text-base-content-hover h-5 w-5" />
+          <ChevronUpDownIcon aria-hidden="true" class="text-base-content group-hover:text-base-content-hover h-5 w-5" />
         </HeadlessComboboxButton>
 
         <!-- Options -->
@@ -218,7 +218,7 @@
                 v-if="selected"
                 class="text-base-content-highlight absolute inset-y-0 left-0 flex items-center pl-1.5"
               >
-                <CheckIcon class="h-5 w-5" />
+                <CheckIcon aria-hidden="true" class="h-5 w-5" />
               </span>
             </div>
           </HeadlessComboboxOption>
@@ -239,7 +239,7 @@
                 v-if="selected"
                 class="text-base-content-highlight absolute inset-y-0 left-0 flex items-center pl-1.5"
               >
-                <CheckIcon class="h-5 w-5" />
+                <CheckIcon aria-hidden="true" class="h-5 w-5" />
               </span>
 
               <!-- Tag -->
@@ -270,7 +270,7 @@
           type="button"
           @click="isTagCollectionsActive = !isTagCollectionsActive"
         >
-          <TagIcon class="-ml-0.5 h-[1.15rem] w-[1.15rem]" />
+          <TagIcon aria-hidden="true" class="-ml-0.5 h-[1.15rem] w-[1.15rem]" />
 
           <span class="text-sm font-medium whitespace-nowrap">Collections</span>
         </button>
@@ -340,11 +340,13 @@
           >
             <NoSymbolIcon
               v-if="!isTagExcluded(tag.name)"
+              aria-hidden="true"
               class="h-4 w-4"
             />
 
             <PlusIcon
               v-else
+              aria-hidden="true"
               class="h-4 w-4"
             />
           </button>

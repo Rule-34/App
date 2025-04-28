@@ -47,6 +47,6 @@
     type="button"
     @click="downloadMedia"
   >
-    <ArrowDownTrayIcon class="group-hover:hover-text-util text-base-content h-5 w-5" />
+    <ArrowDownTrayIcon aria-hidden="true" class="group-hover:hover-text-util text-base-content h-5 w-5" />
   </button>
 </template>

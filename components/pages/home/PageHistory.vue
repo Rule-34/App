@@ -97,7 +97,7 @@
         type="button"
         @click="removeHistoryItem(historyItem.path)"
       >
-        <XMarkIcon class="h-5 w-5" />
+        <XMarkIcon aria-hidden="true" class="h-5 w-5" />
       </button>
     </li>
   </ol>
