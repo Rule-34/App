@@ -76,35 +76,6 @@
       height: 630
     }
   })
-
-  useSchemaOrg([
-    defineWebSite({
-      name: 'Rule 34 App'
-    }),
-
-    defineWebPage(),
-
-    defineOrganization({
-      name: 'Rule 34 App',
-      logo: '/icon.svg',
-      sameAs: [
-        'https://rule34.app',
-        'https://twitter.com/Rule34App',
-        'https://twitter.com/Rule34App',
-        'https://discord.gg/fUhYHSZ',
-        'https://github.com/Rule-34/App'
-      ]
-    }),
-
-    defineProduct({
-      name: 'Rule 34 App',
-      // @see https://www.trustpilot.com/review/r34.app
-      aggregateRating: {
-        ratingValue: 4.7,
-        ratingCount: 81
-      }
-    })
-  ])
 </script>
 
 <template>

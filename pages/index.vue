@@ -105,18 +105,6 @@
     })
   }
 
-  // TODO: Listen to router
-
-  useSchemaOrg([
-    defineWebSite({
-      potentialAction: [
-        defineSearchAction({
-          target: '/posts/rule34.xxx?tags={search_term_string}'
-        })
-      ]
-    })
-  ])
-
   /**
    * Show popunders for non-premium users
    */
@@ -432,6 +420,42 @@
     //   ]
     // }
   ]
+
+  useSchemaOrg([
+    defineWebSite({
+      name: 'Rule 34 App',
+
+      potentialAction: [
+        // TODO: Listen to router
+        defineSearchAction({
+          target: '/?query={search_term_string}'
+        })
+      ]
+    }),
+
+    defineWebPage(),
+
+    defineOrganization({
+      name: 'Rule 34 App',
+      logo: '/icon.svg',
+      sameAs: [
+        'https://rule34.app',
+        'https://twitter.com/Rule34App',
+        'https://twitter.com/Rule34App',
+        'https://discord.gg/fUhYHSZ',
+        'https://github.com/Rule-34/App'
+      ]
+    }),
+
+    defineProduct({
+      name: 'Rule 34 App',
+      // @see https://www.trustpilot.com/review/r34.app
+      aggregateRating: {
+        ratingValue: 4.5,
+        ratingCount: 331
+      }
+    })
+  ])
 </script>
 
 <template>

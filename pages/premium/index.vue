@@ -205,6 +205,17 @@
   useSeoMeta({
     title: 'Premium'
   })
+
+  useSchemaOrg([
+    defineProduct({
+      name: 'Rule 34 App',
+      // @see https://www.trustpilot.com/review/r34.app
+      aggregateRating: {
+        ratingValue: 4.5,
+        ratingCount: 331
+      }
+    })
+  ])
 </script>
 
 <template>

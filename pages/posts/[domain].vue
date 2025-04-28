@@ -29,6 +29,23 @@
   const { selectedDomainFromStorage } = useSelectedDomainFromStorage()
 
   /**
+   * Show ads for non-premium users
+   */
+  onMounted(() => {
+    if (isPremium.value) {
+      return
+    }
+
+    watch(hasInteracted, (hasInteracted) => {
+      if (!hasInteracted) {
+        return
+      }
+
+      useAdvertisements()
+    })
+  })
+
+  /**
    * URL
    */
   const selectedBooru = computed(() => {
@@ -822,23 +839,6 @@
       return true
     }
   })
-
-  /**
-   * Show popunders for non-premium users
-   */
-  onMounted(() => {
-    if (isPremium.value) {
-      return
-    }
-
-    watch(hasInteracted, (hasInteracted) => {
-      if (!hasInteracted) {
-        return
-      }
-
-      useAdvertisements()
-    })
-  })
 </script>
 
 <template>
@@ -1074,10 +1074,10 @@
 
     <PostsPageFooter
       v-if="!isPending && !isError && allRows.length > 0"
-      :selected-booru="selectedBooru"
-      :selected-tags="selectedTags"
-      :selected-filters="selectedFilters"
       :posts-count="allRows.length"
+      :selected-booru="selectedBooru"
+      :selected-filters="selectedFilters"
+      :selected-tags="selectedTags"
     />
   </main>
 </template>
