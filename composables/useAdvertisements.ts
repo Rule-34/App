@@ -34,13 +34,13 @@ export default function () {
     },
     /**
      * Clickadu
-     * Pros: Good CPM
-     * Cons: Does not count visits well
+     * Pros: Good CPM (2.1)
+     * Cons: Low revenue (70), Does not count visits well, (!!!) Clears console
      */
-    // {
-    //   id: '/js/popunder2.js?v=8',
-    //   weight: 1,
-    // }
+    {
+      id: '/js/popunder2.js?v=8',
+      weight: 1
+    }
     /**
      * AdMaven
      * Pros:
@@ -52,13 +52,13 @@ export default function () {
     // },
     /**
      * AdsCarat
-     * Pros: Great CPM
+     * Pros: Great CPM (2.5)
      * Cons: Low Revenue (25) | Does not count visits well | Reloads website once?
      */
-    {
-      id: 'https://hp.scrannyplacebo.com/rMGqiS1acWcIq4LyI/oQRmJ',
-      weight: 1
-    }
+    // {
+    //   id: 'https://hp.scrannyplacebo.com/rMGqiS1acWcIq4LyI/oQRmJ',
+    //   weight: 1
+    // }
   ]
 
   const pushAds = [
@@ -68,7 +68,7 @@ export default function () {
      * Cons: Low revenue (17)
      */
     {
-      id: 'https://hotbcetici.today/process.js?id=1300335215&p1=sub1&p2=sub2&p3=sub3&p4=sub4',
+      id: 'https://hotbsizovu.today/process.js?id=1300335215&p1=sub1&p2=sub2&p3=sub3&p4=sub4',
       weight: 0.3
     },
     /**
