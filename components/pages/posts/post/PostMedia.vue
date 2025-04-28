@@ -499,8 +499,11 @@
         v-if="isAnimatedMediaLoading && isAnimatedMediaPlaying"
         class="absolute inset-0 flex items-center justify-center rounded-t-md bg-black/20"
       >
+        <span class="sr-only"> Loading media&hellip; </span>
+
         <span class="rounded-full bg-black/65 p-2">
           <svg
+            aria-hidden="true"
             class="h-12 w-12 animate-spin text-white"
             fill="none"
             viewBox="0 0 24 24"
@@ -533,6 +536,7 @@
       >
         <span class="rounded-full bg-black/65 p-2">
           <svg
+            aria-hidden="true"
             class="h-12 w-12 text-white"
             fill="currentColor"
             viewBox="0 0 24 24"

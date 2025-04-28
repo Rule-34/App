@@ -99,6 +99,7 @@
             target="_blank"
           >
             <svg
+              aria-hidden="true"
               class="icon mr-1 h-6 w-6"
               fill="currentColor"
               viewBox="0 0 24 24"
@@ -119,6 +120,7 @@
             target="_blank"
           >
             <svg
+              aria-hidden="true"
               class="icon mr-1 h-6 w-6"
               fill="currentColor"
               viewBox="0 0 24 24"
