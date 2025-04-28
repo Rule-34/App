@@ -515,11 +515,10 @@
           />
 
           <button
+            aria-label="Go to selected Booru"
             class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 rounded-full border-0 bg-transparent p-2.5 ring-1 ring-inset sm:text-sm"
             @click="onSearchSubmit()"
           >
-            <span class="sr-only">Go to selected Booru</span>
-
             <ArrowRightIcon
               aria-hidden="true"
               class="h-4 w-4"

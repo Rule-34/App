@@ -169,12 +169,12 @@
           <div class="handle mr-2 cursor-move">
             <span class="sr-only">Drag to reorder</span>
 
-            <Bars2Icon class="h-4 w-4 text-base-content group-hover:text-base-content-hover" />
+            <Bars2Icon class="text-base-content group-hover:text-base-content-hover h-4 w-4" />
           </div>
 
           <!-- Tag Length -->
           <div
-            class="flex h-5 w-8 shrink-0 items-center justify-center overflow-x-hidden rounded-full bg-base-0/20 px-2 text-sm tabular-nums"
+            class="bg-base-0/20 flex h-5 w-8 shrink-0 items-center justify-center overflow-x-hidden rounded-full px-2 text-sm tabular-nums"
           >
             {{ tagCollection.tags.length }}
 
@@ -193,11 +193,11 @@
           <div class="flex gap-2">
             <!-- Edit -->
             <button
+              aria-label="Edit"
               class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util inline-flex items-center justify-center rounded-md p-2"
               type="button"
               @click="openEditDialog(index)"
             >
-              <span class="sr-only">Edit</span>
               <PencilIcon class="h-4 w-4" />
             </button>
           </div>
@@ -226,7 +226,7 @@
       >
         Create collection
 
-        <PlusIcon class="ml-2 mr-2 h-4 w-4" />
+        <PlusIcon class="mr-2 ml-2 h-4 w-4" />
       </button>
     </section>
   </main>
@@ -242,13 +242,13 @@
       <!-- Form -->
       <form
         id="create-form"
-        class="space-y-6 pb-5 pt-6"
+        class="space-y-6 pt-6 pb-5"
         @submit.prevent="onFormSubmit"
       >
         <!-- Name -->
         <div>
           <label
-            class="block font-medium leading-8 text-base-content-highlight"
+            class="text-base-content-highlight block leading-8 font-medium"
             for="name"
           >
             Name
@@ -257,7 +257,7 @@
           <input
             id="name"
             v-model="currentItem.name"
-            class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util w-full rounded-md border-base-0/20 bg-base-1000 px-2 py-1.5 sm:text-sm sm:leading-6"
+            class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util border-base-0/20 bg-base-1000 w-full rounded-md px-2 py-1.5 sm:text-sm sm:leading-6"
             name="name"
             required
             type="text"
@@ -267,7 +267,7 @@
         <!-- Tags -->
         <div>
           <label
-            class="block font-medium leading-8 text-base-content-highlight"
+            class="text-base-content-highlight block leading-8 font-medium"
             for="tags"
           >
             Tags
@@ -277,7 +277,7 @@
             id="tags"
             v-model="currentItem.tags"
             aria-describedby="tags-description"
-            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mt-2 block w-full rounded-md border-base-0/20 bg-base-1000 py-1.5 pl-3 pr-10 sm:text-sm sm:leading-6"
+            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util border-base-0/20 bg-base-1000 mt-2 block w-full rounded-md py-1.5 pr-10 pl-3 sm:text-sm sm:leading-6"
             name="tags"
             required
             rows="10"
@@ -300,7 +300,7 @@
     <template #actions>
       <button
         v-if="dialogMode === 'update'"
-        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mr-auto inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium ring-1 ring-base-0/20"
+        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 mr-auto inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium ring-1"
         type="button"
         @click="deleteItem"
       >
@@ -308,7 +308,7 @@
       </button>
 
       <button
-        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium ring-1 ring-base-0/20"
+        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium ring-1"
         form="create-form"
         type="submit"
       >

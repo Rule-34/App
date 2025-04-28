@@ -42,12 +42,11 @@
 
 <template>
   <button
+    aria-label="Download post"
     class="hover:hover-bg-util focus-visible:focus-outline-util group rounded-md px-1.5 py-1"
     type="button"
     @click="downloadMedia"
   >
-    <span class="sr-only"> Download post </span>
-
-    <ArrowDownTrayIcon class="group-hover:hover-text-util h-5 w-5 text-base-content" />
+    <ArrowDownTrayIcon class="group-hover:hover-text-util text-base-content h-5 w-5" />
   </button>
 </template>

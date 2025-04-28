@@ -237,11 +237,11 @@
             <div class="flex gap-2">
               <!-- Edit -->
               <button
+                aria-label="Edit"
                 class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util inline-flex items-center justify-center rounded-md p-2"
                 type="button"
                 @click="openEditBooru(index)"
               >
-                <span class="sr-only">Edit</span>
                 <PencilIcon class="h-4 w-4" />
               </button>
             </div>

@@ -67,19 +67,18 @@
 
 <template>
   <button
+    aria-label="Save post"
     class="hover:hover-bg-util focus-visible:focus-outline-util group rounded-md px-1.5 py-1"
     type="button"
     @click="onClick"
   >
-    <span class="sr-only"> Save post </span>
-
     <SolidBookmarkIcon
       v-if="isPostSaved"
-      class="group-hover:hover-text-util h-5 w-5 text-base-content-highlight"
+      class="group-hover:hover-text-util text-base-content-highlight h-5 w-5"
     />
     <BookmarkIcon
       v-else
-      class="group-hover:hover-text-util h-5 w-5 text-base-content"
+      class="group-hover:hover-text-util text-base-content h-5 w-5"
     />
   </button>
 </template>

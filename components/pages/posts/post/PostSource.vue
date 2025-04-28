@@ -113,11 +113,10 @@
       vue-transition
     >
       <HeadlessMenuButton
+        aria-label="Open post source options"
         class="hover:hover-bg-util focus-visible:focus-outline-util group flex items-center rounded-md px-1.5 py-1"
         @click="onMenuOpen"
       >
-        <span class="sr-only"> Open post source options </span>
-
         <LinkIcon class="group-hover:hover-text-util text-base-content h-5 w-5" />
       </HeadlessMenuButton>
 
