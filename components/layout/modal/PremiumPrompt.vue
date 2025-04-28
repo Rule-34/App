@@ -36,12 +36,11 @@
       <!-- Controls -->
       <div class="absolute bottom-[6%] left-4">
         <button
+          aria-label="Previous"
           class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util bg-base-1000/80 ring-base-0/20 rounded-full p-2 font-semibold ring-1"
           type="button"
           @click="prev()"
         >
-          <span class="sr-only"> Previous </span>
-
           <ArrowLeftIcon
             aria-hidden="true"
             class="h-5 w-5"
@@ -51,12 +50,11 @@
 
       <div class="absolute right-4 bottom-[6%]">
         <button
+          aria-label="Next"
           class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util bg-base-1000/80 ring-base-0/20 rounded-full p-2 font-semibold ring-1"
           type="button"
           @click="next()"
         >
-          <span class="sr-only"> Next </span>
-
           <ArrowRightIcon
             aria-hidden="true"
             class="h-5 w-5"

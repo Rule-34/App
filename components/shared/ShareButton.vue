@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-  import * as Sentry from '@sentry/nuxt'
   import { ShareIcon } from '@heroicons/vue/24/outline'
   import { toast } from 'vue-sonner'
 
@@ -60,12 +59,11 @@
 
 <template>
   <button
+    aria-label="Share page"
     class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util rounded-md"
     type="button"
     @click="share"
   >
-    <span class="sr-only"> Share page</span>
-
     <ShareIcon class="h-5 w-5" />
   </button>
 </template>

@@ -117,12 +117,11 @@
   <ClientOnly>
     <Teleport to="#navbar-actions">
       <button
+        aria-label="Sign out"
         class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
         type="button"
         @click="signOut"
       >
-        <span class="sr-only">Sign out</span>
-
         <ArrowLeftOnRectangleIcon class="text-base-content-highlight h-6 w-6" />
       </button>
     </Teleport>

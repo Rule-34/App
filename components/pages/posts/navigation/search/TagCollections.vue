@@ -65,7 +65,7 @@
     <header>
       <HeadlessDialogTitle
         as="h3"
-        class="text-lg font-medium leading-10 text-base-content-highlight"
+        class="text-base-content-highlight text-lg leading-10 font-medium"
       >
         Tag Collections
       </HeadlessDialogTitle>
@@ -73,7 +73,7 @@
       <h4 class="text-sm">List of tags that you can create for easy access</h4>
     </header>
 
-    <div class="absolute right-0 top-0.5">
+    <div class="absolute top-0.5 right-0">
       <NuxtLink
         class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util inline-flex w-full items-center gap-x-1.5 rounded-md p-1"
         to="/premium/tag-collections"
@@ -93,10 +93,12 @@
           <!-- -->
 
           <button
-            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util inline-flex w-full items-center justify-between rounded-full px-4 py-1 ring-1 ring-base-0/20"
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util ring-base-0/20 inline-flex w-full items-center justify-between rounded-full px-4 py-1 ring-1"
             type="button"
             @click="setTagCollectionAsSelected(tagCollection)"
           >
+            <span class="sr-only">Select tag:</span>
+
             <span>{{ tagCollection.name }}</span>
 
             <div class="flex items-center justify-center gap-x-1.5">
@@ -113,7 +115,7 @@
         <!-- TODO: Improve design and cohesion -->
         <li>
           <button
-            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util inline-flex w-full items-center justify-between rounded-full px-4 py-1 ring-1 ring-base-0/20"
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util ring-base-0/20 inline-flex w-full items-center justify-between rounded-full px-4 py-1 ring-1"
             type="button"
             @click="createTagCollectionFromSelectedTags"
           >

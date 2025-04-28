@@ -61,12 +61,11 @@
         <!-- Right side: Menu button -->
         <div class="absolute inset-y-0 left-0 flex items-center pl-2">
           <button
+            aria-label="Open main menu"
             class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util text-base-content-highlight inline-flex items-center justify-center rounded-md p-2 focus-visible:ring-inset"
             type="button"
             @click="toggleMenu()"
           >
-            <span class="sr-only">Open main menu</span>
-
             <Bars3Icon
               v-if="!isMenuActive"
               class="block h-6 w-6"

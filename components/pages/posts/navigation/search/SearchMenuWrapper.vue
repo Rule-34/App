@@ -25,7 +25,7 @@
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 bg-base-1000/80 backdrop-blur-sm" />
+        <div class="bg-base-1000/80 fixed inset-0 backdrop-blur-sm" />
       </HeadlessTransitionChild>
 
       <div class="fixed inset-0 flex flex-row-reverse">
@@ -49,21 +49,20 @@
               leave-from="opacity-100"
               leave-to="opacity-0"
             >
-              <div class="absolute right-full top-0 flex w-16 justify-center pt-5">
+              <div class="absolute top-0 right-full flex w-16 justify-center pt-5">
                 <button
+                  aria-label="Close menu"
                   class="focus-visible:focus-outline-util hover:hover-bg-util -m-2.5 rounded-md p-2.5"
                   type="button"
                   @click="toggleSearchMenu(false)"
                 >
-                  <span class="sr-only">Close menu</span>
-
-                  <XMarkIcon class="hover:hover-text-util h-6 w-6 text-base-content-highlight" />
+                  <XMarkIcon class="hover:hover-text-util text-base-content-highlight h-6 w-6" />
                 </button>
               </div>
             </HeadlessTransitionChild>
 
             <!-- Sidebar -->
-            <div class="flex grow flex-col gap-y-6 overflow-y-auto bg-base-1000 px-6 pb-6 pt-12 ring-1 ring-base-0/10">
+            <div class="bg-base-1000 ring-base-0/10 flex grow flex-col gap-y-6 overflow-y-auto px-6 pt-12 pb-6 ring-1">
               <!-- -->
 
               <slot />

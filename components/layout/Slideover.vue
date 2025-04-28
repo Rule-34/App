@@ -30,7 +30,7 @@
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 bg-base-1000/80 backdrop-blur-sm transition-opacity" />
+        <div class="bg-base-1000/80 fixed inset-0 backdrop-blur-sm transition-opacity" />
       </HeadlessTransitionChild>
 
       <div class="fixed inset-0 overflow-hidden">
@@ -56,15 +56,14 @@
                   leave-from="opacity-100"
                   leave-to="opacity-0"
                 >
-                  <div class="absolute left-0 top-0 -ml-9 flex pr-2 pt-4 sm:-ml-10 sm:pr-4">
+                  <div class="absolute top-0 left-0 -ml-9 flex pt-4 pr-2 sm:-ml-10 sm:pr-4">
                     <button
+                      aria-label="Close dialog"
                       class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util relative rounded-md p-1"
                       type="button"
                       @click="emit('close')"
                     >
                       <span class="absolute -inset-2.5" />
-
-                      <span class="sr-only"> Close panel </span>
 
                       <XMarkIcon
                         aria-hidden="true"
@@ -75,7 +74,7 @@
                 </HeadlessTransitionChild>
 
                 <!-- Sidebar -->
-                <div class="flex h-full flex-col bg-base-1000 shadow-xl ring-1 ring-base-0/10">
+                <div class="bg-base-1000 ring-base-0/10 flex h-full flex-col shadow-xl ring-1">
                   <!-- Header -->
                   <div
                     v-if="$slots.title || $slots.description"
@@ -83,7 +82,7 @@
                   >
                     <div class="px-4 py-6 sm:px-6">
                       <!-- Title -->
-                      <HeadlessDialogTitle class="text-xl font-semibold leading-8 text-base-content-highlight">
+                      <HeadlessDialogTitle class="text-base-content-highlight text-xl leading-8 font-semibold">
                         <slot name="title" />
                       </HeadlessDialogTitle>
 

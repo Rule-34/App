@@ -526,6 +526,7 @@
       <!-- Play button overlay - only shown when GIF is not playing -->
       <button
         v-if="!isAnimatedMediaPlaying"
+        aria-label="Play"
         class="absolute inset-0 flex items-center justify-center rounded-t-md bg-black/20"
         type="button"
         @click="startPlayingAnimatedMedia"
