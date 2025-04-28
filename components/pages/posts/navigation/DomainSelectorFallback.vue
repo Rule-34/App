@@ -42,7 +42,7 @@
       v-if="!props.compact"
       class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2"
     >
-      <ChevronUpDownIcon class="h-5 w-5" />
+      <ChevronUpDownIcon aria-hidden="true" class="h-5 w-5" />
     </span>
   </div>
 </template>

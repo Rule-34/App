@@ -190,7 +190,7 @@
     <section class="mx-2 mt-4 flex-auto">
       <template v-if="!userBooruList.length">
         <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-center text-lg">
-          <ExclamationCircleIcon class="h-12 w-12" />
+          <ExclamationCircleIcon aria-hidden="true" class="h-12 w-12" />
 
           <h3>Start adding Boorus!</h3>
 
@@ -213,7 +213,7 @@
             <div class="handle mr-2 cursor-move">
               <span class="sr-only">Drag to reorder</span>
 
-              <Bars2Icon class="text-base-content group-hover:text-base-content-hover h-4 w-4" />
+              <Bars2Icon aria-hidden="true" class="text-base-content group-hover:text-base-content-hover h-4 w-4" />
             </div>
 
             <!-- Favicon -->
@@ -242,7 +242,7 @@
                 type="button"
                 @click="openEditBooru(index)"
               >
-                <PencilIcon class="h-4 w-4" />
+                <PencilIcon aria-hidden="true" class="h-4 w-4" />
               </button>
             </div>
           </li>
@@ -258,7 +258,7 @@
         type="button"
         @click="resetUserBooruListToDefault"
       >
-        <ArrowUturnLeftIcon class="mr-2 h-4 w-4" />
+        <ArrowUturnLeftIcon aria-hidden="true" class="mr-2 h-4 w-4" />
 
         Reset
       </button>
@@ -271,7 +271,7 @@
       >
         Add Booru
 
-        <PlusIcon class="mr-2 ml-2 h-4 w-4" />
+        <PlusIcon aria-hidden="true" class="mr-2 ml-2 h-4 w-4" />
       </button>
     </section>
   </main>

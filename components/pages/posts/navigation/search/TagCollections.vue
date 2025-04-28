@@ -80,7 +80,7 @@
       >
         <span class="sr-only"> Manage tag collections </span>
 
-        <Cog6ToothIcon class="h-6 w-6" />
+        <Cog6ToothIcon aria-hidden="true" class="h-6 w-6" />
       </NuxtLink>
     </div>
 
@@ -106,7 +106,7 @@
                 {{ tagCollection.tags.length }}
               </span>
 
-              <TagIcon class="h-5 w-5" />
+              <TagIcon aria-hidden="true" class="h-5 w-5" />
             </div>
           </button>
         </li>
@@ -121,7 +121,7 @@
           >
             <span class="whitespace-nowrap">Create from current tags</span>
 
-            <PlusIcon class="h-5 w-5" />
+            <PlusIcon aria-hidden="true" class="h-5 w-5" />
           </button>
         </li>
       </ol>

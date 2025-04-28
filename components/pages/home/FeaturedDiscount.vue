@@ -32,7 +32,7 @@
       type="button"
       @click="closeBanner"
     >
-      <XMarkIcon class="h-6 w-6" />
+      <XMarkIcon aria-hidden="true" class="h-6 w-6" />
     </button>
 
     <h2 class="text-base-content-highlight text-xl leading-8 font-bold tracking-normal">Black Friday Sale! 🎉</h2>

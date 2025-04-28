@@ -117,7 +117,7 @@
         class="hover:hover-bg-util focus-visible:focus-outline-util group flex items-center rounded-md px-1.5 py-1"
         @click="onMenuOpen"
       >
-        <LinkIcon class="group-hover:hover-text-util text-base-content h-5 w-5" />
+        <LinkIcon aria-hidden="true" class="group-hover:hover-text-util text-base-content h-5 w-5" />
       </HeadlessMenuButton>
 
       <HeadlessMenuItems

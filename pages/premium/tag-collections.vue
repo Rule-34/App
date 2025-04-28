@@ -169,7 +169,7 @@
           <div class="handle mr-2 cursor-move">
             <span class="sr-only">Drag to reorder</span>
 
-            <Bars2Icon class="text-base-content group-hover:text-base-content-hover h-4 w-4" />
+            <Bars2Icon aria-hidden="true" class="text-base-content group-hover:text-base-content-hover h-4 w-4" />
           </div>
 
           <!-- Tag Length -->
@@ -198,7 +198,7 @@
               type="button"
               @click="openEditDialog(index)"
             >
-              <PencilIcon class="h-4 w-4" />
+              <PencilIcon aria-hidden="true" class="h-4 w-4" />
             </button>
           </div>
         </li>
@@ -213,7 +213,7 @@
         type="button"
         @click="resetTagCollectionsToDefault"
       >
-        <ArrowUturnLeftIcon class="mr-2 h-4 w-4" />
+        <ArrowUturnLeftIcon aria-hidden="true" class="mr-2 h-4 w-4" />
 
         Reset to default
       </button>
@@ -226,7 +226,7 @@
       >
         Create collection
 
-        <PlusIcon class="mr-2 ml-2 h-4 w-4" />
+        <PlusIcon aria-hidden="true" class="mr-2 ml-2 h-4 w-4" />
       </button>
     </section>
   </main>

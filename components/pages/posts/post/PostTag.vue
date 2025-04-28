@@ -110,6 +110,7 @@
             >
               <component
                 :is="isTagInSelectedTags(tag) ? MinusIcon : PlusIcon"
+                aria-hidden="true"
                 class="mr-3 h-4 w-4 shrink-0 rounded-sm"
               />
 
@@ -127,7 +128,7 @@
               type="button"
               @click="emit('addTag', '-' + props.tag.name)"
             >
-              <NoSymbolIcon class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
+              <NoSymbolIcon aria-hidden="true" class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
 
               Exclude tag
             </button>
@@ -143,7 +144,7 @@
               type="button"
               @click="emit('setTag', props.tag.name)"
             >
-              <MagnifyingGlassIcon class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
+              <MagnifyingGlassIcon aria-hidden="true" class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
 
               Set tag
             </button>
@@ -159,7 +160,7 @@
               type="button"
               @click="toggleBlockedTag(tag)"
             >
-              <ShieldExclamationIcon class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
+              <ShieldExclamationIcon aria-hidden="true" class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
               {{ isTagBlocked(tag) ? 'Remove from blocklist' : 'Add to blocklist' }}
             </button>
           </HeadlessMenuItem>
@@ -174,7 +175,7 @@
               type="button"
               @click="emit('openTagInNewTab', props.tag.name)"
             >
-              <ArrowTopRightOnSquareIcon class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
+              <ArrowTopRightOnSquareIcon aria-hidden="true" class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
 
               Open in new tab
             </button>

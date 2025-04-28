@@ -166,7 +166,7 @@
       class="border-base-0/20 mt-4 rounded-md border p-4 text-sm text-pretty"
     >
       <div class="mb-2 flex items-center gap-2">
-        <ExclamationTriangleIcon class="h-6 w-6 text-yellow-400" />
+        <ExclamationTriangleIcon aria-hidden="true" class="h-6 w-6 text-yellow-400" />
         <h2 class="text-base font-medium">Your subscription has expired</h2>
       </div>
 
