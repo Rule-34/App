@@ -120,7 +120,7 @@
               >
                 <NuxtLink
                   :title="`Browse ${formattedTagsString} Rule 34 hentai on ${booru.domain}`"
-                  :to="`/posts/${booru.domain}${selectedTags.length ? '?tags=' + selectedTags.map((t) => encodeURIComponent(t.name)).join('|') : ''}`"
+                  :to="`/posts/${booru.domain}`"
                 >
                   {{ booru.domain }}
                 </NuxtLink>
