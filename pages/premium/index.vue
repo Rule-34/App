@@ -178,8 +178,6 @@
   })
 
   function onIntervalClick(interval: (typeof paymentIntervals)[0]) {
-    window._paq?.push(['trackEvent', 'Premium', 'Plan Click', interval.name])
-
     selectedPaymentInterval.value = interval
 
     isPaymentDialogOpen.value = true
@@ -374,7 +372,10 @@
                       :key="mainFeature.title"
                       class="flex items-center gap-x-3 py-2"
                     >
-                      <CheckIcon aria-hidden="true" class="text-primary-600 h-6 w-5 flex-none" />
+                      <CheckIcon
+                        aria-hidden="true"
+                        class="text-primary-600 h-6 w-5 flex-none"
+                      />
 
                       <span class="text-base-content-highlight flex-auto text-sm leading-6">
                         {{ mainFeature.title }}
