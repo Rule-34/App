@@ -14,6 +14,17 @@
 
   const { pageHistory } = usePageHistory()
 
+  /**
+   * Filter out advertisements for premium users
+   */
+  function getFilteredTags(tags) {
+    if (isPremium.value) {
+      // Filter out advertisements for premium users
+      return tags.filter((tag) => !tag.isAdvertisement)
+    }
+    return tags
+  }
+
   const { booruList } = useBooruList()
   const { selectedDomainFromStorage } = useSelectedDomainFromStorage()
 
@@ -142,6 +153,7 @@
         {
           name: 'Anime AI Sluts',
           path: 'https://s.eunow4u.com/v1/d.php?z=2168',
+          isAdvertisement: true,
           media: [
             { type: 'image', src: '/img/ads/Advertisement_1.webp' },
             { type: 'image', src: '/img/ads/Advertisement_2.webp' },
@@ -587,7 +599,7 @@
             </div>
 
             <FeaturedTags
-              :tags="featuredDomain.tags"
+              :tags="getFilteredTags(featuredDomain.tags)"
               class="-mx-4 px-4 py-2"
             />
           </li>
