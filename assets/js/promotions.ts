@@ -99,43 +99,6 @@ export const referralPromotions = [
     mediaType: 'image',
     link: 'https://candy.ai?via=rule-3496'
   }
-  // dreamgf.ai
-  // {
-  //   media: '/img/promo/referrals/DreamGF-300x600-2.gif',
-  //   mediaWidth: 300,
-  //   mediaHeight: 600,
-  //   mediaType: 'image',
-  //   link: 'https://dreamgf.ai/?a=dEhouXU2PPmKlo'
-  // },
-  // {
-  //   media: '/img/promo/referrals/DreamGF-1200x1200-1.jpg',
-  //   mediaWidth: 1200,
-  //   mediaHeight: 1200,
-  //   mediaType: 'image',
-  //   link: 'https://dreamgf.ai/?a=dEhouXU2PPmKlo'
-  // },
-  // ehentai.ai
-  // {
-  //   media: '/img/promo/referrals/eHentai-300x250-2.jpg',
-  //   mediaWidth: 300,
-  //   mediaHeight: 250,
-  //   mediaType: 'image',
-  //   link: 'https://ehentai.ai/?a=5Zwcn730LArsRN'
-  // },
-  // {
-  //   media: '/img/promo/referrals/eHentai-300x250-5.jpg',
-  //   mediaWidth: 300,
-  //   mediaHeight: 250,
-  //   mediaType: 'image',
-  //   link: 'https://ehentai.ai/?a=5Zwcn730LArsRN'
-  // },
-  // {
-  //   media: '/img/promo/referrals/eHentai-300x250-12.jpg',
-  //   mediaWidth: 300,
-  //   mediaHeight: 250,
-  //   mediaType: 'image',
-  //   link: 'https://ehentai.ai/?a=5Zwcn730LArsRN'
-  // },
 ]
 
 export const advertisementPromotions = [
