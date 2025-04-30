@@ -556,7 +556,10 @@
 
         <!-- TODO: Figure out a way for negative margin to work inside an overflow-hidden -->
         <ol class="mt-4 space-y-4">
-          <li v-for="featuredDomain in featuredDomains">
+          <li
+            v-for="featuredDomain in featuredDomains"
+            :key="featuredDomain.domain + '-' + featuredDomain.tags.length"
+          >
             <div class="flex items-center pr-2">
               <NuxtLink
                 :href="featuredDomain.path"

@@ -13,9 +13,9 @@
 
   const { isPremium } = useUserData()
 
-  const tagsKey = props.tags[0].path
+  const tagsKey = props.tags.map((tag) => tag.media.length).join('-')
 
-  const preselectedTags = useState<typeof props.tags>('preselectedTags' + tagsKey)
+  const preselectedTags = useState<typeof props.tags>('preselectedTags:' + tagsKey)
 
   callOnce(tagsKey, () => {
     preselectedTags.value = props.tags.map((tag) => ({
