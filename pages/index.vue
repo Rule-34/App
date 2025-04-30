@@ -122,7 +122,7 @@
     })
   })
 
-  const featuredDomains = useState('featured-domains', () => [
+  const featuredDomains = [
     {
       domain: 'rule34.xxx',
       path: '/posts/rule34.xxx',
@@ -420,7 +420,7 @@
     //     }
     //   ]
     // }
-  ])
+  ]
 
   useSchemaOrg([
     defineWebSite({
