@@ -14,17 +14,6 @@
 
   const { pageHistory } = usePageHistory()
 
-  /**
-   * Filter out advertisements for premium users
-   */
-  function getFilteredTags(tags) {
-    if (isPremium.value) {
-      // Filter out advertisements for premium users
-      return tags.filter((tag) => !tag.isAdvertisement)
-    }
-    return tags
-  }
-
   const { booruList } = useBooruList()
   const { selectedDomainFromStorage } = useSelectedDomainFromStorage()
 
@@ -133,7 +122,7 @@
     })
   })
 
-  const featuredDomains = [
+  const featuredDomains = useState('featured-domains', () => [
     {
       domain: 'rule34.xxx',
       path: '/posts/rule34.xxx',
@@ -431,7 +420,7 @@
     //     }
     //   ]
     // }
-  ]
+  ])
 
   useSchemaOrg([
     defineWebSite({
@@ -599,7 +588,7 @@
             </div>
 
             <FeaturedTags
-              :tags="getFilteredTags(featuredDomain.tags)"
+              :tags="featuredDomain.tags"
               class="-mx-4 px-4 py-2"
             />
           </li>
