@@ -181,6 +181,9 @@
     selectedPaymentInterval.value = interval
 
     isPaymentDialogOpen.value = true
+
+    window.clarity('event', 'PremiumPlanClick')
+    window.clarity('event', 'PremiumPlanClick:' + interval.name)
   }
 
   // Payment methods categorization

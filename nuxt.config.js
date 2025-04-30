@@ -368,7 +368,7 @@ export default defineNuxtConfig({
 
   partytown: {
     forward: [
-      // Matomo
+      // Clarity
       'clarity',
       // Formbricks
       'formbricks.track'

@@ -65,6 +65,9 @@
     }
 
     window.open(PLATFORM_URLS[platformOfPurchase.value], '_blank', 'noopener,noreferrer')
+
+    window.clarity('event', 'PremiumClickManageSubscription')
+    window.clarity('event', 'PremiumClickManageSubscription:' + platformOfPurchase.value)
   }
 
   onNuxtReady(() => {
@@ -96,6 +99,9 @@
     if (!isRecentlyCreated) {
       return
     }
+
+    window.clarity('event', 'PremiumSubscribed')
+    window.clarity('event', 'PremiumSubscribed:' + platformOfPurchase.value)
     // <--- Event Tracking ---
   })
 
