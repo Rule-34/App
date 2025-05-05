@@ -1,5 +1,5 @@
 <script setup>
-  import { BookmarkIcon, ChatBubbleLeftEllipsisIcon, SparklesIcon } from '@heroicons/vue/24/outline'
+  import { BookmarkIcon, SparklesIcon } from '@heroicons/vue/24/outline'
   import { sidebarNavigation } from 'assets/js/sidebarLinks'
 
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
@@ -71,19 +71,19 @@
       </template>
 
       <!-- Advertisements -->
-      <template v-if="!isPremium">
-        <li class="-mx-2">
-          <a
-            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
-            href="https://candyai.gg/home2?via=rule-3496"
-            rel="nofollow noopener noreferrer"
-            target="_blank"
-          >
-            <ChatBubbleLeftEllipsisIcon class="h-6 w-6 shrink-0" />
-            AI Chat
-          </a>
-        </li>
-      </template>
+      <!--      <template v-if="!isPremium">-->
+      <!--        <li class="-mx-2">-->
+      <!--          <a-->
+      <!--            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"-->
+      <!--            href="https://candyai.gg/home2?via=rule-3496"-->
+      <!--            rel="nofollow noopener noreferrer"-->
+      <!--            target="_blank"-->
+      <!--          >-->
+      <!--            <ChatBubbleLeftEllipsisIcon class="h-6 w-6 shrink-0" />-->
+      <!--            AI Chat-->
+      <!--          </a>-->
+      <!--        </li>-->
+      <!--      </template>-->
 
       <!-- Bottom -->
       <li class="flex flex-1 flex-col">
