@@ -62,12 +62,6 @@
       interval: 'month',
       links: [
         {
-          name: 'Ko-fi',
-          url: 'https://ko-fi.com/alejandro_akbal/tiers',
-          category: 'creditCard',
-          cta: 'Subscribe with Credit Card & PayPal'
-        },
-        {
           name: 'Patreon',
           url: 'https://www.patreon.com/R34App',
           category: 'creditCard',
@@ -82,12 +76,6 @@
       originalPrice: undefined,
       interval: 'once',
       links: [
-        {
-          name: 'Ko-fi',
-          url: 'https://ko-fi.com/s/4ff7beebad',
-          category: 'creditCard',
-          cta: 'Pay with Credit Card & PayPal'
-        },
         {
           name: 'SellApp',
           url: 'https://akbal.sell.app/product/premium-30-days-access',
@@ -120,12 +108,6 @@
       originalPrice: 699.99,
       interval: 'once',
       links: [
-        {
-          name: 'Ko-fi',
-          url: 'https://ko-fi.com/s/4fa1d3781c',
-          category: 'creditCard',
-          cta: 'Pay with Credit Card & PayPal'
-        },
         {
           name: 'SellApp',
           url: 'https://akbal.sell.app/product/premium-lifetime',
@@ -190,8 +172,7 @@
   const paymentMethods = {
     creditCard: { name: 'Credit Card', icon: 'https://icons.duckduckgo.com/ip2/mastercard.us.ico' },
     crypto: { name: 'Cryptocurrency', icon: 'https://icons.duckduckgo.com/ip2/bitcoin.org.ico' },
-    patreon: { name: 'Patreon', icon: 'https://icons.duckduckgo.com/ip2/patreon.com.ico' },
-    kofi: { name: 'Ko-fi', icon: 'https://icons.duckduckgo.com/ip2/ko-fi.com.ico' }
+    patreon: { name: 'Patreon', icon: 'https://icons.duckduckgo.com/ip2/patreon.com.ico' }
   }
 
   function getFaviconUrl(url: string) {
