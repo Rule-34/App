@@ -62,10 +62,16 @@
       interval: 'month',
       links: [
         {
+          name: 'Credit Card',
+          url: 'https://shop.akbal.dev/how-to-get-premium-features/#/portal/signup/66ae85c1cfb018000163bf6f/monthly',
+          category: 'creditCard',
+          cta: 'Subscribe w/ Credit Card & PayPal'
+        },
+        {
           name: 'Patreon',
           url: 'https://www.patreon.com/R34App',
           category: 'creditCard',
-          cta: 'Subscribe with Patreon'
+          cta: 'Subscribe w/ Patreon'
         }
       ]
     },
@@ -93,11 +99,17 @@
       interval: 'month',
       links: [
         {
+          name: 'Credit Card',
+          url: 'https://shop.akbal.dev/how-to-get-premium-features/#/portal/signup/66ae85c1cfb018000163bf6f/yearly',
+          category: 'creditCard',
+          cta: 'Subscribe w/ Credit Card & PayPal'
+        },
+        {
           name: 'Patreon',
           url: 'https://www.patreon.com/R34App',
-          category: 'patreon',
-          cta: 'Subscribe with Patreon',
-          instructions: ['Make sure to select "Pay annually" on the Patreon page']
+          category: 'creditCard',
+          cta: 'Subscribe w/ Patreon',
+          instructions: ['Select "Pay annually" on the Patreon page']
         }
       ]
     },
@@ -171,8 +183,7 @@
   // Payment methods categorization
   const paymentMethods = {
     creditCard: { name: 'Credit Card', icon: 'https://icons.duckduckgo.com/ip2/mastercard.us.ico' },
-    crypto: { name: 'Cryptocurrency', icon: 'https://icons.duckduckgo.com/ip2/bitcoin.org.ico' },
-    patreon: { name: 'Patreon', icon: 'https://icons.duckduckgo.com/ip2/patreon.com.ico' }
+    crypto: { name: 'Cryptocurrency', icon: 'https://icons.duckduckgo.com/ip2/bitcoin.org.ico' }
   }
 
   function getFaviconUrl(url: string) {
@@ -623,7 +634,7 @@
                     </div>
 
                     <!-- Payment links -->
-                    <div class="grid gap-3 sm:grid-cols-2">
+                    <div class="grid gap-3">
                       <a
                         v-for="link in selectedPaymentInterval.links.filter((link) => link.category === category)"
                         :key="link.name"
@@ -651,14 +662,14 @@
                       :key="`${link.name}-instructions`"
                     >
                       <div v-if="link.category === category && 'instructions' in link && link.instructions">
-                        <ol class="text-base-content mt-2 list-decimal space-y-2 pl-4 text-sm">
+                        <ul class="text-base-content mt-2 list-disc space-y-2 pl-4 text-sm">
                           <li
                             v-for="(instruction, index) in link.instructions"
                             :key="index"
                           >
                             {{ instruction }}
                           </li>
-                        </ol>
+                        </ul>
                       </div>
                     </template>
                   </div>
