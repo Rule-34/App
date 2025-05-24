@@ -2,11 +2,12 @@
   import { version } from '~/package.json'
   import { ExclamationTriangleIcon } from '@heroicons/vue/20/solid'
   import { toast } from 'vue-sonner'
+  import { project } from '@/config/project'
 
   useSeoMeta({
     title: 'Settings',
 
-    description: 'Options to configure how the Rule 34 App works.'
+    description: `Options to configure how ${project.name} works.`
   })
 
   const appVersion = version
@@ -112,7 +113,7 @@
 
     <PageHeader>
       <template #title>Settings</template>
-      <template #text> Options to configure how the Rule 34 App works</template>
+      <template #text> Options to configure how {{ project.name }} works</template>
     </PageHeader>
 
     <!-- Settings -->
@@ -201,7 +202,10 @@
       <label for="reset">
         <span class="text-base-content-highlight leading-8 font-medium">
           Reset
-          <ExclamationTriangleIcon aria-hidden="true" class="inline-block h-4 w-4" />
+          <ExclamationTriangleIcon
+            aria-hidden="true"
+            class="inline-block h-4 w-4"
+          />
         </span>
 
         <span class="block text-sm"> Clear settings, cookies, and all other app data </span>

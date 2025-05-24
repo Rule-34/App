@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { ClientResponseError } from 'pocketbase'
   import { toast } from 'vue-sonner'
+  import { project } from '@/config/project'
 
   const { $pocketBase } = useNuxtApp()
 
@@ -52,7 +53,7 @@
   useSeoMeta({
     title: 'Sign in',
 
-    description: 'Sign in to the Rule 34 App.'
+    description: `Sign in to ${project.name}.`
   })
 
   definePageMeta({

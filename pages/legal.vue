@@ -1,8 +1,10 @@
 <script setup>
+  import { project } from '@/config/project'
+
   useSeoMeta({
     title: 'Legal',
 
-    description: 'Legal information about the Rule 34 App'
+    description: `Legal information about ${project.name}`
   })
 </script>
 
@@ -74,8 +76,8 @@
         <ContentContainer
           :links="[
             {
-              text: 'contact@r34.app',
-              href: 'mailto:contact@r34.app',
+              text: project.email,
+              href: `mailto:${project.email}`,
               target: '_blank'
             }
           ]"

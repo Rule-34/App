@@ -13,6 +13,7 @@
   import type { Domain } from '~/assets/js/domain'
   import type { IPost, IPostPage } from '~/assets/js/post.dto'
   import Tag from '~/assets/js/tag.dto'
+  import { project } from '@/config/project'
 
   const router = useRouter()
   const route = useRoute()
@@ -730,7 +731,7 @@
     description += `, from ${selectedBooru.value.domain}`
 
     // TODO: Improve ending
-    description += '. Free anime hentai here on R34.app'
+    description += `. Free anime hentai here on ${project.shortName}`
 
     return description
   })
@@ -953,7 +954,8 @@
             <h3 class="text-lg leading-10 font-semibold">Too many requests</h3>
 
             <span class="w-full overflow-x-auto text-pretty">
-              You sent too many requests in a short period of time. Use the button below to continue using the R34 App
+              You sent too many requests in a short period of time. Use the button below to continue using the
+              {{ project.name }}
             </span>
 
             <NuxtLink

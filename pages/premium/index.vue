@@ -13,6 +13,7 @@
     TransitionRoot
   } from '@headlessui/vue'
   import { useCountdown } from '@vueuse/core'
+  import { project } from '@/config/project'
 
   const customerCount = 2363
 
@@ -154,7 +155,7 @@
     },
     {
       question: 'Is the lifetime access really forever?',
-      answer: 'Yes! Lifetime means you get permanent access to Premium features for as long as the R34 app exists.'
+      answer: `Yes! Lifetime means you get permanent access to Premium features for as long as ${project.name} exists.`
     }
   ]
 
@@ -201,7 +202,7 @@
 
   useSchemaOrg([
     defineProduct({
-      name: 'Rule 34 App',
+      name: project.name,
       // @see https://www.trustpilot.com/review/r34.app
       aggregateRating: {
         ratingValue: 4.5,
@@ -259,7 +260,7 @@
           <!-- Rating -->
           <NuxtLink
             class="focus-visible:focus-outline-util hover:hover-text-util mt-16 flex flex-col items-center justify-center gap-3 pb-4"
-            href="https://www.trustpilot.com/review/r34.app"
+            :href="`https://www.trustpilot.com/review/${project.urls.production.hostname}`"
             rel="nofollow noopener"
             target="_blank"
           >
@@ -295,7 +296,7 @@
 
             <NuxtLink
               class="focus-visible:focus-outline-util hover:hover-text-util mx-auto mt-10 flex w-full max-w-fit gap-2.5 text-sm underline"
-              href="https://www.trustpilot.com/review/r34.app"
+              :href="`https://www.trustpilot.com/review/${project.urls.production.hostname}`"
               rel="nofollow noopener"
               target="_blank"
             >
@@ -411,7 +412,7 @@
 
                     <NuxtLink
                       class="focus-visible:focus-outline-util hover:hover-text-util"
-                      href="https://www.trustpilot.com/review/r34.app"
+                      :href="`https://www.trustpilot.com/review/${project.urls.production.hostname}`"
                       rel="nofollow noopener"
                       target="_blank"
                     >

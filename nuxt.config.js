@@ -1,4 +1,5 @@
 import tailwindcss from '@tailwindcss/vite'
+import { project } from './config/project.ts'
 
 export default defineNuxtConfig({
   ssr: true,
@@ -9,33 +10,41 @@ export default defineNuxtConfig({
       style: [
         {
           type: 'text/css',
-          children: 'html { background-color: black; }'
+          children: `html { background-color: ${project.branding.colors.background}; }`
         }
       ],
 
       script: [
         /**
-         * Clarity
+         * Clarity Analytics
          */
-        {
-          type: 'text/partytown',
-          innerHTML: `
+        ...(project.analytics?.clarityId
+          ? [
+              {
+                type: 'text/partytown',
+                innerHTML: `
 (function(c,l,a,r,i,t,y){
     c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
     t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
     y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-})(window, document, "clarity", "script", "rbnkjz06ip");
+})(window, document, "clarity", "script", "${project.analytics.clarityId}");
     `
-        },
+              }
+            ]
+          : []),
         /**
-         * Formbricks
+         * Formbricks User Experience
          */
-        {
-          type: 'text/partytown',
-          innerHTML: `
-!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://app.formbricks.com/js/formbricks.umd.cjs",t.onload=function(){window.formbricks?window.formbricks.setup({environmentId:"cm6gbkjeq0008l7036ckdvtnm",appUrl:"https://app.formbricks.com"}):console.error("Formbricks library failed to load properly. The formbricks object is not available.");};var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)}();
+        ...(project.analytics?.formbricksEnvironmentId && project.analytics?.formbricksAppUrl
+          ? [
+              {
+                type: 'text/partytown',
+                innerHTML: `
+!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="${project.analytics.formbricksAppUrl}/js/formbricks.umd.cjs",t.onload=function(){window.formbricks?window.formbricks.setup({environmentId:"${project.analytics.formbricksEnvironmentId}",appUrl:"${project.analytics.formbricksAppUrl}"}):console.error("Formbricks library failed to load properly. The formbricks object is not available.");};var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)}();
 `
-        }
+              }
+            ]
+          : [])
       ]
     }
   },
@@ -225,8 +234,6 @@ export default defineNuxtConfig({
     public: {
       NODE_ENV: process.env.NODE_ENV,
 
-      APP_DOMAIN: process.env.APP_DOMAIN,
-
       API_URL: process.env.API_URL,
 
       SENTRY_DSN: process.env.SENTRY_DSN
@@ -237,7 +244,7 @@ export default defineNuxtConfig({
   components: [{ path: '~/components', pathPrefix: false }],
 
   site: {
-    url: `https://${process.env.APP_DOMAIN}`
+    url: project.urls.production.toString()
   },
 
   /**
@@ -279,7 +286,7 @@ export default defineNuxtConfig({
         name: 'imgproxy',
         provider: '~~/assets/js/nuxt-image/imgproxy.provider',
         options: {
-          baseURL: 'https://imgproxy.r34.app'
+          baseURL: `https://imgproxy.${project.urls.production.hostname}`
         }
       }
     },
@@ -299,16 +306,17 @@ export default defineNuxtConfig({
     registerWebManifestInRouteRules: true,
 
     manifest: {
-      name: 'Rule 34 App',
-      short_name: 'R34 App',
+      name: project.name,
+      short_name: project.shortName,
+      description: project.description,
 
       scope: '/',
       lang: 'en',
 
       start_url: '/?utm_source=pwa',
 
-      theme_color: '#000000',
-      background_color: '#000000',
+      theme_color: project.branding.colors.background,
+      background_color: project.branding.colors.background,
 
       icons: [
         {
@@ -342,7 +350,7 @@ export default defineNuxtConfig({
         },
         {
           name: 'Saved Posts',
-          url: '/premium/saved-posts/r34.app?utm_source=pwa&utm_medium=shortcut'
+          url: `/premium/saved-posts/${project.urls.production.hostname}?utm_source=pwa&utm_medium=shortcut`
         }
       ]
     },

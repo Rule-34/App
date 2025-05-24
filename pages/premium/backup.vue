@@ -3,6 +3,7 @@
   import { toast } from 'vue-sonner'
   import { createBackupState, type IBackupState, tryToRestoreV2OrV3Backup } from '~/assets/js/BackupHelper'
   import PageHeader from '~/components/layout/PageHeader.vue'
+  import { project } from '@/config/project'
 
   const fileInputElement = ref<HTMLInputElement | null>(null)
 
@@ -45,7 +46,7 @@
 
     const blob = new Blob([JSON.stringify(backupState)], { type: 'application/json' })
 
-    const fileName = `R34App_${currentDateString}_Backup.json`
+    const fileName = `${project.urls.production.hostname}_${currentDateString}_Backup.json`
 
     downloadBlob(blob, fileName)
   }

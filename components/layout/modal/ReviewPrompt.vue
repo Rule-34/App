@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { FaceSmileIcon } from '@heroicons/vue/24/outline'
+  import { project } from '@/config/project'
 
   defineProps<{
     close: () => void
@@ -19,13 +20,13 @@
     <div class="mt-3 text-center sm:mt-5">
       <HeadlessDialogTitle
         as="h3"
-        class="text-base font-semibold leading-6 text-base-content-highlight"
+        class="text-base-content-highlight text-base leading-6 font-semibold"
       >
-        Are you enjoying R34.app?
+        Are you enjoying {{ project.shortName }}?
       </HeadlessDialogTitle>
 
       <div class="mt-2">
-        <p class="text-pretty text-sm">Let me know with a rating and a few words about your experience</p>
+        <p class="text-sm text-pretty">Let me know with a rating and a few words about your experience</p>
       </div>
     </div>
   </div>
@@ -33,8 +34,8 @@
   <!-- Body -->
   <div class="mt-10 pb-10">
     <NuxtLink
-      class="focus-visible:focus-outline-util mx-auto flex w-full max-w-fit justify-center border border-[#00b67a] px-4 py-2 text-center text-base-content-highlight"
-      href="https://www.trustpilot.com/evaluate/r34.app"
+      class="focus-visible:focus-outline-util text-base-content-highlight mx-auto flex w-full max-w-fit justify-center border border-[#00b67a] px-4 py-2 text-center"
+      :href="`https://www.trustpilot.com/evaluate/${project.urls.production.hostname}`"
       rel="nofollow noopener"
       target="_blank"
     >
@@ -53,7 +54,7 @@
   <!-- Actions -->
   <div class="mt-5 sm:mt-6">
     <button
-      class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-xs ring-1 ring-inset ring-base-0/20"
+      class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-xs ring-1 ring-inset"
       type="button"
       @click="close()"
     >

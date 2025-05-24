@@ -3,6 +3,7 @@
   import type { Domain } from '~/assets/js/domain'
   import type { ITag } from '~/assets/js/tag.dto'
   import { normalizeStringForTitle } from '~/assets/js/SeoHelper'
+  import { project } from '@/config/project'
 
   const props = defineProps({
     selectedBooru: {
@@ -78,7 +79,7 @@
         </section>
 
         <section>
-          <h3>Why choose R34.app for {{ formattedTagsString }} hentai and Rule 34</h3>
+          <h3>Why choose {{ project.shortName }} for {{ formattedTagsString }} hentai and Rule 34</h3>
           <ul>
             <li>Real-time adult image and porn video updates from original sources like {{ selectedBooru.domain }}</li>
             <li>Instant access to new Rule 34 artwork and anime parodies as they appear</li>
@@ -132,11 +133,11 @@
         <section>
           <h3>{{ formattedTagsString }} Rule 34 updates - always fresh hentai artwork</h3>
           <p>
-            As a dedicated hentai viewer application, R34.app doesn't host adult media - we connect directly to
-            {{ selectedBooru.domain }} and other popular Rule 34 sources. This means you're always seeing the newest
-            {{ formattedTagsString }} porn images and adult videos in real-time, without any delay. New hentai artwork
-            is refreshed instantly as it appears on the original sites, ensuring you never miss new additions to your
-            favorite parody tags and anime categories.
+            As a dedicated hentai viewer application, {{ project.shortName }} doesn't host adult media - we connect
+            directly to {{ selectedBooru.domain }} and other popular Rule 34 sources. This means you're always seeing
+            the newest {{ formattedTagsString }} porn images and adult videos in real-time, without any delay. New
+            hentai artwork is refreshed instantly as it appears on the original sites, ensuring you never miss new
+            additions to your favorite parody tags and anime categories.
           </p>
         </section>
 

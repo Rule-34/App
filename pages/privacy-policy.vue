@@ -1,13 +1,14 @@
 <script setup>
+  import { project } from '@/config/project'
+
   useSeoMeta({
     title: 'Privacy Policy',
-
-    description: 'Privacy policy of the Rule 34 App'
+    description: `Privacy policy of ${project.name}`
   })
 </script>
 
 <template>
-  <main class="container prose prose-invert mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
+  <main class="prose prose-invert container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
     <PageHeader>
       <template #title>Privacy Policy</template>
     </PageHeader>
@@ -15,17 +16,18 @@
     <div>
       <p><strong>Last updated February 18, 2024</strong></p>
       <div>
-        This privacy notice for Rule 34 App ('<strong>we</strong>', '<strong>us</strong>', or '<strong>our</strong>'),
-        describes how and why we might collect, store, use, and/or share ('<strong>process</strong>') your information
-        when you use our services ('<strong>Services</strong>'), such as when you:
+        This privacy notice for {{ project.name }} ('<strong>we</strong>', '<strong>us</strong>', or
+        '<strong>our</strong>'), describes how and why we might collect, store, use, and/or share
+        ('<strong>process</strong>') your information when you use our services ('<strong>Services</strong>'), such as
+        when you:
       </div>
       <ul>
         <li>
           Visit our website at
           <a
-            href="https://r34.app"
+            :href="project.urls.production.toString()"
             target="_blank"
-            >https://r34.app</a
+            >{{ project.urls.production.toString() }}</a
           >, or any website of ours that links to this privacy notice
         </li>
       </ul>
@@ -36,7 +38,7 @@
         <p>
           <strong>Questions or concerns?&nbsp;</strong>Reading this privacy notice will help you understand your privacy
           rights and choices. If you do not agree with our policies and practices, please do not use our Services. If
-          you still have any questions or concerns, please contact us at contact@r34.app.
+          you still have any questions or concerns, please contact us at {{ project.email }}.
         </p>
         <p><strong>SUMMARY OF KEY POINTS</strong></p>
         <p>
@@ -97,8 +99,8 @@
         </p>
         <p>
           <strong>How do you exercise your rights?</strong> The easiest way to exercise your rights is by visiting
-          contact@r34.app, or by contacting us. We will consider and act upon any request in accordance with applicable
-          data protection laws.
+          {{ project.email }}, or by contacting us. We will consider and act upon any request in accordance with
+          applicable data protection laws.
         </p>
         <div>
           Want to learn more about what we do with any information we collect?&nbsp;<a href="#toc"
@@ -183,9 +185,9 @@
           Like many businesses, we also collect information through cookies and similar technologies. You can find out
           more about this in our Cookie Notice:
           <a
-            href="https://r34.app/cookie-policy"
+            href="/cookie-policy"
             target="_blank"
-            >https://r34.app/cookie-policy</a
+            >{{ project.urls.production.toString() }}cookie-policy</a
           >.
         </div>
         <div>The information we collect includes:</div>
@@ -572,9 +574,9 @@
                                                         information about how we use such technologies and how you can
                                                         refuse certain cookies is set out in our Cookie Notice:
                                                         <a
-                                                          href="https://r34.app/cookie-policy"
+                                                          href="/cookie-policy"
                                                           target="_blank"
-                                                          >https://r34.app/cookie-policy</a
+                                                          >{{ project.urls.production.toString() }}cookie-policy</a
                                                         >.
                                                       </div>
                                                       <p><strong>7. HOW LONG DO WE KEEP YOUR INFORMATION?</strong></p>
@@ -747,14 +749,14 @@
                                                         on our Services. For further information, please see our Cookie
                                                         Notice:
                                                         <a
-                                                          href="https://r34.app/cookie-policy"
+                                                          href="/cookie-policy"
                                                           target="_blank"
-                                                          >https://r34.app/cookie-policy</a
+                                                          >{{ project.urls.production.toString() }}cookie-policy</a
                                                         >.
                                                       </p>
                                                       <div>
                                                         If you have questions or comments about your privacy rights, you
-                                                        may email us at contact@r34.app.
+                                                        may email us at {{ project.email }}.
                                                       </div>
                                                       <p><strong>11. CONTROLS FOR DO-NOT-TRACK FEATURES</strong></p>
                                                       <div>
@@ -1084,13 +1086,23 @@
                                                                             <div>
                                                                               If you have questions or comments about
                                                                               this notice, you may email us at
-                                                                              contact@r34.app or&nbsp;contact us by post
-                                                                              at:
+                                                                              {{ project.email }} or&nbsp;contact us by
+                                                                              post at:
                                                                             </div>
-                                                                            <div>Rule 34 App</div>
+                                                                            <div>{{ project.name }}</div>
                                                                             <div>__________</div>
                                                                             <div>__________</div>
-                                                                            <div>Spain</div>
+                                                                            <div>__________</div>
+                                                                            <div>
+                                                                              You can also visit our Cookie Notice:
+                                                                              <a
+                                                                                href="/cookie-policy"
+                                                                                target="_blank"
+                                                                                >{{
+                                                                                  project.urls.production.toString()
+                                                                                }}/cookie-policy</a
+                                                                              >.
+                                                                            </div>
                                                                             <p>
                                                                               <strong
                                                                                 >15. HOW CAN YOU REVIEW, UPDATE, OR
@@ -1106,7 +1118,7 @@
                                                                               or delete it. To request to review,
                                                                               update, or delete your personal
                                                                               information, please visit:
-                                                                              contact@r34.app.
+                                                                              {{ project.email }}.
                                                                             </div>
                                                                           </div>
                                                                         </div>

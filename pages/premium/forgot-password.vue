@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { toast } from 'vue-sonner'
+  import { project } from '@/config/project'
 
   const { $pocketBase } = useNuxtApp()
 
@@ -33,7 +34,7 @@
   useSeoMeta({
     title: 'Forgot license',
 
-    description: 'Recover your Rule 34 App license key.'
+    description: `Recover your ${project.name} license key.`
   })
 
   definePageMeta({
@@ -63,7 +64,7 @@
             <!-- Email-->
             <div class="flex items-center justify-between">
               <label
-                class="block text-sm font-medium leading-6 text-base-content-highlight"
+                class="text-base-content-highlight block text-sm leading-6 font-medium"
                 for="email"
               >
                 Email
@@ -75,7 +76,7 @@
                 id="email"
                 v-model.trim="formData.email"
                 autocomplete="email"
-                class="focus-visible:focus-outline-util block w-full rounded-md border-0 bg-transparent py-1.5 text-base-content-highlight shadow-xs ring-1 ring-inset ring-base-0/20 sm:text-sm sm:leading-6"
+                class="focus-visible:focus-outline-util text-base-content-highlight ring-base-0/20 block w-full rounded-md border-0 bg-transparent py-1.5 shadow-xs ring-1 ring-inset sm:text-sm sm:leading-6"
                 name="email"
                 required
                 type="email"
@@ -85,7 +86,7 @@
 
           <div>
             <button
-              class="focus-visible:focus-outline-util hover:hover-text-util flex w-full justify-center rounded-md bg-primary-500 px-3 py-1.5 text-sm font-semibold leading-6 text-base-content-highlight shadow-xs hover:bg-primary-400"
+              class="focus-visible:focus-outline-util hover:hover-text-util bg-primary-500 text-base-content-highlight hover:bg-primary-400 flex w-full justify-center rounded-md px-3 py-1.5 text-sm leading-6 font-semibold shadow-xs"
               type="submit"
             >
               Send license
@@ -99,7 +100,7 @@
           {{ ' ' }}
 
           <NuxtLink
-            class="focus-visible:focus-outline-util font-semibold leading-6 text-primary-400 hover:text-primary-300"
+            class="focus-visible:focus-outline-util text-primary-400 hover:text-primary-300 leading-6 font-semibold"
             href="/premium/sign-in"
           >
             Sign in

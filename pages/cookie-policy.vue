@@ -1,8 +1,10 @@
 <script setup>
+  import { project } from '@/config/project'
+
   useSeoMeta({
     title: 'Cookie Policy',
 
-    description: 'Cookie policy of the Rule 34 App'
+    description: `Cookie policy of ${project.name}`
   })
 </script>
 
@@ -17,7 +19,7 @@
         <strong> Last updated April 9, 2025 </strong>
       </div>
       <div>
-        This Cookie Policy explains how Rule 34 App ("
+        This Cookie Policy explains how {{ project.name }} ("
         <strong> Company </strong>
         ," "
         <strong> we </strong>
@@ -26,7 +28,7 @@
         ," and "
         <strong> our </strong>
         ") uses cookies and similar technologies to recognize you when you visit our website at
-        <a href="https://r34.app"> https://r34.app </a>
+        <a :href="project.urls.production.toString()"> {{ project.urls.production.toString() }} </a>
         ("
         <strong> Website </strong>
         "). It explains what these technologies are and why we use them, as well as your rights to control our use of
@@ -45,11 +47,11 @@
         to provide reporting information.
       </div>
       <div>
-        Cookies set by the website owner (in this case, Rule 34 App) are called "first-party cookies." Cookies set by
-        parties other than the website owner are called "third-party cookies." Third-party cookies enable third-party
-        features or functionality to be provided on or through the website (e.g., advertising, interactive content). The
-        parties that set these third-party cookies can recognize your computer both when it visits the website in
-        question and also when it visits certain other websites.
+        Cookies set by the website owner (in this case, {{ project.name }}) are called "first-party cookies." Cookies
+        set by parties other than the website owner are called "third-party cookies." Third-party cookies enable
+        third-party features or functionality to be provided on or through the website (e.g., advertising, interactive
+        content). The parties that set these third-party cookies can recognize your computer both when it visits the
+        website in question and also when it visits certain other websites.
       </div>
       <div>
         <strong> Why do we use cookies? </strong>
@@ -92,7 +94,7 @@
                 </tr>
                 <tr>
                   <td>Provider:</td>
-                  <td>r34.app</td>
+                  <td>{{ project.name }}</td>
                 </tr>
                 <tr>
                   <td>Service:</td>
@@ -124,7 +126,7 @@
                 </tr>
                 <tr>
                   <td>Provider:</td>
-                  <td>r34.app</td>
+                  <td>{{ project.name }}</td>
                 </tr>
                 <tr>
                   <td>Service:</td>
@@ -171,7 +173,7 @@
                   </tr>
                   <tr>
                     <td>Provider:</td>
-                    <td>r34.app</td>
+                    <td>{{ project.name }}</td>
                   </tr>
                   <tr>
                     <td>Service:</td>
@@ -313,10 +315,10 @@
         <strong> Where can I get further information? </strong>
       </div>
       <div>
-        If you have any questions about our use of cookies or other technologies, please email us at contact@r34.app or
-        by post to:
+        If you have any questions about our use of cookies or other technologies, please email us at
+        {{ project.email }} or by post to:
       </div>
-      <div>Rule 34 App</div>
+      <div>{{ project.name }}</div>
       <div>__________</div>
       <div>__________</div>
       <div>Spain</div>
