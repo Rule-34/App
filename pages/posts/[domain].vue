@@ -324,7 +324,6 @@
   }
 
   async function onLoadNextPostPage() {
-    return
     // Skip if already fetching
     if (isFetching.value || isFetchingNextPage.value) {
       return

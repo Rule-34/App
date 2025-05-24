@@ -63,6 +63,8 @@
 
     description: project.seo.description,
 
+    keywords: project.seo.keywords.join(', '),
+
     rating: 'adult',
 
     colorScheme: 'dark',

@@ -88,9 +88,6 @@ export const project: ProjectConfig = {
     formbricksEnvironmentId: 'cm6gbkjeq0008l7036ckdvtnm',
     formbricksAppUrl: 'https://app.formbricks.com'
   },
-  sentry: {
-    dsn: ''
-  },
   seo: {
     title: 'Rule 34 porn videos, GIFs and images at R34.app',
     description:
