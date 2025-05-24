@@ -1,8 +1,10 @@
 <script setup>
+  import { project } from '@/config/project'
+
   useSeoMeta({
     title: 'Terms of Service',
 
-    description: 'Terms of Service of the Rule 34 App'
+    description: `Terms of Service of ${project.name}`
   })
 </script>
 
@@ -14,17 +16,19 @@
 
     <p>
       These Terms of Service govern your use of the website located at
-      <a href="https://r34.app">https://r34.app</a> and any related services provided by Rule 34 App.
+      <a :href="project.urls.production.toString()">{{ project.urls.production.toString() }}</a> and any related
+      services provided by {{ project.name }}.
     </p>
     <p>
-      By accessing <a href="https://r34.app">https://r34.app</a>, you agree to abide by these Terms of Service and to
-      comply with all applicable laws and regulations. If you do not agree with these Terms of Service, you are
-      prohibited from using or accessing this website or using any other services provided by Rule 34 App.
+      By accessing <a :href="project.urls.production.toString()">{{ project.urls.production.toString() }}</a
+      >, you agree to abide by these Terms of Service and to comply with all applicable laws and regulations. If you do
+      not agree with these Terms of Service, you are prohibited from using or accessing this website or using any other
+      services provided by {{ project.name }}.
     </p>
     <p>
-      We, Rule 34 App, reserve the right to review and amend any of these Terms of Service at our sole discretion. Upon
-      doing so, we will update this page. Any changes to these Terms of Service will take effect immediately from the
-      date of publication.
+      We, {{ project.name }}, reserve the right to review and amend any of these Terms of Service at our sole
+      discretion. Upon doing so, we will update this page. Any changes to these Terms of Service will take effect
+      immediately from the date of publication.
     </p>
     <p>These Terms of Service were last updated on 2 March 2021.</p>
 
@@ -54,10 +58,10 @@
         on this website;
       </li>
       <li>remove any copyright or other proprietary notations from any materials and software on this website;</li>
-      <li>transfer the materials to another person or “mirror” the materials on any other server;</li>
+      <li>transfer the materials to another person or "mirror" the materials on any other server;</li>
       <li>
         knowingly or negligently use this website or any of its associated services in a way that abuses or disrupts our
-        networks or any other service Rule 34 App provides;
+        networks or any other service {{ project.name }} provides;
       </li>
       <li>
         use this website or its associated services to transmit or publish any harassing, indecent, obscene, fraudulent,
@@ -65,7 +69,7 @@
       </li>
       <li>use this website or its associated services in violation of any applicable laws or regulations;</li>
       <li>use this website in conjunction with sending unauthorized advertising or spam;</li>
-      <li>harvest, collect, or gather user data without the user’s consent; or</li>
+      <li>harvest, collect, or gather user data without the user's consent; or</li>
       <li>
         use this website or its associated services in such a way that may infringe the privacy, intellectual property
         rights, or other rights of third parties.
@@ -74,27 +78,28 @@
 
     <h2>Intellectual Property</h2>
     <p>
-      The intellectual property in the materials contained in this website are owned by or licensed to Rule 34 App and
-      are protected by applicable copyright and trademark law. We grant our users permission to download one copy of the
-      materials for personal, non-commercial transitory use.
+      The intellectual property in the materials contained in this website are owned by or licensed to
+      {{ project.name }} and are protected by applicable copyright and trademark law. We grant our users permission to
+      download one copy of the materials for personal, non-commercial transitory use.
     </p>
     <p>
       This constitutes the grant of a license, not a transfer of title. This license shall automatically terminate if
-      you violate any of these restrictions or the Terms of Service, and may be terminated by Rule 34 App at any time.
+      you violate any of these restrictions or the Terms of Service, and may be terminated by {{ project.name }} at any
+      time.
     </p>
 
     <h2>Liability</h2>
     <p>
       Our website and the materials on our website are provided on an 'as is' basis. To the extent permitted by law,
-      Rule 34 App makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties
-      including, without limitation, implied warranties or conditions of merchantability, fitness for a particular
-      purpose, or non-infringement of intellectual property, or other violation of rights.
+      {{ project.name }} makes no warranties, expressed or implied, and hereby disclaims and negates all other
+      warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a
+      particular purpose, or non-infringement of intellectual property, or other violation of rights.
     </p>
     <p>
-      In no event shall Rule 34 App or its suppliers be liable for any consequential loss suffered or incurred by you or
-      any third party arising from the use or inability to use this website or the materials on this website, even if
-      Rule 34 App or an authorized representative has been notified, orally or in writing, of the possibility of such
-      damage.
+      In no event shall {{ project.name }} or its suppliers be liable for any consequential loss suffered or incurred by
+      you or any third party arising from the use or inability to use this website or the materials on this website,
+      even if {{ project.name }} or an authorized representative has been notified, orally or in writing, of the
+      possibility of such damage.
     </p>
     <p>
       In the context of this agreement, &ldquo;consequential loss&rdquo; includes any consequential loss, indirect loss,
@@ -109,18 +114,18 @@
 
     <h2>Accuracy of Materials</h2>
     <p>
-      The materials appearing on our website are not comprehensive and are for general information purposes only. Rule
-      34 App does not warrant or make any representations concerning the accuracy, likely results, or reliability of the
-      use of the materials on this website, or otherwise relating to such materials or on any resources linked to this
-      website.
+      The materials appearing on our website are not comprehensive and are for general information purposes only.
+      {{ project.name }}
+      does not warrant or make any representations concerning the accuracy, likely results, or reliability of the use of
+      the materials on this website, or otherwise relating to such materials or on any resources linked to this website.
     </p>
 
     <h2>Links</h2>
     <p>
-      Rule 34 App has not reviewed all of the sites linked to its website and is not responsible for the contents of any
-      such linked site. The inclusion of any link does not imply endorsement, approval, or control by Rule 34 App of the
-      site. Use of any such linked site is at your own risk and we strongly advise you make your own investigations with
-      respect to the suitability of those sites.
+      {{ project.name }} has not reviewed all of the sites linked to its website and is not responsible for the contents
+      of any such linked site. The inclusion of any link does not imply endorsement, approval, or control by
+      {{ project.name }} of the site. Use of any such linked site is at your own risk and we strongly advise you make
+      your own investigations with respect to the suitability of those sites.
     </p>
 
     <h2>Right to Terminate</h2>

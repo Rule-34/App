@@ -11,6 +11,7 @@
   } from '@heroicons/vue/24/solid'
   import { toast } from 'vue-sonner'
   import { detectPlatform, Platform, PLATFORM_URLS } from '~/types/enums/Platform'
+  import { project } from '@/config/project'
 
   const { $pocketBase } = useNuxtApp()
   const route = useRoute()
@@ -23,7 +24,7 @@
     {
       name: 'Saved posts',
       description: 'Save posts and enjoy them later',
-      href: '/premium/saved-posts/r34.app',
+      href: `/premium/saved-posts/${project.urls.production.hostname}`,
       icon: BookmarkIcon
     },
     {
@@ -217,7 +218,7 @@
     <section class="mt-8">
       <NuxtLink
         class="hover:hover-bg-util focus-visible:focus-outline-util bg-base-0/5 border-base-0/20 flex items-start rounded-md border p-4 transition-all duration-200 hover:shadow-md"
-        href="https://feedback.r34.app"
+        :href="`https://feedback.${project.urls.production.hostname}`"
         rel="nofollow noopener noreferrer"
         target="_blank"
       >
@@ -236,7 +237,7 @@
       <div class="flex flex-row items-center justify-center gap-4">
         <NuxtLink
           class="hover:hover-bg-util focus-visible:focus-outline-util border-base-0/20 flex items-center gap-2 rounded-md border px-4 py-2 transition-all duration-200"
-          href="mailto:contact@r34.app"
+          :href="`mailto:${project.email}`"
           rel="nofollow noopener noreferrer"
           target="_blank"
         >

@@ -1,23 +1,25 @@
 <script lang="ts" setup>
+  import { project } from '@/config/project'
+
   const newsList = [
     {
       name: 'Feedback website',
-      text: 'Now you can vote, discuss and share ideas 💡 to improve the Rule 34 App',
+      text: `Now you can vote, discuss and share ideas 💡 to improve ${project.name}`,
       links: [
         {
-          text: 'feedback.r34.app',
-          href: 'https://feedback.r34.app',
+          text: `feedback.${project.urls.production.hostname}`,
+          href: `https://feedback.${project.urls.production.hostname}`,
           target: '_blank'
         }
       ]
     },
     {
       name: 'Blocked in your country? 🇷🇺',
-      text: 'Access the Rule 34 App without restrictions, with the alternative site',
+      text: `Access ${project.name} without restrictions, with the alternative site`,
       links: [
         {
-          text: 'alt3.r34.app',
-          href: 'https://alt3.r34.app',
+          text: `alt3.${project.urls.production.hostname}`,
+          href: `https://alt3.${project.urls.production.hostname}`,
           target: '_blank'
         }
       ]

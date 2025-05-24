@@ -1,6 +1,7 @@
 <script setup>
   import { BookmarkIcon, SparklesIcon } from '@heroicons/vue/24/outline'
   import { sidebarNavigation } from 'assets/js/sidebarLinks'
+  import { project } from '@/config/project'
 
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
   const { isPremium } = useUserData()
@@ -17,7 +18,7 @@
       width="16"
     />
 
-    <span class="text-base-content-highlight text-2xl font-bold">Rule 34 App</span>
+    <span class="text-base-content-highlight text-2xl font-bold">{{ project.name }}</span>
   </div>
 
   <!-- Content -->
@@ -62,7 +63,7 @@
           <NuxtLink
             class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
             exactActiveClass="bg-base-0/20 text-base-content-highlight"
-            href="/premium/saved-posts/r34.app"
+            :href="`/premium/saved-posts/${project.urls.production.hostname}`"
           >
             <BookmarkIcon class="text-primary-500 h-6 w-6 shrink-0" />
             Saved Posts
@@ -94,7 +95,7 @@
           <!-- Twitter -->
           <NuxtLink
             class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
-            href="https://twitter.com/Rule34App"
+            :href="project.social.twitter"
             rel="nofollow noopener noreferrer"
             target="_blank"
           >
@@ -115,7 +116,7 @@
           <!-- Discord -->
           <NuxtLink
             class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
-            href="https://discord.gg/fUhYHSZ"
+            :href="project.social.discord"
             rel="nofollow noopener noreferrer"
             target="_blank"
           >

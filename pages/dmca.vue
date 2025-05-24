@@ -1,22 +1,24 @@
 <script setup>
+  import { project } from '@/config/project'
+
   useSeoMeta({
     title: 'DMCA Notice of Copyright infringement',
 
-    description: 'Learn how to submit a DMCA notice of copyright infringement to the Rule 34 App'
+    description: `Learn how to submit a DMCA notice of copyright infringement to ${project.name}`
   })
 </script>
 
 <template>
-  <main class="container prose prose-invert mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
+  <main class="prose prose-invert container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
     <PageHeader>
       <template #title>DMCA Notice</template>
     </PageHeader>
 
     <div>
       <p>
-        The Rule 34 App (https://r34.app) is a search engine that indexes and links to content hosted on third-party
-        websites. We do not host any content ourselves. If you believe that your copyrighted work has been infringed
-        upon by a website that we link to, please follow these steps:
+        {{ project.name }} ({{ project.urls.production.toString() }}) is a search engine that indexes and links to
+        content hosted on third-party websites. We do not host any content ourselves. If you believe that your
+        copyrighted work has been infringed upon by a website that we link to, please follow these steps:
       </p>
 
       <ol>
@@ -32,9 +34,9 @@
       </ol>
 
       <p>
-        Please note that the Rule 34 App cannot process DMCA notices or remove content from third-party websites. We are
-        merely a search engine that indexes and links to content hosted elsewhere on the internet. If you have any
-        further questions or concerns, please contact us at contact@r34.app.
+        Please note that {{ project.name }} cannot process DMCA notices or remove content from third-party websites.
+        We are merely a search engine that indexes and links to content hosted elsewhere on the internet. If you have
+        any further questions or concerns, please contact us at {{ project.email }}.
       </p>
     </div>
   </main>

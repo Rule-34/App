@@ -6,6 +6,7 @@
   import { ArrowRightIcon } from '@heroicons/vue/24/solid'
   import * as Sentry from '@sentry/nuxt'
   import { FetchError } from 'ofetch'
+  import { project } from '@/config/project'
 
   const config = useRuntimeConfig()
 
@@ -424,7 +425,7 @@
 
   useSchemaOrg([
     defineWebSite({
-      name: 'Rule 34 App',
+      name: project.name,
 
       potentialAction: [
         // TODO: Listen to router
@@ -437,19 +438,18 @@
     defineWebPage(),
 
     defineOrganization({
-      name: 'Rule 34 App',
+      name: project.name,
       logo: '/icon.svg',
       sameAs: [
-        'https://rule34.app',
-        'https://twitter.com/Rule34App',
-        'https://twitter.com/Rule34App',
-        'https://discord.gg/fUhYHSZ',
-        'https://github.com/Rule-34/App'
+        project.urls.production.toString(),
+        project.social.twitter,
+        project.social.discord,
+        project.social.github
       ]
     }),
 
     defineProduct({
-      name: 'Rule 34 App',
+      name: project.name,
       // @see https://www.trustpilot.com/review/r34.app
       aggregateRating: {
         ratingValue: 4.5,

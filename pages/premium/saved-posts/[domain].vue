@@ -14,6 +14,7 @@
   import { generatePostsRoute } from 'assets/js/RouterHelper'
   import { tagArrayToTitle } from 'assets/js/SeoHelper'
   import type { IPocketbasePost } from '~/assets/js/pocketbase.dto'
+  import { project } from '@/config/project'
 
   const router = useRouter()
   const route = useRoute()
@@ -35,7 +36,7 @@
   const booruList = computed(() => {
     const _booruList: Domain[] = [
       {
-        domain: 'r34.app',
+        domain: project.urls.production.hostname,
         type: booruTypeList[0],
         config: null,
         isCustom: false,
@@ -316,7 +317,7 @@
 
     let pocketbaseRequestFilter = ''
 
-    if (selectedBooru.value.domain !== 'r34.app') {
+    if (selectedBooru.value.domain !== project.urls.production.hostname) {
       pocketbaseRequestFilter += $pocketBase.filter('original_domain = {:original_domain}', {
         original_domain: selectedBooru.value.domain
       })
@@ -664,7 +665,10 @@
         type="button"
         @click="toggleSearchMenu()"
       >
-        <MagnifyingGlassIcon aria-hidden="true" class="text-base-content-highlight h-6 w-6" />
+        <MagnifyingGlassIcon
+          aria-hidden="true"
+          class="text-base-content-highlight h-6 w-6"
+        />
 
         <!-- Highlighter -->
         <span
@@ -729,7 +733,10 @@
           class="flex h-80 w-full animate-pulse flex-col items-center justify-center gap-4 text-lg"
           data-testid="posts-loader"
         >
-          <ArrowPathIcon aria-hidden="true" class="h-12 w-12 animate-spin" />
+          <ArrowPathIcon
+            aria-hidden="true"
+            class="h-12 w-12 animate-spin"
+          />
 
           <h3>Loading posts&hellip;</h3>
         </div>
@@ -738,7 +745,10 @@
       <!-- Error -->
       <template v-else-if="isError">
         <div class="mt-12 text-center">
-          <ExclamationCircleIcon aria-hidden="true" class="mx-auto mb-1 h-12 w-12" />
+          <ExclamationCircleIcon
+            aria-hidden="true"
+            class="mx-auto mb-1 h-12 w-12"
+          />
 
           <div v-if="error.status === 404">
             <h3 class="text-lg leading-10 font-semibold">No posts found</h3>
@@ -750,7 +760,8 @@
             <h3 class="text-lg leading-10 font-semibold">Too many requests</h3>
 
             <span class="w-full overflow-x-auto text-pretty">
-              You sent too many requests in a short period of time. Use the button below to continue using the R34 App
+              You sent too many requests in a short period of time. Use the button below to continue using the
+              {{ project.shortName }}
             </span>
 
             <NuxtLink
@@ -785,7 +796,10 @@
       <!-- No results -->
       <template v-else-if="!allRows.length">
         <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-lg">
-          <QuestionMarkCircleIcon aria-hidden="true" class="h-12 w-12" />
+          <QuestionMarkCircleIcon
+            aria-hidden="true"
+            class="h-12 w-12"
+          />
 
           <h3>No results</h3>
 

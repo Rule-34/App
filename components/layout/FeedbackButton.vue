@@ -1,8 +1,9 @@
 <script lang="ts" setup>
   import { PencilSquareIcon } from '@heroicons/vue/24/outline'
+  import { project } from '@/config/project'
 
   function handleClick(event: Event) {
-    window.open('https://feedback.r34.app', '_blank')
+    window.open(`https://feedback.${project.urls.production.hostname}`, '_blank')
   }
 </script>
 
@@ -15,7 +16,7 @@
         class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util bg-base-1000 ring-base-0/15 flex items-center justify-center gap-2 rounded-r-md p-2 ring-1"
         style="writing-mode: vertical-lr; transform: rotate(180deg)"
         target="_blank"
-        to="https://feedback.r34.app"
+        :to="`https://feedback.${project.urls.production.hostname}`"
       >
         <span class="text-base font-medium"> Feedback </span>
 

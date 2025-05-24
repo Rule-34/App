@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { ChevronUpDownIcon } from '@heroicons/vue/20/solid'
+  import { project } from '@/config/project'
 
   defineOptions({
     inheritAttrs: false
@@ -20,7 +21,7 @@
   >
     <span class="flex items-center">
       <img
-        :src="`https://icons.duckduckgo.com/ip2/r34.app.ico`"
+        :src="`https://icons.duckduckgo.com/ip2/${project.urls.production.hostname}.ico`"
         alt="Favicon"
         class="h-5 w-5 shrink-0 rounded-sm"
         height="128"
@@ -33,7 +34,7 @@
         v-if="!props.compact"
         class="ml-3 block truncate"
       >
-        r34.app
+        {{ project.urls.production.hostname }}
       </span>
     </span>
 
@@ -42,7 +43,10 @@
       v-if="!props.compact"
       class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2"
     >
-      <ChevronUpDownIcon aria-hidden="true" class="h-5 w-5" />
+      <ChevronUpDownIcon
+        aria-hidden="true"
+        class="h-5 w-5"
+      />
     </span>
   </div>
 </template>

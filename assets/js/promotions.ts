@@ -1,3 +1,5 @@
+import { project } from '@/config/project'
+
 export const premiumPromotions = [
   // Premium
   {
@@ -79,7 +81,7 @@ export const otherPromotions = [
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: 'https://hentaiporn.app/?utm_source=r34.app&utm_medium=promotion'
+    link: `https://hentaiporn.app/?utm_source=${project.urls.production.hostname}&utm_medium=promotion`
   }
 ]
 

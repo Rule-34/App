@@ -2,6 +2,7 @@
   import { ChevronDownIcon } from '@heroicons/vue/24/outline'
   import type { IPost } from '~/assets/js/post.dto'
   import Tag from '~/assets/js/tag.dto'
+  import { project } from '@/config/project'
 
   const props = defineProps<{
     postIndex: number
@@ -136,7 +137,7 @@
         />
 
         <ShareButton
-          :text="`Found on Rule 34 App: ${currentUrl.href}`"
+          :text="`Found on ${project.name}: ${currentUrl.href}`"
           :title="`Post #${post.id} from ${post.domain}`"
           :url="mediaFile.file ?? undefined"
           class="px-1.5 py-1"

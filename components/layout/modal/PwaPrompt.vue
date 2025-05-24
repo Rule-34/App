@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { HomeIcon } from '@heroicons/vue/24/outline'
   import { ArrowPathIcon } from '@heroicons/vue/24/solid'
+  import { project } from '@/config/project'
 
   defineProps<{
     close: () => void
@@ -48,7 +49,7 @@
       border="0"
       class="mt-5 h-screen max-h-[60vh] w-full rounded-md sm:mt-6"
       credentialless
-      src="https://www.installpwa.com/from/r34.app/embed?theme=dark"
+      :src="`https://www.installpwa.com/from/${project.urls.production.hostname}/embed?theme=dark`"
       title="Install PWA"
       @load="isIframeLoaded = true"
     />

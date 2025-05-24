@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { LightBulbIcon } from '@heroicons/vue/24/outline'
+  import { project } from '@/config/project'
 
   defineProps<{
     close: () => void
@@ -26,7 +27,7 @@
 
       <div class="mt-2">
         <p class="text-nice text-pretty">
-          Vote on new features, report bugs, and share your ideas to make R34.app even better
+          Vote on new features, report bugs, and share your ideas to make {{ project.shortName }} even better
         </p>
       </div>
     </div>
@@ -37,13 +38,13 @@
     <NuxtLink
       class="focus-visible:focus-outline-util relative block overflow-hidden rounded-lg"
       target="_blank"
-      to="https://feedback.r34.app"
+      :to="`https://feedback.${project.urls.production.hostname}`"
     >
       <img
         alt="Feedback website preview"
         class="h-auto max-h-[50svh] w-full object-cover"
         height="1080"
-        src="https://screenshot.akbal.dev/v1/capture?width=720&height=1080&url=https://feedback.r34.app/"
+        :src="`https://screenshot.akbal.dev/v1/capture?width=720&height=1080&url=https://feedback.${project.urls.production.hostname}/`"
         width="720"
       />
       <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
@@ -55,7 +56,7 @@
     <NuxtLink
       class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-xs ring-1 ring-inset"
       target="_blank"
-      to="https://feedback.r34.app"
+      :to="`https://feedback.${project.urls.production.hostname}`"
     >
       Go to Feedback page
     </NuxtLink>

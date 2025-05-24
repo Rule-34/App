@@ -7,6 +7,7 @@ import {
   QuestionMarkCircleIcon,
   UserGroupIcon
 } from '@heroicons/vue/24/outline'
+import { project } from '@/config/project'
 
 export const sidebarNavigation = [
   {
@@ -31,7 +32,7 @@ export const sidebarNavigation = [
         {
           name: 'Install App',
           icon: ArrowDownTrayIcon,
-          href: 'https://www.installpwa.com/from/r34.app',
+          href: `https://www.installpwa.com/from/${project.urls.production.hostname}`,
           isExternal: true
         }
       ]),
@@ -47,7 +48,7 @@ export const sidebarNavigation = [
     name: 'Blog',
     icon: NewspaperIcon,
 
-    href: 'https://r34.app/blog',
+    href: `${project.urls.production.toString()}blog`,
     isExternal: false
   },
   {

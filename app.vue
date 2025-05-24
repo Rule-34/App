@@ -1,11 +1,13 @@
 <script setup>
+  import { project } from './config/project.ts'
+
   provideHeadlessUseId(() => useId())
 
   const route = useRoute()
-  const config = useRuntimeConfig()
+  const runtimeConfig = useRuntimeConfig()
 
   const canonicalUrl = computed(() => {
-    const url = 'https://' + config.public.APP_DOMAIN + route.fullPath
+    const url = 'https://' + project.urls.production.hostname + route.fullPath
 
     const parsedUrl = new URL(url)
 
@@ -22,7 +24,7 @@
     },
 
     titleTemplate: (titleChunk) => {
-      return titleChunk ? `${titleChunk} | R34.app` : 'Rule 34 porn videos, GIFs and images at R34.app'
+      return titleChunk ? `${titleChunk} | ${project.name}` : project.seo.title
     },
 
     link: [
@@ -50,7 +52,7 @@
       // Preconnect to API
       {
         rel: 'preconnect',
-        href: config.public.API_URL
+        href: runtimeConfig.public.API_URL
       }
     ]
   })
@@ -59,14 +61,12 @@
     charset: 'utf-8',
     viewport: 'width=device-width, initial-scale=1',
 
-    // TODO: Improve description
-    description:
-      'Stream and download Rule 34 porn videos, GIFs, and images from multiple Boorus in a mobile-first web app',
+    description: project.seo.description,
 
     rating: 'adult',
 
     colorScheme: 'dark',
-    themeColor: '#000',
+    themeColor: project.branding.colors.background,
 
     monetization: '$ilp.uphold.com/Hf3zAn3pQ7fD',
 
