@@ -87,6 +87,13 @@
           name: 'SellApp',
           url: 'https://akbal.sell.app/product/premium-30-days-access',
           faviconDomain: 'https://sell.app',
+          category: 'creditCard',
+          cta: 'Pay w/ Credit Card & PayPal'
+        },
+        {
+          name: 'SellApp',
+          url: 'https://akbal.sell.app/product/premium-30-days-access',
+          faviconDomain: 'https://sell.app',
           category: 'crypto',
           cta: 'Pay with Crypto'
         }
@@ -121,6 +128,13 @@
       originalPrice: 699.99,
       interval: 'once',
       links: [
+        {
+          name: 'SellApp',
+          url: 'https://akbal.sell.app/product/premium-lifetime',
+          faviconDomain: 'https://sell.app',
+          category: 'creditCard',
+          cta: 'Pay w/ Credit Card & PayPal'
+        },
         {
           name: 'SellApp',
           url: 'https://akbal.sell.app/product/premium-lifetime',
@@ -259,8 +273,8 @@
 
           <!-- Rating -->
           <NuxtLink
-            class="focus-visible:focus-outline-util hover:hover-text-util mt-16 flex flex-col items-center justify-center gap-3 pb-4"
             :href="`https://www.trustpilot.com/review/${project.urls.production.hostname}`"
+            class="focus-visible:focus-outline-util hover:hover-text-util mt-16 flex flex-col items-center justify-center gap-3 pb-4"
             rel="nofollow noopener"
             target="_blank"
           >
@@ -295,8 +309,8 @@
             </ol>
 
             <NuxtLink
-              class="focus-visible:focus-outline-util hover:hover-text-util mx-auto mt-10 flex w-full max-w-fit gap-2.5 text-sm underline"
               :href="`https://www.trustpilot.com/review/${project.urls.production.hostname}`"
+              class="focus-visible:focus-outline-util hover:hover-text-util mx-auto mt-10 flex w-full max-w-fit gap-2.5 text-sm underline"
               rel="nofollow noopener"
               target="_blank"
             >
@@ -411,8 +425,8 @@
                     <br />
 
                     <NuxtLink
-                      class="focus-visible:focus-outline-util hover:hover-text-util"
                       :href="`https://www.trustpilot.com/review/${project.urls.production.hostname}`"
+                      class="focus-visible:focus-outline-util hover:hover-text-util"
                       rel="nofollow noopener"
                       target="_blank"
                     >
