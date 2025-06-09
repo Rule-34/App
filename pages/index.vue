@@ -140,17 +140,17 @@
           ]
         },
         // Advertisement from AdSession
-        {
-          name: 'Anime AI Sluts',
-          path: 'https://s.eunow4u.com/v1/d.php?z=2168',
-          isAdvertisement: true,
-          media: [
-            { type: 'image', src: '/img/ads/Advertisement_1.webp' },
-            { type: 'image', src: '/img/ads/Advertisement_2.webp' },
-            { type: 'image', src: '/img/ads/Advertisement_3.webp' },
-            { type: 'image', src: '/img/ads/Advertisement_4.webp' }
-          ]
-        },
+        // {
+        //   name: 'Anime AI Sluts',
+        //   path: 'https://s.eunow4u.com/v1/d.php?z=2168',
+        //   isAdvertisement: true,
+        //   media: [
+        //     { type: 'image', src: '/img/ads/Advertisement_1.webp' },
+        //     { type: 'image', src: '/img/ads/Advertisement_2.webp' },
+        //     { type: 'image', src: '/img/ads/Advertisement_3.webp' },
+        //     { type: 'image', src: '/img/ads/Advertisement_4.webp' }
+        //   ]
+        // },
         {
           name: 'Trending posts',
           path: '/posts/rule34.xxx?filter%5Bscore%5D=>%3D50',
