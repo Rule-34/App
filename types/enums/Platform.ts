@@ -10,7 +10,7 @@ export const PLATFORM_URLS = {
   [Platform.GUMROAD]: 'https://app.gumroad.com/library?query=Rule+34+App',
   [Platform.PATREON]: 'https://www.patreon.com/r34app/membership',
   [Platform.SELLIX]: 'https://alejandroakbal.mysellix.io/customer/auth',
-  [Platform.KOFI]: 'https://ko-fi.com/alejandro_akbal/tiers',
+  [Platform.KOFI]: 'https://ko-fi.com/account',
   [Platform.SHOP]: 'https://shop.akbal.dev/how-to-get-premium-features/#/portal/account'
 } as const
 
@@ -32,6 +32,7 @@ export function detectPlatform(license: string | null): Platform | undefined {
     case license.startsWith('KOFI-'):
       return Platform.KOFI
 
+    case license.startsWith('GHOST-'):
     case license.startsWith('SHOP-'):
       return Platform.SHOP
 
