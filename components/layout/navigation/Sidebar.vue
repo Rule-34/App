@@ -1,5 +1,5 @@
 <script setup>
-  import { BookmarkIcon, SparklesIcon } from '@heroicons/vue/24/outline'
+  import { BookmarkIcon, PaintBrushIcon, SparklesIcon } from '@heroicons/vue/24/outline'
   import { sidebarNavigation } from 'assets/js/sidebarLinks'
   import { project } from '@/config/project'
 
@@ -61,9 +61,9 @@
       <template v-if="isPremium">
         <li class="-mr-2 ml-6">
           <NuxtLink
+            :href="`/premium/saved-posts/${project.urls.production.hostname}`"
             class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
             exactActiveClass="bg-base-0/20 text-base-content-highlight"
-            :href="`/premium/saved-posts/${project.urls.production.hostname}`"
           >
             <BookmarkIcon class="text-primary-500 h-6 w-6 shrink-0" />
             Saved Posts
@@ -72,19 +72,19 @@
       </template>
 
       <!-- Advertisements -->
-      <!--      <template v-if="!isPremium">-->
-      <!--        <li class="-mx-2">-->
-      <!--          <a-->
-      <!--            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"-->
-      <!--            href="https://candyai.gg/home2?via=rule-3496"-->
-      <!--            rel="nofollow noopener noreferrer"-->
-      <!--            target="_blank"-->
-      <!--          >-->
-      <!--            <ChatBubbleLeftEllipsisIcon class="h-6 w-6 shrink-0" />-->
-      <!--            AI Chat-->
-      <!--          </a>-->
-      <!--        </li>-->
-      <!--      </template>-->
+      <template v-if="!isPremium">
+        <li class="-mx-2">
+          <a
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+            href="https://www.nsfwartgenerator.ai?ref=ytnjywm"
+            rel="nofollow noopener noreferrer"
+            target="_blank"
+          >
+            <PaintBrushIcon class="h-6 w-6 shrink-0" />
+            NSFW AI Generator
+          </a>
+        </li>
+      </template>
 
       <!-- Bottom -->
       <li class="flex flex-1 flex-col">
@@ -94,8 +94,8 @@
         <div class="flex justify-around pb-3">
           <!-- Twitter -->
           <NuxtLink
-            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
             :href="project.social.twitter"
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
             rel="nofollow noopener noreferrer"
             target="_blank"
           >
@@ -115,8 +115,8 @@
 
           <!-- Discord -->
           <NuxtLink
-            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
             :href="project.social.discord"
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
             rel="nofollow noopener noreferrer"
             target="_blank"
           >
