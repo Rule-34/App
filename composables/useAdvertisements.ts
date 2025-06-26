@@ -38,7 +38,7 @@ export default function () {
      * Cons: Low revenue (70), Does not count visits well, (!!!) Clears console
      */
     {
-      id: '/js/popunder2.js?v=8',
+      id: '/js/popunder2.js?v=9',
       weight: 1
     }
     /**
