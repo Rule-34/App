@@ -203,21 +203,28 @@
                * Pros:
                * Cons: Low revenue (9)
                */
-              'https://s.magsrv.com/splash.php?idzone=5386496'
+              // 'https://s.magsrv.com/splash.php?idzone=5386496'
 
-            /**
-             * HilltopAds
-             * Pros:
-             * Cons: Low revenue (4)
-             */
-            // 'https://ellipticaltrack.com/dCm.FXz/doGMNPv/Z-GhUX/OermX9/u-ZqUEltk/PYTgYBy/ODTZQI5oNHDDEHtdNbjLIS5eNvDhk/0uMGgu?limit=1'
+              /**
+               * HilltopAds
+               * Pros:
+               * Cons: Low revenue (4)
+               */
+              // 'https://ellipticaltrack.com/dCm.FXz/doGMNPv/Z-GhUX/OermX9/u-ZqUEltk/PYTgYBy/ODTZQI5oNHDDEHtdNbjLIS5eNvDhk/0uMGgu?limit=1'
 
-            /**
-             * Clickadu
-             * Pros:
-             * Cons:
-             */
-            // 'https://anewfeedliberty.com/ceef/gdt3g0/tbt/2034767/tlk.xml'
+              /**
+               * Clickadu
+               * Pros:
+               * Cons:
+               */
+              // 'https://anewfeedliberty.com/ceef/gdt3g0/tbt/2034767/tlk.xml'
+
+              /**
+               * AdSession
+               * Pros:
+               * Cons:
+               */
+              'https://s.eunow4u.com/v1/vast.php?idzone=2310'
           }
         )
       }
