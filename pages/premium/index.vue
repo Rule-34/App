@@ -68,12 +68,12 @@
           category: 'creditCard',
           cta: 'Subscribe w/ Credit Card & PayPal'
         },
-        {
-          name: 'Patreon',
-          url: 'https://www.patreon.com/R34App',
-          category: 'creditCard',
-          cta: 'Subscribe w/ Patreon'
-        }
+        // {
+        //   name: 'Patreon',
+        //   url: 'https://www.patreon.com/R34App',
+        //   category: 'creditCard',
+        //   cta: 'Subscribe w/ Patreon'
+        // }
       ]
     },
     {
@@ -112,13 +112,13 @@
           category: 'creditCard',
           cta: 'Subscribe w/ Credit Card & PayPal'
         },
-        {
-          name: 'Patreon',
-          url: 'https://www.patreon.com/R34App',
-          category: 'creditCard',
-          cta: 'Subscribe w/ Patreon',
-          instructions: ['Select "Pay annually" on the Patreon page']
-        }
+        // {
+        //   name: 'Patreon',
+        //   url: 'https://www.patreon.com/R34App',
+        //   category: 'creditCard',
+        //   cta: 'Subscribe w/ Patreon',
+        //   instructions: ['Select "Pay annually" on the Patreon page']
+        // }
       ]
     },
     {
