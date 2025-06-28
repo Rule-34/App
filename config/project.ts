@@ -18,10 +18,8 @@ export interface Branding {
 }
 
 export interface Analytics {
-  clarityId?: string
   formbricksEnvironmentId?: string
   formbricksAppUrl?: string
-  googleAnalyticsId?: string
 }
 
 export interface Sentry {
@@ -84,7 +82,6 @@ export const project: ProjectConfig = {
     }
   },
   analytics: {
-    clarityId: 'rbnkjz06ip',
     formbricksEnvironmentId: 'cm6gbkjeq0008l7036ckdvtnm',
     formbricksAppUrl: 'https://app.formbricks.com'
   },

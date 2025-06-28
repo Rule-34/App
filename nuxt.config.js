@@ -16,22 +16,26 @@ export default defineNuxtConfig({
 
       script: [
         /**
-         * Clarity Analytics
+         * Matomo
          */
-        ...(project.analytics?.clarityId
-          ? [
-              {
-                type: 'text/partytown',
-                innerHTML: `
-(function(c,l,a,r,i,t,y){
-    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-})(window, document, "clarity", "script", "${project.analytics.clarityId}");
-    `
-              }
-            ]
-          : []),
+        {
+          type: 'text/partytown',
+          innerHTML: `
+var _paq = (window._paq = window._paq || [])
+
+_paq.push(['setDomains', ['*.r34.app']])
+_paq.push(['enableCrossDomainLinking'])
+
+_paq.push(['setExcludedQueryParams', ['page', 'cursor']])
+
+;(function () {
+  var u = 'https://matomo.akbal.dev/'
+
+  _paq.push(['setTrackerUrl', u + 'matomo.php'])
+  _paq.push(['setSiteId', '1'])
+})()`
+        },
+        { src: 'https://matomo.akbal.dev/matomo.js', type: 'text/partytown', async: true, defer: true },
         /**
          * Formbricks User Experience
          */
@@ -376,8 +380,8 @@ export default defineNuxtConfig({
 
   partytown: {
     forward: [
-      // Clarity
-      'clarity',
+      // Matomo
+      '_paq.push',
       // Formbricks
       'formbricks.track'
     ]
