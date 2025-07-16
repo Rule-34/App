@@ -27,9 +27,9 @@
   function getDefaultBooru() {
     let domain = selectedDomainFromStorage.value
 
-    // Fallback to first Booru
+    // Fallback/Default to specific Booru (rule34.paheal.net)
     if (!domain) {
-      return booruList.value[0]
+      return booruList.value[2]
     }
 
     const booru = booruList.value.find((booru) => booru.domain === domain)
@@ -125,13 +125,13 @@
 
   const featuredDomains = [
     {
-      domain: 'rule34.xxx',
-      path: '/posts/rule34.xxx',
+      domain: 'rule34.paheal.net',
+      path: '/posts/rule34.paheal.net',
       isPremium: false,
       tags: [
         {
           name: 'Top posts',
-          path: '/posts/rule34.xxx?filter%5Bsort%5D=score',
+          path: '/posts/rule34.paheal.net?filter%5Bsort%5D=score',
           media: [
             { type: 'image', src: '/img/featured/rule34.xxx/top-1.jpg' },
             { type: 'image', src: '/img/featured/rule34.xxx/top-2.jpg' },
@@ -153,7 +153,7 @@
         // },
         {
           name: 'Trending posts',
-          path: '/posts/rule34.xxx?filter%5Bscore%5D=>%3D50',
+          path: '/posts/rule34.paheal.net?filter%5Bscore%5D=>%3D50',
           media: [
             { type: 'image', src: '/img/featured/rule34.xxx/top-5.jpg' },
             { type: 'image', src: '/img/featured/rule34.xxx/top-6.jpg' },
@@ -163,12 +163,12 @@
         },
         {
           name: 'Animated (video)',
-          path: '/posts/rule34.xxx?tags=animated',
+          path: '/posts/rule34.paheal.net?tags=animated',
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/animated.jpeg' }]
         },
         {
           name: 'Overwatch',
-          path: '/posts/rule34.xxx?tags=overwatch',
+          path: '/posts/rule34.paheal.net?tags=overwatch',
           media: [
             { type: 'image', src: '/img/featured/rule34.xxx/overwatch-1.jpeg' },
             { type: 'image', src: '/img/featured/rule34.xxx/overwatch-2.jpeg' },
@@ -181,108 +181,108 @@
         },
         {
           name: 'Genshin Impact',
-          path: '/posts/rule34.xxx?tags=genshin_impact',
+          path: '/posts/rule34.paheal.net?tags=genshin_impact',
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/genshin_impact.jpg' }]
         },
         {
           name: 'Brawl Stars',
-          path: '/posts/rule34.xxx?tags=brawl_stars',
+          path: '/posts/rule34.paheal.net?tags=brawl_stars',
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/brawl_stars.jpeg' }]
         },
         {
           name: 'Friday Night Funkin',
-          path: '/posts/rule34.xxx?tags=friday_night_funkin',
+          path: '/posts/rule34.paheal.net?tags=friday_night_funkin',
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/friday_night_funkin.jpg' }]
         },
         {
           name: 'Atomic Heart',
-          path: '/posts/rule34.xxx?tags=atomic_heart',
+          path: '/posts/rule34.paheal.net?tags=atomic_heart',
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/atomic_heart.jpg' }]
         },
         {
           name: 'Minecraft',
-          path: '/posts/rule34.xxx?tags=minecraft',
+          path: '/posts/rule34.paheal.net?tags=minecraft',
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/minecraft.jpg' }]
         },
         {
           name: 'Murder Drones',
-          path: '/posts/rule34.xxx?tags=murder_drones',
+          path: '/posts/rule34.paheal.net?tags=murder_drones',
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/murder_drones.jpg' }]
         },
         {
           name: 'CountryHumans',
-          path: '/posts/rule34.xxx?tags=countryhumans',
+          path: '/posts/rule34.paheal.net?tags=countryhumans',
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/countryhumans.jpg' }]
         },
         {
           name: 'Honkai: Star Rail',
-          path: '/posts/rule34.xxx?tags=honkai:_star_rail',
+          path: '/posts/rule34.paheal.net?tags=honkai:_star_rail',
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/honkai_star_rail.jpg' }]
         },
         {
           name: "Five Nights at Freddy's",
-          path: "/posts/rule34.xxx?tags=five_nights_at_freddy's",
+          path: "/posts/rule34.paheal.net?tags=five_nights_at_freddy's",
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/five_nights_at_freddys.jpg' }]
         },
         {
           name: 'Roblox',
-          path: '/posts/rule34.xxx?tags=roblox',
+          path: '/posts/rule34.paheal.net?tags=roblox',
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/roblox.jpg' }]
         },
         {
           name: 'Undertale',
-          path: '/posts/rule34.xxx?tags=undertale',
+          path: '/posts/rule34.paheal.net?tags=undertale',
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/undertale.jpeg' }]
         }
       ]
     },
-    {
-      domain: 'gelbooru.com',
-      path: '/posts/gelbooru.com',
-      isPremium: false,
-      tags: [
-        {
-          name: 'Top posts',
-          path: '/posts/gelbooru.com?filter%5Bsort%5D=score&filter%5Brating%5D=explicit',
-          media: [
-            { type: 'image', src: '/img/featured/gelbooru.com/top-1.jpeg' },
-            { type: 'image', src: '/img/featured/gelbooru.com/top-2.jpeg' },
-            { type: 'image', src: '/img/featured/gelbooru.com/top-3.jpeg' },
-            { type: 'image', src: '/img/featured/gelbooru.com/top-4.jpeg' }
-          ]
-        },
-        {
-          name: 'Trending posts',
-          path: '/posts/gelbooru.com?filter%5Bscore%5D=>%3D50',
-          media: [
-            { type: 'image', src: '/img/featured/gelbooru.com/top-5.jpeg' },
-            { type: 'image', src: '/img/featured/gelbooru.com/top-6.jpeg' },
-            { type: 'image', src: '/img/featured/gelbooru.com/top-7.jpeg' },
-            { type: 'image', src: '/img/featured/gelbooru.com/top-8.jpeg' }
-          ]
-        },
-        {
-          name: 'Animated (video)',
-          path: '/posts/gelbooru.com?tags=animated',
-          media: [{ type: 'image', src: '/img/featured/gelbooru.com/animated.jpeg' }]
-        },
-        {
-          name: 'Pokemon',
-          path: '/posts/gelbooru.com?tags=pokemon',
-          media: [{ type: 'image', src: '/img/featured/gelbooru.com/pokemon.jpeg' }]
-        },
-        {
-          name: '3D',
-          path: '/posts/gelbooru.com?tags=3d',
-          media: [{ type: 'image', src: '/img/featured/gelbooru.com/3d.jpeg' }]
-        },
-        {
-          name: 'Furry',
-          path: '/posts/gelbooru.com?tags=furry',
-          media: [{ type: 'image', src: '/img/featured/gelbooru.com/furry.jpeg' }]
-        }
-      ]
-    },
+    // {
+    //   domain: 'gelbooru.com',
+    //   path: '/posts/gelbooru.com',
+    //   isPremium: false,
+    //   tags: [
+    //     {
+    //       name: 'Top posts',
+    //       path: '/posts/gelbooru.com?filter%5Bsort%5D=score&filter%5Brating%5D=explicit',
+    //       media: [
+    //         { type: 'image', src: '/img/featured/gelbooru.com/top-1.jpeg' },
+    //         { type: 'image', src: '/img/featured/gelbooru.com/top-2.jpeg' },
+    //         { type: 'image', src: '/img/featured/gelbooru.com/top-3.jpeg' },
+    //         { type: 'image', src: '/img/featured/gelbooru.com/top-4.jpeg' }
+    //       ]
+    //     },
+    //     {
+    //       name: 'Trending posts',
+    //       path: '/posts/gelbooru.com?filter%5Bscore%5D=>%3D50',
+    //       media: [
+    //         { type: 'image', src: '/img/featured/gelbooru.com/top-5.jpeg' },
+    //         { type: 'image', src: '/img/featured/gelbooru.com/top-6.jpeg' },
+    //         { type: 'image', src: '/img/featured/gelbooru.com/top-7.jpeg' },
+    //         { type: 'image', src: '/img/featured/gelbooru.com/top-8.jpeg' }
+    //       ]
+    //     },
+    //     {
+    //       name: 'Animated (video)',
+    //       path: '/posts/gelbooru.com?tags=animated',
+    //       media: [{ type: 'image', src: '/img/featured/gelbooru.com/animated.jpeg' }]
+    //     },
+    //     {
+    //       name: 'Pokemon',
+    //       path: '/posts/gelbooru.com?tags=pokemon',
+    //       media: [{ type: 'image', src: '/img/featured/gelbooru.com/pokemon.jpeg' }]
+    //     },
+    //     {
+    //       name: '3D',
+    //       path: '/posts/gelbooru.com?tags=3d',
+    //       media: [{ type: 'image', src: '/img/featured/gelbooru.com/3d.jpeg' }]
+    //     },
+    //     {
+    //       name: 'Furry',
+    //       path: '/posts/gelbooru.com?tags=furry',
+    //       media: [{ type: 'image', src: '/img/featured/gelbooru.com/furry.jpeg' }]
+    //     }
+    //   ]
+    // },
     {
       domain: 'e621.net',
       path: '/posts/e621.net',
