@@ -61,7 +61,7 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
       // Not prerendered because it needs to redirect old URLs
       // prerender: true,
       headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
       }
     },
 
@@ -72,7 +72,7 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
       },
       // TODO: Reactivate SWR once memory fix is found
       headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
       }
     },
 
@@ -80,68 +80,68 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
     '/other-sites': {
       prerender: true,
       headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
       }
     },
 
     '/legal': {
       prerender: true,
       headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
       }
     },
 
     '/privacy-policy': {
       prerender: true,
       headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
       }
     },
 
     '/terms-of-service': {
       prerender: true,
       headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
       }
     },
 
     '/cookie-policy': {
       prerender: true,
       headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
       }
     },
 
     '/dmca': {
       prerender: true,
       headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
       }
     },
 
     '/settings': {
       ssr: false,
       headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
       }
     },
 
     '/premium': {
       prerender: true,
       headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
       }
     },
     '/premium/sign-in': {
       prerender: true,
       headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
       }
     },
     '/premium/forgot-password': {
       prerender: true,
       headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
       }
     },
 
@@ -149,31 +149,31 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
     '/premium/dashboard': {
       ssr: false,
       headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
       }
     },
     '/premium/saved-posts/**': {
       ssr: false,
       headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
       }
     },
     '/premium/tag-collections': {
       ssr: false,
       headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
       }
     },
     '/premium/additional-boorus': {
       ssr: false,
       headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
       }
     },
     '/premium/backup': {
       ssr: false,
       headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
       }
     },
 
