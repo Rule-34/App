@@ -1,5 +1,7 @@
 <script lang="ts" setup>
   const props = defineProps<{
+    domain: string
+
     tags: {
       name: string
       path: string
@@ -13,9 +15,9 @@
 
   const { isPremium } = useUserData()
 
-  const tagsKey = props.tags.map((tag) => tag.media.length).join('-')
+  const tagsKey = 'preselectedTags:' + `${props.domain}:` + props.tags.map((tag) => tag.media.length).join('-')
 
-  const preselectedTags = useState<typeof props.tags>('preselectedTags:' + tagsKey)
+  const preselectedTags = useState<typeof props.tags>(tagsKey)
 
   callOnce(tagsKey, () => {
     preselectedTags.value = props.tags.map((tag) => ({
@@ -37,8 +39,8 @@
     >
       <!-- Don't show advertisement if user is premium -->
       <li
-        class="w-36"
         v-if="!tag.isAdvertisement || !isPremium"
+        class="w-36"
       >
         <!-- -->
 
