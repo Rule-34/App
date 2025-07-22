@@ -418,16 +418,22 @@
     suspense,
 
     data,
-    error,
-    refetch,
-    fetchNextPage,
-    fetchPreviousPage,
-    hasNextPage,
-    hasPreviousPage,
-    isFetching,
-    isFetchingNextPage,
+
     isPending,
-    isError
+
+    refetch,
+    isFetching,
+
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+
+    hasPreviousPage,
+    fetchPreviousPage,
+
+    error,
+    isError,
+    isFetchNextPageError
   } = useInfiniteQuery({
     queryKey: [
       //
@@ -1004,10 +1010,10 @@
                 class="text-base-content flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
               >
                 <!-- Error loading next page -->
-                <div v-if="isError">
+                <div v-if="isFetchNextPageError">
                   <PostPageError
                     :error="error"
-                    :on-retry="onRetryClick"
+                    :on-retry="fetchNextPage"
                     class="my-12"
                   />
                 </div>
@@ -1068,7 +1074,7 @@
     </section>
 
     <PostsPageFooter
-      v-if="!isPending && !isError && allRows.length > 0"
+      v-if="!isPending && !isError && allRows.length"
       :posts-count="allRows.length"
       :selected-booru="selectedBooru"
       :selected-filters="selectedFilters"
