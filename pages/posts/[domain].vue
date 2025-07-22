@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { Bars3BottomRightIcon, EyeIcon, MagnifyingGlassIcon, StarIcon } from '@heroicons/vue/24/outline'
-  import { ArrowPathIcon, ExclamationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
+  import { ArrowPathIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
   import * as Sentry from '@sentry/nuxt'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
@@ -609,8 +609,14 @@
     // IF last item is the last item in the list
     // AND there is a next page
     // AND it's not fetching
+    // AND there's no error (to prevent infinite retry loop)
     // THEN load next page automatically
-    if (lastItem.index >= allRows.value.length - 1 && hasNextPage.value && !isFetchingNextPage.value) {
+    if (
+      lastItem.index >= allRows.value.length - 1 &&
+      hasNextPage.value &&
+      !isFetchingNextPage.value &&
+      !isError.value
+    ) {
       debouncedOnLoadNextPostPage()
     }
   })
@@ -936,68 +942,26 @@
         </div>
       </template>
 
-      <!-- Error -->
-      <template v-else-if="isError">
-        <div class="mt-12 text-center">
-          <ExclamationCircleIcon
-            aria-hidden="true"
-            class="mx-auto mb-1 h-12 w-12"
-          />
-
-          <div v-if="error.status === 404">
-            <h3 class="text-lg leading-10 font-semibold">No posts found</h3>
-
-            <span class="w-full overflow-x-auto"> Try changing the tags or filters </span>
-          </div>
-
-          <div v-else-if="error.status === 429">
-            <h3 class="text-lg leading-10 font-semibold">Too many requests</h3>
-
-            <span class="w-full overflow-x-auto text-pretty">
-              You sent too many requests in a short period of time. Use the button below to continue using the
-              {{ project.name }}
-            </span>
-
-            <NuxtLink
-              :href="config.public.API_URL + '/status'"
-              class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 mx-auto mt-4 block w-fit rounded-md px-6 py-1.5 text-base ring-1 focus-visible:ring-offset-2"
-              rel="nofollow noopener noreferrer"
-              target="_blank"
-            >
-              Verify I am not a Bot
-            </NuxtLink>
-          </div>
-
-          <div v-else>
-            <h3 class="text-lg leading-10 font-semibold">Failed to load posts</h3>
-
-            <span class="w-full overflow-x-auto text-base">
-              {{ error.data?.message ?? error.message }}
-            </span>
-          </div>
-
-          <!-- Retry button -->
-          <button
-            class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 mx-auto mt-6 block w-fit rounded-md px-6 py-1.5 text-base ring-1 focus-visible:ring-offset-2"
-            type="button"
-            @click="onRetryClick"
-          >
-            Retry
-          </button>
-        </div>
+      <!-- Error (initial load only) -->
+      <template v-else-if="isError && !allRows.length">
+        <PostPageError
+          :error="error"
+          :on-retry="onRetryClick"
+          class="mt-32"
+        />
       </template>
 
       <!-- No results -->
       <template v-else-if="!allRows.length">
-        <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-lg">
+        <div class="mt-32 text-center">
           <QuestionMarkCircleIcon
             aria-hidden="true"
-            class="h-12 w-12"
+            class="mx-auto mb-1 h-12 w-12"
           />
 
-          <h3>No results</h3>
+          <h3 class="text-lg leading-10 font-semibold">No results</h3>
 
-          <span class="text-base">Try changing the tags or filters</span>
+          <span class="w-full overflow-x-auto text-pretty">Try changing the tags or filters</span>
         </div>
       </template>
 
@@ -1039,7 +1003,20 @@
                 v-if="virtualRow.index > allRows.length - 1"
                 class="text-base-content flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
               >
-                <span class="block rounded-md px-1.5 py-1">
+                <!-- Error loading next page -->
+                <div v-if="isError && allRows.length > 0">
+                  <PostPageError
+                    :error="error"
+                    :on-retry="onRetryClick"
+                    class="my-12"
+                  />
+                </div>
+
+                <!-- Normal pagination states -->
+                <span
+                  v-else
+                  class="block rounded-md px-1.5 py-1"
+                >
                   <template v-if="isFetching"> Loading more... </template>
 
                   <template v-else-if="hasNextPage"> Reach here to load more </template>
