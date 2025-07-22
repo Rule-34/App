@@ -1004,7 +1004,7 @@
                 class="text-base-content flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
               >
                 <!-- Error loading next page -->
-                <div v-if="isError && allRows.length > 0">
+                <div v-if="isError">
                   <PostPageError
                     :error="error"
                     :on-retry="onRetryClick"
@@ -1020,9 +1020,6 @@
                   <template v-if="isFetching"> Loading more... </template>
 
                   <template v-else-if="hasNextPage"> Reach here to load more </template>
-
-                  <!-- TODO: Show nothing more to load -->
-                  <template v-else> Nothing more to load </template>
                 </span>
               </div>
 
@@ -1058,6 +1055,14 @@
               </template>
             </li>
           </ol>
+        </div>
+
+        <!-- Nothing more to load message -->
+        <div
+          v-if="!hasNextPage && !isFetching && allRows.length"
+          class="text-base-content mt-4 flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
+        >
+          <span class="block rounded-md px-1.5 py-1"> Nothing more to load </span>
         </div>
       </div>
     </section>
