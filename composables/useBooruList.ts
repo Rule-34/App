@@ -2,23 +2,36 @@ import { booruTypeList, completeBooruList } from '~/assets/lib/rule-34-shared-re
 import { useLocalStorage } from '@vueuse/core'
 import type { Domain } from '~/assets/js/domain'
 
-const defaultBooruList: Domain[] = completeBooruList.map((booruObj, index) => {
-  const booruType = booruTypeList.find((booruTypeObj) => booruTypeObj.type === booruObj.type)
+const defaultBooruList: Domain[] = completeBooruList
+  // Disable specific Booru sites
+  .filter((booruObj) => {
+    const disabledDomains = [
+      'gelbooru.com',
+      'realbooru.com',
+      'konachan.com',
+      'booru.allthefallen.moe',
+      'sakugabooru.com'
+    ]
 
-  if (!booruType) throw new Error(`Booru type not found: ${booruObj.type}`)
+    return !disabledDomains.includes(booruObj.domain)
+  })
+  .map((booruObj, index) => {
+    const booruType = booruTypeList.find((booruTypeObj) => booruTypeObj.type === booruObj.type)
 
-  return {
-    domain: booruObj.domain,
+    if (!booruType) throw new Error(`Booru type not found: ${booruObj.type}`)
 
-    type: booruType,
+    return {
+      domain: booruObj.domain,
 
-    config: booruObj.config,
+      type: booruType,
 
-    // The first 7 boorus are free
-    isPremium: index > 6,
-    isCustom: false
-  } as Domain
-})
+      config: booruObj.config,
+
+      // The first 7 boorus are free
+      isPremium: index > 5,
+      isCustom: false
+    } as Domain
+  })
 
 export default function () {
   let userBooruList = ref<Domain[]>([])
