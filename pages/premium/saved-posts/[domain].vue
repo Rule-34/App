@@ -35,6 +35,7 @@
 
   const booruList = computed(() => {
     const _booruList: Domain[] = [
+      // r34.app
       {
         domain: project.urls.production.hostname,
         type: booruTypeList[0],
@@ -47,13 +48,13 @@
     const booruNamesInDb: string[] = domainsFromPocketbase.map((domain) => domain.original_domain)
 
     booruNamesInDb.forEach((booruNameInDb) => {
-      const booru = _availableBooruList.value.find((availableBooru) => availableBooru.domain === booruNameInDb)
-
-      if (!booru) {
-        throw new Error(`Booru with domain "${booruNameInDb}" not found`)
-      }
-
-      _booruList.push(booru)
+      _booruList.push({
+        domain: booruNameInDb,
+        type: booruTypeList[0],
+        config: null,
+        isCustom: false,
+        isPremium: false
+      })
     })
 
     return _booruList
