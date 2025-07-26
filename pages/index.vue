@@ -29,14 +29,14 @@
 
     // Fallback/Default to specific Booru (rule34.paheal.net)
     if (!domain) {
-      return booruList.value[2]
+      return booruList.value[1]
     }
 
     const booru = booruList.value.find((booru) => booru.domain === domain)
 
     if (!booru) {
       toast.error(`Booru "${domain}" not found`)
-      return booruList.value[2] // Fallback to specific Booru (rule34.paheal.net)
+      return booruList.value[1] // Fallback to specific Booru (rule34.paheal.net)
     }
 
     return booru
