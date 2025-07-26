@@ -147,13 +147,9 @@
 
       onBeforeXMLHttpRequest(request) {
         request.withCredentials = false
-      }
-    }
+      },
 
-    if (!isPremium.value) {
-      timesVideoHasRendered.value++
-
-      fluidPlayerOptions.vastOptions = {
+      vastOptions: {
         adText: 'Only one ad per hour. Never see ads again with Premium!',
 
         vastAdvanced: {
@@ -172,6 +168,10 @@
 
         adList: []
       }
+    }
+
+    if (!isPremium.value) {
+      timesVideoHasRendered.value++
 
       // Only show pause roll ads every 2 videos
       if (timesVideoHasRendered.value % 2 === 0) {
