@@ -36,7 +36,7 @@
 
     if (!booru) {
       toast.error(`Booru "${domain}" not found`)
-      throw new Error(`Booru "${domain}" not found`)
+      return booruList.value[2] // Fallback to specific Booru (rule34.paheal.net)
     }
 
     return booru
