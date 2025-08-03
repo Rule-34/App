@@ -67,7 +67,7 @@
           url: 'https://shop.akbal.dev/how-to-get-premium-features/#/portal/signup/66ae85c1cfb018000163bf6f/monthly',
           category: 'creditCard',
           cta: 'Subscribe w/ Credit Card & PayPal'
-        },
+        }
         // {
         //   name: 'Patreon',
         //   url: 'https://www.patreon.com/R34App',
@@ -111,7 +111,7 @@
           url: 'https://shop.akbal.dev/how-to-get-premium-features/#/portal/signup/66ae85c1cfb018000163bf6f/yearly',
           category: 'creditCard',
           cta: 'Subscribe w/ Credit Card & PayPal'
-        },
+        }
         // {
         //   name: 'Patreon',
         //   url: 'https://www.patreon.com/R34App',
@@ -149,18 +149,17 @@
   const faqs = [
     {
       question: 'How do I get access after payment?',
-      answer:
-        "After payment, you'll receive an email with instructions to sign in to your Premium account.\n\nFor Ko-fi payments, this is instant.\nFor Patreon, it may take up to 24 hours.\n\nChoose the payment method that works best for you."
+      answer: "After payment, you'll receive an email with instructions to sign in to your Premium account."
     },
     {
       question: 'What payment options are accepted?',
       answer:
-        'We accept credit/debit cards and PayPal through Ko-fi and Patreon.\nWe also accept cryptocurrency payments through Sell.app.'
+        'We accept credit/debit cards and PayPal.\nWe also accept cryptocurrency payments.\n\nLook for the credit card / crypto icon in the payment dialog.'
     },
     {
       question: 'Can I cancel my subscription?',
       answer:
-        "Yes, you can cancel your subscription anytime.\nFor subscriptions through Patreon or Ko-fi, cancel directly on their platform.\nOne-time purchases don't need cancellation."
+        "Yes, you can cancel your subscription anytime.\nFor subscriptions through external platforms, cancel directly on their platform.\nOne-time purchases don't need cancellation."
     },
     {
       question: 'What happens after I cancel?',
@@ -381,7 +380,10 @@
                       :key="mainFeature.title"
                       class="flex items-center gap-x-3 py-2"
                     >
-                      <CheckIcon aria-hidden="true" class="text-primary-600 h-6 w-5 flex-none" />
+                      <CheckIcon
+                        aria-hidden="true"
+                        class="text-primary-600 h-6 w-5 flex-none"
+                      />
 
                       <span class="text-base-content-highlight flex-auto text-sm leading-6">
                         {{ mainFeature.title }}
