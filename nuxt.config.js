@@ -68,11 +68,7 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
     // Redirect public disabled Boorus to / to not lose SEO
     // @see useBooruList.ts
     '/posts/gelbooru.com': {
-      redirect: '/posts/rule34.paheal.net'
-    },
-
-    '/posts/rule34.xxx': {
-      redirect: '/posts/rule34.paheal.net'
+      redirect: '/posts/rule34.xxx'
     },
 
     '/posts/**': {
