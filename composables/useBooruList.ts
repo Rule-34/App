@@ -28,7 +28,7 @@ const defaultBooruList: Domain[] = completeBooruList
       config: booruObj.config,
 
       // The first 7 boorus are free
-      isPremium: index > 5,
+      isPremium: index > 6,
       isCustom: false
     } as Domain
   })
