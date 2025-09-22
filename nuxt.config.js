@@ -272,7 +272,7 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
     '@nuxtjs/partytown',
     '@nuxtjs/sitemap',
     'nuxt-schema-org',
-    'nuxt-security'
+    //'nuxt-security'
   ],
 
   /** @type {import('@sentry/nuxt/module').ModuleOptions} */
