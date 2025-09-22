@@ -272,7 +272,7 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
     '@nuxtjs/partytown',
     '@nuxtjs/sitemap',
     'nuxt-schema-org',
-    //'nuxt-security'
+    'nuxt-security'
   ],
 
   /** @type {import('@sentry/nuxt/module').ModuleOptions} */
@@ -413,6 +413,9 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
 
   /** @type {import('nuxt-security').ModuleOptions} */
   security: {
+    // Rate limiting is at infraestructure level (Cloudflare/Traefik)
+    rateLimiter: false,
+    
     headers: {
       contentSecurityPolicy: {
         // Fix: disable HTTPS upgrade on development, otherwise Safari will fail to load the page
