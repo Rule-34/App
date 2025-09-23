@@ -1,5 +1,5 @@
 import tailwindcss from '@tailwindcss/vite'
-import { project } from './config/project.ts'
+import { project } from './config/project'
 
 export default defineNuxtConfig({
   ssr: true,
@@ -211,10 +211,10 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
     }
   },
 
-  experimental: {
-    // @see https://nuxt.com/docs/guide/going-further/experimental-features#emitroutechunkerror
-    emitRouteChunkError: 'automatic-immediate'
-  },
+  // experimental: {
+  //   // @see https://nuxt.com/docs/guide/going-further/experimental-features#emitroutechunkerror
+  //   emitRouteChunkError: 'automatic-immediate'
+  // },
 
   nitro: {
     esbuild: {
