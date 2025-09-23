@@ -66,11 +66,16 @@
       </div>
 
       <Teleport to="body">
-        <HeadlessListboxOptions
-          ref="floatingEl"
-          :style="floatingStyles"
-          class="w-44 divide-y divide-base-0/20 overflow-hidden rounded-md bg-base-1000 ring-1 ring-inset ring-base-0/20 focus:outline-hidden z-50"
+        <Transition
+          leave-active-class="transition ease-in duration-100"
+          leave-from-class="opacity-100"
+          leave-to-class="opacity-0"
         >
+          <HeadlessListboxOptions
+            ref="floatingEl"
+            :style="floatingStyles"
+            class="w-44 divide-y divide-base-0/20 overflow-hidden rounded-md bg-base-1000 ring-1 ring-inset ring-base-0/20 focus:outline-hidden z-50"
+          >
           <HeadlessListboxOption
             v-for="option in options"
             :key="option.label"
@@ -96,7 +101,8 @@
               </div>
             </div>
           </HeadlessListboxOption>
-        </HeadlessListboxOptions>
+          </HeadlessListboxOptions>
+        </Transition>
       </Teleport>
   </HeadlessListbox>
 </template>

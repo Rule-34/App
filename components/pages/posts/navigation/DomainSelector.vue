@@ -129,11 +129,16 @@
 
       <!-- Menu -->
       <Teleport to="body">
-        <HeadlessListboxOptions
-          ref="floatingEl"
-          :style="floatingStyles"
-          class="bg-base-1000 ring-base-0/20 max-h-[23rem] w-full max-w-sm overflow-auto rounded-md py-1 ring-1 focus:outline-hidden sm:text-sm z-50"
+        <Transition
+          leave-active-class="transition ease-in duration-100"
+          leave-from-class="opacity-100"
+          leave-to-class="opacity-0"
         >
+          <HeadlessListboxOptions
+            ref="floatingEl"
+            :style="floatingStyles"
+            class="bg-base-1000 ring-base-0/20 max-h-[23rem] w-full max-w-sm overflow-auto rounded-md py-1 ring-1 focus:outline-hidden sm:text-sm z-50"
+          >
           <!-- Options -->
           <HeadlessListboxOption
             v-for="booru in props.boorus"
@@ -191,7 +196,8 @@
               Add more Boorus
             </NuxtLink>
           </div>
-        </HeadlessListboxOptions>
+          </HeadlessListboxOptions>
+        </Transition>
       </Teleport>
   </HeadlessListbox>
 </template>

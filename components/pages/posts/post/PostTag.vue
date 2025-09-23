@@ -92,11 +92,16 @@
       </HeadlessMenuButton>
 
       <Teleport to="body">
-        <HeadlessMenuItems
-          ref="floatingEl"
-          :style="floatingStyles"
-          class="divide-base-0/20 bg-base-1000 ring-base-0/20 divide-y rounded-md ring-1 focus:outline-hidden z-50"
+        <Transition
+          leave-active-class="transition ease-in duration-100"
+          leave-from-class="opacity-100"
+          leave-to-class="opacity-0"
         >
+          <HeadlessMenuItems
+            ref="floatingEl"
+            :style="floatingStyles"
+            class="divide-base-0/20 bg-base-1000 ring-base-0/20 divide-y rounded-md ring-1 focus:outline-hidden z-50"
+          >
           <!-- Add or Remove tag -->
           <div class="py-1">
             <HeadlessMenuItem v-slot="{ active }">
@@ -179,7 +184,8 @@
               </button>
             </HeadlessMenuItem>
           </div>
-        </HeadlessMenuItems>
+          </HeadlessMenuItems>
+        </Transition>
       </Teleport>
   </HeadlessMenu>
 </template>
