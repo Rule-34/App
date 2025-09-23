@@ -1,6 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 const defaultColors = require('tailwindcss/colors')
-const { tailwindcssOriginSafelist } = require('@headlessui-float/vue')
 
 module.exports = {
   content: [
@@ -13,8 +12,6 @@ module.exports = {
     'error.vue',
     './app.vue'
   ],
-
-  safelist: [...tailwindcssOriginSafelist],
 
   theme: {
     extend: {

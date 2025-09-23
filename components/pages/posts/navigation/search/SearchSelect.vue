@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { CheckIcon, ChevronDownIcon } from '@heroicons/vue/20/solid'
+  import { useFloating, offset, flip, shift } from '@floating-ui/vue'
 
   const props = defineProps({
     modelValue: {
@@ -23,6 +24,14 @@
   })
 
   const emit = defineEmits(['update:modelValue'])
+
+  const referenceEl = ref<HTMLElement>()
+  const floatingEl = ref<HTMLElement>()
+
+  const { floatingStyles } = useFloating(referenceEl, floatingEl, {
+    placement: 'bottom-end',
+    middleware: [offset(8), flip(), shift()]
+  })
 </script>
 
 <template>
@@ -33,16 +42,6 @@
   >
     <HeadlessListboxLabel class="sr-only">Change options</HeadlessListboxLabel>
 
-    <Float
-      :offset="8"
-      leave="transition ease-in duration-100"
-      leave-from="opacity-100"
-      leave-to="opacity-0"
-      placement="bottom-end"
-      strategy="fixed"
-      tailwindcss-origin-class
-      vue-transition
-    >
       <!-- Button -->
       <div class="inline-flex divide-x divide-base-0/20 rounded-md ring-1 ring-base-0/20">
         <!-- Left side -->
@@ -57,6 +56,7 @@
 
         <!-- Right side -->
         <HeadlessListboxButton
+          ref="referenceEl"
           class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util inline-flex items-center rounded-l-none rounded-r-md px-2 py-1"
         >
           <span class="sr-only">Change {{ label }}</span>
@@ -65,35 +65,38 @@
         </HeadlessListboxButton>
       </div>
 
-      <HeadlessListboxOptions
-        class="w-44 divide-y divide-base-0/20 overflow-hidden rounded-md bg-base-1000 ring-1 ring-inset ring-base-0/20 focus:outline-hidden"
-      >
-        <HeadlessListboxOption
-          v-for="option in options"
-          :key="option.label"
-          v-slot="{ active, selected }"
-          :value="option"
+      <Teleport to="body">
+        <HeadlessListboxOptions
+          ref="floatingEl"
+          :style="floatingStyles"
+          class="w-44 divide-y divide-base-0/20 overflow-hidden rounded-md bg-base-1000 ring-1 ring-inset ring-base-0/20 focus:outline-hidden z-50"
         >
-          <div
-            :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-            class="cursor-default select-none px-4 py-2.5 text-sm"
+          <HeadlessListboxOption
+            v-for="option in options"
+            :key="option.label"
+            v-slot="{ active, selected }"
+            :value="option"
           >
-            <div class="flex flex-col">
-              <div class="flex justify-between">
-                <p :class="selected ? 'font-medium' : 'font-normal'">{{ option.label }}</p>
+            <div
+              :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+              class="cursor-default select-none px-4 py-2.5 text-sm"
+            >
+              <div class="flex flex-col">
+                <div class="flex justify-between">
+                  <p :class="selected ? 'font-medium' : 'font-normal'">{{ option.label }}</p>
 
-                <!-- Check icon -->
-                <span
-                  v-if="selected"
-                  :class="active ? 'text-base-content-highlight' : 'text-base-content'"
-                >
-                  <CheckIcon class="h-5 w-5" />
-                </span>
+                  <!-- Check icon -->
+                  <span
+                    v-if="selected"
+                    :class="active ? 'text-base-content-highlight' : 'text-base-content'"
+                  >
+                    <CheckIcon class="h-5 w-5" />
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        </HeadlessListboxOption>
-      </HeadlessListboxOptions>
-    </Float>
+          </HeadlessListboxOption>
+        </HeadlessListboxOptions>
+      </Teleport>
   </HeadlessListbox>
 </template>

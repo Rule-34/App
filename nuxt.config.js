@@ -1,7 +1,13 @@
 import tailwindcss from '@tailwindcss/vite'
-import { project } from './config/project'
+import {project} from './config/project'
 
 export default defineNuxtConfig({
+  srcDir: '.',
+
+  dir: {
+    app: 'app'
+  },
+
   ssr: true,
   spaLoadingTemplate: true,
 
@@ -224,10 +230,6 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
     }
   },
 
-  build: {
-    transpile: ['vue-sonner']
-  },
-
   vite: {
     plugins: [tailwindcss()]
   },
@@ -263,7 +265,6 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
   modules: [
     '@sentry/nuxt/module',
     'nuxt-headlessui',
-    '@headlessui-float/nuxt',
     'vue-sonner/nuxt',
     '@nuxt/image',
     '@nuxt/fonts',
@@ -415,7 +416,7 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
   security: {
     // Rate limiting is at infraestructure level (Cloudflare/Traefik)
     rateLimiter: false,
-    
+
     headers: {
       contentSecurityPolicy: {
         // Fix: disable HTTPS upgrade on development, otherwise Safari will fail to load the page

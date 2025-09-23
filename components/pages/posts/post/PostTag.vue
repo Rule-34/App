@@ -8,6 +8,7 @@
     ShieldExclamationIcon
   } from '@heroicons/vue/24/outline'
   import { toast } from 'vue-sonner'
+  import { useFloating, offset, flip, shift } from '@floating-ui/vue'
   import type Tag from '~/assets/js/tag.dto'
   import { blockListOptions } from '~/composables/useBlockLists'
 
@@ -24,6 +25,14 @@
 
   const { isPremium } = useUserData()
   const { customBlockList, selectedList } = useBlockLists()
+
+  const referenceEl = ref<HTMLElement>()
+  const floatingEl = ref<HTMLElement>()
+
+  const { floatingStyles } = useFloating(referenceEl, floatingEl, {
+    placement: 'bottom-start',
+    middleware: [offset(6), flip(), shift()]
+  })
 
   function isTagInSelectedTags(tag: Tag): boolean {
     return props.selectedTags.some((selectedTag) => selectedTag.name === tag.name)
@@ -64,22 +73,8 @@
     as="div"
     class="relative inline-block text-left"
   >
-    <!-- TODO: Fix placement to be auto -->
-    <Float
-      :offset="6"
-      enter="transition ease-out duration-100"
-      enter-from="transform opacity-0 scale-95"
-      enter-to="transform opacity-100 scale-100"
-      flip
-      leave="transition ease-in duration-75"
-      leave-from="transform opacity-100 scale-100"
-      leave-to="transform opacity-0 scale-95"
-      placement="bottom-start"
-      portal
-      tailwindcss-origin-class
-      vue-transition
-    >
       <HeadlessMenuButton
+        ref="referenceEl"
         :class="{
           'bg-primary-400/20 text-primary-400/90 ring-accent-400/20 hover:bg-primary-400/20': tag.type === 'artist',
           'bg-green-400/20 text-green-400/90 ring-green-400/20 hover:bg-green-400/20': tag.type === 'copyright',
@@ -96,92 +91,95 @@
         {{ tag.name }}
       </HeadlessMenuButton>
 
-      <HeadlessMenuItems
-        class="divide-base-0/20 bg-base-1000 ring-base-0/20 divide-y rounded-md ring-1 focus:outline-hidden"
-      >
-        <!-- Add or Remove tag -->
-        <div class="py-1">
-          <HeadlessMenuItem v-slot="{ active }">
-            <button
-              :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-              class="group flex w-full items-center px-2.5 py-1 text-sm"
-              type="button"
-              @click="emit('addTag', props.tag.name)"
-            >
-              <component
-                :is="isTagInSelectedTags(tag) ? MinusIcon : PlusIcon"
-                aria-hidden="true"
-                class="mr-3 h-4 w-4 shrink-0 rounded-sm"
-              />
+      <Teleport to="body">
+        <HeadlessMenuItems
+          ref="floatingEl"
+          :style="floatingStyles"
+          class="divide-base-0/20 bg-base-1000 ring-base-0/20 divide-y rounded-md ring-1 focus:outline-hidden z-50"
+        >
+          <!-- Add or Remove tag -->
+          <div class="py-1">
+            <HeadlessMenuItem v-slot="{ active }">
+              <button
+                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                class="group flex w-full items-center px-2.5 py-1 text-sm"
+                type="button"
+                @click="emit('addTag', props.tag.name)"
+              >
+                <component
+                  :is="isTagInSelectedTags(tag) ? MinusIcon : PlusIcon"
+                  aria-hidden="true"
+                  class="mr-3 h-4 w-4 shrink-0 rounded-sm"
+                />
 
-              {{ isTagInSelectedTags(tag) ? 'Remove tag' : 'Add tag' }}
-            </button>
-          </HeadlessMenuItem>
-        </div>
+                {{ isTagInSelectedTags(tag) ? 'Remove tag' : 'Add tag' }}
+              </button>
+            </HeadlessMenuItem>
+          </div>
 
-        <!-- Exclude tag -->
-        <div class="py-1">
-          <HeadlessMenuItem v-slot="{ active }">
-            <button
-              :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-              class="group flex w-full items-center px-2.5 py-1 text-sm"
-              type="button"
-              @click="emit('addTag', '-' + props.tag.name)"
-            >
-              <NoSymbolIcon aria-hidden="true" class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
+          <!-- Exclude tag -->
+          <div class="py-1">
+            <HeadlessMenuItem v-slot="{ active }">
+              <button
+                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                class="group flex w-full items-center px-2.5 py-1 text-sm"
+                type="button"
+                @click="emit('addTag', '-' + props.tag.name)"
+              >
+                <NoSymbolIcon aria-hidden="true" class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
 
-              Exclude tag
-            </button>
-          </HeadlessMenuItem>
-        </div>
+                Exclude tag
+              </button>
+            </HeadlessMenuItem>
+          </div>
 
-        <!-- Set tag -->
-        <div class="py-1">
-          <HeadlessMenuItem v-slot="{ active }">
-            <button
-              :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-              class="group flex w-full items-center px-2.5 py-1 text-sm"
-              type="button"
-              @click="emit('setTag', props.tag.name)"
-            >
-              <MagnifyingGlassIcon aria-hidden="true" class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
+          <!-- Set tag -->
+          <div class="py-1">
+            <HeadlessMenuItem v-slot="{ active }">
+              <button
+                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                class="group flex w-full items-center px-2.5 py-1 text-sm"
+                type="button"
+                @click="emit('setTag', props.tag.name)"
+              >
+                <MagnifyingGlassIcon aria-hidden="true" class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
 
-              Set tag
-            </button>
-          </HeadlessMenuItem>
-        </div>
+                Set tag
+              </button>
+            </HeadlessMenuItem>
+          </div>
 
-        <!-- Blocklist Management (Premium only) -->
-        <div class="py-1">
-          <HeadlessMenuItem v-slot="{ active }">
-            <button
-              :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-              class="group flex w-full items-center px-2.5 py-1 text-sm"
-              type="button"
-              @click="toggleBlockedTag(tag)"
-            >
-              <ShieldExclamationIcon aria-hidden="true" class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
-              {{ isTagBlocked(tag) ? 'Remove from blocklist' : 'Add to blocklist' }}
-            </button>
-          </HeadlessMenuItem>
-        </div>
+          <!-- Blocklist Management (Premium only) -->
+          <div class="py-1">
+            <HeadlessMenuItem v-slot="{ active }">
+              <button
+                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                class="group flex w-full items-center px-2.5 py-1 text-sm"
+                type="button"
+                @click="toggleBlockedTag(tag)"
+              >
+                <ShieldExclamationIcon aria-hidden="true" class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
+                {{ isTagBlocked(tag) ? 'Remove from blocklist' : 'Add to blocklist' }}
+              </button>
+            </HeadlessMenuItem>
+          </div>
 
-        <!-- Open in new tab -->
-        <div class="py-1">
-          <HeadlessMenuItem v-slot="{ active }">
-            <button
-              :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-              class="group flex w-full items-center px-2.5 py-1 text-sm"
-              type="button"
-              @click="emit('openTagInNewTab', props.tag.name)"
-            >
-              <ArrowTopRightOnSquareIcon aria-hidden="true" class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
+          <!-- Open in new tab -->
+          <div class="py-1">
+            <HeadlessMenuItem v-slot="{ active }">
+              <button
+                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                class="group flex w-full items-center px-2.5 py-1 text-sm"
+                type="button"
+                @click="emit('openTagInNewTab', props.tag.name)"
+              >
+                <ArrowTopRightOnSquareIcon aria-hidden="true" class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
 
-              Open in new tab
-            </button>
-          </HeadlessMenuItem>
-        </div>
-      </HeadlessMenuItems>
-    </Float>
+                Open in new tab
+              </button>
+            </HeadlessMenuItem>
+          </div>
+        </HeadlessMenuItems>
+      </Teleport>
   </HeadlessMenu>
 </template>
