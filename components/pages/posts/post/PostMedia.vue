@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import type { IPost } from '~/assets/js/post.dto'
-import { vIntersectionObserver } from '@vueuse/components'
-import fluidPlayer from 'fluid-player'
-import 'fluid-player/src/css/fluidplayer.css'
-import { proxyUrl } from 'assets/js/proxy'
+  import type { IPost } from '~/assets/js/post.dto'
+  import { vIntersectionObserver } from '@vueuse/components'
+  import fluidPlayer from 'fluid-player'
+  import 'fluid-player/src/css/fluidplayer.css'
+  import { proxyUrl } from 'assets/js/proxy'
 
-const { isPremium } = useUserData()
+  const { isPremium } = useUserData()
   const { autoplayAnimatedMedia } = useUserSettings()
   let { timesVideoHasRendered } = useEthics()
 
@@ -440,42 +440,41 @@ const { isPremium } = useUserData()
       :class="mediaHasLoaded ? 'opacity-100' : 'opacity-0'"
       class="transition-opacity duration-700 ease-in-out"
     >
-      <!-- Optimized + Proxied images for Premium users or first 8 posts (for SEO) -->
-      <template v-if="isPremium || postIndex < 8">
-        <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
-        <NuxtPicture
+      <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
+      <template v-if="!isPremium">
+        <NuxtImg
           ref="mediaElement"
           :alt="mediaAlt"
-          :decoding="postIndex < 3 ? undefined : 'async'"
+          :decoding="postIndex <= 2 ? undefined : 'async'"
           :height="mediaSrcHeight"
-          :imgAttrs="{
-            class: 'h-auto w-full rounded-t-md',
-            style: 'aspect-ratio: ' + mediaSrcWidth + '/' + mediaSrcHeight
-          }"
-          :loading="postIndex < 3 ? undefined : 'lazy'"
-          :preload="postIndex < 3"
+          :loading="postIndex <= 2 ? undefined : 'lazy'"
+          :preload="postIndex <= 2"
           :src="localSrc"
+          :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
           :width="mediaSrcWidth"
-          provider="imgproxy"
+          class="h-auto w-full rounded-t-md"
           @error="onMediaError"
           @load="onMediaLoad"
         />
       </template>
 
-      <!-- Regular images for non-premium users beyond first 8 posts -->
+      <!-- Premium users get their media proxied and optimized -->
       <template v-else>
         <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
-        <NuxtImg
+        <NuxtPicture
           ref="mediaElement"
           :alt="mediaAlt"
-          :decoding="postIndex < 3 ? undefined : 'async'"
+          :decoding="postIndex <= 2 ? undefined : 'async'"
           :height="mediaSrcHeight"
-          :loading="postIndex < 3 ? undefined : 'lazy'"
-          :preload="postIndex < 3"
+          :imgAttrs="{
+            class: 'h-auto w-full rounded-t-md',
+            style: 'aspect-ratio: ' + mediaSrcWidth + '/' + mediaSrcHeight
+          }"
+          :loading="postIndex <= 2 ? undefined : 'lazy'"
+          :preload="postIndex <= 2"
           :src="localSrc"
-          :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
           :width="mediaSrcWidth"
-          class="h-auto w-full rounded-t-md"
+          provider="imgproxy"
           @error="onMediaError"
           @load="onMediaLoad"
         />
