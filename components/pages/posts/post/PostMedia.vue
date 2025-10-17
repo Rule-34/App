@@ -8,6 +8,7 @@ import { proxyUrl } from 'assets/js/proxy'
 const { isPremium } = useUserData()
   const { autoplayAnimatedMedia } = useUserSettings()
   let { timesVideoHasRendered } = useEthics()
+  const { wasCurrentPageSSR } = useSSRDetection()
 
   export interface PostMediaProps {
     postIndex: number
@@ -440,8 +441,8 @@ const { isPremium } = useUserData()
       :class="mediaHasLoaded ? 'opacity-100' : 'opacity-0'"
       class="transition-opacity duration-700 ease-in-out"
     >
-      <!-- Optimized + Proxied images for Premium users or first 8 posts (for SEO) -->
-      <template v-if="isPremium || postIndex < 8">
+      <!-- Optimized + Proxied images for Premium users or first 8 posts on SSR'd pages (for SEO) -->
+      <template v-if="isPremium || (wasCurrentPageSSR && postIndex < 8)">
         <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
         <NuxtPicture
           ref="mediaElement"
@@ -462,7 +463,7 @@ const { isPremium } = useUserData()
         />
       </template>
 
-      <!-- Regular images for non-premium users beyond first 8 posts -->
+      <!-- Regular images for non-premium users -->
       <template v-else>
         <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
         <NuxtImg
