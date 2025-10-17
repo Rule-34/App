@@ -1,2 +1,4 @@
 [phases.setup]
 nixPkgs = ['...', 'python3']
+# TODO: Fix for Node 22.14 not available in latest nixpkgs
+nixpkgsArchive = '3042376469d8940a95b7294273fdbf1fa0d0ec67'
