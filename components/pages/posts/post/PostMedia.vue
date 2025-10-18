@@ -438,11 +438,15 @@ const { isPremium } = useUserData()
     <!-- TODO: Fix very large images not being on screen so not loaded -->
     <div
       v-else-if="isImage"
-      :class="mediaHasLoaded ? 'opacity-100' : 'opacity-0'"
-      class="transition-opacity duration-700 ease-in-out"
+      :class="
+        !(wasCurrentPageSSR && postIndex < 8) && [
+          mediaHasLoaded ? 'opacity-100' : 'opacity-0',
+          'transition-opacity duration-700 ease-in-out'
+        ]
+      "
     >
-      <!-- Optimized + Proxied images for Premium users or first 8 posts on SSR'd pages (for SEO) -->
-      <template v-if="isPremium || (wasCurrentPageSSR && postIndex < 8)">
+      <!-- Optimized + Proxied images for Premium users-->
+      <template v-if="isPremium">
         <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
         <NuxtPicture
           ref="mediaElement"
