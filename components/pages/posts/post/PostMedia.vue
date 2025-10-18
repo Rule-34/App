@@ -445,13 +445,14 @@ const { isPremium } = useUserData()
         ]
       "
     >
-      <!-- Optimized + Proxied images for Premium users-->
-      <template v-if="isPremium">
+      <!-- Optimized + Proxied images for Premium users or first 8 posts on SSR'd pages -->
+      <template v-if="isPremium || (wasCurrentPageSSR && postIndex < 8)">
         <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
         <NuxtPicture
           ref="mediaElement"
           :alt="mediaAlt"
           :decoding="postIndex < 3 ? undefined : 'async'"
+          :fetchpriority="postIndex < 3 ? 'high' : undefined"
           :height="mediaSrcHeight"
           :imgAttrs="{
             class: 'h-auto w-full rounded-t-md',
@@ -474,9 +475,10 @@ const { isPremium } = useUserData()
           ref="mediaElement"
           :alt="mediaAlt"
           :decoding="postIndex < 3 ? undefined : 'async'"
+          :fetchpriority="postIndex < 3 ? 'high' : undefined"
           :height="mediaSrcHeight"
           :loading="postIndex < 3 ? undefined : 'lazy'"
-          :preload="postIndex < 3"
+          :preload="postIndex < 8"
           :src="localSrc"
           :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
           :width="mediaSrcWidth"
@@ -496,6 +498,7 @@ const { isPremium } = useUserData()
         ref="mediaElement"
         :alt="mediaAlt"
         :decoding="postIndex < 3 ? undefined : 'async'"
+        :fetchpriority="postIndex < 3 ? 'high' : undefined"
         :height="mediaSrcHeight"
         :loading="postIndex < 3 ? undefined : 'lazy'"
         :preload="postIndex < 8"
