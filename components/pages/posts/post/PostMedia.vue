@@ -458,7 +458,7 @@ const { isPremium } = useUserData()
             style: 'aspect-ratio: ' + mediaSrcWidth + '/' + mediaSrcHeight
           }"
           :loading="postIndex < 3 ? undefined : 'lazy'"
-          :preload="postIndex < 3"
+          :preload="postIndex < 8"
           :src="localSrc"
           :width="mediaSrcWidth"
           provider="imgproxy"
@@ -495,10 +495,10 @@ const { isPremium } = useUserData()
       <NuxtImg
         ref="mediaElement"
         :alt="mediaAlt"
-        :decoding="postIndex <= 2 ? undefined : 'async'"
+        :decoding="postIndex < 3 ? undefined : 'async'"
         :height="mediaSrcHeight"
-        :loading="postIndex <= 2 ? undefined : 'lazy'"
-        :preload="postIndex <= 2"
+        :loading="postIndex < 3 ? undefined : 'lazy'"
+        :preload="postIndex < 8"
         :src="isAnimatedMediaPlaying ? localSrc : localPosterSrc"
         :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
         :width="mediaSrcWidth"
