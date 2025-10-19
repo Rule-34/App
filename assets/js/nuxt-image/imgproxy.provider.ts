@@ -69,9 +69,12 @@ export const getImage: ProviderGetImage = (src, options) => {
 
   const mergeModifiers = { ...defaultModifiers, ...modifiers }
 
+  // Remove width and height to generate more common URLs for better caching
+  const { width, height, ...modifiersWithoutSize } = mergeModifiers
+
   const encodedUrl = urlSafeBase64(src)
 
-  const path = joinURL('/', operationsGenerator(mergeModifiers), encodedUrl)
+  const path = joinURL('/', operationsGenerator(modifiersWithoutSize), encodedUrl)
 
   return {
     url: joinURL(baseURL, path)
