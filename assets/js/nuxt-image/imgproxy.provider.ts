@@ -74,7 +74,7 @@ export const getImage: ProviderGetImage = (src, options) => {
 
   const encodedUrl = urlSafeBase64(src)
 
-  const path = joinURL('/', operationsGenerator(modifiersWithoutSize), encodedUrl)
+  const path = joinURL('/insecure', operationsGenerator(modifiersWithoutSize), encodedUrl)
 
   return {
     url: joinURL(baseURL, path)
