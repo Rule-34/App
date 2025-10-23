@@ -2,7 +2,6 @@
 import type { IPost } from '~/assets/js/post.dto'
 import { vIntersectionObserver } from '@vueuse/components'
 import fluidPlayer from 'fluid-player'
-import 'fluid-player/src/css/fluidplayer.css'
 import { proxyUrl } from 'assets/js/proxy'
 
 const { isPremium } = useUserData()
