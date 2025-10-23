@@ -799,7 +799,7 @@
               top: 0,
               left: 0,
               width: '100%',
-              transform: `translateY(${virtualRows[0]?.start - rowVirtualizer.options.scrollMargin ?? 0}px)`
+              transform: `translateY(${virtualRows[0]?.start - rowVirtualizer.options.scrollMargin}px)`
             }"
             class="space-y-4"
           >
