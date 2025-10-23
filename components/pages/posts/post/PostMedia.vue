@@ -452,11 +452,11 @@ const { isPremium } = useUserData()
           ref="mediaElement"
           :alt="mediaAlt"
           :decoding="postIndex < 3 ? undefined : 'async'"
-          :fetchpriority="postIndex < 3 ? 'high' : undefined"
           :height="mediaSrcHeight"
           :imgAttrs="{
             class: 'h-auto w-full rounded-t-md',
-            style: 'aspect-ratio: ' + mediaSrcWidth + '/' + mediaSrcHeight
+            style: 'aspect-ratio: ' + mediaSrcWidth + '/' + mediaSrcHeight,
+            fetchpriority: postIndex < 3 ? 'high' : undefined
           }"
           :loading="postIndex < 3 ? undefined : 'lazy'"
           :preload="postIndex < 8"
