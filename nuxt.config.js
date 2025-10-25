@@ -1,5 +1,5 @@
 import tailwindcss from '@tailwindcss/vite'
-import {project} from './config/project'
+import { project } from './config/project'
 
 export default defineNuxtConfig({
   srcDir: '.',
@@ -287,7 +287,11 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
     }
   },
 
+  /** @type {import('@nuxt/image').ModuleOptions} */
   image: {
+    // Force imgproxy to convert to webp, since its way faster to convert than avif
+    format: ['webp'],
+
     ipx: {
       maxAge: 60 * 60 * 24 * 365 // 1 year
     },
@@ -300,9 +304,7 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
           baseURL: `https://imgproxy.${project.urls.production.hostname}`
         }
       }
-    },
-
-    format: ['avif', 'webp']
+    }
   },
 
   /** @type {import('@vite-pwa/nuxt').ModuleOptions} */
