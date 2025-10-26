@@ -5,11 +5,11 @@ import fluidPlayer from 'fluid-player'
 import { proxyUrl } from 'assets/js/proxy'
 
 // Lazy-load Fluid Player CSS only when this component is used
-if (import.meta.client) {
-  import('fluid-player/src/css/fluidplayer.css')
-}
+  if (import.meta.client) {
+    import('fluid-player/src/css/fluidplayer.css')
+  }
 
-const { isPremium } = useUserData()
+  const { isPremium } = useUserData()
   const { autoplayAnimatedMedia } = useUserSettings()
   let { timesVideoHasRendered } = useEthics()
   const { wasCurrentPageSSR } = useSSRDetection()
@@ -449,8 +449,8 @@ const { isPremium } = useUserData()
         ]
       "
     >
-      <!-- Optimized + Proxied images for Premium users or first 8 posts on SSR'd pages -->
-      <template v-if="isPremium || (wasCurrentPageSSR && postIndex < 8)">
+      <!-- Optimized + Proxied images for Premium users or first 2 posts on SSR'd pages -->
+      <template v-if="isPremium || (wasCurrentPageSSR && postIndex < 2)">
         <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
         <NuxtPicture
           ref="mediaElement"
