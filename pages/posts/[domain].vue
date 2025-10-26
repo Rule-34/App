@@ -565,7 +565,9 @@
   const parentOffsetRef = ref(0)
 
   onMounted(() => {
-    parentOffsetRef.value = parentRef.value?.offsetTop ?? 0
+    requestAnimationFrame(() => {
+      parentOffsetRef.value = parentRef.value?.offsetTop ?? 0
+    })
   })
 
   const rowVirtualizerOptions = computed(() => {
