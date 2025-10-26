@@ -11,6 +11,10 @@ export default defineNuxtConfig({
   ssr: true,
   spaLoadingTemplate: true,
 
+  features: {
+    inlineStyles: true
+  },
+
   app: {
     head: {
       style: [
