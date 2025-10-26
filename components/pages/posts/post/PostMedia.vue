@@ -4,6 +4,11 @@ import { vIntersectionObserver } from '@vueuse/components'
 import fluidPlayer from 'fluid-player'
 import { proxyUrl } from 'assets/js/proxy'
 
+// Lazy-load Fluid Player CSS only when this component is used
+if (import.meta.client) {
+  import('fluid-player/src/css/fluidplayer.css')
+}
+
 const { isPremium } = useUserData()
   const { autoplayAnimatedMedia } = useUserSettings()
   let { timesVideoHasRendered } = useEthics()

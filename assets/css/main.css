@@ -1,8 +1,4 @@
 @import 'tailwindcss';
-/* Fluid Player CSS - imported here to be included in main bundle
- * @see components/pages/posts/post/PostMedia.vue
- */
-@import 'fluid-player/src/css/fluidplayer.css';
 
 @config '../../tailwind.config.js';
 
