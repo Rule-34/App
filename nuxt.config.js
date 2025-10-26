@@ -238,7 +238,7 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
     plugins: [tailwindcss()]
   },
 
-  sourcemap: true,
+  sourcemap: { client: 'hidden' },
 
   runtimeConfig: {
     MATOMO_API_KEY: process.env.MATOMO_API_KEY,
