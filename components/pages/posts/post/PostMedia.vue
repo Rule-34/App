@@ -449,8 +449,8 @@ const { isPremium } = useUserData()
         ]
       "
     >
-      <!-- Optimized + Proxied images for Premium users or first 8 posts on SSR'd pages -->
-      <template v-if="isPremium || (wasCurrentPageSSR && postIndex < 8)">
+      <!-- Optimized + Proxied images for Premium users -->
+      <template v-if="isPremium">
         <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
         <NuxtPicture
           ref="mediaElement"
