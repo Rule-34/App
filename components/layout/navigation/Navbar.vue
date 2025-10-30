@@ -6,6 +6,8 @@
 
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
 
+  const { seasonalEmoji } = useSeasonalIcon()
+
   const isPageWithLogoDisabled = computed(() => {
     switch (route.path) {
       case '/':
@@ -86,12 +88,22 @@
             to="/"
           >
             <img
+              v-if="!seasonalEmoji"
               alt="Icon"
               class="flip-vertical-fwd text-base-content-highlight h-6 w-6"
               height="16"
               src="/icon.svg"
               width="16"
             />
+
+            <!-- Seasonal Icon -->
+            <span
+              v-else
+              class="flip-vertical-fwd flex h-6 w-6 items-center justify-center text-2xl"
+              style="mask-image: url('/icon.svg'); mask-size: contain; mask-repeat: no-repeat; mask-position: center"
+            >
+              {{ seasonalEmoji }}
+            </span>
           </NuxtLink>
         </div>
 

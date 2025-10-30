@@ -1,22 +1,33 @@
 <script setup>
-  import { BookmarkIcon, SparklesIcon } from '@heroicons/vue/24/outline'
-  import { sidebarNavigation } from 'assets/js/sidebarLinks'
-  import { project } from '@/config/project'
+import { BookmarkIcon, SparklesIcon } from '@heroicons/vue/24/outline'
+import { sidebarNavigation } from 'assets/js/sidebarLinks'
+import { project } from '@/config/project'
 
-  const { value: isMenuActive, toggle: toggleMenu } = useMenu()
+const { value: isMenuActive, toggle: toggleMenu } = useMenu()
   const { isPremium } = useUserData()
+  const { seasonalEmoji } = useSeasonalIcon()
 </script>
 
 <template>
   <!-- Logo -->
   <div class="my-6 flex shrink-0 flex-col items-center justify-center gap-2">
     <img
+      v-if="!seasonalEmoji"
       alt="Logo"
       class="h-24 w-full opacity-95"
       height="16"
       src="/icon.svg"
       width="16"
     />
+
+    <!-- Seasonal Icon -->
+    <span
+      v-else
+      class="flex h-24 w-full items-center justify-center text-8xl opacity-95"
+      style="mask-image: url('/icon.svg'); mask-size: contain; mask-repeat: no-repeat; mask-position: center"
+    >
+      {{ seasonalEmoji }}
+    </span>
 
     <span class="text-base-content-highlight text-2xl font-bold">{{ project.name }}</span>
   </div>
@@ -61,9 +72,9 @@
       <template v-if="isPremium">
         <li class="-mr-2 ml-6">
           <NuxtLink
+            :href="`/premium/saved-posts/${project.urls.production.hostname}`"
             class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
             exactActiveClass="bg-base-0/20 text-base-content-highlight"
-            :href="`/premium/saved-posts/${project.urls.production.hostname}`"
           >
             <BookmarkIcon class="text-primary-500 h-6 w-6 shrink-0" />
             Saved Posts
@@ -94,8 +105,8 @@
         <div class="flex justify-around pb-3">
           <!-- Twitter -->
           <NuxtLink
-            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
             :href="project.social.twitter"
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
             rel="nofollow noopener noreferrer"
             target="_blank"
           >
@@ -115,8 +126,8 @@
 
           <!-- Discord -->
           <NuxtLink
-            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
             :href="project.social.discord"
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex flex-col items-center gap-2 rounded-md p-2 text-sm font-semibold"
             rel="nofollow noopener noreferrer"
             target="_blank"
           >
