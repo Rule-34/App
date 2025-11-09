@@ -30,14 +30,14 @@
     "@formkit/auto-animate": "^0.9.0",
     "@headlessui/tailwindcss": "^0.2.2",
     "@heroicons/vue": "^2.2.0",
-    "@nuxt/fonts": "^0.11.4",
+    "@nuxt/fonts": "^0.12.1",
     "@nuxt/image": "^1.11.0",
     "@nuxtjs/sitemap": "^7.4.7",
-    "@sentry/nuxt": "^10.22.0",
+    "@sentry/nuxt": "^10.23.0",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "^4.1.16",
-    "@tanstack/vue-query": "^5.90.5",
+    "@tailwindcss/vite": "^4.1.17",
+    "@tanstack/vue-query": "^5.90.7",
     "@tanstack/vue-virtual": "^3.13.12",
     "@vite-pwa/assets-generator": "^1.0.2",
     "@vite-pwa/nuxt": "^1.0.7",
@@ -56,19 +56,19 @@
     "random-weighted-choice": "^0.1.4",
     "rxjs": "^7.8.2",
     "sortablejs": "^1.15.6",
-    "tailwindcss": "^4.1.16",
+    "tailwindcss": "^4.1.17",
     "vue-sonner": "^2.0.9"
   },
   "devDependencies": {
     "@nuxtjs/partytown": "^2.0.0",
     "@types/qs": "^6.14.0",
     "jest": "^30.2.0",
-    "nuxt": "^4.2.0",
+    "nuxt": "^4.2.1",
     "playwright": "^1.56.1",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.7.1",
     "standard-version": "^9.5.0",
-    "vitest": "^4.0.3"
+    "vitest": "^4.0.8"
   },
   "overrides": {
     "vue": "^3"
