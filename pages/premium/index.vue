@@ -1,19 +1,19 @@
 <script lang="ts" setup>
-  import { CheckIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/20/solid'
-  import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
-  import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-  import {
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-    Disclosure,
-    DisclosureButton,
-    DisclosurePanel,
-    TransitionChild,
-    TransitionRoot
-  } from '@headlessui/vue'
-  import { useCountdown } from '@vueuse/core'
-  import { project } from '@/config/project'
+import { CheckIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/20/solid'
+import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
+import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  TransitionChild,
+  TransitionRoot
+} from '@headlessui/vue'
+import { project } from '@/config/project'
+
 const { shouldShow } = useActivePromotion()
 
   const customerCount = 2363
@@ -176,15 +176,6 @@ const { shouldShow } = useActivePromotion()
   const selectedPaymentInterval = ref(paymentIntervals[0])
 
   const isPaymentDialogOpen = ref(false)
-
-  // Countdown: 7 minutes
-  const { remaining, start } = useCountdown(7 * 60, {
-    onComplete() {
-      // Reset the countdown when it completes
-      start()
-    },
-    immediate: true
-  })
 
   function onIntervalClick(interval: (typeof paymentIntervals)[0]) {
     selectedPaymentInterval.value = interval
@@ -443,28 +434,6 @@ const { shouldShow } = useActivePromotion()
                 </div>
               </div>
             </div>
-
-            <!-- Countdown Timer -->
-            <!--            <div class="text-center tabular-nums">-->
-            <!--              <div class="text-base-content mb-2 text-lg font-semibold">Offer ends in</div>-->
-
-            <!--              <div class="flex justify-center gap-4 text-2xl font-bold">-->
-            <!--                <div class="flex flex-col items-center">-->
-            <!--                  <span class="text-base-content-highlight">{{ Math.floor(remaining / 3600) }}</span>-->
-            <!--                  <span class="text-sm font-normal">Hours</span>-->
-            <!--                </div>-->
-
-            <!--                <div class="flex flex-col items-center">-->
-            <!--                  <span class="text-base-content-highlight">{{ Math.floor((remaining % 3600) / 60) }}</span>-->
-            <!--                  <span class="text-sm font-normal">Minutes</span>-->
-            <!--                </div>-->
-
-            <!--                <div class="flex flex-col items-center">-->
-            <!--                  <span class="text-base-content-highlight">{{ remaining % 60 }}</span>-->
-            <!--                  <span class="text-sm font-normal">Seconds</span>-->
-            <!--                </div>-->
-            <!--              </div>-->
-            <!--            </div>-->
 
             <!-- Tiers -->
             <div
