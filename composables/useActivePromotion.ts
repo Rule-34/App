@@ -38,6 +38,8 @@ function generatePromotionId(baseId: string, year: number): string {
  * Promotions automatically recur every year
  */
 export function useActivePromotion() {
+  const { isPremium } = useUserData()
+  
   /**
    * Get the currently active promotion based on:
    * 1. Current date (month/day) is within promotion range
@@ -75,11 +77,12 @@ export function useActivePromotion() {
 
   /**
    * Whether the promotional banner should be shown
-   * True if there's an active promotion and it hasn't been dismissed
+   * True if there's an active promotion, user is not premium, and it hasn't been dismissed
    */
   const shouldShow = computed(() => {
     if (!activePromotion.value) return false
     if (!dismissalState.value) return false
+    if (isPremium.value) return false
 
     return !dismissalState.value.value
   })
