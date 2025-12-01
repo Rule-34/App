@@ -14,6 +14,7 @@
   } from '@headlessui/vue'
   import { useCountdown } from '@vueuse/core'
   import { project } from '@/config/project'
+const { shouldShow } = useActivePromotion()
 
   const customerCount = 2363
 
@@ -354,7 +355,10 @@
 
             <!-- Promotional Banner -->
             <ClientOnly>
-              <PromotionalBanner class="mx-auto" />
+              <LazyPromotionalBanner
+                v-if="shouldShow"
+                class="mx-auto"
+              />
             </ClientOnly>
 
             <!-- Features -->

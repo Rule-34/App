@@ -13,6 +13,7 @@
   const { isPremium } = useUserData()
   const { hasInteracted } = useInteractionDetector()
   const { seasonalEmoji } = useSeasonalIcon()
+  const { shouldShow } = useActivePromotion()
 
   const { pageHistory } = usePageHistory()
 
@@ -643,7 +644,7 @@
       <ClientOnly>
         <!-- Discounts -->
         <section>
-          <PromotionalBanner class="mt-4 mb-2" />
+          <LazyPromotionalBanner v-if="shouldShow" class="mt-4 mb-2" />
         </section>
 
         <!-- History -->
