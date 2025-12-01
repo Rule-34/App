@@ -352,6 +352,11 @@
 
             <h2 class="text-base-content-highlight text-center text-2xl font-bold tracking-wide">Premium Plans</h2>
 
+            <!-- Promotional Banner -->
+            <ClientOnly>
+              <PromotionalBanner class="mx-auto" />
+            </ClientOnly>
+
             <!-- Features -->
             <div class="bg-base-1000/70 ring-base-0/10 relative rounded-2xl ring-2 backdrop-blur-sm">
               <div class="p-8 lg:pt-12 xl:p-10">

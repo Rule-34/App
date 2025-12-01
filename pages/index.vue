@@ -643,7 +643,7 @@
       <ClientOnly>
         <!-- Discounts -->
         <section>
-          <FeaturedDiscount class="m-2 mt-4" />
+          <PromotionalBanner class="mt-4 mb-2" />
         </section>
 
         <!-- History -->
