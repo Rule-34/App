@@ -1,5 +1,7 @@
-# Build stage
-FROM node:22-alpine AS builder
+ARG NODE_VERSION=22
+
+# Stage 1: Build
+FROM node:${NODE_VERSION}-alpine AS builder
 
 ARG NITRO_PRESET
 ARG SENTRY_ORG
@@ -21,11 +23,10 @@ COPY . .
 
 RUN npm run build
 
-# Production stage
-FROM node:22-alpine
+# Stage 2: Production
+FROM node:${NODE_VERSION}-alpine AS production
 
-ENV NODE_ENV=production \
-    PORT=8080
+ENV NODE_ENV=production
 
 WORKDIR /app
 
