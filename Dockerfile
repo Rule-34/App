@@ -35,9 +35,9 @@ COPY --from=builder --chown=node:node /app/.output ./.output
 
 USER node
 
-EXPOSE 8080
+EXPOSE 3000
 
-HEALTHCHECK CMD wget --no-verbose --spider http://localhost:8080/ || exit 1
+HEALTHCHECK CMD wget --no-verbose --spider http://localhost:3000/ || exit 1
 
 # Use `docker run --init` or `init: true` in compose for proper signal handling
 CMD ["node", ".output/server/index.mjs"]
