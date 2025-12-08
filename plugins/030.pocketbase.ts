@@ -2,8 +2,6 @@ import PocketBase from 'pocketbase'
 
 // https://github.com/pocketbase/js-sdk#ssr-integration
 export default defineNuxtPlugin(async ({ app }) => {
-  const config = useRuntimeConfig()
-
   const pb = new PocketBase('https://pocketbase.r34.app')
 
   // TODO: Store in localStorage for better caching

@@ -6,7 +6,7 @@ const config = useRuntimeConfig()
 Sentry.init({
   enabled: !import.meta.dev,
 
-  dsn: config.public.SENTRY_DSN,
+  dsn: config.public.sentryDsn,
 
   tracesSampleRate: 0.2,
 

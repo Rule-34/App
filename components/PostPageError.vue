@@ -32,7 +32,7 @@
       </span>
 
       <NuxtLink
-        :href="config.public.API_URL + '/status'"
+        :href="config.public.apiUrl + '/status'"
         class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 mx-auto mt-4 block w-fit rounded-md px-6 py-1.5 text-base ring-1 focus-visible:ring-offset-2"
         rel="nofollow noopener noreferrer"
         target="_blank"

@@ -241,18 +241,11 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
   sourcemap: { client: 'hidden' },
 
   runtimeConfig: {
-    MATOMO_API_KEY: process.env.MATOMO_API_KEY,
-
-    SENTRY_ORG: process.env.SENTRY_ORG,
-    SENTRY_PROJECT: process.env.SENTRY_PROJECT,
-    SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
+    matomoApiKey,
 
     public: {
-      NODE_ENV: process.env.NODE_ENV,
-
-      API_URL: process.env.API_URL,
-
-      SENTRY_DSN: process.env.SENTRY_DSN
+      apiUrl,
+      sentryDsn
     }
   },
 
