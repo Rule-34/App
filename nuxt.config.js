@@ -241,11 +241,11 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
   sourcemap: { client: 'hidden' },
 
   runtimeConfig: {
-    matomoApiKey,
+    matomoApiKey: undefined,
 
     public: {
-      apiUrl,
-      sentryDsn
+      apiUrl: undefined,
+      sentryDsn: undefined
     }
   },
 
