@@ -52,7 +52,7 @@
       // Preconnect to API
       {
         rel: 'preconnect',
-        href: runtimeConfig.public.API_URL
+        href: runtimeConfig.public.apiUrl
       }
     ]
   })

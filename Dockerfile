@@ -30,6 +30,8 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
+RUN apk add --no-cache tini
+
 # Nuxt/Nitro bundles all dependencies, so node_modules is not needed
 COPY --from=builder --chown=node:node /app/.output ./.output
 
@@ -39,5 +41,5 @@ EXPOSE 3000
 
 HEALTHCHECK CMD wget --no-verbose --spider http://127.0.0.1:3000/ || exit 1
 
-# Use `docker run --init` or `init: true` in compose for proper signal handling
+ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["node", ".output/server/index.mjs"]

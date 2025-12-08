@@ -211,7 +211,7 @@
    * Listeners
    */
   async function onSearchTag(tag: string) {
-    const apiUrl = config.public.API_URL + '/booru/' + selectedBooru.value.type.type + '/tags'
+    const apiUrl = config.public.apiUrl + '/booru/' + selectedBooru.value.type.type + '/tags'
 
     const response = await $fetch(apiUrl, {
       params: {
@@ -244,7 +244,7 @@
             description: 'You sent too many requests in a short period of time',
             action: {
               label: 'Verify I am not a Bot',
-              onClick: () => window.open(config.public.API_URL + '/status', '_blank')
+              onClick: () => window.open(config.public.apiUrl + '/status', '_blank')
             }
           })
           break
@@ -386,7 +386,7 @@
       })
     }
 
-    const apiUrl = config.public.API_URL + '/booru/' + selectedBooru.value.type.type + '/posts'
+    const apiUrl = config.public.apiUrl + '/booru/' + selectedBooru.value.type.type + '/posts'
 
     const tags = selectedTags.value.map((tag) => tag.name).join('|')
 
