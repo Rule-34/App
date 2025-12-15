@@ -1,18 +1,20 @@
 <script lang="ts" setup>
-  import {
-    ArrowTopRightOnSquareIcon,
-    MagnifyingGlassIcon,
-    MinusIcon,
-    NoSymbolIcon,
-    PlusIcon,
-    ShieldExclamationIcon
-  } from '@heroicons/vue/24/outline'
-  import { toast } from 'vue-sonner'
-  import { useFloating, offset, flip, shift } from '@floating-ui/vue'
-  import type Tag from '~/assets/js/tag.dto'
-  import { blockListOptions } from '~/composables/useBlockLists'
+import {
+  ArrowTopRightOnSquareIcon,
+  DocumentDuplicateIcon,
+  MagnifyingGlassIcon,
+  MinusIcon,
+  NoSymbolIcon,
+  PlusIcon,
+  ShieldExclamationIcon
+} from '@heroicons/vue/24/outline'
+import { useClipboard } from '@vueuse/core'
+import { toast } from 'vue-sonner'
+import { flip, offset, shift, useFloating } from '@floating-ui/vue'
+import type Tag from '~/assets/js/tag.dto'
+import { blockListOptions } from '~/composables/useBlockLists'
 
-  const props = defineProps<{
+const props = defineProps<{
     tag: Tag
     selectedTags: Tag[]
   }>()
@@ -25,6 +27,7 @@
 
   const { isPremium } = useUserData()
   const { customBlockList, selectedList } = useBlockLists()
+  const { copy } = useClipboard()
 
   const referenceEl = ref<HTMLElement>()
   const floatingEl = ref<HTMLElement>()
@@ -40,6 +43,12 @@
 
   function isTagBlocked(tag: Tag): boolean {
     return customBlockList.value.includes(tag.name)
+  }
+
+  async function copyTag() {
+    await copy(props.tag.name)
+
+    toast.success('Tag copied to clipboard')
   }
 
   async function toggleBlockedTag(tag: Tag) {
@@ -73,35 +82,35 @@
     as="div"
     class="relative inline-block text-left"
   >
-      <HeadlessMenuButton
-        ref="referenceEl"
-        :class="{
-          'bg-primary-400/20 text-primary-400/90 ring-accent-400/20 hover:bg-primary-400/20': tag.type === 'artist',
-          'bg-green-400/20 text-green-400/90 ring-green-400/20 hover:bg-green-400/20': tag.type === 'copyright',
-          'bg-emerald-400/20 text-emerald-400/90 ring-emerald-400/20 hover:bg-emerald-400/20': tag.type === 'character',
-          'hover:hover-bg-util': tag.type === 'general' || tag.type === 'meta',
+    <HeadlessMenuButton
+      ref="referenceEl"
+      :class="{
+        'bg-primary-400/20 text-primary-400/90 ring-accent-400/20 hover:bg-primary-400/20': tag.type === 'artist',
+        'bg-green-400/20 text-green-400/90 ring-green-400/20 hover:bg-green-400/20': tag.type === 'copyright',
+        'bg-emerald-400/20 text-emerald-400/90 ring-emerald-400/20 hover:bg-emerald-400/20': tag.type === 'character',
+        'hover:hover-bg-util': tag.type === 'general' || tag.type === 'meta',
 
-          // Mark tag as selected
-          'hover-bg-util hover-text-util ring-base-0/20!': selectedTags.some(
-            (selectedTag) => selectedTag.name === tag.name
-          )
-        }"
-        class="focus-visible:focus-outline-util hover:hover-text-util ring-base-0/20 items-center rounded-full px-2 py-1 text-xs font-medium ring-1 select-none ring-inset"
+        // Mark tag as selected
+        'hover-bg-util hover-text-util ring-base-0/20!': selectedTags.some(
+          (selectedTag) => selectedTag.name === tag.name
+        )
+      }"
+      class="focus-visible:focus-outline-util hover:hover-text-util ring-base-0/20 items-center rounded-full px-2 py-1 text-xs font-medium ring-1 select-none ring-inset"
+    >
+      {{ tag.name }}
+    </HeadlessMenuButton>
+
+    <Teleport to="body">
+      <Transition
+        leave-active-class="transition ease-in duration-100"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
       >
-        {{ tag.name }}
-      </HeadlessMenuButton>
-
-      <Teleport to="body">
-        <Transition
-          leave-active-class="transition ease-in duration-100"
-          leave-from-class="opacity-100"
-          leave-to-class="opacity-0"
+        <HeadlessMenuItems
+          ref="floatingEl"
+          :style="floatingStyles"
+          class="divide-base-0/20 bg-base-1000 ring-base-0/20 z-50 divide-y rounded-md ring-1 focus:outline-hidden"
         >
-          <HeadlessMenuItems
-            ref="floatingEl"
-            :style="floatingStyles"
-            class="divide-base-0/20 bg-base-1000 ring-base-0/20 divide-y rounded-md ring-1 focus:outline-hidden z-50"
-          >
           <!-- Add or Remove tag -->
           <div class="py-1">
             <HeadlessMenuItem v-slot="{ active }">
@@ -131,7 +140,10 @@
                 type="button"
                 @click="emit('addTag', '-' + props.tag.name)"
               >
-                <NoSymbolIcon aria-hidden="true" class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
+                <NoSymbolIcon
+                  aria-hidden="true"
+                  class="mr-3 h-4 w-4 shrink-0 rounded-sm"
+                />
 
                 Exclude tag
               </button>
@@ -147,9 +159,31 @@
                 type="button"
                 @click="emit('setTag', props.tag.name)"
               >
-                <MagnifyingGlassIcon aria-hidden="true" class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
+                <MagnifyingGlassIcon
+                  aria-hidden="true"
+                  class="mr-3 h-4 w-4 shrink-0 rounded-sm"
+                />
 
                 Set tag
+              </button>
+            </HeadlessMenuItem>
+          </div>
+
+          <!-- Copy tag -->
+          <div class="py-1">
+            <HeadlessMenuItem v-slot="{ active }">
+              <button
+                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                class="group flex w-full items-center px-2.5 py-1 text-sm"
+                type="button"
+                @click="copyTag"
+              >
+                <DocumentDuplicateIcon
+                  aria-hidden="true"
+                  class="mr-3 h-4 w-4 shrink-0 rounded-sm"
+                />
+
+                Copy tag
               </button>
             </HeadlessMenuItem>
           </div>
@@ -163,7 +197,10 @@
                 type="button"
                 @click="toggleBlockedTag(tag)"
               >
-                <ShieldExclamationIcon aria-hidden="true" class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
+                <ShieldExclamationIcon
+                  aria-hidden="true"
+                  class="mr-3 h-4 w-4 shrink-0 rounded-sm"
+                />
                 {{ isTagBlocked(tag) ? 'Remove from blocklist' : 'Add to blocklist' }}
               </button>
             </HeadlessMenuItem>
@@ -178,14 +215,17 @@
                 type="button"
                 @click="emit('openTagInNewTab', props.tag.name)"
               >
-                <ArrowTopRightOnSquareIcon aria-hidden="true" class="mr-3 h-4 w-4 shrink-0 rounded-sm" />
+                <ArrowTopRightOnSquareIcon
+                  aria-hidden="true"
+                  class="mr-3 h-4 w-4 shrink-0 rounded-sm"
+                />
 
                 Open in new tab
               </button>
             </HeadlessMenuItem>
           </div>
-          </HeadlessMenuItems>
-        </Transition>
-      </Teleport>
+        </HeadlessMenuItems>
+      </Transition>
+    </Teleport>
   </HeadlessMenu>
 </template>
