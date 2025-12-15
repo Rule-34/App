@@ -27,6 +27,18 @@
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
   @keyframes pulse {
     0%, 100% {
       opacity: 1;
@@ -55,5 +67,5 @@
     </g>
   </svg>
 
-  <!-- TODO: Add screenreader text -->
+  <span class="sr-only">Loading application...</span>
 </div>
