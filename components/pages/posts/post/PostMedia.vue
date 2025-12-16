@@ -211,10 +211,6 @@
 
       // If user hasn't interacted with the page yet, force mute to ensure autoplay works
       // and to avoid blasting sound unexpectedly
-      if (!hasInteracted.value) {
-        video.muted = true
-      }
-
       const playPromise = video.play()
 
       if (playPromise !== undefined) {
@@ -444,6 +440,7 @@
         :height="mediaSrcHeight"
         :poster="localPosterSrc"
         :preload="autoplayVideos ? 'metadata' : 'none'"
+        :muted="!hasInteracted"
         :src="localSrc"
         :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
         :width="mediaSrcWidth"
