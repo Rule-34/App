@@ -43,8 +43,8 @@ export const useFeedAutoplay = () => {
       window.addEventListener('scroll', throttledCheck, options)
       window.addEventListener('resize', throttledCheck, options)
     } else {
-      window.removeEventListener('scroll', throttledCheck)
-      window.removeEventListener('resize', throttledCheck)
+      window.removeEventListener('scroll', throttledCheck, options)
+      window.removeEventListener('resize', throttledCheck, options)
     }
 
     listening.value = enable
