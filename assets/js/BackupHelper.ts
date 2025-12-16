@@ -52,7 +52,7 @@ async function restoreV3Backup(backupState: IBackupState) {
   }
 
   if (backupState.settings) {
-    const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia } = useUserSettings()
+    const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia, autoplayVideos } = useUserSettings()
 
     if (backupState.settings.postFullSizeImages != null) {
       postFullSizeImages.value = backupState.settings.postFullSizeImages
@@ -64,6 +64,10 @@ async function restoreV3Backup(backupState: IBackupState) {
 
     if (backupState.settings.autoplayAnimatedMedia != null) {
       autoplayAnimatedMedia.value = backupState.settings.autoplayAnimatedMedia
+    }
+
+    if (backupState.settings.autoplayVideos != null) {
+      autoplayVideos.value = backupState.settings.autoplayVideos
     }
   }
 }
