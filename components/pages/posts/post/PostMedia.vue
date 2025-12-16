@@ -7,6 +7,10 @@
   const { autoplayAnimatedMedia, autoplayVideos } = useUserSettings()
   let { timesVideoHasRendered } = useEthics()
   const { wasCurrentPageSSR } = useSSRDetection()
+  const { hasInteracted } = useInteractionDetector()
+
+  const instance = getCurrentInstance()
+  const componentId = instance?.uid ?? Math.random()
 
   export interface PostMediaProps {
     postIndex: number
@@ -42,6 +46,8 @@
   const isAnimatedMediaPlaying = ref(false)
   const mediaHasLoaded = ref(false)
 
+  const { activeVideoId, updateCandidate } = useFeedAutoplay()
+
   onMounted(() => {
     if (!mediaElement.value) {
       return
@@ -60,6 +66,8 @@
   })
 
   onBeforeUnmount(() => {
+    updateCandidate(componentId, null, false)
+
     let finalMediaElement = mediaElement.value
 
     if (finalMediaElement == null) {
@@ -187,11 +195,41 @@
     }
 
     const entry = entries[0]
-
-    if (!entry.isIntersecting) {
-      videoPlayer?.pause()
-    }
+    updateCandidate(componentId, mediaElement.value, entry.isIntersecting)
   }
+
+  // Watch for active video changes to play/pause accordingly
+  watch(activeVideoId, (newId) => {
+    if (!isVideo.value || !mediaElement.value) {
+      return
+    }
+
+    const video = mediaElement.value as HTMLVideoElement
+
+    if (newId === componentId) {
+      console.debug('Autoplaying video', props.postIndex)
+
+      // If user hasn't interacted with the page yet, force mute to ensure autoplay works
+      // and to avoid blasting sound unexpectedly
+      if (!hasInteracted.value) {
+        video.muted = true
+      }
+
+      const playPromise = video.play()
+
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          // Auto-play was prevented
+          // AbortError is expected when scrolling fast
+          if (error.name !== 'AbortError') {
+            console.error('Error playing video:', error)
+          }
+        })
+      }
+    } else {
+      video.pause()
+    }
+  })
 
   function onMediaLoad(event: Event) {
     mediaHasLoaded.value = true
@@ -402,9 +440,10 @@
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <video
         ref="mediaElement"
-        v-intersection-observer="[onVideoIntersectionObserver, { rootMargin: '100px' }]"
+        v-intersection-observer="[onVideoIntersectionObserver, { threshold: 0.2 }]"
         :height="mediaSrcHeight"
         :poster="localPosterSrc"
+        :preload="autoplayVideos ? 'metadata' : 'none'"
         :src="localSrc"
         :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
         :width="mediaSrcWidth"
@@ -412,7 +451,6 @@
         controls
         loop
         playsinline
-        preload="none"
         @error="onMediaError"
       />
     </div>

@@ -17,7 +17,7 @@ export interface IBackupState {
 export async function createBackupState(): Promise<IBackupState> {
   const { userBooruList } = useBooruList()
   const { tagCollections } = useTagCollections()
-  const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia } = useUserSettings()
+  const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia, autoplayVideos } = useUserSettings()
 
   // TODO: Only save data that is not defaulted
 
@@ -30,7 +30,8 @@ export async function createBackupState(): Promise<IBackupState> {
     settings: {
       postFullSizeImages: postFullSizeImages.value,
       postsPerPage: postsPerPage.value,
-      autoplayAnimatedMedia: autoplayAnimatedMedia.value
+      autoplayAnimatedMedia: autoplayAnimatedMedia.value,
+      autoplayVideos: autoplayVideos.value
     }
   }
 

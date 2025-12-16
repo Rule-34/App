@@ -12,7 +12,7 @@
 
   const appVersion = version
 
-  const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia } = useUserSettings()
+  const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia, autoplayVideos } = useUserSettings()
   const { isPremium } = useUserData()
   const { selectedList, defaultBlockList, customBlockList, resetCustomBlockList } = useBlockLists()
 
@@ -119,6 +119,15 @@
     <!-- Settings -->
     <section class="mx-2 mt-4 flex-auto">
       <ol class="space-y-4">
+        <!-- autoplayVideos -->
+        <li>
+          <SettingSwitch v-model="autoplayVideos">
+            <template #name> Autoplay Videos</template>
+
+            <template #description> Automatically play videos when they scroll into view </template>
+          </SettingSwitch>
+        </li>
+
         <!-- autoplayAnimatedMedia -->
         <li>
           <SettingSwitch v-model="autoplayAnimatedMedia">
