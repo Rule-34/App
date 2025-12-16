@@ -23,7 +23,7 @@ export interface Analytics {
 }
 
 export interface Sentry {
-  dsn: string
+  applicationKey: string
 }
 
 export interface SEO {
@@ -84,6 +84,9 @@ export const project: ProjectConfig = {
   analytics: {
     formbricksEnvironmentId: 'cm6gbkjeq0008l7036ckdvtnm',
     formbricksAppUrl: 'https://app.formbricks.com'
+  },
+  sentry: {
+    applicationKey: 'r34-app'
   },
   seo: {
     title: 'Rule 34 porn videos, GIFs and images at R34.app',
