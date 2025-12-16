@@ -424,10 +424,17 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
         // Fix: enable any origin for images
         'img-src': ["'self'", 'http:', 'https:', 'data:', 'blob:'],
 
-        // Fix: enable fluid player fullscreen eval
         // @see https://nuxt-security.vercel.app/documentation/advanced/faq#cloudflare
         // @see https://nuxt-security.vercel.app/documentation/getting-started/configuration#defaults
-        'script-src': ["'self'", 'https:', "'unsafe-inline'", "'strict-dynamic'", "'nonce-{{nonce}}'", "'unsafe-eval'"],
+        'script-src': [
+          "'self'",
+          'https:',
+          "'unsafe-inline'",
+          "'strict-dynamic'",
+          "'nonce-{{nonce}}'",
+          // Fix: ads need this
+          "'unsafe-eval'"
+        ],
 
         // Fix: enable inline execution
         'script-src-attr': ["'unsafe-inline'"],

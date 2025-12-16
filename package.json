@@ -47,7 +47,6 @@
     "@vueuse/integrations": "^14.1.0",
     "@vueuse/rxjs": "^14.1.0",
     "es-toolkit": "^1.42.0",
-    "fluid-player": "^3.57.0",
     "js-abbreviation-number": "^1.4.0",
     "nuxt-headlessui": "^1.2.2",
     "nuxt-schema-org": "^5.0.9",

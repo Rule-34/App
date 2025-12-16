@@ -34,7 +34,6 @@ Sentry.init({
      */
     // Specific files
     /\/js\/popunder\.js/,
-    /\/fluid-player\//i,
 
     // Random plugins and extensions.
     /^resource:\/\//i,
