@@ -440,7 +440,7 @@
         :height="mediaSrcHeight"
         :poster="localPosterSrc"
         :preload="autoplayVideos ? 'metadata' : 'none'"
-        :muted="!hasInteracted"
+        :muted="autoplayVideos ? !hasInteracted : undefined"
         :src="localSrc"
         :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
         :width="mediaSrcWidth"
