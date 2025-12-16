@@ -281,7 +281,11 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
       authToken: process.env.SENTRY_AUTH_TOKEN,
 
       telemetry: false
-    }
+    },
+
+    unstable_sentryBundlerPluginOptions: {
+      applicationKey: project.sentry.applicationKey,
+    },
   },
 
   /** @type {import('@nuxt/image').ModuleOptions} */
