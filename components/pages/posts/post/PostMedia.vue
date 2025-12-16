@@ -1,18 +1,16 @@
 <script lang="ts" setup>
-import type { IPost } from '~/assets/js/post.dto'
-import { vIntersectionObserver } from '@vueuse/components'
-import fluidPlayer from 'fluid-player'
-import { proxyUrl } from 'assets/js/proxy'
+  import type { IPost } from '~/assets/js/post.dto'
+  import { vIntersectionObserver } from '@vueuse/components'
+  import { proxyUrl } from 'assets/js/proxy'
 
-// Lazy-load Fluid Player CSS only when this component is used
-if (import.meta.client) {
-  import('fluid-player/src/css/fluidplayer.css')
-}
-
-const { isPremium } = useUserData()
-  const { autoplayAnimatedMedia } = useUserSettings()
+  const { isPremium } = useUserData()
+  const { autoplayAnimatedMedia, autoplayVideos } = useUserSettings()
   let { timesVideoHasRendered } = useEthics()
   const { wasCurrentPageSSR } = useSSRDetection()
+  const { hasInteracted } = useInteractionDetector()
+
+  const instance = getCurrentInstance()
+  const componentId = instance!.uid
 
   export interface PostMediaProps {
     postIndex: number
@@ -44,11 +42,11 @@ const { isPremium } = useUserData()
   const triedToLoadWithProxy = shallowRef(false)
   const triedToLoadPosterWithProxy = shallowRef(false)
 
-  let videoPlayer: FluidPlayerInstance | undefined
-
   const isAnimatedMediaLoading = ref(false)
   const isAnimatedMediaPlaying = ref(false)
   const mediaHasLoaded = ref(false)
+
+  const { activeVideoId, updateCandidate } = useFeedAutoplay()
 
   onMounted(() => {
     if (!mediaElement.value) {
@@ -57,7 +55,6 @@ const { isPremium } = useUserData()
 
     switch (true) {
       case isVideo.value:
-        createVideoPlayer()
         break
 
       case isAnimatedMedia.value:
@@ -69,6 +66,8 @@ const { isPremium } = useUserData()
   })
 
   onBeforeUnmount(() => {
+    updateCandidate(componentId, null, false)
+
     let finalMediaElement = mediaElement.value
 
     if (finalMediaElement == null) {
@@ -89,181 +88,15 @@ const { isPremium } = useUserData()
       // Cancel any pending media requests - https://stackoverflow.com/a/28060352
       finalMediaElement.removeAttribute('src')
     }
-
-    //
-    else if (isVideo.value) {
-      destroyVideoPlayer()
-    }
   })
 
-  function createVideoPlayer() {
-    if (!mediaElement.value) {
-      throw new Error('Media element not found')
-    }
-
-    if (!isVideo.value) {
-      throw new Error('Media is not a video')
-    }
-
-    const fluidPlayerOptions: Partial<FluidPlayerOptions> = {
-      layoutControls: {
-        primaryColor: 'rgba(0, 0, 0, 0.7)',
-
-        fillToContainer: true,
-
-        preload: 'none',
-
-        loop: true,
-
-        playbackRateEnabled: true,
-
-        allowTheatre: false,
-
-        autoRotateFullScreen: true,
-
-        // Fix: Opening in fullscreen when searching something with "F"
-        keyboardControl: false,
-
-        controlBar: {
-          autoHide: true,
-
-          playbackRates: ['x2', 'x1.5', 'x1', 'x0.75', 'x0.5', 'x0.25']
-        },
-
-        contextMenu: {
-          controls: true,
-
-          links: [
-            {
-              label: 'Remove ads',
-              href: '/premium?utm_source=internal&utm_medium=player-context-menu'
-            },
-            {
-              label: 'Download',
-              href: localSrc.value
-            }
-          ]
-        },
-
-        miniPlayer: {
-          enabled: false
-        }
-      },
-
-      onBeforeXMLHttpRequest(request) {
-        request.withCredentials = false
-      },
-
-      vastOptions: {
-        adText: 'Only one ad per hour. Never see ads again with Premium!',
-
-        vastAdvanced: {
-          /**
-           * Handle empty VAST
-           */
-          vastVideoEndedCallback() {
-            if (!mediaElement.value?.src.endsWith('/null')) {
-              return
-            }
-
-            mediaElement.value.src = localSrc.value
-            videoPlayer?.play()
-          }
-        },
-
-        adList: []
-      }
-    }
-
-    if (!isPremium.value) {
-      timesVideoHasRendered.value++
-
-      // Only show pause roll ads every 2 videos
-      if (timesVideoHasRendered.value % 2 === 0) {
-        fluidPlayerOptions.vastOptions.adList.push(
-          // In-Video Banner
-          {
-            roll: 'onPauseRoll',
-            vastTag:
-              /**
-               * ExoClick
-               * Pros:
-               * Cons: Low revenue (7)
-               */
-              'https://s.magsrv.com/splash.php?idzone=5386214'
-          }
-        )
-      }
-      //
-
-      // Only show preroll ads after 3 videos, and every 3 videos
-      if (timesVideoHasRendered.value > 3 && timesVideoHasRendered.value % 3 === 0) {
-        fluidPlayerOptions.vastOptions.adList.push(
-          // In-Stream Video
-          {
-            roll: 'preRoll',
-            vastTag:
-              /**
-               * ExoClick
-               * Pros:
-               * Cons: Low revenue (9)
-               */
-              'https://s.magsrv.com/splash.php?idzone=5386496'
-
-            /**
-             * HilltopAds
-             * Pros:
-             * Cons: Low revenue (4)
-             */
-            // 'https://ellipticaltrack.com/dCm.FXz/doGMNPv/Z-GhUX/OermX9/u-ZqUEltk/PYTgYBy/ODTZQI5oNHDDEHtdNbjLIS5eNvDhk/0uMGgu?limit=1'
-
-            /**
-             * Clickadu
-             * Pros:
-             * Cons:
-             */
-            // 'https://anewfeedliberty.com/ceef/gdt3g0/tbt/2034767/tlk.xml'
-
-            /**
-             * AdSession
-             * Pros:
-             * Cons:
-             */
-            // 'https://s.eunow4u.com/v1/vast.php?idzone=2310'
-          }
-        )
-      }
-    }
-
-    videoPlayer = fluidPlayer(mediaElement.value as HTMLVideoElement, fluidPlayerOptions)
-
-    // TODO: Handle poster error
-  }
-
-  function destroyVideoPlayer() {
-    if (!videoPlayer) {
-      throw new Error('Player not found')
-    }
-
-    videoPlayer.destroy()
-  }
-
   function reloadVideoPlayer(shouldPlay: boolean = false) {
-    nextTick(() => {
-      destroyVideoPlayer()
-
+    if (shouldPlay) {
       nextTick(() => {
-        createVideoPlayer()
-
-        if (!shouldPlay) {
-          return
-        }
-
-        nextTick(() => {
-          videoPlayer?.play()
-        })
+        const video = mediaElement.value as HTMLVideoElement | null
+        video?.play()
       })
-    })
+    }
   }
 
   function startPlayingAnimatedMedia() {
@@ -362,11 +195,37 @@ const { isPremium } = useUserData()
     }
 
     const entry = entries[0]
-
-    if (!entry.isIntersecting) {
-      videoPlayer?.pause()
-    }
+    updateCandidate(componentId, mediaElement.value, entry.isIntersecting)
   }
+
+  // Watch for active video changes to play/pause accordingly
+  watch(activeVideoId, (newId) => {
+    if (!isVideo.value || !mediaElement.value || !autoplayVideos.value) {
+      return
+    }
+
+    const video = mediaElement.value as HTMLVideoElement
+
+    if (newId === componentId) {
+      console.debug('Autoplaying video', props.postIndex)
+
+      // If user hasn't interacted with the page yet, force mute to ensure autoplay works
+      // and to avoid blasting sound unexpectedly
+      const playPromise = video.play()
+
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          // Auto-play was prevented
+          // AbortError is expected when scrolling fast
+          if (error.name !== 'AbortError') {
+            console.error('Error playing video:', error)
+          }
+        })
+      }
+    } else {
+      video.pause()
+    }
+  })
 
   function onMediaLoad(event: Event) {
     mediaHasLoaded.value = true
@@ -577,9 +436,11 @@ const { isPremium } = useUserData()
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <video
         ref="mediaElement"
-        v-intersection-observer="[onVideoIntersectionObserver, { rootMargin: '100px' }]"
+        v-intersection-observer="[onVideoIntersectionObserver, { threshold: 0.2 }]"
         :height="mediaSrcHeight"
         :poster="localPosterSrc"
+        :preload="autoplayVideos ? 'metadata' : 'none'"
+        :muted="autoplayVideos ? !hasInteracted : undefined"
         :src="localSrc"
         :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
         :width="mediaSrcWidth"
@@ -587,7 +448,6 @@ const { isPremium } = useUserData()
         controls
         loop
         playsinline
-        preload="none"
         @error="onMediaError"
       />
     </div>
