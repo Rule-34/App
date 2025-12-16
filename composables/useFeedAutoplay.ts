@@ -34,20 +34,27 @@ const throttledCheck = useThrottleFn(calculateBestVideo, 200)
 let listening = false
 const toggleListeners = (enable: boolean) => {
   if (listening === enable || typeof window === 'undefined') return
-  const method = enable ? 'addEventListener' : 'removeEventListener'
-  // @ts-expect-error - EventListener options overlap
-  window[method]('scroll', throttledCheck, { passive: true })
-  // @ts-expect-error - EventListener options overlap
-  window[method]('resize', throttledCheck, { passive: true })
+  const options = { passive: true }
+  if (enable) {
+    window.addEventListener('scroll', throttledCheck, options)
+    window.addEventListener('resize', throttledCheck, options)
+  } else {
+    window.removeEventListener('scroll', throttledCheck)
+    window.removeEventListener('resize', throttledCheck)
+  }
   listening = enable
 }
 
 export const useFeedAutoplay = () => {
+  const { autoplayVideos } = useUserSettings()
+
   const activeVideoId = useState<number | null>('activeVideoId', () => null)
   if (import.meta.client) globalActiveVideoId = activeVideoId
 
   const updateCandidate = (id: number, element: HTMLElement | null, isVisible: boolean) => {
-    if (!import.meta.client) return
+    if (!import.meta.client || !autoplayVideos.value) {
+      return
+    }
 
     if (isVisible && element) {
       visibleElements.set(id, element)

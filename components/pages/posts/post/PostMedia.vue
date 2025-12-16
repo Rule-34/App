@@ -10,7 +10,7 @@
   const { hasInteracted } = useInteractionDetector()
 
   const instance = getCurrentInstance()
-  const componentId = instance?.uid ?? Math.random()
+  const componentId = instance!.uid
 
   export interface PostMediaProps {
     postIndex: number
@@ -200,7 +200,7 @@
 
   // Watch for active video changes to play/pause accordingly
   watch(activeVideoId, (newId) => {
-    if (!isVideo.value || !mediaElement.value) {
+    if (!isVideo.value || !mediaElement.value || !autoplayVideos.value) {
       return
     }
 
