@@ -218,6 +218,16 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
       headers: {
         'Cache-Control': 'public, max-age=86400'
       }
+    },
+
+    /**
+     * Partytown assets (served from /~partytown/*)
+     * These are versioned (e.g. ?v=0.11.2) so they can be cached very aggressively.
+     */
+    '/~partytown/**': {
+      headers: {
+        'Cache-Control': 'public, max-age=31536000, immutable'
+      }
     }
   },
 
