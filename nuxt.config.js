@@ -296,6 +296,8 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
       lg: 1200
     },
 
+    densities: [1],
+
     // Force conversion to webp, since its way faster to convert than avif
     format: ['webp'],
 
