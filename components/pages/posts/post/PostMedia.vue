@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import type { IPost } from '~/assets/js/post.dto'
-import { vIntersectionObserver } from '@vueuse/components'
-import fluidPlayer from 'fluid-player'
-import { proxyUrl } from 'assets/js/proxy'
+  import type { IPost } from '~/assets/js/post.dto'
+  import { vIntersectionObserver } from '@vueuse/components'
+  import fluidPlayer from 'fluid-player'
+  import { proxyUrl } from 'assets/js/proxy'
 
-// Lazy-load Fluid Player CSS only when this component is used
-if (import.meta.client) {
-  import('fluid-player/src/css/fluidplayer.css')
-}
+  // Lazy-load Fluid Player CSS only when this component is used
+  if (import.meta.client) {
+    import('fluid-player/src/css/fluidplayer.css')
+  }
 
-const { isPremium } = useUserData()
+  const { isPremium } = useUserData()
   const { autoplayAnimatedMedia } = useUserSettings()
   let { timesVideoHasRendered } = useEthics()
   const { wasCurrentPageSSR } = useSSRDetection()
@@ -474,8 +474,31 @@ const { isPremium } = useUserData()
 
       <!-- Regular images for non-premium users -->
       <template v-else>
+        <!-- SSR + first 7: Bunny proxied via Nuxt Picture -->
+        <NuxtPicture
+          v-if="wasCurrentPageSSR && postIndex < 8"
+          ref="mediaElement"
+          :alt="mediaAlt"
+          :decoding="postIndex < 3 ? undefined : 'async'"
+          :height="mediaSrcHeight"
+          :imgAttrs="{
+            class: 'h-auto w-full rounded-t-md',
+            style: 'aspect-ratio: ' + mediaSrcWidth + '/' + mediaSrcHeight,
+            fetchpriority: postIndex < 3 ? 'high' : undefined
+          }"
+          :loading="postIndex < 3 ? undefined : 'lazy'"
+          :preload="postIndex < 8"
+          :src="localSrc"
+          :width="mediaSrcWidth"
+          provider="bunny"
+          @error="onMediaError"
+          @load="onMediaLoad"
+        />
+
+        <!-- Non-SSR (or after SPA nav): regular NuxtImg -->
         <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
         <NuxtImg
+          v-else
           ref="mediaElement"
           :alt="mediaAlt"
           :decoding="postIndex < 3 ? undefined : 'async'"

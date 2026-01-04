@@ -293,6 +293,15 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
       maxAge: 60 * 60 * 24 * 365 // 1 year
     },
 
+    bunny: {
+      baseURL: 'https://b-cdn.r34.app',
+
+      modifiers: {
+        // Always add this to every image URL to force optimization
+        optimizer: 'image'
+      }
+    },
+
     providers: {
       imgproxy: {
         name: 'imgproxy',
