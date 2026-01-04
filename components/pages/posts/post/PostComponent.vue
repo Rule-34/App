@@ -30,6 +30,8 @@
   const areTagsOpen = ref(false)
 
   const mediaFile = computed(() => {
+    const stripFragment = (url: string | null) => (url ? url.split('#')[0] : null)
+
     const data: {
       file: IPost['high_res_file']['url']
       width: IPost['high_res_file']['width'] | null
@@ -82,6 +84,9 @@
       default:
         throw new Error('Unknown media type: ' + props.post.media_type)
     }
+
+    data.file = stripFragment(data.file)
+    data.posterFile = stripFragment(data.posterFile)
 
     return data
   })
