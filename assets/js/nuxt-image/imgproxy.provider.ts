@@ -1,7 +1,7 @@
 import { joinURL } from 'ufo'
 import type { ProviderGetImage } from '@nuxt/image'
 import { Buffer } from 'buffer'
-import { createOperationsGenerator } from '#image/utils'
+import { createOperationsGenerator, defineProvider } from '@nuxt/image/runtime'
 
 // https://docs.imgproxy.net/
 const operationsGenerator = createOperationsGenerator({
@@ -34,7 +34,7 @@ const operationsGenerator = createOperationsGenerator({
     filename: 'fn',
     format: 'f'
   },
-  formatter: (key, value) => `${key}:${value}`
+  formatter: (key: string, value: string | number) => `${key}:${value}`
 })
 
 function urlSafeBase64(string: string) {
@@ -50,11 +50,15 @@ const defaultModifiers = {
   // format: "webp",
 }
 
+interface ImgproxyProviderOptions {
+  baseURL: string
+}
+
 /**
  *
  * @see https://github.com/nuxt/image/issues/378
  */
-export const getImage: ProviderGetImage = (src, options) => {
+const getImage: ProviderGetImage<ImgproxyProviderOptions> = (src, options) => {
   // Skip if src is a relative URL
   if (src.startsWith('/')) {
     return { url: src }
@@ -80,3 +84,7 @@ export const getImage: ProviderGetImage = (src, options) => {
     url: joinURL(baseURL, path)
   }
 }
+
+export default defineProvider({
+  getImage
+})
