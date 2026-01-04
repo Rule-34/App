@@ -286,8 +286,28 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
 
   /** @type {import('@nuxt/image').ModuleOptions} */
   image: {
-    // Force imgproxy to convert to webp, since its way faster to convert than avif
+    /**
+     * Limited screen sizes to reduce bandwith and compute usage
+     * @see https://image.nuxt.com/get-started/configuration#screens
+     */
+    screens: {
+      sm: 400,
+      md: 768,
+      lg: 1200
+    },
+
+    // Force conversion to webp, since its way faster to convert than avif
     format: ['webp'],
+
+    providers: {
+      imgproxy: {
+        name: 'imgproxy',
+        provider: '~~/assets/js/nuxt-image/imgproxy.provider',
+        options: {
+          baseURL: `https://imgproxy.${project.urls.production.hostname}`
+        }
+      }
+    },
 
     ipx: {
       maxAge: 60 * 60 * 24 * 365 // 1 year
@@ -297,18 +317,8 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
       baseURL: 'https://b-cdn.r34.app',
 
       modifiers: {
-        // Always add this to every image URL to force optimization
+        // Fix: always add this to every image URL to force optimization
         optimizer: 'image'
-      }
-    },
-
-    providers: {
-      imgproxy: {
-        name: 'imgproxy',
-        provider: '~~/assets/js/nuxt-image/imgproxy.provider',
-        options: {
-          baseURL: `https://imgproxy.${project.urls.production.hostname}`
-        }
       }
     }
   },
