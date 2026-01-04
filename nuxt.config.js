@@ -325,6 +325,18 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
     }
   },
 
+  fonts: {
+    /**
+     * Default resolution for auto-detected font usage.
+     * - We only need Latin coverage.
+     * - Italic is not required above the fold (browser can synthesize italic if needed).
+     */
+    defaults: {
+      subsets: ['latin'],
+      styles: ['normal']
+    }
+  },
+
   /** @type {import('@vite-pwa/nuxt').ModuleOptions} */
   pwa: {
     // Disable service worker, fuck it
