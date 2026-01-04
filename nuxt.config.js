@@ -239,6 +239,7 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
   nitro: {
     esbuild: {
       options: {
+        // This only affects the Nitro/server bundle (SSR + `server/*` routes/middleware).
         target: 'esnext'
       }
     }
