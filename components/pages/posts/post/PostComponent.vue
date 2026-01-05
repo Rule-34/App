@@ -30,7 +30,7 @@
   const areTagsOpen = ref(false)
 
   const mediaFile = computed(() => {
-    const stripFragment = (url: string | null) => (url ? url.split('#')[0] : null)
+    const stripFragment = (url?: string | null) => url?.split('#')[0] ?? null
 
     const data: {
       file: IPost['high_res_file']['url']
