@@ -3,9 +3,11 @@ import { defineNuxtPlugin, useRuntimeConfig } from '#imports'
 import { useInteractionDetector } from '~/composables/useInteractionDetector'
 import { buildSentryClientInitOptions } from '~/sentry.client.options'
 
-export default defineNuxtPlugin((nuxtApp) => {
-  const config = useRuntimeConfig()
-  const dsn = config.public.sentryDsn
+export default defineNuxtPlugin({
+  parallel: true,
+  setup(nuxtApp) {
+    const config = useRuntimeConfig()
+    const dsn = config.public.sentryDsn
 
   if (!dsn) return
 

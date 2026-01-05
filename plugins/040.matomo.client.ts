@@ -7,29 +7,28 @@ import {defineNuxtPlugin} from '#imports'
  *
  * @see https://developer.matomo.org/guides/spa-tracking#solution-2-embedding-the-tracking-code-manually
  */
-export default defineNuxtPlugin((nuxtApp) => {
-  const router = useRouter()
+export default defineNuxtPlugin({
+  parallel: true,
+  setup() {
+    const router = useRouter()
 
-  router.afterEach((to, from) => {
-    onNuxtReady(async () => {
-      const _paq = window._paq
+    router.afterEach((to, from) => {
+      onNuxtReady(async () => {
+        const _paq = window._paq
 
-      if (!_paq) {
-        return
-      }
+        if (!_paq) {
+          return
+        }
 
-      _paq.push(['setCustomUrl', to.fullPath])
-      _paq.push(['setDocumentTitle', document.title])
+        _paq.push(['setCustomUrl', to.fullPath])
+        _paq.push(['setDocumentTitle', document.title])
 
-      loadAbTesting(_paq)
+        loadAbTesting(_paq)
 
-      _paq.push(['trackPageView'])
-      _paq.push(['enableLinkTracking'])
+        _paq.push(['trackPageView'])
+        _paq.push(['enableLinkTracking'])
+      })
     })
-  })
-
-  return {
-    parallel: true
   }
 })
 
