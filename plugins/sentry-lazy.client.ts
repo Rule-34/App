@@ -77,7 +77,7 @@ export default defineNuxtPlugin({
           stop()
         }
       },
-      { flush: 'post' }
+      { flush: 'post', immediate: true }
     )
   }
 })
