@@ -297,8 +297,8 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
     },
 
     unstable_sentryBundlerPluginOptions: {
-      applicationKey: project.sentry.applicationKey,
-    },
+      applicationKey: project.sentry.applicationKey
+    }
   },
 
   /** @type {import('@nuxt/image').ModuleOptions} */
@@ -313,6 +313,9 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
       lg: 1200
     },
 
+    /**
+     * Intentionally generate only 1x assets to reduce image variants (CPU/storage/cache/bandwidth).
+     */
     densities: [1],
 
     // Force conversion to webp, since its way faster to convert than avif
