@@ -40,12 +40,14 @@ export function buildSentryClientInitOptions(params: {
       return integrations
     },
 
-    beforeSend(event: any) {
+    beforeSend(event: Sentry.Event) {
       if (isInjectedCode(event)) {
         return null
       }
 
-      return event
+      // The Nuxt Sentry SDK calls `beforeSend` for error events. The SDK typing
+      // expects an ErrorEvent return type here, so we narrow accordingly.
+      return event as Sentry.ErrorEvent
     },
 
     denyUrls,
