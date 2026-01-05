@@ -3,6 +3,16 @@ import { defineNuxtPlugin, useRuntimeConfig } from '#imports'
 import { useInteractionDetector } from '~/composables/useInteractionDetector'
 import { buildSentryClientInitOptions } from '~/sentry.client.options'
 
+/**
+ * NOTE: This plugin intentionally mirrors the `@sentry/nuxt/module` client runtime plugin behavior,
+ * but defers loading any Sentry code until the user interacts.
+ *
+ * Upstream reference (Sentry v10.32.1):
+ * - `node_modules/@sentry/nuxt/build/module/runtime/plugins/sentry.client.js`
+ *   - hooks: `app:error` (with 3xx/4xx Nuxt error filtering) and `vue:error`
+ *
+ * Keep this in sync with upstream behavior when upgrading Sentry.
+ */
 export default defineNuxtPlugin({
   parallel: true,
   setup(nuxtApp) {
@@ -14,18 +24,13 @@ export default defineNuxtPlugin({
     const { hasInteracted } = useInteractionDetector()
 
     let initPromise: Promise<void> | null = null
-    const errorBuffer: unknown[] = []
-
-    let unhookErrorBuffer: (() => void) | null = nuxtApp.hook('app:error', (err) => {
-      errorBuffer.push(err)
-    })
 
     const init = () => {
       if (initPromise) return initPromise
 
       initPromise = (async () => {
         const Sentry = await import('@sentry/nuxt')
-        const SentryVue = await import('@sentry/vue')
+        const { isNuxtError } = await import('nuxt/app')
 
         Sentry.init(
           buildSentryClientInitOptions({
@@ -34,31 +39,20 @@ export default defineNuxtPlugin({
           })
         )
 
-        // Wire Vue integration (the @sentry/nuxt module normally does this in its client plugin).
-        const client = Sentry.getClient()
-        if (client) {
-          client.addIntegration(
-            SentryVue.vueIntegration({
-              app: nuxtApp.vueApp,
-              attachErrorHandler: true
-            })
-          )
-        }
+        // Capture Nuxt-level errors (after init)
+        nuxtApp.hook('app:error', (error) => {
+          if (isNuxtError(error)) {
+            if (error.statusCode >= 300 && error.statusCode < 500) {
+              return
+            }
+          }
 
-        // Capture Nuxt-level errors (after init). Swap in the real handler and flush any buffered errors.
-        if (unhookErrorBuffer) {
-          unhookErrorBuffer()
-          unhookErrorBuffer = null
-        }
-
-        nuxtApp.hook('app:error', (err) => {
-          Sentry.captureException(err)
+          Sentry.captureException(error)
         })
 
-        for (const err of errorBuffer) {
-          Sentry.captureException(err)
-        }
-        errorBuffer.length = 0
+        nuxtApp.hook('vue:error', (error) => {
+          Sentry.captureException(error)
+        })
       })()
 
       return initPromise
