@@ -52,11 +52,12 @@ export default defineNuxtPlugin((nuxtApp) => {
     return
   }
 
-  watch(
+  const stop = watch(
     hasInteracted,
     (val) => {
       if (val) {
         void init()
+        stop()
       }
     },
     { flush: 'post' }
