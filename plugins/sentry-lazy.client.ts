@@ -9,59 +9,75 @@ export default defineNuxtPlugin({
     const config = useRuntimeConfig()
     const dsn = config.public.sentryDsn
 
-  if (!dsn) return
+    if (!dsn) return
 
-  const { hasInteracted } = useInteractionDetector()
+    const { hasInteracted } = useInteractionDetector()
 
-  let initPromise: Promise<void> | null = null
+    let initPromise: Promise<void> | null = null
+    const errorBuffer: unknown[] = []
 
-  const init = () => {
-    if (initPromise) return initPromise
+    let unhookErrorBuffer: (() => void) | null = nuxtApp.hook('app:error', (err) => {
+      errorBuffer.push(err)
+    })
 
-    initPromise = (async () => {
-      const Sentry = await import('@sentry/nuxt')
-      const SentryVue = await import('@sentry/vue')
+    const init = () => {
+      if (initPromise) return initPromise
 
-      Sentry.init(
-        buildSentryClientInitOptions({
-          dsn,
-          Sentry
-        })
-      )
+      initPromise = (async () => {
+        const Sentry = await import('@sentry/nuxt')
+        const SentryVue = await import('@sentry/vue')
 
-      // Wire Vue integration (the @sentry/nuxt module normally does this in its client plugin).
-      const client = Sentry.getClient()
-      if (client) {
-        client.addIntegration(
-          SentryVue.vueIntegration({
-            app: nuxtApp.vueApp,
-            attachErrorHandler: true
+        Sentry.init(
+          buildSentryClientInitOptions({
+            dsn,
+            Sentry
           })
         )
-      }
 
-      // Capture Nuxt-level errors (after init)
-      nuxtApp.hook('app:error', (err) => {
-        Sentry.captureException(err)
-      })
-    })()
+        // Wire Vue integration (the @sentry/nuxt module normally does this in its client plugin).
+        const client = Sentry.getClient()
+        if (client) {
+          client.addIntegration(
+            SentryVue.vueIntegration({
+              app: nuxtApp.vueApp,
+              attachErrorHandler: true
+            })
+          )
+        }
 
-    return initPromise
+        // Capture Nuxt-level errors (after init). Swap in the real handler and flush any buffered errors.
+        if (unhookErrorBuffer) {
+          unhookErrorBuffer()
+          unhookErrorBuffer = null
+        }
+
+        nuxtApp.hook('app:error', (err) => {
+          Sentry.captureException(err)
+        })
+
+        for (const err of errorBuffer) {
+          Sentry.captureException(err)
+        }
+        errorBuffer.length = 0
+      })()
+
+      return initPromise
+    }
+
+    if (hasInteracted.value) {
+      void init()
+      return
+    }
+
+    const stop = watch(
+      hasInteracted,
+      (val) => {
+        if (val) {
+          void init()
+          stop()
+        }
+      },
+      { flush: 'post' }
+    )
   }
-
-  if (hasInteracted.value) {
-    void init()
-    return
-  }
-
-  const stop = watch(
-    hasInteracted,
-    (val) => {
-      if (val) {
-        void init()
-        stop()
-      }
-    },
-    { flush: 'post' }
-  )
 })
