@@ -1,4 +1,5 @@
 import type * as Sentry from '@sentry/nuxt'
+import type { Integration } from '@sentry/core'
 import { project } from './config/project'
 
 type SentryNuxtInitOptions = Parameters<typeof import('@sentry/nuxt').init>[0]
@@ -19,8 +20,8 @@ export function buildSentryClientInitOptions(params: {
     replaysSessionSampleRate: 0,
     replaysOnErrorSampleRate: 0.5,
 
-    integrations(defaultIntegrations: any[]) {
-      const integrations = [
+    integrations(defaultIntegrations: Integration[]): Integration[] {
+      const integrations: Integration[] = [
         ...defaultIntegrations,
 
         // Replay
