@@ -286,6 +286,8 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
 
   /** @type {import('@sentry/nuxt/module').ModuleOptions} */
   sentry: {
+    // Ensure server-side Sentry is actually preloaded without requiring `node --import ...`
+    autoInjectServerSentry: 'experimental_dynamic-import',
     sourceMapsUploadOptions: {
       org: process.env.SENTRY_ORG,
       project: process.env.SENTRY_PROJECT,

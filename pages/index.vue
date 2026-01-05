@@ -4,7 +4,6 @@
   import Tag from '~/assets/js/tag.dto'
   import type { Domain } from '~/assets/js/domain'
   import { ArrowRightIcon } from '@heroicons/vue/24/solid'
-  import * as Sentry from '@sentry/nuxt'
   import { FetchError } from 'ofetch'
   import { project } from '@/config/project'
 
@@ -66,7 +65,9 @@
       }
     })
       //
-      .catch((error) => {
+      .catch(async (error) => {
+        const Sentry = await import('@sentry/nuxt')
+        
         Sentry.captureException(error)
 
         return error
@@ -644,7 +645,10 @@
       <ClientOnly>
         <!-- Discounts -->
         <section>
-          <LazyPromotionalBanner v-if="shouldShow" class="mt-4 mb-2" />
+          <LazyPromotionalBanner
+            v-if="shouldShow"
+            class="mt-4 mb-2"
+          />
         </section>
 
         <!-- History -->

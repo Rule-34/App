@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import { Bars3BottomRightIcon, EyeIcon, MagnifyingGlassIcon, StarIcon } from '@heroicons/vue/24/outline'
   import { ArrowPathIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
-  import * as Sentry from '@sentry/nuxt'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
   import { cloneDeep, throttle } from 'es-toolkit'
@@ -226,7 +225,9 @@
       }
     })
       //
-      .catch((error) => {
+      .catch(async (error) => {
+        const Sentry = await import('@sentry/nuxt')
+
         Sentry.captureException(error)
 
         return error
