@@ -31,6 +31,9 @@ export default defineNuxtPlugin({
       initPromise = (async () => {
         const Sentry = await import('@sentry/nuxt')
         const { isNuxtError } = await import('nuxt/app')
+        // Risky on purpose: reuse the `@sentry/nuxt/module` internal helper for Nuxt/Vue error reporting.
+        // This is a deep import and may break on Sentry upgrades or due to package "exports" restrictions.
+        const { reportNuxtError } = await import('../node_modules/@sentry/nuxt/build/module/runtime/utils.js')
 
         Sentry.init(
           buildSentryClientInitOptions({
@@ -38,6 +41,11 @@ export default defineNuxtPlugin({
             Sentry
           })
         )
+
+        // NOTE: We intentionally do NOT install `@sentry/vue`'s `vueIntegration` here.
+        // With interaction-gated init, the Vue app is already mounted, and `@sentry/vue` will warn:
+        // "Misconfigured SDK. Vue app is already mounted. Make sure to call `app.mount()` after `Sentry.init()`."
+        // We rely on Nuxt hooks (`app:error` + `vue:error`) + `reportNuxtError` instead.
 
         // Capture Nuxt-level errors (after init)
         nuxtApp.hook('app:error', (error) => {
@@ -47,11 +55,11 @@ export default defineNuxtPlugin({
             }
           }
 
-          Sentry.captureException(error)
+          reportNuxtError({ error })
         })
 
-        nuxtApp.hook('vue:error', (error) => {
-          Sentry.captureException(error)
+        nuxtApp.hook('vue:error', (error, instance, info) => {
+          reportNuxtError({ error, instance, info })
         })
       })()
 
