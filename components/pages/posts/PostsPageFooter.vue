@@ -55,7 +55,7 @@
 <template>
   <footer class="border-base-300/30 mt-5 border-t pt-8">
     <ShowMore :max-height-in-rem="16">
-      <article class="prose prose-sm prose-invert">
+      <article class="richtext text-sm">
         <h2>Rule 34 {{ formattedTagsString }} hentai images and videos</h2>
 
         <section>
@@ -158,3 +158,5 @@
     </ShowMore>
   </footer>
 </template>
+
+<style src="~/assets/css/richtext.css"></style>

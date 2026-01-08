@@ -85,11 +85,18 @@
   input[type='number'] {
     -webkit-appearance: none;
     -moz-appearance: textfield !important;
-  }
-
+  } 
+  
   /* Fix for elements jumping around with overflow-auto */
   * {
     scrollbar-gutter: stable;
+  }
+
+  /* Default borders for text-like form controls (replacement for @tailwindcss/forms). */
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']),
+  textarea,
+  select {
+    @apply border border-base-0/20;
   }
 }
 

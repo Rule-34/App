@@ -1,0 +1,70 @@
+/* Minimal replacement for `@tailwindcss/typography` (`prose`), scoped to pages that opt in. */
+@reference "./main.css";
+
+@layer components {
+  .richtext {
+    @apply text-base-content leading-relaxed;
+  }
+
+  /* Match prior `prose prose-invert` feel: links should not be brand-blue. */
+  .richtext :where(a) {
+    @apply text-base-content-hover underline decoration-current underline-offset-4;
+  }
+
+  .richtext :where(a:hover) {
+    @apply opacity-95;
+  }
+
+  .richtext :where(a:visited) {
+    @apply text-base-content-hover;
+  }
+
+  .richtext :where(strong) {
+    @apply text-base-content-highlight font-semibold;
+  }
+
+  .richtext :where(p) {
+    @apply my-4;
+  }
+
+  .richtext :where(h1) {
+    @apply text-2xl font-bold leading-tight tracking-tight text-base-content-highlight mt-0 mb-4;
+  }
+
+  .richtext :where(h2) {
+    @apply text-xl font-semibold leading-tight tracking-tight text-base-content-highlight mt-10 mb-3;
+  }
+
+  .richtext :where(h3) {
+    @apply text-lg font-semibold leading-tight text-base-content-highlight mt-8 mb-2;
+  }
+
+  .richtext :where(ul) {
+    @apply list-disc pl-6 my-4;
+  }
+
+  .richtext :where(ol) {
+    @apply list-decimal pl-6 my-4;
+  }
+
+  .richtext :where(li) {
+    @apply my-1;
+  }
+
+  .richtext :where(table) {
+    @apply my-6 w-full border-collapse text-sm;
+  }
+
+  .richtext :where(th, td) {
+    @apply border border-base-0/10 px-2 py-1 align-top;
+  }
+
+  .richtext :where(hr) {
+    @apply my-8 border-base-0/20;
+  }
+
+  .richtext :where(code) {
+    @apply font-mono text-sm;
+  }
+}
+

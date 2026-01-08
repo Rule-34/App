@@ -44,9 +44,9 @@ module.exports = {
 
           DEFAULT: defaultColors.gray[400]
         }
-      },
+      }
     }
   },
 
-  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography'), require('@headlessui/tailwindcss')]
+  plugins: [require('@headlessui/tailwindcss')]
 }

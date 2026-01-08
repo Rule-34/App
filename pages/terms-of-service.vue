@@ -9,7 +9,7 @@
 </script>
 
 <template>
-  <main class="prose prose-invert container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
+  <main class="richtext container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
     <PageHeader>
       <template #title>Terms of Service</template>
     </PageHeader>
@@ -157,3 +157,5 @@
     </p>
   </main>
 </template>
+
+<style src="~/assets/css/richtext.css"></style>
