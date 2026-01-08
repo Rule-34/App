@@ -45,11 +45,6 @@ module.exports = {
           DEFAULT: defaultColors.gray[400]
         }
       },
-
-      fontFamily: {
-        /* TODO: Change to inter var */
-        sans: ['Inter', ...defaultTheme.fontFamily.sans]
-      }
     }
   },
 
