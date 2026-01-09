@@ -130,9 +130,9 @@
   }
 
   /* https://www.joshwcomeau.com/css/custom-css-reset/#nine-root-stacking-context-10 */
-  #__nuxt {
-    /*@apply isolate;*/
-  }
+  /* If you need a root stacking context, uncomment:
+   * #__nuxt { @apply isolate; }
+   */
 
   /* https://www.joshwcomeau.com/css/custom-css-reset/#three-percentage-based-heights-4 */
   html, body, #__nuxt {
@@ -140,10 +140,8 @@
   }
 
   /* Add cursor to buttons */
-  @layer base {
-    button:not([disabled]), [role='button']:not([disabled]) {
-      cursor: pointer;
-    }
+  button:not([disabled]), [role='button']:not([disabled]) {
+    cursor: pointer;
   }
 
 
@@ -151,10 +149,11 @@
   input[type='number']::-webkit-outer-spin-button,
   input[type='number']::-webkit-inner-spin-button,
   input[type='number'] {
+    appearance: textfield;
     -webkit-appearance: none;
     -moz-appearance: textfield !important;
-  } 
-  
+  }
+
   /* Fix for elements jumping around with overflow-auto */
   * {
     scrollbar-gutter: stable;
