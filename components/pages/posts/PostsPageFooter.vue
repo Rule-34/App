@@ -158,5 +158,3 @@
     </ShowMore>
   </footer>
 </template>
-
-<style src="~/assets/css/richtext.css"></style>

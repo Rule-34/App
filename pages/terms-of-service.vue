@@ -157,5 +157,3 @@
     </p>
   </main>
 </template>
-
-<style src="~/assets/css/richtext.css"></style>
