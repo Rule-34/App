@@ -2,6 +2,11 @@
   import { useEventListener } from '@vueuse/core'
   import { toast, Toaster } from 'vue-sonner'
 
+  // Lazy-load vue-sonner CSS on the client so it doesn't get inlined into SSR <head>.
+  onMounted(async () => {
+    await import('vue-sonner/style.css')
+  })
+
   useAppStatistics()
 
   const { toggle: toggleMenu } = useMenu()
@@ -21,7 +26,6 @@
     toast.error(error.message)
   })
 
-
   // Restore scroll position after fullscreen
   useEventListener('fullscreenchange', async (event) => {
     const isInFullscreen = document.fullscreenElement !== null
@@ -36,10 +40,9 @@
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-
         event.target.scrollIntoView({
           block: 'center',
-          inline: 'center',
+          inline: 'center'
         })
       })
     })
@@ -64,7 +67,7 @@
       class="absolute inset-x-0 -z-10 flex transform-gpu justify-center blur-xl md:blur-3xl"
     >
       <div
-        class="aspect-1108/632 w-full flex-none bg-linear-to-l from-primary-300 to-accent-700 opacity-25"
+        class="from-primary-300 to-accent-700 aspect-1108/632 w-full flex-none bg-linear-to-l opacity-25"
         style="
           clip-path: polygon(
             100% 0%,

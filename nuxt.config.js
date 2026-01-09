@@ -283,6 +283,15 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
     'nuxt-security'
   ],
 
+  /**
+   * vue-sonner
+   * Disable global CSS injection so it doesn't end up in the main SSR inline <head> styles.
+   * We'll lazy-load `vue-sonner/style.css` on the client (see `layouts/default.vue`).
+   */
+  vueSonner: {
+    css: false
+  },
+
   /** @type {import('@sentry/nuxt/module').ModuleOptions} */
   sentry: {
     // Ensure server-side Sentry is actually preloaded without requiring `node --import ...`
