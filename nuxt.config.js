@@ -233,7 +233,10 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
 
   experimental: {
     // @see https://nuxt.com/docs/guide/going-further/experimental-features#emitroutechunkerror
-    emitRouteChunkError: 'automatic-immediate'
+    emitRouteChunkError: 'automatic-immediate',
+
+    // @see https://nuxt.com/docs/4.x/guide/going-further/experimental-features#writeearlyhints
+    writeEarlyHints: true
   },
 
   nitro: {
