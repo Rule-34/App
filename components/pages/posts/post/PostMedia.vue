@@ -457,13 +457,13 @@
           :alt="mediaAlt"
           :decoding="postIndex < 3 ? undefined : 'async'"
           :height="mediaSrcHeight"
-          :imgAttrs="{
+          :imgAttrs="({
             class: 'h-auto w-full rounded-t-md',
             style: 'aspect-ratio: ' + mediaSrcWidth + '/' + mediaSrcHeight,
-            fetchpriority: postIndex < 3 ? 'high' : undefined
-          }"
-          :loading="postIndex < 3 ? undefined : 'lazy'"
-          :preload="postIndex < 8"
+            fetchpriority: postIndex === 0 ? 'high' : undefined
+          } as any)"
+          :loading="postIndex === 0 ? 'eager' : 'lazy'"
+          :preload="postIndex === 0"
           :src="localSrc"
           :width="mediaSrcWidth"
           provider="imgproxy"
@@ -481,13 +481,13 @@
           :alt="mediaAlt"
           :decoding="postIndex < 3 ? undefined : 'async'"
           :height="mediaSrcHeight"
-          :imgAttrs="{
+          :imgAttrs="({
             class: 'h-auto w-full rounded-t-md',
             style: 'aspect-ratio: ' + mediaSrcWidth + '/' + mediaSrcHeight,
-            fetchpriority: postIndex < 3 ? 'high' : undefined
-          }"
-          :loading="postIndex < 3 ? undefined : 'lazy'"
-          :preload="postIndex < 8"
+            fetchpriority: postIndex === 0 ? 'high' : undefined
+          } as any)"
+          :loading="postIndex === 0 ? 'eager' : 'lazy'"
+          :preload="postIndex === 0"
           :src="localSrc"
           :width="mediaSrcWidth"
           provider="bunny"
@@ -502,10 +502,10 @@
           ref="mediaElement"
           :alt="mediaAlt"
           :decoding="postIndex < 3 ? undefined : 'async'"
-          :fetchpriority="postIndex < 3 ? 'high' : undefined"
+          :fetch-priority="postIndex === 0 ? 'high' : undefined"
           :height="mediaSrcHeight"
-          :loading="postIndex < 3 ? undefined : 'lazy'"
-          :preload="postIndex < 8"
+          :loading="postIndex === 0 ? 'eager' : 'lazy'"
+          :preload="postIndex === 0"
           :src="localSrc"
           :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
           :width="mediaSrcWidth"
@@ -525,10 +525,10 @@
         ref="mediaElement"
         :alt="mediaAlt"
         :decoding="postIndex < 3 ? undefined : 'async'"
-        :fetchpriority="postIndex < 3 ? 'high' : undefined"
+        :fetch-priority="postIndex === 0 ? 'high' : undefined"
         :height="mediaSrcHeight"
-        :loading="postIndex < 3 ? undefined : 'lazy'"
-        :preload="postIndex < 8"
+        :loading="postIndex === 0 ? 'eager' : 'lazy'"
+        :preload="postIndex === 0"
         :src="isAnimatedMediaPlaying ? localSrc : localPosterSrc"
         :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
         :width="mediaSrcWidth"
