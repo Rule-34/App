@@ -237,6 +237,8 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
   },
 
   nitro: {
+    plugins: ['~/server/plugins/lcp-preload-fetchpriority'],
+
     esbuild: {
       options: {
         // This only affects the Nitro/server bundle (SSR + `server/*` routes/middleware).
