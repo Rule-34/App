@@ -108,26 +108,33 @@
     as="div"
     class="relative inline-block text-left"
   >
-      <HeadlessMenuButton
-        ref="referenceEl"
-        aria-label="Open post source options"
-        class="hover:hover-bg-util focus-visible:focus-outline-util group flex items-center rounded-md px-1.5 py-1"
-        @click="onMenuOpen"
-      >
-        <LinkIcon aria-hidden="true" class="group-hover:hover-text-util text-base-content h-5 w-5" />
-      </HeadlessMenuButton>
+    <HeadlessMenuButton
+      ref="referenceEl"
+      aria-label="Open post source options"
+      class="hover:hover-bg-util focus-visible:focus-outline-util group flex items-center rounded-md px-1.5 py-1"
+      @click="onMenuOpen"
+    >
+      <LinkIcon
+        aria-hidden="true"
+        class="group-hover:hover-text-util text-base-content h-5 w-5"
+      />
+    </HeadlessMenuButton>
 
-      <Teleport to="body">
-        <Transition
-          leave-active-class="transition ease-in duration-100"
-          leave-from-class="opacity-100"
-          leave-to-class="opacity-0"
+    <Teleport to="body">
+      <Transition
+        leave-active-class="transition ease-in duration-100"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
+        <HeadlessMenuItems
+          ref="floatingEl"
+          :style="floatingStyles"
+          class="divide-base-0/20 bg-base-1000 ring-base-0/20 z-50 w-56 divide-y rounded-md ring-1 focus:outline-hidden"
         >
-          <HeadlessMenuItems
-            ref="floatingEl"
-            :style="floatingStyles"
-            class="divide-base-0/20 bg-base-1000 ring-base-0/20 w-56 divide-y rounded-md ring-1 focus:outline-hidden z-50"
-          >
+          <div class="text-base-content-highlight px-4 py-2 text-sm font-medium">
+            Post source
+          </div>
+
           <!-- No source found -->
           <div
             v-if="!postSources.length"
@@ -224,8 +231,8 @@
               </button>
             </HeadlessMenuItem>
           </div>
-          </HeadlessMenuItems>
-        </Transition>
-      </Teleport>
+        </HeadlessMenuItems>
+      </Transition>
+    </Teleport>
   </HeadlessMenu>
 </template>
