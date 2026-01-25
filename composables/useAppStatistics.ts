@@ -5,6 +5,7 @@ export default function () {
 
   let tutorialPostSource = ref<boolean>(false)
   let tutorialDomainSwitcher = ref<boolean>(false)
+  let tutorialChatWithAi = ref<boolean>(false)
 
   let promptInstallPwa = ref<boolean>(false)
   let promptFeedback = ref<boolean>(false)
@@ -21,6 +22,10 @@ export default function () {
     })
 
     tutorialDomainSwitcher = useLocalStorage('tutorial-domainSwitcher', false, {
+      writeDefaults: false
+    })
+
+    tutorialChatWithAi = useLocalStorage('tutorial-chatWithAi', false, {
       writeDefaults: false
     })
 
@@ -47,6 +52,7 @@ export default function () {
 
     tutorialPostSource,
     tutorialDomainSwitcher,
+    tutorialChatWithAi,
     promptInstallPwa,
     promptFeedback,
     promptNewsletter,

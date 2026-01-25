@@ -142,3 +142,24 @@ export default function () {
     ]
   })
 }
+
+export function useChatWithAiReferral() {
+  const chatWithAiReferrals = [
+    // {
+    //   id: 'https://crushon.ai/search?s={query}',
+    //   weight: 1
+    // },
+    {
+      id: 'https://spicychat.ai/?public_characters_alias%2Fsort%2Fnum_messages_24h%3Adesc[query]={query}&ref=ode2nzn',
+      weight: 0.5
+    }
+  ]
+
+  const chatWithAiReferralTemplate = useState<string>('chat-with-ai-referral', () => {
+    return randomWeightedChoice(chatWithAiReferrals)
+  })
+
+  return {
+    chatWithAiReferralTemplate
+  }
+}

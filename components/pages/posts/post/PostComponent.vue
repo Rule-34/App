@@ -141,6 +141,8 @@
           :post-sources="post.sources"
         />
 
+        <PostChatWithAi :tags="post.tags" />
+
         <ShareButton
           :text="`Found on ${project.name}: ${currentUrl.href}`"
           :title="`Post #${post.id} from ${post.domain}`"
