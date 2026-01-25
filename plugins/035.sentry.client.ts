@@ -50,7 +50,7 @@ export default defineNuxtPlugin({
         // Capture Nuxt-level errors (after init)
         nuxtApp.hook('app:error', (error) => {
           if (isNuxtError(error)) {
-            if (error.statusCode >= 300 && error.statusCode < 500) {
+            if (error.status >= 300 && error.status < 500) {
               return
             }
           }

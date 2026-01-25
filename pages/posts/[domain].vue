@@ -831,8 +831,8 @@
 
       if (!isPremium.value && booru.isPremium) {
         return {
-          statusCode: 401,
-          statusMessage: 'Unauthorized, please login to view this page'
+          status: 401,
+          statusText: 'Unauthorized, please login to view this page'
         }
       }
 
