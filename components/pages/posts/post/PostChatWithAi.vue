@@ -32,14 +32,7 @@
     return Object.values(props.tags).flat()
   })
 
-  const normalizedTags = computed(() => {
-    const uniqueTags = new Set<string>()
-    for (const tag of tagCandidates.value) {
-      uniqueTags.add(tag)
-    }
-
-    return Array.from(uniqueTags)
-  })
+  const normalizedTags = computed(() => Array.from(new Set(tagCandidates.value)))
 
   function formatTagForQuery(tag: string) {
     return tag.replaceAll('_', ' ')
@@ -114,9 +107,7 @@
           :style="floatingStyles"
           class="divide-base-0/20 bg-base-1000 ring-base-0/20 z-50 w-56 divide-y rounded-md ring-1 focus:outline-hidden"
         >
-          <div class="text-base-content-highlight px-4 py-2 text-sm font-medium">
-            Chat with AI
-          </div>
+          <div class="text-base-content-highlight px-4 py-2 text-sm font-medium">Chat with AI</div>
 
           <div
             v-if="!normalizedTags.length"
@@ -139,7 +130,7 @@
                 :href="buildReferralUrl(tag)"
                 class="group flex w-full items-center px-4 py-2 text-sm"
                 target="_blank"
-                @click="tutorialChatWithAi = true"
+                rel="nofollow noopener"
               >
                 <span class="truncate">
                   {{ formatTagForDisplay(tag) }}
@@ -166,8 +157,7 @@
     }
     50% {
       color: rgba(167, 139, 250, 0.95);
-      filter: drop-shadow(0 0 4px rgba(167, 139, 250, 0.4))
-        drop-shadow(0 0 8px rgba(56, 189, 248, 0.25));
+      filter: drop-shadow(0 0 4px rgba(167, 139, 250, 0.4)) drop-shadow(0 0 8px rgba(56, 189, 248, 0.25));
     }
   }
 </style>

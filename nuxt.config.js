@@ -314,7 +314,7 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
   /** @type {import('@nuxt/image').ModuleOptions} */
   image: {
     /**
-     * Limited screen sizes to reduce bandwith and compute usage
+     * Limited screen sizes to reduce bandwidth and compute usage
      * @see https://image.nuxt.com/get-started/configuration#screens
      */
     screens: {

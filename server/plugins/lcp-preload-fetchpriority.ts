@@ -6,7 +6,7 @@ export default defineNitroPlugin((nitroApp) => {
   nitroApp.hooks.hook('render:response', (response, { event }) => {
     const path =
       // Nitro v2 often provides `event.path`
-      (event as any)?.path ??
+      (event as any)?.path?.split('?')?.[0] ??
       // Fallback for other runtimes
       (event as any)?.node?.req?.url?.split('?')?.[0]
 
@@ -22,9 +22,7 @@ export default defineNitroPlugin((nitroApp) => {
     }
 
     const contentType =
-      (response as any)?.headers?.['content-type'] ??
-      (response as any)?.headers?.['Content-Type'] ??
-      ''
+      (response as any)?.headers?.['content-type'] ?? (response as any)?.headers?.['Content-Type'] ?? ''
 
     if (typeof contentType === 'string' && contentType.length && !contentType.includes('text/html')) {
       return
@@ -44,7 +42,7 @@ export default defineNitroPlugin((nitroApp) => {
     const headHtml = body.slice(headStartIdx + 1, headEndIdx)
 
     const patchedHead = headHtml.replace(
-      /<link\b(?![^>]*\bfetchpriority=)([^>]*\brel=(?:"|')preload(?:"|')[^>]*\bas=(?:"|')image(?:"|')[^>]*)>/gi,
+      /<link\b(?=[^>]*\brel=["']?preload["']?)(?=[^>]*\bas=["']?image["']?)(?![^>]*\bfetchpriority=)([^>]*)>/gi,
       '<link fetchpriority="high"$1>'
     )
 
@@ -55,4 +53,3 @@ export default defineNitroPlugin((nitroApp) => {
     ;(response as any).body = body.slice(0, headStartIdx + 1) + patchedHead + body.slice(headEndIdx)
   })
 })
-

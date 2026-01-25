@@ -4,7 +4,7 @@
 
   // Lazy-load vue-sonner CSS on the client so it doesn't get inlined into SSR <head>.
   onMounted(async () => {
-    await import('vue-sonner/style.css')
+    import('vue-sonner/style.css')
   })
 
   useAppStatistics()
