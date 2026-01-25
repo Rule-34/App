@@ -4,6 +4,7 @@ export default function () {
   let postFullSizeImages = ref<boolean>(true)
   let postsPerPage = ref<number>(29)
   let autoplayAnimatedMedia = ref<boolean>(false)
+  let blockAiGeneratedImages = ref<boolean>(false)
 
   if (import.meta.client) {
     postFullSizeImages = useLocalStorage('settings-postFullSizeImages', true, {
@@ -15,11 +16,15 @@ export default function () {
     autoplayAnimatedMedia = useLocalStorage('settings-autoplayAnimatedMedia', false, {
       writeDefaults: false
     })
+    blockAiGeneratedImages = useLocalStorage('settings-blockAiGeneratedImages', false, {
+      writeDefaults: false
+    })
   }
 
   return {
     postFullSizeImages,
     postsPerPage,
-    autoplayAnimatedMedia
+    autoplayAnimatedMedia,
+    blockAiGeneratedImages
   }
 }

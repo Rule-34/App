@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-  import { version } from '~/package.json'
-  import { ExclamationTriangleIcon } from '@heroicons/vue/20/solid'
-  import { toast } from 'vue-sonner'
-  import { project } from '@/config/project'
+import { version } from '~/package.json'
+import { ExclamationTriangleIcon } from '@heroicons/vue/20/solid'
+import { toast } from 'vue-sonner'
+import { project } from '@/config/project'
 
-  useSeoMeta({
+useSeoMeta({
     title: 'Settings',
 
     description: `Options to configure how ${project.name} works.`
@@ -12,7 +12,7 @@
 
   const appVersion = version
 
-  const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia } = useUserSettings()
+  const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia, blockAiGeneratedImages } = useUserSettings()
   const { isPremium } = useUserData()
   const { selectedList, defaultBlockList, customBlockList, resetCustomBlockList } = useBlockLists()
 
@@ -193,6 +193,15 @@
               </button>
             </form>
           </template>
+        </li>
+
+        <!-- blockAiGeneratedImages -->
+        <li>
+          <SettingSwitch v-model="blockAiGeneratedImages">
+            <template #name> Block AI posts </template>
+
+            <template #description> Hide posts that are tagged as AI generated </template>
+          </SettingSwitch>
         </li>
       </ol>
     </section>

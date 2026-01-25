@@ -13,6 +13,8 @@ const defaultBlockList: readonly string[] = Object.freeze([
   // 'vore'
 ])
 
+const aiBlockList: readonly string[] = Object.freeze(['ai_generated', 'ai-generated', 'AI-generated'])
+
 export enum blockListOptions {
   Default = 'default',
   Custom = 'custom',
@@ -20,6 +22,8 @@ export enum blockListOptions {
 }
 
 export default function () {
+  const { blockAiGeneratedImages } = useUserSettings()
+
   let customBlockList = ref<string[]>([])
 
   let selectedList = ref<blockListOptions>(blockListOptions.None)
@@ -37,16 +41,27 @@ export default function () {
   return {
     selectedList,
     selectedBlockList: computed(() => {
+      let list: string[] = []
+
       switch (selectedList.value) {
         case 'default':
-          return defaultBlockList
+          list = [...defaultBlockList]
+          break
 
         case 'custom':
-          return customBlockList.value
+          list = [...customBlockList.value]
+          break
 
         default:
-          return []
+          list = []
+          break
       }
+
+      if (blockAiGeneratedImages.value) {
+        list.push(...aiBlockList)
+      }
+
+      return [...new Set(list)]
     }),
 
     defaultBlockList,
