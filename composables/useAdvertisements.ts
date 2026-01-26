@@ -145,13 +145,13 @@ export default function () {
 
 export function useChatWithAiReferral() {
   const chatWithAiReferrals = [
-    // {
-    //   id: 'https://crushon.ai/search?s={query}',
-    //   weight: 1
-    // },
+    {
+      id: 'https://crushon.ai/?s={query}&ref=zdnmmzy&mist=1',
+      weight: 2
+    },
     {
       id: 'https://spicychat.ai/?public_characters_alias%2Fsort%2Fnum_messages_24h%3Adesc[query]={query}&ref=ode2nzn',
-      weight: 0.5
+      weight: 8
     }
   ]
 
