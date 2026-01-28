@@ -26,6 +26,7 @@
   const currentUrl = useRequestURL()
 
   const { postFullSizeImages } = useUserSettings()
+  const { isPremium } = useUserData()
 
   const areTagsOpen = ref(false)
 
@@ -141,7 +142,10 @@
           :post-sources="post.sources"
         />
 
-        <PostChatWithAi :tags="post.tags" />
+        <PostChatWithAi
+          v-if="!isPremium"
+          :tags="post.tags"
+        />
 
         <ShareButton
           :text="`Found on ${project.name}: ${currentUrl.href}`"
