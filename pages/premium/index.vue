@@ -65,16 +65,17 @@
       links: [
         {
           name: 'Credit Card',
-          url: 'https://shop.akbal.dev/how-to-get-premium-features/#/portal/signup/66ae85c1cfb018000163bf6f/monthly',
+          url: 'https://www.refinedsoft.com/shop-premium-features-discord-role/#/portal/signup/6881f5fb9c83c40001487e13/monthly',
           category: 'creditCard',
-          cta: 'Subscribe w/ Credit Card & PayPal'
+          cta: 'Subscribe with Credit Card & PayPal'
+        },
+        {
+          name: 'SellApp',
+          url: 'https://refinedsoft.sell.app/product/premium-monthly',
+          faviconDomain: 'https://sell.app',
+          category: 'crypto',
+          cta: 'Subscribe with Crypto'
         }
-        // {
-        //   name: 'Patreon',
-        //   url: 'https://www.patreon.com/R34App',
-        //   category: 'creditCard',
-        //   cta: 'Subscribe w/ Patreon'
-        // }
       ]
     },
     {
@@ -86,14 +87,14 @@
       links: [
         {
           name: 'SellApp',
-          url: 'https://akbal.sell.app/product/premium-30-days-access',
+          url: 'https://refinedsoft.sell.app/product/premium-30-days-access',
           faviconDomain: 'https://sell.app',
           category: 'creditCard',
-          cta: 'Pay w/ Credit Card & PayPal'
+          cta: 'Pay with Credit Card & PayPal'
         },
         {
           name: 'SellApp',
-          url: 'https://akbal.sell.app/product/premium-30-days-access',
+          url: 'https://refinedsoft.sell.app/product/premium-30-days-access',
           faviconDomain: 'https://sell.app',
           category: 'crypto',
           cta: 'Pay with Crypto'
@@ -109,17 +110,17 @@
       links: [
         {
           name: 'Credit Card',
-          url: 'https://shop.akbal.dev/how-to-get-premium-features/#/portal/signup/66ae85c1cfb018000163bf6f/yearly',
+          url: 'https://www.refinedsoft.com/shop-premium-features-discord-role/#/portal/signup/6881f5fb9c83c40001487e13/yearly',
           category: 'creditCard',
-          cta: 'Subscribe w/ Credit Card & PayPal'
+          cta: 'Subscribe with Credit Card & PayPal'
+        },
+        {
+          name: 'SellApp',
+          url: 'https://refinedsoft.sell.app/product/premium-yearly',
+          faviconDomain: 'https://sell.app',
+          category: 'crypto',
+          cta: 'Subscribe with Crypto'
         }
-        // {
-        //   name: 'Patreon',
-        //   url: 'https://www.patreon.com/R34App',
-        //   category: 'creditCard',
-        //   cta: 'Subscribe w/ Patreon',
-        //   instructions: ['Select "Pay annually" on the Patreon page']
-        // }
       ]
     },
     {
@@ -131,14 +132,14 @@
       links: [
         {
           name: 'SellApp',
-          url: 'https://akbal.sell.app/product/premium-lifetime',
+          url: 'https://refinedsoft.sell.app/product/premium-lifetime',
           faviconDomain: 'https://sell.app',
           category: 'creditCard',
-          cta: 'Pay w/ Credit Card & PayPal'
+          cta: 'Pay with Credit Card & PayPal'
         },
         {
           name: 'SellApp',
-          url: 'https://akbal.sell.app/product/premium-lifetime',
+          url: 'https://refinedsoft.sell.app/product/premium-lifetime',
           faviconDomain: 'https://sell.app',
           category: 'crypto',
           cta: 'Pay with Crypto'
