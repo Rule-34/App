@@ -1,20 +1,20 @@
 <script lang="ts" setup>
-import { CheckIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/20/solid'
-import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
-import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-import {
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  TransitionChild,
-  TransitionRoot
-} from '@headlessui/vue'
-import { project } from '@/config/project'
+  import { CheckIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/20/solid'
+  import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
+  import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+  import {
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    TransitionChild,
+    TransitionRoot
+  } from '@headlessui/vue'
+  import { project } from '@/config/project'
 
-const { shouldShow } = useActivePromotion()
+  const { shouldShow } = useActivePromotion()
 
   const customerCount = 2363
 
@@ -73,8 +73,15 @@ const { shouldShow } = useActivePromotion()
           name: 'SellApp',
           url: 'https://refinedsoft.sell.app/product/premium-monthly',
           faviconDomain: 'https://sell.app',
+          category: 'paypal',
+          cta: 'Subscribe with PayPal'
+        },
+        {
+          name: 'SellApp',
+          url: 'https://refinedsoft.sell.app/product/premium-monthly',
+          faviconDomain: 'https://sell.app',
           category: 'crypto',
-          cta: 'Subscribe with PayPal & Crypto'
+          cta: 'Subscribe with Crypto'
         }
       ]
     },
@@ -96,8 +103,15 @@ const { shouldShow } = useActivePromotion()
           name: 'SellApp',
           url: 'https://refinedsoft.sell.app/product/premium-30-days-access',
           faviconDomain: 'https://sell.app',
+          category: 'paypal',
+          cta: 'Pay with PayPal'
+        },
+        {
+          name: 'SellApp',
+          url: 'https://refinedsoft.sell.app/product/premium-30-days-access',
+          faviconDomain: 'https://sell.app',
           category: 'crypto',
-          cta: 'Pay with PayPal & Crypto'
+          cta: 'Pay with Crypto'
         }
       ]
     },
@@ -118,8 +132,15 @@ const { shouldShow } = useActivePromotion()
           name: 'SellApp',
           url: 'https://refinedsoft.sell.app/product/premium-yearly',
           faviconDomain: 'https://sell.app',
+          category: 'paypal',
+          cta: 'Subscribe with PayPal'
+        },
+        {
+          name: 'SellApp',
+          url: 'https://refinedsoft.sell.app/product/premium-yearly',
+          faviconDomain: 'https://sell.app',
           category: 'crypto',
-          cta: 'Subscribe with PayPal & Crypto'
+          cta: 'Subscribe with Crypto'
         }
       ]
     },
@@ -141,8 +162,15 @@ const { shouldShow } = useActivePromotion()
           name: 'SellApp',
           url: 'https://refinedsoft.sell.app/product/premium-lifetime',
           faviconDomain: 'https://sell.app',
+          category: 'paypal',
+          cta: 'Pay with PayPal'
+        },
+        {
+          name: 'SellApp',
+          url: 'https://refinedsoft.sell.app/product/premium-lifetime',
+          faviconDomain: 'https://sell.app',
           category: 'crypto',
-          cta: 'Pay with PayPal & Crypto'
+          cta: 'Pay with Crypto'
         }
       ]
     }
@@ -189,6 +217,7 @@ const { shouldShow } = useActivePromotion()
   // Payment methods categorization
   const paymentMethods = {
     creditCard: { name: 'Credit Card', icon: 'https://icons.duckduckgo.com/ip2/mastercard.us.ico' },
+    paypal: { name: 'PayPal', icon: 'https://icons.duckduckgo.com/ip2/paypal.com.ico' },
     crypto: { name: 'Cryptocurrency', icon: 'https://icons.duckduckgo.com/ip2/bitcoin.org.ico' }
   }
 
