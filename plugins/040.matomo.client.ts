@@ -1,4 +1,8 @@
-import {defineNuxtPlugin} from '#imports'
+import { defineNuxtPlugin } from '#imports'
+
+type MatomoQueueItem = [string, ...unknown[]]
+type MatomoQueue = MatomoQueueItem[]
+type MatomoWindow = Window & { _paq?: MatomoQueue }
 
 /**
  * Track page view using Matomo
@@ -12,9 +16,11 @@ export default defineNuxtPlugin({
   setup() {
     const router = useRouter()
 
+    let hasLoaded = false
+
     router.afterEach((to, from) => {
       onNuxtReady(async () => {
-        const _paq = window._paq
+        const _paq = (window as MatomoWindow)._paq
 
         if (!_paq) {
           return
@@ -29,12 +35,49 @@ export default defineNuxtPlugin({
         _paq.push(['enableLinkTracking'])
       })
     })
+
+    const { hasInteracted } = useInteractionDetector()
+
+    const stop = watch(
+      hasInteracted,
+      (val) => {
+        if (val) {
+          ensureMatomoLoaded()
+          stop()
+        }
+      },
+      { flush: 'post', immediate: true }
+    )
+
+    function ensureMatomoLoaded() {
+      if (hasLoaded) {
+        return
+      }
+
+      hasLoaded = true
+
+      const _paq = ((window as MatomoWindow)._paq = (window as MatomoWindow)._paq || [])
+
+      const matomoUrl = 'https://matomo.akbal.dev/'
+      _paq.push(['setTrackerUrl', matomoUrl + 'matomo.php'])
+      _paq.push(['setSiteId', '1'])
+      _paq.push(['setDomains', ['*.r34.app']])
+
+      _paq.push(['enableCrossDomainLinking'])
+      _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
+
+      const script = document.createElement('script')
+      script.src = matomoUrl + 'matomo.js'
+      script.async = true
+      script.defer = true
+      document.head.appendChild(script)
+    }
   }
 })
 
 let hasAbTestingLoaded = false
 
-function loadAbTesting(_paq) {
+function loadAbTesting(_paq: MatomoQueue) {
   if (hasAbTestingLoaded) {
     return
   }

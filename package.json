@@ -31,7 +31,6 @@
     "@headlessui/tailwindcss": "^0.2.2",
     "@heroicons/vue": "^2.2.0",
     "@nuxt/image": "^2.0.0",
-    "@nuxtjs/partytown": "^2.0.0",
     "@nuxtjs/sitemap": "^7.6.0",
     "@sentry/nuxt": "^10.38.0",
     "@tailwindcss/vite": "^4.1.18",

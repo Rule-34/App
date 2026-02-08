@@ -22,31 +22,6 @@ export default defineNuxtConfig({
           type: 'text/css',
           children: `html { background-color: ${project.branding.colors.background}; }`
         }
-      ],
-
-      script: [
-        /**
-         * Matomo
-         */
-        {
-          type: 'text/partytown',
-          innerHTML: `
-var _paq = (window._paq = window._paq || [])
-
-_paq.push(['setDomains', ['*.r34.app']])
-_paq.push(['enableCrossDomainLinking'])
-
-_paq.push(['setExcludedQueryParams', ['page', 'cursor']])
-
-;(function () {
-  var u = 'https://matomo.akbal.dev/'
-
-  _paq.push(['setTrackerUrl', u + 'matomo.php'])
-  _paq.push(['setSiteId', '1'])
-})()`
-        },
-        { src: 'https://matomo.akbal.dev/matomo.js', type: 'text/partytown', async: true, defer: true },
-        
       ]
     }
   },
@@ -206,16 +181,6 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
       headers: {
         'Cache-Control': 'public, max-age=86400'
       }
-    },
-
-    /**
-     * Partytown assets (served from /~partytown/*)
-     * These are versioned (e.g. ?v=0.11.2) so they can be cached very aggressively.
-     */
-    '/~partytown/**': {
-      headers: {
-        'Cache-Control': 'public, max-age=31536000, immutable'
-      }
     }
   },
 
@@ -267,7 +232,6 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
     '@nuxt/image',
     '@formkit/auto-animate/nuxt',
     '@vite-pwa/nuxt',
-    '@nuxtjs/partytown',
     '@nuxtjs/sitemap',
     'nuxt-schema-org',
     'nuxt-security'
@@ -421,13 +385,6 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
 
   schemaOrg: {
     default: false
-  },
-
-  partytown: {
-    forward: [
-      // Matomo
-      '_paq.push'
-    ]
   },
 
   /** @type {import('@nuxtjs/sitemap').ModuleOptions} */
