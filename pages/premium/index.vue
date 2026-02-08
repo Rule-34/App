@@ -1,20 +1,20 @@
 <script lang="ts" setup>
-  import { CheckIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/20/solid'
-  import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
-  import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-  import {
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-    Disclosure,
-    DisclosureButton,
-    DisclosurePanel,
-    TransitionChild,
-    TransitionRoot
-  } from '@headlessui/vue'
-  import { project } from '@/config/project'
+import { CheckIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/20/solid'
+import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
+import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  TransitionChild,
+  TransitionRoot
+} from '@headlessui/vue'
+import { project } from '@/config/project'
 
-  const { shouldShow } = useActivePromotion()
+const { shouldShow } = useActivePromotion()
 
   const customerCount = 2363
 
@@ -67,14 +67,14 @@
           name: 'Credit Card',
           url: 'https://www.refinedsoft.com/shop-premium-features-discord-role/#/portal/signup/6881f5fb9c83c40001487e13/monthly',
           category: 'creditCard',
-          cta: 'Subscribe with Credit Card & PayPal'
+          cta: 'Subscribe with Credit Card'
         },
         {
           name: 'SellApp',
           url: 'https://refinedsoft.sell.app/product/premium-monthly',
           faviconDomain: 'https://sell.app',
           category: 'crypto',
-          cta: 'Subscribe with Crypto'
+          cta: 'Subscribe with PayPal & Crypto'
         }
       ]
     },
@@ -90,14 +90,14 @@
           url: 'https://refinedsoft.sell.app/product/premium-30-days-access',
           faviconDomain: 'https://sell.app',
           category: 'creditCard',
-          cta: 'Pay with Credit Card & PayPal'
+          cta: 'Pay with Credit Card'
         },
         {
           name: 'SellApp',
           url: 'https://refinedsoft.sell.app/product/premium-30-days-access',
           faviconDomain: 'https://sell.app',
           category: 'crypto',
-          cta: 'Pay with Crypto'
+          cta: 'Pay with PayPal & Crypto'
         }
       ]
     },
@@ -112,14 +112,14 @@
           name: 'Credit Card',
           url: 'https://www.refinedsoft.com/shop-premium-features-discord-role/#/portal/signup/6881f5fb9c83c40001487e13/yearly',
           category: 'creditCard',
-          cta: 'Subscribe with Credit Card & PayPal'
+          cta: 'Subscribe with Credit Card'
         },
         {
           name: 'SellApp',
           url: 'https://refinedsoft.sell.app/product/premium-yearly',
           faviconDomain: 'https://sell.app',
           category: 'crypto',
-          cta: 'Subscribe with Crypto'
+          cta: 'Subscribe with PayPal & Crypto'
         }
       ]
     },
@@ -135,14 +135,14 @@
           url: 'https://refinedsoft.sell.app/product/premium-lifetime',
           faviconDomain: 'https://sell.app',
           category: 'creditCard',
-          cta: 'Pay with Credit Card & PayPal'
+          cta: 'Pay with Credit Card'
         },
         {
           name: 'SellApp',
           url: 'https://refinedsoft.sell.app/product/premium-lifetime',
           faviconDomain: 'https://sell.app',
           category: 'crypto',
-          cta: 'Pay with Crypto'
+          cta: 'Pay with PayPal & Crypto'
         }
       ]
     }
