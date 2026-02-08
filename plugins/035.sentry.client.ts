@@ -25,7 +25,18 @@ export default defineNuxtPlugin({
 
     let initPromise: Promise<void> | null = null
 
-    const init = () => {
+    const stop = watch(
+      hasInteracted,
+      (hasInteracted) => {
+        if (hasInteracted) {
+          void init()
+          stop()
+        }
+      },
+      { flush: 'post', immediate: true }
+    )
+
+    async function init() {
       if (initPromise) return initPromise
 
       initPromise = (async () => {
@@ -65,21 +76,5 @@ export default defineNuxtPlugin({
 
       return initPromise
     }
-
-    if (hasInteracted.value) {
-      void init()
-      return
-    }
-
-    const stop = watch(
-      hasInteracted,
-      (val) => {
-        if (val) {
-          void init()
-          stop()
-        }
-      },
-      { flush: 'post', immediate: true }
-    )
   }
 })

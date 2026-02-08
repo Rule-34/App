@@ -46,19 +46,7 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
 })()`
         },
         { src: 'https://matomo.akbal.dev/matomo.js', type: 'text/partytown', async: true, defer: true },
-        /**
-         * Formbricks User Experience
-         */
-        ...(project.analytics?.formbricksEnvironmentId && project.analytics?.formbricksAppUrl
-          ? [
-              {
-                type: 'text/partytown',
-                innerHTML: `
-!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="${project.analytics.formbricksAppUrl}/js/formbricks.umd.cjs",t.onload=function(){window.formbricks?window.formbricks.setup({environmentId:"${project.analytics.formbricksEnvironmentId}",appUrl:"${project.analytics.formbricksAppUrl}"}):console.error("Formbricks library failed to load properly. The formbricks object is not available.");};var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)}();
-`
-              }
-            ]
-          : [])
+        
       ]
     }
   },
@@ -438,9 +426,7 @@ _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
   partytown: {
     forward: [
       // Matomo
-      '_paq.push',
-      // Formbricks
-      'formbricks.track'
+      '_paq.push'
     ]
   },
 
