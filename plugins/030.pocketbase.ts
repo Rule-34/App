@@ -9,7 +9,7 @@ export default defineNuxtPlugin({
     // TODO: Store in localStorage for better caching
     const cookie = useCookie('pb_auth', {
       path: '/',
-      secure: true,
+      secure: useRequestURL().protocol === 'https:',
       sameSite: 'strict',
       httpOnly: false,
       maxAge: 60 * 60 * 24 * 90 // 90 days // Same as PocketBase config?
@@ -28,7 +28,9 @@ export default defineNuxtPlugin({
 
     try {
       // get an up-to-date auth store state by verifying and refreshing the loaded auth model (if any)
-      pb.authStore.isValid && (await pb.collection('users').authRefresh())
+      if (pb.authStore.isValid && import.meta.client) {
+        await pb.collection('users').authRefresh()
+      }
     } catch (_) {
       // clear the auth store on failed refresh
       pb.authStore.clear()

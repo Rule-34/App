@@ -18,7 +18,7 @@
 
     // Authenticate to pocketbase
     try {
-      const authData = await $pocketBase.collection('users').authWithPassword(password, password)
+      await $pocketBase.collection('users').authWithPassword(password, password)
     } catch (error) {
       if (error instanceof ClientResponseError) {
         toast.error(error.message)
