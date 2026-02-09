@@ -32,17 +32,25 @@
    * Show ads for non-premium users
    */
   onMounted(() => {
-    if (isPremium.value) {
-      return
-    }
+    const hasLoadedAds = ref(false)
 
-    watch(hasInteracted, (hasInteracted) => {
+    watch([hasInteracted, isPremium], ([hasInteracted, isPremium]) => {
+      if (hasLoadedAds.value) {
+        return
+      }
+
       if (!hasInteracted) {
         return
       }
 
+      if (isPremium) {
+        return
+      }
+
+      hasLoadedAds.value = true
+
       useAdvertisements()
-    })
+    }, { immediate: true })
   })
 
   /**
