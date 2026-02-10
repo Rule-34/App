@@ -71,13 +71,6 @@
         },
         {
           name: 'SellApp',
-          url: 'https://refinedsoft.sell.app/product/premium-monthly?payment_method=PAYPAL',
-          faviconDomain: 'https://sell.app',
-          category: 'paypal',
-          cta: 'Subscribe with PayPal'
-        },
-        {
-          name: 'SellApp',
           url: 'https://refinedsoft.sell.app/product/premium-monthly?payment_method=STRIPE',
           faviconDomain: 'https://sell.app',
           category: 'crypto',
@@ -98,13 +91,6 @@
           faviconDomain: 'https://sell.app',
           category: 'creditCard',
           cta: 'Pay with Credit Card'
-        },
-        {
-          name: 'SellApp',
-          url: 'https://refinedsoft.sell.app/product/premium-30-days-access?payment_method=PAYPAL',
-          faviconDomain: 'https://sell.app',
-          category: 'paypal',
-          cta: 'Pay with PayPal'
         },
         {
           name: 'SellApp',
@@ -130,13 +116,6 @@
         },
         {
           name: 'SellApp',
-          url: 'https://refinedsoft.sell.app/product/premium-yearly?payment_method=PAYPAL',
-          faviconDomain: 'https://sell.app',
-          category: 'paypal',
-          cta: 'Subscribe with PayPal'
-        },
-        {
-          name: 'SellApp',
           url: 'https://refinedsoft.sell.app/product/premium-yearly?payment_method=STRIPE',
           faviconDomain: 'https://sell.app',
           category: 'crypto',
@@ -157,13 +136,6 @@
           faviconDomain: 'https://sell.app',
           category: 'creditCard',
           cta: 'Pay with Credit Card'
-        },
-        {
-          name: 'SellApp',
-          url: 'https://refinedsoft.sell.app/product/premium-lifetime?payment_method=PAYPAL',
-          faviconDomain: 'https://sell.app',
-          category: 'paypal',
-          cta: 'Pay with PayPal'
         },
         {
           name: 'SellApp',
@@ -217,7 +189,6 @@
   // Payment methods categorization
   const paymentMethods = {
     creditCard: { name: 'Credit Card', icon: 'https://icons.duckduckgo.com/ip2/mastercard.us.ico' },
-    paypal: { name: 'PayPal', icon: 'https://icons.duckduckgo.com/ip2/paypal.com.ico' },
     crypto: { name: 'Cryptocurrency', icon: 'https://icons.duckduckgo.com/ip2/bitcoin.org.ico' }
   }
 
