@@ -296,15 +296,6 @@ export default defineNuxtConfig({
     ipx: {
       maxAge: 60 * 60 * 24 * 365 // 1 year
     },
-
-    bunny: {
-      baseURL: 'https://b-cdn.r34.app',
-
-      modifiers: {
-        // Fix: always add this to every image URL to force optimization
-        optimizer: 'image'
-      }
-    }
   },
 
   /** @type {import('@vite-pwa/nuxt').ModuleOptions} */

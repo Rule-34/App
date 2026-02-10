@@ -480,7 +480,7 @@
 
       <!-- Regular images for non-premium users -->
       <template v-else>
-        <!-- SSR + first 7: Bunny proxied via Nuxt Picture -->
+        <!-- SSR + first 7: Imgproxy via Nuxt Picture -->
         <NuxtPicture
           v-if="wasCurrentPageSSR && postIndex < 8 && isMainHost"
           ref="mediaElement"
@@ -498,7 +498,7 @@
           :preload="postIndex === 0"
           :src="localSrc"
           :width="mediaSrcWidth"
-          provider="bunny"
+          provider="imgproxy"
           @error="onMediaError"
           @load="onMediaLoad"
         />
