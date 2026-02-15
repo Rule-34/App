@@ -3,7 +3,8 @@ export enum Platform {
   PATREON = 'Patreon',
   SELLIX = 'Sellix',
   KOFI = 'Ko-Fi',
-  SHOP = 'Ghost'
+  SHOP = 'Ghost',
+  SHOP2 = 'Shop2'
 }
 
 export const PLATFORM_URLS = {
@@ -11,7 +12,8 @@ export const PLATFORM_URLS = {
   [Platform.PATREON]: 'https://www.patreon.com/r34app/membership',
   [Platform.SELLIX]: 'https://alejandroakbal.mysellix.io/customer/auth',
   [Platform.KOFI]: 'https://ko-fi.com/account',
-  [Platform.SHOP]: 'https://shop.akbal.dev/how-to-get-premium-features/#/portal/account'
+  [Platform.SHOP]: 'https://shop.akbal.dev/how-to-get-premium-features/#/portal/account',
+  [Platform.SHOP2]: 'https://www.refinedsoft.com/shop-premium-features-discord-role/#/portal/account'
 } as const
 
 /**
@@ -35,6 +37,9 @@ export function detectPlatform(license: string | null): Platform | undefined {
     case license.startsWith('GHOST-'):
     case license.startsWith('SHOP-'):
       return Platform.SHOP
+
+    case license.startsWith('SHOP2-'):
+      return Platform.SHOP2
 
     case license.length === 35:
       return Platform.GUMROAD
