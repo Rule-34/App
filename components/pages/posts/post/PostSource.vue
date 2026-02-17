@@ -53,6 +53,10 @@
     {
       title: 'Find with TinEye',
       link: `https://tineye.com/search/?url=${encodeURIComponent(props.postFileUrl)}`
+    },
+    {
+      title: 'Edit with ImgOps',
+      link: `https://imgops.com/${props.postFileUrl.replace(/^https?:\/\//, '')}`
     }
   ]
 
@@ -131,9 +135,7 @@
           :style="floatingStyles"
           class="divide-base-0/20 bg-base-1000 ring-base-0/20 z-50 w-56 divide-y rounded-md ring-1 focus:outline-hidden"
         >
-          <div class="text-base-content-highlight px-4 py-2 text-sm font-medium">
-            Post source
-          </div>
+          <div class="text-base-content-highlight px-4 py-2 text-sm font-medium">Post source</div>
 
           <!-- No source found -->
           <div
