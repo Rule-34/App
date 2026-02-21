@@ -234,7 +234,8 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     '@nuxtjs/sitemap',
     'nuxt-schema-org',
-    'nuxt-security'
+    'nuxt-security',
+    '@nuxt/hints'
   ],
 
   /**
