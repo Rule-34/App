@@ -76,7 +76,9 @@ const getImage: ProviderGetImage<ImgproxyProviderOptions> = (src, options) => {
   // Remove width and height to generate more common URLs for better caching
   const { width, height, ...modifiersWithoutSize } = mergeModifiers
 
-  const encodedUrl = urlSafeBase64(src)
+  // Build rewriter URL: nginx-proxy fetches the source and strips headers
+  const rewriterUrl = `http://nginx-proxy/proxy?url=${src}`
+  const encodedUrl = urlSafeBase64(rewriterUrl)
 
   const path = joinURL('/insecure', operationsGenerator(modifiersWithoutSize), encodedUrl)
 
