@@ -41,20 +41,19 @@
       return
     }
 
-    // Danbooru media blocked tutorial
-    if (
-      //
-      domain.domain === 'danbooru.donmai.us' &&
-      !isPremium.value
-    ) {
+    // Danbooru / Gelbooru media blocked tutorial
+    const mediaBlockedDomains = ['danbooru.donmai.us', 'gelbooru.com']
+    if (mediaBlockedDomains.includes(domain.domain) && !isPremium.value) {
+      const { hostname } = new URL(`https://${domain.domain}`)
+      const utmMedium = hostname.replace(/\./g, '-') + '-media-blocked'
+      const label = hostname.charAt(0).toUpperCase() + hostname.slice(1)
       toast.info('Media blocked 😢', {
-        description:
-          "We're just as frustrated as you; Danbooru has blocked us from showing images and videos. The only way we can help you see Danbooru content is with Premium, which lets us securely proxy their media for you.",
+        description: `We're just as frustrated as you; ${label} has blocked us from showing images and videos. The only way we can help you see ${label} content is with Premium, which lets us securely proxy their media for you.`,
         duration: 1000 * 15, // 15 seconds
         action: {
           label: 'Proxy media',
           onClick: () => {
-            window.location.href = '/premium?utm_source=internal&utm_medium=danbooru-media-blocked'
+            window.location.href = `/premium?utm_source=internal&utm_medium=${utmMedium}`
           }
         }
       })
