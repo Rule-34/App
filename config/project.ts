@@ -38,6 +38,11 @@ export interface Social {
   github: string
 }
 
+export interface Imgproxy {
+  baseUrl: string
+  internalProxyUrl: string
+}
+
 /**
  * Main project configuration interface
  * This defines the complete structure of the project configuration
@@ -51,6 +56,7 @@ export interface ProjectConfig {
   urls: ProjectUrls
   branding: Branding
   analytics: Analytics
+  imgproxy: Imgproxy
   sentry: Sentry
   seo: SEO
   social: Social
@@ -84,6 +90,10 @@ export const project: ProjectConfig = {
   analytics: {
     formbricksEnvironmentId: 'cm6gbkjeq0008l7036ckdvtnm',
     formbricksAppUrl: 'https://app.formbricks.com'
+  },
+  imgproxy: {
+    baseUrl: 'https://imgproxy2.r34.app',
+    internalProxyUrl: 'http://nginx-proxy/proxy?url='
   },
   sentry: {
     applicationKey: 'r34-app'

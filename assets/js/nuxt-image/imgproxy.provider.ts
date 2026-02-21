@@ -51,7 +51,8 @@ const defaultModifiers = {
 }
 
 interface ImgproxyProviderOptions {
-  baseURL: string
+  baseUrl: string
+  internalProxyUrl: string
 }
 
 /**
@@ -69,7 +70,7 @@ const getImage: ProviderGetImage<ImgproxyProviderOptions> = (src, options) => {
     return { url: src }
   }
 
-  const { modifiers, baseURL } = options
+  const { modifiers, baseUrl, internalProxyUrl } = options
 
   const mergeModifiers = { ...defaultModifiers, ...modifiers }
 
@@ -77,13 +78,13 @@ const getImage: ProviderGetImage<ImgproxyProviderOptions> = (src, options) => {
   const { width, height, ...modifiersWithoutSize } = mergeModifiers
 
   // Build rewriter URL: nginx-proxy fetches the source and strips headers
-  const rewriterUrl = `http://nginx-proxy/proxy?url=${src}`
+  const rewriterUrl = `${internalProxyUrl}${src}`
   const encodedUrl = urlSafeBase64(rewriterUrl)
 
   const path = joinURL('/insecure', operationsGenerator(modifiersWithoutSize), encodedUrl)
 
   return {
-    url: joinURL(baseURL, path)
+    url: joinURL(baseUrl, path)
   }
 }
 

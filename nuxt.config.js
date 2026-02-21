@@ -288,7 +288,8 @@ export default defineNuxtConfig({
         name: 'imgproxy',
         provider: '~~/assets/js/nuxt-image/imgproxy.provider',
         options: {
-          baseURL: `https://imgproxy2.${project.urls.production.hostname}`
+          baseUrl: project.imgproxy.baseUrl,
+          internalProxyUrl: project.imgproxy.internalProxyUrl
         }
       }
     },
