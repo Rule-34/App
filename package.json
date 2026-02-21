@@ -33,7 +33,7 @@
     "@nuxt/image": "^2.0.0",
     "@nuxtjs/sitemap": "^7.6.0",
     "@sentry/nuxt": "^10.39.0",
-    "@tailwindcss/vite": "^4.1.18",
+    "@tailwindcss/vite": "^4.2.0",
     "@tanstack/vue-query": "^5.92.9",
     "@tanstack/vue-virtual": "^3.13.18",
     "@vite-pwa/assets-generator": "^1.0.2",
@@ -53,11 +53,11 @@
     "random-weighted-choice": "^0.1.4",
     "rxjs": "^7.8.2",
     "sortablejs": "^1.15.7",
-    "tailwindcss": "^4.1.18",
+    "tailwindcss": "^4.2.0",
     "vue-sonner": "^2.0.9"
   },
   "devDependencies": {
-    "@nuxt/hints": "^1.0.0-alpha.6",
+    "@nuxt/hints": "^1.0.0-alpha.7",
     "@types/qs": "^6.14.0",
     "jest": "^30.2.0",
     "nuxt": "^4.3.1",
