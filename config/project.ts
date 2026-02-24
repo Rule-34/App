@@ -43,6 +43,11 @@ export interface Imgproxy {
   internalProxyUrl: string
 }
 
+export interface DiscordOauth {
+  clientId: string
+  redirectUri: string
+}
+
 /**
  * Main project configuration interface
  * This defines the complete structure of the project configuration
@@ -60,6 +65,7 @@ export interface ProjectConfig {
   sentry: Sentry
   seo: SEO
   social: Social
+  discordOauth: DiscordOauth
 }
 
 // =============================================================================
@@ -108,5 +114,9 @@ export const project: ProjectConfig = {
     twitter: 'https://twitter.com/Rule34App',
     discord: 'https://discord.gg/fUhYHSZ',
     github: 'https://github.com/Rule-34/App'
+  },
+  discordOauth: {
+    clientId: '1475457445747884124',
+    redirectUri: 'https://n8n.akbal.dev/webhook/b731e0f9-b13e-475f-80ae-09a86b6706ca'
   }
 }
