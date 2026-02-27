@@ -28,16 +28,24 @@
   function getDefaultBooru() {
     let domain = selectedDomainFromStorage.value
 
-    // Fallback/Default to specific Booru (rule34.paheal.net)
+    // Fallback/Default to specific Booru (rule34.xxx)
     if (!domain) {
-      return booruList.value[1]
+      const fallback = booruList.value.find((booru) => booru.domain === 'rule34.xxx')
+      if (fallback) {
+        return fallback
+      }
+      return booruList.value[0]
     }
 
     const booru = booruList.value.find((booru) => booru.domain === domain)
 
     if (!booru) {
       toast.error(`Booru "${domain}" not found`)
-      return booruList.value[1] // Fallback to specific Booru (rule34.paheal.net)
+      const fallback = booruList.value.find((booru) => booru.domain === 'rule34.xxx')
+      if (fallback) {
+        return fallback
+      }
+      return booruList.value[0]
     }
 
     return booru
