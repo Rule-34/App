@@ -5,7 +5,7 @@
   "description": "Stream and download Rule 34 porn videos, GIFs, and images from multiple Boorus in a mobile-first web app",
   "author": "Alejandro Akbal",
   "engines": {
-    "node": "^22"
+    "node": "^24"
   },
   "scripts": {
     "start": "node .output/server/index.mjs",
@@ -25,25 +25,25 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "@floating-ui/vue": "^1.1.10",
+    "@floating-ui/vue": "^1.1.11",
     "@formbricks/js": "^4.3.0",
     "@formkit/auto-animate": "^0.9.0",
     "@headlessui/tailwindcss": "^0.2.2",
     "@heroicons/vue": "^2.2.0",
     "@nuxt/image": "^2.0.0",
     "@nuxtjs/sitemap": "^7.6.0",
-    "@sentry/nuxt": "^10.39.0",
-    "@tailwindcss/vite": "^4.2.0",
+    "@sentry/nuxt": "^10.42.0",
+    "@tailwindcss/vite": "^4.2.1",
     "@tanstack/vue-query": "^5.92.9",
-    "@tanstack/vue-virtual": "^3.13.18",
+    "@tanstack/vue-virtual": "^3.13.21",
     "@vite-pwa/assets-generator": "^1.0.2",
     "@vite-pwa/nuxt": "^1.1.1",
     "@vueuse/components": "^14.2.1",
     "@vueuse/core": "^14.2.1",
     "@vueuse/integrations": "^14.2.1",
     "@vueuse/rxjs": "^14.2.1",
-    "es-toolkit": "^1.44.0",
-    "fluid-player": "^3.57.0",
+    "es-toolkit": "^1.45.1",
+    "fluid-player": "^3.58.0",
     "js-abbreviation-number": "^1.4.0",
     "nuxt-headlessui": "^1.2.2",
     "nuxt-schema-org": "^5.0.10",
@@ -53,11 +53,11 @@
     "random-weighted-choice": "^0.1.4",
     "rxjs": "^7.8.2",
     "sortablejs": "^1.15.7",
-    "tailwindcss": "^4.2.0",
+    "tailwindcss": "^4.2.1",
     "vue-sonner": "^2.0.9"
   },
   "devDependencies": {
-    "@types/qs": "^6.14.0",
+    "@types/qs": "^6.15.0",
     "jest": "^30.2.0",
     "nuxt": "^4.3.1",
     "playwright": "^1.58.2",

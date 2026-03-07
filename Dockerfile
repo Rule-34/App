@@ -1,4 +1,4 @@
-ARG NODE_VERSION=22
+ARG NODE_VERSION=24
 
 # Stage 1: Build
 FROM node:${NODE_VERSION}-alpine AS builder
