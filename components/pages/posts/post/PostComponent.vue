@@ -134,7 +134,7 @@
         <PostDownload
           v-if="mediaFile.file"
           :mediaName="`${post.domain}-${post.id}`"
-          :mediaUrl="mediaFile.file"
+          :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
         />
 
         <PostSource
