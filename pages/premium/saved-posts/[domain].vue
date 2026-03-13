@@ -131,8 +131,7 @@
         { label: 'Score', value: '-score' },
         { label: 'Score (asc)', value: 'score' },
         { label: 'Created', value: '-created' },
-        { label: 'Created (asc)', value: 'created' },
-        { label: 'Random', value: '@random' }
+        { label: 'Created (asc)', value: 'created' }
       ]
     },
     rating: {
@@ -332,7 +331,7 @@
       })
     }
 
-    const pocketbaseRequestSort = selectedFilters.value.sort ?? '-created'
+    const pocketbaseRequestSort = selectedFilters.value.sort === '@random' ? '-created' : selectedFilters.value.sort ?? '-created'
 
     if (selectedFilters.value.rating) {
       if (pocketbaseRequestFilter !== '') {
