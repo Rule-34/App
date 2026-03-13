@@ -7,9 +7,7 @@ const defaultBooruList: Domain[] = completeBooruList
   .filter((booruObj) => {
     const disabledDomains = [
       //
-      'realbooru.com',
       'konachan.com',
-      'booru.allthefallen.moe',
       'sakugabooru.com'
     ]
 
