@@ -1,30 +1,12 @@
 <script lang="ts" setup>
   import { ArrowDownTrayIcon, ArrowUturnLeftIcon } from '@heroicons/vue/24/solid'
   import { toast } from 'vue-sonner'
+  import { downloadBlob } from '~/assets/js/DownloadHelper'
   import { createBackupState, type IBackupState, tryToRestoreV2OrV3Backup } from '~/assets/js/BackupHelper'
   import PageHeader from '~/components/layout/PageHeader.vue'
   import { project } from '@/config/project'
 
   const fileInputElement = ref<HTMLInputElement | null>(null)
-
-  function downloadBlob(blob: Blob, filename: string) {
-    const objectURL = window.URL.createObjectURL(blob)
-
-    // Create anchor element
-    const anchorElement = document.createElement('a')
-
-    anchorElement.href = objectURL
-    anchorElement.target = '_blank'
-    anchorElement.download = filename
-    anchorElement.style.display = 'none'
-
-    // Download
-    anchorElement.click()
-
-    // Clean up
-    anchorElement.remove()
-    window.URL.revokeObjectURL(objectURL)
-  }
 
   async function createBackup() {
     const currentDateString = new Date()

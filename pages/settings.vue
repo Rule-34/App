@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { version } from '~/package.json'
-import { ExclamationTriangleIcon } from '@heroicons/vue/20/solid'
-import { toast } from 'vue-sonner'
-import { project } from '@/config/project'
+  import { version } from '~/package.json'
+  import { ExclamationTriangleIcon } from '@heroicons/vue/20/solid'
+  import { toast } from 'vue-sonner'
+  import { downloadBlob } from '~/assets/js/DownloadHelper'
+  import { project } from '@/config/project'
 
-useSeoMeta({
+  useSeoMeta({
     title: 'Settings',
 
     description: `Options to configure how ${project.name} works.`
@@ -14,7 +15,7 @@ useSeoMeta({
 
   const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia, blockAiGeneratedImages } = useUserSettings()
   const { isPremium } = useUserData()
-  const { selectedList, defaultBlockList, customBlockList, resetCustomBlockList } = useBlockLists()
+  const { selectedList, selectedBlockList, defaultBlockList, customBlockList, resetCustomBlockList } = useBlockLists()
 
   function onSelectedListChange(value: blockListOptions) {
     if (value === blockListOptions.Custom && !isPremium.value) {
@@ -48,6 +49,19 @@ useSeoMeta({
     customBlockList.value = tags
 
     toast.success('Custom block list saved')
+  }
+
+  function exportBlockList() {
+    if (selectedBlockList.value.length === 0) {
+      toast.error('No blocked tags to export')
+      return
+    }
+
+    const blob = new Blob([selectedBlockList.value.join('\n')], { type: 'text/plain;charset=utf-8' })
+    const fileName = `${project.urls.production.hostname}_Blocklist.txt`
+
+    downloadBlob(blob, fileName)
+    toast.success('Block list exported')
   }
 
   async function removeAllData() {
@@ -185,12 +199,22 @@ useSeoMeta({
                 rows="4"
               />
 
-              <button
-                class="hover:hover-bg-util focus-visible:focus-outline-util hover:hover-text-util ring-base-0/20 self-end rounded-lg px-3 py-1.5 text-sm font-medium ring-1 transition-colors focus-visible:ring-inset"
-                type="submit"
-              >
-                Save
-              </button>
+              <div class="flex justify-end gap-2">
+                <button
+                  class="hover:hover-bg-util focus-visible:focus-outline-util hover:hover-text-util ring-base-0/20 rounded-lg px-3 py-1.5 text-sm font-medium ring-1 transition-colors focus-visible:ring-inset"
+                  type="button"
+                  @click="exportBlockList"
+                >
+                  Export .txt
+                </button>
+
+                <button
+                  class="hover:hover-bg-util focus-visible:focus-outline-util hover:hover-text-util ring-base-0/20 rounded-lg px-3 py-1.5 text-sm font-medium ring-1 transition-colors focus-visible:ring-inset"
+                  type="submit"
+                >
+                  Save
+                </button>
+              </div>
             </form>
           </template>
         </li>
