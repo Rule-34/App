@@ -242,6 +242,8 @@
       })
 
     if (response instanceof FetchError) {
+      tagResults.value = []
+
       switch (response.status) {
         case 404:
           toast.error('No tags found for query "' + tag + '"')
@@ -256,6 +258,10 @@
               onClick: () => window.open(config.public.apiUrl + '/status', '_blank')
             }
           })
+          break
+
+        case 503:
+          // Upstream can briefly fail during autocomplete; avoid noisy error toasts while typing
           break
 
         default:
