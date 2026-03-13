@@ -229,7 +229,10 @@
   /**
    * Listeners
    */
+  let currentSearchRequestId = 0
+
   async function onSearchTag(tag: string) {
+    const requestId = ++currentSearchRequestId
     const apiUrl = config.public.apiUrl + '/booru/' + selectedBooru.value.type.type + '/tags'
 
     const response = await $fetch(apiUrl, {
@@ -246,17 +249,19 @@
     })
       //
       .catch(async (error) => {
-        const Sentry = await import('@sentry/nuxt')
-
-        Sentry.captureException(error)
-
         return error
       })
+
+    // Ignore if this is not the latest request
+    if (requestId !== currentSearchRequestId) {
+      return
+    }
 
     if (response instanceof FetchError) {
       switch (response.status) {
         case 404:
           toast.error('No tags found for query "' + tag + '"')
+          tagResults.value = []
           break
 
         case 429:
@@ -268,10 +273,14 @@
               onClick: () => window.open(config.public.apiUrl + '/status', '_blank')
             }
           })
+          tagResults.value = []
           break
 
         default:
+          const Sentry = await import('@sentry/nuxt')
+          Sentry.captureException(response)
           toast.error(`Failed to load tags: "${response.message}"`)
+          tagResults.value = []
           break
       }
 
@@ -307,12 +316,15 @@
       return
     }
 
+    // Remove opposite variant to prevent conflicts
     if (isTagNegative) {
-      const doesTagExistInPositive = newTags.some((selectedTag) => selectedTag.name === tag.slice(1))
-
-      if (doesTagExistInPositive) {
-        newTags = newTags.filter((selectedTag) => selectedTag.name !== tag.slice(1))
-      }
+      // Removing negative prefix, check for positive counterpart
+      const positiveVariant = tag.slice(1)
+      newTags = newTags.filter((selectedTag) => selectedTag.name !== positiveVariant)
+    } else {
+      // Adding positive tag, check for negative counterpart
+      const negativeVariant = `-${tag}`
+      newTags = newTags.filter((selectedTag) => selectedTag.name !== negativeVariant)
     }
 
     newTags.push(new Tag({ name: tag }).toJSON())
