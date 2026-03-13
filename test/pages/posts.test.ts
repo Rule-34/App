@@ -107,10 +107,14 @@ describe('/', async () => {
       // Post
       const firstPost = postsInList.first()
 
+      const openMediaLink = firstPost.getByRole('link', { name: /open media in new tab/i })
+
       // Image
       const firstPostImage = firstPost.locator('img')
 
       expect(await firstPostImage.getAttribute('src')).toBe(mockPostsPage0.data[0].low_res_file.url)
+      expect(await openMediaLink.getAttribute('href')).toBe(mockPostsPage0.data[0].low_res_file.url)
+      expect(await openMediaLink.getAttribute('target')).toBe('_blank')
 
       await firstPost.getByRole('button', { name: /tags/i }).click()
 
