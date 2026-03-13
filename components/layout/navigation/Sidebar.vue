@@ -1,5 +1,5 @@
 <script setup>
-import { BookmarkIcon, SparklesIcon } from '@heroicons/vue/24/outline'
+import { ArrowRightOnRectangleIcon, BookmarkIcon, SparklesIcon } from '@heroicons/vue/24/outline'
 import { sidebarNavigation } from 'assets/js/sidebarLinks'
 import { project } from '@/config/project'
 
@@ -78,6 +78,19 @@ const { value: isMenuActive, toggle: toggleMenu } = useMenu()
           >
             <BookmarkIcon class="text-primary-500 h-6 w-6 shrink-0" />
             Saved Posts
+          </NuxtLink>
+        </li>
+      </template>
+
+      <template v-else>
+        <li class="-mr-2 ml-6">
+          <NuxtLink
+            href="/premium/sign-in"
+            class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+            exactActiveClass="bg-base-0/20 text-base-content-highlight"
+          >
+            <ArrowRightOnRectangleIcon class="text-primary-500 h-6 w-6 shrink-0" />
+            Sign in
           </NuxtLink>
         </li>
       </template>
