@@ -56,14 +56,15 @@
     const anchorElement = document.createElement('a')
 
     anchorElement.href = objectURL
-    anchorElement.target = '_blank'
     anchorElement.download = filename
     anchorElement.style.display = 'none'
 
+    document.body.appendChild(anchorElement)
     anchorElement.click()
 
     anchorElement.remove()
-    window.URL.revokeObjectURL(objectURL)
+
+    setTimeout(() => window.URL.revokeObjectURL(objectURL), 100)
   }
 
   function exportBlockList() {
