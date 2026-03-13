@@ -215,24 +215,24 @@
                 rows="4"
               />
 
-              <button
-                class="hover:hover-bg-util focus-visible:focus-outline-util hover:hover-text-util ring-base-0/20 self-end rounded-lg px-3 py-1.5 text-sm font-medium ring-1 transition-colors focus-visible:ring-inset"
-                type="submit"
-              >
-                Save
-              </button>
+              <div class="flex justify-end gap-2">
+                <button
+                  class="hover:hover-bg-util focus-visible:focus-outline-util hover:hover-text-util ring-base-0/20 rounded-lg px-3 py-1.5 text-sm font-medium ring-1 transition-colors focus-visible:ring-inset"
+                  type="button"
+                  @click="exportBlockList"
+                >
+                  Export .txt
+                </button>
+
+                <button
+                  class="hover:hover-bg-util focus-visible:focus-outline-util hover:hover-text-util ring-base-0/20 rounded-lg px-3 py-1.5 text-sm font-medium ring-1 transition-colors focus-visible:ring-inset"
+                  type="submit"
+                >
+                  Save
+                </button>
+              </div>
             </form>
           </template>
-
-          <div class="mt-2 flex justify-end">
-            <button
-              class="hover:hover-bg-util focus-visible:focus-outline-util hover:hover-text-util ring-base-0/20 rounded-lg px-3 py-1.5 text-sm font-medium ring-1 transition-colors focus-visible:ring-inset"
-              type="button"
-              @click="exportBlockList"
-            >
-              Export .txt
-            </button>
-          </div>
         </li>
 
         <!-- blockAiGeneratedImages -->
