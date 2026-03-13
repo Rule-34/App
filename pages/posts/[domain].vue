@@ -572,10 +572,16 @@
 
   const parentRef = ref<HTMLElement | null>(null)
   const parentOffsetRef = ref(0)
+  let scrollRestoreRemeasureTimeout: ReturnType<typeof setTimeout> | null = null
 
-  onMounted(() => {
-    parentOffsetRef.value = parentRef.value?.offsetTop ?? 0
-  })
+  function clearScrollRestoreRemeasureTimeout() {
+    if (scrollRestoreRemeasureTimeout == null) {
+      return
+    }
+
+    clearTimeout(scrollRestoreRemeasureTimeout)
+    scrollRestoreRemeasureTimeout = null
+  }
 
   const rowVirtualizerOptions = computed(() => {
     return {
@@ -646,6 +652,50 @@
       rowVirtualizer.value.measureElement(el)
     })
   }
+
+  function remeasureAfterScrollRestore() {
+    if (!import.meta.client || window.scrollY === 0) {
+      return
+    }
+
+    clearScrollRestoreRemeasureTimeout()
+
+    nextTick(() => {
+      rowVirtualizer.value.measure()
+
+      requestAnimationFrame(() => {
+        rowVirtualizer.value.measure()
+
+        scrollRestoreRemeasureTimeout = setTimeout(() => {
+          rowVirtualizer.value.measure()
+          scrollRestoreRemeasureTimeout = null
+        }, 250)
+      })
+    })
+  }
+
+  function onPageShow() {
+    remeasureAfterScrollRestore()
+  }
+
+  onMounted(() => {
+    parentOffsetRef.value = parentRef.value?.offsetTop ?? 0
+
+    remeasureAfterScrollRestore()
+    window.addEventListener('pageshow', onPageShow)
+  })
+
+  onBeforeUnmount(() => {
+    clearScrollRestoreRemeasureTimeout()
+    window.removeEventListener('pageshow', onPageShow)
+  })
+
+  watch(
+    () => allRows.value.length,
+    () => {
+      remeasureAfterScrollRestore()
+    }
+  )
 
   /**
    * SEO
