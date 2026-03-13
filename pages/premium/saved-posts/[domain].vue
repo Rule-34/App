@@ -3,7 +3,8 @@
   import { ArrowPathIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
-  import { throttle } from 'es-toolkit'
+  import { cloneDeep, throttle } from 'es-toolkit'
+  import { FetchError } from 'ofetch'
   import type { Ref } from 'vue'
   import { toast } from 'vue-sonner'
   import type { Domain } from '~/assets/js/domain'
@@ -17,6 +18,7 @@
 
   const router = useRouter()
   const route = useRoute()
+  const config = useRuntimeConfig()
 
   const { $pocketBase } = useNuxtApp()
 
@@ -227,8 +229,65 @@
   /**
    * Listeners
    */
+  let currentSearchRequestId = 0
+
   async function onSearchTag(tag: string) {
-    toast.error('Autocomplete not implemented')
+    const requestId = ++currentSearchRequestId
+    const apiUrl = config.public.apiUrl + '/booru/' + selectedBooru.value.type.type + '/tags'
+
+    const response = await $fetch(apiUrl, {
+      params: {
+        baseEndpoint: selectedBooru.value.domain,
+
+        tag,
+        order: 'count',
+        limit: 20,
+
+        // Booru options
+        httpScheme: selectedBooru.value.config?.options?.HTTPScheme ?? undefined
+      }
+    })
+      //
+      .catch(async (error) => {
+        return error
+      })
+
+    // Ignore if this is not the latest request
+    if (requestId !== currentSearchRequestId) {
+      return
+    }
+
+    if (response instanceof FetchError) {
+      switch (response.status) {
+        case 404:
+          toast.error('No tags found for query "' + tag + '"')
+          tagResults.value = []
+          break
+
+        case 429:
+          // TODO: Cant always check if 429 is the status code, always show?
+          toast.error(response.statusText, {
+            description: 'You sent too many requests in a short period of time',
+            action: {
+              label: 'Verify I am not a Bot',
+              onClick: () => window.open(config.public.apiUrl + '/status', '_blank')
+            }
+          })
+          tagResults.value = []
+          break
+
+        default:
+          const Sentry = await import('@sentry/nuxt')
+          Sentry.captureException(response)
+          toast.error(`Failed to load tags: "${response.message}"`)
+          tagResults.value = []
+          break
+      }
+
+      return
+    }
+
+    tagResults.value = response.data
   }
 
   async function onDomainChange(domain: Domain) {
@@ -236,29 +295,65 @@
   }
 
   async function onSearchSubmit({ tags, filters }) {
-    // TODO: Tags
-    await reflectChangesInUrl({ page: null, filters })
+    await reflectChangesInUrl({ page: null, tags, filters })
   }
 
   /**
    * Adds the tag, or removes it if it already exists
    */
   async function onPostAddTag(tag: string) {
-    toast.error('Not implemented')
+    const isTagNegative = tag.startsWith('-')
+
+    let newTags = cloneDeep(selectedTags.value)
+
+    // Remove tag if it already exists
+    const isTagAlreadySelected = newTags.some((selectedTag) => selectedTag.name === tag)
+
+    if (isTagAlreadySelected) {
+      newTags = newTags.filter((selectedTag) => selectedTag.name !== tag)
+
+      await reflectChangesInUrl({ page: null, tags: newTags })
+      return
+    }
+
+    // Remove opposite variant to prevent conflicts
+    if (isTagNegative) {
+      // Removing negative prefix, check for positive counterpart
+      const positiveVariant = tag.slice(1)
+      newTags = newTags.filter((selectedTag) => selectedTag.name !== positiveVariant)
+    } else {
+      // Adding positive tag, check for negative counterpart
+      const negativeVariant = `-${tag}`
+      newTags = newTags.filter((selectedTag) => selectedTag.name !== negativeVariant)
+    }
+
+    newTags.push(new Tag({ name: tag }).toJSON())
+
+    await reflectChangesInUrl({ page: null, tags: newTags })
   }
 
   /**
    * Sets tags to only the given tag
    */
   async function onPostSetTag(tag: string) {
-    toast.error('Not implemented')
+    await reflectChangesInUrl({ page: null, tags: [new Tag({ name: tag }).toJSON()] })
   }
 
   /**
    * Opens the tag in a new tab
    */
   async function onPostOpenTagInNewTab(tag: string) {
-    toast.error('Not implemented')
+    const tagUrl = generatePostsRoute(
+      '/premium/saved-posts',
+      selectedBooru.value.domain,
+      undefined,
+      [new Tag({ name: tag }).toJSON()],
+      undefined
+    )
+
+    const resolvedTagUrl = router.resolve(tagUrl).href
+
+    window.open(resolvedTagUrl, '_blank')
   }
 
   async function onLoadNextPostPage() {
@@ -309,6 +404,18 @@
    */
   interface IPostPageFromPocketBase extends Omit<IPostPage, 'links'> {}
 
+  const tagCategoryFields = ['tags_artist', 'tags_character', 'tags_copyright', 'tags_general', 'tags_meta'] as const
+
+  function buildTagFilterInAnyCategory(tag: string, tagParamKey: string) {
+    const tagFilterByCategory = tagCategoryFields.map((tagField) => {
+      return $pocketBase.filter(`${tagField} ?= {:${tagParamKey}}`, {
+        [tagParamKey]: tag
+      })
+    })
+
+    return `(${tagFilterByCategory.join(' || ')})`
+  }
+
   async function fetchPosts(options: any): Promise<IPostPageFromPocketBase> {
     const page = options.pageParam
 
@@ -344,11 +451,35 @@
       })
     }
 
-    // TODO
-    // if (selectedTags.value.length > 0) {
-    // }
+    if (selectedTags.value.length > 0) {
+      selectedTags.value.forEach((selectedTag, tagIndex) => {
+        const isNegativeTag = selectedTag.name.startsWith('-')
+        const normalizedTag = isNegativeTag ? selectedTag.name.slice(1) : selectedTag.name
+
+        if (!normalizedTag) {
+          return
+        }
+
+        if (pocketbaseRequestFilter !== '') {
+          pocketbaseRequestFilter += ' && '
+        }
+
+        const tagFilter = buildTagFilterInAnyCategory(normalizedTag, `tag_${tagIndex}`)
+
+        if (isNegativeTag) {
+          pocketbaseRequestFilter += `!${tagFilter}`
+          return
+        }
+
+        pocketbaseRequestFilter += tagFilter
+      })
+    }
 
     if (selectedFilters.value.score) {
+      if (pocketbaseRequestFilter !== '') {
+        pocketbaseRequestFilter += ' && '
+      }
+
       pocketbaseRequestFilter += $pocketBase.filter('score >= {:score}', {
         score: selectedFilters.value.score
       })
