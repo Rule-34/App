@@ -1,4 +1,4 @@
-import Tag from '~/assets/js/tag.dto'
+import Tag from './tag.dto'
 import type { RouteLocationRaw } from 'vue-router'
 
 export function generatePostsRoute(
@@ -22,7 +22,7 @@ export function generatePostsRoute(
   }
 
   if (tags != null && Array.isArray(tags) && tags.length) {
-    route.query.tags = tags.map((tag) => encodeURI(tag.name)).join('|')
+    route.query.tags = tags.map((tag) => encodeURIComponent(tag.name)).join('|')
   }
 
   // Check if object keys are not undefined

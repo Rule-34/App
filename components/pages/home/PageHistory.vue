@@ -6,8 +6,6 @@
   const { pageHistory } = usePageHistory()
 
   function historyPathToTitle(path: string) {
-    path = decodeURIComponent(path)
-
     return (
       path
         //
@@ -15,16 +13,28 @@
         .replace('?', '&')
         .split('&')
         .map(
-          (_query) =>
-            _query
-              // Capitalize first character
-              .charAt(0)
-              .toUpperCase() +
-            _query
-              .slice(1)
+          (_query) => {
+            let query = _query
 
-              // Replace first '=' with ': '
-              .replace(/=/, ': ')
+            try {
+              query = decodeURIComponent(_query)
+            }
+            catch {
+              // Keep raw query when percent-encoding is malformed
+            }
+
+            return (
+              query
+                // Capitalize first character
+                .charAt(0)
+                .toUpperCase() +
+              query
+                .slice(1)
+
+                // Replace first '=' with ': '
+                .replace(/=/, ': ')
+            )
+          }
         )
         // Query separator
         .join('\n')
