@@ -2,6 +2,7 @@
   import { version } from '~/package.json'
   import { ExclamationTriangleIcon } from '@heroicons/vue/20/solid'
   import { toast } from 'vue-sonner'
+  import { downloadBlob } from '~/assets/js/DownloadHelper'
   import { project } from '@/config/project'
 
   useSeoMeta({
@@ -48,23 +49,6 @@
     customBlockList.value = tags
 
     toast.success('Custom block list saved')
-  }
-
-  function downloadBlob(blob: Blob, filename: string) {
-    const objectURL = window.URL.createObjectURL(blob)
-
-    const anchorElement = document.createElement('a')
-
-    anchorElement.href = objectURL
-    anchorElement.download = filename
-    anchorElement.style.display = 'none'
-
-    document.body.appendChild(anchorElement)
-    anchorElement.click()
-
-    anchorElement.remove()
-
-    setTimeout(() => window.URL.revokeObjectURL(objectURL), 100)
   }
 
   function exportBlockList() {
