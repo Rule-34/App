@@ -14,7 +14,14 @@
         .split('&')
         .map(
           (_query) => {
-            const query = decodeURIComponent(_query)
+            let query = _query
+
+            try {
+              query = decodeURIComponent(_query)
+            }
+            catch {
+              // Keep raw query when percent-encoding is malformed
+            }
 
             return (
               query
