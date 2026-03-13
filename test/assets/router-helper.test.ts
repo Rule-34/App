@@ -21,4 +21,28 @@ describe('generatePostsRoute', () => {
 
     expect(decodeURIComponent(String(route.query?.tags))).toBe('panty_&_stocking_with_garterbelt')
   })
+
+  it('encodes multiple tags joined by pipes when one contains an ampersand', () => {
+    const route = generatePostsRoute(
+      '/posts',
+      'safebooru.org',
+      undefined,
+      [
+        new Tag({ name: 'panty_&_stocking_with_garterbelt' }),
+        new Tag({ name: 'rating:safe' })
+      ],
+      undefined
+    )
+
+    expect(route).toMatchObject({
+      path: '/posts/safebooru.org',
+      query: {
+        tags: 'panty_%26_stocking_with_garterbelt|rating%3Asafe'
+      }
+    })
+
+    expect(decodeURIComponent(String(route.query?.tags))).toBe(
+      'panty_&_stocking_with_garterbelt|rating:safe'
+    )
+  })
 })
