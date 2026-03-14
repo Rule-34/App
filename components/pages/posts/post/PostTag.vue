@@ -1,20 +1,21 @@
 <script lang="ts" setup>
-import {
-  ArrowTopRightOnSquareIcon,
-  DocumentDuplicateIcon,
-  MagnifyingGlassIcon,
-  MinusIcon,
-  NoSymbolIcon,
-  PlusIcon,
-  ShieldExclamationIcon
-} from '@heroicons/vue/24/outline'
-import { useClipboard } from '@vueuse/core'
-import { toast } from 'vue-sonner'
-import { flip, offset, shift, useFloating } from '@floating-ui/vue'
-import type Tag from '~/assets/js/tag.dto'
-import { blockListOptions } from '~/composables/useBlockLists'
+  import {
+    ArrowTopRightOnSquareIcon,
+    DocumentDuplicateIcon,
+    MagnifyingGlassIcon,
+    MinusIcon,
+    NoSymbolIcon,
+    PlusIcon,
+    ShieldExclamationIcon
+  } from '@heroicons/vue/24/outline'
+  import { useClipboard } from '@vueuse/core'
+  import { toast } from 'vue-sonner'
+  import { flip, offset, shift, useFloating } from '@floating-ui/vue'
+  import type Tag from '~/assets/js/tag.dto'
+  import { TagCollection } from '~/assets/js/tagCollection.dto'
+  import { blockListOptions } from '~/composables/useBlockLists'
 
-const props = defineProps<{
+  const props = defineProps<{
     tag: Tag
     selectedTags: Tag[]
   }>()
@@ -27,6 +28,7 @@ const props = defineProps<{
 
   const { isPremium } = useUserData()
   const { customBlockList, selectedList } = useBlockLists()
+  const { tagCollections } = useTagCollections()
   const { copy } = useClipboard()
 
   const referenceEl = ref<HTMLElement>()
@@ -74,6 +76,43 @@ const props = defineProps<{
         duration: 10000 // 10 seconds
       })
     }
+  }
+
+  function addTagToCollection(tag: Tag) {
+    if (!isPremium.value) {
+      const { open: promptPremium, currentIndex } = usePremiumDialog()
+      currentIndex.value = 6
+      promptPremium.value = true
+      return
+    }
+
+    const name = prompt('Enter a tag collection name')?.trim()
+
+    if (!name) {
+      return
+    }
+
+    const existingTagCollection = tagCollections.value.find((tagCollection) => tagCollection.name === name)
+
+    if (existingTagCollection) {
+      if (existingTagCollection.tags.includes(tag.name)) {
+        toast.info('Tag is already in this collection')
+        return
+      }
+
+      existingTagCollection.tags.push(tag.name)
+      toast.success('Tag added to collection')
+      return
+    }
+
+    tagCollections.value.push(
+      new TagCollection({
+        name,
+        tags: [tag.name]
+      })
+    )
+
+    toast.success('Tag collection created')
   }
 </script>
 
@@ -184,6 +223,25 @@ const props = defineProps<{
                 />
 
                 Copy tag
+              </button>
+            </HeadlessMenuItem>
+          </div>
+
+          <!-- Tag Collection Management (Premium only) -->
+          <div class="py-1">
+            <HeadlessMenuItem v-slot="{ active }">
+              <button
+                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                class="group flex w-full items-center px-2.5 py-1 text-sm"
+                type="button"
+                @click="addTagToCollection(tag)"
+              >
+                <PlusIcon
+                  aria-hidden="true"
+                  class="mr-3 h-4 w-4 shrink-0 rounded-sm"
+                />
+
+                Add to tag collection
               </button>
             </HeadlessMenuItem>
           </div>
