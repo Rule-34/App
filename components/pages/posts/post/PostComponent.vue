@@ -21,7 +21,12 @@
     addTag: [tag: string]
     setTag: [tag: string]
     openTagInNewTab: [tag: string]
+    mediaError: [postId: number]
   }>()
+
+  function onMediaError() {
+    emit('mediaError', props.post.id)
+  }
 
   const currentUrl = useRequestURL()
 
@@ -108,6 +113,7 @@
       :mediaSrcWidth="mediaFile.width"
       :mediaType="post.media_type"
       :postIndex="props.postIndex"
+      @mediaError="onMediaError"
     />
 
     <figcaption>

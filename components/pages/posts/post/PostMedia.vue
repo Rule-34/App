@@ -29,6 +29,10 @@
 
   const props = defineProps<PostMediaProps>()
 
+  const emit = defineEmits<{
+    mediaError: []
+  }>()
+
   const isMainHost = computed(() => import.meta.dev || requestUrl.hostname === project.urls.production.hostname)
 
   const mediaElement = ref<HTMLElement | null>(null)
@@ -337,6 +341,7 @@
     }
 
     error.value = new Error('Error loading media')
+    emit('mediaError')
   }
 
   function manuallyReloadMedia() {
