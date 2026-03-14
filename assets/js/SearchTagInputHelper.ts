@@ -5,10 +5,10 @@ export function normalizeSearchTagInput(rawValue: string) {
 
   let value = rawValue.trim()
 
-  // Map typed OR separators (including adjacent/repeated "or" tokens) to existing pipe semantics
-  value = value.replace(/\s*(?:\bor\b(?:\s+)?)+\s*/gi, '|')
+  // Collapse one or more OR tokens (case-insensitive) into a comma — the OR-group delimiter
+  value = value.replace(/\s*(?:\bor\b(?:\s+)?)+\s*/gi, ',')
 
-  // Replace spaces inside tags with underscores
+  // Replace remaining spaces (within individual tag names) with underscores
   value = value.replace(/\s/g, '_')
 
   return value
