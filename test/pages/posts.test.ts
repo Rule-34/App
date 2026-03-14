@@ -1,12 +1,12 @@
-import {describe, expect, it} from 'vitest'
-import {createPage, setup, url} from '@nuxt/test-utils'
+import { describe, expect, it } from 'vitest'
+import { createPage, setup, url } from '@nuxt/test-utils'
 import {
   mockPostsPage0,
   mockPostsPage1,
   mockPostsPageWithOfflineMedia,
   mockPostsPageWithoutResults
 } from './posts.mock-data'
-import {defaultSetupConfig} from '../helper'
+import { defaultSetupConfig } from '../helper'
 
 describe('/', async () => {
   await setup(defaultSetupConfig)
@@ -127,7 +127,7 @@ describe('/', async () => {
       throw new Error('Not implemented')
     })
 
-    it('renders warning when media failed to load', async () => {
+    it('hides post when media failed to load in feed', async () => {
       // Arrange
       const page = await createPage()
 
@@ -151,23 +151,16 @@ describe('/', async () => {
       await Promise.all([
         page.goto(url('/posts/safebooru.org')),
         page.waitForResponse('**/posts?baseEndpoint=*'),
-
-        await page.waitForRequest('**/example.local/**')
+        page.waitForRequest('**/example.local/**')
       ])
 
       // Assert
 
-      // Expect 1 post
-      expect(
-        //
-        await page.getByTestId('posts-list').locator('li').count()
-      ).toBe(1)
+      // Expect post to be hidden after media fails
+      expect(await page.getByRole('heading', { name: /no results/i }).isVisible()).toBe(true)
 
-      // Expect post to have warning
-      expect(
-        //
-        await page.getByTestId('posts-list').locator('li').first().textContent()
-      ).toContain('Error loading media')
+      // Expect no media error placeholder to remain in feed
+      expect(await page.getByText('Error loading media').count()).toBe(0)
     })
   })
 
