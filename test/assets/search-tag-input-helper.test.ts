@@ -21,4 +21,10 @@ describe('normalizeSearchTagInput', () => {
   it('trims surrounding whitespace', () => {
     expect(normalizeSearchTagInput('  cat OR dog  ')).toBe('cat|dog')
   })
+
+  it('collapses adjacent/repeated OR separators into a single pipe', () => {
+    expect(normalizeSearchTagInput('cat OR OR dog')).toBe('cat|dog')
+    expect(normalizeSearchTagInput('cat or OR or dog')).toBe('cat|dog')
+    expect(normalizeSearchTagInput('cat OR OR OR dog')).toBe('cat|dog')
+  })
 })
