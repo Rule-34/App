@@ -136,9 +136,11 @@
         <!-- autoplayAnimatedMedia -->
         <li>
           <SettingSwitch v-model="autoplayAnimatedMedia">
-            <template #name> Autoplay GIFs</template>
+            <template #name> Autoplay GIFs & videos</template>
 
-            <template #description> Automatically play animated GIFs without requiring a click </template>
+            <template #description>
+              Automatically play animated GIFs and start videos muted without requiring a click
+            </template>
           </SettingSwitch>
         </li>
 
