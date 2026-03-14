@@ -2,6 +2,7 @@
   import { CheckIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
   import { watchDebounced } from '@vueuse/core'
   import { abbreviateNumber } from 'js-abbreviation-number'
+  import { normalizeSearchTagInput } from '~/assets/js/SearchTagInputHelper'
   import Tag from '~/assets/js/tag.dto'
 
   const props = defineProps<{
@@ -22,14 +23,9 @@
 
   // Change event
   function onComboboxInputChange(event: InputEvent) {
-    let value = (event.target as HTMLInputElement).value
+    const value = (event.target as HTMLInputElement).value
 
-    value = value.trim()
-
-    // Replace empty spaces with underscores
-    value = value.replace(/\s/g, '_')
-
-    searchQuery.value = value
+    searchQuery.value = normalizeSearchTagInput(value)
   }
 
   watchDebounced(searchQuery, (value) => onSearchChange(value), { debounce: 350 })
