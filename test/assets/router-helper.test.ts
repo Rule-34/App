@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest'
-import {generatePostsRoute} from '../../assets/js/RouterHelper'
+import {generatePostsRoute, parseRouteTags} from '../../assets/js/RouterHelper'
 import Tag from '../../assets/js/tag.dto'
 
 describe('generatePostsRoute', () => {
@@ -15,14 +15,14 @@ describe('generatePostsRoute', () => {
     expect(route).toMatchObject({
       path: '/posts/safebooru.org',
       query: {
-        tags: 'panty_%26_stocking_with_garterbelt'
+        tags: ['panty_%26_stocking_with_garterbelt']
       }
     })
 
-    expect(decodeURIComponent(String(route.query?.tags))).toBe('panty_&_stocking_with_garterbelt')
+    expect(parseRouteTags(route.query?.tags)).toEqual([{ name: 'panty_&_stocking_with_garterbelt' }])
   })
 
-  it('encodes multiple tags joined by pipes when one contains an ampersand', () => {
+  it('stores multiple tags as repeated query values', () => {
     const route = generatePostsRoute(
       '/posts',
       'safebooru.org',
@@ -37,12 +37,13 @@ describe('generatePostsRoute', () => {
     expect(route).toMatchObject({
       path: '/posts/safebooru.org',
       query: {
-        tags: 'panty_%26_stocking_with_garterbelt|rating%3Asafe'
+        tags: ['panty_%26_stocking_with_garterbelt', 'rating%3Asafe']
       }
     })
 
-    expect(decodeURIComponent(String(route.query?.tags))).toBe(
-      'panty_&_stocking_with_garterbelt|rating:safe'
-    )
+    expect(parseRouteTags(route.query?.tags)).toEqual([
+      { name: 'panty_&_stocking_with_garterbelt' },
+      { name: 'rating:safe' }
+    ])
   })
 })

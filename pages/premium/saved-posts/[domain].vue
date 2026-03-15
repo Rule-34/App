@@ -11,7 +11,7 @@
   import Tag from '~/assets/js/tag.dto'
   import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
   import type { IPost, IPostPage } from 'assets/js/post.dto'
-  import { generatePostsRoute } from '~/assets/js/RouterHelper'
+  import { generatePostsRoute, parseRouteTags } from '~/assets/js/RouterHelper'
   import type { IPocketbasePost } from '~/assets/js/pocketbase.dto'
   import { project } from '@/config/project'
 
@@ -77,16 +77,7 @@
   })
 
   const selectedTags = computed(() => {
-    const tags = route.query.tags as string
-
-    if (!tags) {
-      return []
-    }
-
-    return tags
-      .split('|')
-      .map((tag) => decodeURIComponent(tag))
-      .map((tag) => new Tag({ name: tag }).toJSON())
+    return parseRouteTags(route.query.tags)
   })
 
   const selectedPage = computed(() => {
