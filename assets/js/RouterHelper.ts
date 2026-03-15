@@ -22,7 +22,7 @@ export function generatePostsRoute(
   }
 
   if (tags != null && Array.isArray(tags) && tags.length) {
-    route.query.tags = tags.map((tag) => encodeURIComponent(tag.name)).join('|')
+    route.query.tags = tags.map((tag) => tag.name).join('|')
   }
 
   // Check if object keys are not undefined

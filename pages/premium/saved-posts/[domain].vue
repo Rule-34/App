@@ -85,7 +85,6 @@
 
     return tags
       .split('|')
-      .map((tag) => decodeURIComponent(tag))
       .map((tag) => new Tag({ name: tag }).toJSON())
   })
 
