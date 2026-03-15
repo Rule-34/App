@@ -7,7 +7,7 @@
   import { FetchError } from 'ofetch'
   import type { Ref } from 'vue'
   import { toast } from 'vue-sonner'
-  import { generatePostsRoute } from '~/assets/js/RouterHelper'
+  import { generatePostsRoute, parseRouteTags } from '~/assets/js/RouterHelper'
   import { tagArrayToTitle } from '~/assets/js/SeoHelper'
   import type { Domain } from '~/assets/js/domain'
   import type { IPost, IPostPage } from '~/assets/js/post.dto'
@@ -73,16 +73,7 @@
   })
 
   const selectedTags = computed(() => {
-    const tags = route.query.tags as string
-
-    if (!tags) {
-      return []
-    }
-
-    return tags
-      .split('|')
-      .map((tag) => decodeURIComponent(tag))
-      .map((tag) => new Tag({ name: tag }).toJSON())
+    return parseRouteTags(route.query.tags)
   })
 
   const selectedPage = computed(() => {
@@ -397,7 +388,7 @@
 
     const apiUrl = config.public.apiUrl + '/booru/' + selectedBooru.value.type.type + '/posts'
 
-    const tags = selectedTags.value.map((tag) => tag.name).join('|')
+    const tags = selectedTags.value.map((tag) => tag.name)
 
     return $fetch<IPostPage>(apiUrl, {
       params: {
