@@ -68,13 +68,6 @@
           url: 'https://www.refinedsoft.com/shop-premium-features-discord-role/#/portal/signup/6881f5fb9c83c40001487e13/monthly',
           category: 'creditCard',
           cta: 'Subscribe with Credit Card'
-        },
-        {
-          name: 'SellApp',
-          url: 'https://refinedsoft.sell.app/product/premium-monthly?payment_method=STRIPE',
-          faviconDomain: 'https://sell.app',
-          category: 'crypto',
-          cta: 'Subscribe with Crypto'
         }
       ]
     },
@@ -94,7 +87,7 @@
         },
         {
           name: 'SellApp',
-          url: 'https://refinedsoft.sell.app/product/premium-30-days-access?payment_method=STRIPE',
+          url: 'https://refinedsoft.sell.app/product/premium-30-days-access?payment_method=XMR',
           faviconDomain: 'https://sell.app',
           category: 'crypto',
           cta: 'Pay with Crypto'
@@ -113,13 +106,6 @@
           url: 'https://www.refinedsoft.com/shop-premium-features-discord-role/#/portal/signup/6881f5fb9c83c40001487e13/yearly',
           category: 'creditCard',
           cta: 'Subscribe with Credit Card'
-        },
-        {
-          name: 'SellApp',
-          url: 'https://refinedsoft.sell.app/product/premium-yearly?payment_method=STRIPE',
-          faviconDomain: 'https://sell.app',
-          category: 'crypto',
-          cta: 'Subscribe with Crypto'
         }
       ]
     },
@@ -139,7 +125,7 @@
         },
         {
           name: 'SellApp',
-          url: 'https://refinedsoft.sell.app/product/premium-lifetime?payment_method=STRIPE',
+          url: 'https://refinedsoft.sell.app/product/premium-lifetime?payment_method=XMR',
           faviconDomain: 'https://sell.app',
           category: 'crypto',
           cta: 'Pay with Crypto'
