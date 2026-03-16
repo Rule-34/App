@@ -34,23 +34,27 @@
   onMounted(() => {
     const hasLoadedAds = ref(false)
 
-    watch([hasInteracted, isPremium], ([hasInteracted, isPremium]) => {
-      if (hasLoadedAds.value) {
-        return
-      }
+    watch(
+      [hasInteracted, isPremium],
+      ([hasInteracted, isPremium]) => {
+        if (hasLoadedAds.value) {
+          return
+        }
 
-      if (!hasInteracted) {
-        return
-      }
+        if (!hasInteracted) {
+          return
+        }
 
-      if (isPremium) {
-        return
-      }
+        if (isPremium) {
+          return
+        }
 
-      hasLoadedAds.value = true
+        hasLoadedAds.value = true
 
-      useAdvertisements()
-    }, { immediate: true })
+        useAdvertisements()
+      },
+      { immediate: true }
+    )
   })
 
   /**
@@ -374,6 +378,34 @@
     window.location.reload()
   }
 
+  const hiddenPostMediaErrorKeys = ref<string[]>([])
+
+  const hiddenPostMediaErrorScopeKey = computed(() => {
+    return JSON.stringify({
+      domain: selectedBooru.value.domain,
+      tags: selectedTags.value.map((tag) => tag.name),
+      filters: selectedFilters.value
+    })
+  })
+
+  function getPostMediaErrorKey(postId: number) {
+    return `${selectedBooru.value.domain}-${postId}`
+  }
+
+  function onPostMediaError(postId: number) {
+    const postMediaErrorKey = getPostMediaErrorKey(postId)
+
+    if (hiddenPostMediaErrorKeys.value.includes(postMediaErrorKey)) {
+      return
+    }
+
+    hiddenPostMediaErrorKeys.value.push(postMediaErrorKey)
+  }
+
+  watch(hiddenPostMediaErrorScopeKey, () => {
+    hiddenPostMediaErrorKeys.value = []
+  })
+
   /**
    * Data fetching
    */
@@ -553,6 +585,10 @@
       //
 
       return page.data.flatMap((post, index) => {
+        if (hiddenPostMediaErrorKeys.value.includes(getPostMediaErrorKey(post.id))) {
+          return []
+        }
+
         //
 
         return {
@@ -1058,6 +1094,7 @@
                   :postIndex="virtualRow.index"
                   :selectedTags="selectedTags"
                   @addTag="onPostAddTag"
+                  @mediaError="onPostMediaError"
                   @openTagInNewTab="onPostOpenTagInNewTab"
                   @setTag="onPostSetTag"
                 />
