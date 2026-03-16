@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { Bars3BottomRightIcon, EyeIcon, MagnifyingGlassIcon, StarIcon } from '@heroicons/vue/24/outline'
+  import { Bars3BottomRightIcon, EyeIcon, MagnifyingGlassIcon, PhotoIcon, StarIcon } from '@heroicons/vue/24/outline'
   import { ArrowPathIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
@@ -98,6 +98,7 @@
     // TODO: Validate
 
     return {
+      type: route.query.filter?.type ?? undefined,
       rating: route.query.filter?.rating ?? undefined,
       sort: route.query.filter?.sort ?? undefined,
       score: route.query.filter?.score ?? undefined
@@ -105,6 +106,15 @@
   })
 
   const filterConfig = {
+    type: {
+      type: 'select' as const,
+      label: 'Type',
+      icon: PhotoIcon,
+      options: [
+        { label: 'Type', value: undefined },
+        { label: 'Video', value: 'video' }
+      ]
+    },
     sort: {
       type: 'select' as const,
       label: 'Sort',
@@ -484,6 +494,10 @@
           return false
         }
 
+        if (selectedFilters.value.type && post.media_type !== selectedFilters.value.type) {
+          return false
+        }
+
         // Delete all posts that have a blocklisted tag
         if (selectedBlockList.value.length > 0) {
           const postTags = post.tags.meta.concat(
@@ -665,6 +679,10 @@
     }
 
     // Filters
+    if (selectedFilters.value.type) {
+      title += `, ${selectedFilters.value.type} only`
+    }
+
     if (selectedFilters.value.rating) {
       title += `, rated ${selectedFilters.value.rating}`
     }
@@ -736,6 +754,10 @@
     let description = `Stream and download ${tagsTitle ?? 'various'} Hentai porn videos, GIFs and images`
 
     // Filters
+    if (selectedFilters.value.type) {
+      description += `, ${selectedFilters.value.type} only`
+    }
+
     if (selectedFilters.value.rating) {
       description += `, rated ${selectedFilters.value.rating}`
     }
