@@ -13,7 +13,8 @@
 
   const appVersion = version
 
-  const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia, blockAiGeneratedImages } = useUserSettings()
+  const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia, preferClassicVideoPlayer, blockAiGeneratedImages } =
+    useUserSettings()
   const { isPremium } = useUserData()
   const { selectedList, selectedBlockList, defaultBlockList, customBlockList, resetCustomBlockList } = useBlockLists()
 
@@ -139,6 +140,20 @@
             <template #name> Autoplay GIFs</template>
 
             <template #description> Automatically play animated GIFs without requiring a click </template>
+          </SettingSwitch>
+        </li>
+
+        <li>
+          <SettingSwitch
+            v-model="preferClassicVideoPlayer"
+            :disabled="!isPremium"
+          >
+            <template #name> Classic video controls </template>
+
+            <template #description>
+              Use your browser's native video player instead of the JS player. Premium only so video ad support stays
+              intact.
+            </template>
           </SettingSwitch>
         </li>
 
