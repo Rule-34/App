@@ -3,7 +3,7 @@ import {generatePostsRoute} from '../../assets/js/RouterHelper'
 import Tag from '../../assets/js/tag.dto'
 
 describe('generatePostsRoute', () => {
-  it('encodes ampersands in tag query values', () => {
+  it('keeps raw tag values in route query objects', () => {
     const route = generatePostsRoute(
       '/posts',
       'safebooru.org',
@@ -15,14 +15,13 @@ describe('generatePostsRoute', () => {
     expect(route).toMatchObject({
       path: '/posts/safebooru.org',
       query: {
-        tags: 'panty_%26_stocking_with_garterbelt'
+        tags: 'panty_&_stocking_with_garterbelt'
       }
     })
-
-    expect(decodeURIComponent(String(route.query?.tags))).toBe('panty_&_stocking_with_garterbelt')
+    expect(String(route.query?.tags)).toBe('panty_&_stocking_with_garterbelt')
   })
 
-  it('encodes multiple tags joined by pipes when one contains an ampersand', () => {
+  it('keeps multiple tag and filter values raw before router serialization', () => {
     const route = generatePostsRoute(
       '/posts',
       'safebooru.org',
@@ -37,12 +36,10 @@ describe('generatePostsRoute', () => {
     expect(route).toMatchObject({
       path: '/posts/safebooru.org',
       query: {
-        tags: 'panty_%26_stocking_with_garterbelt|rating%3Asafe'
+        tags: 'panty_&_stocking_with_garterbelt|rating:safe'
       }
     })
 
-    expect(decodeURIComponent(String(route.query?.tags))).toBe(
-      'panty_&_stocking_with_garterbelt|rating:safe'
-    )
+    expect(String(route.query?.tags)).toBe('panty_&_stocking_with_garterbelt|rating:safe')
   })
 })
