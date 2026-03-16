@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { Bars3BottomRightIcon, EyeIcon, MagnifyingGlassIcon, StarIcon } from '@heroicons/vue/24/outline'
+  import { Bars3BottomRightIcon, Bars3Icon, EyeIcon, MagnifyingGlassIcon, Squares2X2Icon, StarIcon } from '@heroicons/vue/24/outline'
   import { ArrowPathIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
@@ -18,7 +18,7 @@
   const route = useRoute()
   const config = useRuntimeConfig()
 
-  const { postsPerPage } = useUserSettings()
+  const { postsPerPage, postsLayout } = useUserSettings()
   const { isPremium } = useUserData()
   const { hasInteracted } = useInteractionDetector()
   const { booruList } = useBooruList()
@@ -374,6 +374,12 @@
     window.location.reload()
   }
 
+  const isGridPostsLayout = computed(() => postsLayout.value === 'grid')
+
+  function togglePostsLayout() {
+    postsLayout.value = postsLayout.value === 'list' ? 'grid' : 'list'
+  }
+
   /**
    * Data fetching
    */
@@ -606,6 +612,11 @@
   watchEffect(() => {
     // Only run on client
     if (!import.meta.client) {
+      return
+    }
+
+    // Grid layout uses a manual "Load more" button
+    if (postsLayout.value !== 'list') {
       return
     }
 
@@ -933,11 +944,34 @@
         </template>
       </PageHeader>
 
-      <!-- TODO: strip page -->
-      <ShareButton
-        :title="completeTitle"
-        class="my-auto p-3"
-      />
+      <div class="my-auto flex items-center gap-1">
+        <button
+          :aria-label="`Switch to ${isGridPostsLayout ? 'list' : 'grid'} layout`"
+          class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util ring-base-0/20 rounded-md p-2 ring-1"
+          type="button"
+          @click="togglePostsLayout"
+        >
+          <span class="sr-only"> Toggle posts layout </span>
+
+          <Bars3Icon
+            v-if="isGridPostsLayout"
+            aria-hidden="true"
+            class="h-5 w-5"
+          />
+
+          <Squares2X2Icon
+            v-else
+            aria-hidden="true"
+            class="h-5 w-5"
+          />
+        </button>
+
+        <!-- TODO: strip page -->
+        <ShareButton
+          :title="completeTitle"
+          class="p-3"
+        />
+      </div>
     </div>
 
     <section class="my-4">
@@ -957,7 +991,7 @@
       </template>
 
       <!-- Error (initial load only) -->
-      <template v-else-if="isError && !allRows.length">
+      <template v-else-if="isError && !allRows.length && !isBlockedTagSelected && !hasHiddenPosts">
         <PostPageError
           :error="error"
           :on-retry="onRetryClick"
@@ -975,7 +1009,17 @@
 
           <h3 class="text-lg leading-10 font-semibold">No results</h3>
 
-          <span class="w-full overflow-x-auto text-pretty">Try changing the tags or filters</span>
+          <span class="w-full overflow-x-auto text-pretty">
+            <template v-if="isBlockedTagSelected">
+              Your selected tag is in your blocklist
+            </template>
+            <template v-else-if="hasHiddenPosts">
+              Results were hidden by your tag blocklist
+            </template>
+            <template v-else>
+              Try changing the tags or filters
+            </template>
+          </span>
         </div>
       </template>
 
@@ -988,88 +1032,135 @@
 
         <!-- TODO: Animate adding posts https://vuejs.org/guide/built-ins/transition-group.html#staggering-list-transitions -->
 
-        <div
-          :style="{
-            height: `${totalSize}px`,
-            width: '100%',
-            position: 'relative'
-          }"
-        >
-          <!-- TODO: Fix SSR mismatches -->
-          <ol
+        <template v-if="!isGridPostsLayout">
+          <div
             :style="{
-              position: 'absolute',
-              top: 0,
-              left: 0,
+              height: `${totalSize}px`,
               width: '100%',
-              transform: `translateY(${virtualRows[0]?.start - rowVirtualizer.options.scrollMargin}px)`
+              position: 'relative'
             }"
-            class="space-y-4"
           >
-            <li
-              v-for="virtualRow in virtualRows"
-              :key="virtualRow.key"
-              :ref="measureElement"
-              :data-index="virtualRow.index"
+            <!-- TODO: Fix SSR mismatches -->
+            <ol
+              :style="{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                transform: `translateY(${virtualRows[0]?.start - rowVirtualizer.options.scrollMargin}px)`
+              }"
+              class="space-y-4"
             >
-              <!-- Next Pagination -->
-              <div
-                v-if="virtualRow.index > allRows.length - 1"
-                class="text-base-content flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
+              <li
+                v-for="virtualRow in virtualRows"
+                :key="virtualRow.key"
+                :ref="measureElement"
+                :data-index="virtualRow.index"
               >
-                <!-- Error loading next page -->
-                <div v-if="isFetchNextPageError">
-                  <PostPageError
-                    :error="error"
-                    :on-retry="fetchNextPage"
-                    class="my-12"
-                  />
+                <!-- Next Pagination -->
+                <div
+                  v-if="virtualRow.index > allRows.length - 1"
+                  class="text-base-content flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
+                >
+                  <!-- Error loading next page -->
+                  <div v-if="isFetchNextPageError">
+                    <PostPageError
+                      :error="error"
+                      :on-retry="fetchNextPage"
+                      class="my-12"
+                    />
+                  </div>
+
+                  <!-- Normal pagination states -->
+                  <span
+                    v-else
+                    class="block rounded-md px-1.5 py-1"
+                  >
+                    <template v-if="isFetching"> Loading more... </template>
+
+                    <template v-else-if="hasNextPage"> Reach here to load more </template>
+                  </span>
                 </div>
 
-                <!-- Normal pagination states -->
-                <span
-                  v-else
-                  class="block rounded-md px-1.5 py-1"
-                >
-                  <template v-if="isFetching"> Loading more... </template>
+                <!-- Content -->
+                <template v-else>
+                  <!-- Page indicator -->
+                  <!-- TODO: Show individually, not attached to a post-->
+                  <button
+                    v-if="virtualRow.index !== 0 && allRows[virtualRow.index].isFirstPost"
+                    class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util mx-auto mb-4 block rounded-md px-1.5 py-1 text-sm"
+                    type="button"
+                    @click="onPageIndicatorClick"
+                  >
+                    &dharl; Page {{ allRows[virtualRow.index].current_page }} &dharr;
+                  </button>
 
-                  <template v-else-if="hasNextPage"> Reach here to load more </template>
-                </span>
-              </div>
+                  <!-- Post -->
+                  <!-- Fix: use domain + post.id as unique key, since virtualRow.index could be the same on different Boorus/pages -->
+                  <PostComponent
+                    :key="selectedBooru.domain + '-' + allRows[virtualRow.index].id"
+                    :post="allRows[virtualRow.index]"
+                    :postIndex="virtualRow.index"
+                    :selectedTags="selectedTags"
+                    @addTag="onPostAddTag"
+                    @openTagInNewTab="onPostOpenTagInNewTab"
+                    @setTag="onPostSetTag"
+                  />
 
-              <!-- Content -->
-              <template v-else>
-                <!-- Page indicator -->
-                <!-- TODO: Show individually, not attached to a post-->
-                <button
-                  v-if="virtualRow.index !== 0 && allRows[virtualRow.index].isFirstPost"
-                  class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util mx-auto mb-4 block rounded-md px-1.5 py-1 text-sm"
-                  type="button"
-                  @click="onPageIndicatorClick"
-                >
-                  &dharl; Page {{ allRows[virtualRow.index].current_page }} &dharr;
-                </button>
-
-                <!-- Post -->
-                <!-- Fix: use domain + post.id as unique key, since virtualRow.index could be the same on different Boorus/pages -->
-                <PostComponent
-                  :key="selectedBooru.domain + '-' + allRows[virtualRow.index].id"
-                  :post="allRows[virtualRow.index]"
-                  :postIndex="virtualRow.index"
-                  :selectedTags="selectedTags"
-                  @addTag="onPostAddTag"
-                  @openTagInNewTab="onPostOpenTagInNewTab"
-                  @setTag="onPostSetTag"
-                />
-
-                <!-- Promoted content -->
-                <template v-if="!isPremium && virtualRow.index !== 0 && virtualRow.index % 7 === 0">
-                  <PromotedContent class="mt-4" />
+                  <!-- Promoted content -->
+                  <template v-if="!isPremium && virtualRow.index !== 0 && virtualRow.index % 7 === 0">
+                    <PromotedContent class="mt-4" />
+                  </template>
                 </template>
-              </template>
+              </li>
+            </ol>
+          </div>
+        </template>
+
+        <template v-else>
+          <ol class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+            <li
+              v-for="(post, postIndex) in allRows"
+              :key="selectedBooru.domain + '-' + post.id"
+            >
+              <PostComponent
+                :post="post"
+                :postIndex="postIndex"
+                :selectedTags="selectedTags"
+                @addTag="onPostAddTag"
+                @openTagInNewTab="onPostOpenTagInNewTab"
+                @setTag="onPostSetTag"
+              />
+
             </li>
           </ol>
-        </div>
+
+          <div
+            v-if="isFetchNextPageError"
+            class="mt-4"
+          >
+            <PostPageError
+              :error="error"
+              :on-retry="fetchNextPage"
+              class="my-12"
+            />
+          </div>
+
+          <div
+            v-else-if="hasNextPage"
+            class="text-base-content mt-4 flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
+          >
+            <button
+              :disabled="isFetching || isFetchingNextPage"
+              class="hover:hover-bg-util focus-visible:focus-outline-util hover:hover-text-util ring-base-0/20 rounded-md px-3 py-1.5 ring-1 disabled:opacity-60"
+              type="button"
+              @click="onLoadNextPostPage"
+            >
+              <template v-if="isFetching || isFetchingNextPage"> Loading more... </template>
+              <template v-else> Load more </template>
+            </button>
+          </div>
+        </template>
 
         <!-- Nothing more to load message -->
         <div
