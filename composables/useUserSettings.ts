@@ -4,6 +4,7 @@ export default function () {
   let postFullSizeImages = ref<boolean>(false)
   let postsPerPage = ref<number>(29)
   let autoplayAnimatedMedia = ref<boolean>(false)
+  let preferClassicVideoPlayer = ref<boolean>(false)
   let blockAiGeneratedImages = ref<boolean>(false)
 
   if (import.meta.client) {
@@ -16,6 +17,9 @@ export default function () {
     autoplayAnimatedMedia = useLocalStorage('settings-autoplayAnimatedMedia', false, {
       writeDefaults: false
     })
+    preferClassicVideoPlayer = useLocalStorage('settings-preferClassicVideoPlayer', false, {
+      writeDefaults: false
+    })
     blockAiGeneratedImages = useLocalStorage('settings-blockAiGeneratedImages', false, {
       writeDefaults: false
     })
@@ -25,6 +29,7 @@ export default function () {
     postFullSizeImages,
     postsPerPage,
     autoplayAnimatedMedia,
+    preferClassicVideoPlayer,
     blockAiGeneratedImages
   }
 }

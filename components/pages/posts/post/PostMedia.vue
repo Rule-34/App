@@ -12,7 +12,7 @@
 
   const requestUrl = useRequestURL()
   const { isPremium } = useUserData()
-  const { autoplayAnimatedMedia } = useUserSettings()
+  const { autoplayAnimatedMedia, preferClassicVideoPlayer } = useUserSettings()
   let { timesVideoHasRendered } = useEthics()
   const { wasCurrentPageSSR } = useSSRDetection()
 
@@ -44,6 +44,7 @@
   const isAnimatedMedia = computed(
     () => props.mediaType === 'animated' || (props.mediaType === 'image' && props.mediaSrc.endsWith('.gif'))
   )
+  const shouldUseClassicVideoPlayer = computed(() => isVideo.value && isPremium.value && preferClassicVideoPlayer.value)
 
   const triedToLoadWithProxy = shallowRef(false)
   const triedToLoadPosterWithProxy = shallowRef(false)
@@ -61,6 +62,10 @@
 
     switch (true) {
       case isVideo.value:
+        if (shouldUseClassicVideoPlayer.value) {
+          break
+        }
+
         createVideoPlayer()
         break
 
@@ -71,6 +76,14 @@
         break
     }
   })
+
+  function getVideoElement() {
+    if (!mediaElement.value || !isVideo.value) {
+      return null
+    }
+
+    return mediaElement.value as HTMLVideoElement
+  }
 
   onBeforeUnmount(() => {
     let finalMediaElement = mediaElement.value
@@ -96,6 +109,10 @@
 
     //
     else if (isVideo.value) {
+      if (shouldUseClassicVideoPlayer.value) {
+        return
+      }
+
       destroyVideoPlayer()
     }
   })
@@ -253,6 +270,26 @@
   }
 
   function reloadVideoPlayer(shouldPlay: boolean = false) {
+    if (shouldUseClassicVideoPlayer.value) {
+      nextTick(() => {
+        const videoElement = getVideoElement()
+
+        if (!videoElement) {
+          return
+        }
+
+        videoElement.load()
+
+        if (!shouldPlay) {
+          return
+        }
+
+        void videoElement.play().catch(() => undefined)
+      })
+
+      return
+    }
+
     nextTick(() => {
       destroyVideoPlayer()
 
@@ -368,6 +405,11 @@
     const entry = entries[0]
 
     if (!entry.isIntersecting) {
+      if (shouldUseClassicVideoPlayer.value) {
+        getVideoElement()?.pause()
+        return
+      }
+
       videoPlayer?.pause()
     }
   }

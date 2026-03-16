@@ -11,5 +11,6 @@ describe('/settings', async () => {
     await page.waitForSelector('h1')
 
     expect(await page.textContent('h1')).toBe('Settings')
+    expect(await page.textContent('body')).toContain('Classic video controls')
   })
 })
