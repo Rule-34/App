@@ -24,7 +24,17 @@
   const { toggle: toggleSearchMenu } = useSearchMenu()
 
   const { addUrlToPageHistory } = usePageHistory()
-  const { savedPostList } = usePocketbase()
+  const {
+    savedPostList,
+    savedPostFolders,
+    getSavedPostFolder,
+    setSavedPostFolder,
+    removeSavedPostFolder,
+    createSavedPostFolder,
+    deleteSavedPostFolder
+  } = usePocketbase()
+
+  const selectedFolderFilter = ref<string | null>(null)
 
   /**
    * URL
@@ -83,9 +93,7 @@
       return []
     }
 
-    return tags
-      .split('|')
-      .map((tag) => new Tag({ name: tag }).toJSON())
+    return tags.split('|').map((tag) => new Tag({ name: tag }).toJSON())
   })
 
   const selectedPage = computed(() => {
@@ -303,6 +311,51 @@
     window.location.reload()
   }
 
+  function onCreateFolderClick() {
+    const folderNamePrompt = prompt('Folder name')
+
+    if (folderNamePrompt == null) {
+      return
+    }
+
+    const wasFolderCreated = createSavedPostFolder(folderNamePrompt)
+
+    if (!wasFolderCreated) {
+      toast.error('Invalid or duplicate folder name')
+      return
+    }
+
+    const normalizedFolderName = folderNamePrompt.trim().replace(/\s+/g, ' ')
+
+    selectedFolderFilter.value = normalizedFolderName
+  }
+
+  function onDeleteSelectedFolderClick() {
+    if (!selectedFolderFilter.value) {
+      return
+    }
+
+    if (!confirm(`Delete folder "${selectedFolderFilter.value}"?`)) {
+      return
+    }
+
+    deleteSavedPostFolder(selectedFolderFilter.value)
+    selectedFolderFilter.value = null
+  }
+
+  function onPostFolderChange(post: IPost, selectedFolderName: string) {
+    if (!selectedFolderName) {
+      removeSavedPostFolder(post.domain, post.id)
+      return
+    }
+
+    const wasFolderAssigned = setSavedPostFolder(post.domain, post.id, selectedFolderName)
+
+    if (!wasFolderAssigned) {
+      toast.error('Folder not found')
+    }
+  }
+
   /**
    * Data fetching
    */
@@ -471,6 +524,24 @@
     })
   })
 
+  const filteredRows = computed<IPost[]>(() => {
+    if (!selectedFolderFilter.value) {
+      return allRows.value
+    }
+
+    return allRows.value.filter((post) => getSavedPostFolder(post.domain, post.id) === selectedFolderFilter.value)
+  })
+
+  watch(savedPostFolders, (folders) => {
+    if (!selectedFolderFilter.value) {
+      return
+    }
+
+    if (!folders.includes(selectedFolderFilter.value)) {
+      selectedFolderFilter.value = null
+    }
+  })
+
   const parentRef = ref<HTMLElement | null>(null)
   const parentOffsetRef = ref(0)
 
@@ -479,8 +550,10 @@
   })
 
   const rowVirtualizerOptions = computed(() => {
+    const includeLoaderRow = hasNextPage.value
+
     return {
-      count: hasNextPage.value ? allRows.value.length + 1 : allRows.value.length,
+      count: includeLoaderRow ? filteredRows.value.length + 1 : filteredRows.value.length,
 
       estimateSize: () => 600,
 
@@ -511,11 +584,6 @@
       return
     }
 
-    // Skip if there is no data
-    if (!allRows.value) {
-      return
-    }
-
     const [lastItem] = [...virtualRows.value].reverse()
 
     if (!lastItem) {
@@ -528,7 +596,7 @@
     // AND there's no error (to prevent infinite retry loop)
     // THEN load next page automatically
     if (
-      lastItem.index >= allRows.value.length - 1 &&
+      lastItem.index >= filteredRows.value.length - 1 &&
       hasNextPage.value &&
       !isFetchingNextPage.value &&
       !isError.value
@@ -736,6 +804,49 @@
       </PageHeader>
     </div>
 
+    <section class="mt-2 mb-4 space-y-2">
+      <div class="flex flex-wrap items-center gap-2">
+        <button
+          :class="selectedFolderFilter === null ? 'bg-primary-600 text-base-content-highlight' : ''"
+          class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util rounded-md px-2 py-1 text-xs"
+          type="button"
+          @click="selectedFolderFilter = null"
+        >
+          All
+        </button>
+
+        <button
+          v-for="folder in savedPostFolders"
+          :key="folder"
+          :class="selectedFolderFilter === folder ? 'bg-primary-600 text-base-content-highlight' : ''"
+          class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util rounded-md px-2 py-1 text-xs"
+          type="button"
+          @click="selectedFolderFilter = folder"
+        >
+          {{ folder }}
+        </button>
+
+        <button
+          class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util rounded-md px-2 py-1 text-xs"
+          type="button"
+          @click="onCreateFolderClick"
+        >
+          New folder
+        </button>
+
+        <button
+          v-if="selectedFolderFilter"
+          class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util rounded-md px-2 py-1 text-xs"
+          type="button"
+          @click="onDeleteSelectedFolderClick"
+        >
+          Delete folder
+        </button>
+      </div>
+
+      <p class="text-base-content text-xs">Assign a folder from each post card.</p>
+    </section>
+
     <section class="my-4">
       <!-- Pending -->
       <template v-if="isPending">
@@ -762,7 +873,7 @@
       </template>
 
       <!-- No results -->
-      <template v-else-if="!allRows.length">
+      <template v-else-if="!filteredRows.length">
         <div class="mt-32 text-center">
           <QuestionMarkCircleIcon
             aria-hidden="true"
@@ -771,7 +882,10 @@
 
           <h3 class="text-lg leading-10 font-semibold">No results</h3>
 
-          <span class="w-full overflow-x-auto text-pretty">Try changing the tags or filters</span>
+          <span class="w-full overflow-x-auto text-pretty">
+            <template v-if="selectedFolderFilter">Try selecting another folder or clear folder filter</template>
+            <template v-else>Try changing the tags or filters</template>
+          </span>
         </div>
       </template>
 
@@ -810,7 +924,7 @@
             >
               <!-- Next Pagination -->
               <div
-                v-if="virtualRow.index > allRows.length - 1"
+                v-if="virtualRow.index > filteredRows.length - 1"
                 class="text-base-content flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
               >
                 <!-- Error loading next page -->
@@ -838,19 +952,49 @@
                 <!-- Page indicator -->
                 <!-- TODO: Show individually, not attached to a post-->
                 <button
-                  v-if="virtualRow.index !== 0 && allRows[virtualRow.index].isFirstPost"
+                  v-if="virtualRow.index !== 0 && filteredRows[virtualRow.index].isFirstPost"
                   class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util mx-auto mb-4 block rounded-md px-1.5 py-1 text-sm"
                   type="button"
                   @click="onPageIndicatorClick"
                 >
-                  &dharl; Page {{ allRows[virtualRow.index].current_page }} &dharr;
+                  &dharl; Page {{ filteredRows[virtualRow.index].current_page }} &dharr;
                 </button>
+
+                <div class="mb-2 flex items-center gap-2 px-1 text-xs">
+                  <label
+                    :for="`folder-select-${filteredRows[virtualRow.index].domain}-${filteredRows[virtualRow.index].id}`"
+                    class="text-base-content-highlight"
+                  >
+                    Folder
+                  </label>
+
+                  <select
+                    :id="`folder-select-${filteredRows[virtualRow.index].domain}-${filteredRows[virtualRow.index].id}`"
+                    :value="
+                      getSavedPostFolder(filteredRows[virtualRow.index].domain, filteredRows[virtualRow.index].id) ?? ''
+                    "
+                    class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util border-base-0/20 bg-base-1000 rounded-md px-2 py-1"
+                    @change="
+                      onPostFolderChange(filteredRows[virtualRow.index], ($event.target as HTMLSelectElement).value)
+                    "
+                  >
+                    <option value="">No folder</option>
+
+                    <option
+                      v-for="folder in savedPostFolders"
+                      :key="folder"
+                      :value="folder"
+                    >
+                      {{ folder }}
+                    </option>
+                  </select>
+                </div>
 
                 <!-- Post -->
                 <!-- Fix: use domain + post.id as unique key, since virtualRow.index could be the same on different Boorus/pages -->
                 <PostComponent
-                  :key="allRows[virtualRow.index].domain + '-' + allRows[virtualRow.index].id"
-                  :post="allRows[virtualRow.index]"
+                  :key="filteredRows[virtualRow.index].domain + '-' + filteredRows[virtualRow.index].id"
+                  :post="filteredRows[virtualRow.index]"
                   :postIndex="virtualRow.index"
                   :selected-tags="selectedTags"
                   @addTag="onPostAddTag"
@@ -864,7 +1008,7 @@
 
         <!-- Nothing more to load message -->
         <div
-          v-if="!hasNextPage && !isFetching && allRows.length"
+          v-if="!hasNextPage && !isFetching && filteredRows.length"
           class="text-base-content mt-4 flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
         >
           <span class="block rounded-md px-1.5 py-1"> Nothing more to load </span>
