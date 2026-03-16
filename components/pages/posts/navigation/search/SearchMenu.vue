@@ -33,6 +33,9 @@
   }>()
 
   const isTagCollectionsActive = ref(false)
+  const filtersRowRef = ref<HTMLElement | null>(null)
+
+  useDesktopHorizontalScroll(filtersRowRef)
 
   /**
    * Info: ShallowRef will only update when the entire value changes
@@ -260,7 +263,10 @@
     </HeadlessCombobox>
 
     <!-- Filters -->
-    <section class="scrollbar-hide -mx-5 mt-8 flex gap-4 overflow-x-auto py-1 pr-3 before:w-1 after:w-1">
+    <section
+      ref="filtersRowRef"
+      class="scrollbar-hide -mx-5 mt-8 flex gap-4 overflow-x-auto py-1 pr-3 before:w-1 after:w-1"
+    >
       <!-- -->
 
       <!-- Tag Collections Toggler -->

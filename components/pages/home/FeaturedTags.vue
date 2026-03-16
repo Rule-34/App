@@ -14,6 +14,9 @@
   }>()
 
   const { isPremium } = useUserData()
+  const featuredTagsRef = ref<HTMLOListElement | null>(null)
+
+  useDesktopHorizontalScroll(featuredTagsRef)
 
   const tagsKey = 'preselectedTags:' + `${props.domain}:` + props.tags.map((tag) => tag.media.length).join('-')
 
@@ -32,7 +35,10 @@
 </script>
 
 <template>
-  <ol class="scrollbar-hide grid grid-flow-col gap-4 overflow-x-auto">
+  <ol
+    ref="featuredTagsRef"
+    class="scrollbar-hide grid grid-flow-col gap-4 overflow-x-auto"
+  >
     <template
       v-for="(tag, index) in preselectedTags"
       :key="tag.name"
