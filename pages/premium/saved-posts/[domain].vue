@@ -370,7 +370,7 @@
   /**
    * Opens the tag in a new tab
    */
-  async function onPostOpenTagInNewTab(tag: string) {
+  function onPostOpenTagInNewTab(tag: string) {
     const tagUrl = generatePostsRoute(
       '/premium/saved-posts',
       selectedBooru.value.domain,
