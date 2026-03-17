@@ -243,56 +243,75 @@
 
     const apiUrl = apiBaseUrl + '/booru/' + selectedBooru.value.type.type + '/tags'
 
-    const response = await $fetch(apiUrl, {
-      params: {
-        baseEndpoint: selectedBooru.value.domain,
+    let response: { data: Tag[] } | undefined
 
-        tag,
-        order: 'count',
-        limit: 20,
+    try {
+      response = await $fetch<{ data: Tag[] }>(apiUrl, {
+        params: {
+          baseEndpoint: selectedBooru.value.domain,
 
-        // Booru options
-        httpScheme: selectedBooru.value.config?.options?.HTTPScheme ?? undefined
-      }
-    })
-      //
-      .catch(async (error) => {
-        return error
+          tag,
+          order: 'count',
+          limit: 20,
+
+          // Booru options
+          httpScheme: selectedBooru.value.config?.options?.HTTPScheme ?? undefined
+        }
       })
+    } catch (error) {
+      // Ignore if this is not the latest request
+      if (requestId !== currentSearchRequestId) {
+        return
+      }
+
+      if (error instanceof FetchError) {
+        switch (error.status) {
+          case 404:
+            toast.error('No tags found for query "' + tag + '"')
+            tagResults.value = []
+            break
+
+          case 429:
+            // TODO: Cant always check if 429 is the status code, always show?
+            toast.error(error.statusText, {
+              description: 'You sent too many requests in a short period of time',
+              action: {
+                label: 'Verify I am not a Bot',
+                onClick: () => window.open(apiBaseUrl + '/status', '_blank')
+              }
+            })
+            tagResults.value = []
+            break
+
+          default: {
+            const Sentry = await import('@sentry/nuxt')
+            Sentry.captureException(error)
+            toast.error(`Failed to load tags: "${error.message}"`)
+            tagResults.value = []
+            break
+          }
+        }
+
+        return
+      }
+
+      const Sentry = await import('@sentry/nuxt')
+      Sentry.captureException(error)
+      toast.error('Failed to load tags')
+      tagResults.value = []
+      return
+    }
 
     // Ignore if this is not the latest request
     if (requestId !== currentSearchRequestId) {
       return
     }
 
-    if (response instanceof FetchError) {
-      switch (response.status) {
-        case 404:
-          toast.error('No tags found for query "' + tag + '"')
-          tagResults.value = []
-          break
-
-        case 429:
-          // TODO: Cant always check if 429 is the status code, always show?
-          toast.error(response.statusText, {
-            description: 'You sent too many requests in a short period of time',
-            action: {
-              label: 'Verify I am not a Bot',
-              onClick: () => window.open(apiBaseUrl + '/status', '_blank')
-            }
-          })
-          tagResults.value = []
-          break
-
-        default: {
-          const Sentry = await import('@sentry/nuxt')
-          Sentry.captureException(response)
-          toast.error(`Failed to load tags: "${response.message}"`)
-          tagResults.value = []
-          break
-        }
-      }
-
+    if (!(response && typeof response === 'object' && 'data' in response && Array.isArray(response.data))) {
+      const Sentry = await import('@sentry/nuxt')
+      Sentry.captureException(response)
+      toast.error('Failed to load tags')
+      tagResults.value = []
       return
     }
 
@@ -484,7 +503,7 @@
       })
     }
 
-    if (selectedFilters.value.score) {
+    if (selectedFilters.value.score !== undefined) {
       if (pocketbaseRequestFilter !== '') {
         pocketbaseRequestFilter += ' && '
       }
