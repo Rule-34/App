@@ -233,7 +233,15 @@
 
   async function onSearchTag(tag: string) {
     const requestId = ++currentSearchRequestId
-    const apiUrl = config.public.apiUrl + '/booru/' + selectedBooru.value.type.type + '/tags'
+    const apiBaseUrl = config.public.apiUrl
+
+    if (!apiBaseUrl) {
+      toast.error('API URL is not configured')
+      tagResults.value = []
+      return
+    }
+
+    const apiUrl = apiBaseUrl + '/booru/' + selectedBooru.value.type.type + '/tags'
 
     const response = await $fetch(apiUrl, {
       params: {
@@ -270,18 +278,19 @@
             description: 'You sent too many requests in a short period of time',
             action: {
               label: 'Verify I am not a Bot',
-              onClick: () => window.open(config.public.apiUrl + '/status', '_blank')
+              onClick: () => window.open(apiBaseUrl + '/status', '_blank')
             }
           })
           tagResults.value = []
           break
 
-        default:
+        default: {
           const Sentry = await import('@sentry/nuxt')
           Sentry.captureException(response)
           toast.error(`Failed to load tags: "${response.message}"`)
           tagResults.value = []
           break
+        }
       }
 
       return
