@@ -9,6 +9,7 @@ const AD_POPUP_DEBUG_STORAGE_KEY = 'ads-popup-guard-debug'
 const AD_POPUP_DEBUG_WINDOW_FLAG = '__ADS_POPUP_GUARD_DEBUG__'
 const STACK_URL_REGEX = /https?:\/\/[^\s)]+/g
 const DEBUG_TRUTHY_VALUES = new Set(['1', 'true', 'yes', 'on'])
+const INTEGER_TIMESTAMP_REGEX = /^\d+$/
 
 type WindowOpenArgs = Parameters<Window['open']>
 type WindowOpenResult = ReturnType<Window['open']>
@@ -111,6 +112,8 @@ export default function () {
     callerScriptUrls: URL[]
     capState: PopupCapState
     recordedPopupAt?: number
+    openAttemptOutcome?: 'opened' | 'blocked-or-null' | 'threw-error'
+    openError?: string
   }) {
     if (!isPopupGuardDebugEnabled()) {
       return
@@ -132,22 +135,55 @@ export default function () {
       capActive: details.capState.isActive,
       lastPopupAt: details.capState.lastPopupAt,
       elapsedSinceLastPopupMs: details.capState.elapsedSinceLastPopupMs,
-      recordedPopupAt: details.recordedPopupAt ?? null
+      recordedPopupAt: details.recordedPopupAt ?? null,
+      openAttemptOutcome: details.openAttemptOutcome ?? null,
+      openError: details.openError ?? null
     })
   }
 
-  function getLastAdPopupAt(): number | null {
-    if (lastAdPopupAtInMemory.value !== null) {
-      return lastAdPopupAtInMemory.value
+  function parseStoredLastPopupAt(rawLastPopupAt: string, now: number): number | null {
+    const normalizedRawLastPopupAt = rawLastPopupAt.trim()
+
+    if (!INTEGER_TIMESTAMP_REGEX.test(normalizedRawLastPopupAt)) {
+      return null
+    }
+
+    const parsedLastPopupAt = Number(normalizedRawLastPopupAt)
+
+    if (
+      !Number.isSafeInteger(parsedLastPopupAt)
+      || parsedLastPopupAt <= 0
+      || parsedLastPopupAt > now
+    ) {
+      return null
+    }
+
+    return parsedLastPopupAt
+  }
+
+  function getLastAdPopupAt(now = Date.now()): number | null {
+    const inMemoryLastPopupAt = lastAdPopupAtInMemory.value
+
+    if (inMemoryLastPopupAt !== null) {
+      if (
+        Number.isSafeInteger(inMemoryLastPopupAt)
+        && inMemoryLastPopupAt > 0
+        && inMemoryLastPopupAt <= now
+      ) {
+        return inMemoryLastPopupAt
+      }
+
+      // Reset invalid or future in-memory values so they do not over-block.
+      lastAdPopupAtInMemory.value = null
     }
 
     try {
       const rawLastPopupAt = window.localStorage.getItem(AD_LAST_POPUP_AT_STORAGE_KEY)
 
       if (rawLastPopupAt) {
-        const parsedLastPopupAt = Number.parseInt(rawLastPopupAt, 10)
+        const parsedLastPopupAt = parseStoredLastPopupAt(rawLastPopupAt, now)
 
-        if (Number.isFinite(parsedLastPopupAt) && parsedLastPopupAt > 0) {
+        if (parsedLastPopupAt !== null) {
           lastAdPopupAtInMemory.value = parsedLastPopupAt
           return parsedLastPopupAt
         }
@@ -170,7 +206,7 @@ export default function () {
   }
 
   function getAdPopupCapState(now = Date.now()): PopupCapState {
-    const lastAdPopupAt = getLastAdPopupAt()
+    const lastAdPopupAt = getLastAdPopupAt(now)
 
     if (!lastAdPopupAt) {
       return {
@@ -232,21 +268,53 @@ export default function () {
         return null
       }
 
-      const openedAt = Date.now()
-      recordAdPopupOpened(openedAt)
+      try {
+        const popupHandle = originalWindowOpen(...args)
 
-      debugPopupGuardDecision({
-        decision: 'allowed',
-        reason: 'vendor-cap-inactive',
-        vendorPopupMatchReason,
-        args,
-        hasUserActivation,
-        callerScriptUrls,
-        capState,
-        recordedPopupAt: openedAt
-      })
+        if (popupHandle) {
+          const openedAt = Date.now()
+          recordAdPopupOpened(openedAt)
 
-      return originalWindowOpen(...args)
+          debugPopupGuardDecision({
+            decision: 'allowed',
+            reason: 'vendor-cap-inactive',
+            vendorPopupMatchReason,
+            args,
+            hasUserActivation,
+            callerScriptUrls,
+            capState,
+            recordedPopupAt: openedAt,
+            openAttemptOutcome: 'opened'
+          })
+        } else {
+          debugPopupGuardDecision({
+            decision: 'allowed',
+            reason: 'vendor-cap-inactive',
+            vendorPopupMatchReason,
+            args,
+            hasUserActivation,
+            callerScriptUrls,
+            capState,
+            openAttemptOutcome: 'blocked-or-null'
+          })
+        }
+
+        return popupHandle
+      } catch (error) {
+        debugPopupGuardDecision({
+          decision: 'allowed',
+          reason: 'vendor-cap-inactive',
+          vendorPopupMatchReason,
+          args,
+          hasUserActivation,
+          callerScriptUrls,
+          capState,
+          openAttemptOutcome: 'threw-error',
+          openError: error instanceof Error ? error.message : String(error)
+        })
+
+        throw error
+      }
     }
 
     isPopupGuardInstalled.value = true
