@@ -74,6 +74,8 @@
     )
   })
 
+  // Reopen the existing premium upsell when a non-premium user lands here
+  // via redirect from a premium-only booru to the fallback booru route.
   onMounted(() => {
     if (isPremium.value) {
       return
@@ -885,18 +887,20 @@
         }
 
         const tags = getSingleQueryValue(to.query.tags)
+        const redirectQuery = {
+          ...(tags ? { tags } : {}),
+          utm_source: 'internal',
+          utm_medium: 'unauthorized-booru-redirect',
+          utm_campaign: 'additional-boorus',
+          utm_content: domain,
+          // Used after landing to reopen the existing premium upsell modal.
+          source_booru: domain
+        }
 
         return navigateTo(
           {
             path: `/posts/${fallbackBooruDomain}`,
-            query: {
-              ...(tags ? { tags } : {}),
-              utm_source: 'internal',
-              utm_medium: 'unauthorized-booru-redirect',
-              utm_campaign: 'additional-boorus',
-              utm_content: domain,
-              source_booru: domain
-            }
+            query: redirectQuery
           },
           {
             redirectCode: 302
