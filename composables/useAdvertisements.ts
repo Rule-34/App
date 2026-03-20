@@ -3,6 +3,7 @@ import { default as randomWeightedChoice } from 'random-weighted-choice'
 const AD_POPUP_CAP_DURATION_MS = 30 * 60 * 1000
 const AD_LAST_POPUP_AT_STORAGE_KEY = 'ads-last-popup-at'
 const AD_TRUSTED_WINDOW_OPEN_BYPASS_STATE_KEY = 'ads-trusted-window-open-bypass-next'
+const IN_PAGE_PUSH_HOSTNAMES = new Set(['hotbsizovu.today', 'udzpel.com'])
 const INTEGER_TIMESTAMP_REGEX = /^\d+$/
 
 type WindowOpenArgs = Parameters<Window['open']>
@@ -35,6 +36,13 @@ function getPopupOpenKind(args: WindowOpenArgs): PopupOpenKind {
 
   try {
     const parsedUrl = new URL(requestedUrl, window.location.href)
+
+    if (
+      IN_PAGE_PUSH_HOSTNAMES.has(parsedUrl.hostname)
+      || Array.from(IN_PAGE_PUSH_HOSTNAMES).some(hostname => parsedUrl.hostname.endsWith(`.${hostname}`))
+    ) {
+      return 'in-page-push'
+    }
 
     for (const searchParamKey of parsedUrl.searchParams.keys()) {
       if (searchParamKey.startsWith('inpage.')) {
@@ -142,7 +150,9 @@ export default function () {
       if (shouldBypassNextWindowOpenGuard.value) {
         shouldBypassNextWindowOpenGuard.value = false
 
-        logAdPopupGuard('trusted-open-bypass')
+        logAdPopupGuard('trusted-open-bypass', {
+          requestedUrl: getRequestedUrl(args)
+        })
 
         return originalWindowOpen(...args)
       }
@@ -152,13 +162,17 @@ export default function () {
       }
 
       if (getPopupOpenKind(args) === 'in-page-push') {
-        logAdPopupGuard('allow-in-page-push')
+        logAdPopupGuard('allow-in-page-push', {
+          requestedUrl: getRequestedUrl(args)
+        })
 
         return originalWindowOpen(...args)
       }
 
       if (isAdPopupCapActive()) {
-        logAdPopupGuard('block-capped-popunder')
+        logAdPopupGuard('block-capped-popunder', {
+          requestedUrl: getRequestedUrl(args)
+        })
 
         return null
       }
@@ -166,6 +180,7 @@ export default function () {
       recordAdPopupOpened()
 
       logAdPopupGuard('allow-popunder', {
+        requestedUrl: getRequestedUrl(args),
         cappedUntil: Date.now() + AD_POPUP_CAP_DURATION_MS
       })
 
