@@ -9,6 +9,17 @@ type WindowOpenArgs = Parameters<Window['open']>
 type WindowOpenResult = ReturnType<Window['open']>
 type PopupOpenKind = 'popunder' | 'in-page-push'
 
+function logAdPopupGuard(event: string, details?: Record<string, unknown>) {
+  if (!import.meta.dev) {
+    return
+  }
+
+  console.debug('[ads-popup-guard]', {
+    event,
+    ...details
+  })
+}
+
 function getRequestedUrl(args: WindowOpenArgs): string | null {
   const [requestedUrl] = args
 
@@ -131,6 +142,8 @@ export default function () {
       if (shouldBypassNextWindowOpenGuard.value) {
         shouldBypassNextWindowOpenGuard.value = false
 
+        logAdPopupGuard('trusted-open-bypass')
+
         return originalWindowOpen(...args)
       }
 
@@ -139,14 +152,22 @@ export default function () {
       }
 
       if (getPopupOpenKind(args) === 'in-page-push') {
+        logAdPopupGuard('allow-in-page-push')
+
         return originalWindowOpen(...args)
       }
 
       if (isAdPopupCapActive()) {
+        logAdPopupGuard('block-capped-popunder')
+
         return null
       }
 
       recordAdPopupOpened()
+
+      logAdPopupGuard('allow-popunder', {
+        cappedUntil: Date.now() + AD_POPUP_CAP_DURATION_MS
+      })
 
       return originalWindowOpen(...args)
     }
@@ -156,6 +177,8 @@ export default function () {
 
   // Stop injecting ad scripts while the 30-minute popup cap is active.
   if (isAdPopupCapActive()) {
+    logAdPopupGuard('skip-script-injection-while-capped')
+
     return
   }
 
