@@ -120,6 +120,10 @@ export default function () {
   }
 
   function isPopupGuardDebugEnabled(): boolean {
+    if (import.meta.dev) {
+      return true
+    }
+
     const debugFlagOnWindow = (window as Window & Record<string, unknown>)[AD_POPUP_DEBUG_WINDOW_FLAG]
 
     if (typeof debugFlagOnWindow === 'boolean') {
