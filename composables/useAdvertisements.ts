@@ -3,12 +3,58 @@ import { default as randomWeightedChoice } from 'random-weighted-choice'
 const AD_POPUP_CAP_DURATION_MS = 30 * 60 * 1000
 const AD_LAST_POPUP_AT_STORAGE_KEY = 'ads-last-popup-at'
 const AD_TRUSTED_WINDOW_OPEN_BYPASS_STATE_KEY = 'ads-trusted-window-open-bypass-next'
-const IN_PAGE_PUSH_HOSTNAMES = new Set(['hotbsizovu.today', 'udzpel.com', 'hotsoz.com'])
 const INTEGER_TIMESTAMP_REGEX = /^\d+$/
+const AD_SCRIPT_ATTRIBUTES = {
+  async: false,
+  defer: true,
+  crossorigin: 'anonymous' as const
+}
 
 type WindowOpenArgs = Parameters<Window['open']>
 type WindowOpenResult = ReturnType<Window['open']>
 type PopupOpenKind = 'popunder' | 'in-page-push'
+type WeightedAd = {
+  id: string
+  weight: number
+}
+type PushAd = WeightedAd & {
+  inPageOpenHostnames: string[]
+}
+
+const POPUNDER_ADS: WeightedAd[] = [
+  {
+    id: 'https:////ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
+    weight: 1
+  },
+  {
+    id: '/js/popunder2.js?v=10',
+    weight: 1
+  }
+]
+
+const PUSH_ADS: PushAd[] = [
+  {
+    id: 'https://hotbsizovu.today/process.js?id=1300335215&p1=sub1&p2=sub2&p3=sub3&p4=sub4',
+    weight: 0.15,
+    inPageOpenHostnames: ['hotbsizovu.today']
+  },
+  {
+    id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
+    weight: 1,
+    inPageOpenHostnames: ['udzpel.com', 'hotsoz.com']
+  }
+]
+
+const CHAT_WITH_AI_REFERRALS: WeightedAd[] = [
+  {
+    id: 'https://crushon.ai/search?s={query}&ref=zdnmmzy&mist=1',
+    weight: 0.5
+  },
+  {
+    id: 'https://spicychat.ai/?public_characters_alias%2Fsort%2Fnum_messages_24h%3Adesc[query]={query}&ref=ode2nzn',
+    weight: 0.5
+  }
+]
 
 function logAdPopupGuard(event: string, details?: Record<string, unknown>) {
   if (!import.meta.dev) {
@@ -27,7 +73,17 @@ function getRequestedUrl(args: WindowOpenArgs): string | null {
   return typeof requestedUrl === 'string' ? requestedUrl : null
 }
 
-function getPopupOpenKind(args: WindowOpenArgs): PopupOpenKind {
+function hostnameMatches(hostname: string, allowedHostnames: string[]): boolean {
+  return allowedHostnames.some(allowedHostname => {
+    return hostname === allowedHostname || hostname.endsWith(`.${allowedHostname}`)
+  })
+}
+
+function findPushAdByScriptId(scriptId: string): PushAd | null {
+  return PUSH_ADS.find(pushAd => pushAd.id === scriptId) ?? null
+}
+
+function getPopupOpenKind(args: WindowOpenArgs, activePushAd: PushAd | null): PopupOpenKind {
   const requestedUrl = getRequestedUrl(args)
 
   if (!requestedUrl) {
@@ -37,10 +93,7 @@ function getPopupOpenKind(args: WindowOpenArgs): PopupOpenKind {
   try {
     const parsedUrl = new URL(requestedUrl, window.location.href)
 
-    if (
-      IN_PAGE_PUSH_HOSTNAMES.has(parsedUrl.hostname)
-      || Array.from(IN_PAGE_PUSH_HOSTNAMES).some(hostname => parsedUrl.hostname.endsWith(`.${hostname}`))
-    ) {
+    if (activePushAd && hostnameMatches(parsedUrl.hostname, activePushAd.inPageOpenHostnames)) {
       return 'in-page-push'
     }
 
@@ -100,7 +153,6 @@ export default function () {
       ) {
         resolvedLastPopupAt = inMemoryLastPopupAt
       } else {
-        // Reset invalid or future in-memory values so they do not over-block.
         lastAdPopupAtInMemory.value = null
       }
     }
@@ -119,7 +171,7 @@ export default function () {
         }
       }
     } catch {
-      // Ignore storage failures and use in-memory fallback
+      // Ignore storage failures and use in-memory fallback.
     }
 
     lastAdPopupAtInMemory.value = resolvedLastPopupAt
@@ -133,7 +185,7 @@ export default function () {
     try {
       window.localStorage.setItem(AD_LAST_POPUP_AT_STORAGE_KEY, String(at))
     } catch {
-      // Ignore storage failures and keep the in-memory fallback
+      // Ignore storage failures and keep the in-memory fallback.
     }
   }
 
@@ -167,6 +219,8 @@ export default function () {
     const originalWindowOpen = window.open.bind(window)
 
     window.open = (...args: WindowOpenArgs): WindowOpenResult => {
+      const activePushAd = findPushAdByScriptId(pushScript.value)
+
       if (shouldBypassNextWindowOpenGuard.value) {
         shouldBypassNextWindowOpenGuard.value = false
 
@@ -181,7 +235,7 @@ export default function () {
         return originalWindowOpen(...args)
       }
 
-      if (getPopupOpenKind(args) === 'in-page-push') {
+      if (getPopupOpenKind(args, activePushAd) === 'in-page-push') {
         logAdPopupGuard('allow-in-page-push', {
           requestedUrl: getRequestedUrl(args)
         })
@@ -211,7 +265,6 @@ export default function () {
     isPopupGuardInstalled.value = true
   }
 
-  // Stop injecting ad scripts while the 30-minute popup cap is active.
   if (isAdPopupCapActive()) {
     logAdPopupGuard('skip-script-injection-while-capped', {
       popunderScript: popunderScript.value || null,
@@ -222,143 +275,25 @@ export default function () {
     return
   }
 
-  // Once scripts load, guard future popunder opens with the first-party cap.
   isPopupGuardArmed.value = true
 
-  const popunderAds = [
-    /**
-     * ExoClick
-     * Pros:
-     * Cons:
-     */
-    // {
-    //   id: '',
-    //   weight: 1,
-    // },
-    /**
-     * Adsession
-     * Pros:
-     * Cons:
-     */
-    // {
-    //   id: '/js/popunder.js?v=7',
-    //   weight: 1,
-    // },
-    /**
-     * HilltopAds
-     * Pros: Good min payout
-     * Cons: Not fixed CPM, Low Revenue (70)
-     */
-    {
-      id: 'https:////ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
-      weight: 1
-    },
-    /**
-     * Clickadu
-     * Pros: Good CPM (2.1)
-     * Cons: Low revenue (70), Does not count visits well, (!!!) Clears console
-     */
-    {
-      id: '/js/popunder2.js?v=10',
-      weight: 1
-    }
-    /**
-     * AdMaven
-     * Pros:
-     * Cons: Does not open in a new tab, Possible malware: ads open requests to social media login??
-     */
-    // {
-    //   id: 'https://d3pk1qkob3uzgp.cloudfront.net/?kqkpd=1171073',
-    //   weight: 1,
-    // },
-    /**
-     * AdsCarat
-     * Pros: Great CPM (2.5)
-     * Cons: Low Revenue (25) | Does not count visits well | Reloads website once?
-     */
-    // {
-    //   id: 'https://hp.scrannyplacebo.com/rMGqiS1acWcIq4LyI/oQRmJ',
-    //   weight: 1
-    // }
-  ]
-
-  const pushAds = [
-    /**
-     * PartnersHouse
-     * Pros:
-     * Cons: Low revenue (17)
-     */
-    {
-      id: 'https://hotbsizovu.today/process.js?id=1300335215&p1=sub1&p2=sub2&p3=sub3&p4=sub4',
-      weight: 0.15
-    },
-    /**
-     * HilltopAds
-     * Pros:
-     * Cons: Very Low Revenue (1.96)
-     */
-    // {
-    //   id: '\\/\\/ellipticaltrack.com\\/b\\/XeV.sad\\/GJlb0jYvWxcR\\/HewmG9ou\\/ZWUXlukZPMTJY_yMOQTBQe5VMsjVI\\/tuNbjOIh5MNDDpkryvMSwO',
-    //   weight: 0.15,
-    // },
-    /**
-     * Clickadu
-     * Pros:
-     * Cons: Low Revenue (4.64)
-     */
-    // {
-    //   id: '//guidepaparazzisurface.com/bultykh/ipp24/7/bazinga/2065744',
-    //   weight: 0.15,
-    // },
-    /**
-     * AdsCarat
-     * Pros:
-     * Cons: Extremely low revenue (0.50)
-     */
-    // {
-    //   id: '//jn.astelicbanes.com/sgC9H1j3tpX/121206',
-    //   weight: 0.15
-    // },
-    /**
-     * EvaDav
-     * Pros: Fixed weekly pay ()
-     * Cons:
-     */
-    {
-      id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
-      weight: 1
-    }
-  ]
-
-  // Load popunder ad if not already loaded
   if (!popunderScript.value) {
-    const selectedPopunder = randomWeightedChoice(popunderAds)
-    popunderScript.value = selectedPopunder
+    popunderScript.value = randomWeightedChoice(POPUNDER_ADS)
   }
 
-  // Load push notification ad if not already loaded
   if (!pushScript.value) {
-    const selectedPush = randomWeightedChoice(pushAds)
-    pushScript.value = selectedPush
+    pushScript.value = randomWeightedChoice(PUSH_ADS)
   }
 
-  // Load selected ads
   useHead({
     script: [
       {
         src: popunderScript.value,
-        async: false,
-        defer: true,
-
-        // Fix for CORS issues - https://unhead.unjs.io/usage/composables/use-script#referrerpolicy-and-crossorigin
-        crossorigin: 'anonymous'
+        ...AD_SCRIPT_ATTRIBUTES
       },
       {
         src: pushScript.value,
-        async: false,
-        defer: true,
-
-        crossorigin: 'anonymous'
+        ...AD_SCRIPT_ATTRIBUTES
       }
     ]
   })
@@ -381,19 +316,8 @@ export function openTrustedWindow(...args: WindowOpenArgs): WindowOpenResult {
 }
 
 export function useChatWithAiReferral() {
-  const chatWithAiReferrals = [
-    {
-      id: 'https://crushon.ai/search?s={query}&ref=zdnmmzy&mist=1',
-      weight: 0.5
-    },
-    {
-      id: 'https://spicychat.ai/?public_characters_alias%2Fsort%2Fnum_messages_24h%3Adesc[query]={query}&ref=ode2nzn',
-      weight: 0.5
-    }
-  ]
-
   const chatWithAiReferralTemplate = useState<string>('chat-with-ai-referral', () => {
-    return randomWeightedChoice(chatWithAiReferrals)
+    return randomWeightedChoice(CHAT_WITH_AI_REFERRALS)
   })
 
   return {
