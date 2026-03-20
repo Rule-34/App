@@ -143,6 +143,26 @@ export default function () {
     return lastPopupAt !== null && now - lastPopupAt < AD_POPUP_CAP_DURATION_MS
   }
 
+  function getAdPopupCapLogDetails(now = Date.now()): Record<string, number | null> {
+    const lastPopupAt = getLastAdPopupAt(now)
+
+    if (lastPopupAt === null) {
+      return {
+        lastPopupAt: null,
+        cappedUntil: null,
+        remainingMs: null
+      }
+    }
+
+    const cappedUntil = lastPopupAt + AD_POPUP_CAP_DURATION_MS
+
+    return {
+      lastPopupAt,
+      cappedUntil,
+      remainingMs: Math.max(0, cappedUntil - now)
+    }
+  }
+
   if (!isPopupGuardInstalled.value) {
     const originalWindowOpen = window.open.bind(window)
 
@@ -171,7 +191,8 @@ export default function () {
 
       if (isAdPopupCapActive()) {
         logAdPopupGuard('block-capped-popunder', {
-          requestedUrl: getRequestedUrl(args)
+          requestedUrl: getRequestedUrl(args),
+          ...getAdPopupCapLogDetails()
         })
 
         return null
@@ -192,7 +213,11 @@ export default function () {
 
   // Stop injecting ad scripts while the 30-minute popup cap is active.
   if (isAdPopupCapActive()) {
-    logAdPopupGuard('skip-script-injection-while-capped')
+    logAdPopupGuard('skip-script-injection-while-capped', {
+      popunderScript: popunderScript.value || null,
+      pushScript: pushScript.value || null,
+      ...getAdPopupCapLogDetails()
+    })
 
     return
   }
