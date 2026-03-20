@@ -10,6 +10,13 @@ const AD_POPUP_DEBUG_WINDOW_FLAG = '__ADS_POPUP_GUARD_DEBUG__'
 const STACK_URL_REGEX = /https?:\/\/[^\s)]+/g
 const DEBUG_TRUTHY_VALUES = new Set(['1', 'true', 'yes', 'on'])
 const INTEGER_TIMESTAMP_REGEX = /^\d+$/
+const VENDOR_INTERACTION_EVENT_TYPES = new Set([
+  'click',
+  'mousedown',
+  'mouseup',
+  'pointerdown',
+  'touchstart'
+])
 
 type WindowOpenArgs = Parameters<Window['open']>
 type WindowOpenResult = ReturnType<Window['open']>
@@ -269,6 +276,96 @@ export default function () {
 
   if (!isPopupGuardInstalled.value) {
     const originalWindowOpen = window.open.bind(window)
+    const originalAddEventListener = EventTarget.prototype.addEventListener
+    const originalRemoveEventListener = EventTarget.prototype.removeEventListener
+    const wrappedVendorInteractionListeners = new WeakMap<
+      EventListenerOrEventListenerObject,
+      Map<string, EventListener>
+    >()
+
+    EventTarget.prototype.addEventListener = function (
+      type: string,
+      listener: EventListenerOrEventListenerObject | null,
+      options?: boolean | AddEventListenerOptions
+    ) {
+      if (!listener || !VENDOR_INTERACTION_EVENT_TYPES.has(type)) {
+        originalAddEventListener.call(this, type, listener, options)
+
+        return
+      }
+
+      const callerScriptUrls = getScriptUrlsFromStack(new Error().stack)
+      const vendorPopupMatchReason = getVendorPopupMatchReason(callerScriptUrls, true)
+
+      if (!vendorPopupMatchReason || vendorPopupMatchReason === 'no-user-activation') {
+        originalAddEventListener.call(this, type, listener, options)
+
+        return
+      }
+
+      let wrappedListener = wrappedVendorInteractionListeners.get(listener)?.get(type)
+
+      if (!wrappedListener) {
+        wrappedListener = function (this: EventTarget, event: Event) {
+          if (isPopupGuardArmed.value && isAdPopupCapActive()) {
+            if (isPopupGuardDebugEnabled()) {
+              const capState = getAdPopupCapState()
+
+              console.debug('[ads-popup-guard]', {
+                decision: 'blocked',
+                reason: 'vendor-cap-active',
+                guard: 'interaction-listener',
+                eventType: event.type,
+                vendorPopupMatchReason,
+                callerScriptUrlCount: callerScriptUrls.length,
+                callerScriptUrls: callerScriptUrls.slice(0, 5).map(scriptUrl => scriptUrl.href),
+                capDurationMs: AD_POPUP_CAP_DURATION_MS,
+                capActive: capState.isActive,
+                lastPopupAt: capState.lastPopupAt,
+                elapsedSinceLastPopupMs: capState.elapsedSinceLastPopupMs
+              })
+            }
+
+            return
+          }
+
+          if (typeof listener === 'function') {
+            listener.call(this, event)
+
+            return
+          }
+
+          listener.handleEvent.call(listener, event)
+        }
+
+        let wrappedListenersByType = wrappedVendorInteractionListeners.get(listener)
+
+        if (!wrappedListenersByType) {
+          wrappedListenersByType = new Map()
+          wrappedVendorInteractionListeners.set(listener, wrappedListenersByType)
+        }
+
+        wrappedListenersByType.set(type, wrappedListener)
+      }
+
+      originalAddEventListener.call(this, type, wrappedListener, options)
+    }
+
+    EventTarget.prototype.removeEventListener = function (
+      type: string,
+      listener: EventListenerOrEventListenerObject | null,
+      options?: boolean | EventListenerOptions
+    ) {
+      if (!listener || !VENDOR_INTERACTION_EVENT_TYPES.has(type)) {
+        originalRemoveEventListener.call(this, type, listener, options)
+
+        return
+      }
+
+      const wrappedListener = wrappedVendorInteractionListeners.get(listener)?.get(type)
+
+      originalRemoveEventListener.call(this, type, wrappedListener ?? listener, options)
+    }
 
     window.open = (...args: WindowOpenArgs): WindowOpenResult => {
       if (!isPopupGuardArmed.value) {
