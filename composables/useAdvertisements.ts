@@ -114,6 +114,7 @@ export default function () {
     recordedPopupAt?: number
     openAttemptOutcome?: 'opened' | 'blocked-or-null' | 'threw-error'
     openError?: string
+    capRecordedAt?: number
   }) {
     if (!isPopupGuardDebugEnabled()) {
       return
@@ -136,6 +137,7 @@ export default function () {
       lastPopupAt: details.capState.lastPopupAt,
       elapsedSinceLastPopupMs: details.capState.elapsedSinceLastPopupMs,
       recordedPopupAt: details.recordedPopupAt ?? null,
+      capRecordedAt: details.capRecordedAt ?? null,
       openAttemptOutcome: details.openAttemptOutcome ?? null,
       openError: details.openError ?? null
     })
@@ -273,13 +275,13 @@ export default function () {
         return null
       }
 
+      const attemptedAt = Date.now()
+      recordAdPopupOpened(attemptedAt)
+
       try {
         const popupHandle = originalWindowOpen(...args)
 
         if (popupHandle) {
-          const openedAt = Date.now()
-          recordAdPopupOpened(openedAt)
-
           debugPopupGuardDecision({
             decision: 'allowed',
             reason: 'vendor-cap-inactive',
@@ -288,7 +290,8 @@ export default function () {
             hasUserActivation,
             callerScriptUrls,
             capState,
-            recordedPopupAt: openedAt,
+            recordedPopupAt: attemptedAt,
+            capRecordedAt: attemptedAt,
             openAttemptOutcome: 'opened'
           })
         } else {
@@ -300,6 +303,7 @@ export default function () {
             hasUserActivation,
             callerScriptUrls,
             capState,
+            capRecordedAt: attemptedAt,
             openAttemptOutcome: 'blocked-or-null'
           })
         }
@@ -314,6 +318,7 @@ export default function () {
           hasUserActivation,
           callerScriptUrls,
           capState,
+          capRecordedAt: attemptedAt,
           openAttemptOutcome: 'threw-error',
           openError: error instanceof Error ? error.message : String(error)
         })
