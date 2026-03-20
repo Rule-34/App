@@ -1,8 +1,155 @@
 import { default as randomWeightedChoice } from 'random-weighted-choice'
 
+const AD_POPUP_CAP_DURATION_MS = 30 * 60 * 1000
+const AD_LAST_POPUP_AT_STORAGE_KEY = 'ads-last-popup-at'
+const STACK_URL_REGEX = /https?:\/\/[^\s)]+/g
+
+type WindowOpenArgs = Parameters<Window['open']>
+type WindowOpenResult = ReturnType<Window['open']>
+
+function getScriptUrlsFromStack(stack: string): URL[] {
+  const matches = stack.match(STACK_URL_REGEX)
+
+  if (!matches) {
+    return []
+  }
+
+  const urls: URL[] = []
+
+  for (const rawMatch of matches) {
+    const normalizedUrl = rawMatch
+      .replace(/[),]$/, '')
+      .replace(/:\d+:\d+$/, '')
+
+    try {
+      urls.push(new URL(normalizedUrl))
+    } catch {
+      // Ignore malformed URLs from stack traces
+    }
+  }
+
+  return urls
+}
+
+function isLikelyVendorPopupCall(stack: string | undefined, hasUserActivation: boolean): boolean {
+  if (!stack) {
+    return !hasUserActivation
+  }
+
+  const callerScriptUrls = getScriptUrlsFromStack(stack)
+
+  if (callerScriptUrls.length === 0) {
+    return !hasUserActivation
+  }
+
+  const currentOrigin = window.location.origin
+
+  for (const scriptUrl of callerScriptUrls) {
+    if (scriptUrl.origin !== currentOrigin) {
+      return true
+    }
+
+    // Keep the heuristic broad: treat same-origin static /js scripts as likely ad/vendor callers.
+    if (scriptUrl.pathname.startsWith('/js/')) {
+      return true
+    }
+  }
+
+  return !hasUserActivation
+}
+
 export default function () {
   const popunderScript = useState<string>('popunder-script', () => '')
   const pushScript = useState<string>('push-notification-script', () => '')
+  const isPopupGuardInstalled = useState<boolean>('ads-popup-guard-installed', () => false)
+  const isPopupGuardArmed = useState<boolean>('ads-popup-guard-armed', () => false)
+  const lastAdPopupAtInMemory = useState<number | null>('ads-last-popup-at-in-memory', () => null)
+
+  if (!import.meta.client) {
+    return
+  }
+
+  function getLastAdPopupAt(): number | null {
+    if (lastAdPopupAtInMemory.value !== null) {
+      return lastAdPopupAtInMemory.value
+    }
+
+    try {
+      const rawLastPopupAt = window.localStorage.getItem(AD_LAST_POPUP_AT_STORAGE_KEY)
+
+      if (rawLastPopupAt) {
+        const parsedLastPopupAt = Number.parseInt(rawLastPopupAt, 10)
+
+        if (Number.isFinite(parsedLastPopupAt) && parsedLastPopupAt > 0) {
+          lastAdPopupAtInMemory.value = parsedLastPopupAt
+          return parsedLastPopupAt
+        }
+      }
+    } catch {
+      // Ignore storage failures and use in-memory fallback
+    }
+
+    return null
+  }
+
+  function recordAdPopupOpened(at = Date.now()) {
+    lastAdPopupAtInMemory.value = at
+
+    try {
+      window.localStorage.setItem(AD_LAST_POPUP_AT_STORAGE_KEY, String(at))
+    } catch {
+      // Ignore storage failures and keep the in-memory fallback
+    }
+  }
+
+  function isAdPopupCapActive(): boolean {
+    const lastAdPopupAt = getLastAdPopupAt()
+
+    if (!lastAdPopupAt) {
+      return false
+    }
+
+    return Date.now() - lastAdPopupAt < AD_POPUP_CAP_DURATION_MS
+  }
+
+  if (!isPopupGuardInstalled.value) {
+    const originalWindowOpen = window.open.bind(window)
+
+    window.open = (...args: WindowOpenArgs): WindowOpenResult => {
+      if (!isPopupGuardArmed.value) {
+        return originalWindowOpen(...args)
+      }
+
+      const userActivation = (window.navigator as Navigator & {
+        userActivation?: { isActive: boolean }
+      }).userActivation
+
+      const hasUserActivation = userActivation?.isActive ?? true
+      const stack = new Error().stack
+
+      if (!isLikelyVendorPopupCall(stack, hasUserActivation)) {
+        return originalWindowOpen(...args)
+      }
+
+      if (isAdPopupCapActive()) {
+        return null
+      }
+
+      recordAdPopupOpened()
+
+      return originalWindowOpen(...args)
+    }
+
+    isPopupGuardInstalled.value = true
+  }
+
+  // Phase 1: stop injecting ad scripts while the 30-minute popup cap is active.
+  if (isAdPopupCapActive()) {
+    return
+  }
+
+  // Phase 2 (arming): once scripts load, guard vendor-like popups with the first-party cap.
+  isPopupGuardArmed.value = true
 
   const popunderAds = [
     /**
