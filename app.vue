@@ -11,9 +11,16 @@
 
     const parsedUrl = new URL(url)
 
-    // Remove query params: page or cursor
+    // Remove query params: page, cursor, and tracking params
     parsedUrl.searchParams.delete('page')
     parsedUrl.searchParams.delete('cursor')
+    parsedUrl.searchParams.delete('source_booru')
+
+    for (const key of [...parsedUrl.searchParams.keys()]) {
+      if (key.startsWith('utm_')) {
+        parsedUrl.searchParams.delete(key)
+      }
+    }
 
     return parsedUrl.href
   })
