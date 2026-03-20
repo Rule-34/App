@@ -162,6 +162,7 @@ export default function () {
   }
 
   function getLastAdPopupAt(now = Date.now()): number | null {
+    let resolvedLastPopupAt: number | null = null
     const inMemoryLastPopupAt = lastAdPopupAtInMemory.value
 
     if (inMemoryLastPopupAt !== null) {
@@ -170,11 +171,11 @@ export default function () {
         && inMemoryLastPopupAt > 0
         && inMemoryLastPopupAt <= now
       ) {
-        return inMemoryLastPopupAt
+        resolvedLastPopupAt = inMemoryLastPopupAt
+      } else {
+        // Reset invalid or future in-memory values so they do not over-block.
+        lastAdPopupAtInMemory.value = null
       }
-
-      // Reset invalid or future in-memory values so they do not over-block.
-      lastAdPopupAtInMemory.value = null
     }
 
     try {
@@ -183,16 +184,20 @@ export default function () {
       if (rawLastPopupAt) {
         const parsedLastPopupAt = parseStoredLastPopupAt(rawLastPopupAt, now)
 
-        if (parsedLastPopupAt !== null) {
-          lastAdPopupAtInMemory.value = parsedLastPopupAt
-          return parsedLastPopupAt
+        if (
+          parsedLastPopupAt !== null
+          && (resolvedLastPopupAt === null || parsedLastPopupAt > resolvedLastPopupAt)
+        ) {
+          resolvedLastPopupAt = parsedLastPopupAt
         }
       }
     } catch {
       // Ignore storage failures and use in-memory fallback
     }
 
-    return null
+    lastAdPopupAtInMemory.value = resolvedLastPopupAt
+
+    return resolvedLastPopupAt
   }
 
   function recordAdPopupOpened(at = Date.now()) {
