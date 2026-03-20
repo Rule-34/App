@@ -19,6 +19,7 @@ type PopupCapState = {
   elapsedSinceLastPopupMs: number | null
 }
 type VendorPopupMatchReason = 'cross-origin-script' | 'same-origin-js-script' | 'no-user-activation'
+type VendorOpenKind = 'popunder' | 'in-page-push'
 
 function getScriptUrlsFromStack(stack?: string): URL[] {
   if (!stack) {
@@ -72,6 +73,34 @@ function getVendorPopupMatchReason(
   return hasUserActivation ? null : 'no-user-activation'
 }
 
+function getRequestedUrl(args: WindowOpenArgs): string | null {
+  const [requestedUrl] = args
+
+  return typeof requestedUrl === 'string' ? requestedUrl : null
+}
+
+function getVendorOpenKind(args: WindowOpenArgs): VendorOpenKind {
+  const requestedUrl = getRequestedUrl(args)
+
+  if (!requestedUrl) {
+    return 'popunder'
+  }
+
+  try {
+    const parsedUrl = new URL(requestedUrl, window.location.href)
+
+    for (const searchParamKey of parsedUrl.searchParams.keys()) {
+      if (searchParamKey.startsWith('inpage.')) {
+        return 'in-page-push'
+      }
+    }
+  } catch {
+    // Ignore malformed vendor URLs and keep the default popunder classification.
+  }
+
+  return 'popunder'
+}
+
 export default function () {
   const popunderScript = useState<string>('popunder-script', () => '')
   const pushScript = useState<string>('push-notification-script', () => '')
@@ -107,6 +136,7 @@ export default function () {
     decision: 'allowed' | 'blocked'
     reason: 'vendor-cap-active' | 'vendor-cap-inactive'
     vendorPopupMatchReason: VendorPopupMatchReason
+    vendorOpenKind: VendorOpenKind
     args: WindowOpenArgs
     hasUserActivation: boolean
     callerScriptUrls: URL[]
@@ -126,6 +156,7 @@ export default function () {
       decision: details.decision,
       reason: details.reason,
       vendorPopupMatchReason: details.vendorPopupMatchReason,
+      vendorOpenKind: details.vendorOpenKind,
       requestedUrl: typeof requestedUrl === 'string' ? requestedUrl : null,
       target: typeof target === 'string' ? target : null,
       windowFeatures: typeof windowFeatures === 'string' ? windowFeatures : null,
@@ -254,8 +285,24 @@ export default function () {
       const hasUserActivation = userActivation?.isActive ?? true
       const callerScriptUrls = getScriptUrlsFromStack(new Error().stack)
       const vendorPopupMatchReason = getVendorPopupMatchReason(callerScriptUrls, hasUserActivation)
+      const vendorOpenKind = getVendorOpenKind(args)
 
       if (!vendorPopupMatchReason) {
+        return originalWindowOpen(...args)
+      }
+
+      if (vendorOpenKind === 'in-page-push') {
+        debugPopupGuardDecision({
+          decision: 'allowed',
+          reason: 'vendor-cap-inactive',
+          vendorPopupMatchReason,
+          vendorOpenKind,
+          args,
+          hasUserActivation,
+          callerScriptUrls,
+          capState: getAdPopupCapState()
+        })
+
         return originalWindowOpen(...args)
       }
 
@@ -266,6 +313,7 @@ export default function () {
           decision: 'blocked',
           reason: 'vendor-cap-active',
           vendorPopupMatchReason,
+          vendorOpenKind,
           args,
           hasUserActivation,
           callerScriptUrls,
@@ -286,6 +334,7 @@ export default function () {
             decision: 'allowed',
             reason: 'vendor-cap-inactive',
             vendorPopupMatchReason,
+            vendorOpenKind,
             args,
             hasUserActivation,
             callerScriptUrls,
@@ -299,6 +348,7 @@ export default function () {
             decision: 'allowed',
             reason: 'vendor-cap-inactive',
             vendorPopupMatchReason,
+            vendorOpenKind,
             args,
             hasUserActivation,
             callerScriptUrls,
@@ -314,6 +364,7 @@ export default function () {
           decision: 'allowed',
           reason: 'vendor-cap-inactive',
           vendorPopupMatchReason,
+          vendorOpenKind,
           args,
           hasUserActivation,
           callerScriptUrls,
