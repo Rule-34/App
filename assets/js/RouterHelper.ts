@@ -1,6 +1,8 @@
 import Tag from './tag.dto'
 import type { RouteLocationRaw } from 'vue-router'
 
+export const fallbackBooruDomain = 'rule34.xxx'
+
 export function generatePostsRoute(
   path: string = '/posts',
   domain?: string | undefined | null,
@@ -31,6 +33,20 @@ export function generatePostsRoute(
   }
 
   return route
+}
+
+export function getSingleQueryValue(value: string | string[] | null | (string | null)[] | undefined) {
+  if (Array.isArray(value)) {
+    const firstValue = value[0]
+
+    return firstValue ?? undefined
+  }
+
+  if (value === null || value === undefined) {
+    return undefined
+  }
+
+  return value
 }
 
 function isObjectEmpty(obj) {

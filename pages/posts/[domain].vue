@@ -7,7 +7,7 @@
   import { FetchError } from 'ofetch'
   import type { Ref } from 'vue'
   import { toast } from 'vue-sonner'
-  import { generatePostsRoute } from '~/assets/js/RouterHelper'
+  import { fallbackBooruDomain, generatePostsRoute, getSingleQueryValue } from '~/assets/js/RouterHelper'
   import { tagArrayToTitle } from '~/assets/js/SeoHelper'
   import type { Domain } from '~/assets/js/domain'
   import type { IPost, IPostPage } from '~/assets/js/post.dto'
@@ -28,22 +28,7 @@
 
   const { selectedDomainFromStorage } = useSelectedDomainFromStorage()
 
-  const fallbackBooruDomain = 'rule34.xxx'
   const additionalBoorusPremiumSlideIndex = 4
-
-  function getSingleQueryValue(value: string | string[] | null | (string | null)[] | undefined) {
-    if (Array.isArray(value)) {
-      const firstValue = value[0]
-
-      return firstValue ?? undefined
-    }
-
-    if (value === null || value === undefined) {
-      return undefined
-    }
-
-    return value
-  }
 
   /**
    * Show ads for non-premium users
