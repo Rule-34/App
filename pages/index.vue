@@ -122,6 +122,7 @@
    */
   onMounted(() => {
     const hasLoadedAds = ref(false)
+    let adLoadTimeoutId: number | null = null
 
     watch([hasInteracted, isPremium], ([hasInteracted, isPremium]) => {
       if (hasLoadedAds.value) {
@@ -138,8 +139,16 @@
 
       hasLoadedAds.value = true
 
-      useAdvertisements()
+      adLoadTimeoutId = window.setTimeout(() => {
+        useAdvertisements()
+      }, 0)
     }, { immediate: true })
+
+    onBeforeUnmount(() => {
+      if (adLoadTimeoutId !== null) {
+        window.clearTimeout(adLoadTimeoutId)
+      }
+    })
   })
 
   const featuredDomains = [
