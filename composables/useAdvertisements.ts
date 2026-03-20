@@ -17,6 +17,7 @@ type PopupCapState = {
   lastPopupAt: number | null
   elapsedSinceLastPopupMs: number | null
 }
+type VendorPopupMatchReason = 'cross-origin-script' | 'same-origin-js-script' | 'no-user-activation'
 
 function getScriptUrlsFromStack(stack?: string): URL[] {
   if (!stack) {
@@ -46,25 +47,28 @@ function getScriptUrlsFromStack(stack?: string): URL[] {
   return urls
 }
 
-function isLikelyVendorPopupCall(callerScriptUrls: URL[], hasUserActivation: boolean): boolean {
+function getVendorPopupMatchReason(
+  callerScriptUrls: URL[],
+  hasUserActivation: boolean
+): VendorPopupMatchReason | null {
   if (callerScriptUrls.length === 0) {
-    return !hasUserActivation
+    return hasUserActivation ? null : 'no-user-activation'
   }
 
   const currentOrigin = window.location.origin
 
   for (const scriptUrl of callerScriptUrls) {
     if (scriptUrl.origin !== currentOrigin) {
-      return true
+      return 'cross-origin-script'
     }
 
     // Keep the heuristic broad: treat same-origin static /js scripts as likely ad/vendor callers.
     if (scriptUrl.pathname.startsWith('/js/')) {
-      return true
+      return 'same-origin-js-script'
     }
   }
 
-  return !hasUserActivation
+  return hasUserActivation ? null : 'no-user-activation'
 }
 
 export default function () {
@@ -101,6 +105,7 @@ export default function () {
   function debugPopupGuardDecision(details: {
     decision: 'allowed' | 'blocked'
     reason: 'vendor-cap-active' | 'vendor-cap-inactive'
+    vendorPopupMatchReason: VendorPopupMatchReason
     args: WindowOpenArgs
     hasUserActivation: boolean
     callerScriptUrls: URL[]
@@ -116,6 +121,7 @@ export default function () {
     console.debug('[ads-popup-guard]', {
       decision: details.decision,
       reason: details.reason,
+      vendorPopupMatchReason: details.vendorPopupMatchReason,
       requestedUrl: typeof requestedUrl === 'string' ? requestedUrl : null,
       target: typeof target === 'string' ? target : null,
       windowFeatures: typeof windowFeatures === 'string' ? windowFeatures : null,
@@ -196,13 +202,17 @@ export default function () {
       }
 
       const userActivation = (window.navigator as Navigator & {
+        // Legacy browsers may not expose navigator.userActivation.
         userActivation?: { isActive: boolean }
       }).userActivation
 
+      // Default to true when userActivation is unavailable so older browsers keep allowing
+      // popups instead of breaking ad flows entirely; this trades stricter detection for compatibility.
       const hasUserActivation = userActivation?.isActive ?? true
       const callerScriptUrls = getScriptUrlsFromStack(new Error().stack)
+      const vendorPopupMatchReason = getVendorPopupMatchReason(callerScriptUrls, hasUserActivation)
 
-      if (!isLikelyVendorPopupCall(callerScriptUrls, hasUserActivation)) {
+      if (!vendorPopupMatchReason) {
         return originalWindowOpen(...args)
       }
 
@@ -212,6 +222,7 @@ export default function () {
         debugPopupGuardDecision({
           decision: 'blocked',
           reason: 'vendor-cap-active',
+          vendorPopupMatchReason,
           args,
           hasUserActivation,
           callerScriptUrls,
@@ -227,6 +238,7 @@ export default function () {
       debugPopupGuardDecision({
         decision: 'allowed',
         reason: 'vendor-cap-inactive',
+        vendorPopupMatchReason,
         args,
         hasUserActivation,
         callerScriptUrls,
