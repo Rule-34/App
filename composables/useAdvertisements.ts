@@ -2,83 +2,11 @@ import { default as randomWeightedChoice } from 'random-weighted-choice'
 
 const AD_POPUP_CAP_DURATION_MS = 30 * 60 * 1000
 const AD_LAST_POPUP_AT_STORAGE_KEY = 'ads-last-popup-at'
-// Temporary debug toggles for popup-cap behavior:
-// - window.__ADS_POPUP_GUARD_DEBUG__ = true
-// - localStorage.setItem('ads-popup-guard-debug', '1')
-const AD_POPUP_DEBUG_STORAGE_KEY = 'ads-popup-guard-debug'
-const AD_POPUP_DEBUG_WINDOW_FLAG = '__ADS_POPUP_GUARD_DEBUG__'
-const STACK_URL_REGEX = /https?:\/\/[^\s)]+/g
-const DEBUG_TRUTHY_VALUES = new Set(['1', 'true', 'yes', 'on'])
 const INTEGER_TIMESTAMP_REGEX = /^\d+$/
-const VENDOR_INTERACTION_EVENT_TYPES = new Set([
-  'click',
-  'mousedown',
-  'mouseup',
-  'pointerdown',
-  'touchstart'
-])
 
 type WindowOpenArgs = Parameters<Window['open']>
 type WindowOpenResult = ReturnType<Window['open']>
-type PopupCapState = {
-  isActive: boolean
-  lastPopupAt: number | null
-  elapsedSinceLastPopupMs: number | null
-}
-type VendorPopupMatchReason = 'cross-origin-script' | 'same-origin-js-script' | 'no-user-activation'
-type VendorOpenKind = 'popunder' | 'in-page-push'
-
-function getScriptUrlsFromStack(stack?: string): URL[] {
-  if (!stack) {
-    return []
-  }
-
-  const matches = stack.match(STACK_URL_REGEX)
-
-  if (!matches) {
-    return []
-  }
-
-  const urls: URL[] = []
-
-  for (const rawMatch of matches) {
-    const normalizedUrl = rawMatch
-      .replace(/[),]$/, '')
-      .replace(/:\d+:\d+$/, '')
-
-    try {
-      urls.push(new URL(normalizedUrl))
-    } catch {
-      // Ignore malformed URLs from stack traces
-    }
-  }
-
-  return urls
-}
-
-function getVendorPopupMatchReason(
-  callerScriptUrls: URL[],
-  hasUserActivation: boolean
-): VendorPopupMatchReason | null {
-  if (callerScriptUrls.length === 0) {
-    return hasUserActivation ? null : 'no-user-activation'
-  }
-
-  const currentOrigin = window.location.origin
-
-  for (const scriptUrl of callerScriptUrls) {
-    if (scriptUrl.origin !== currentOrigin) {
-      return 'cross-origin-script'
-    }
-
-    // Keep the heuristic broad: treat same-origin static /js scripts as likely ad/vendor callers.
-    if (scriptUrl.pathname.startsWith('/js/')) {
-      return 'same-origin-js-script'
-    }
-  }
-
-  return hasUserActivation ? null : 'no-user-activation'
-}
+type PopupOpenKind = 'popunder' | 'in-page-push'
 
 function getRequestedUrl(args: WindowOpenArgs): string | null {
   const [requestedUrl] = args
@@ -86,7 +14,7 @@ function getRequestedUrl(args: WindowOpenArgs): string | null {
   return typeof requestedUrl === 'string' ? requestedUrl : null
 }
 
-function getVendorOpenKind(args: WindowOpenArgs): VendorOpenKind {
+function getPopupOpenKind(args: WindowOpenArgs): PopupOpenKind {
   const requestedUrl = getRequestedUrl(args)
 
   if (!requestedUrl) {
@@ -117,72 +45,6 @@ export default function () {
 
   if (!import.meta.client) {
     return
-  }
-
-  function isPopupGuardDebugEnabled(): boolean {
-    if (import.meta.dev) {
-      return true
-    }
-
-    const debugFlagOnWindow = (window as Window & Record<string, unknown>)[AD_POPUP_DEBUG_WINDOW_FLAG]
-
-    if (typeof debugFlagOnWindow === 'boolean') {
-      return debugFlagOnWindow
-    }
-
-    try {
-      const rawDebugFlag = window.localStorage.getItem(AD_POPUP_DEBUG_STORAGE_KEY)
-
-      if (!rawDebugFlag) {
-        return false
-      }
-
-      return DEBUG_TRUTHY_VALUES.has(rawDebugFlag.trim().toLowerCase())
-    } catch {
-      return false
-    }
-  }
-
-  function debugPopupGuardDecision(details: {
-    decision: 'allowed' | 'blocked'
-    reason: 'vendor-cap-active' | 'vendor-cap-inactive'
-    vendorPopupMatchReason: VendorPopupMatchReason
-    vendorOpenKind: VendorOpenKind
-    args: WindowOpenArgs
-    hasUserActivation: boolean
-    callerScriptUrls: URL[]
-    capState: PopupCapState
-    recordedPopupAt?: number
-    openAttemptOutcome?: 'opened' | 'blocked-or-null' | 'threw-error'
-    openError?: string
-    capRecordedAt?: number
-  }) {
-    if (!isPopupGuardDebugEnabled()) {
-      return
-    }
-
-    const [requestedUrl, target, windowFeatures] = details.args
-
-    console.debug('[ads-popup-guard]', {
-      decision: details.decision,
-      reason: details.reason,
-      vendorPopupMatchReason: details.vendorPopupMatchReason,
-      vendorOpenKind: details.vendorOpenKind,
-      requestedUrl: typeof requestedUrl === 'string' ? requestedUrl : null,
-      target: typeof target === 'string' ? target : null,
-      windowFeatures: typeof windowFeatures === 'string' ? windowFeatures : null,
-      hasUserActivation: details.hasUserActivation,
-      callerScriptUrlCount: details.callerScriptUrls.length,
-      callerScriptUrls: details.callerScriptUrls.slice(0, 5).map(scriptUrl => scriptUrl.href),
-      capDurationMs: AD_POPUP_CAP_DURATION_MS,
-      capActive: details.capState.isActive,
-      lastPopupAt: details.capState.lastPopupAt,
-      elapsedSinceLastPopupMs: details.capState.elapsedSinceLastPopupMs,
-      recordedPopupAt: details.recordedPopupAt ?? null,
-      capRecordedAt: details.capRecordedAt ?? null,
-      openAttemptOutcome: details.openAttemptOutcome ?? null,
-      openError: details.openError ?? null
-    })
   }
 
   function parseStoredLastPopupAt(rawLastPopupAt: string, now: number): number | null {
@@ -254,240 +116,42 @@ export default function () {
     }
   }
 
-  function getAdPopupCapState(now = Date.now()): PopupCapState {
-    const lastAdPopupAt = getLastAdPopupAt(now)
+  function isAdPopupCapActive(now = Date.now()): boolean {
+    const lastPopupAt = getLastAdPopupAt(now)
 
-    if (!lastAdPopupAt) {
-      return {
-        isActive: false,
-        lastPopupAt: null,
-        elapsedSinceLastPopupMs: null
-      }
-    }
-
-    const elapsedSinceLastPopupMs = now - lastAdPopupAt
-
-    return {
-      isActive: elapsedSinceLastPopupMs < AD_POPUP_CAP_DURATION_MS,
-      lastPopupAt: lastAdPopupAt,
-      elapsedSinceLastPopupMs
-    }
-  }
-
-  function isAdPopupCapActive(): boolean {
-    return getAdPopupCapState().isActive
+    return lastPopupAt !== null && now - lastPopupAt < AD_POPUP_CAP_DURATION_MS
   }
 
   if (!isPopupGuardInstalled.value) {
     const originalWindowOpen = window.open.bind(window)
-    const originalAddEventListener = EventTarget.prototype.addEventListener
-    const originalRemoveEventListener = EventTarget.prototype.removeEventListener
-    const wrappedVendorInteractionListeners = new WeakMap<
-      EventListenerOrEventListenerObject,
-      Map<string, EventListener>
-    >()
-
-    EventTarget.prototype.addEventListener = function (
-      type: string,
-      listener: EventListenerOrEventListenerObject | null,
-      options?: boolean | AddEventListenerOptions
-    ) {
-      if (!listener || !VENDOR_INTERACTION_EVENT_TYPES.has(type)) {
-        originalAddEventListener.call(this, type, listener, options)
-
-        return
-      }
-
-      const callerScriptUrls = getScriptUrlsFromStack(new Error().stack)
-      const vendorPopupMatchReason = getVendorPopupMatchReason(callerScriptUrls, true)
-
-      if (!vendorPopupMatchReason || vendorPopupMatchReason === 'no-user-activation') {
-        originalAddEventListener.call(this, type, listener, options)
-
-        return
-      }
-
-      let wrappedListener = wrappedVendorInteractionListeners.get(listener)?.get(type)
-
-      if (!wrappedListener) {
-        wrappedListener = function (this: EventTarget, event: Event) {
-          if (isPopupGuardArmed.value && isAdPopupCapActive()) {
-            if (isPopupGuardDebugEnabled()) {
-              const capState = getAdPopupCapState()
-
-              console.debug('[ads-popup-guard]', {
-                decision: 'blocked',
-                reason: 'vendor-cap-active',
-                guard: 'interaction-listener',
-                eventType: event.type,
-                vendorPopupMatchReason,
-                callerScriptUrlCount: callerScriptUrls.length,
-                callerScriptUrls: callerScriptUrls.slice(0, 5).map(scriptUrl => scriptUrl.href),
-                capDurationMs: AD_POPUP_CAP_DURATION_MS,
-                capActive: capState.isActive,
-                lastPopupAt: capState.lastPopupAt,
-                elapsedSinceLastPopupMs: capState.elapsedSinceLastPopupMs
-              })
-            }
-
-            return
-          }
-
-          if (typeof listener === 'function') {
-            listener.call(this, event)
-
-            return
-          }
-
-          listener.handleEvent.call(listener, event)
-        }
-
-        let wrappedListenersByType = wrappedVendorInteractionListeners.get(listener)
-
-        if (!wrappedListenersByType) {
-          wrappedListenersByType = new Map()
-          wrappedVendorInteractionListeners.set(listener, wrappedListenersByType)
-        }
-
-        wrappedListenersByType.set(type, wrappedListener)
-      }
-
-      originalAddEventListener.call(this, type, wrappedListener, options)
-    }
-
-    EventTarget.prototype.removeEventListener = function (
-      type: string,
-      listener: EventListenerOrEventListenerObject | null,
-      options?: boolean | EventListenerOptions
-    ) {
-      if (!listener || !VENDOR_INTERACTION_EVENT_TYPES.has(type)) {
-        originalRemoveEventListener.call(this, type, listener, options)
-
-        return
-      }
-
-      const wrappedListener = wrappedVendorInteractionListeners.get(listener)?.get(type)
-
-      originalRemoveEventListener.call(this, type, wrappedListener ?? listener, options)
-    }
 
     window.open = (...args: WindowOpenArgs): WindowOpenResult => {
       if (!isPopupGuardArmed.value) {
         return originalWindowOpen(...args)
       }
 
-      const userActivation = (window.navigator as Navigator & {
-        // Legacy browsers may not expose navigator.userActivation.
-        userActivation?: { isActive: boolean }
-      }).userActivation
-
-      // Default to true when userActivation is unavailable so older browsers keep allowing
-      // popups instead of breaking ad flows entirely; this trades stricter detection for compatibility.
-      const hasUserActivation = userActivation?.isActive ?? true
-      const callerScriptUrls = getScriptUrlsFromStack(new Error().stack)
-      const vendorPopupMatchReason = getVendorPopupMatchReason(callerScriptUrls, hasUserActivation)
-      const vendorOpenKind = getVendorOpenKind(args)
-
-      if (!vendorPopupMatchReason) {
+      if (getPopupOpenKind(args) === 'in-page-push') {
         return originalWindowOpen(...args)
       }
 
-      if (vendorOpenKind === 'in-page-push') {
-        debugPopupGuardDecision({
-          decision: 'allowed',
-          reason: 'vendor-cap-inactive',
-          vendorPopupMatchReason,
-          vendorOpenKind,
-          args,
-          hasUserActivation,
-          callerScriptUrls,
-          capState: getAdPopupCapState()
-        })
-
-        return originalWindowOpen(...args)
-      }
-
-      const capState = getAdPopupCapState()
-
-      if (capState.isActive) {
-        debugPopupGuardDecision({
-          decision: 'blocked',
-          reason: 'vendor-cap-active',
-          vendorPopupMatchReason,
-          vendorOpenKind,
-          args,
-          hasUserActivation,
-          callerScriptUrls,
-          capState
-        })
-
+      if (isAdPopupCapActive()) {
         return null
       }
 
-      const attemptedAt = Date.now()
-      recordAdPopupOpened(attemptedAt)
+      recordAdPopupOpened()
 
-      try {
-        const popupHandle = originalWindowOpen(...args)
-
-        if (popupHandle) {
-          debugPopupGuardDecision({
-            decision: 'allowed',
-            reason: 'vendor-cap-inactive',
-            vendorPopupMatchReason,
-            vendorOpenKind,
-            args,
-            hasUserActivation,
-            callerScriptUrls,
-            capState,
-            recordedPopupAt: attemptedAt,
-            capRecordedAt: attemptedAt,
-            openAttemptOutcome: 'opened'
-          })
-        } else {
-          debugPopupGuardDecision({
-            decision: 'allowed',
-            reason: 'vendor-cap-inactive',
-            vendorPopupMatchReason,
-            vendorOpenKind,
-            args,
-            hasUserActivation,
-            callerScriptUrls,
-            capState,
-            capRecordedAt: attemptedAt,
-            openAttemptOutcome: 'blocked-or-null'
-          })
-        }
-
-        return popupHandle
-      } catch (error) {
-        debugPopupGuardDecision({
-          decision: 'allowed',
-          reason: 'vendor-cap-inactive',
-          vendorPopupMatchReason,
-          vendorOpenKind,
-          args,
-          hasUserActivation,
-          callerScriptUrls,
-          capState,
-          capRecordedAt: attemptedAt,
-          openAttemptOutcome: 'threw-error',
-          openError: error instanceof Error ? error.message : String(error)
-        })
-
-        throw error
-      }
+      return originalWindowOpen(...args)
     }
 
     isPopupGuardInstalled.value = true
   }
 
-  // Phase 1: stop injecting ad scripts while the 30-minute popup cap is active.
+  // Stop injecting ad scripts while the 30-minute popup cap is active.
   if (isAdPopupCapActive()) {
     return
   }
 
-  // Phase 2 (arming): once scripts load, guard vendor-like popups with the first-party cap.
+  // Once scripts load, guard future popunder opens with the first-party cap.
   isPopupGuardArmed.value = true
 
   const popunderAds = [
