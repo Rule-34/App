@@ -3,7 +3,7 @@ import { default as randomWeightedChoice } from 'random-weighted-choice'
 const AD_POPUP_CAP_DURATION_MS = 30 * 60 * 1000
 const AD_LAST_POPUP_AT_STORAGE_KEY = 'ads-last-popup-at'
 const AD_TRUSTED_WINDOW_OPEN_BYPASS_STATE_KEY = 'ads-trusted-window-open-bypass-next'
-const IN_PAGE_PUSH_HOSTNAMES = new Set(['hotbsizovu.today', 'udzpel.com'])
+const IN_PAGE_PUSH_HOSTNAMES = new Set(['hotbsizovu.today', 'udzpel.com', 'hotsoz.com'])
 const INTEGER_TIMESTAMP_REGEX = /^\d+$/
 
 type WindowOpenArgs = Parameters<Window['open']>
