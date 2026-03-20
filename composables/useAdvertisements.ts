@@ -2,12 +2,27 @@ import { default as randomWeightedChoice } from 'random-weighted-choice'
 
 const AD_POPUP_CAP_DURATION_MS = 30 * 60 * 1000
 const AD_LAST_POPUP_AT_STORAGE_KEY = 'ads-last-popup-at'
+// Temporary debug toggles for popup-cap behavior:
+// - window.__ADS_POPUP_GUARD_DEBUG__ = true
+// - localStorage.setItem('ads-popup-guard-debug', '1')
+const AD_POPUP_DEBUG_STORAGE_KEY = 'ads-popup-guard-debug'
+const AD_POPUP_DEBUG_WINDOW_FLAG = '__ADS_POPUP_GUARD_DEBUG__'
 const STACK_URL_REGEX = /https?:\/\/[^\s)]+/g
+const DEBUG_TRUTHY_VALUES = new Set(['1', 'true', 'yes', 'on'])
 
 type WindowOpenArgs = Parameters<Window['open']>
 type WindowOpenResult = ReturnType<Window['open']>
+type PopupCapState = {
+  isActive: boolean
+  lastPopupAt: number | null
+  elapsedSinceLastPopupMs: number | null
+}
 
-function getScriptUrlsFromStack(stack: string): URL[] {
+function getScriptUrlsFromStack(stack?: string): URL[] {
+  if (!stack) {
+    return []
+  }
+
   const matches = stack.match(STACK_URL_REGEX)
 
   if (!matches) {
@@ -31,13 +46,7 @@ function getScriptUrlsFromStack(stack: string): URL[] {
   return urls
 }
 
-function isLikelyVendorPopupCall(stack: string | undefined, hasUserActivation: boolean): boolean {
-  if (!stack) {
-    return !hasUserActivation
-  }
-
-  const callerScriptUrls = getScriptUrlsFromStack(stack)
-
+function isLikelyVendorPopupCall(callerScriptUrls: URL[], hasUserActivation: boolean): boolean {
   if (callerScriptUrls.length === 0) {
     return !hasUserActivation
   }
@@ -67,6 +76,58 @@ export default function () {
 
   if (!import.meta.client) {
     return
+  }
+
+  function isPopupGuardDebugEnabled(): boolean {
+    const debugFlagOnWindow = (window as Window & Record<string, unknown>)[AD_POPUP_DEBUG_WINDOW_FLAG]
+
+    if (typeof debugFlagOnWindow === 'boolean') {
+      return debugFlagOnWindow
+    }
+
+    try {
+      const rawDebugFlag = window.localStorage.getItem(AD_POPUP_DEBUG_STORAGE_KEY)
+
+      if (!rawDebugFlag) {
+        return false
+      }
+
+      return DEBUG_TRUTHY_VALUES.has(rawDebugFlag.trim().toLowerCase())
+    } catch {
+      return false
+    }
+  }
+
+  function debugPopupGuardDecision(details: {
+    decision: 'allowed' | 'blocked'
+    reason: 'vendor-cap-active' | 'vendor-cap-inactive'
+    args: WindowOpenArgs
+    hasUserActivation: boolean
+    callerScriptUrls: URL[]
+    capState: PopupCapState
+    recordedPopupAt?: number
+  }) {
+    if (!isPopupGuardDebugEnabled()) {
+      return
+    }
+
+    const [requestedUrl, target, windowFeatures] = details.args
+
+    console.debug('[ads-popup-guard]', {
+      decision: details.decision,
+      reason: details.reason,
+      requestedUrl: typeof requestedUrl === 'string' ? requestedUrl : null,
+      target: typeof target === 'string' ? target : null,
+      windowFeatures: typeof windowFeatures === 'string' ? windowFeatures : null,
+      hasUserActivation: details.hasUserActivation,
+      callerScriptUrlCount: details.callerScriptUrls.length,
+      callerScriptUrls: details.callerScriptUrls.slice(0, 5).map(scriptUrl => scriptUrl.href),
+      capDurationMs: AD_POPUP_CAP_DURATION_MS,
+      capActive: details.capState.isActive,
+      lastPopupAt: details.capState.lastPopupAt,
+      elapsedSinceLastPopupMs: details.capState.elapsedSinceLastPopupMs,
+      recordedPopupAt: details.recordedPopupAt ?? null
+    })
   }
 
   function getLastAdPopupAt(): number | null {
@@ -102,14 +163,28 @@ export default function () {
     }
   }
 
-  function isAdPopupCapActive(): boolean {
+  function getAdPopupCapState(now = Date.now()): PopupCapState {
     const lastAdPopupAt = getLastAdPopupAt()
 
     if (!lastAdPopupAt) {
-      return false
+      return {
+        isActive: false,
+        lastPopupAt: null,
+        elapsedSinceLastPopupMs: null
+      }
     }
 
-    return Date.now() - lastAdPopupAt < AD_POPUP_CAP_DURATION_MS
+    const elapsedSinceLastPopupMs = now - lastAdPopupAt
+
+    return {
+      isActive: elapsedSinceLastPopupMs < AD_POPUP_CAP_DURATION_MS,
+      lastPopupAt: lastAdPopupAt,
+      elapsedSinceLastPopupMs
+    }
+  }
+
+  function isAdPopupCapActive(): boolean {
+    return getAdPopupCapState().isActive
   }
 
   if (!isPopupGuardInstalled.value) {
@@ -125,17 +200,39 @@ export default function () {
       }).userActivation
 
       const hasUserActivation = userActivation?.isActive ?? true
-      const stack = new Error().stack
+      const callerScriptUrls = getScriptUrlsFromStack(new Error().stack)
 
-      if (!isLikelyVendorPopupCall(stack, hasUserActivation)) {
+      if (!isLikelyVendorPopupCall(callerScriptUrls, hasUserActivation)) {
         return originalWindowOpen(...args)
       }
 
-      if (isAdPopupCapActive()) {
+      const capState = getAdPopupCapState()
+
+      if (capState.isActive) {
+        debugPopupGuardDecision({
+          decision: 'blocked',
+          reason: 'vendor-cap-active',
+          args,
+          hasUserActivation,
+          callerScriptUrls,
+          capState
+        })
+
         return null
       }
 
-      recordAdPopupOpened()
+      const openedAt = Date.now()
+      recordAdPopupOpened(openedAt)
+
+      debugPopupGuardDecision({
+        decision: 'allowed',
+        reason: 'vendor-cap-inactive',
+        args,
+        hasUserActivation,
+        callerScriptUrls,
+        capState,
+        recordedPopupAt: openedAt
+      })
 
       return originalWindowOpen(...args)
     }
