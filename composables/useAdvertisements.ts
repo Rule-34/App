@@ -2,6 +2,7 @@ import { default as randomWeightedChoice } from 'random-weighted-choice'
 
 const AD_POPUP_CAP_DURATION_MS = 30 * 60 * 1000
 const AD_LAST_POPUP_AT_STORAGE_KEY = 'ads-last-popup-at'
+const AD_TRUSTED_WINDOW_OPEN_BYPASS_STATE_KEY = 'ads-trusted-window-open-bypass-next'
 const INTEGER_TIMESTAMP_REGEX = /^\d+$/
 
 type WindowOpenArgs = Parameters<Window['open']>
@@ -42,6 +43,7 @@ export default function () {
   const isPopupGuardInstalled = useState<boolean>('ads-popup-guard-installed', () => false)
   const isPopupGuardArmed = useState<boolean>('ads-popup-guard-armed', () => false)
   const lastAdPopupAtInMemory = useState<number | null>('ads-last-popup-at-in-memory', () => null)
+  const shouldBypassNextWindowOpenGuard = useState<boolean>(AD_TRUSTED_WINDOW_OPEN_BYPASS_STATE_KEY, () => false)
 
   if (!import.meta.client) {
     return
@@ -126,6 +128,12 @@ export default function () {
     const originalWindowOpen = window.open.bind(window)
 
     window.open = (...args: WindowOpenArgs): WindowOpenResult => {
+      if (shouldBypassNextWindowOpenGuard.value) {
+        shouldBypassNextWindowOpenGuard.value = false
+
+        return originalWindowOpen(...args)
+      }
+
       if (!isPopupGuardArmed.value) {
         return originalWindowOpen(...args)
       }
@@ -291,6 +299,22 @@ export default function () {
       }
     ]
   })
+}
+
+export function openTrustedWindow(...args: WindowOpenArgs): WindowOpenResult {
+  if (!import.meta.client) {
+    return null
+  }
+
+  const shouldBypassNextWindowOpenGuard = useState<boolean>(AD_TRUSTED_WINDOW_OPEN_BYPASS_STATE_KEY, () => false)
+
+  shouldBypassNextWindowOpenGuard.value = true
+
+  try {
+    return window.open(...args)
+  } finally {
+    shouldBypassNextWindowOpenGuard.value = false
+  }
 }
 
 export function useChatWithAiReferral() {

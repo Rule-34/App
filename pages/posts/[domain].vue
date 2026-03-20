@@ -252,7 +252,7 @@
             description: 'You sent too many requests in a short period of time',
             action: {
               label: 'Verify I am not a Bot',
-              onClick: () => window.open(config.public.apiUrl + '/status', '_blank')
+              onClick: () => openTrustedWindow(config.public.apiUrl + '/status', '_blank')
             }
           })
           break
@@ -328,7 +328,7 @@
 
     const resolvedTagUrl = router.resolve(tagUrl).href
 
-    window.open(resolvedTagUrl, '_blank')
+    openTrustedWindow(resolvedTagUrl, '_blank')
   }
 
   async function onLoadNextPostPage() {
