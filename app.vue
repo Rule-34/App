@@ -10,10 +10,16 @@
     const url = 'https://' + project.urls.production.hostname + route.fullPath
 
     const parsedUrl = new URL(url)
+    const canonicalIgnoredParams = new Set(['page', 'cursor', 'source_booru'])
 
-    // Remove query params: page or cursor
-    parsedUrl.searchParams.delete('page')
-    parsedUrl.searchParams.delete('cursor')
+    // Keep canonical URLs focused on content-defining params only.
+    // Redirect attribution params (utm_* and source_booru) are intentionally removed so
+    // premium-redirect landings don't create duplicate canonicals for the same page.
+    for (const key of [...parsedUrl.searchParams.keys()]) {
+      if (canonicalIgnoredParams.has(key) || key.startsWith('utm_')) {
+        parsedUrl.searchParams.delete(key)
+      }
+    }
 
     return parsedUrl.href
   })
