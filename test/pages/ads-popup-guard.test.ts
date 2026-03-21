@@ -43,7 +43,7 @@ describe('popup guard', () => {
     })
   })
 
-  it('blocks a second popunder attempt within 20 minutes', () => {
+  it('blocks a second popunder attempt within the active cap window', () => {
     const now = 1_710_000_000_000
     const fiveMinutesAgo = now - (5 * 60 * 1000)
 
@@ -96,7 +96,7 @@ describe('popup guard', () => {
     })
   })
 
-  it('allows popunder after cap expires at 20 minutes', () => {
+  it('allows popunder after the active cap expires', () => {
     const now = 1_710_000_000_000
     const expiredLastPopupAt = now - AD_POPUP_CAP_DURATION_MS - 1
 

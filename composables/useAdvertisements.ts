@@ -69,7 +69,7 @@ const POPUNDER_AD_PROVIDERS: AdProvider[] = [
     name: 'HilltopAds',
     ads: [
       {
-        id: 'https:////ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
+        id: 'https://ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
         weight: 1
       }
     ]
