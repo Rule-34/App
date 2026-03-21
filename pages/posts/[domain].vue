@@ -7,7 +7,7 @@
   import { FetchError } from 'ofetch'
   import type { Ref } from 'vue'
   import { toast } from 'vue-sonner'
-  import { generatePostsRoute } from '~/assets/js/RouterHelper'
+  import { fallbackBooruDomain, generatePostsRoute, getSingleQueryValue } from '~/assets/js/RouterHelper'
   import { tagArrayToTitle } from '~/assets/js/SeoHelper'
   import type { Domain } from '~/assets/js/domain'
   import type { IPost, IPostPage } from '~/assets/js/post.dto'
@@ -28,29 +28,58 @@
 
   const { selectedDomainFromStorage } = useSelectedDomainFromStorage()
 
+  const additionalBoorusPremiumSlideIndex = 4
+
   /**
    * Show ads for non-premium users
    */
   onMounted(() => {
     const hasLoadedAds = ref(false)
 
-    watch([hasInteracted, isPremium], ([hasInteracted, isPremium]) => {
-      if (hasLoadedAds.value) {
-        return
-      }
+    watch(
+      [hasInteracted, isPremium],
+      ([hasInteracted, isPremium]) => {
+        if (hasLoadedAds.value) {
+          return
+        }
 
-      if (!hasInteracted) {
-        return
-      }
+        if (!hasInteracted) {
+          return
+        }
 
-      if (isPremium) {
-        return
-      }
+        if (isPremium) {
+          return
+        }
 
-      hasLoadedAds.value = true
+        hasLoadedAds.value = true
 
-      useAdvertisements()
-    }, { immediate: true })
+        useAdvertisements()
+      },
+      { immediate: true }
+    )
+  })
+
+  // Reopen the existing premium upsell when a non-premium user lands here
+  // via redirect from a premium-only booru to the fallback booru route.
+  onMounted(() => {
+    if (isPremium.value) {
+      return
+    }
+
+    if (selectedBooru.value.domain !== fallbackBooruDomain) {
+      return
+    }
+
+    const sourceBooru = getSingleQueryValue(route.query.source_booru)
+
+    if (!sourceBooru) {
+      return
+    }
+
+    const { open: promptPremium, currentIndex } = usePremiumDialog()
+
+    currentIndex.value = additionalBoorusPremiumSlideIndex
+    promptPremium.value = true
   })
 
   /**
@@ -79,9 +108,7 @@
       return []
     }
 
-    return tags
-      .split('|')
-      .map((tag) => new Tag({ name: tag }).toJSON())
+    return tags.split('|').map((tag) => new Tag({ name: tag }).toJSON())
   })
 
   const selectedPage = computed(() => {
@@ -823,6 +850,50 @@
   ])
 
   definePageMeta({
+    middleware: [
+      (to) => {
+        const { booruList } = useBooruList()
+        const { isPremium } = useUserData()
+
+        if (isPremium.value) {
+          return
+        }
+
+        const domain = Array.isArray(to.params.domain) ? to.params.domain[0] : to.params.domain
+
+        if (!domain || domain === fallbackBooruDomain) {
+          return
+        }
+
+        const booru = booruList.value.find((booru) => booru.domain === domain)
+
+        if (!booru?.isPremium) {
+          return
+        }
+
+        const tags = getSingleQueryValue(to.query.tags)
+        const redirectQuery = {
+          ...(tags ? { tags } : {}),
+          utm_source: 'internal',
+          utm_medium: 'unauthorized-booru-redirect',
+          utm_campaign: 'additional-boorus',
+          utm_content: domain,
+          // Used after landing to reopen the existing premium upsell modal.
+          source_booru: domain
+        }
+
+        return navigateTo(
+          {
+            path: `/posts/${fallbackBooruDomain}`,
+            query: redirectQuery
+          },
+          {
+            redirectCode: 302
+          }
+        )
+      }
+    ],
+
     validate: async (route) => {
       const { booruList } = useBooruList()
 
@@ -832,15 +903,6 @@
 
       if (!booru) {
         return false
-      }
-
-      const { isPremium } = useUserData()
-
-      if (!isPremium.value && booru.isPremium) {
-        return {
-          status: 401,
-          statusText: 'Unauthorized, please login to view this page'
-        }
       }
 
       const page = route.query.page
