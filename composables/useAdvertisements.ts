@@ -225,6 +225,10 @@ function getRequestedUrl(args: WindowOpenArgs): string | null {
   return typeof requestedUrl === 'string' ? requestedUrl : null
 }
 
+function createBlockedAdPopupError(reason: 'frequency-cap' | 'browser-blocked'): Error {
+  return new Error(`Ad popup blocked: ${reason}`)
+}
+
 const PUSH_POPUP_CLASSIFICATIONS: readonly PopupClassification[] = PUSH_AD_PROVIDERS
   .map(provider => provider.popupClassification)
   .filter((popupClassification): popupClassification is PopupClassification => Boolean(popupClassification))
@@ -360,7 +364,7 @@ export default function () {
           ...popupGuardDecision.capLogDetails
         })
 
-        return null
+        throw createBlockedAdPopupError('frequency-cap')
       }
 
       if (popupGuardDecision.shouldRecordPopupAt) {
@@ -372,7 +376,13 @@ export default function () {
         ...(popupGuardDecision.cappedUntil ? { cappedUntil: popupGuardDecision.cappedUntil } : {})
       })
 
-      return originalWindowOpen(...args)
+      const popupHandle = originalWindowOpen(...args)
+
+      if (popupGuardDecision.event === 'allow-popunder' && popupHandle === null) {
+        throw createBlockedAdPopupError('browser-blocked')
+      }
+
+      return popupHandle
     }
 
     isPopupGuardInstalled.value = true
