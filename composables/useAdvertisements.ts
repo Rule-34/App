@@ -1,10 +1,18 @@
 import { default as randomWeightedChoice } from 'random-weighted-choice'
+import {
+  AD_POPUP_CAP_DURATION_MS,
+  IN_PAGE_PUSH_SEARCH_PARAM_PREFIXES,
+  getAdPopupCapLogDetails as getAdPopupCapLogDetailsPure,
+  getPopupGuardDecision,
+  getPopupOpenKind as getPopupOpenKindPure,
+  getTrustedPopupBypassDecision,
+  isAdPopupCapActive as isAdPopupCapActivePure,
+  type PopupClassification
+} from '../assets/js/ads-popup-guard'
 
-const AD_POPUP_CAP_DURATION_MS = 20 * 60 * 1000
 const AD_LAST_POPUP_AT_STORAGE_KEY = 'ads-last-popup-at'
 const AD_TRUSTED_WINDOW_OPEN_BYPASS_STATE_KEY = 'ads-trusted-window-open-bypass-next'
 const INTEGER_TIMESTAMP_REGEX = /^\d+$/
-const IN_PAGE_PUSH_SEARCH_PARAM_PREFIXES = ['inpage.'] as const
 const AD_SCRIPT_ATTRIBUTES = {
   async: false,
   defer: true,
@@ -13,12 +21,6 @@ const AD_SCRIPT_ATTRIBUTES = {
 
 type WindowOpenArgs = Parameters<Window['open']>
 type WindowOpenResult = ReturnType<Window['open']>
-type PopupOpenKind = 'popunder' | 'in-page-push'
-type PopupClassification = {
-  kind: PopupOpenKind
-  hostnames?: string[]
-  searchParamPrefixes?: readonly string[]
-}
 type WeightedAd = {
   id: string
   weight: number
@@ -223,53 +225,9 @@ function getRequestedUrl(args: WindowOpenArgs): string | null {
   return typeof requestedUrl === 'string' ? requestedUrl : null
 }
 
-function hostnameMatches(hostname: string, allowedHostnames: string[]): boolean {
-  return allowedHostnames.some(allowedHostname => {
-    return hostname === allowedHostname || hostname.endsWith(`.${allowedHostname}`)
-  })
-}
-
-function hasMatchingSearchParamPrefix(parsedUrl: URL, searchParamPrefixes: readonly string[]): boolean {
-  for (const searchParamKey of parsedUrl.searchParams.keys()) {
-    if (searchParamPrefixes.some(prefix => searchParamKey.startsWith(prefix))) {
-      return true
-    }
-  }
-
-  return false
-}
-
-function matchesPopupClassification(parsedUrl: URL, popupClassification: PopupClassification): boolean {
-  if (popupClassification.hostnames && hostnameMatches(parsedUrl.hostname, popupClassification.hostnames)) {
-    return true
-  }
-
-  if (popupClassification.searchParamPrefixes && hasMatchingSearchParamPrefix(parsedUrl, popupClassification.searchParamPrefixes)) {
-    return true
-  }
-
-  return false
-}
-
-function getPopupOpenKind(requestedUrl: string | null): PopupOpenKind {
-  if (!requestedUrl) {
-    return 'popunder'
-  }
-
-  try {
-    const parsedUrl = new URL(requestedUrl, window.location.href)
-
-    for (const provider of PUSH_AD_PROVIDERS) {
-      if (provider.popupClassification && matchesPopupClassification(parsedUrl, provider.popupClassification)) {
-        return provider.popupClassification.kind
-      }
-    }
-  } catch {
-    // Ignore malformed vendor URLs and keep the default popunder classification.
-  }
-
-  return 'popunder'
-}
+const PUSH_POPUP_CLASSIFICATIONS: readonly PopupClassification[] = PUSH_AD_PROVIDERS
+  .map(provider => provider.popupClassification)
+  .filter((popupClassification): popupClassification is PopupClassification => Boolean(popupClassification))
 
 export default function () {
   const popunderScript = useState<string>('popunder-script', () => '')
@@ -355,27 +313,13 @@ export default function () {
   function isAdPopupCapActive(now = Date.now()): boolean {
     const lastPopupAt = getLastAdPopupAt(now)
 
-    return lastPopupAt !== null && now - lastPopupAt < AD_POPUP_CAP_DURATION_MS
+    return isAdPopupCapActivePure(lastPopupAt, now)
   }
 
   function getAdPopupCapLogDetails(now = Date.now()): Record<string, number | null> {
     const lastPopupAt = getLastAdPopupAt(now)
 
-    if (lastPopupAt === null) {
-      return {
-        lastPopupAt: null,
-        cappedUntil: null,
-        remainingMs: null
-      }
-    }
-
-    const cappedUntil = lastPopupAt + AD_POPUP_CAP_DURATION_MS
-
-    return {
-      lastPopupAt,
-      cappedUntil,
-      remainingMs: Math.max(0, cappedUntil - now)
-    }
+    return getAdPopupCapLogDetailsPure(lastPopupAt, now)
   }
 
   if (!isPopupGuardInstalled.value) {
@@ -383,9 +327,10 @@ export default function () {
 
     window.open = (...args: WindowOpenArgs): WindowOpenResult => {
       const requestedUrl = getRequestedUrl(args)
+      const trustedPopupBypassDecision = getTrustedPopupBypassDecision(shouldBypassNextWindowOpenGuard.value)
 
-      if (shouldBypassNextWindowOpenGuard.value) {
-        shouldBypassNextWindowOpenGuard.value = false
+      if (trustedPopupBypassDecision.shouldBypassCurrentOpen) {
+        shouldBypassNextWindowOpenGuard.value = trustedPopupBypassDecision.nextShouldBypass
 
         logAdPopupGuard('trusted-open-bypass', {
           requestedUrl
@@ -398,28 +343,33 @@ export default function () {
         return originalWindowOpen(...args)
       }
 
-      if (getPopupOpenKind(requestedUrl) === 'in-page-push') {
-        logAdPopupGuard('allow-in-page-push', {
-          requestedUrl
-        })
+      const popupOpenKind = getPopupOpenKindPure(requestedUrl, {
+        baseUrl: window.location.href,
+        popupClassifications: PUSH_POPUP_CLASSIFICATIONS
+      })
+      const now = Date.now()
+      const popupGuardDecision = getPopupGuardDecision({
+        popupOpenKind,
+        lastPopupAt: popupOpenKind === 'in-page-push' ? null : getLastAdPopupAt(now),
+        now
+      })
 
-        return originalWindowOpen(...args)
-      }
-
-      if (isAdPopupCapActive()) {
-        logAdPopupGuard('block-capped-popunder', {
+      if (!popupGuardDecision.shouldAllow) {
+        logAdPopupGuard(popupGuardDecision.event, {
           requestedUrl,
-          ...getAdPopupCapLogDetails()
+          ...popupGuardDecision.capLogDetails
         })
 
         return null
       }
 
-      recordAdPopupOpened()
+      if (popupGuardDecision.shouldRecordPopupAt) {
+        recordAdPopupOpened(now)
+      }
 
-      logAdPopupGuard('allow-popunder', {
+      logAdPopupGuard(popupGuardDecision.event, {
         requestedUrl,
-        cappedUntil: Date.now() + AD_POPUP_CAP_DURATION_MS
+        ...(popupGuardDecision.cappedUntil ? { cappedUntil: popupGuardDecision.cappedUntil } : {})
       })
 
       return originalWindowOpen(...args)
