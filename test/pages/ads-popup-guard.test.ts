@@ -8,6 +8,8 @@ import {
   IN_PAGE_PUSH_SEARCH_PARAM_PREFIXES
 } from '../../assets/js/ads-popup-guard'
 
+const REQUIRED_AD_POPUP_CAP_DURATION_MS = 20 * 60 * 1000
+
 const PUSH_POPUP_CLASSIFICATIONS = [
   {
     kind: 'in-page-push' as const,
@@ -22,6 +24,10 @@ const PUSH_POPUP_CLASSIFICATIONS = [
 ]
 
 describe('popup guard', () => {
+  it('keeps the popup cap at the required 20 minutes', () => {
+    expect(AD_POPUP_CAP_DURATION_MS).toBe(REQUIRED_AD_POPUP_CAP_DURATION_MS)
+  })
+
   it('allows the first popunder attempt and records the cap decision path', () => {
     const now = 1_710_000_000_000
     const popupOpenKind = getPopupOpenKind('https://bundlemoviepumice.com/test', {
@@ -39,7 +45,7 @@ describe('popup guard', () => {
       event: 'allow-popunder',
       shouldAllow: true,
       shouldRecordPopupAt: true,
-      cappedUntil: now + AD_POPUP_CAP_DURATION_MS
+      cappedUntil: now + REQUIRED_AD_POPUP_CAP_DURATION_MS
     })
   })
 
@@ -58,8 +64,8 @@ describe('popup guard', () => {
     expect(decision.shouldRecordPopupAt).toBe(false)
     expect(decision.capLogDetails).toEqual({
       lastPopupAt: fiveMinutesAgo,
-      cappedUntil: fiveMinutesAgo + AD_POPUP_CAP_DURATION_MS,
-      remainingMs: AD_POPUP_CAP_DURATION_MS - (5 * 60 * 1000)
+      cappedUntil: fiveMinutesAgo + REQUIRED_AD_POPUP_CAP_DURATION_MS,
+      remainingMs: REQUIRED_AD_POPUP_CAP_DURATION_MS - (5 * 60 * 1000)
     })
   })
 
@@ -98,7 +104,7 @@ describe('popup guard', () => {
 
   it('allows popunder after the active cap expires', () => {
     const now = 1_710_000_000_000
-    const expiredLastPopupAt = now - AD_POPUP_CAP_DURATION_MS - 1
+    const expiredLastPopupAt = now - REQUIRED_AD_POPUP_CAP_DURATION_MS - 1
 
     const decision = getPopupGuardDecision({
       popupOpenKind: 'popunder',
@@ -110,12 +116,12 @@ describe('popup guard', () => {
       event: 'allow-popunder',
       shouldAllow: true,
       shouldRecordPopupAt: true,
-      cappedUntil: now + AD_POPUP_CAP_DURATION_MS
+      cappedUntil: now + REQUIRED_AD_POPUP_CAP_DURATION_MS
     })
 
     expect(getAdPopupCapLogDetails(expiredLastPopupAt, now)).toEqual({
       lastPopupAt: expiredLastPopupAt,
-      cappedUntil: expiredLastPopupAt + AD_POPUP_CAP_DURATION_MS,
+      cappedUntil: expiredLastPopupAt + REQUIRED_AD_POPUP_CAP_DURATION_MS,
       remainingMs: 0
     })
   })
