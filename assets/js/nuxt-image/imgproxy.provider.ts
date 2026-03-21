@@ -1,6 +1,5 @@
 import { joinURL } from 'ufo'
 import type { ProviderGetImage } from '@nuxt/image'
-import { Buffer } from 'buffer'
 import { createOperationsGenerator, defineProvider } from '@nuxt/image/runtime'
 
 // https://docs.imgproxy.net/
@@ -38,7 +37,10 @@ const operationsGenerator = createOperationsGenerator({
 })
 
 function urlSafeBase64(string: string) {
-  return Buffer.from(string, 'utf8').toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
+  const bytes = new TextEncoder().encode(string)
+  const binaryString = Array.from(bytes, byte => String.fromCodePoint(byte)).join('')
+
+  return btoa(binaryString).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
 }
 
 const defaultModifiers = {
