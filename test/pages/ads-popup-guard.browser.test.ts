@@ -214,6 +214,9 @@ describe('popup guard browser flow', async () => {
     }, AD_LAST_POPUP_AT_STORAGE_KEY)).toMatch(/^\d+$/)
     expect(new URL(page.url()).origin).toBe(appOrigin)
 
+    const popunderWrapperBeforeBlockedClick = requestCounts.popunderWrapper
+    const popunderRemoteBeforeBlockedClick = requestCounts.popunderRemote
+    const dynamicPopunderRemoteBeforeBlockedClick = requestCounts.dynamicPopunderRemote
     const remoteDocumentsBeforeBlockedClick = requestCounts.remoteDocuments
     const blockedPopupPromise = page.waitForEvent('popup', { timeout: 1_000 }).catch(() => null)
     const blockedErrorPromise = page.waitForEvent('pageerror', { timeout: 1_000 }).catch(() => null)
@@ -225,6 +228,9 @@ describe('popup guard browser flow', async () => {
     expect(blockedPopup === null).toBe(true)
     expect(blockedError?.message).toContain('Ad popup blocked: frequency-cap')
     expect(new URL(page.url()).origin).toBe(appOrigin)
+    expect(requestCounts.popunderWrapper).toBe(popunderWrapperBeforeBlockedClick)
+    expect(requestCounts.popunderRemote).toBe(popunderRemoteBeforeBlockedClick)
+    expect(requestCounts.dynamicPopunderRemote).toBe(dynamicPopunderRemoteBeforeBlockedClick)
     expect(requestCounts.remoteDocuments).toBe(remoteDocumentsBeforeBlockedClick)
 
     await page.reload()
