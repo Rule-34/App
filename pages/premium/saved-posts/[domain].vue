@@ -232,6 +232,13 @@
   let currentSearchRequestId = 0
 
   async function onSearchTag(tag: string) {
+    const trimmedTag = tag.trim()
+
+    if (!trimmedTag) {
+      tagResults.value = []
+      return
+    }
+
     const requestId = ++currentSearchRequestId
     const apiBaseUrl = config.public.apiUrl
 
@@ -250,7 +257,7 @@
         params: {
           baseEndpoint: selectedBooru.value.domain,
 
-          tag,
+          tag: trimmedTag,
           order: 'count',
           limit: 20,
 
@@ -267,7 +274,7 @@
       if (error instanceof FetchError) {
         switch (error.status) {
           case 404:
-            toast.error('No tags found for query "' + tag + '"')
+            toast.error('No tags found for query "' + trimmedTag + '"')
             tagResults.value = []
             break
 
@@ -309,7 +316,10 @@
 
     if (!(response && typeof response === 'object' && 'data' in response && Array.isArray(response.data))) {
       const Sentry = await import('@sentry/nuxt')
-      Sentry.captureException(response)
+      const invalidTagsResponseError = Object.assign(new Error('Invalid tags response format'), {
+        response
+      })
+      Sentry.captureException(invalidTagsResponseError)
       toast.error('Failed to load tags')
       tagResults.value = []
       return
