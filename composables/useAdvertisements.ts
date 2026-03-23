@@ -202,10 +202,7 @@ const PUSH_AD_PROVIDERS: AdProvider[] = [
 ]
 
 function getProviderAds(providers: AdProvider[]): WeightedAd[] {
-  return providers.reduce<WeightedAd[]>((ads, provider) => {
-    ads.push(...provider.ads)
-    return ads
-  }, [])
+  return providers.flatMap(provider => provider.ads)
 }
 
 function logAdPopupGuard(event: string, details?: Record<string, unknown>) {
@@ -230,8 +227,7 @@ function createBlockedAdPopupError(reason: 'frequency-cap' | 'browser-blocked'):
 }
 
 const PUSH_POPUP_CLASSIFICATIONS: readonly PopupClassification[] = PUSH_AD_PROVIDERS
-  .map(provider => provider.popupClassification)
-  .filter((popupClassification): popupClassification is PopupClassification => Boolean(popupClassification))
+  .flatMap(provider => provider.popupClassification ? [provider.popupClassification] : [])
 
 export default function () {
   const popunderScript = useState<string>('popunder-script', () => '')
