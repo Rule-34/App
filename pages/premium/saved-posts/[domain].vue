@@ -27,6 +27,7 @@
 
   const { addUrlToPageHistory } = usePageHistory()
   const { savedPostList } = usePocketbase()
+  const { booruList: availableBooruList } = useBooruList()
 
   /**
    * URL
@@ -34,12 +35,23 @@
   const domainsFromPocketbase = await $pocketBase.collection('distinct_original_domain_from_posts').getFullList()
 
   const booruList = computed(() => {
+    const getKnownBooruMetadata = (domain: string) => {
+      const knownBooru = availableBooruList.value.find((booru) => booru.domain === domain)
+
+      return {
+        type: knownBooru?.type ?? booruTypeList[0],
+        config: knownBooru?.config ?? null
+      }
+    }
+
+    const productionBooruMetadata = getKnownBooruMetadata(project.urls.production.hostname)
+
     const _booruList: Domain[] = [
       // r34.app
       {
         domain: project.urls.production.hostname,
-        type: booruTypeList[0],
-        config: null,
+        type: productionBooruMetadata.type,
+        config: productionBooruMetadata.config,
         isCustom: false,
         isPremium: false
       }
@@ -48,10 +60,12 @@
     const booruNamesInDb: string[] = domainsFromPocketbase.map((domain) => domain.original_domain)
 
     booruNamesInDb.forEach((booruNameInDb) => {
+      const booruMetadata = getKnownBooruMetadata(booruNameInDb)
+
       _booruList.push({
         domain: booruNameInDb,
-        type: booruTypeList[0],
-        config: null,
+        type: booruMetadata.type,
+        config: booruMetadata.config,
         isCustom: false,
         isPremium: false
       })
@@ -232,6 +246,7 @@
   let currentSearchRequestId = 0
 
   async function onSearchTag(tag: string) {
+    const requestId = ++currentSearchRequestId
     const trimmedTag = tag.trim()
 
     if (!trimmedTag) {
@@ -239,7 +254,6 @@
       return
     }
 
-    const requestId = ++currentSearchRequestId
     const apiBaseUrl = config.public.apiUrl
 
     if (!apiBaseUrl) {
