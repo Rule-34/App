@@ -82,7 +82,7 @@
       return
     }
 
-    window.open(PLATFORM_URLS[platformOfPurchase.value], '_blank', 'noopener,noreferrer')
+    openTrustedWindow(PLATFORM_URLS[platformOfPurchase.value], '_blank', 'noopener,noreferrer')
 
     window._paq?.push(['trackEvent', 'Premium', 'Click "Manage subscription"', platformOfPurchase.value])
   }

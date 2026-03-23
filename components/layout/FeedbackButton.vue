@@ -3,7 +3,7 @@
   import { project } from '@/config/project'
 
   function handleClick(event: Event) {
-    window.open(`https://feedback.${project.urls.production.hostname}`, '_blank')
+    openTrustedWindow(`https://feedback.${project.urls.production.hostname}`, '_blank')
   }
 </script>
 
