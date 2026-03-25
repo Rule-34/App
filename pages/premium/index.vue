@@ -142,7 +142,7 @@
     {
       question: "Didn't receive the license email?",
       answer:
-        "Sometimes the confirmation email can fail to arrive or end up in your spam folder—check there first. If it's nowhere to be found, go to the \"Forgot license\" page and request it to be sent again using the email address you used for payment."
+        'Sometimes the confirmation email can fail to arrive or end up in your spam folder—check there first. If it\'s nowhere to be found, go to the "Forgot license" page and request it to be sent again using the email address you used for payment.'
     },
     {
       question: 'What payment options are accepted?',
@@ -656,12 +656,6 @@
                       />
                       <span>
                         {{ link.cta }}
-                      </span>
-                      <span
-                        v-if="link.category === 'crypto'"
-                        class="bg-primary-700 text-base-content-highlight ml-auto rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase"
-                      >
-                        20% OFF
                       </span>
                     </a>
                   </div>
