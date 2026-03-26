@@ -1,20 +1,20 @@
 <script lang="ts" setup>
-  import { CheckIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/20/solid'
-  import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
-  import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-  import {
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-    Disclosure,
-    DisclosureButton,
-    DisclosurePanel,
-    TransitionChild,
-    TransitionRoot
-  } from '@headlessui/vue'
-  import { project } from '@/config/project'
+import { CheckIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/20/solid'
+import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
+import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  TransitionChild,
+  TransitionRoot
+} from '@headlessui/vue'
+import { project } from '@/config/project'
 
-  const { shouldShow } = useActivePromotion()
+const { shouldShow } = useActivePromotion()
 
   const customerCount = 2363
 
@@ -630,7 +630,7 @@
                       v-if="group.category === 'crypto'"
                       class="bg-primary-700 text-base-content-highlight rounded-full px-2 py-0.5 text-xs font-semibold"
                     >
-                      20% OFF
+                      20% Off
                     </span>
                   </div>
 
@@ -639,13 +639,13 @@
                     <a
                       v-for="link in group.links"
                       :key="link.name"
-                      :href="link.url"
                       :class="
                         link.category === 'crypto'
-                          ? 'ring-primary-700/70 bg-primary-700/10 hover:bg-primary-700/20 hover:text-base-content-highlight'
-                          : 'hover:hover-bg-util hover:hover-text-util'
+                          ? 'ring-primary-700/70 bg-primary-700/10 hover:bg-primary-700/20'
+                          : 'hover:hover-bg-util'
                       "
-                      class="focus-visible:focus-outline-util text-base-content-highlight ring-base-0/20 flex items-center gap-2 rounded-lg px-3 py-2 text-center text-sm font-medium ring-1"
+                      :href="link.url"
+                      class="focus-visible:focus-outline-util text-base-content-highlight hover:hover-text-util ring-base-0/20 flex items-center gap-2 rounded-lg px-3 py-2 text-center text-sm font-medium ring-1"
                       rel="nofollow noopener noreferrer"
                       target="_blank"
                     >
