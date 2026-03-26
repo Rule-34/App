@@ -1,20 +1,20 @@
 <script lang="ts" setup>
-import { CheckIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/20/solid'
-import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
-import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-import {
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  TransitionChild,
-  TransitionRoot
-} from '@headlessui/vue'
-import { project } from '@/config/project'
+  import { CheckIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/20/solid'
+  import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
+  import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+  import {
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    TransitionChild,
+    TransitionRoot
+  } from '@headlessui/vue'
+  import { project } from '@/config/project'
 
-const { shouldShow } = useActivePromotion()
+  const { shouldShow } = useActivePromotion()
 
   const customerCount = 2363
 
@@ -68,6 +68,13 @@ const { shouldShow } = useActivePromotion()
           url: 'https://www.refinedsoft.com/shop-premium-features-discord-role/#/portal/signup/6881f5fb9c83c40001487e13/monthly',
           category: 'creditCard',
           cta: 'Subscribe with Credit Card'
+        },
+        {
+          name: 'SellApp',
+          url: 'https://refinedsoft.sell.app/product/premium-monthly-crypto?payment_method=XMR',
+          faviconDomain: 'https://sell.app',
+          category: 'crypto',
+          cta: 'Pay with Crypto'
         }
       ]
     },
@@ -106,6 +113,13 @@ const { shouldShow } = useActivePromotion()
           url: 'https://www.refinedsoft.com/shop-premium-features-discord-role/#/portal/signup/6881f5fb9c83c40001487e13/yearly',
           category: 'creditCard',
           cta: 'Subscribe with Credit Card'
+        },
+        {
+          name: 'SellApp',
+          url: 'https://refinedsoft.sell.app/product/premium-yearly-crypto?payment_method=XMR',
+          faviconDomain: 'https://sell.app',
+          category: 'crypto',
+          cta: 'Pay with Crypto'
         }
       ]
     },
