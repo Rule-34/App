@@ -1,20 +1,20 @@
 <script lang="ts" setup>
-  import { CheckIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/20/solid'
-  import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
-  import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-  import {
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-    Disclosure,
-    DisclosureButton,
-    DisclosurePanel,
-    TransitionChild,
-    TransitionRoot
-  } from '@headlessui/vue'
-  import { project } from '@/config/project'
+import { CheckIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/20/solid'
+import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
+import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  TransitionChild,
+  TransitionRoot
+} from '@headlessui/vue'
+import { project } from '@/config/project'
 
-  const { shouldShow } = useActivePromotion()
+const { shouldShow } = useActivePromotion()
 
   const customerCount = 2363
 
@@ -142,7 +142,7 @@
     {
       question: "Didn't receive the license email?",
       answer:
-        "Sometimes the confirmation email can fail to arrive or end up in your spam folder—check there first. If it's nowhere to be found, go to the \"Forgot license\" page and request it to be sent again using the email address you used for payment."
+        'Sometimes the confirmation email can fail to arrive or end up in your spam folder—check there first. If it\'s nowhere to be found, go to the "Forgot license" page and request it to be sent again using the email address you used for payment.'
     },
     {
       question: 'What payment options are accepted?',
@@ -152,7 +152,12 @@
     {
       question: 'Can I cancel my subscription?',
       answer:
-        "Yes, you can cancel your subscription anytime.\nFor subscriptions through external platforms, cancel directly on their platform.\nOne-time purchases don't need cancellation."
+        "Yes, you can cancel your subscription anytime.\nGo to the bottom of your Premium Dashboard and use Manage Subscription to cancel.\nPlease do not charge back—if you need help, contact the owner first from your Premium Dashboard.\nOne-time purchases don't need cancellation."
+    },
+    {
+      question: 'Can I get a refund?',
+      answer:
+        'Yes. Within the first 14 days, refunds are no questions asked.\nMessage us using the Contact button in your Premium Dashboard.'
     },
     {
       question: 'What happens after I cancel?',
@@ -182,6 +187,18 @@
     creditCard: { name: 'Credit Card', icon: 'https://icons.duckduckgo.com/ip2/mastercard.us.ico' },
     crypto: { name: 'Cryptocurrency', icon: 'https://icons.duckduckgo.com/ip2/bitcoin.org.ico' }
   }
+
+  const paymentMethodCategories = Object.keys(paymentMethods) as Array<keyof typeof paymentMethods>
+
+  const selectedPaymentLinkGroups = computed(() =>
+    paymentMethodCategories
+      .map((category) => ({
+        category,
+        method: paymentMethods[category],
+        links: selectedPaymentInterval.value.links.filter((link) => link.category === category)
+      }))
+      .filter((group) => group.links.length > 0)
+  )
 
   function getFaviconUrl(url: string) {
     try {
@@ -592,71 +609,76 @@
               <p class="text-base-content mt-2 text-sm text-pretty">Choose your preferred payment method</p>
 
               <div class="mt-6 space-y-8">
-                <!-- Group links by category -->
-                <template
-                  v-for="category in Object.keys(paymentMethods) as Array<keyof typeof paymentMethods>"
-                  :key="category"
+                <div
+                  v-for="group in selectedPaymentLinkGroups"
+                  :key="group.category"
+                  class="space-y-4"
                 >
-                  <!-- Only show section if links exist for this category -->
-                  <div
-                    v-if="selectedPaymentInterval.links.some((link) => link.category === category)"
-                    class="space-y-4"
-                  >
-                    <!-- Section header -->
-                    <div class="flex items-center gap-3">
+                  <!-- Section header -->
+                  <div class="flex items-center gap-3">
+                    <img
+                      :alt="`${group.method.name} icon`"
+                      :src="group.method.icon"
+                      class="h-6 w-6 shrink-0 rounded-sm"
+                      height="128"
+                      width="128"
+                    />
+                    <h4 class="text-base-content-highlight text-lg font-medium">
+                      {{ group.method.name }}
+                    </h4>
+                    <span
+                      v-if="group.category === 'crypto'"
+                      class="bg-primary-700 text-base-content-highlight rounded-full px-2 py-0.5 text-xs font-semibold"
+                    >
+                      20% Off
+                    </span>
+                  </div>
+
+                  <!-- Payment links -->
+                  <div class="grid gap-3">
+                    <a
+                      v-for="link in group.links"
+                      :key="link.name"
+                      :class="
+                        link.category === 'crypto'
+                          ? 'ring-primary-700/70 bg-primary-700/10 hover:bg-primary-700/20'
+                          : 'hover:hover-bg-util'
+                      "
+                      :href="link.url"
+                      class="focus-visible:focus-outline-util text-base-content-highlight hover:hover-text-util ring-base-0/20 flex items-center gap-2 rounded-lg px-3 py-2 text-center text-sm font-medium ring-1"
+                      rel="nofollow noopener noreferrer"
+                      target="_blank"
+                    >
                       <img
-                        :alt="`${paymentMethods[category].name} icon`"
-                        :src="paymentMethods[category].icon"
-                        class="h-6 w-6 shrink-0 rounded-sm"
+                        :alt="`${link.name} favicon`"
+                        :src="getFaviconUrl(link.faviconDomain ?? link.url)"
+                        class="h-5 w-5 shrink-0 rounded-sm"
                         height="128"
                         width="128"
                       />
-                      <h4 class="text-base-content-highlight text-lg font-medium">
-                        {{ paymentMethods[category].name }}
-                      </h4>
-                    </div>
-
-                    <!-- Payment links -->
-                    <div class="grid gap-3">
-                      <a
-                        v-for="link in selectedPaymentInterval.links.filter((link) => link.category === category)"
-                        :key="link.name"
-                        :href="link.url"
-                        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util text-base-content-highlight ring-base-0/20 flex items-center gap-2 rounded-lg px-3 py-2 text-center text-sm font-medium ring-1"
-                        rel="nofollow noopener noreferrer"
-                        target="_blank"
-                      >
-                        <img
-                          :alt="`${link.name} favicon`"
-                          :src="getFaviconUrl(link.faviconDomain ?? link.url)"
-                          class="h-5 w-5 shrink-0 rounded-sm"
-                          height="128"
-                          width="128"
-                        />
-                        <span>
-                          {{ link.cta }}
-                        </span>
-                      </a>
-                    </div>
-
-                    <!-- Instructions (only for links that have them) -->
-                    <template
-                      v-for="link in selectedPaymentInterval.links"
-                      :key="`${link.name}-instructions`"
-                    >
-                      <div v-if="link.category === category && 'instructions' in link && link.instructions">
-                        <ul class="text-base-content mt-2 list-disc space-y-2 pl-4 text-sm">
-                          <li
-                            v-for="(instruction, index) in link.instructions"
-                            :key="index"
-                          >
-                            {{ instruction }}
-                          </li>
-                        </ul>
-                      </div>
-                    </template>
+                      <span>
+                        {{ link.cta }}
+                      </span>
+                    </a>
                   </div>
-                </template>
+
+                  <!-- Instructions (only for links that have them) -->
+                  <template
+                    v-for="link in group.links"
+                    :key="`${link.name}-instructions`"
+                  >
+                    <div v-if="'instructions' in link && link.instructions">
+                      <ul class="text-base-content mt-2 list-disc space-y-2 pl-4 text-sm">
+                        <li
+                          v-for="(instruction, index) in link.instructions"
+                          :key="index"
+                        >
+                          {{ instruction }}
+                        </li>
+                      </ul>
+                    </div>
+                  </template>
+                </div>
               </div>
 
               <!-- Actions -->
