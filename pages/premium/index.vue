@@ -640,10 +640,12 @@
                       v-for="link in group.links"
                       :key="link.name"
                       :href="link.url"
-                      :class="{
-                        'ring-primary-700/70 bg-primary-700/10': link.category === 'crypto'
-                      }"
-                      class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util text-base-content-highlight ring-base-0/20 flex items-center gap-2 rounded-lg px-3 py-2 text-center text-sm font-medium ring-1"
+                      :class="
+                        link.category === 'crypto'
+                          ? 'ring-primary-700/70 bg-primary-700/10 hover:bg-primary-700/20 hover:text-base-content-highlight'
+                          : 'hover:hover-bg-util hover:hover-text-util'
+                      "
+                      class="focus-visible:focus-outline-util text-base-content-highlight ring-base-0/20 flex items-center gap-2 rounded-lg px-3 py-2 text-center text-sm font-medium ring-1"
                       rel="nofollow noopener noreferrer"
                       target="_blank"
                     >
