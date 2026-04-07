@@ -14,7 +14,7 @@
     aria-label="Undress photo"
     title="Undress photo"
     class="hover:hover-bg-util focus-visible:focus-outline-util group rounded-md px-1.5 py-1"
-    :href="`https://nud3.me?photoUrl=${encodeURIComponent(mediaUrl)}&r=r34`"
+    :href="`https://nud3.me/pornify?imageUrl=${encodeURIComponent(mediaUrl)}&r=r34`"
     target="_blank"
     rel="noopener noreferrer"
   >
