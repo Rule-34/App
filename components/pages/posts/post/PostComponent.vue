@@ -145,6 +145,8 @@
         <PostChatWithAi
           v-if="!isPremium"
           :tags="post.tags"
+          :mediaType="post.media_type"
+          :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
         />
 
         <ShareButton
