@@ -90,7 +90,7 @@
       return
     }
 
-    window.open(url, '_blank')
+    openTrustedWindow(url, '_blank')
   }
 
   function onMenuOpen() {
