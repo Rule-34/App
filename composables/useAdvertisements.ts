@@ -25,12 +25,12 @@ export default function () {
     // },
     /**
      * HilltopAds
-     * Pros: Good min payout
+     * Pros: Good min payout (100)
      * Cons: Not fixed CPM, Low Revenue (70)
      */
     {
       id: 'https:////ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
-      weight: 1
+      weight: 0.5
     },
     /**
      * Clickadu
@@ -39,7 +39,7 @@ export default function () {
      */
     {
       id: '/js/popunder2.js?v=10',
-      weight: 1
+      weight: 0.5
     }
     /**
      * AdMaven
@@ -100,12 +100,12 @@ export default function () {
     // },
     /**
      * EvaDav
-     * Pros: Fixed weekly pay ()
+     * Pros: Fixed weekly pay (150)
      * Cons:
      */
     {
       id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
-      weight: 1
+      weight: 0.85
     }
   ]
 
