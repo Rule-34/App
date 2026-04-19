@@ -137,6 +137,11 @@
           :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
         />
 
+        <PostNud3
+          v-if="post.media_type === 'image' && mediaFile.file"
+          :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
+        />
+
         <PostSource
           :post-file-url="post.media_type === 'video' ? mediaFile.posterFile : mediaFile.file"
           :post-sources="post.sources"
@@ -169,11 +174,6 @@
             class="group-hover:hover-text-util text-base-content h-5 w-5"
           />
         </button>
-
-        <PostNud3
-          v-if="post.media_type === 'image' && mediaFile.file"
-          :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
-        />
       </div>
 
       <!-- Tags -->
