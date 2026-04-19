@@ -1,14 +1,12 @@
 <script lang="ts" setup>
-import { ChatBubbleLeftEllipsisIcon, SparklesIcon } from '@heroicons/vue/24/outline'
-import { flip, offset, shift, useFloating } from '@floating-ui/vue'
-import { useChatWithAiReferral } from '~/composables/useAdvertisements'
-import useAppStatistics from '~/composables/useAppStatistics'
-import type { IPost } from '~/assets/js/post.dto'
+  import { ChatBubbleLeftEllipsisIcon } from '@heroicons/vue/24/outline'
+  import { useFloating, offset, flip, shift } from '@floating-ui/vue'
+  import { useChatWithAiReferral } from '~/composables/useAdvertisements'
+  import useAppStatistics from '~/composables/useAppStatistics'
+  import type { IPost } from '~/assets/js/post.dto'
 
-const props = defineProps<{
+  const props = defineProps<{
     tags: IPost['tags']
-    mediaType: IPost['media_type']
-    mediaUrl: string | null
   }>()
 
   const { chatWithAiReferralTemplate } = useChatWithAiReferral()
@@ -19,7 +17,7 @@ const props = defineProps<{
 
   const { floatingStyles } = useFloating(referenceEl, floatingEl, {
     placement: 'bottom-start',
-    middleware: [offset(6), flip({ fallbackPlacements: ['bottom-end'] }), shift()]
+    middleware: [offset(6), flip(), shift()]
   })
 
   const tagCandidates = computed(() => {
@@ -34,9 +32,7 @@ const props = defineProps<{
     return Object.values(props.tags).flat()
   })
 
-  const normalizedTags = computed(() => {
-    return Array.from(new Set(tagCandidates.value)).filter((tag) => typeof tag === 'string' && tag.trim().length > 0)
-  })
+  const normalizedTags = computed(() => Array.from(new Set(tagCandidates.value)))
 
   function formatTagForQuery(tag: string) {
     return tag.replaceAll('_', ' ')
@@ -63,14 +59,6 @@ const props = defineProps<{
     return chatWithAiReferralTemplate.value.replace('{query}', encodeURIComponent(query))
   }
 
-  const nud3Url = computed(() => {
-    if (props.mediaType !== 'image' || !props.mediaUrl) {
-      return null
-    }
-
-    return `https://nud3.me/pornify?imageUrl=${encodeURIComponent(props.mediaUrl)}&r=r34`
-  })
-
   function onChatMenuOpen() {
     if (tutorialChatWithAi.value) {
       return
@@ -93,13 +81,12 @@ const props = defineProps<{
     >
       <ClientOnly>
         <ChatBubbleLeftEllipsisIcon
+          aria-hidden="true"
           :class="[
             'group-hover:hover-text-util text-base-content h-5 w-5',
             !tutorialChatWithAi ? 'chat-with-ai-glow-icon' : ''
           ]"
-          aria-hidden="true"
         />
-
         <template #fallback>
           <ChatBubbleLeftEllipsisIcon
             aria-hidden="true"
@@ -120,58 +107,36 @@ const props = defineProps<{
           :style="floatingStyles"
           class="divide-base-0/20 bg-base-1000 ring-base-0/20 z-50 w-56 divide-y rounded-md ring-1 focus:outline-hidden"
         >
+          <div class="text-base-content-highlight px-4 py-2 text-sm font-medium">Chat with AI</div>
+
           <div
-            v-if="nud3Url"
+            v-if="!normalizedTags.length"
             class="py-1"
           >
-            <div class="text-base-content-highlight px-4 py-2 text-sm font-medium">Fuck with AI</div>
-
-            <HeadlessMenuItem v-slot="{ active }">
-              <NuxtLink
-                :class="[active ? 'bg-base-0/20 text-[#F0489C]' : 'text-[#F0489C]']"
-                :href="nud3Url"
-                class="group flex w-full items-center gap-2 px-4 py-2 text-sm"
-                rel="nofollow noopener"
-                target="_blank"
-              >
-                <SparklesIcon
-                  aria-hidden="true"
-                  class="h-5 w-5"
-                />
-                <span class="truncate font-bold">AI Video</span>
-              </NuxtLink>
-            </HeadlessMenuItem>
+            <span class="block px-4 py-2 text-sm"> No tags available </span>
           </div>
 
-          <div class="py-1">
-            <div class="text-base-content-highlight px-4 py-2 text-sm font-medium">Chat with AI</div>
-
-            <template v-if="normalizedTags.length > 0">
-              <HeadlessMenuItem
-                v-for="tag in normalizedTags"
-                :key="tag"
-                v-slot="{ active }"
-              >
-                <NuxtLink
-                  :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-                  :href="buildReferralUrl(tag)"
-                  class="group flex w-full items-center px-4 py-2 text-sm"
-                  rel="nofollow noopener"
-                  target="_blank"
-                >
-                  <span class="truncate">
-                    {{ formatTagForDisplay(tag) }}
-                  </span>
-                </NuxtLink>
-              </HeadlessMenuItem>
-            </template>
-
-            <span
-              v-else
-              class="block px-4 py-2 text-sm"
+          <div
+            v-else
+            class="py-1"
+          >
+            <HeadlessMenuItem
+              v-for="tag in normalizedTags"
+              :key="tag"
+              v-slot="{ active }"
             >
-              No tags available
-            </span>
+              <NuxtLink
+                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                :href="buildReferralUrl(tag)"
+                class="group flex w-full items-center px-4 py-2 text-sm"
+                target="_blank"
+                rel="nofollow noopener"
+              >
+                <span class="truncate">
+                  {{ formatTagForDisplay(tag) }}
+                </span>
+              </NuxtLink>
+            </HeadlessMenuItem>
           </div>
         </HeadlessMenuItems>
       </Transition>

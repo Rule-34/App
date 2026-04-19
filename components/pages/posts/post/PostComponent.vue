@@ -145,8 +145,6 @@
         <PostChatWithAi
           v-if="!isPremium"
           :tags="post.tags"
-          :mediaType="post.media_type"
-          :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
         />
 
         <ShareButton
@@ -171,6 +169,11 @@
             class="group-hover:hover-text-util text-base-content h-5 w-5"
           />
         </button>
+
+        <PostNud3
+          v-if="post.media_type === 'image' && mediaFile.file"
+          :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
+        />
       </div>
 
       <!-- Tags -->
