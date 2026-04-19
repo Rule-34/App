@@ -1,10 +1,12 @@
 <script lang="ts" setup>
   import { project } from '@/config/project'
 
-  const newsList = [
+  const { t } = useI18n()
+
+  const newsList = computed(() => [
     {
-      name: 'Feedback website',
-      text: `Now you can vote, discuss and share ideas 💡 to improve ${project.name}`,
+      name: t('news.feedbackWebsiteTitle'),
+      text: t('news.feedbackWebsiteText', { name: project.name }),
       links: [
         {
           text: `feedback.${project.urls.production.hostname}`,
@@ -14,8 +16,8 @@
       ]
     },
     {
-      name: 'Blocked in your country? 🇷🇺',
-      text: `Access ${project.name} without restrictions, with the alternative site`,
+      name: t('news.blockedTitle'),
+      text: t('news.blockedText', { name: project.name }),
       links: [
         {
           text: `alt3.${project.urls.production.hostname}`,
@@ -25,8 +27,8 @@
       ]
     },
     {
-      name: 'Get the best Hentai on social media! 📱',
-      text: "We're on Bluesky, Mastodon and Telegram",
+      name: t('news.socialTitle'),
+      text: t('news.socialText'),
       links: [
         {
           text: 'Bluesky',
@@ -37,16 +39,12 @@
           href: 'https://mastodon.social/@r34'
         },
         {
-          text: 'Lemmy',
-          href: 'https://lemmynsfw.com/c/r34'
-        },
-        {
           text: 'Telegram',
           href: 'https://t.me/Rule_34_Hentai'
         }
       ]
     }
-  ]
+  ])
 </script>
 
 <template>

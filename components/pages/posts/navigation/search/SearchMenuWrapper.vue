@@ -51,7 +51,7 @@
             >
               <div class="absolute top-0 right-full flex w-16 justify-center pt-5">
                 <button
-                  aria-label="Close menu"
+                  :aria-label="$t('common.closeMenu')"
                   class="focus-visible:focus-outline-util hover:hover-bg-util -m-2.5 rounded-md p-2.5"
                   type="button"
                   @click="toggleSearchMenu(false)"

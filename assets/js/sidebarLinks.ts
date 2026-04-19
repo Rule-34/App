@@ -11,16 +11,14 @@ import { project } from '@/config/project'
 
 export const sidebarNavigation = [
   {
-    name: 'Home',
+    nameKey: 'nav.home',
     icon: HomeIcon,
-
     href: '/',
     isExternal: false
   },
   {
-    name: 'Other sites',
+    nameKey: 'nav.otherSites',
     icon: UserGroupIcon,
-
     href: '/other-sites',
     isExternal: false
   },
@@ -30,7 +28,7 @@ export const sidebarNavigation = [
     ? []
     : [
         {
-          name: 'Install App',
+          nameKey: 'nav.installApp',
           icon: ArrowDownTrayIcon,
           href: `https://www.installpwa.com/from/${project.urls.production.hostname}`,
           isExternal: true
@@ -38,30 +36,26 @@ export const sidebarNavigation = [
       ]),
 
   {
-    name: 'F.A.Q.',
+    nameKey: 'nav.faq',
     icon: QuestionMarkCircleIcon,
-
     href: 'https://rule34.app/frequently-asked-questions',
     isExternal: true
   },
   {
-    name: 'Blog',
+    nameKey: 'nav.blog',
     icon: NewspaperIcon,
-
     href: `${project.urls.production.toString()}blog`,
-    isExternal: false
+    isExternal: true
   },
   {
-    name: 'Legal',
+    nameKey: 'nav.legal',
     icon: BuildingLibraryIcon,
-
     href: '/legal',
     isExternal: false
   },
   {
-    name: 'Settings',
+    nameKey: 'nav.settings',
     icon: Cog6ToothIcon,
-
     href: '/settings',
     isExternal: false
   }

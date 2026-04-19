@@ -1,6 +1,8 @@
 <script setup>
   import { project } from '@/config/project'
 
+  const { t } = useI18n()
+
   useHead({
     script: [
       {
@@ -14,17 +16,16 @@
   })
 
   useSeoMeta({
-    title: 'Other sites',
-
-    description: `Partners of ${project.name}, and other cool sites.`
+    title: computed(() => t('pages.otherSites.title')),
+    description: computed(() => t('pages.otherSites.description', { name: project.name }))
   })
 </script>
 
 <template>
   <main class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
     <PageHeader>
-      <template #title>Other sites</template>
-      <template #text>Partners of {{ project.name }}, and other cool sites</template>
+      <template #title>{{ $t('pages.otherSites.title') }}</template>
+      <template #text>{{ $t('pages.otherSites.text', { name: project.name }) }}</template>
     </PageHeader>
 
     <ol class="mx-2 mt-4 space-y-4">
@@ -37,8 +38,8 @@
               target: '_blank'
             }
           ]"
-          :text="`Sister site of ${project.name}, has the best high-quality hentai images and videos`"
-          title="Hentai Porn"
+          :text="$t('pages.otherSites.hentaiPornText', { name: project.name })"
+          :title="$t('pages.otherSites.hentaiPorn')"
         />
       </li>
 
@@ -51,8 +52,8 @@
               target: '_blank'
             }
           ]"
-          text="The Porn Dude lists the world's best porn sites"
-          title="ThePornDude"
+          :text="$t('pages.otherSites.thePornDudeText')"
+          :title="$t('pages.otherSites.thePornDude')"
         />
       </li>
     </ol>

@@ -1,17 +1,18 @@
 <script setup>
   import { project } from '@/config/project'
 
-  useSeoMeta({
-    title: 'Cookie Policy',
+  const { t } = useI18n()
 
-    description: `Cookie policy of ${project.name}`
+  useSeoMeta({
+    title: computed(() => t('pages.legal.cookiePolicy')),
+    description: computed(() => t('pages.legal.cookiePolicyDescription', { name: project.name }))
   })
 </script>
 
 <template>
   <main class="richtext container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
     <PageHeader>
-      <template #title>Cookie Policy</template>
+      <template #title>{{ $t('pages.legal.cookiePolicy') }}</template>
     </PageHeader>
 
     <div>

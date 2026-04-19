@@ -1,9 +1,9 @@
 <script setup>
-import { ArrowRightOnRectangleIcon, BookmarkIcon, SparklesIcon } from '@heroicons/vue/24/outline'
-import { sidebarNavigation } from 'assets/js/sidebarLinks'
-import { project } from '@/config/project'
+  import { ArrowRightOnRectangleIcon, BookmarkIcon, SparklesIcon } from '@heroicons/vue/24/outline'
+  import { sidebarNavigation } from '~/assets/js/sidebarLinks'
+  import { project } from '@/config/project'
 
-const { value: isMenuActive, toggle: toggleMenu } = useMenu()
+  const localePath = useLocalePath()
   const { isPremium } = useUserData()
   const { seasonalEmoji } = useSeasonalIcon()
 </script>
@@ -13,7 +13,7 @@ const { value: isMenuActive, toggle: toggleMenu } = useMenu()
   <div class="my-6 flex shrink-0 flex-col items-center justify-center gap-2">
     <img
       v-if="!seasonalEmoji"
-      alt="Logo"
+      :alt="$t('common.logo')"
       class="h-24 w-full opacity-95"
       height="16"
       src="/icon.svg"
@@ -40,11 +40,11 @@ const { value: isMenuActive, toggle: toggleMenu } = useMenu()
     >
       <li
         v-for="item in sidebarNavigation"
-        :key="item.name"
+        :key="item.nameKey"
         class="-mx-2"
       >
         <NuxtLink
-          :href="item.href"
+          :href="localePath(item.href)"
           :target="item.isExternal ? '_blank' : undefined"
           class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
           exactActiveClass="bg-base-0/20 text-base-content-highlight"
@@ -53,31 +53,31 @@ const { value: isMenuActive, toggle: toggleMenu } = useMenu()
             :is="item.icon"
             class="h-6 w-6 shrink-0"
           />
-          {{ item.name }}
+          {{ $t(item.nameKey) }}
         </NuxtLink>
       </li>
 
       <!-- Premium -->
       <li class="-mx-2">
         <NuxtLink
-          :href="isPremium ? '/premium/dashboard' : '/premium'"
+          :href="localePath(isPremium ? '/premium/dashboard' : '/premium')"
           class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group decoration-primary-500 flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold underline decoration-2 underline-offset-8"
           exactActiveClass="bg-base-0/20 text-base-content-highlight"
         >
           <SparklesIcon class="text-primary-500 h-6 w-6 shrink-0" />
-          Premium
+          {{ $t('common.premium') }}
         </NuxtLink>
       </li>
 
       <template v-if="isPremium">
         <li class="-mr-2 ml-6">
           <NuxtLink
-            :href="`/premium/saved-posts/${project.urls.production.hostname}`"
+            :href="localePath(`/premium/saved-posts/${project.urls.production.hostname}`)"
             class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
             exactActiveClass="bg-base-0/20 text-base-content-highlight"
           >
             <BookmarkIcon class="text-primary-500 h-6 w-6 shrink-0" />
-            Saved Posts
+            {{ $t('common.savedPosts') }}
           </NuxtLink>
         </li>
       </template>
@@ -85,12 +85,12 @@ const { value: isMenuActive, toggle: toggleMenu } = useMenu()
       <template v-else>
         <li class="-mr-2 ml-6">
           <NuxtLink
-            href="/premium/sign-in"
+            :href="localePath('/premium/sign-in')"
             class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
             exactActiveClass="bg-base-0/20 text-base-content-highlight"
           >
             <ArrowRightOnRectangleIcon class="text-primary-500 h-6 w-6 shrink-0" />
-            Sign in
+            {{ $t('pages.premium.signIn.pageTitle') }}
           </NuxtLink>
         </li>
       </template>

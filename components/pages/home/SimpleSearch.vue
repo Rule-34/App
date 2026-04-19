@@ -14,6 +14,8 @@
     submit: [payload: string | undefined]
   }>()
 
+  const { t } = useI18n()
+
   const selectedTag = ref<Tag | undefined>()
 
   watch(selectedTag, () => onSubmitted())
@@ -83,7 +85,7 @@
         <HeadlessComboboxInput
           :displayValue="(tag) => tag?.name"
           class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util w-full rounded-full border-0 bg-transparent px-9 py-2 text-base-content-highlight ring-1 ring-inset ring-base-0/20 sm:text-sm"
-          placeholder="Search for tags: genshin_impact"
+          :placeholder="t('search.placeholderWithExample')"
           @change="onComboboxInputChange"
         />
 
@@ -109,7 +111,7 @@
               class="relative cursor-default select-none py-2 pl-8"
             >
               <span :class="['block truncate', selected && 'font-semibold']">
-                Search “{{ customTagFromQuery.name }}” tag
+                {{ t('search.searchTagOption', { tag: customTagFromQuery.name }) }}
               </span>
 
               <span

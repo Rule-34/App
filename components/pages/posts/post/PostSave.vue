@@ -67,7 +67,7 @@
 
 <template>
   <button
-    aria-label="Save post"
+    :aria-label="$t('common.savePost')"
     class="hover:hover-bg-util focus-visible:focus-outline-util group rounded-md px-1.5 py-1"
     type="button"
     @click="onClick"

@@ -1,13 +1,14 @@
 <script lang="ts" setup>
-  import { useCycleList } from '@vueuse/core'
-  import { premiumPromotions } from '~/assets/js/promotions'
-  import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/vue/24/outline'
+import { useCycleList } from '@vueuse/core'
+import { premiumPromotions } from '~/assets/js/promotions'
+import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/vue/24/outline'
 
-  defineProps<{
+defineProps<{
     close: () => void
   }>()
 
   const { state, next, prev, go } = useCycleList(premiumPromotions)
+  const localePath = useLocalePath()
 
   const { currentIndex } = usePremiumDialog()
 
@@ -21,14 +22,14 @@
   <div>
     <div class="relative -mx-4 -mt-5">
       <NuxtLink
-        :to="state.link"
+        :to="localePath(state.link)"
         @click="close()"
       >
         <NuxtPicture
+          :alt="$t('common.featurePromotion')"
           :height="state.mediaHeight"
           :src="state.media"
           :width="state.mediaWidth"
-          alt="Feature promotion"
           class="h-auto w-full"
         />
       </NuxtLink>
@@ -36,7 +37,7 @@
       <!-- Controls -->
       <div class="absolute bottom-[6%] left-4">
         <button
-          aria-label="Previous"
+          :aria-label="$t('common.previous')"
           class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util bg-base-1000/80 ring-base-0/20 rounded-full p-2 font-semibold ring-1"
           type="button"
           @click="prev()"
@@ -50,7 +51,7 @@
 
       <div class="absolute right-4 bottom-[6%]">
         <button
-          aria-label="Next"
+          :aria-label="$t('common.next')"
           class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util bg-base-1000/80 ring-base-0/20 rounded-full p-2 font-semibold ring-1"
           type="button"
           @click="next()"
@@ -71,7 +72,7 @@
       type="button"
       @click="close()"
     >
-      Dismiss
+      {{ $t('common.close') }}
     </button>
   </div>
 </template>

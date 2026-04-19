@@ -41,7 +41,7 @@
     >
       <button
         v-show="showScrollTopButton"
-        aria-label="Scroll to top"
+        :aria-label="$t('common.scrollToTop')"
         class="hover:hover-text-util hover:hover-bg-util bg-base-1000/60 text-base-content-highlight ring-base-0/20 fixed right-4 bottom-4 z-10 flex h-12 w-12 items-center justify-center rounded-full ring-2 backdrop-blur-lg backdrop-saturate-200"
         type="button"
         @click="scrollToTop"

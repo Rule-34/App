@@ -58,7 +58,7 @@
                 >
                   <div class="absolute top-0 left-0 -ml-9 flex pt-4 pr-2 sm:-ml-10 sm:pr-4">
                     <button
-                      aria-label="Close dialog"
+                      :aria-label="$t('common.closeDialog')"
                       class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util relative rounded-md p-1"
                       type="button"
                       @click="emit('close')"

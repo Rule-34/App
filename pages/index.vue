@@ -8,6 +8,8 @@
   import { project } from '@/config/project'
 
   const config = useRuntimeConfig()
+  const { t } = useI18n()
+  const localePath = useLocalePath()
 
   const { isPremium } = useUserData()
   const { hasInteracted } = useInteractionDetector()
@@ -40,7 +42,7 @@
     const booru = booruList.value.find((booru) => booru.domain === domain)
 
     if (!booru) {
-      toast.error(`Booru "${domain}" not found`)
+      toast.error(t('toasts.booruNotFound', { domain }))
       const fallback = booruList.value.find((booru) => booru.domain === 'rule34.xxx')
       if (fallback) {
         return fallback
@@ -75,7 +77,7 @@
       //
       .catch(async (error) => {
         const Sentry = await import('@sentry/nuxt')
-        
+
         Sentry.captureException(error)
 
         return error
@@ -84,21 +86,21 @@
     if (response instanceof FetchError) {
       switch (response.status) {
         case 404:
-          toast.error('No tags found for query "' + tag + '"')
+          toast.error(t('toasts.noTagsFound', { tag }))
           break
 
         case 429:
-          toast.error(response.statusText, {
-            description: 'You sent too many requests in a short period of time',
+          toast.error(t('errors.tooManyRequests'), {
+            description: t('toasts.rateLimitDescription'),
             action: {
-              label: 'Verify I am not a Bot',
+              label: t('toasts.verifyNotBot'),
               onClick: () => window.open(config.public.apiUrl + '/status', '_blank')
             }
           })
           break
 
         default:
-          toast.error(`Failed to load tags: "${response.message}"`)
+          toast.error(t('toasts.failedToLoadTags', { message: response.message }))
           break
       }
 
@@ -110,7 +112,7 @@
 
   function onSearchSubmit(tag?: string | undefined) {
     navigateTo({
-      path: '/posts/' + selectedBooru.value.domain,
+      path: localePath('/posts/' + selectedBooru.value.domain),
       query: {
         tags: tag
       }
@@ -123,33 +125,37 @@
   onMounted(() => {
     const hasLoadedAds = ref(false)
 
-    watch([hasInteracted, isPremium], ([hasInteracted, isPremium]) => {
-      if (hasLoadedAds.value) {
-        return
-      }
+    watch(
+      [hasInteracted, isPremium],
+      ([hasInteracted, isPremium]) => {
+        if (hasLoadedAds.value) {
+          return
+        }
 
-      if (!hasInteracted) {
-        return
-      }
+        if (!hasInteracted) {
+          return
+        }
 
-      if (isPremium) {
-        return
-      }
+        if (isPremium) {
+          return
+        }
 
-      hasLoadedAds.value = true
+        hasLoadedAds.value = true
 
-      useAdvertisements()
-    }, { immediate: true })
+        useAdvertisements()
+      },
+      { immediate: true }
+    )
   })
 
-  const featuredDomains = [
+  const featuredDomains = computed(() => [
     {
       domain: 'rule34.xxx',
       path: '/posts/rule34.xxx',
       isPremium: false,
       tags: [
         {
-          name: 'Top posts',
+          name: t('pages.home.topPosts'),
           path: '/posts/rule34.xxx?filter%5Bsort%5D=score',
           media: [
             { type: 'image', src: '/img/featured/rule34.xxx/top-1.jpg' },
@@ -171,7 +177,7 @@
         //   ]
         // },
         {
-          name: 'Trending posts',
+          name: t('pages.home.trendingPosts'),
           path: '/posts/rule34.xxx?filter%5Bscore%5D=>%3D50',
           media: [
             { type: 'image', src: '/img/featured/rule34.xxx/top-5.jpg' },
@@ -181,7 +187,7 @@
           ]
         },
         {
-          name: 'Animated (video)',
+          name: t('pages.home.animatedVideo'),
           path: '/posts/rule34.xxx?tags=animated',
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/animated.jpeg' }]
         },
@@ -258,7 +264,7 @@
       isPremium: false,
       tags: [
         {
-          name: 'Top posts',
+          name: t('pages.home.topPosts'),
           path: '/posts/rule34.paheal.net?filter%5Bsort%5D=score',
           media: [
             { type: 'image', src: '/img/featured/rule34.paheal.net/top-1.jpg' },
@@ -269,7 +275,7 @@
           ]
         },
         {
-          name: 'Trending posts',
+          name: t('pages.home.trendingPosts'),
           path: '/posts/rule34.paheal.net?filter%5Bscore%5D=>%3D50',
           media: [
             { type: 'image', src: '/img/featured/rule34.paheal.net/top-6.jpg' },
@@ -281,7 +287,7 @@
           ]
         },
         {
-          name: 'Animated (video)',
+          name: t('pages.home.animatedVideo'),
           path: '/posts/rule34.paheal.net?tags=animated',
           media: [
             { type: 'image', src: '/img/featured/rule34.paheal.net/animated-1.jpg' },
@@ -409,7 +415,7 @@
       isPremium: false,
       tags: [
         {
-          name: 'Top posts',
+          name: t('pages.home.topPosts'),
           path: '/posts/e621.net?filter%5Bsort%5D=score',
           media: [
             { type: 'image', src: '/img/featured/e621.net/top-1.jpeg' },
@@ -419,7 +425,7 @@
           ]
         },
         {
-          name: 'Trending posts',
+          name: t('pages.home.trendingPosts'),
           path: '/posts/e621.net?filter%5Bscore%5D=>%3D50',
           media: [
             { type: 'image', src: '/img/featured/e621.net/top-5.jpeg' },
@@ -429,7 +435,7 @@
           ]
         },
         {
-          name: 'Animated (video)',
+          name: t('pages.home.animatedVideo'),
           path: '/posts/e621.net?tags=animated',
           media: [{ type: 'image', src: '/img/featured/e621.net/animated.jpeg' }]
         },
@@ -541,7 +547,7 @@
     //     }
     //   ]
     // }
-  ]
+  ])
 
   useSchemaOrg([
     defineWebSite({
@@ -590,7 +596,7 @@
 
         <img
           v-if="!seasonalEmoji"
-          alt="Icon"
+          :alt="$t('common.icon')"
           class="flip-vertical-fwd text-base-content-highlight h-6 w-6"
           height="16"
           src="/icon.svg"
@@ -609,14 +615,14 @@
         App
       </h1>
 
-      <p class="mt-4 leading-relaxed">Find the best hentai of your favorite characters, games, anime, and more!</p>
+      <p class="mt-4 leading-relaxed">{{ $t('pages.home.heroDescription') }}</p>
     </div>
 
     <div class="mt-8 space-y-8">
       <!-- Search -->
       <section>
         <PageHeader as="h2">
-          <template #title>Search</template>
+          <template #title>{{ $t('pages.home.searchTitle') }}</template>
         </PageHeader>
 
         <div class="mt-2 flex items-center gap-2">
@@ -646,7 +652,7 @@
           />
 
           <button
-            aria-label="Go to selected Booru"
+            :aria-label="$t('common.goToSelectedBooru')"
             class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util ring-base-0/20 rounded-full border-0 bg-transparent p-2.5 ring-1 ring-inset sm:text-sm"
             @click="onSearchSubmit()"
           >
@@ -670,8 +676,8 @@
         <!-- History -->
         <section v-if="pageHistory.length">
           <PageHeader as="h2">
-            <template #title>History</template>
-            <template #text>Continue where you left off</template>
+            <template #title>{{ $t('pages.home.historyTitle') }}</template>
+            <template #text>{{ $t('pages.home.historyText') }}</template>
           </PageHeader>
 
           <ShowMore :max-height-in-rem="12">
@@ -683,8 +689,8 @@
       <!-- Featured tags -->
       <section>
         <PageHeader as="h2">
-          <template #title> Featured</template>
-          <template #text>Tags & filters</template>
+          <template #title>{{ $t('pages.home.featuredTitle') }}</template>
+          <template #text>{{ $t('pages.home.featuredText') }}</template>
         </PageHeader>
 
         <!-- TODO: Figure out a way for negative margin to work inside an overflow-hidden -->
@@ -695,12 +701,12 @@
           >
             <div class="flex items-center pr-2">
               <NuxtLink
-                :href="featuredDomain.path"
+                :href="localePath(featuredDomain.path)"
                 class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util flex items-center gap-2 rounded-md px-2"
               >
                 <img
                   :src="`https://icons.duckduckgo.com/ip2/${featuredDomain.domain}.ico`"
-                  alt="Favicon"
+                  :alt="$t('common.favicon')"
                   class="h-5 w-5 rounded-sm"
                   height="128"
                   width="128"
@@ -716,7 +722,7 @@
                   v-if="featuredDomain.isPremium"
                   class="border-primary-500/60 text-base-content-highlight inline-flex items-center rounded-full border-2 px-2.5 py-0.5 text-xs font-medium"
                 >
-                  Premium
+                  {{ $t('common.premium') }}
                 </span>
               </NuxtLink>
 
@@ -739,7 +745,7 @@
       <!-- News -->
       <section>
         <PageHeader as="h2">
-          <template #title>News</template>
+          <template #title>{{ $t('pages.home.newsTitle') }}</template>
         </PageHeader>
 
         <News class="mt-2 px-2" />

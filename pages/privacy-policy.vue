@@ -1,16 +1,19 @@
 <script setup>
   import { project } from '@/config/project'
 
+  const { t } = useI18n()
+  const localePath = useLocalePath()
+
   useSeoMeta({
-    title: 'Privacy Policy',
-    description: `Privacy policy of ${project.name}`
+    title: computed(() => t('pages.legal.privacyPolicy')),
+    description: computed(() => t('pages.legal.privacyPolicyDescription', { name: project.name }))
   })
 </script>
 
 <template>
   <main class="richtext container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
     <PageHeader>
-      <template #title>Privacy Policy</template>
+      <template #title>{{ $t('pages.legal.privacyPolicy') }}</template>
     </PageHeader>
 
     <div>
@@ -185,7 +188,7 @@
           Like many businesses, we also collect information through cookies and similar technologies. You can find out
           more about this in our Cookie Notice:
           <a
-            href="/cookie-policy"
+            :href="localePath('/cookie-policy')"
             target="_blank"
             >{{ project.urls.production.toString() }}cookie-policy</a
           >.
@@ -574,7 +577,7 @@
                                                         information about how we use such technologies and how you can
                                                         refuse certain cookies is set out in our Cookie Notice:
                                                         <a
-                                                          href="/cookie-policy"
+                                                          :href="localePath('/cookie-policy')"
                                                           target="_blank"
                                                           >{{ project.urls.production.toString() }}cookie-policy</a
                                                         >.
@@ -749,7 +752,7 @@
                                                         on our Services. For further information, please see our Cookie
                                                         Notice:
                                                         <a
-                                                          href="/cookie-policy"
+                                                          :href="localePath('/cookie-policy')"
                                                           target="_blank"
                                                           >{{ project.urls.production.toString() }}cookie-policy</a
                                                         >.
@@ -1096,7 +1099,7 @@
                                                                             <div>
                                                                               You can also visit our Cookie Notice:
                                                                               <a
-                                                                                href="/cookie-policy"
+                                                                                :href="localePath('/cookie-policy')"
                                                                                 target="_blank"
                                                                                 >{{
                                                                                   project.urls.production.toString()

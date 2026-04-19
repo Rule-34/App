@@ -4,6 +4,8 @@
   import { project } from '@/config/project'
 
   const { $pocketBase } = useNuxtApp()
+  const localePath = useLocalePath()
+  const { t } = useI18n()
 
   const formData = shallowRef({
     password: ''
@@ -26,17 +28,18 @@
       }
     }
 
-    await navigateTo({ path: '/premium/dashboard', query: { initialLogin: 'true' } })
+    await navigateTo({
+      path: localePath('/premium/dashboard'),
+      query: { initialLogin: 'true' }
+    })
   }
 
   onNuxtReady(() => {
     const route = useRoute()
-    const message = route.query.message
     const license = route.query.license
 
-    // TODO: Add action to contact support
-    if (message) {
-      toast.info(message)
+    if (route.query.authFailed) {
+      toast.info(t('toasts.authFailed'))
     }
 
     if (license) {
@@ -51,9 +54,8 @@
   })
 
   useSeoMeta({
-    title: 'Sign in',
-
-    description: `Sign in to ${project.name}.`
+    title: computed(() => t('pages.premium.signIn.seoTitle')),
+    description: computed(() => t('pages.premium.signIn.seoDescription', { name: project.name }))
   })
 
   definePageMeta({
@@ -69,7 +71,7 @@
     <section class="-mt-12 flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div class="sm:mx-auto sm:w-full sm:max-w-sm">
         <PageHeader class="text-center">
-          <template #title>Sign in</template>
+          <template #title>{{ $t('pages.premium.signIn.pageTitle') }}</template>
         </PageHeader>
       </div>
 
@@ -85,15 +87,15 @@
                 class="text-base-content-highlight block text-sm leading-6 font-medium"
                 for="license"
               >
-                License
+                {{ $t('pages.premium.signIn.licenseLabel') }}
               </label>
               <div class="text-sm">
                 <NuxtLink
+                  :href="localePath('/premium/forgot-password')"
                   class="hover:hover-text-util focus-visible:focus-outline-util font-semibold"
-                  href="/premium/forgot-password"
                   rel="noopener"
                 >
-                  Forgot license?
+                  {{ $t('pages.premium.signIn.forgotLicense') }}
                 </NuxtLink>
               </div>
             </div>
@@ -126,21 +128,21 @@
               class="focus-visible:focus-outline-util hover:hover-text-util bg-primary-500 text-base-content-highlight hover:bg-primary-400 flex w-full justify-center rounded-md px-3 py-1.5 text-sm leading-6 font-semibold shadow-xs"
               type="submit"
             >
-              Sign in
+              {{ $t('pages.premium.signIn.signInButton') }}
             </button>
           </div>
         </form>
 
         <p class="mt-10 text-center text-sm">
-          Not a Premium member?
+          {{ $t('pages.premium.signIn.notMember') }}
 
           {{ ' ' }}
 
           <NuxtLink
+            :href="localePath('/premium')"
             class="focus-visible:focus-outline-util text-primary-400 hover:text-primary-300 leading-6 font-semibold"
-            href="/premium"
           >
-            Subscribe now
+            {{ $t('pages.premium.signIn.subscribeNow') }}
           </NuxtLink>
         </p>
       </div>

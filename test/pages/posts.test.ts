@@ -378,6 +378,41 @@ describe('/', async () => {
         await page.evaluate(() => window.scrollY)
       ).toBe(400)
     }, 15000)
+
+    it('replaces older history entries for the same tag query', async () => {
+      // Arrange
+      const page = await createPage()
+
+      await page.addInitScript(() => {
+        window.localStorage.removeItem('settings-pageHistory')
+      })
+
+      await page.route('**/posts?baseEndpoint=*', (route) =>
+        route.fulfill({
+          status: 200,
+          json: mockPostsPage0
+        })
+      )
+
+      // Act
+      await Promise.all([
+        page.goto(url('/posts/safebooru.org?tags=hair_bun&page=0')),
+        page.waitForResponse('**/posts?baseEndpoint=*')
+      ])
+
+      await Promise.all([
+        page.goto(url('/posts/safebooru.org?tags=hair_bun&page=4')),
+        page.waitForResponse('**/posts?baseEndpoint=*')
+      ])
+
+      const history = await page.evaluate(() => JSON.parse(localStorage.getItem('settings-pageHistory') ?? '[]'))
+
+      // Assert
+      expect(history).toHaveLength(1)
+      expect(history[0].path).toContain('/posts/safebooru.org')
+      expect(history[0].path).toContain('tags=hair_bun')
+      expect(history[0].path).toContain('page=4')
+    })
   })
 
   describe('Domain', async () => {

@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
-import { PlusIcon } from '@heroicons/vue/24/solid'
-import { toast } from 'vue-sonner'
-import { flip, offset, shift, useFloating } from '@floating-ui/vue'
-import type { Domain } from '~/assets/js/domain'
+  import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
+  import { PlusIcon } from '@heroicons/vue/24/solid'
+  import { toast } from 'vue-sonner'
+  import { flip, offset, shift, useFloating } from '@floating-ui/vue'
+  import type { Domain } from '~/assets/js/domain'
 
-defineOptions({
+  defineOptions({
     inheritAttrs: false
   })
 
@@ -20,6 +20,8 @@ defineOptions({
 
   const emit = defineEmits(['update:modelValue'])
 
+  const { t } = useI18n()
+  const localePath = useLocalePath()
   const { isPremium } = useUserData()
   const { tutorialDomainSwitcher } = useAppStatistics()
 
@@ -41,6 +43,7 @@ defineOptions({
       return
     }
 
+
     emit('update:modelValue', domain)
   }
 
@@ -57,8 +60,8 @@ defineOptions({
       return
     }
 
-    toast.info('Domain Switcher', {
-      description: 'Switch between Booru websites: each one has unique content, find the one you like the most!',
+    toast.info(t('toasts.domainSwitcher'), {
+      description: t('toasts.domainSwitcherDescription'),
       duration: 10000
     })
 
@@ -83,14 +86,14 @@ defineOptions({
     >
       <span class="flex items-center">
         <img
+          :alt="$t('common.favicon')"
           :src="`https://icons.duckduckgo.com/ip2/${props.modelValue.domain}.ico`"
-          alt="Favicon"
           class="h-5 w-5 shrink-0 rounded-sm"
           height="128"
           width="128"
         />
 
-        <span class="sr-only"> Website to browse: </span>
+        <span class="sr-only"> {{ t('common.websiteToBrowse') }} </span>
 
         <span
           v-if="!props.compact"
@@ -137,8 +140,8 @@ defineOptions({
             >
               <div class="flex items-center">
                 <img
+                  :alt="$t('common.favicon')"
                   :src="`https://icons.duckduckgo.com/ip2/${booru.domain}.ico`"
-                  alt="Favicon"
                   class="h-5 w-5 shrink-0 rounded-sm"
                   height="128"
                   width="128"
@@ -153,7 +156,7 @@ defineOptions({
                   v-if="shouldBooruBeDisabled(booru)"
                   class="border-primary-500/60 text-base-content-highlight ml-2 inline-flex items-center rounded-full border-2 px-2.5 py-0.5 text-xs font-medium"
                 >
-                  Premium
+                  {{ $t('common.premium') }}
                 </span>
               </div>
 
@@ -180,10 +183,10 @@ defineOptions({
             />
 
             <NuxtLink
-              :href="isPremium ? '/premium/additional-boorus' : '/premium'"
+              :href="localePath(isPremium ? '/premium/additional-boorus' : '/premium')"
               class="focus-visible:focus-outline-util ml-3"
             >
-              Add more Boorus
+              {{ t('pages.premium.addMoreBoorus') }}
             </NuxtLink>
           </div>
         </HeadlessListboxOptions>

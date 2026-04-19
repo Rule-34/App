@@ -22,13 +22,13 @@
     <span class="flex items-center">
       <img
         :src="`https://icons.duckduckgo.com/ip2/${project.urls.production.hostname}.ico`"
-        alt="Favicon"
+        :alt="$t('common.favicon')"
         class="h-5 w-5 shrink-0 rounded-sm"
         height="128"
         width="128"
       />
 
-      <span class="sr-only"> Website to browse: </span>
+      <span class="sr-only"> {{ $t('common.websiteToBrowse') }} </span>
 
       <span
         v-if="!props.compact"

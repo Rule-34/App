@@ -42,7 +42,7 @@
 
     <HeadlessListboxButton
       ref="referenceEl"
-      class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util text-base-content-highlight ring-base-0/20 inline-flex items-center rounded-lg px-2 py-1 capitalize ring-1"
+      class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util text-base-content-highlight ring-base-0/20 inline-flex items-center rounded-lg px-2 py-1 ring-1"
     >
       {{ modelValue }}
 
@@ -74,7 +74,7 @@
               class="cursor-default px-4 py-2.5 text-sm select-none"
             >
               <div class="flex flex-col">
-                <div class="flex justify-between capitalize">
+                <div class="flex justify-between">
                   <p :class="selected ? 'font-medium' : 'font-normal'">{{ option }}</p>
 
                   <!-- Check icon -->

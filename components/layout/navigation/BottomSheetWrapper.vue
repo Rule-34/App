@@ -50,7 +50,7 @@
                   @click="isOpen = false"
                   class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util mx-auto inline-flex w-full items-center justify-center border-t border-base-0/20 px-3 py-2 text-base"
                 >
-                  Dismiss
+                  {{ $t('common.close') }}
                 </button>
               </div>
             </HeadlessDialogPanel>

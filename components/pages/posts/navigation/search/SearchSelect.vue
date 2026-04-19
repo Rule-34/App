@@ -40,7 +40,7 @@
     as="div"
     @update:modelValue="emit('update:modelValue', $event)"
   >
-    <HeadlessListboxLabel class="sr-only">Change options</HeadlessListboxLabel>
+    <HeadlessListboxLabel class="sr-only">{{ $t('search.changeOptions') }}</HeadlessListboxLabel>
 
       <!-- Button -->
       <div class="inline-flex divide-x divide-base-0/20 rounded-md ring-1 ring-base-0/20">
@@ -59,7 +59,7 @@
           ref="referenceEl"
           class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util inline-flex items-center rounded-l-none rounded-r-md px-2 py-1"
         >
-          <span class="sr-only">Change {{ label }}</span>
+          <span class="sr-only">{{ $t('search.changeFilter', { label }) }}</span>
 
           <ChevronDownIcon class="-ml-0.5 h-5 w-5" />
         </HeadlessListboxButton>

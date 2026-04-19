@@ -22,11 +22,11 @@
         as="h3"
         class="text-base-content-highlight text-base leading-6 font-semibold"
       >
-        Are you enjoying {{ project.shortName }}?
+        {{ $t('modals.review.title', { name: project.shortName }) }}
       </HeadlessDialogTitle>
 
       <div class="mt-2">
-        <p class="text-sm text-pretty">Let me know with a rating and a few words about your experience</p>
+        <p class="text-sm text-pretty">{{ $t('modals.review.description') }}</p>
       </div>
     </div>
   </div>
@@ -39,10 +39,10 @@
       rel="nofollow noopener"
       target="_blank"
     >
-      Review us on &nbsp;
+      {{ $t('modals.review.reviewUs') }} &nbsp;
 
       <img
-        alt="Trustpilot logo"
+        :alt="$t('modals.review.trustpilotAlt')"
         class="mr-0.5 h-6 w-6"
         src="https://icons.duckduckgo.com/ip2/trustpilot.com.ico"
       />
@@ -58,7 +58,7 @@
       type="button"
       @click="close()"
     >
-      Dismiss
+      {{ $t('common.close') }}
     </button>
   </div>
 </template>

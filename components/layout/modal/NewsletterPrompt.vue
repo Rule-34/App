@@ -16,7 +16,7 @@
       type="button"
       @click="close()"
     >
-      Dismiss
+      {{ $t('common.close') }}
     </button>
   </div>
 </template>

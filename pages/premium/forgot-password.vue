@@ -2,6 +2,8 @@
   import { toast } from 'vue-sonner'
   import { project } from '@/config/project'
 
+  const { t } = useI18n()
+  const localePath = useLocalePath()
   const { $pocketBase } = useNuxtApp()
 
   const formData = shallowRef({
@@ -20,21 +22,19 @@
     try {
       await $pocketBase.collection('users').requestPasswordReset(cleanEmail)
 
-      toast.success('Email sent', {
-        description:
-          'If your email exists, you will receive an email with your current license. \nIf you do not receive an email, check your spam folder',
+      toast.success(t('toasts.emailSent'), {
+        description: t('toasts.emailSentDescription'),
         duration: 1000 * 30 // 30 seconds
       })
     } catch (error) {
-      toast.error(`Failed to send email: ${error.response.data.email.message}`)
+      toast.error(t('toasts.failedToSendEmail', { message: error.response?.data?.email?.message ?? error.message }))
       return
     }
   }
 
   useSeoMeta({
-    title: 'Forgot license',
-
-    description: `Recover your ${project.name} license key.`
+    title: computed(() => t('pages.premium.forgotPassword.seoTitle')),
+    description: computed(() => t('pages.premium.forgotPassword.seoDescription', { name: project.name }))
   })
 
   definePageMeta({
@@ -50,8 +50,8 @@
     <section class="-mt-12 flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div class="sm:mx-auto sm:w-full sm:max-w-sm">
         <PageHeader class="text-center">
-          <template #title>Forgot license?</template>
-          <template #text>Enter your email and we'll send it to you</template>
+          <template #title>{{ $t('pages.premium.forgotPassword.pageTitle') }}</template>
+          <template #text>{{ $t('pages.premium.forgotPassword.pageDescription') }}</template>
         </PageHeader>
       </div>
 
@@ -67,7 +67,7 @@
                 class="text-base-content-highlight block text-sm leading-6 font-medium"
                 for="email"
               >
-                Email
+                {{ $t('pages.premium.forgotPassword.emailLabel') }}
               </label>
             </div>
 
@@ -89,21 +89,21 @@
               class="focus-visible:focus-outline-util hover:hover-text-util bg-primary-500 text-base-content-highlight hover:bg-primary-400 flex w-full justify-center rounded-md px-3 py-1.5 text-sm leading-6 font-semibold shadow-xs"
               type="submit"
             >
-              Send license
+              {{ $t('pages.premium.forgotPassword.sendLicense') }}
             </button>
           </div>
         </form>
 
         <p class="mt-10 text-center text-sm">
-          Got your license key?
+          {{ $t('pages.premium.forgotPassword.gotLicense') }}
 
           {{ ' ' }}
 
           <NuxtLink
+            :href="localePath('/premium/sign-in')"
             class="focus-visible:focus-outline-util text-primary-400 hover:text-primary-300 leading-6 font-semibold"
-            href="/premium/sign-in"
           >
-            Sign in
+            {{ $t('pages.premium.forgotPassword.signIn') }}
           </NuxtLink>
         </p>
       </div>

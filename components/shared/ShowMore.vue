@@ -56,7 +56,7 @@
         type="button"
         @click="toggleExpanded()"
       >
-        {{ isExpanded ? 'Show less' : 'Show more' }}
+        {{ isExpanded ? $t('common.showLess') : $t('common.showMore') }}
       </button>
     </div>
   </div>

@@ -32,6 +32,8 @@
     ]
   }>()
 
+  const { t } = useI18n()
+
   const isTagCollectionsActive = ref(false)
 
   /**
@@ -170,19 +172,22 @@
       multiple
     >
       <HeadlessComboboxLabel class="text-base-content-highlight block text-center text-3xl font-semibold tracking-wide">
-        Search
+        {{ t('search.label') }}
       </HeadlessComboboxLabel>
 
       <div class="group relative mt-4">
         <!-- Icon -->
         <div class="group pointer-events-none absolute inset-y-0 left-0 flex items-center rounded-l-md px-2">
-          <MagnifyingGlassIcon aria-hidden="true" class="text-base-content group-hover:text-base-content-hover h-5 w-5" />
+          <MagnifyingGlassIcon
+            aria-hidden="true"
+            class="text-base-content group-hover:text-base-content-hover h-5 w-5"
+          />
         </div>
 
         <!-- Input -->
         <HeadlessComboboxInput
           class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util bg-base-1000 text-base-content-highlight ring-base-0/20 w-full rounded-full border-0 px-9 py-2 ring-1 ring-inset sm:text-sm"
-          placeholder="Search for tags"
+          :placeholder="t('search.placeholder')"
           @change="onComboboxInputChange"
         />
 
@@ -191,7 +196,10 @@
           ref="comboboxButtonRef"
           class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2"
         >
-          <ChevronUpDownIcon aria-hidden="true" class="text-base-content group-hover:text-base-content-hover h-5 w-5" />
+          <ChevronUpDownIcon
+            aria-hidden="true"
+            class="text-base-content group-hover:text-base-content-hover h-5 w-5"
+          />
         </HeadlessComboboxButton>
 
         <!-- Options -->
@@ -211,14 +219,17 @@
               class="relative cursor-default py-2 pl-8 select-none"
             >
               <span :class="['block truncate', selected && 'font-semibold']">
-                Create “{{ customTagFromQuery.name }}” tag
+                {{ t('search.createTag', { tag: customTagFromQuery.name }) }}
               </span>
 
               <span
                 v-if="selected"
                 class="text-base-content-highlight absolute inset-y-0 left-0 flex items-center pl-1.5"
               >
-                <CheckIcon aria-hidden="true" class="h-5 w-5" />
+                <CheckIcon
+                  aria-hidden="true"
+                  class="h-5 w-5"
+                />
               </span>
             </div>
           </HeadlessComboboxOption>
@@ -239,7 +250,10 @@
                 v-if="selected"
                 class="text-base-content-highlight absolute inset-y-0 left-0 flex items-center pl-1.5"
               >
-                <CheckIcon aria-hidden="true" class="h-5 w-5" />
+                <CheckIcon
+                  aria-hidden="true"
+                  class="h-5 w-5"
+                />
               </span>
 
               <!-- Tag -->
@@ -270,9 +284,12 @@
           type="button"
           @click="isTagCollectionsActive = !isTagCollectionsActive"
         >
-          <TagIcon aria-hidden="true" class="-ml-0.5 h-[1.15rem] w-[1.15rem]" />
+          <TagIcon
+            aria-hidden="true"
+            class="-ml-0.5 h-[1.15rem] w-[1.15rem]"
+          />
 
-          <span class="text-sm font-medium whitespace-nowrap">Collections</span>
+          <span class="text-sm font-medium whitespace-nowrap">{{ t('common.collections') }}</span>
         </button>
 
         <BottomSheetWrapper v-model="isTagCollectionsActive">
@@ -304,7 +321,7 @@
   <!-- Tags -->
   <section class="flex-1 overflow-y-auto">
     <div v-if="selectedTags.length">
-      <p class="text-base-content block text-lg font-medium">Selected tags</p>
+      <p class="text-base-content block text-lg font-medium">{{ t('search.selectedTags') }}</p>
 
       <!-- Selected tags -->
       <ol class="mt-2 flex flex-wrap gap-2.5 rounded-md">
@@ -333,7 +350,7 @@
 
           <!-- Exclude button -->
           <button
-            aria-label="Exclude or Include tag"
+            :aria-label="t('search.excludeOrIncludeTag')"
             class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util group border-base-0/20 inline-flex h-full items-center rounded-r-full border py-1 pr-2.5 pl-1.5 focus-visible:ring-inset"
             type="button"
             @click="toggleSelectedTagAsExcluded(index)"
@@ -361,11 +378,11 @@
       v-if="selectedTags.length"
       class="mt-4 text-xs"
     >
-      Note:
+      {{ t('search.tagNote') }}
       <br />
-      To remove a tag, click on its name
+      {{ t('search.removeTagHint') }}
       <br />
-      To exclude search results with a specific tag, click the block icon next to it
+      {{ t('search.excludeTagHint') }}
     </p>
 
     <button
@@ -373,7 +390,7 @@
       type="submit"
       @click="onSubmitted"
     >
-      Search
+      {{ t('search.label') }}
     </button>
   </footer>
 </template>

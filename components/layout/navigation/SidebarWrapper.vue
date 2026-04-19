@@ -1,8 +1,9 @@
 <script setup>
   import { XMarkIcon } from '@heroicons/vue/24/outline'
-  import { sidebarNavigation } from 'assets/js/sidebarLinks'
+  import { sidebarNavigation } from '~/assets/js/sidebarLinks'
 
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
+  const localePath = useLocalePath()
 </script>
 
 <template>
@@ -67,7 +68,7 @@
               >
                 <div class="absolute top-0 left-full flex w-16 justify-center pt-5">
                   <button
-                    aria-label="Close menu"
+                    :aria-label="$t('common.closeMenu')"
                     class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util -m-2.5 rounded-md p-2.5"
                     type="button"
                     @click="toggleMenu(false)"
@@ -95,13 +96,13 @@
     >
       <template
         v-for="link in sidebarNavigation"
-        :key="link.name"
+        :key="link.nameKey"
       >
         <a
-          :href="link.href"
+          :href="localePath(link.href)"
           :rel="link.isExternal ? 'noopener noreferrer nofollow' : ''"
         >
-          {{ link.name }}
+          {{ $t(link.nameKey) }}
         </a>
       </template>
     </div>
