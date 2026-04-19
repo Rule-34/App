@@ -19,9 +19,6 @@
     rel="noopener noreferrer"
   >
     <SparklesIcon aria-hidden="true" class="group-hover:hover-text-util text-base-content h-5 w-5" />
-    <span class="group-hover:hover-text-util text-base-content text-xs font-bold">
-      <span class="sm:hidden">AI</span>
-      <span class="hidden sm:inline">AI Video</span>
-    </span>
+    <span class="group-hover:hover-text-util text-base-content text-xs font-bold">AI</span>
   </a>
 </template>

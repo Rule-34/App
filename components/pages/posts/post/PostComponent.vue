@@ -137,11 +137,6 @@
           :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
         />
 
-        <PostNud3
-          v-if="post.media_type === 'image' && mediaFile.file"
-          :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
-        />
-
         <PostSource
           :post-file-url="post.media_type === 'video' ? mediaFile.posterFile : mediaFile.file"
           :post-sources="post.sources"
@@ -157,6 +152,11 @@
           :title="`Post #${post.id} from ${post.domain}`"
           :url="mediaFile.file ?? undefined"
           class="px-1.5 py-1"
+        />
+
+        <PostNud3
+          v-if="post.media_type === 'image' && mediaFile.file"
+          :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
         />
 
         <button
