@@ -69,7 +69,7 @@ export default function () {
      */
     {
       id: 'https://hotbsizovu.today/process.js?id=1300335215&p1=sub1&p2=sub2&p3=sub3&p4=sub4',
-      weight: 0.15
+      weight: 0.3
     },
     /**
      * HilltopAds
@@ -105,7 +105,7 @@ export default function () {
      */
     {
       id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
-      weight: 0.85
+      weight: 0.7
     }
   ]
 
