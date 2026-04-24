@@ -142,18 +142,18 @@
           :post-sources="post.sources"
         />
 
-        <PostChatWithAi
-          v-if="!isPremium"
-          :tags="post.tags"
-          :mediaType="post.media_type"
-          :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
-        />
-
         <ShareButton
           :text="`Found on ${project.name}: ${currentUrl.href}`"
           :title="`Post #${post.id} from ${post.domain}`"
           :url="mediaFile.file ?? undefined"
           class="px-1.5 py-1"
+        />
+
+        <PostChatWithAi
+          v-if="!isPremium"
+          :mediaType="post.media_type"
+          :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
+          :tags="post.tags"
         />
 
         <button
