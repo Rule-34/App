@@ -18,8 +18,8 @@
       text: `Access ${project.name} without restrictions, with the alternative site`,
       links: [
         {
-          text: `alt3.${project.urls.production.hostname}`,
-          href: `https://alt3.${project.urls.production.hostname}`,
+          text: `alt4.${project.urls.production.hostname}`,
+          href: `https://alt4.${project.urls.production.hostname}`,
           target: '_blank'
         }
       ]
