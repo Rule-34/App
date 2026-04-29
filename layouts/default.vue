@@ -1,8 +1,8 @@
 <script setup>
-  import { useEventListener } from '@vueuse/core'
-  import { toast, Toaster } from 'vue-sonner'
+import { useEventListener } from '@vueuse/core'
+import { toast, Toaster } from 'vue-sonner'
 
-  // Lazy-load vue-sonner CSS on the client so it doesn't get inlined into SSR <head>.
+// Lazy-load vue-sonner CSS on the client so it doesn't get inlined into SSR <head>.
   onMounted(async () => {
     import('vue-sonner/style.css')
   })
@@ -48,14 +48,16 @@
     })
   })
 
-  console.info(
-    '%cWe ❤︎ open source!',
-    'font-size:32px;font-weight:bold;letter-spacing:0.02em;color:hsl(205, 78%, 62%);background-color:white;padding:8px 16px;'
-  )
-  console.info(
-    '%cContribute: https://github.com/Rule-34/App\nJoin our discord: https://discord.gg/fUhYHSZ',
-    'background-color:hsl(0, 0%, 7%);padding:4px 8px;font-size:16px;color:white;'
-  )
+  if (import.meta.client) {
+    console.info(
+      '%cWe ❤︎ open source!',
+      'font-size:32px;font-weight:bold;letter-spacing:0.02em;color:hsl(205, 78%, 62%);background-color:white;padding:8px 16px;'
+    )
+    console.info(
+      '%cContribute: https://github.com/Rule-34/App\nJoin our discord: https://discord.gg/fUhYHSZ',
+      'background-color:hsl(0, 0%, 7%);padding:4px 8px;font-size:16px;color:white;'
+    )
+  }
 </script>
 
 <!-- TODO: Restore gestures -->
