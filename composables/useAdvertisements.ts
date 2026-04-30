@@ -46,8 +46,8 @@ export default function () {
     },
     /**
      * AdMaven
-     * Pros:
-     * Cons: Sometimes replaces current tab instead of opening in new tab | Possible malware: ads open requests to social media login
+     * Pros: Good CPM (3.5)
+     * Cons: Impression count lower than everybody else (less overall revenue) | Sometimes replaces current tab instead of opening in new tab | Possible malware: ads open requests to social media login
      */
     {
       id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255038',
