@@ -20,8 +20,8 @@
       text: t('news.blockedText', { name: project.name }),
       links: [
         {
-          text: `alt3.${project.urls.production.hostname}`,
-          href: `https://alt3.${project.urls.production.hostname}`,
+          text: `alt4.${project.urls.production.hostname}`,
+          href: `https://alt4.${project.urls.production.hostname}`,
           target: '_blank'
         }
       ]

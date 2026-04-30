@@ -4,6 +4,9 @@ export default function () {
   const popunderScript = useState<string>('popunder-script', () => '')
   const pushScript = useState<string>('push-notification-script', () => '')
 
+  /**
+   * Sum of all weights must be 1.0
+   */
   const popunderAds = [
     /**
      * ExoClick
@@ -25,31 +28,31 @@ export default function () {
     // },
     /**
      * HilltopAds
-     * Pros: Good min payout (100)
-     * Cons: Not fixed CPM, Low Revenue (70)
+     * Pros: Good min payout (100) | Counts + impressions w/ same traffic? (could be abuse, use of multiple ads that we didnt agree)
+     * Cons: Not fixed CPM (~2.0) | Low Revenue (70)
      */
     {
-      id: 'https:////ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
-      weight: 0.5
+      id: 'https://ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
+      weight: 0.3
     },
     /**
      * Clickadu
      * Pros: Good CPM (2.1)
-     * Cons: Low revenue (70), Does not count visits well, (!!!) Clears console
+     * Cons: Low revenue (70) | Does not count visits well | Clears console
      */
     {
       id: '/js/popunder2.js?v=10',
-      weight: 0.5
-    }
+      weight: 0.3
+    },
     /**
      * AdMaven
-     * Pros:
-     * Cons: Does not open in a new tab, Possible malware: ads open requests to social media login??
+     * Pros: Good CPM (3.5)
+     * Cons: Impression count lower than everybody else (less overall revenue) | Sometimes replaces current tab instead of opening in new tab | Possible malware: ads open requests to social media login
      */
-    // {
-    //   id: 'https://d3pk1qkob3uzgp.cloudfront.net/?kqkpd=1171073',
-    //   weight: 1,
-    // },
+    {
+      id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255038',
+      weight: 0.3
+    }
     /**
      * AdsCarat
      * Pros: Great CPM (2.5)
@@ -61,16 +64,19 @@ export default function () {
     // }
   ]
 
+  /**
+   * Sum of all weights must be 1.0
+   */
   const pushAds = [
     /**
      * PartnersHouse
-     * Pros:
-     * Cons: Low revenue (17)
+     * Pros: Good min payout (50)
+     * Cons: Low revenue (0.4)
      */
-    {
-      id: 'https://hotbsizovu.today/process.js?id=1300335215&p1=sub1&p2=sub2&p3=sub3&p4=sub4',
-      weight: 0.15
-    },
+    // {
+    //   id: 'https://hotbsizovu.today/process.js?id=1300335215&p1=sub1&p2=sub2&p3=sub3&p4=sub4',
+    //   weight: 0.3
+    // },
     /**
      * HilltopAds
      * Pros:
@@ -83,16 +89,16 @@ export default function () {
     /**
      * Clickadu
      * Pros:
-     * Cons: Low Revenue (4.64)
+     * Cons: Low Revenue (0.3 CPM)
      */
     // {
-    //   id: '//guidepaparazzisurface.com/bultykh/ipp24/7/bazinga/2065744',
-    //   weight: 0.15,
+    //   id: '/js/in_page_push_ads.js?v=1',
+    //   weight: 0.2
     // },
     /**
      * AdsCarat
      * Pros:
-     * Cons: Extremely low revenue (0.50)
+     * Cons: Low revenue (0.50)
      */
     // {
     //   id: '//jn.astelicbanes.com/sgC9H1j3tpX/121206',
@@ -105,7 +111,16 @@ export default function () {
      */
     {
       id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
-      weight: 0.85
+      weight: 0.5
+    },
+    /**
+     * AdMaven
+     * Pros:
+     * Cons: Re-opens after closing
+     */
+    {
+      id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255040',
+      weight: 0.5
     }
   ]
 
@@ -144,20 +159,33 @@ export default function () {
 }
 
 export function useChatWithAiReferral() {
+  const chatWithAiReferralTemplate = useState<string>('chat-with-ai-referral')
+
   const chatWithAiReferrals = [
+    /**
+     * CrushOn
+     * Pros:
+     * Cons:
+     */
     {
       id: 'https://crushon.ai/search?s={query}&ref=zdnmmzy&mist=1',
-      weight: 0.5
+      weight: 0.4
     },
+    /**
+     * SpicyChat
+     * Pros: More revenue ()
+     * Cons:
+     */
     {
       id: 'https://spicychat.ai/?public_characters_alias%2Fsort%2Fnum_messages_24h%3Adesc[query]={query}&ref=ode2nzn',
-      weight: 0.5
+      weight: 0.6
     }
   ]
 
-  const chatWithAiReferralTemplate = useState<string>('chat-with-ai-referral', () => {
-    return randomWeightedChoice(chatWithAiReferrals)
-  })
+  if (!chatWithAiReferralTemplate.value) {
+    const selectedReferral = randomWeightedChoice(chatWithAiReferrals)
+    chatWithAiReferralTemplate.value = selectedReferral
+  }
 
   return {
     chatWithAiReferralTemplate

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-  import { ChatBubbleLeftEllipsisIcon, SparklesIcon } from '@heroicons/vue/24/outline'
-  import { flip, offset, shift, useFloating } from '@floating-ui/vue'
-  import { useChatWithAiReferral } from '~/composables/useAdvertisements'
-  import useAppStatistics from '~/composables/useAppStatistics'
-  import type { IPost } from '~/assets/js/post.dto'
+import { SparklesIcon } from '@heroicons/vue/24/outline'
+import { flip, offset, shift, useFloating } from '@floating-ui/vue'
+import { useChatWithAiReferral } from '~/composables/useAdvertisements'
+import useAppStatistics from '~/composables/useAppStatistics'
+import type { IPost } from '~/assets/js/post.dto'
 
   const props = defineProps<{
     tags: IPost['tags']
@@ -89,11 +89,11 @@
     <HeadlessMenuButton
       ref="referenceEl"
       :aria-label="t('common.chatWithAi')"
-      class="hover:hover-bg-util focus-visible:focus-outline-util group flex items-center rounded-md px-1.5 py-1"
+      class="hover:hover-bg-util focus-visible:focus-outline-util group flex items-center gap-1 rounded-md px-1.5 py-1"
       @click="onChatMenuOpen"
     >
       <ClientOnly>
-        <ChatBubbleLeftEllipsisIcon
+        <SparklesIcon
           :class="[
             'group-hover:hover-text-util text-base-content h-5 w-5',
             !tutorialChatWithAi ? 'chat-with-ai-glow-icon' : ''
@@ -102,12 +102,14 @@
         />
 
         <template #fallback>
-          <ChatBubbleLeftEllipsisIcon
+          <SparklesIcon
             aria-hidden="true"
             class="group-hover:hover-text-util text-base-content h-5 w-5"
           />
         </template>
       </ClientOnly>
+
+      <span class="group-hover:hover-text-util text-base-content text-sm font-medium">AI</span>
     </HeadlessMenuButton>
 
     <Teleport to="body">
