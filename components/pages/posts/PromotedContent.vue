@@ -1,8 +1,16 @@
 <script setup>
-import { advertisementPromotions, otherPromotions, premiumPromotions, referralPromotions } from '~/assets/js/promotions'
-import { default as random_weighted_choice } from 'random-weighted-choice'
+  import {
+    advertisementPromotions,
+    otherPromotions,
+    premiumPromotions,
+    referralPromotions
+  } from '~/assets/js/promotions'
+  import { default as random_weighted_choice } from 'random-weighted-choice'
+  import { isExternalHref } from '~/composables/locale'
 
-const weightedPromotions = [
+  const localePath = useLocalePath()
+
+  const weightedPromotions = [
     {
       id: 'premiumPromotions',
       weight: 3
@@ -68,15 +76,15 @@ const weightedPromotions = [
     <!-- Media -->
     <NuxtLink
       v-else
-      :href="promo.link"
-      :target="promo.link.startsWith('http') ? '_blank' : null"
-      class="focus-visible:focus-outline-util focus-visible:ring-inset"
-      rel="nofollow noopener"
+      :href="localePath(promo.link)"
+:target="isExternalHref(promo.link) ? '_blank' : null"
+
+      :rel="isExternalHref(promo.link) ? 'nofollow noopener' : undefined"
     >
       <!-- TODO: Temporarily hardcode post index for promoted content -->
       <PostMedia
         :alt-media-src="null"
-        :media-alt="'Promoted content'"
+        :media-alt="$t('media.promotedContent')"
         :media-poster-src="null"
         :media-src="promo.media"
         :media-src-height="promo.mediaHeight"
@@ -89,10 +97,11 @@ const weightedPromotions = [
     <!-- Body -->
     <figcaption class="px-1 py-3 text-center text-sm whitespace-normal">
       <NuxtLink
+        :href="localePath('/premium?utm_source=internal&utm_medium=promo#pricing')"
         class="hover:hover-text-util focus-visible:focus-outline-util underline"
-        href="/premium?utm_source=internal&utm_medium=promo"
-        >Get Premium<!----></NuxtLink
-      ><!---->: No ads + exclusive features
+        >{{ $t('media.getPremium')
+        }}<!----></NuxtLink
+      ><!---->: {{ $t('media.promotedDescription') }}
     </figcaption>
   </figure>
 </template>

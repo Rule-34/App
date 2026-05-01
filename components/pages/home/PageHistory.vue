@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-  import { formatTimeAgo } from '@vueuse/core'
-  import { XMarkIcon } from '@heroicons/vue/20/solid'
+import { XMarkIcon } from '@heroicons/vue/20/solid'
+
+const localePath = useLocalePath()
 
   const { isPremium } = useUserData()
   const { pageHistory } = usePageHistory()
@@ -12,30 +13,27 @@
         .replace('/posts/', 'domain: ')
         .replace('?', '&')
         .split('&')
-        .map(
-          (_query) => {
-            let query = _query
+        .map((_query) => {
+          let query = _query
 
-            try {
-              query = decodeURIComponent(_query)
-            }
-            catch {
-              // Keep raw query when percent-encoding is malformed
-            }
-
-            return (
-              query
-                // Capitalize first character
-                .charAt(0)
-                .toUpperCase() +
-              query
-                .slice(1)
-
-                // Replace first '=' with ': '
-                .replace(/=/, ': ')
-            )
+          try {
+            query = decodeURIComponent(_query)
+          } catch {
+            // Keep raw query when percent-encoding is malformed
           }
-        )
+
+          return (
+            query
+              // Capitalize first character
+              .charAt(0)
+              .toUpperCase() +
+            query
+              .slice(1)
+
+              // Replace first '=' with ': '
+              .replace(/=/, ': ')
+          )
+        })
         // Query separator
         .join('\n')
         // Separate tags
@@ -52,7 +50,7 @@
       return
     }
 
-    navigateTo(path)
+    navigateTo(localePath(path))
   }
 
   function removeHistoryItem(path: string) {
@@ -102,12 +100,15 @@
       </time>
 
       <button
-        aria-label="Remove this history item"
+        :aria-label="$t('common.removeHistoryItem')"
         class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util h-fit max-h-fit rounded-md px-1 py-0.5"
         type="button"
         @click="removeHistoryItem(historyItem.path)"
       >
-        <XMarkIcon aria-hidden="true" class="h-5 w-5" />
+        <XMarkIcon
+          aria-hidden="true"
+          class="h-5 w-5"
+        />
       </button>
     </li>
   </ol>

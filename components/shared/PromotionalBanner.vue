@@ -3,6 +3,7 @@ import { CheckIcon, DocumentDuplicateIcon, XMarkIcon } from '@heroicons/vue/20/s
 import { useClipboard, useNow } from '@vueuse/core'
 
 const { activePromotion, shouldShow, dismiss } = useActivePromotion()
+const localePath = useLocalePath()
 
   // Use VueUse's reactive current time (updates every second)
   const now = useNow({ interval: 1000 })
@@ -34,14 +35,16 @@ const { activePromotion, shouldShow, dismiss } = useActivePromotion()
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
     const seconds = Math.floor((diff % (1000 * 60)) / 1000)
 
+    const d = t('time.days'), h = t('time.hours'), m = t('time.minutes'), s = t('time.seconds')
+
     if (days > 0) {
-      return `${days}d ${hours}h ${minutes}m ${seconds}s`
+      return `${days}${d} ${hours}${h} ${minutes}${m} ${seconds}${s}`
     } else if (hours > 0) {
-      return `${hours}h ${minutes}m ${seconds}s`
+      return `${hours}${h} ${minutes}${m} ${seconds}${s}`
     } else if (minutes > 0) {
-      return `${minutes}m ${seconds}s`
+      return `${minutes}${m} ${seconds}${s}`
     } else {
-      return `${seconds}s`
+      return `${seconds}${s}`
     }
   })
 
@@ -50,6 +53,7 @@ const { activePromotion, shouldShow, dismiss } = useActivePromotion()
    */
   const { copy: copyMonthly, copied: copiedMonthly } = useClipboard()
   const { copy: copyYearly, copied: copiedYearly } = useClipboard()
+  const { t } = useI18n()
 </script>
 
 <template>
@@ -68,16 +72,16 @@ const { activePromotion, shouldShow, dismiss } = useActivePromotion()
         <span
           v-if="activePromotion.emoji"
           class="text-base"
-          >{{ activePromotion.emoji }}</span
-        >
-        <span class="text-primary-400 text-sm font-bold"> {{ activePromotion.discountPercent }}% OFF </span>
+        >{{ activePromotion.emoji }}</span>
+
+        <span class="text-primary-400 text-sm font-bold"> {{ t('promotions.percentOff', { percent: activePromotion.discountPercent }) }} </span>
       </div>
     </div>
 
     <div class="bg-base-1000/70 ring-base-0/10 relative rounded-2xl p-5 ring-2 backdrop-blur-sm sm:p-6">
       <!-- Close button -->
       <button
-        aria-label="Close promotional banner"
+        :aria-label="$t('common.closePromotionalBanner')"
         class="hover:hover-bg-util bg-base-1000 hover:hover-text-util focus-visible:focus-outline-util ring-base-0/20 absolute -top-4 -right-4 rounded-full p-1.5 text-2xl font-bold ring-2 ring-inset"
         type="button"
         @click="dismiss"
@@ -91,7 +95,7 @@ const { activePromotion, shouldShow, dismiss } = useActivePromotion()
       <!-- Title -->
       <div class="mt-4 mb-3 text-center sm:mt-5">
         <h2 class="text-base-content-highlight text-lg leading-tight font-bold sm:text-xl">
-          {{ activePromotion.title }}
+          {{ t(activePromotion.title) }}
         </h2>
       </div>
 
@@ -100,7 +104,7 @@ const { activePromotion, shouldShow, dismiss } = useActivePromotion()
         v-if="activePromotion.description"
         class="text-base-content mb-5 text-center text-sm"
       >
-        {{ activePromotion.description }}
+        {{ t(activePromotion.description) }}
       </p>
 
       <!-- Countdown timer -->
@@ -108,7 +112,7 @@ const { activePromotion, shouldShow, dismiss } = useActivePromotion()
         v-if="countdownText"
         class="text-base-content mb-5 text-center text-xs"
       >
-        Ends in
+        {{ t('common.endsIn') }}
         <span
           class="text-base-content-highlight inline-block font-mono text-sm font-semibold tracking-tight tabular-nums"
           >{{ countdownText }}</span
@@ -124,7 +128,7 @@ const { activePromotion, shouldShow, dismiss } = useActivePromotion()
           @click="copyMonthly(activePromotion.monthlyCode)"
         >
           <div class="min-w-0 flex-1">
-            <span class="text-base-content block text-xs">Monthly</span>
+            <span class="text-base-content block text-xs">{{ t('common.monthly') }}</span>
             <span class="text-base-content-highlight block truncate font-mono text-sm font-semibold">
               {{ activePromotion.monthlyCode }}
             </span>
@@ -148,7 +152,7 @@ const { activePromotion, shouldShow, dismiss } = useActivePromotion()
           @click="copyYearly(activePromotion.yearlyCode)"
         >
           <div class="min-w-0 flex-1">
-            <span class="text-base-content block text-xs">Yearly</span>
+            <span class="text-base-content block text-xs">{{ t('common.yearly') }}</span>
             <span class="text-base-content-highlight block truncate font-mono text-sm font-semibold">
               {{ activePromotion.yearlyCode }}
             </span>
@@ -169,11 +173,11 @@ const { activePromotion, shouldShow, dismiss } = useActivePromotion()
       <!-- CTA button -->
       <NuxtLink
         v-if="activePromotion.cta"
-        :to="activePromotion.cta.link"
+        :to="localePath(activePromotion.cta.link)"
         class="hover:hover-text-util hover:hover-bg-util focus-visible:focus-outline-util bg-util text-base-content-highlight ring-base-0/20 mt-5 block w-full rounded-lg px-4 py-2.5 text-center text-sm font-semibold ring-2 transition-all"
         rel="nofollow noopener noreferrer"
       >
-        {{ activePromotion.cta.text }}
+        {{ t(activePromotion.cta.text) }}
       </NuxtLink>
     </div>
   </div>

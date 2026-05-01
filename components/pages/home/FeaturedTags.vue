@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+  import { isExternalHref } from '~/composables/locale'
+
   const props = defineProps<{
     domain: string
 
@@ -12,6 +14,9 @@
       }[]
     }[]
   }>()
+
+  const { t } = useI18n()
+  const localePath = useLocalePath()
 
   const { isPremium } = useUserData()
 
@@ -78,15 +83,15 @@
           <!-- -->
 
           <NuxtLink
-            :href="tag.path"
-            :rel="tag.path.startsWith('http') ? 'noopener noreferrer nofollow' : ''"
-            :target="tag.path.startsWith('http') ? '_blank' : ''"
+            :href="localePath(tag.path)"
+            :rel="isExternalHref(tag.path) ? 'noopener noreferrer nofollow' : ''"
+            :target="isExternalHref(tag.path) ? '_blank' : ''"
             class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util block rounded-md"
           >
             <figure>
               <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
               <NuxtPicture
-                :alt="'Featured tag: ' + tag.name"
+                :alt="t('common.featuredTag', { name: tag.name })"
                 :decoding="index <= 4 ? undefined : 'async'"
                 :loading="index <= 4 ? undefined : 'lazy'"
                 :preload="index <= 4"

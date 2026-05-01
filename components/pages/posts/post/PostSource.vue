@@ -10,6 +10,7 @@
     postFileUrl: string
   }>()
 
+  const { t } = useI18n()
   const { isPremium } = useUserData()
   const { tutorialPostSource } = useAppStatistics()
 
@@ -21,44 +22,58 @@
     middleware: [offset(6), flip(), shift()]
   })
 
-  const imageAnimeRelatedServiceOptions = [
+  const imageAnimeRelatedServiceOptions = computed(() => [
     {
-      title: 'Find with SauceNAO',
+      serviceName: 'SauceNAO',
+      action: 'find' as const,
       link: `https://saucenao.com/search.php?url=${encodeURIComponent(props.postFileUrl)}`
     },
     {
-      title: 'Find with ASCII2D',
+      serviceName: 'ASCII2D',
+      action: 'find' as const,
       link: `https://ascii2d.net/search/url/${encodeURIComponent(props.postFileUrl)}`
     },
     {
-      title: 'Find with IQDB',
+      serviceName: 'IQDB',
+      action: 'find' as const,
       link: `https://iqdb.org/?url=${encodeURIComponent(props.postFileUrl)}`
     }
-  ]
+  ])
 
-  const imageRelatedServiceOptions = [
+  const imageRelatedServiceOptions = computed(() => [
     {
-      title: 'Find with Google',
+      serviceName: 'Google',
+      action: 'find' as const,
       link: `https://lens.google.com/uploadbyurl?url=${encodeURIComponent(props.postFileUrl)}`
     },
     // TODO: Fix Yandex
     {
-      title: 'Find with Yandex',
+      serviceName: 'Yandex',
+      action: 'find' as const,
       link: `https://yandex.com/images/search?url=${encodeURIComponent(props.postFileUrl)}`
     },
     {
-      title: 'Find with Bing',
+      serviceName: 'Bing',
+      action: 'find' as const,
       link: `https://www.bing.com/images/searchbyimage?cbir=sbi&imgurl=${encodeURIComponent(props.postFileUrl)}`
     },
     {
-      title: 'Find with TinEye',
+      serviceName: 'TinEye',
+      action: 'find' as const,
       link: `https://tineye.com/search/?url=${encodeURIComponent(props.postFileUrl)}`
     },
     {
-      title: 'Edit with ImgOps',
+      serviceName: 'ImgOps',
+      action: 'edit' as const,
       link: `https://imgops.com/${props.postFileUrl.replace(/^https?:\/\//, '')}`
     }
-  ]
+  ])
+
+  function getServiceTitle(action: 'find' | 'edit', serviceName: string) {
+    return t(action === 'edit' ? 'source.editWithService' : 'source.findWithService', {
+      service: serviceName
+    })
+  }
 
   function isSourceAnUrl(source: string) {
     try {
@@ -98,8 +113,8 @@
       return
     }
 
-    toast.info('Post Source', {
-      description: 'Go to the source (artist) if it exists, or find it with reverse image search',
+    toast.info(t('toasts.postSource'), {
+      description: t('toasts.postSourceDescription'),
       duration: 10000
     })
 
@@ -114,7 +129,7 @@
   >
     <HeadlessMenuButton
       ref="referenceEl"
-      aria-label="Open post source options"
+      :aria-label="t('common.openPostSourceOptions')"
       class="hover:hover-bg-util focus-visible:focus-outline-util group flex items-center rounded-md px-1.5 py-1"
       @click="onMenuOpen"
     >
@@ -135,14 +150,14 @@
           :style="floatingStyles"
           class="divide-base-0/20 bg-base-1000 ring-base-0/20 z-50 w-56 divide-y rounded-md ring-1 focus:outline-hidden"
         >
-          <div class="text-base-content-highlight px-4 py-2 text-sm font-medium">Post source</div>
+          <div class="text-base-content-highlight px-4 py-2 text-sm font-medium">{{ t('source.postSource') }}</div>
 
           <!-- No source found -->
           <div
             v-if="!postSources.length"
             class="py-1"
           >
-            <span class="block px-4 py-2 text-sm"> No source found :( </span>
+            <span class="block px-4 py-2 text-sm"> {{ t('source.noSourceFound') }} </span>
           </div>
 
           <!-- Sources -->
@@ -164,7 +179,7 @@
                 >
                   <img
                     :src="`https://icons.duckduckgo.com/ip2/${getHostnameFromUrl(source)}.ico`"
-                    alt="Favicon"
+                    :alt="$t('common.favicon')"
                     class="mr-3 h-5 w-5 shrink-0 rounded-sm"
                     height="128"
                     width="128"
@@ -198,13 +213,13 @@
               >
                 <img
                   :src="`https://icons.duckduckgo.com/ip2/${getHostnameFromUrl(service.link)}.ico`"
-                  alt="Favicon"
+                  :alt="$t('common.favicon')"
                   class="mr-3 h-5 w-5 shrink-0 rounded-sm"
                   height="128"
                   width="128"
                 />
 
-                {{ service.title }}
+                {{ getServiceTitle(service.action, service.serviceName) }}
               </button>
             </HeadlessMenuItem>
           </div>
@@ -223,13 +238,13 @@
               >
                 <img
                   :src="`https://icons.duckduckgo.com/ip2/${getHostnameFromUrl(service.link)}.ico`"
-                  alt="Favicon"
+                  :alt="$t('common.favicon')"
                   class="mr-3 h-5 w-5 shrink-0 rounded-sm"
                   height="128"
                   width="128"
                 />
 
-                {{ service.title }}
+                {{ getServiceTitle(service.action, service.serviceName) }}
               </button>
             </HeadlessMenuItem>
           </div>

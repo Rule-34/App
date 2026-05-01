@@ -15,50 +15,42 @@
   import { project } from '@/config/project'
 
   const { shouldShow } = useActivePromotion()
-
+  const { t } = useI18n()
+  const localePath = useLocalePath()
   const customerCount = 2363
 
-  const mainFeatures = [
-    { title: 'No ads', additionalInfo: undefined },
-    { title: 'Faster image loading', additionalInfo: '#image-proxy' },
+  const mainFeatures = computed(() => [
+    { title: t('pages.premium.landingPage.featureNoAds'), additionalInfo: undefined },
+    { title: t('pages.premium.landingPage.featureFasterImages'), additionalInfo: '#image-proxy' },
     {
-      title: 'Access to ' + (completeBooruList.length - defaultBooruList.length) + ' additional websites',
+      title: t('pages.premium.landingPage.featureAdditionalWebsites', {
+        count: completeBooruList.length - defaultBooruList.length
+      }),
       additionalInfo: '#additional-boorus'
     },
-    { title: 'Save posts, synchronized on all devices', additionalInfo: '#save-posts' },
-    { title: 'Download posts with one click', additionalInfo: '#download-posts' },
-    { title: 'Find the source (artist) of a post', additionalInfo: '#find-source' },
-    { title: 'Integrated history to resume browsing', additionalInfo: '#history' },
-    { title: 'Create tag collections', additionalInfo: '#tag-collections' },
-    { title: 'Block tags to filter out posts', additionalInfo: '#tag-blocklist' },
-    { title: 'Proxy to bypass website blocked in your country', additionalInfo: '#proxy' },
-    { title: '“Premium” Discord role', additionalInfo: undefined },
-    { title: 'Support the development', additionalInfo: '#support-development' }
-  ]
+    { title: t('pages.premium.landingPage.featureSavePosts'), additionalInfo: '#save-posts' },
+    { title: t('pages.premium.landingPage.featureDownload'), additionalInfo: '#download-posts' },
+    { title: t('pages.premium.landingPage.featureFindSource'), additionalInfo: '#find-source' },
+    { title: t('pages.premium.landingPage.featureHistory'), additionalInfo: '#history' },
+    { title: t('pages.premium.landingPage.featureTagCollections'), additionalInfo: '#tag-collections' },
+    { title: t('pages.premium.landingPage.featureBlockTags'), additionalInfo: '#tag-blocklist' },
+    { title: t('pages.premium.landingPage.featureProxy'), additionalInfo: '#proxy' },
+    { title: t('pages.premium.landingPage.featureDiscordRole'), additionalInfo: undefined },
+    { title: t('pages.premium.landingPage.featureSupportDev'), additionalInfo: '#support-development' }
+  ])
 
-  const testimonials = [
-    {
-      text: 'You skip all the ads and focus on the porn',
-      from: 'Discord'
-    },
-    {
-      text: 'Basically THE hentai search engine for mobile',
-      from: 'Feedback'
-    },
-    {
-      text: 'Downloading videos is the best, and saving them for later is even better',
-      from: 'Discord'
-    },
-    {
-      text: "The extra websites make a difference, I've discovered so many new artists and content",
-      from: 'Feedback'
-    }
-  ]
+  const testimonials = computed(() => [
+    { text: t('pages.premium.landingPage.testimonial1Text'), from: t('pages.premium.landingPage.testimonial1From') },
+    { text: t('pages.premium.landingPage.testimonial2Text'), from: t('pages.premium.landingPage.testimonial2From') },
+    { text: t('pages.premium.landingPage.testimonial3Text'), from: t('pages.premium.landingPage.testimonial3From') },
+    { text: t('pages.premium.landingPage.testimonial4Text'), from: t('pages.premium.landingPage.testimonial4From') }
+  ])
 
-  const paymentIntervals = [
+  const paymentIntervals = computed(() => [
     {
-      name: 'Monthly',
-      description: 'Billed monthly',
+      key: 'monthly',
+      name: t('pages.premium.landingPage.planMonthlyName'),
+      description: t('pages.premium.landingPage.planMonthlyDescription'),
       price: 7,
       originalPrice: 12.99,
       interval: 'month',
@@ -67,20 +59,21 @@
           name: 'Credit Card',
           url: 'https://www.refinedsoft.com/shop-premium-features-discord-role/#/portal/signup/6881f5fb9c83c40001487e13/monthly',
           category: 'creditCard',
-          cta: 'Subscribe with Credit Card'
+          cta: t('pages.premium.landingPage.subscribeWithCreditCard')
         },
         {
           name: 'SellApp',
           url: 'https://refinedsoft.sell.app/product/premium-monthly-crypto?payment_method=XMR',
           faviconDomain: 'https://sell.app',
           category: 'crypto',
-          cta: 'Pay with Crypto'
+          cta: t('pages.premium.landingPage.subscribeWithCrypto')
         }
       ]
     },
     {
-      name: '30 days access',
-      description: 'One time payment',
+      key: '30days',
+      name: t('pages.premium.landingPage.plan30DaysName'),
+      description: t('pages.premium.landingPage.oneTimePayment'),
       price: 12.99,
       originalPrice: undefined,
       interval: 'once',
@@ -90,20 +83,21 @@
           url: 'https://refinedsoft.sell.app/product/premium-30-days-access',
           faviconDomain: 'https://sell.app',
           category: 'creditCard',
-          cta: 'Pay with Credit Card'
+          cta: t('pages.premium.landingPage.payWithCreditCard')
         },
         {
           name: 'SellApp',
           url: 'https://refinedsoft.sell.app/product/premium-30-days-access?payment_method=XMR',
           faviconDomain: 'https://sell.app',
           category: 'crypto',
-          cta: 'Pay with Crypto'
+          cta: t('pages.premium.landingPage.payWithCrypto')
         }
       ]
     },
     {
-      name: 'Yearly',
-      description: 'Billed as €59.64; Save 4 months',
+      key: 'yearly',
+      name: t('pages.premium.landingPage.planYearlyName'),
+      description: t('pages.premium.landingPage.planYearlyDescription'),
       price: 4.97,
       originalPrice: 12.99,
       interval: 'month',
@@ -112,20 +106,21 @@
           name: 'Credit Card',
           url: 'https://www.refinedsoft.com/shop-premium-features-discord-role/#/portal/signup/6881f5fb9c83c40001487e13/yearly',
           category: 'creditCard',
-          cta: 'Subscribe with Credit Card'
+          cta: t('pages.premium.landingPage.subscribeWithCreditCard')
         },
         {
           name: 'SellApp',
           url: 'https://refinedsoft.sell.app/product/premium-yearly-crypto?payment_method=XMR',
           faviconDomain: 'https://sell.app',
           category: 'crypto',
-          cta: 'Pay with Crypto'
+          cta: t('pages.premium.landingPage.subscribeWithCrypto')
         }
       ]
     },
     {
-      name: 'Lifetime',
-      description: 'One time payment',
+      key: 'lifetime',
+      name: t('pages.premium.landingPage.planLifetimeName'),
+      description: t('pages.premium.landingPage.oneTimePayment'),
       price: 199.99,
       originalPrice: 699.99,
       interval: 'once',
@@ -135,80 +130,65 @@
           url: 'https://refinedsoft.sell.app/product/premium-lifetime',
           faviconDomain: 'https://sell.app',
           category: 'creditCard',
-          cta: 'Pay with Credit Card'
+          cta: t('pages.premium.landingPage.payWithCreditCard')
         },
         {
           name: 'SellApp',
           url: 'https://refinedsoft.sell.app/product/premium-lifetime?payment_method=XMR',
           faviconDomain: 'https://sell.app',
           category: 'crypto',
-          cta: 'Pay with Crypto'
+          cta: t('pages.premium.landingPage.payWithCrypto')
         }
       ]
     }
-  ]
+  ])
 
-  const faqs = [
+  const faqs = computed(() => [
+    { question: t('pages.premium.landingPage.faq1Question'), answer: t('pages.premium.landingPage.faq1Answer') },
+    { question: t('pages.premium.landingPage.faq2Question'), answer: t('pages.premium.landingPage.faq2Answer') },
+    { question: t('pages.premium.landingPage.faq3Question'), answer: t('pages.premium.landingPage.faq3Answer') },
+    { question: t('pages.premium.landingPage.faq4Question'), answer: t('pages.premium.landingPage.faq4Answer') },
+    { question: t('pages.premium.landingPage.faq5Question'), answer: t('pages.premium.landingPage.faq5Answer') },
     {
-      question: 'How do I get access after payment?',
-      answer: "After payment, you'll receive an email with instructions to sign in to your Premium account."
-    },
-    {
-      question: "Didn't receive the license email?",
-      answer:
-        'Sometimes the confirmation email can fail to arrive or end up in your spam folder—check there first. If it\'s nowhere to be found, go to the "Forgot license" page and request it to be sent again using the email address you used for payment.'
-    },
-    {
-      question: 'What payment options are accepted?',
-      answer:
-        'We accept credit/debit cards and PayPal.\nWe also accept cryptocurrency payments.\n\nLook for the credit card / crypto icon in the payment dialog.'
-    },
-    {
-      question: 'Can I cancel my subscription?',
-      answer:
-        "Yes, you can cancel your subscription anytime.\nGo to the bottom of your Premium Dashboard and use Manage Subscription to cancel.\nPlease do not charge back—if you need help, contact the owner first from your Premium Dashboard.\nOne-time purchases don't need cancellation."
-    },
-    {
-      question: 'Can I get a refund?',
-      answer:
-        'Yes. Within the first 14 days, refunds are no questions asked.\nMessage us using the Contact button in your Premium Dashboard.'
-    },
-    {
-      question: 'What happens after I cancel?',
-      answer:
-        "You'll keep Premium access until the end of your paid period.\n\nAfter subscription, your account will be left in a read-only state."
-    },
-    {
-      question: 'Is the lifetime access really forever?',
-      answer: `Yes! Lifetime means you get permanent access to Premium features for as long as ${project.name} exists.`
+      question: t('pages.premium.landingPage.faq6Question'),
+      answer: t('pages.premium.landingPage.faq6Answer', { name: project.name })
     }
-  ]
+  ])
 
-  const selectedPaymentInterval = ref(paymentIntervals[0])
+  const selectedPaymentIntervalKey = ref<'monthly' | '30days' | 'yearly' | 'lifetime'>('monthly')
+
+  const selectedPaymentInterval = computed(
+    () => paymentIntervals.value.find((p) => p.key === selectedPaymentIntervalKey.value) ?? paymentIntervals.value[0]!
+  )
 
   const isPaymentDialogOpen = ref(false)
 
-  function onIntervalClick(interval: (typeof paymentIntervals)[0]) {
-    selectedPaymentInterval.value = interval
+  function onIntervalClick(interval: (typeof paymentIntervals.value)[0]) {
+    selectedPaymentIntervalKey.value = interval.key as typeof selectedPaymentIntervalKey.value
 
     isPaymentDialogOpen.value = true
-
-    window._paq?.push(['trackEvent', 'Premium', 'Plan Click', interval.name])
+    ;(window as any)._paq?.push(['trackEvent', 'Premium', 'Plan Click', interval.key])
   }
 
   // Payment methods categorization
-  const paymentMethods = {
-    creditCard: { name: 'Credit Card', icon: 'https://icons.duckduckgo.com/ip2/mastercard.us.ico' },
-    crypto: { name: 'Cryptocurrency', icon: 'https://icons.duckduckgo.com/ip2/bitcoin.org.ico' }
-  }
+  const paymentMethods = computed(() => ({
+    creditCard: {
+      name: t('pages.premium.landingPage.creditCard'),
+      icon: 'https://icons.duckduckgo.com/ip2/mastercard.us.ico'
+    },
+    crypto: {
+      name: t('pages.premium.landingPage.cryptocurrency'),
+      icon: 'https://icons.duckduckgo.com/ip2/bitcoin.org.ico'
+    }
+  }))
 
-  const paymentMethodCategories = Object.keys(paymentMethods) as Array<keyof typeof paymentMethods>
+  const paymentMethodCategories = ['creditCard', 'crypto'] as const
 
   const selectedPaymentLinkGroups = computed(() =>
     paymentMethodCategories
       .map((category) => ({
         category,
-        method: paymentMethods[category],
+        method: paymentMethods.value[category],
         links: selectedPaymentInterval.value.links.filter((link) => link.category === category)
       }))
       .filter((group) => group.links.length > 0)
@@ -224,7 +204,7 @@
   }
 
   useSeoMeta({
-    title: 'Premium'
+    title: computed(() => t('pages.premium.landingPage.seoTitle'))
   })
 
   useSchemaOrg([
@@ -244,10 +224,10 @@
   <ClientOnly>
     <Teleport to="#navbar-actions">
       <NuxtLink
+        :href="localePath('/premium/sign-in')"
         class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative flex items-center gap-x-2 rounded-md p-2"
-        href="/premium/sign-in"
       >
-        <span class="text-base-content text-sm">Sign in</span>
+        <span class="text-base-content text-sm">{{ $t('pages.premium.landingPage.signIn') }}</span>
 
         <ArrowRightOnRectangleIcon class="text-base-content-highlight h-6 w-6" />
       </NuxtLink>
@@ -266,22 +246,22 @@
           <div class="relative z-10">
             <!-- Title -->
             <h1 class="text-base-content-highlight mx-auto max-w-4xl text-center text-2xl font-bold tracking-tight">
-              Browse Ad-free & Save Posts
+              {{ $t('pages.premium.landingPage.heroTitle') }}
             </h1>
 
             <p class="mx-auto mt-3 max-w-3xl text-center text-lg leading-7 font-medium lg:mt-3">
-              Focus on Hentai without distractions, save posts to view them later, faster image loading and much more!
+              {{ $t('pages.premium.landingPage.heroSubtitle') }}
             </p>
           </div>
 
           <!-- CTA -->
           <div class="mt-10 flex justify-center">
-            <NuxtLink
-              class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util text-base-content-highlight ring-base-0/20 mx-auto inline-flex items-center justify-center rounded-lg px-6 py-2 text-lg font-medium ring-1"
+            <a
               href="#pricing"
+              class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util text-base-content-highlight ring-base-0/20 mx-auto inline-flex items-center justify-center rounded-lg px-6 py-2 text-lg font-medium ring-1"
             >
-              Get Premium
-            </NuxtLink>
+              {{ $t('pages.premium.landingPage.getPremium') }}
+            </a>
           </div>
 
           <!-- Rating -->
@@ -301,7 +281,7 @@
             </div>
 
             <!-- TODO: Images of user profiles -->
-            <span> Loved by {{ customerCount }}+ customers</span>
+            <span> {{ $t('pages.premium.landingPage.lovedByCustomers', { count: customerCount }) }}</span>
           </NuxtLink>
 
           <!-- Testimonials -->
@@ -316,7 +296,7 @@
                 <span>”</span>
 
                 <div class="mt-1.5 flex items-center gap-x-2 text-xs">
-                  <span> from {{ testimonial.from }} </span>
+                  <span> {{ $t('pages.premium.landingPage.fromSource', { source: testimonial.from }) }} </span>
                 </div>
               </li>
             </ol>
@@ -327,7 +307,7 @@
               rel="nofollow noopener"
               target="_blank"
             >
-              And many more
+              {{ $t('pages.premium.landingPage.andManyMore') }}
             </NuxtLink>
           </section>
 
@@ -365,7 +345,9 @@
               </defs>
             </svg>
 
-            <h2 class="text-base-content-highlight text-center text-2xl font-bold tracking-wide">Premium Plans</h2>
+            <h2 class="text-base-content-highlight text-center text-2xl font-bold tracking-wide">
+              {{ $t('pages.premium.landingPage.premiumPlans') }}
+            </h2>
 
             <!-- Promotional Banner -->
             <ClientOnly>
@@ -382,12 +364,16 @@
 
                 <div>
                   <h3 class="text-base-content-highlight text-2xl font-bold tracking-wide">
-                    All plans include&hellip;
+                    {{ $t('pages.premium.landingPage.allPlansInclude') }}
                   </h3>
 
                   <p class="mt-2 text-sm leading-7">
-                    Access to {{ completeBooruList.length - defaultBooruList.length }} additional websites, and
-                    {{ mainFeatures.length }} exclusive features!
+                    {{
+                      $t('pages.premium.landingPage.featuresDescription', {
+                        count: completeBooruList.length - defaultBooruList.length,
+                        features: mainFeatures.length
+                      })
+                    }}
                   </p>
                 </div>
 
@@ -437,11 +423,11 @@
                   <!--                  </NuxtLink>-->
 
                   <p class="text-center text-xs leading-6">
-                    Cancel anytime
+                    {{ $t('pages.premium.landingPage.cancelAnytime') }}
 
                     <br />
 
-                    Safe and discreet billing
+                    {{ $t('pages.premium.landingPage.safeDiscreetBilling') }}
 
                     <br />
 
@@ -451,7 +437,7 @@
                       rel="nofollow noopener"
                       target="_blank"
                     >
-                      Trusted by {{ customerCount }}+ customers
+                      {{ $t('pages.premium.landingPage.trustedByCustomers', { count: customerCount }) }}
                     </NuxtLink>
                   </p>
                 </div>
@@ -463,7 +449,7 @@
               v-for="interval in paymentIntervals"
               :key="interval.name"
               :class="{
-                'ring-primary-700': interval.name === selectedPaymentInterval.name
+                'ring-primary-700': interval.key === selectedPaymentInterval.key
               }"
               class="bg-base-1000/70 ring-base-0/10 relative rounded-2xl ring-2 backdrop-blur-sm"
             >
@@ -477,17 +463,23 @@
                 >
                   <div
                     :class="{
-                      'bg-primary-700': interval.name === selectedPaymentInterval.name
+                      'bg-primary-700': interval.key === selectedPaymentInterval.key
                     }"
                     class="bg-base-0/10 rounded-b-2xl px-2 pt-3 pb-4"
                   >
                     <span
                       :class="{
-                        'font-medium': interval.name === selectedPaymentInterval.name
+                        'font-medium': interval.key === selectedPaymentInterval.key
                       }"
                       class="text-base-content-highlight text-sm"
                     >
-                      Save {{ Math.round(((interval.originalPrice - interval.price) / interval.originalPrice) * 100) }}%
+                      {{
+                        $t('pages.premium.landingPage.savePercent', {
+                          percent: Math.round(
+                            ((interval.originalPrice - interval.price) / interval.originalPrice) * 100
+                          )
+                        })
+                      }}
                     </span>
                   </div>
                 </div>
@@ -519,19 +511,24 @@
                       </p>
                     </div>
 
-                    <p class="ml-2 inline text-sm leading-5">/{{ interval.interval }}</p>
+                    <p
+                      v-if="interval.interval !== 'once'"
+                      class="ml-2 inline text-sm leading-5"
+                    >
+                      /{{ $t('pages.premium.landingPage.perMonth') }}
+                    </p>
                   </div>
 
                   <!-- TODO: Media that attracts the attention of the user -->
                   <button
                     :class="{
-                      'bg-primary-700 hover:bg-primary-600! ring-0!': interval.name === selectedPaymentInterval.name
+                      'bg-primary-700 hover:bg-primary-600! ring-0!': interval.key === selectedPaymentInterval.key
                     }"
                     aria-describedby="premium-features"
                     class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util text-base-content-highlight ring-base-0/20 rounded-lg px-3 py-2 text-center text-sm font-medium ring-1"
                     @click="onIntervalClick(interval)"
                   >
-                    Get Premium
+                    {{ $t('pages.premium.landingPage.getPremium') }}
                   </button>
                 </div>
               </div>
@@ -540,7 +537,9 @@
 
           <!-- FAQ -->
           <section class="mt-24">
-            <h2 class="text-base-content-highlight text-center text-2xl font-bold">Frequently Asked Questions</h2>
+            <h2 class="text-base-content-highlight text-center text-2xl font-bold">
+              {{ $t('pages.premium.landingPage.faqTitle') }}
+            </h2>
 
             <dl class="divide-base-0/10 mt-8 divide-y">
               <Disclosure
@@ -617,10 +616,12 @@
                 as="h3"
                 class="text-base-content-highlight text-lg leading-6 font-medium"
               >
-                Payment Instructions - {{ selectedPaymentInterval.name }}
+                {{ $t('pages.premium.landingPage.paymentDialogTitle', { name: selectedPaymentInterval.name }) }}
               </DialogTitle>
 
-              <p class="text-base-content mt-2 text-sm text-pretty">Choose your preferred payment method</p>
+              <p class="text-base-content mt-2 text-sm text-pretty">
+                {{ $t('pages.premium.landingPage.paymentDialogSubtitle') }}
+              </p>
 
               <div class="mt-6 space-y-8">
                 <div
@@ -644,7 +645,7 @@
                       v-if="group.category === 'crypto'"
                       class="bg-primary-700 text-base-content-highlight rounded-full px-2 py-0.5 text-xs font-semibold"
                     >
-                      20% Off
+                      {{ $t('promotions.percentOff', { percent: 20 }) }}
                     </span>
                   </div>
 
@@ -702,7 +703,7 @@
                   type="button"
                   @click="isPaymentDialogOpen = false"
                 >
-                  Dismiss
+                  {{ $t('common.close') }}
                 </button>
               </div>
             </DialogPanel>
