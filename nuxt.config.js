@@ -407,5 +407,21 @@ export default defineNuxtConfig({
   },
 
   telemetry: false,
-  compatibilityDate: '2025-03-12'
+  compatibilityDate: '2025-03-12',
+
+  /** Test overrides — only applied when running vitest. */
+  $test: {
+    runtimeConfig: {
+      public: {
+        apiUrl: '' // routes $fetch(baseURL: '') to local Nitro server
+      }
+    },
+
+    nitro: {
+      plugins: [
+        '~/test/server-mocks/plugin.ts',
+        '~/test/server-mocks/auth.ts'
+      ]
+    }
+  }
 })

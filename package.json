@@ -58,6 +58,7 @@
     "vue-sonner": "^2.0.9"
   },
   "devDependencies": {
+    "@nuxt/test-utils": "^4.0.3",
     "@types/qs": "^6.15.0",
     "jest": "^30.3.0",
     "nuxt": "^4.4.2",
