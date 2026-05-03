@@ -111,7 +111,7 @@ export default function () {
      */
     {
       id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
-      weight: 0.5
+      weight: 0.35
     },
     /**
      * AdMaven
@@ -120,7 +120,7 @@ export default function () {
      */
     {
       id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255040',
-      weight: 0.5
+      weight: 0.65
     }
   ]
 
