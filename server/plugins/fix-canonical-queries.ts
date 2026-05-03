@@ -8,14 +8,27 @@
  *       Track: https://github.com/nuxt-modules/i18n
  *       See also: nuxt.config.js ~L369
  */
+
+function patchCanonicalTags(headHtml: string, tags: string): string {
+  if (!tags) return headHtml
+  return headHtml.replace(
+    /(<link\b[^>]*\brel=["']canonical["'][^>]*href=["'])([^"']+)(["'][^>]*>)/i,
+    (_match, before: string, href: string, after: string) => {
+      if (!href) return `${before}${href}${after}`
+      return `${before}${href}?tags=${encodeURIComponent(tags)}${after}`
+    }
+  )
+}
+
 export default defineNitroPlugin((nitroApp) => {
   nitroApp.hooks.hook('render:response', (response, { event }) => {
     const url = new URL(event.path, 'http://localhost')
     const tags = url.searchParams.get('tags')
 
-    if (!tags) {
-      return
-    }
+    if (!tags) return
+
+    // Only patch canonical on posts pages
+    if (!/^(\/[a-z]{2})?\/posts\//.test(url.pathname)) return
 
     const body = response.body
     if (typeof body !== 'string') return
@@ -29,18 +42,9 @@ export default defineNitroPlugin((nitroApp) => {
 
     const headHtml = body.slice(headStartIdx + 1, headEndIdx)
 
-    const patchedHead = headHtml.replace(
-      /(<link\b[^>]*\brel=["']canonical["'][^>]*href=")([^"]*)("[^>]*>)/i,
-      (_match, before: string, href: string, after: string) => {
-        // Only append tags if the canonical href is non-empty
-        if (!href) return `${before}${href}${after}`
-        return `${before}${href}?tags=${encodeURIComponent(tags)}${after}`
-      }
-    )
+    const patchedHead = patchCanonicalTags(headHtml, tags)
 
-    if (patchedHead === headHtml) {
-      return
-    }
+    if (patchedHead === headHtml) return
 
     response.body = body.slice(0, headStartIdx + 1) + patchedHead + body.slice(headEndIdx)
   })

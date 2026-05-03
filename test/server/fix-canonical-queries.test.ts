@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { $fetch, setup } from '@nuxt/test-utils'
 import { locales } from '../../config/i18n'
+import { project } from '../../config/project'
 
 const localeCodes = locales.map((l) => l.code)
 
@@ -51,5 +52,35 @@ describe('SEO canonical URLs', async () => {
 
     const expected = [...localeCodes, 'x-default']
     expect(codes).toEqual(expect.arrayContaining(expected))
+  })
+
+  /**
+   * Canonical must always point to the main production domain so clone/mirror
+   * domains do not dilute SEO authority or get indexed as separate sites.
+   */
+  describe('clone domain canonicalization', () => {
+    it('posts page on clone host canonicalizes to main domain', async () => {
+      const html = await $fetch('/posts/e621.net?tags=solo', {
+        headers: { Host: 'alt3.r34.app' }
+      })
+
+      expect(getCanonical(html)).toBe(`${project.urls.production.origin}/posts/e621.net?tags=solo`)
+    })
+
+    it('locale-prefixed route on external clone host canonicalizes to main domain', async () => {
+      const html = await $fetch('/es/posts/e621.net?tags=solo', {
+        headers: { Host: 'naughtyneko.com' }
+      })
+
+      expect(getCanonical(html)).toBe(`${project.urls.production.origin}/es/posts/e621.net?tags=solo`)
+    })
+
+    it('home page on clone host canonicalizes to main domain', async () => {
+      const html = await $fetch('/', {
+        headers: { Host: 'alt3.r34.app' }
+      })
+
+      expect(getCanonical(html)).toBe(`${project.urls.production.origin}/`)
+    })
   })
 })
