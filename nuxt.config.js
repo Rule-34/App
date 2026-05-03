@@ -157,7 +157,8 @@ export default defineNuxtConfig({
 
     public: {
       apiUrl: undefined,
-      sentryDsn: undefined
+      sentryDsn: undefined,
+      testAuthBypass: undefined
     }
   },
 
@@ -413,15 +414,13 @@ export default defineNuxtConfig({
   $test: {
     runtimeConfig: {
       public: {
-        apiUrl: '' // routes $fetch(baseURL: '') to local Nitro server
+        apiUrl: '', // routes $fetch(baseURL: '') to local Nitro server
+        testAuthBypass: true // skip auth middleware for premium page tests
       }
     },
 
     nitro: {
-      plugins: [
-        '~/test/server-mocks/plugin.ts',
-        '~/test/server-mocks/auth.ts'
-      ]
+      plugins: ['~/test/server-mocks/plugin.ts']
     }
   }
 })

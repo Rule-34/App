@@ -60,9 +60,9 @@
   const searchTagResults: Ref<Tag[]> = shallowRef([])
 
   async function onSearchTag(tag: string) {
-    const apiUrl = config.public.apiUrl + '/booru/' + selectedBooru.value.type.type + '/tags'
+    const response = await $fetch(`/booru/${selectedBooru.value.type.type}/tags`, {
+      baseURL: config.public.apiUrl,
 
-    const response = await $fetch(apiUrl, {
       params: {
         baseEndpoint: selectedBooru.value.domain,
 
