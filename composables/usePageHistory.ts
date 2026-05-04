@@ -6,30 +6,27 @@ interface PageHistory {
   date: Date
 }
 
-/**
- * Checks if the relative URL is the previous page
- */
-function isUrlPreviousPage(url1: string, url2: string): boolean {
-  if (!url1 || !url2) {
-    return false
+export default function () {
+  const router = useRouter()
+  const getRouteBaseName = useRouteBaseName()
+
+  let pageHistory = ref<PageHistory[]>([])
+
+  function isPostsPage(relativeUrl: string) {
+    return getRouteBaseName(router.resolve(relativeUrl)) === 'posts-domain'
   }
 
-  const url1WithoutPage = new URL(url1, window.location.origin)
-  const url1Page = url1WithoutPage.searchParams.get('page')
-  url1WithoutPage.searchParams.delete('page')
+  function getComparableUrlWithoutPage(relativeUrl: string) {
+    const url = new URL(relativeUrl, window.location.origin)
 
-  const url2WithoutPage = new URL(url2, window.location.origin)
-  const url2Page = url2WithoutPage.searchParams.get('page')
-  url2WithoutPage.searchParams.delete('page')
+    url.searchParams.delete('page')
 
-  const isSameUrlWithoutPage = url1WithoutPage.href === url2WithoutPage.href
-  const isPreviousPage = url2Page === String(Number(url1Page) - 1)
+    // Keep query-order differences from creating duplicate history entries.
+    const sortedParams = new URLSearchParams(Array.from(url.searchParams.entries()).sort(([a], [b]) => a.localeCompare(b)))
+    const search = sortedParams.toString()
 
-  return isSameUrlWithoutPage && isPreviousPage
-}
-
-export default function () {
-  let pageHistory = ref<PageHistory[]>([])
+    return search ? `${url.pathname}?${search}` : url.pathname
+  }
 
   // TODO: Serialize Date
   if (import.meta.client) {
@@ -43,16 +40,15 @@ export default function () {
    * With a maximum of 10 pages
    */
   function addUrlToPageHistory(relativeUrl: string) {
-    if (process.server) {
+    if (import.meta.server) {
       throw new Error('This should only be called on the client')
     }
 
-    const url = new URL(relativeUrl, window.location.origin)
-
-    // Skip if it's not the posts path
-    if (!url.pathname.startsWith('/posts/')) {
+    if (!isPostsPage(relativeUrl)) {
       return
     }
+
+    const url = new URL(relativeUrl, window.location.origin)
 
     // Skip if there are no query params
     if (!url.search) {
@@ -60,16 +56,15 @@ export default function () {
     }
 
     const previousPage = pageHistory.value[pageHistory.value.length - 1]
+    const comparableUrl = getComparableUrlWithoutPage(relativeUrl)
 
     // Skip if the previous url is the same
     if (previousPage && previousPage.path === relativeUrl) {
       return
     }
 
-    // Replace if the previous url is the previous page before current page
-    if (previousPage && isUrlPreviousPage(relativeUrl, previousPage.path)) {
-      pageHistory.value.pop()
-    }
+    // Keep the latest page for the same path/query (ignoring only page).
+    pageHistory.value = pageHistory.value.filter((page) => getComparableUrlWithoutPage(page.path) !== comparableUrl)
 
     // Maximum of 10 pages
     if (pageHistory.value.length >= 10) {

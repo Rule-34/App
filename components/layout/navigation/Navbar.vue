@@ -1,47 +1,35 @@
 <script lang="ts" setup>
-  import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
-  import { vIntersectionObserver } from '@vueuse/components'
+import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
+import { vIntersectionObserver } from '@vueuse/components'
 
-  const route = useRoute()
+const route = useRoute()
+  const localePath = useLocalePath()
+  const getRouteBaseName = useRouteBaseName()
 
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
 
   const { seasonalEmoji } = useSeasonalIcon()
 
-  const isPageWithLogoDisabled = computed(() => {
-    switch (route.path) {
-      case '/':
-        return true
+  const isPageWithLogoDisabled = computed(() => route.path === localePath('/'))
 
-      default:
-        return false
-    }
+  const isPostsPage = computed(() => {
+    const baseName = getRouteBaseName(route)
+
+    return baseName === 'posts-domain' || baseName === 'premium-saved-posts-domain'
   })
-  const isPostsPage = computed(() =>
-    [
-      //
-      '/posts/',
-      '/premium/saved-posts/'
-    ].some((path) => route.path.startsWith(path))
-  )
 
   const isOnTop = ref(true)
 
   function onIntersectionObserver(entries: IntersectionObserverEntry[]) {
     const [entry] = entries
-
-    if (entry.isIntersecting) {
-      isOnTop.value = true
-    } else {
-      isOnTop.value = false
-    }
+    isOnTop.value = !!entry?.isIntersecting
   }
 </script>
 
 <template>
   <!-- Same margin as Nav height -->
   <nav class="mb-14">
-    <div v-intersection-observer="[onIntersectionObserver]" />
+    <div v-intersection-observer="onIntersectionObserver" />
 
     <div
       :class="{
@@ -63,7 +51,7 @@
         <!-- Right side: Menu button -->
         <div class="absolute inset-y-0 left-0 flex items-center pl-2">
           <button
-            aria-label="Open main menu"
+            :aria-label="$t('common.openMenu')"
             class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util text-base-content-highlight inline-flex items-center justify-center rounded-md p-2 focus-visible:ring-inset"
             type="button"
             @click="toggleMenu()"
@@ -84,12 +72,12 @@
         <div class="flex flex-1 items-center justify-center">
           <NuxtLink
             v-if="!isPageWithLogoDisabled"
+            :to="localePath('/')"
             class="focus-visible:focus-outline-util shrink-0"
-            to="/"
           >
             <img
               v-if="!seasonalEmoji"
-              alt="Icon"
+              :alt="$t('common.icon')"
               class="flip-vertical-fwd text-base-content-highlight h-6 w-6"
               height="16"
               src="/icon.svg"

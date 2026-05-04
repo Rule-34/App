@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { XMarkIcon } from '@heroicons/vue/20/solid'
+import { formatTimeAgo } from '@vueuse/core'
 
 const localePath = useLocalePath()
 

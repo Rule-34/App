@@ -1,9 +1,16 @@
 <script lang="ts" setup>
-  import type { PropType } from 'vue'
-  import type { Domain } from '~/assets/js/domain'
-  import type { ITag } from '~/assets/js/tag.dto'
-  import { normalizeStringForTitle } from '~/assets/js/SeoHelper'
-  import { project } from '@/config/project'
+import type { PropType } from 'vue'
+import type { Domain } from '~/assets/js/domain'
+import type { ITag } from '~/assets/js/tag.dto'
+import { normalizeStringForTitle } from '~/assets/js/SeoHelper'
+
+interface SelectedFilters {
+    rating?: string
+    sort?: string
+    score?: string
+  }
+
+  const RELATED_TAGS = ['highres', 'animated', 'cum', 'big_breasts', '1girl', '1boy']
 
   const props = defineProps({
     selectedBooru: {
@@ -15,7 +22,7 @@
       default: () => []
     },
     selectedFilters: {
-      type: Object,
+      type: Object as PropType<SelectedFilters>,
       default: () => ({})
     },
     postsCount: {
@@ -24,80 +31,82 @@
     }
   })
 
+  const { t } = useI18n()
   const { booruList } = useBooruList()
 
-  // Filter out the current booru to show related sites
-  const relatedBoorus = computed(() => {
-    return booruList.value.filter((booru) => booru.domain !== props.selectedBooru.domain).slice(0, 4)
-  })
+  const hasTags = computed(() => props.selectedTags.length > 0)
 
-  // Computed properties for formatted tag displays
+  const relatedBoorus = computed(() =>
+    booruList.value.filter((b) => b.domain !== props.selectedBooru.domain).slice(0, 4)
+  )
+
   const formattedTags = computed(() => {
-    if (!props.selectedTags.length) {
-      return ['Anime']
-    }
-
-    // Filter out excluded tags (those with a minus prefix)
+    if (!hasTags.value) return [t('seoFooter.defaultTag')]
     return props.selectedTags.filter((tag) => !tag.name.startsWith('-')).map((tag) => normalizeStringForTitle(tag.name))
   })
 
   const formattedTagsString = computed(() => formattedTags.value.join(', '))
 
-  // Hardcoded related tags based on common combinations
-  // These would be general enough to exist on most booru sites
-  const hardcodedRelatedTags = ['highres', 'animated', 'cum', 'big_breasts', '1girl', '1boy']
+  const formattedTagsLower = computed(() => formattedTagsString.value.toLowerCase())
 
-  const formattedRelatedTags = computed(() => {
-    return hardcodedRelatedTags.map((tag) => normalizeStringForTitle(tag))
-  })
+  const formattedRelatedTags = computed(() => RELATED_TAGS.map((tag) => normalizeStringForTitle(tag)))
+
+  const ratingLabel = computed(() => props.selectedFilters.rating || 'explicit')
+
+  const formattedCount = computed(() => (props.postsCount > 0 ? `${props.postsCount}+ ` : ''))
+
+  const sortLabel = computed(() =>
+    props.selectedFilters.sort
+      ? t('seoFooter.sortingBy', { sort: props.selectedFilters.sort })
+      : t('seoFooter.mostPopularUploads')
+  )
 </script>
 
 <template>
   <footer class="border-base-300/30 mt-5 border-t pt-8">
     <ShowMore :max-height-in-rem="16">
       <article class="richtext text-sm">
-        <h2>Rule 34 {{ formattedTagsString }} hentai images and videos</h2>
+        <h2>{{ $t('seoFooter.h2', { tags: formattedTagsString }) }}</h2>
 
         <section>
-          <h3 v-if="selectedTags.length > 0">
-            Exclusive {{ formattedTagsString }} Rule 34 gallery from {{ selectedBooru.domain }}
+          <h3 v-if="hasTags">
+            {{ $t('seoFooter.exclusiveGalleryH3', { tags: formattedTagsString, domain: selectedBooru.domain }) }}
           </h3>
           <p>
-            Browse our extensive collection of high-quality
-            {{ formattedTagsString }} hentai, Rule 34, and anime parody artwork from {{ selectedBooru.domain }}. Our
-            optimized platform provides real-time access to the latest lewd images, porn videos, and adult gifs directly
-            from popular sources, with advanced filtering and search capabilities for the ultimate browsing experience.
-            <template v-if="selectedTags.length > 0">
-              Our library includes {{ selectedFilters.rating || 'explicit' }} rated adult media with
-              {{ selectedFilters.sort ? `sorting by ${selectedFilters.sort}` : 'the most popular uploads' }}.
+            {{ $t('seoFooter.browseCollectionP1', { tags: formattedTagsString, domain: selectedBooru.domain }) }}
+            <template v-if="hasTags">
+              {{ $t('seoFooter.libraryIncludes', { rating: ratingLabel, sort: sortLabel }) }}
             </template>
-            All Rule 34 images and videos are sourced directly from {{ selectedBooru.domain }}, ensuring the highest
-            quality and most accurate tagging. Discover {{ postsCount > 0 ? postsCount + '+ ' : '' }}
-            {{ selectedBooru.domain }} {{ formattedTagsString }} hentai illustrations, porn gifs, and XXX animations in
-            one convenient location.
+            {{
+              $t('seoFooter.allSourcedP2', {
+                domain: selectedBooru.domain,
+                count: formattedCount,
+                tags: formattedTagsString
+              })
+            }}
           </p>
         </section>
 
         <section>
-          <h3>Why choose {{ project.shortName }} for {{ formattedTagsString }} hentai and Rule 34</h3>
+          <h3>{{ $t('seoFooter.whyChooseH3', { name: project.shortName, tags: formattedTagsString }) }}</h3>
           <ul>
-            <li>Real-time adult image and porn video updates from original sources like {{ selectedBooru.domain }}</li>
-            <li>Instant access to new Rule 34 artwork and anime parodies as they appear</li>
-            <li>Mobile-optimized interface for on-the-go hentai viewing</li>
-            <li>Advanced filtering system with precise tag searching for Rule 34 content</li>
-            <li>Direct access to multiple porn booru sites in one place</li>
+            <li>{{ $t('seoFooter.featureRealTime', { domain: selectedBooru.domain }) }}</li>
+            <li>{{ $t('seoFooter.featureInstant') }}</li>
+            <li>{{ $t('seoFooter.featureMobile') }}</li>
+            <li>{{ $t('seoFooter.featureFiltering') }}</li>
+            <li>{{ $t('seoFooter.featureDirect') }}</li>
           </ul>
         </section>
 
         <section>
-          <h3>Top {{ formattedTagsString }} related hentai tags</h3>
-          <p>Explore these popular Rule 34 and adult anime related tags across all booru sites:</p>
+          <h3>{{ $t('seoFooter.relatedTagsH3', { tags: formattedTagsString }) }}</h3>
+          <p>{{ $t('seoFooter.relatedTagsIntro') }}</p>
 
           <nav class="flex flex-wrap gap-2">
             <NuxtLink
-              v-for="(tag, index) in hardcodedRelatedTags"
+              v-for="(tag, index) in RELATED_TAGS"
               :key="tag"
-              :title="`Browse ${formattedRelatedTags[index]} hentai and Rule 34 images`"
+              :title="$t('seoFooter.relatedTagTitle', { tag: formattedRelatedTags[index] })"
               :to="`/posts/${selectedBooru.domain}?tags=${encodeURIComponent(tag)}`"
               class="text-primary text-sm hover:underline"
             >
@@ -107,11 +116,8 @@
         </section>
 
         <section>
-          <h3>More {{ formattedTagsString }} hentai sources</h3>
-          <p>
-            Expand your Rule 34 browsing experience with these alternative adult booru sites that offer similar lewd
-            artwork:
-          </p>
+          <h3>{{ $t('seoFooter.moreSourcesH3', { tags: formattedTagsString }) }}</h3>
+          <p>{{ $t('seoFooter.moreSourcesIntro') }}</p>
 
           <nav>
             <ul class="flex list-none flex-wrap gap-2">
@@ -120,7 +126,7 @@
                 :key="booru.domain"
               >
                 <NuxtLink
-                  :title="`Browse ${formattedTagsString} Rule 34 hentai on ${booru.domain}`"
+                  :title="$t('seoFooter.sourceLinkTitle', { tags: formattedTagsString, domain: booru.domain })"
                   :to="`/posts/${booru.domain}`"
                 >
                   {{ booru.domain }}
@@ -131,28 +137,21 @@
         </section>
 
         <section>
-          <h3>{{ formattedTagsString }} Rule 34 updates - always fresh hentai artwork</h3>
+          <h3>{{ $t('seoFooter.updatesH3', { tags: formattedTagsString }) }}</h3>
           <p>
-            As a dedicated hentai viewer application, {{ project.shortName }} doesn't host adult media - we connect
-            directly to {{ selectedBooru.domain }} and other popular Rule 34 sources. This means you're always seeing
-            the newest {{ formattedTagsString }} porn images and adult videos in real-time, without any delay. New
-            hentai artwork is refreshed instantly as it appears on the original sites, ensuring you never miss new
-            additions to your favorite parody tags and anime categories.
+            {{
+              $t('seoFooter.updatesP', {
+                name: project.shortName,
+                domain: selectedBooru.domain,
+                tags: formattedTagsString
+              })
+            }}
           </p>
         </section>
 
         <section>
-          <h3>
-            How to find the best {{ formattedTagsString }} hentai videos and porn gifs on {{ selectedBooru.domain }}
-          </h3>
-          <p>
-            Looking for the highest quality
-            {{ formattedTagsString.toLowerCase() }} hentai and Rule 34 parody artwork? Use our advanced search and
-            filtering options to discover exactly what you want. Sort adult images and XXX videos by rating, date, or
-            popularity to find the newest and best-rated uploads. Our comprehensive Rule 34 tagging system allows for
-            precise searches, ensuring you find exactly the lewd illustrations, porn gifs, and explicit videos you're
-            looking for, the moment they're uploaded to {{ selectedBooru.domain }} and other popular adult sources.
-          </p>
+          <h3>{{ $t('seoFooter.howToFindH3', { tags: formattedTagsString, domain: selectedBooru.domain }) }}</h3>
+          <p>{{ $t('seoFooter.howToFindP', { tags: formattedTagsLower, domain: selectedBooru.domain }) }}</p>
         </section>
       </article>
     </ShowMore>
