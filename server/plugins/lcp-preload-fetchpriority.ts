@@ -31,7 +31,6 @@ export default defineNitroPlugin((nitroApp) => {
     )
 
     if (patchedHead === headHtml) {
-      console.warn('[lcp-preload-fetchpriority] Already patched or no matching preload links found in head.')
       return
     }
 

@@ -98,7 +98,7 @@
     "emailSentDescription": "Si tu correo electrónico existe, recibirás un correo con tu licencia actual. Si no recibes el correo, revisa tu carpeta de spam",
     "postSourceDescription": "Ve a la fuente (artista) si existe, o búscala con búsqueda inversa de imágenes",
     "domainSwitcherDescription": "Cambia entre sitios Booru: cada uno tiene contenido único, ¡encuentra el que más te guste!",
-    "backupRestored": "¡Copia de seguridad restaurada exitosamente\\!",
+    "backupRestored": "¡Copia de seguridad restaurada exitosamente!",
     "authFailed": "Error de autenticación. Por favor, inicia sesión de nuevo."
   },
   "pages": {
@@ -480,12 +480,12 @@
     "percentOff": "{percent}% de descuento",
     "blackFriday": {
       "title": "Oferta del Black Friday",
-      "description": "¡Obtén Premium a mitad de precio\\!",
+      "description": "¡Obtén Premium a mitad de precio!",
       "cta": "Obtener Premium"
     },
     "valentines": {
       "title": "Especial de San Valentín",
-      "description": "¡El amor está en el aire\\! Obtén un 30% de descuento en Premium",
+      "description": "¡El amor está en el aire! Obtén un 30% de descuento en Premium",
       "cta": "Obtener Premium"
     }
   },

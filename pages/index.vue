@@ -94,7 +94,8 @@
               description: t('toasts.rateLimitDescription'),
               action: {
                 label: t('toasts.verifyNotBot'),
-                onClick: () => window.open(config.public.apiUrl + '/status', '_blank')
+                onClick: () =>
+                  window.open(config.public.apiUrl + '/status', '_blank', 'noopener,noreferrer')
               }
             })
             break

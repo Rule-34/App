@@ -36,16 +36,18 @@ interface SelectedFilters {
   const localePath = useLocalePath()
   const { booruList } = useBooruList()
 
-  const hasTags = computed(() => props.selectedTags.length > 0)
-
   const relatedBoorus = computed(() =>
     booruList.value.filter((b) => b.domain !== props.selectedBooru.domain).slice(0, 4)
   )
 
   const formattedTags = computed(() => {
-    if (!hasTags.value) return [t('seoFooter.defaultTag')]
-    return props.selectedTags.filter((tag) => !tag.name.startsWith('-')).map((tag) => normalizeStringForTitle(tag.name))
+    const included = props.selectedTags
+      .filter((tag) => !tag.name.startsWith('-'))
+      .map((tag) => normalizeStringForTitle(tag.name))
+    return included.length > 0 ? included : [t('seoFooter.defaultTag')]
   })
+
+  const hasTags = computed(() => formattedTags.value[0] !== t('seoFooter.defaultTag'))
 
   const formattedTagsString = computed(() => formattedTags.value.join(', '))
 
@@ -53,7 +55,11 @@ interface SelectedFilters {
 
   const formattedRelatedTags = computed(() => RELATED_TAGS.map((tag) => normalizeStringForTitle(tag)))
 
-  const ratingLabel = computed(() => props.selectedFilters.rating || 'explicit')
+  const ratingLabel = computed(() => {
+    const raw = props.selectedFilters.rating || 'explicit'
+    const key = `filters.rating${raw.charAt(0).toUpperCase() + raw.slice(1)}`
+    return t(key)
+  })
 
   const formattedCount = computed(() => (props.postsCount > 0 ? `${props.postsCount}+ ` : ''))
 

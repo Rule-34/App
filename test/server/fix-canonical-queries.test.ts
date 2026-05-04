@@ -19,31 +19,33 @@ describe('SEO canonical URLs', async () => {
   it('includes tags in canonical when present', async () => {
     const html = await $fetch('/posts/e621.net?tags=solo')
 
-    expect(getCanonical(html)).toBe('https://r34.app/posts/e621.net?tags=solo')
+    expect(getCanonical(html)).toBe(`${project.urls.production.origin}/posts/e621.net?tags=solo`)
   })
 
   it('encodes pipe characters in tags', async () => {
     const html = await $fetch('/posts/e621.net?tags=bored%7Ccum%7C-white_fur')
 
-    expect(getCanonical(html)).toBe('https://r34.app/posts/e621.net?tags=bored%7Ccum%7C-white_fur')
+    expect(getCanonical(html)).toBe(
+      `${project.urls.production.origin}/posts/e621.net?tags=bored%7Ccum%7C-white_fur`
+    )
   })
 
   it('strips non-canonical params (page) while keeping tags', async () => {
     const html = await $fetch('/posts/e621.net?page=4&tags=1girl')
 
-    expect(getCanonical(html)).toBe('https://r34.app/posts/e621.net?tags=1girl')
+    expect(getCanonical(html)).toBe(`${project.urls.production.origin}/posts/e621.net?tags=1girl`)
   })
 
   it('strips all params when tags is absent', async () => {
     const html = await $fetch('/posts/e621.net?page=4')
 
-    expect(getCanonical(html)).toBe('https://r34.app/posts/e621.net')
+    expect(getCanonical(html)).toBe(`${project.urls.production.origin}/posts/e621.net`)
   })
 
   it('does not append tags to non-posts pages', async () => {
     const html = await $fetch('/?tags=solo')
 
-    expect(getCanonical(html)).toBe('https://r34.app/')
+    expect(getCanonical(html)).toBe(`${project.urls.production.origin}/`)
   })
 
   it('includes alternate hreflang links for all locales', async () => {

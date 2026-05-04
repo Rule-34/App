@@ -5,6 +5,9 @@ import { locales, defaultLocale, prefixedLocaleCodes } from './config/i18n'
 const cacheHeaders = { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0' }
 
 const pageRouteRules = {
+  // Not prerendered because it needs to redirect old URLs
+  '/': { headers: cacheHeaders },
+
   // @see https://github.com/Baroshem/nuxt-security/issues/364
   '/posts/**': { security: { xssValidator: false }, headers: cacheHeaders },
 
@@ -33,7 +36,10 @@ const pageRouteRules = {
 const mirroredRouteRules = (rules) =>
   Object.fromEntries(
     prefixedLocaleCodes.flatMap((locale) =>
-      Object.entries(rules).map(([path, rule]) => [`/${locale}${path}`, rule])
+      Object.entries(rules).map(([path, rule]) => [
+        path === '/' ? `/${locale}` : `/${locale}${path}`,
+        rule
+      ])
     )
   )
 
@@ -64,7 +70,9 @@ export default defineNuxtConfig({
         { rel: 'icon', href: '/icon.svg', sizes: 'any', type: 'image/svg+xml' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon-180x180.png' },
 
-        { rel: 'preconnect', href: process.env.NUXT_PUBLIC_API_URL }
+        ...(process.env.NUXT_PUBLIC_API_URL
+          ? [{ rel: 'preconnect', href: process.env.NUXT_PUBLIC_API_URL }]
+          : [])
       ],
       meta: [
         { name: 'rating', content: 'adult' },
@@ -85,11 +93,6 @@ export default defineNuxtConfig({
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
    */
   routeRules: {
-    '/': {
-      // Not prerendered because it needs to redirect old URLs
-      headers: cacheHeaders
-    },
-
     // Redirect public disabled Boorus to / to not lose SEO
     // @see useBooruList.ts
     // '/posts/gelbooru.com': {

@@ -48,9 +48,8 @@
       return
     }
 
-    const backupState: IBackupState = JSON.parse(await file.text())
-
     try {
+      const backupState: IBackupState = JSON.parse(await file.text())
       await tryToRestoreV2OrV3Backup(backupState)
     } catch (error) {
       const message =
