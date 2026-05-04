@@ -8,7 +8,8 @@
   import type { Ref } from 'vue'
   import { toast } from 'vue-sonner'
   import { fallbackBooruDomain, generatePostsRoute, getSingleQueryValue } from '~/assets/js/RouterHelper'
-  import { tagArrayToTitle } from '~/assets/js/SeoHelper'
+  import { stripLocaleFromPath } from '~/composables/locale'
+  import { useTagTitle } from '~/composables/useTagTitle'
   import type { Domain } from '~/assets/js/domain'
   import type { IPost, IPostPage } from '~/assets/js/post.dto'
   import Tag from '~/assets/js/tag.dto'
@@ -17,6 +18,9 @@
   const router = useRouter()
   const route = useRoute()
   const config = useRuntimeConfig()
+  const localePath = useLocalePath()
+  const { t } = useI18n()
+  const buildTagTitle = useTagTitle()
 
   const { postsPerPage } = useUserSettings()
   const { isPremium } = useUserData()
@@ -91,7 +95,7 @@
     const booru = booruList.value.find((booru) => booru.domain === domain)
 
     if (!booru) {
-      toast.error(`Booru "${domain}" not found`)
+      toast.error(t('toasts.booruNotFound', { domain }))
       throw new Error(`Booru "${domain}" not found`)
     }
 
@@ -131,37 +135,37 @@
     }
   })
 
-  const filterConfig = {
+  const filterConfig = computed(() => ({
     sort: {
       type: 'select' as const,
-      label: 'Sort',
+      label: t('filters.sort'),
       icon: Bars3BottomRightIcon,
       options: [
-        { label: 'Sort', value: undefined },
-        { label: 'Score', value: 'score' },
-        { label: 'Created', value: 'id' },
-        { label: 'Random', value: 'random' }
+        { label: t('filters.sort'), value: undefined },
+        { label: t('filters.sortByScore'), value: 'score' },
+        { label: t('filters.sortByCreated'), value: 'id' },
+        { label: t('filters.sortByRandom'), value: 'random' }
       ]
     },
     rating: {
       type: 'select' as const,
-      label: 'Rating',
+      label: t('filters.rating'),
       icon: EyeIcon,
       options: [
-        { label: 'Rating', value: undefined },
-        { label: 'Safe', value: 'safe' },
-        { label: 'General', value: 'general' },
-        { label: 'Sensitive', value: 'sensitive' },
-        { label: 'Questionable', value: 'questionable' },
-        { label: 'Explicit', value: 'explicit' }
+        { label: t('filters.rating'), value: undefined },
+        { label: t('filters.ratingSafe'), value: 'safe' },
+        { label: t('filters.ratingGeneral'), value: 'general' },
+        { label: t('filters.ratingSensitive'), value: 'sensitive' },
+        { label: t('filters.ratingQuestionable'), value: 'questionable' },
+        { label: t('filters.ratingExplicit'), value: 'explicit' }
       ]
     },
     score: {
       type: 'select' as const,
-      label: 'Score',
+      label: t('filters.score'),
       icon: StarIcon,
       options: [
-        { label: 'Score', value: undefined },
+        { label: t('filters.score'), value: undefined },
         { label: '>= 0', value: '>=0' },
 
         { label: '>= 5', value: '>=5' },
@@ -180,13 +184,13 @@
         { label: '>= 1000', value: '>=1000' }
       ]
     }
-  }
+  }))
 
   /**
    * Misc
    */
   const unregisterRouterAfterEach = router.afterEach((to, from) => {
-    addUrlToPageHistory(to.fullPath)
+    addUrlToPageHistory(stripLocaleFromPath(to.fullPath))
   })
 
   onBeforeUnmount(() => {
@@ -237,7 +241,7 @@
 
     const postsRoute = generatePostsRoute(undefined, domain, page, tags, filters)
 
-    await navigateTo({ ...postsRoute }, { replace })
+    await navigateTo({ path: localePath(postsRoute.path), query: postsRoute.query }, { replace })
   }
 
   /**
@@ -270,22 +274,22 @@
     if (response instanceof FetchError) {
       switch (response.status) {
         case 404:
-          toast.error('No tags found for query "' + tag + '"')
+          toast.error(t('toasts.noTagsFound', { tag }))
           break
 
         case 429:
           // TODO: Cant always check if 429 is the status code, always show?
-          toast.error(response.statusText, {
-            description: 'You sent too many requests in a short period of time',
+          toast.error(t('errors.tooManyRequests'), {
+            description: t('toasts.rateLimitDescription'),
             action: {
-              label: 'Verify I am not a Bot',
+              label: t('toasts.verifyNotBot'),
               onClick: () => window.open(config.public.apiUrl + '/status', '_blank')
             }
           })
           break
 
         default:
-          toast.error(`Failed to load tags: "${response.message}"`)
+          toast.error(t('toasts.failedToLoadTags', { message: response.message }))
           break
       }
 
@@ -345,17 +349,15 @@
    * Opens the tag in a new tab
    */
   async function onPostOpenTagInNewTab(tag: string) {
-    const tagUrl = generatePostsRoute(
+    const tagRoute = generatePostsRoute(
       undefined,
       selectedBooru.value.domain,
       undefined,
       [new Tag({ name: tag }).toJSON()],
       undefined
     )
-
-    const resolvedTagUrl = router.resolve(tagUrl).href
-
-    window.open(resolvedTagUrl, '_blank')
+    const path = localePath(tagRoute.path)
+    window.open(router.resolve({ path, query: tagRoute.query }).href, '_blank')
   }
 
   async function onLoadNextPostPage() {
@@ -374,7 +376,7 @@
   })
 
   async function onPageIndicatorClick() {
-    const pagePrompt = prompt('To which page do you want to go?')
+    const pagePrompt = prompt(t('common.promptPageNumber'))
 
     if (pagePrompt == null) {
       return
@@ -383,7 +385,7 @@
     const page = parseInt(pagePrompt, 10)
 
     if (isNaN(page)) {
-      toast.error('Invalid page number')
+      toast.error(t('toasts.invalidPageNumber'))
       return
     }
 
@@ -412,7 +414,7 @@
       // selectedTags.value.some((tag) => selectedBlockList.value.includes(tag.name)) &&
       selectedBlockList.value.some((blocklistTag) => selectedTags.value.map((tag) => tag.name).includes(blocklistTag))
     ) {
-      throw new Error('One of your selected tags is in the tag block list')
+      throw new Error(t('errors.tagInBlockList'))
     }
 
     if (options.pageParam) {
@@ -421,11 +423,13 @@
       })
     }
 
-    const apiUrl = config.public.apiUrl + '/booru/' + selectedBooru.value.type.type + '/posts'
+    const apiUrl = `/booru/${selectedBooru.value.type.type}/posts`
 
     const tags = selectedTags.value.map((tag) => tag.name).join('|')
 
     return $fetch<IPostPage>(apiUrl, {
+      baseURL: config.public.apiUrl,
+
       params: {
         baseEndpoint: selectedBooru.value.domain,
 
@@ -676,111 +680,67 @@
   /**
    * SEO
    */
-  const completeTitle = computed(() => {
-    let title = ''
-
-    // Page
-    if (selectedPage.value !== selectedBooru.value.type.initialPageID) {
-      title += `Page ${selectedPage.value} of `
-    }
-
-    title += 'Posts'
-
-    // Tags
-    if (selectedTags.value.length > 0) {
-      title += ` tagged ${tagArrayToTitle(selectedTags.value)} hentai videos, GIFs, and images`
-    }
-
-    // Filters
-    if (selectedFilters.value.rating) {
-      title += `, rated ${selectedFilters.value.rating}`
-    }
-
-    if (selectedFilters.value.sort) {
-      title += `, sorted by ${selectedFilters.value.sort}`
-    }
-
-    if (selectedFilters.value.score) {
-      title += `, score of ${selectedFilters.value.score}`
-    }
-
-    // Domain
-    title += `, from ${selectedBooru.value.domain}`
-
-    title = title.trim()
-
-    return title
-  })
-
   const shortTitle = computed(() => {
-    let _title = completeTitle.value
+    const hasTags = selectedTags.value.length > 0
+    const hasPaging = selectedPage.value !== selectedBooru.value.type.initialPageID
 
-    _title = _title.replace(/Posts tagged/, '')
-    _title = _title.replace(/with /, '')
-    _title = _title.replace(/and ?without /, ' w/o ')
-    _title = _title.replace(/with a score of/, 'score')
+    let title = hasPaging ? t('posts.seo.pageOf', { page: selectedPage.value }) : ''
 
-    if (selectedTags.value.length > 0) {
-      _title = _title.replace(/, from .+$/, '')
+    if (hasTags) {
+      const tagTitle = buildTagTitle(selectedTags.value)
+      title += t('posts.seo.taggedHentai', { tags: tagTitle })
+    } else {
+      title += t('posts.seo.posts')
+
+      const filterParts: string[] = []
+      if (selectedFilters.value.rating) filterParts.push(t('posts.seo.rated', { rating: selectedFilters.value.rating }))
+      if (selectedFilters.value.sort) filterParts.push(t('posts.seo.sortedBy', { sort: selectedFilters.value.sort }))
+      if (selectedFilters.value.score) filterParts.push(t('posts.seo.scoreOf', { score: selectedFilters.value.score }))
+      if (filterParts.length) title += ', ' + filterParts.join(', ')
+
+      title += t('posts.seo.fromDomain', { domain: selectedBooru.value.domain })
     }
 
-    _title = _title.trim()
-    // Capitalize first letter - https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
-    _title = _title.charAt(0).toUpperCase() + _title.slice(1)
-
-    return _title
+    return title.trim()
   })
 
   const titleForBody = computed(() => {
-    let _title = completeTitle.value
+    const hasTags = selectedTags.value.length > 0
 
-    // TODO: Show page number in body title
-    _title = _title.replace(/page \d+ of /i, '')
-
-    _title = _title.replace(/posts/i, '')
-
-    _title = _title.replace(/tagged with/i, '')
-
-    _title = _title.replace(/hentai videos, GIFs, and images/i, 'rule 34 hentai')
-
-    _title = _title.replace(/, from .+$/, '')
-
-    // Edge case: ", sorted by" || ", rated" || ", with a score of"
-    if (_title.startsWith(', ')) {
-      _title = _title.slice(2)
+    if (hasTags) {
+      const tagTitle = buildTagTitle(selectedTags.value)
+      const title = t('posts.seo.tagsRule34', { tags: tagTitle })
+      const filterParts: string[] = []
+      if (selectedFilters.value.rating) filterParts.push(t('posts.seo.rated', { rating: selectedFilters.value.rating }))
+      if (selectedFilters.value.sort) filterParts.push(t('posts.seo.sortedBy', { sort: selectedFilters.value.sort }))
+      if (selectedFilters.value.score) filterParts.push(t('posts.seo.scoreOf', { score: selectedFilters.value.score }))
+      const full = filterParts.length ? `${title}, ${filterParts.join(', ')}` : title
+      return full.charAt(0).toUpperCase() + full.slice(1)
     }
 
-    _title = _title.trim()
-    // Capitalize first letter - https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
-    _title = _title.charAt(0).toUpperCase() + _title.slice(1)
+    const filterParts: string[] = []
+    if (selectedFilters.value.rating) filterParts.push(t('posts.seo.rated', { rating: selectedFilters.value.rating }))
+    if (selectedFilters.value.sort) filterParts.push(t('posts.seo.sortedBy', { sort: selectedFilters.value.sort }))
+    if (selectedFilters.value.score) filterParts.push(t('posts.seo.scoreOf', { score: selectedFilters.value.score }))
+    if (!filterParts.length) return ''
 
-    return _title
+    const joined = filterParts.join(', ')
+    return joined.charAt(0).toUpperCase() + joined.slice(1)
   })
 
   const description = computed(() => {
-    const tagsTitle = tagArrayToTitle(selectedTags.value, false)
+    const tagsTitle = buildTagTitle(selectedTags.value)
 
-    let description = `Stream and download ${tagsTitle ?? 'various'} Hentai porn videos, GIFs and images`
+    let desc = t('posts.seo.descriptionBase', { tags: tagsTitle ?? t('posts.seo.descriptionVarious') })
 
-    // Filters
-    if (selectedFilters.value.rating) {
-      description += `, rated ${selectedFilters.value.rating}`
-    }
+    if (selectedFilters.value.rating) desc += `, ${t('posts.seo.rated', { rating: selectedFilters.value.rating })}`
+    if (selectedFilters.value.sort) desc += `, ${t('posts.seo.sortedBy', { sort: selectedFilters.value.sort })}`
+    if (selectedFilters.value.score) desc += t('posts.seo.descriptionScoreOf', { score: selectedFilters.value.score })
 
-    if (selectedFilters.value.sort) {
-      description += `, sorted by ${selectedFilters.value.sort}`
-    }
+    desc += t('posts.seo.fromDomain', { domain: selectedBooru.value.domain })
+    desc += t('posts.seo.descriptionEnding', { name: project.shortName })
 
-    if (selectedFilters.value.score) {
-      description += `, with a score of ${selectedFilters.value.score}`
-    }
-
-    description += `, from ${selectedBooru.value.domain}`
-
-    // TODO: Improve ending
-    description += `. Free anime hentai here on ${project.shortName}`
-
-    return description
+    return desc
   })
 
   useSeoMeta({
@@ -836,11 +796,11 @@
     defineBreadcrumb({
       itemListElement: [
         {
-          name: 'Home',
+          name: t('nav.home'),
           item: '/'
         },
         {
-          name: `Posts from ${selectedBooru.value.domain}`,
+          name: t('seo.postsFrom', { domain: selectedBooru.value.domain }),
           item: route.path
         }
       ]
@@ -905,6 +865,15 @@
         return false
       }
 
+      const { isPremium } = useUserData()
+
+      if (!isPremium.value && booru.isPremium) {
+        const { t } = useI18n()
+        return {
+          status: 401,
+          statusText: t('errors.unauthorized')
+        }
+      }
       const page = route.query.page
 
       // Check if `page` query is not an array, not null, and is a number
@@ -930,7 +899,7 @@
   <ClientOnly>
     <Teleport to="#navbar-actions">
       <button
-        aria-label="Search posts"
+        :aria-label="$t('common.searchPosts')"
         class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
         type="button"
         @click="toggleSearchMenu()"
@@ -982,7 +951,7 @@
         as="h2"
         class="flex-1"
       >
-        <template #title>Posts</template>
+        <template #title>{{ $t('posts.title') }}</template>
         <template
           v-if="titleForBody"
           #text
@@ -995,9 +964,8 @@
         </template>
       </PageHeader>
 
-      <!-- TODO: strip page -->
       <ShareButton
-        :title="completeTitle"
+        :title="shortTitle"
         class="my-auto p-3"
       />
     </div>
@@ -1014,7 +982,7 @@
             class="h-12 w-12 animate-spin"
           />
 
-          <h3>Loading posts&hellip;</h3>
+          <h3>{{ t('posts.loadingPosts') }}</h3>
         </div>
       </template>
 
@@ -1035,9 +1003,9 @@
             class="mx-auto mb-1 h-12 w-12"
           />
 
-          <h3 class="text-lg leading-10 font-semibold">No results</h3>
+          <h3 class="text-lg leading-10 font-semibold">{{ t('posts.noResults') }}</h3>
 
-          <span class="w-full overflow-x-auto text-pretty">Try changing the tags or filters</span>
+          <span class="w-full overflow-x-auto text-pretty">{{ t('posts.tryChangingTagsOrFilters') }}</span>
         </div>
       </template>
 
@@ -1066,6 +1034,7 @@
               width: '100%',
               transform: `translateY(${virtualRows[0]?.start - rowVirtualizer.options.scrollMargin}px)`
             }"
+            data-testid="posts-list"
             class="space-y-4"
           >
             <li
@@ -1073,10 +1042,16 @@
               :key="virtualRow.key"
               :ref="measureElement"
               :data-index="virtualRow.index"
+              :data-testid="
+                virtualRow.index <= allRows.length - 1
+                  ? `${allRows[virtualRow.index].domain}-${allRows[virtualRow.index].id}`
+                  : undefined
+              "
             >
               <!-- Next Pagination -->
               <div
                 v-if="virtualRow.index > allRows.length - 1"
+                data-testid="load-next-page"
                 class="text-base-content flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
               >
                 <!-- Error loading next page -->
@@ -1093,9 +1068,9 @@
                   v-else
                   class="block rounded-md px-1.5 py-1"
                 >
-                  <template v-if="isFetching"> Loading more... </template>
+                  <template v-if="isFetching"> {{ t('posts.loadingMore') }} </template>
 
-                  <template v-else-if="hasNextPage"> Reach here to load more </template>
+                  <template v-else-if="hasNextPage"> {{ t('posts.reachHereToLoadMore') }} </template>
                 </span>
               </div>
 
@@ -1109,7 +1084,7 @@
                   type="button"
                   @click="onPageIndicatorClick"
                 >
-                  &dharl; Page {{ allRows[virtualRow.index].current_page }} &dharr;
+                  &dharl; {{ $t('common.pageNumber', { page: allRows[virtualRow.index].current_page }) }} &dharr;
                 </button>
 
                 <!-- Post -->
@@ -1138,7 +1113,7 @@
           v-if="!hasNextPage && !isFetching && allRows.length"
           class="text-base-content mt-4 flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
         >
-          <span class="block rounded-md px-1.5 py-1"> Nothing more to load </span>
+          <span class="block rounded-md px-1.5 py-1"> {{ t('posts.nothingMoreToLoad') }} </span>
         </div>
       </div>
     </section>
