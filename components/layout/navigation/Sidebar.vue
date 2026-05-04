@@ -1,9 +1,9 @@
 <script setup>
-  import { ArrowRightOnRectangleIcon, BookmarkIcon, SparklesIcon } from '@heroicons/vue/24/outline'
-  import { sidebarNavigation } from '~/assets/js/sidebarLinks'
-  import { project } from '@/config/project'
+import { ArrowRightOnRectangleIcon, BookmarkIcon, SparklesIcon } from '@heroicons/vue/24/outline'
+import { sidebarNavigation } from '~/assets/js/sidebarLinks'
+import { project } from '@/config/project'
 
-  const localePath = useLocalePath()
+const localePath = useLocalePath()
   const { isPremium } = useUserData()
   const { seasonalEmoji } = useSeasonalIcon()
 </script>
@@ -44,7 +44,8 @@
         class="-mx-2"
       >
         <NuxtLink
-          :href="localePath(item.href)"
+          :href="item.isExternal ? item.href : localePath(item.href)"
+          :rel="item.isExternal ? 'noopener noreferrer' : undefined"
           :target="item.isExternal ? '_blank' : undefined"
           class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
           exactActiveClass="bg-base-0/20 text-base-content-highlight"

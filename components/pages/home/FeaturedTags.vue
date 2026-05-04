@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-  import { isExternalHref } from '~/composables/locale'
+import { isExternalHref } from '~/composables/locale'
 
-  const props = defineProps<{
+const props = defineProps<{
     domain: string
 
     tags: {
@@ -83,9 +83,9 @@
           <!-- -->
 
           <NuxtLink
-            :href="localePath(tag.path)"
-            :rel="isExternalHref(tag.path) ? 'noopener noreferrer nofollow' : ''"
-            :target="isExternalHref(tag.path) ? '_blank' : ''"
+            :href="isExternalHref(tag.path) ? tag.path : localePath(tag.path)"
+            :rel="isExternalHref(tag.path) ? 'noopener noreferrer nofollow' : undefined"
+            :target="isExternalHref(tag.path) ? '_blank' : undefined"
             class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util block rounded-md"
           >
             <figure>

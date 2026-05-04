@@ -32,6 +32,7 @@
     "openPostSourceOptions": "Открыть параметры источника поста",
     "downloadPost": "Скачать пост",
     "savePost": "Сохранить пост",
+    "unsavePost": "Удалить из сохранённых",
     "chatWithAi": "Чат с ИИ",
     "chatWithCharacters": "Чат с персонажами",
     "aiVideo": "ИИ-видео",

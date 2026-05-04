@@ -32,6 +32,7 @@
     "openPostSourceOptions": "投稿ソースオプションを開く",
     "downloadPost": "投稿をダウンロード",
     "savePost": "投稿を保存",
+    "unsavePost": "保存を解除",
     "chatWithAi": "AIとチャット",
     "chatWithCharacters": "キャラクターとチャット",
     "aiVideo": "AI動画",

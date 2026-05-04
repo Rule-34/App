@@ -32,6 +32,7 @@
     "openPostSourceOptions": "Abrir opciones de fuente de la publicación",
     "downloadPost": "Descargar publicación",
     "savePost": "Guardar publicación",
+    "unsavePost": "Quitar de guardados",
     "chatWithAi": "Chatear con IA",
     "chatWithCharacters": "Chatear con personajes",
     "aiVideo": "Video con IA",
