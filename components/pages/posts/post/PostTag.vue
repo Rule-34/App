@@ -62,7 +62,7 @@ const props = defineProps<{
     }
 
     if (isTagBlocked(tag)) {
-      customBlockList.value = customBlockList.value.filter((t) => t !== tag.name)
+      customBlockList.value = customBlockList.value.filter((blockedTag) => blockedTag !== tag.name)
     } else {
       customBlockList.value = [...customBlockList.value, tag.name]
 

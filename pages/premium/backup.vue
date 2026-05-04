@@ -61,7 +61,7 @@
       return
     }
 
-    window.location.href = localePath('/premium/dashboard?restoreSuccess=true')
+    window.location.href = localePath({ path: '/premium/dashboard', query: { restoreSuccess: 'true' } })
   }
 
   useSeoMeta({

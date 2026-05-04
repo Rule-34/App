@@ -20,6 +20,12 @@ describe('/premium/backup', async () => {
       pageErrors.push(error.message)
     })
 
+    // Verify page loaded correctly
+    expect(await page.textContent('h1')).toBe('Backup & Restore')
+
+    // Spy on Date.prototype.toLocaleString to verify createBackupState() ran.
+    // createBackupState() calls toLocaleString to generate the filename timestamp,
+    // so if it was called, the backup logic executed successfully.
     await page.evaluate(() => {
       const originalToLocaleString = Date.prototype.toLocaleString
       ;(window as any).__backupDateFormattingCalls = 0
@@ -32,7 +38,10 @@ describe('/premium/backup', async () => {
 
     await page.locator('button', { hasText: 'Backup' }).click()
 
-    // Assert createBackup logic ran and page stayed stable
+    // Wait for downloadBlob to execute (it's synchronous after click, but
+    // give the browser a tick to process the click event chain)
+    await page.waitForTimeout(1000)
+
     const backupDateFormattingCalls = await page.evaluate(() => (window as any).__backupDateFormattingCalls)
 
     expect(backupDateFormattingCalls).toBeGreaterThan(0)

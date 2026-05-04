@@ -87,7 +87,7 @@
     "failedToRestoreBackup": "Failed to restore backup: {error}",
     "invalidBooruType": "Invalid Booru type",
     "booruAlreadyExists": "Booru already exists",
-    "cantFindPlatform": "Cant find the platform where you purchased your subscription",
+    "cantFindPlatform": "Can't find the platform where you purchased your subscription",
     "autocompleteNotImplemented": "Autocomplete not implemented",
     "notImplemented": "Not implemented",
     "rateLimitDescription": "You sent too many requests in a short period of time",
@@ -98,7 +98,7 @@
     "emailSentDescription": "If your email exists, you will receive an email with your current license. If you do not receive an email, check your spam folder",
     "postSourceDescription": "Go to the source (artist) if it exists, or find it with reverse image search",
     "domainSwitcherDescription": "Switch between Booru websites: each one has unique content, find the one you like the most!",
-    "backupRestored": "Backup restored successfully\\!",
+    "backupRestored": "Backup restored successfully!",
     "authFailed": "Failed to authenticate. Please sign in again."
   },
   "pages": {
@@ -112,7 +112,7 @@
       "postsPerPageName": "Posts per page",
       "postsPerPageDescription": "How many posts to load per page",
       "tagBlockListName": "Tag block list",
-      "tagBlockListDescription": "Automatically block posts that contain any tags that you dont want to see",
+      "tagBlockListDescription": "Automatically block posts that contain any tags that you don't want to see",
       "tagsBlockedByDefault": "Tags blocked by default:",
       "oneTagPerLine": "One tag per line:",
       "exportTxt": "Export .txt",
@@ -480,12 +480,12 @@
     "percentOff": "{percent}% OFF",
     "blackFriday": {
       "title": "Black Friday Sale",
-      "description": "Get Premium at half price\\!",
+      "description": "Get Premium at half price!",
       "cta": "Get Premium"
     },
     "valentines": {
       "title": "Valentine's Day Special",
-      "description": "Love is in the air\\! Get 30% off Premium",
+      "description": "Love is in the air! Get 30% off Premium",
       "cta": "Get Premium"
     }
   },
@@ -495,7 +495,7 @@
     "feedbackWebsiteText": "Now you can vote, discuss and share ideas 💡 to improve {name}",
     "blockedTitle": "Blocked in your country? 🇷🇺",
     "blockedText": "Access {name} without restrictions, with the alternative site",
-    "socialTitle": "Get the best Hentai on social media\\! 📱",
+    "socialTitle": "Get the best Hentai on social media! 📱",
     "socialText": "We're on Bluesky, Mastodon and Telegram"
   },
   "settings": { "blockListDefault": "Default", "blockListCustom": "Custom", "blockListNone": "None" },

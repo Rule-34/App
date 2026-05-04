@@ -33,6 +33,7 @@ interface SelectedFilters {
   })
 
   const { t } = useI18n()
+  const localePath = useLocalePath()
   const { booruList } = useBooruList()
 
   const hasTags = computed(() => props.selectedTags.length > 0)
@@ -108,7 +109,7 @@ interface SelectedFilters {
               v-for="(tag, index) in RELATED_TAGS"
               :key="tag"
               :title="$t('seoFooter.relatedTagTitle', { tag: formattedRelatedTags[index] })"
-              :to="`/posts/${selectedBooru.domain}?tags=${encodeURIComponent(tag)}`"
+              :to="localePath(`/posts/${selectedBooru.domain}?tags=${encodeURIComponent(tag)}`)"
               class="text-primary text-sm hover:underline"
             >
               {{ formattedRelatedTags[index] }}
@@ -128,7 +129,7 @@ interface SelectedFilters {
               >
                 <NuxtLink
                   :title="$t('seoFooter.sourceLinkTitle', { tags: formattedTagsString, domain: booru.domain })"
-                  :to="`/posts/${booru.domain}`"
+                  :to="localePath(`/posts/${booru.domain}`)"
                 >
                   {{ booru.domain }}
                 </NuxtLink>

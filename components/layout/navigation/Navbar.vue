@@ -51,7 +51,7 @@ const route = useRoute()
         <!-- Right side: Menu button -->
         <div class="absolute inset-y-0 left-0 flex items-center pl-2">
           <button
-            :aria-label="$t('common.openMenu')"
+            :aria-label="isMenuActive ? $t('common.closeMenu') : $t('common.openMenu')"
             class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util text-base-content-highlight inline-flex items-center justify-center rounded-md p-2 focus-visible:ring-inset"
             type="button"
             @click="toggleMenu()"

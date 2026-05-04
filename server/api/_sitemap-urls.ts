@@ -17,7 +17,6 @@ export default defineSitemapEventHandler(async () => {
       loc: `/posts/rule34.xxx?tags=${keyword.label}`,
       changefreq: 'daily',
       priority: 0.8,
-      // _sitemap: 'pages',
       _i18nTransform: true
     })
   )

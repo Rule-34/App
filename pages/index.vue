@@ -60,54 +60,53 @@
   const searchTagResults: Ref<Tag[]> = shallowRef([])
 
   async function onSearchTag(tag: string) {
-    const response = await $fetch(`/booru/${selectedBooru.value.type.type}/tags`, {
-      baseURL: config.public.apiUrl,
+    try {
+      const response = await $fetch(`/booru/${selectedBooru.value.type.type}/tags`, {
+        baseURL: config.public.apiUrl,
 
-      params: {
-        baseEndpoint: selectedBooru.value.domain,
+        params: {
+          baseEndpoint: selectedBooru.value.domain,
 
-        tag,
-        order: 'count',
-        limit: 20,
+          tag,
+          order: 'count',
+          limit: 20,
 
-        // Booru options
-        httpScheme: selectedBooru.value.config?.options?.HTTPScheme ?? undefined
-      }
-    })
-      //
-      .catch(async (error) => {
-        const Sentry = await import('@sentry/nuxt')
-
-        Sentry.captureException(error)
-
-        return error
+          // Booru options
+          httpScheme: selectedBooru.value.config?.options?.HTTPScheme ?? undefined
+        }
       })
 
-    if (response instanceof FetchError) {
-      switch (response.status) {
-        case 404:
-          toast.error(t('toasts.noTagsFound', { tag }))
-          break
+      searchTagResults.value = response.data
+    } catch (error) {
+      const Sentry = await import('@sentry/nuxt')
+      Sentry.captureException(error)
 
-        case 429:
-          toast.error(t('errors.tooManyRequests'), {
-            description: t('toasts.rateLimitDescription'),
-            action: {
-              label: t('toasts.verifyNotBot'),
-              onClick: () => window.open(config.public.apiUrl + '/status', '_blank')
-            }
-          })
-          break
+      searchTagResults.value = []
 
-        default:
-          toast.error(t('toasts.failedToLoadTags', { message: response.message }))
-          break
+      if (error instanceof FetchError) {
+        switch (error.status) {
+          case 404:
+            toast.error(t('toasts.noTagsFound', { tag }))
+            break
+
+          case 429:
+            toast.error(t('errors.tooManyRequests'), {
+              description: t('toasts.rateLimitDescription'),
+              action: {
+                label: t('toasts.verifyNotBot'),
+                onClick: () => window.open(config.public.apiUrl + '/status', '_blank')
+              }
+            })
+            break
+
+          default:
+            toast.error(t('toasts.failedToLoadTags', { message: error.message }))
+            break
+        }
+      } else {
+        toast.error(t('toasts.failedToLoadTags', { message: (error as Error).message }))
       }
-
-      return
     }
-
-    searchTagResults.value = response.data
   }
 
   function onSearchSubmit(tag?: string | undefined) {

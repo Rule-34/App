@@ -157,8 +157,7 @@ export default defineNuxtConfig({
 
     public: {
       apiUrl: undefined,
-      sentryDsn: undefined,
-      testAuthBypass: undefined
+      sentryDsn: undefined
     }
   },
 
@@ -412,10 +411,14 @@ export default defineNuxtConfig({
 
   /** Test overrides — only applied when running vitest. */
   $test: {
+    sentry: {
+      enabled: false
+    },
+
     runtimeConfig: {
       public: {
         apiUrl: '', // routes $fetch(baseURL: '') to local Nitro server
-        testAuthBypass: true // skip auth middleware for premium page tests
+        testAuthBypass: true
       }
     },
 

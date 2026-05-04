@@ -237,7 +237,7 @@
         "domainLabel": "ドメイン",
         "domainDescription": "ドメインのみ。完全なURLは不要",
         "typeLabel": "タイプ",
-        "typeDescription": "通常、BooruウェブサイトのフッターCに記載されています",
+        "typeDescription": "通常、Booruウェブサイトのフッターに記載されています",
         "typeNote": "タイプがドメインと同じ場合は、そのオプションを選択してください",
         "deleteButton": "削除",
         "addButton": "追加",

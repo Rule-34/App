@@ -23,6 +23,10 @@ export function useTagTitle() {
       .map((tag) => normalizeStringForTitle(tag))
       .filter((tag): tag is string => tag != null)
 
+    if (!cleanedTags.length) {
+      return null
+    }
+
     const positive = cleanedTags.filter((tag) => !tag.startsWith('-'))
 
     const negative = cleanedTags

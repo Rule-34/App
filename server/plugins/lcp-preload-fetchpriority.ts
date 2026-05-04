@@ -17,9 +17,11 @@ export default defineNitroPlugin((nitroApp) => {
     if (typeof body !== 'string') return
 
     const headOpenIdx = body.indexOf('<head')
+    if (headOpenIdx === -1) return
 
     const headStartIdx = body.indexOf('>', headOpenIdx)
     const headEndIdx = body.indexOf('</head>')
+    if (headStartIdx === -1 || headEndIdx === -1 || headEndIdx <= headStartIdx) return
 
     const headHtml = body.slice(headStartIdx + 1, headEndIdx)
 

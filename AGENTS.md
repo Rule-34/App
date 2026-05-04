@@ -66,7 +66,6 @@ them as `<DomainSelector>` not `<Input/DomainSelector>`.
 
 ### Router
 
-- Query string parsing uses `qs` library (not standard URLSearchParams) — see `app/router.options.ts`.
 - Custom scroll behavior: skips scroll-to-top when only the `page` query param changes between same-route navigations.
 - Legacy redirect: `server/middleware/redirect-to-posts.get.ts` redirects `/?domain=x&page=…&tags=…` →
   `/posts/x?page=…&tags=…` (301).
@@ -99,8 +98,7 @@ Tailwind v4 uses CSS-based config (`assets/css/main.css`), NOT PostCSS. The `tai
   `nuxt.config.js` → `$test.nitro.plugins`.
 - In test mode, `$test.runtimeConfig.public.apiUrl` is set to `''` so `$fetch(baseURL: '')` routes to the local Nitro
   test server.
-- Sentry source map uploads are disabled in tests by clearing env vars in `vitest.config.ts`.
-- Tests run **serially** (no file parallelism).
+- Sentry is fully disabled in tests via `$test.sentry.enabled: false` in `nuxt.config.js`.
 - Debug mode: import `debugBrowserOptions` from `test/helper.ts` for headful playback with slowMo.
 
 ### Docker production build

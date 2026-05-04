@@ -4,6 +4,7 @@ import { useClipboard, useNow } from '@vueuse/core'
 
 const { activePromotion, shouldShow, dismiss } = useActivePromotion()
 const localePath = useLocalePath()
+const { t } = useI18n()
 
   // Use VueUse's reactive current time (updates every second)
   const now = useNow({ interval: 1000 })
@@ -53,7 +54,6 @@ const localePath = useLocalePath()
    */
   const { copy: copyMonthly, copied: copiedMonthly } = useClipboard()
   const { copy: copyYearly, copied: copiedYearly } = useClipboard()
-  const { t } = useI18n()
 </script>
 
 <template>

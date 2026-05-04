@@ -16,5 +16,8 @@ export default defineNitroPlugin((nitroApp) => {
     if (url.pathname.endsWith('/tags')) {
       return []
     }
+
+    // Any other /booru/* path returns 404 (h3 treats undefined return as 404).
+    // If a test hits this, add the missing endpoint above.
   }))
 })

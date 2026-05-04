@@ -76,7 +76,7 @@
     <!-- Media -->
     <NuxtLink
       v-else
-      :href="localePath(promo.link)"
+      :href="isExternalHref(promo.link) ? promo.link : localePath(promo.link)"
 :target="isExternalHref(promo.link) ? '_blank' : null"
 
       :rel="isExternalHref(promo.link) ? 'nofollow noopener' : undefined"

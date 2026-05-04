@@ -10,7 +10,9 @@ describe('SEO canonical URLs', async () => {
 
   /** Extract canonical href from SSR HTML. */
   function getCanonical(html: string): string | null {
-    const m = html.match(/rel="canonical"\s+href="([^"]+)"/)
+    const m = html.match(
+      /<link\b(?=[^>]*\brel=["']canonical["'])(?=[^>]*\bhref=["']([^"']+)["'])[^>]*>/i
+    )
     return m?.[1] ?? null
   }
 
