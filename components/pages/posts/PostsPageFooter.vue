@@ -3,6 +3,7 @@ import type { PropType } from 'vue'
 import type { Domain } from '~/assets/js/domain'
 import type { ITag } from '~/assets/js/tag.dto'
 import { normalizeStringForTitle } from '~/assets/js/SeoHelper'
+import { project } from '@/config/project'
 
 interface SelectedFilters {
     rating?: string
