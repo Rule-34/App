@@ -45,7 +45,7 @@ Single Nuxt app. Key directories:
 | `server/plugins/`    | Nitro plugins                                                                             |
 | `assets/js/`         | Shared JS utilities, DTOs, custom providers                                               |
 | `assets/lib/`        | Git submodule for shared resources                                                        |
-| `locales/`           | i18n JSON files (en, ru, es, ja)                                                          |
+| `i18n/locales/`      | i18n JSON files (en, ru, es, ja)                                                          |
 | `components/`        | Vue components — **auto-imported flat** (`pathPrefix: false`, no folder prefix)           |
 | `test/`              | Page tests, server tests, mocks                                                           |
 
