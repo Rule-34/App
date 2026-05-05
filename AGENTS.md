@@ -61,8 +61,21 @@ them as `<DomainSelector>` not `<Input/DomainSelector>`.
 - Locales are defined in `config/i18n.ts` (single source of truth).
 - Non-default locales (ru, es, ja) get URL prefixes. Route rules in `nuxt.config` are mirrored via the
   `mirroredRouteRules()` helper so prefixed paths get the same caching/SSR rules.
-- **Known bug**: `canonicalQueries` in the i18n module config is a no-op in v10. A workaround plugin at
-  `server/plugins/fix-canonical-queries.ts` patches the canonical `<link>` in SSR output.
+- **Known bug**: `canonicalQueries` in the i18n module config is a no-op in v10. A two-part workaround is required:
+  1. SSR: `server/plugins/fix-canonical-queries.ts` patches the canonical `<link>` in rendered HTML.
+  2. CSR: `pages/posts/[domain].vue` uses `useHead` to re-apply the canonical after i18n overwrites it on hydration.
+  See the removal checklist in `fix-canonical-queries.ts` for when upstream fixes this.
+
+### SEO & Head Management
+
+- **Static global tags** (favicon, rating, monetization, color-scheme) can live in `nuxt.config.js` `head.meta`.
+- **Dynamic global tags** that need the request host (description, keywords, OG image) belong in `app.vue` using
+  `useSeoMeta` inside an `if (import.meta.server)` guard — `nuxt.config.js` runs too early to know the host.
+- **OG image must be absolute**: Open Graph requires absolute URLs. Build it dynamically with
+  `useRequestURL().origin` on the server only (`app.vue`). i18n does not touch `og:image` during hydration.
+- **Canonical URLs must point to production** (`https://r34.app/…`) even when served from clone domains. This is
+  intentional for SEO — canonicals prevent duplicate content. Use `project.urls.production` for canonicals.
+- **Page-specific tags** (title, description) should use `useSeoMeta` in the page component.
 
 ### Router
 

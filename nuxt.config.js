@@ -80,11 +80,7 @@ export default defineNuxtConfig({
         { name: 'color-scheme', content: 'dark' },
         { name: 'theme-color', content: project.branding.colors.background },
 
-        { name: 'monetization', content: '$ilp.uphold.com/Hf3zAn3pQ7fD' },
-
-        { property: 'og:image', content: `${project.urls.production.origin}/social.jpg` },
-        { property: 'og:image:width', content: '1200' },
-        { property: 'og:image:height', content: '630' }
+        { name: 'monetization', content: '$ilp.uphold.com/Hf3zAn3pQ7fD' }
       ]
     }
   },
