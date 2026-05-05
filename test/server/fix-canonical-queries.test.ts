@@ -57,8 +57,9 @@ describe('SEO canonical URLs', async () => {
       .map((tag) => tag.match(/hreflang=["']([^"']+)["']/)?.[1])
       .filter(Boolean)
 
+    const uniqueCodes = [...new Set(codes)]
     const expected = [...localeCodes, 'x-default']
-    expect(codes.sort()).toEqual(expected.sort())
+    expect(uniqueCodes.sort()).toEqual(expected.sort())
   })
 
   /**

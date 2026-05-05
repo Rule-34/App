@@ -44,7 +44,7 @@ interface SelectedFilters {
     props.selectedTags
       .filter((tag) => !tag.name.startsWith('-'))
       .map((tag) => normalizeStringForTitle(tag.name))
-      .filter(Boolean)
+      .filter((s): s is string => s != null && s !== '')
   )
 
   const hasTags = computed(() => includedTags.value.length > 0)

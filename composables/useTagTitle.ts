@@ -4,6 +4,7 @@ import { normalizeStringForTitle } from '~/assets/js/SeoHelper'
 /**
  * Composable that builds a locale-aware tag-based title string.
  * Uses the `seoHelper.without` translation key for the negative connector.
+ * The translation key should NOT include a trailing space; the code adds it.
  *
  * Usage:
  *   const buildTagTitle = useTagTitle()
@@ -38,7 +39,7 @@ export function useTagTitle() {
     }
 
     if (negative.length) {
-      title += ' ' + t('seoHelper.without')
+      title += ' ' + t('seoHelper.without') + ' '
       title += negative.join(', ')
     }
 
