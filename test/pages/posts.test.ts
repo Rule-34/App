@@ -384,6 +384,43 @@ describe('/', async () => {
     })
   })
 
+  describe('SEO', async () => {
+    it('preserves tags in canonical link after client-side hydration', async () => {
+      // Arrange
+      const page = await createPage()
+      await mockBooruApi(page)
+
+      // Act — navigate to a tagged posts page
+      await page.goto(url('/posts/safebooru.org?tags=1girl'), { waitUntil: 'domcontentloaded' })
+      await page.waitForURL('**/posts/safebooru.org?tags=1girl')
+
+      // Assert — canonical in the DOM must include ?tags= (not stripped by i18n)
+      const canonicalHref = await page.locator('link[rel="canonical"]').getAttribute('href')
+      expect(canonicalHref).toContain('tags=1girl')
+    })
+
+    it('updates canonical link on client-side tag navigation', async () => {
+      // Arrange
+      const page = await createPage()
+      await mockBooruApi(page)
+
+      // Act — start on one tag
+      await page.goto(url('/posts/safebooru.org?tags=1girl'), { waitUntil: 'domcontentloaded' })
+      await page.waitForURL('**/posts/safebooru.org?tags=1girl')
+
+      // Navigate to a different tag (simulates user clicking a tag link)
+      await Promise.all([
+        page.goto(url('/posts/safebooru.org?tags=hair_bun')),
+        page.waitForURL('**/posts/safebooru.org?tags=hair_bun')
+      ])
+
+      // Assert — canonical must reflect the new tag
+      const canonicalHref = await page.locator('link[rel="canonical"]').getAttribute('href')
+      expect(canonicalHref).toContain('tags=hair_bun')
+      expect(canonicalHref).not.toContain('tags=1girl')
+    })
+  })
+
   describe('Search', async () => {
     it.todo('autocompletes tags')
 

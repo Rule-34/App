@@ -16,6 +16,12 @@ describe('SEO canonical URLs', async () => {
     return m?.[1] ?? null
   }
 
+  /** Extract og:image content from SSR HTML. */
+  function getOgImage(html: string): string | null {
+    const m = html.match(/<meta\b[^>]*\bproperty=["']og:image["'][^>]*\bcontent=["']([^"']+)["'][^>]*>/i)
+    return m?.[1] ?? null
+  }
+
   it('includes tags in canonical when present', async () => {
     const html = await $fetch('/posts/e621.net?tags=solo')
 
@@ -89,6 +95,31 @@ describe('SEO canonical URLs', async () => {
       })
 
       expect(getCanonical(html)).toBe(`${project.urls.production.origin}/`)
+    })
+  })
+
+  describe('OG image', () => {
+    it('has an absolute og:image on the home page', async () => {
+      const html = await $fetch('/')
+
+      const ogImage = getOgImage(html)
+      expect(ogImage).toBeTruthy()
+      expect(ogImage).toMatch(/^https?:\/\//)
+    })
+
+    it('has an absolute og:image on posts pages', async () => {
+      const html = await $fetch('/posts/e621.net?tags=solo')
+
+      const ogImage = getOgImage(html)
+      expect(ogImage).toBeTruthy()
+      expect(ogImage).toMatch(/^https?:\/\//)
+    })
+
+    it('has only one og:image tag', async () => {
+      const html = await $fetch('/')
+
+      const matches = html.match(/<meta\b[^>]*\bproperty=["']og:image["']/gi)
+      expect(matches?.length ?? 0).toBe(1)
     })
   })
 })
