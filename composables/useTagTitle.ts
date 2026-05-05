@@ -3,8 +3,7 @@ import { normalizeStringForTitle } from '~/assets/js/SeoHelper'
 
 /**
  * Composable that builds a locale-aware tag-based title string.
- * Automatically uses the current i18n locale for connectors
- * ("with", "and", "without") via `seoHelper.*` translation keys.
+ * Uses the `seoHelper.without` translation key for the negative connector.
  *
  * Usage:
  *   const buildTagTitle = useTagTitle()
@@ -19,8 +18,7 @@ export function useTagTitle() {
     }
 
     const cleanedTags: string[] = tags
-      .map((tag) => tag.name)
-      .map((tag) => normalizeStringForTitle(tag))
+      .map((tag) => normalizeStringForTitle(tag.name))
       .filter((tag): tag is string => tag != null)
 
     if (!cleanedTags.length) {
@@ -40,7 +38,7 @@ export function useTagTitle() {
     }
 
     if (negative.length) {
-      title += t('seoHelper.without')
+      title += ' ' + t('seoHelper.without')
       title += negative.join(', ')
     }
 

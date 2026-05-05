@@ -60,18 +60,21 @@ interface SelectedFilters {
   const formattedRelatedTags = computed(() => RELATED_TAGS.map((tag) => normalizeStringForTitle(tag)))
 
   const ratingLabel = computed(() => {
-    const raw = props.selectedFilters.rating || 'explicit'
+    const raw = (props.selectedFilters.rating || 'explicit').toLowerCase()
     const key = `filters.rating${raw.charAt(0).toUpperCase() + raw.slice(1)}`
-    return t(key)
+    const translated = t(key)
+    return translated === key ? t('filters.ratingExplicit') : translated
   })
 
   const formattedCount = computed(() => (props.postsCount > 0 ? `${props.postsCount}+ ` : ''))
 
   const sortLabel = computed(() => {
     if (!props.selectedFilters.sort) return t('seoFooter.mostPopularUploads')
-    const raw = props.selectedFilters.sort
+    const raw = props.selectedFilters.sort.toLowerCase()
     const key = `filters.sortBy${raw.charAt(0).toUpperCase() + raw.slice(1)}`
-    return t('seoFooter.sortingBy', { sort: t(key) })
+    const translatedSort = t(key)
+    if (translatedSort === key) return t('seoFooter.mostPopularUploads')
+    return t('seoFooter.sortingBy', { sort: translatedSort })
   })
 </script>
 

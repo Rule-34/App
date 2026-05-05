@@ -58,7 +58,7 @@ describe('SEO canonical URLs', async () => {
       .filter(Boolean)
 
     const expected = [...localeCodes, 'x-default']
-    expect(codes).toEqual(expect.arrayContaining(expected))
+    expect(codes.sort()).toEqual(expected.sort())
   })
 
   /**

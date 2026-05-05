@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-  import { toast } from 'vue-sonner'
-  import type { Ref } from 'vue'
-  import Tag from '~/assets/js/tag.dto'
-  import type { Domain } from '~/assets/js/domain'
-  import { ArrowRightIcon } from '@heroicons/vue/24/solid'
-  import { FetchError } from 'ofetch'
-  import { project } from '@/config/project'
+import { toast } from 'vue-sonner'
+import type { Ref } from 'vue'
+import Tag from '~/assets/js/tag.dto'
+import type { Domain } from '~/assets/js/domain'
+import { ArrowRightIcon } from '@heroicons/vue/24/solid'
+import { FetchError } from 'ofetch'
+import { project } from '@/config/project'
 
-  const config = useRuntimeConfig()
+const config = useRuntimeConfig()
   const { t } = useI18n()
   const localePath = useLocalePath()
 
@@ -64,7 +64,7 @@
       const response = await $fetch(`/booru/${selectedBooru.value.type.type}/tags`, {
         baseURL: config.public.apiUrl,
 
-        params: {
+        query: {
           baseEndpoint: selectedBooru.value.domain,
 
           tag,
@@ -94,8 +94,9 @@
               description: t('toasts.rateLimitDescription'),
               action: {
                 label: t('toasts.verifyNotBot'),
-                onClick: () =>
+                onClick: () => {
                   window.open(new URL('/status', config.public.apiUrl).toString(), '_blank', 'noopener,noreferrer')
+                }
               }
             })
             break
@@ -705,8 +706,8 @@
                 class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util flex items-center gap-2 rounded-md px-2"
               >
                 <img
-                  :src="`https://icons.duckduckgo.com/ip2/${featuredDomain.domain}.ico`"
                   :alt="$t('common.favicon')"
+                  :src="`https://icons.duckduckgo.com/ip2/${featuredDomain.domain}.ico`"
                   class="h-5 w-5 rounded-sm"
                   height="128"
                   width="128"
