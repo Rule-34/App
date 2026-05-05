@@ -678,6 +678,37 @@
   }
 
   /**
+   * Helper to translate filter values to localized labels
+   */
+  function getLocalizedFilterLabel(filterKey: string, filterValue: string): string {
+    if (filterKey === 'sort') {
+      const sortMapping = {
+        'score': t('filters.sortByScore'),
+        'id': t('filters.sortByCreated'),
+        'random': t('filters.sortByRandom')
+      }
+      return sortMapping[filterValue] || filterValue
+    }
+
+    if (filterKey === 'rating') {
+      const ratingMapping = {
+        'safe': t('filters.ratingSafe'),
+        'general': t('filters.ratingGeneral'),
+        'sensitive': t('filters.ratingSensitive'),
+        'questionable': t('filters.ratingQuestionable'),
+        'explicit': t('filters.ratingExplicit')
+      }
+      return ratingMapping[filterValue] || filterValue
+    }
+
+    if (filterKey === 'score') {
+      return filterValue
+    }
+
+    return filterValue
+  }
+
+  /**
    * SEO
    */
   const shortTitle = computed(() => {
@@ -693,9 +724,9 @@
       title += t('posts.seo.posts')
 
       const filterParts: string[] = []
-      if (selectedFilters.value.rating) filterParts.push(t('posts.seo.rated', { rating: selectedFilters.value.rating }))
-      if (selectedFilters.value.sort) filterParts.push(t('posts.seo.sortedBy', { sort: selectedFilters.value.sort }))
-      if (selectedFilters.value.score) filterParts.push(t('posts.seo.scoreOf', { score: selectedFilters.value.score }))
+      if (selectedFilters.value.rating) filterParts.push(t('posts.seo.rated', { rating: getLocalizedFilterLabel('rating', selectedFilters.value.rating) }))
+      if (selectedFilters.value.sort) filterParts.push(t('posts.seo.sortedBy', { sort: getLocalizedFilterLabel('sort', selectedFilters.value.sort) }))
+      if (selectedFilters.value.score) filterParts.push(t('posts.seo.scoreOf', { score: getLocalizedFilterLabel('score', selectedFilters.value.score) }))
       if (filterParts.length) title += ', ' + filterParts.join(', ')
 
       title += t('posts.seo.fromDomain', { domain: selectedBooru.value.domain })
@@ -711,17 +742,17 @@
       const tagTitle = buildTagTitle(selectedTags.value)
       const title = t('posts.seo.tagsRule34', { tags: tagTitle })
       const filterParts: string[] = []
-      if (selectedFilters.value.rating) filterParts.push(t('posts.seo.rated', { rating: selectedFilters.value.rating }))
-      if (selectedFilters.value.sort) filterParts.push(t('posts.seo.sortedBy', { sort: selectedFilters.value.sort }))
-      if (selectedFilters.value.score) filterParts.push(t('posts.seo.scoreOf', { score: selectedFilters.value.score }))
+      if (selectedFilters.value.rating) filterParts.push(t('posts.seo.rated', { rating: getLocalizedFilterLabel('rating', selectedFilters.value.rating) }))
+      if (selectedFilters.value.sort) filterParts.push(t('posts.seo.sortedBy', { sort: getLocalizedFilterLabel('sort', selectedFilters.value.sort) }))
+      if (selectedFilters.value.score) filterParts.push(t('posts.seo.scoreOf', { score: getLocalizedFilterLabel('score', selectedFilters.value.score) }))
       const full = filterParts.length ? `${title}, ${filterParts.join(', ')}` : title
       return full.charAt(0).toUpperCase() + full.slice(1)
     }
 
     const filterParts: string[] = []
-    if (selectedFilters.value.rating) filterParts.push(t('posts.seo.rated', { rating: selectedFilters.value.rating }))
-    if (selectedFilters.value.sort) filterParts.push(t('posts.seo.sortedBy', { sort: selectedFilters.value.sort }))
-    if (selectedFilters.value.score) filterParts.push(t('posts.seo.scoreOf', { score: selectedFilters.value.score }))
+    if (selectedFilters.value.rating) filterParts.push(t('posts.seo.rated', { rating: getLocalizedFilterLabel('rating', selectedFilters.value.rating) }))
+    if (selectedFilters.value.sort) filterParts.push(t('posts.seo.sortedBy', { sort: getLocalizedFilterLabel('sort', selectedFilters.value.sort) }))
+    if (selectedFilters.value.score) filterParts.push(t('posts.seo.scoreOf', { score: getLocalizedFilterLabel('score', selectedFilters.value.score) }))
     if (!filterParts.length) return ''
 
     const joined = filterParts.join(', ')
@@ -733,9 +764,9 @@
 
     let desc = t('posts.seo.descriptionBase', { tags: tagsTitle ?? t('posts.seo.descriptionVarious') })
 
-    if (selectedFilters.value.rating) desc += `, ${t('posts.seo.rated', { rating: selectedFilters.value.rating })}`
-    if (selectedFilters.value.sort) desc += `, ${t('posts.seo.sortedBy', { sort: selectedFilters.value.sort })}`
-    if (selectedFilters.value.score) desc += t('posts.seo.descriptionScoreOf', { score: selectedFilters.value.score })
+    if (selectedFilters.value.rating) desc += `, ${t('posts.seo.rated', { rating: getLocalizedFilterLabel('rating', selectedFilters.value.rating) })}`
+    if (selectedFilters.value.sort) desc += `, ${t('posts.seo.sortedBy', { sort: getLocalizedFilterLabel('sort', selectedFilters.value.sort) })}`
+    if (selectedFilters.value.score) desc += t('posts.seo.descriptionScoreOf', { score: getLocalizedFilterLabel('score', selectedFilters.value.score) })
 
     desc += t('posts.seo.fromDomain', { domain: selectedBooru.value.domain })
     desc += t('posts.seo.descriptionEnding', { name: project.shortName })
@@ -812,7 +843,7 @@
       itemListElement: [
         {
           name: t('nav.home'),
-          item: '/'
+          item: localePath('/')
         },
         {
           name: t('seo.postsFrom', { domain: selectedBooru.value.domain }),
@@ -880,15 +911,6 @@
         return false
       }
 
-      const { isPremium } = useUserData()
-
-      if (!isPremium.value && booru.isPremium) {
-        const { t } = useI18n()
-        return {
-          status: 401,
-          statusText: t('errors.unauthorized')
-        }
-      }
       const page = route.query.page
 
       // Check if `page` query is not an array, not null, and is a number

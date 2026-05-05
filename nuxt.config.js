@@ -82,7 +82,7 @@ export default defineNuxtConfig({
 
         { name: 'monetization', content: '$ilp.uphold.com/Hf3zAn3pQ7fD' },
 
-        { property: 'og:image', content: '/social.jpg' },
+        { property: 'og:image', content: `${project.urls.production.origin}/social.jpg` },
         { property: 'og:image:width', content: '1200' },
         { property: 'og:image:height', content: '630' }
       ]
