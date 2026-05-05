@@ -1,12 +1,24 @@
 /**
- * [TEMPORARY] Patches canonical <link> with ?tags= on SSR.
+ * [TEMPORARY WORKAROUND] Patches canonical <link> with ?tags= on SSR.
  *
- * @nuxtjs/i18n v10 canonicalQueries config is a no-op — the `app:rendered`
- * hook always overwrites the canonical with seo:true, stripping all params.
+ * Context:
+ * @nuxtjs/i18n v10 canonicalQueries config is a no-op. The module strips all
+ * query params from the canonical URL during both SSR and client hydration.
  *
- * TODO: Delete this file once upstream fixes canonicalQueries.
- *       Track: https://github.com/nuxt-modules/i18n
- *       See also: nuxt.config.js ~L369
+ * This plugin is PART OF A TWO-PART FIX:
+ *   1. SSR (this file): Patches the rendered HTML to include ?tags= in the
+ *      canonical link before it reaches the browser/SEO crawlers.
+ *   2. CSR (pages/posts/[domain].vue): A `useHead` call re-applies the
+ *      canonical with tags after the i18n module overwrites it on hydration.
+ *
+ * Removal checklist (when upstream fixes canonicalQueries):
+ *   - [ ] Delete this file
+ *   - [ ] Remove the `useHead` canonical override in pages/posts/[domain].vue
+ *   - [ ] Remove the `canonicalQueries: ['tags']` line from nuxt.config.js
+ *   - [ ] Update the comment block in nuxt.config.js
+ *   - [ ] Delete test/server/fix-canonical-queries.test.ts (or update assertions)
+ *
+ * Track upstream: https://github.com/nuxt-modules/i18n
  */
 
 function patchCanonicalTags(headHtml: string, tags: string): string {

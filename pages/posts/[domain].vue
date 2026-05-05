@@ -749,6 +749,21 @@
     description
   })
 
+  // [TEMPORARY WORKAROUND] Override canonical to include tags.
+  // i18n v10 strips query params on client hydration, so we re-apply them.
+  // Part 2 of a two-part fix — see server/plugins/fix-canonical-queries.ts
+  // for the removal checklist.
+  const canonicalUrl = computed(() => {
+    const base = `${project.urls.production.origin}${route.path}`
+    const tags = getSingleQueryValue(route.query.tags)
+    if (!tags) return base
+    return `${base}?tags=${encodeURIComponent(tags)}`
+  })
+
+  useHead(() => ({
+    link: [{ rel: 'canonical', href: canonicalUrl.value }]
+  }))
+
   const firstPostsPageAsSchema = computed(() => {
     if (!data.value?.pages.length) {
       return []
