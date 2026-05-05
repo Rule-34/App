@@ -40,14 +40,18 @@ interface SelectedFilters {
     booruList.value.filter((b) => b.domain !== props.selectedBooru.domain).slice(0, 4)
   )
 
-  const formattedTags = computed(() => {
-    const included = props.selectedTags
+  const includedTags = computed(() =>
+    props.selectedTags
       .filter((tag) => !tag.name.startsWith('-'))
       .map((tag) => normalizeStringForTitle(tag.name))
-    return included.length > 0 ? included : [t('seoFooter.defaultTag')]
-  })
+      .filter(Boolean)
+  )
 
-  const hasTags = computed(() => formattedTags.value[0] !== t('seoFooter.defaultTag'))
+  const hasTags = computed(() => includedTags.value.length > 0)
+
+  const formattedTags = computed(() =>
+    includedTags.value.length > 0 ? includedTags.value : [t('seoFooter.defaultTag')]
+  )
 
   const formattedTagsString = computed(() => formattedTags.value.join(', '))
 
@@ -63,11 +67,12 @@ interface SelectedFilters {
 
   const formattedCount = computed(() => (props.postsCount > 0 ? `${props.postsCount}+ ` : ''))
 
-  const sortLabel = computed(() =>
-    props.selectedFilters.sort
-      ? t('seoFooter.sortingBy', { sort: props.selectedFilters.sort })
-      : t('seoFooter.mostPopularUploads')
-  )
+  const sortLabel = computed(() => {
+    if (!props.selectedFilters.sort) return t('seoFooter.mostPopularUploads')
+    const raw = props.selectedFilters.sort
+    const key = `filters.sortBy${raw.charAt(0).toUpperCase() + raw.slice(1)}`
+    return t('seoFooter.sortingBy', { sort: t(key) })
+  })
 </script>
 
 <template>

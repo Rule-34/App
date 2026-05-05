@@ -51,8 +51,11 @@ describe('SEO canonical URLs', async () => {
   it('includes alternate hreflang links for all locales', async () => {
     const html = await $fetch('/es/posts/e621.net?tags=solo')
 
-    const alternateTags = html.match(/<link\b[^>]*rel="alternate"[^>]*>/gi) || []
-    const codes = alternateTags.map((tag) => tag.match(/hreflang="([^"]+)"/)?.[1]).filter(Boolean)
+    const alternateTags =
+      html.match(/<link\b(?=[^>]*\brel=["']alternate["'])[^>]*>/gi) || []
+    const codes = alternateTags
+      .map((tag) => tag.match(/hreflang=["']([^"']+)["']/)?.[1])
+      .filter(Boolean)
 
     const expected = [...localeCodes, 'x-default']
     expect(codes).toEqual(expect.arrayContaining(expected))

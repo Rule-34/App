@@ -40,11 +40,10 @@ export function useTagTitle() {
     }
 
     if (negative.length) {
-      if (title) title += ' '
       title += t('seoHelper.without')
       title += negative.join(', ')
     }
 
-    return title
+    return title.trim() || null
   }
 }

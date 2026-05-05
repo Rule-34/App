@@ -95,7 +95,7 @@
               action: {
                 label: t('toasts.verifyNotBot'),
                 onClick: () =>
-                  window.open(config.public.apiUrl + '/status', '_blank', 'noopener,noreferrer')
+                  window.open(new URL('/status', config.public.apiUrl).toString(), '_blank', 'noopener,noreferrer')
               }
             })
             break
