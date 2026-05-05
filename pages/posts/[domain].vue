@@ -709,6 +709,31 @@
   }
 
   /**
+   * Helper to build SEO filter parts from selectedFilters
+   */
+  function buildSeoFilterParts(filters: typeof selectedFilters.value, variant: 'default' | 'description' = 'default'): string[] {
+    const filterParts: string[] = []
+
+    if (filters.rating) {
+      filterParts.push(t('posts.seo.rated', { rating: getLocalizedFilterLabel('rating', filters.rating) }))
+    }
+
+    if (filters.sort) {
+      filterParts.push(t('posts.seo.sortedBy', { sort: getLocalizedFilterLabel('sort', filters.sort) }))
+    }
+
+    if (filters.score) {
+      if (variant === 'description') {
+        filterParts.push(t('posts.seo.descriptionScoreOf', { score: getLocalizedFilterLabel('score', filters.score) }))
+      } else {
+        filterParts.push(t('posts.seo.scoreOf', { score: getLocalizedFilterLabel('score', filters.score) }))
+      }
+    }
+
+    return filterParts
+  }
+
+  /**
    * SEO
    */
   const shortTitle = computed(() => {
@@ -723,10 +748,7 @@
     } else {
       title += t('posts.seo.posts')
 
-      const filterParts: string[] = []
-      if (selectedFilters.value.rating) filterParts.push(t('posts.seo.rated', { rating: getLocalizedFilterLabel('rating', selectedFilters.value.rating) }))
-      if (selectedFilters.value.sort) filterParts.push(t('posts.seo.sortedBy', { sort: getLocalizedFilterLabel('sort', selectedFilters.value.sort) }))
-      if (selectedFilters.value.score) filterParts.push(t('posts.seo.scoreOf', { score: getLocalizedFilterLabel('score', selectedFilters.value.score) }))
+      const filterParts = buildSeoFilterParts(selectedFilters.value)
       if (filterParts.length) title += ', ' + filterParts.join(', ')
 
       title += t('posts.seo.fromDomain', { domain: selectedBooru.value.domain })
@@ -741,18 +763,12 @@
     if (hasTags) {
       const tagTitle = buildTagTitle(selectedTags.value)
       const title = t('posts.seo.tagsRule34', { tags: tagTitle })
-      const filterParts: string[] = []
-      if (selectedFilters.value.rating) filterParts.push(t('posts.seo.rated', { rating: getLocalizedFilterLabel('rating', selectedFilters.value.rating) }))
-      if (selectedFilters.value.sort) filterParts.push(t('posts.seo.sortedBy', { sort: getLocalizedFilterLabel('sort', selectedFilters.value.sort) }))
-      if (selectedFilters.value.score) filterParts.push(t('posts.seo.scoreOf', { score: getLocalizedFilterLabel('score', selectedFilters.value.score) }))
+      const filterParts = buildSeoFilterParts(selectedFilters.value)
       const full = filterParts.length ? `${title}, ${filterParts.join(', ')}` : title
       return full.charAt(0).toUpperCase() + full.slice(1)
     }
 
-    const filterParts: string[] = []
-    if (selectedFilters.value.rating) filterParts.push(t('posts.seo.rated', { rating: getLocalizedFilterLabel('rating', selectedFilters.value.rating) }))
-    if (selectedFilters.value.sort) filterParts.push(t('posts.seo.sortedBy', { sort: getLocalizedFilterLabel('sort', selectedFilters.value.sort) }))
-    if (selectedFilters.value.score) filterParts.push(t('posts.seo.scoreOf', { score: getLocalizedFilterLabel('score', selectedFilters.value.score) }))
+    const filterParts = buildSeoFilterParts(selectedFilters.value)
     if (!filterParts.length) return ''
 
     const joined = filterParts.join(', ')
@@ -764,9 +780,14 @@
 
     let desc = t('posts.seo.descriptionBase', { tags: tagsTitle ?? t('posts.seo.descriptionVarious') })
 
-    if (selectedFilters.value.rating) desc += `, ${t('posts.seo.rated', { rating: getLocalizedFilterLabel('rating', selectedFilters.value.rating) })}`
-    if (selectedFilters.value.sort) desc += `, ${t('posts.seo.sortedBy', { sort: getLocalizedFilterLabel('sort', selectedFilters.value.sort) })}`
-    if (selectedFilters.value.score) desc += t('posts.seo.descriptionScoreOf', { score: getLocalizedFilterLabel('score', selectedFilters.value.score) })
+    const filterParts = buildSeoFilterParts(selectedFilters.value, 'description')
+    filterParts.forEach((part, index) => {
+      if (index < 2) {
+        desc += `, ${part}`
+      } else {
+        desc += part
+      }
+    })
 
     desc += t('posts.seo.fromDomain', { domain: selectedBooru.value.domain })
     desc += t('posts.seo.descriptionEnding', { name: project.shortName })
