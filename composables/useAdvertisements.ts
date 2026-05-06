@@ -40,10 +40,10 @@ export default function () {
      * Pros: Good CPM (2.1)
      * Cons: Low revenue (50) | Does not count visits well | Clears console
      */
-    {
-      id: '/js/popunder2.js?v=10',
-      weight: 0.3
-    },
+    // {
+    //   id: '/js/popunder2.js?v=10',
+    //   weight: 0.3
+    // },
     /**
      * AdMaven
      * Pros: Good CPM (3.5)
@@ -52,7 +52,7 @@ export default function () {
     {
       id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255038',
       weight: 0.3
-    }
+    },
     /**
      * AdsCarat
      * Pros: Great CPM (2.5)
@@ -61,7 +61,16 @@ export default function () {
     // {
     //   id: 'https://hp.scrannyplacebo.com/rMGqiS1acWcIq4LyI/oQRmJ',
     //   weight: 1
-    // }
+    // },
+    /**
+     * Profiton
+     * Pros: 
+     * Cons: 
+     */
+    {
+      id: 'https://je.deuxseethe.com/r1onMblLYR8e/rwnnn',
+      weight: 0.3
+    }
   ]
 
   /**
