@@ -33,17 +33,17 @@ export default function () {
      */
     {
       id: 'https://ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
-      weight: 0.3
+      weight: 0.25
     },
     /**
      * Clickadu
      * Pros: Good CPM (2.1)
      * Cons: Low revenue (50) | Does not count visits well | Clears console
      */
-    // {
-    //   id: '/js/popunder2.js?v=10',
-    //   weight: 0.3
-    // },
+    {
+      id: '/js/popunder2.js?v=10',
+      weight: 0.25
+    },
     /**
      * AdMaven
      * Pros: Good CPM (3.5)
@@ -51,7 +51,7 @@ export default function () {
      */
     {
       id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255038',
-      weight: 0.3
+      weight: 0.25
     },
     /**
      * AdsCarat
@@ -69,7 +69,7 @@ export default function () {
      */
     {
       id: 'https://je.deuxseethe.com/r1onMblLYR8e/rwnnn',
-      weight: 0.3
+      weight: 0.25
     }
   ]
 
