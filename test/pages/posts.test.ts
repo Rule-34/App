@@ -40,13 +40,14 @@ describe('/', async () => {
       }
 
       if (tags === 'hair_bun') {
+        const baseUrl = process.env.NUXT_PUBLIC_API_URL || 'http://localhost:8081'
         return route.fulfill({
           status: 200,
           json: {
             ...mockPostsPage0,
             links: {
               ...mockPostsPage0.links,
-              self: `http://localhost:8081/booru/gelbooru/posts?baseEndpoint=safebooru.org&pageID=${pageID ?? '0'}&limit=30&tags=hair_bun`
+              self: `${baseUrl}/booru/gelbooru/posts?baseEndpoint=safebooru.org&pageID=${pageID ?? '0'}&limit=30&tags=hair_bun`
             }
           }
         })
@@ -164,7 +165,7 @@ describe('/', async () => {
       await firstPost.getByRole('button', { name: /tags/i }).click()
 
       // BottomSheet renders outside post row subtree; assert one known tag appears
-      expect(await page.getByRole('button', { name: /1girl/i }).first().isVisible()).toBe(true)
+      await expect(page.getByRole('button', { name: /1girl/i }).first()).toBeVisible()
     })
 
     // TODO: Test that verifies if a post with 'unknown' media type is not rendered

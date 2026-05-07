@@ -2,11 +2,12 @@ import { describe, expect, it } from 'vitest'
 import { $fetch, setup } from '@nuxt/test-utils'
 import { locales } from '../../config/i18n'
 import { project } from '../../config/project'
+import { debugBrowserOptions } from '../helper'
 
 const localeCodes = locales.map((l) => l.code)
 
 describe('SEO canonical URLs', async () => {
-  await setup()
+  await setup({ browser: true, browserOptions: debugBrowserOptions })
 
   /** Extract canonical href from SSR HTML. */
   function getCanonical(html: string): string | null {
@@ -18,7 +19,7 @@ describe('SEO canonical URLs', async () => {
 
   /** Extract og:image content from SSR HTML. */
   function getOgImage(html: string): string | null {
-    const m = html.match(/<meta\b[^>]*\bproperty=["']og:image["'][^>]*\bcontent=["']([^"']+)["'][^>]*>/i)
+    const m = html.match(/<meta\b(?=[^>]*\bproperty=["']og:image["'])(?=[^>]*\bcontent=["']([^"']+)["'])[^>]*>/i)
     return m?.[1] ?? null
   }
 
