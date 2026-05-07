@@ -33,26 +33,26 @@ export default function () {
      */
     {
       id: 'https://ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
-      weight: 0.3
+      weight: 0.25
     },
     /**
      * Clickadu
      * Pros: Good CPM (2.1)
-     * Cons: Low revenue (70) | Does not count visits well | Clears console
+     * Cons: Low revenue (50) | Does not count visits well | Clears console
      */
     {
       id: '/js/popunder2.js?v=10',
-      weight: 0.3
+      weight: 0.25
     },
     /**
      * AdMaven
      * Pros: Good CPM (3.5)
-     * Cons: Impression count lower than everybody else (less overall revenue) | Sometimes replaces current tab instead of opening in new tab | Possible malware: ads open requests to social media login
+     * Cons: Low Revenue (30) | Impression count lower than everybody else (less overall revenue) | Sometimes replaces current tab instead of opening in new tab | Possible malware: ads open requests to social media login
      */
     {
       id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255038',
-      weight: 0.3
-    }
+      weight: 0.25
+    },
     /**
      * AdsCarat
      * Pros: Great CPM (2.5)
@@ -61,7 +61,16 @@ export default function () {
     // {
     //   id: 'https://hp.scrannyplacebo.com/rMGqiS1acWcIq4LyI/oQRmJ',
     //   weight: 1
-    // }
+    // },
+    /**
+     * Profiton
+     * Pros: 
+     * Cons: 
+     */
+    {
+      id: 'https://je.deuxseethe.com/r1onMblLYR8e/rwnnn',
+      weight: 0.25
+    }
   ]
 
   /**
@@ -107,20 +116,20 @@ export default function () {
     /**
      * EvaDav
      * Pros: Fixed weekly pay (150)
-     * Cons:
+     * Cons: Low revenue
      */
     {
       id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
-      weight: 0.5
+      weight: 0.35
     },
     /**
      * AdMaven
-     * Pros:
-     * Cons: Re-opens after closing
+     * Pros: Good CPM (4.5)
+     * Cons: Does not count visits well| Re-opens after closing
      */
     {
       id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255040',
-      weight: 0.5
+      weight: 0.65
     }
   ]
 
