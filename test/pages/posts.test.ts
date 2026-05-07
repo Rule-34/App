@@ -305,11 +305,8 @@ describe('/', async () => {
       })
 
       // Trigger client-side pagination updates (replace=true in app logic)
-      for (let i = 0; i < 20; i++) {
-        await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
-        if (page.url().includes('tags=hair_bun') && !page.url().includes('page=0')) break
-        await page.waitForTimeout(150)
-      }
+      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+      await page.waitForURL(u => u.includes('tags=hair_bun') && !u.includes('page=0'), { timeout: 10000 })
 
       const currentUrl = page.url()
       expect(currentUrl).toContain('tags=hair_bun')
@@ -396,8 +393,7 @@ describe('/', async () => {
       await page.waitForURL('**/posts/safebooru.org?tags=1girl')
 
       // Assert — canonical in the DOM must include ?tags= (not stripped by i18n)
-      const canonicalHref = await page.locator('link[rel="canonical"]').getAttribute('href')
-      expect(canonicalHref).toContain('tags=1girl')
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', expect.stringContaining('tags=1girl'))
     })
 
     it('updates canonical link on client-side tag navigation', async () => {
@@ -416,9 +412,8 @@ describe('/', async () => {
       ])
 
       // Assert — canonical must reflect the new tag
-      const canonicalHref = await page.locator('link[rel="canonical"]').getAttribute('href')
-      expect(canonicalHref).toContain('tags=hair_bun')
-      expect(canonicalHref).not.toContain('tags=1girl')
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', expect.stringContaining('tags=hair_bun'))
+      await expect(page.locator('link[rel="canonical"]')).not.toHaveAttribute('href', expect.stringContaining('tags=1girl'))
     })
   })
 
