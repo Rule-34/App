@@ -412,7 +412,23 @@
       // selectedTags.value.some((tag) => selectedBlockList.value.includes(tag.name)) &&
       selectedBlockList.value.some((blocklistTag) => selectedTags.value.map((tag) => tag.name).includes(blocklistTag))
     ) {
-      throw new Error('One of your selected tags is in the tag block list')
+      return {
+        data: [],
+        meta: {
+          items_count: 0,
+          total_items: 0,
+          current_page: 0,
+          total_pages: 0,
+          items_per_page: 0
+        },
+        links: {
+          self: '',
+          first: '',
+          last: '',
+          prev: '',
+          next: ''
+        }
+      } as IPostPage
     }
 
     if (options.pageParam) {
@@ -594,6 +610,18 @@
         }
       })
     })
+  })
+
+  const isBlockedTagSelected = computed(() => {
+    return (
+      selectedBlockList.value.length > 0 &&
+      selectedBlockList.value.some((blocklistTag) => selectedTags.value.map((tag) => tag.name).includes(blocklistTag))
+    )
+  })
+
+  const hasHiddenPosts = computed(() => {
+    if (!data.value) return false
+    return data.value.pages.some((page) => page.meta.items_count > 0 && page.data.length === 0)
   })
 
   const parentRef = ref<HTMLElement | null>(null)
@@ -1019,7 +1047,7 @@
       </template>
 
       <!-- Error (initial load only) -->
-      <template v-else-if="isError && !allRows.length">
+      <template v-else-if="isError && !allRows.length && !isBlockedTagSelected && !hasHiddenPosts">
         <PostPageError
           :error="error"
           :on-retry="onRetryClick"
@@ -1037,7 +1065,17 @@
 
           <h3 class="text-lg leading-10 font-semibold">No results</h3>
 
-          <span class="w-full overflow-x-auto text-pretty">Try changing the tags or filters</span>
+          <span class="w-full overflow-x-auto text-pretty">
+            <template v-if="isBlockedTagSelected">
+              Your selected tag is in your blocklist
+            </template>
+            <template v-else-if="hasHiddenPosts">
+              Results were hidden by your tag blocklist
+            </template>
+            <template v-else>
+              Try changing the tags or filters
+            </template>
+          </span>
         </div>
       </template>
 
