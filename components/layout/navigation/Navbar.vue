@@ -26,29 +26,95 @@
   )
 
   const isOnTop = ref(true)
+  const isNavbarVisible = ref(true)
+  const lastScrollY = ref(0)
 
-  function onIntersectionObserver(entries: IntersectionObserverEntry[]) {
-    const [entry] = entries
+  const SCROLL_DELTA_THRESHOLD = 12
+  const TOP_VISIBILITY_THRESHOLD = 8
 
-    if (entry.isIntersecting) {
-      isOnTop.value = true
-    } else {
-      isOnTop.value = false
+  let scrollRafId: number | null = null
+
+  function onIntersectionObserver(entries: IntersectionObserverEntry[], _observer: IntersectionObserver) {
+    const entry = entries[0]
+
+    if (!entry) {
+      return
     }
+
+    isOnTop.value = entry.isIntersecting
   }
+
+  function onWindowScroll() {
+    if (!isPostsPage.value || scrollRafId !== null) {
+      return
+    }
+
+    scrollRafId = window.requestAnimationFrame(() => {
+      const currentScrollY = window.scrollY
+
+      if (currentScrollY <= TOP_VISIBILITY_THRESHOLD) {
+        isNavbarVisible.value = true
+        lastScrollY.value = currentScrollY
+        scrollRafId = null
+
+        return
+      }
+
+      const deltaY = currentScrollY - lastScrollY.value
+
+      if (Math.abs(deltaY) >= SCROLL_DELTA_THRESHOLD) {
+        isNavbarVisible.value = deltaY < 0
+        lastScrollY.value = currentScrollY
+      }
+
+      scrollRafId = null
+    })
+  }
+
+  watch(
+    isPostsPage,
+    (value) => {
+      if (!import.meta.client) {
+        return
+      }
+
+      if (!value) {
+        isNavbarVisible.value = true
+      }
+
+      lastScrollY.value = window.scrollY
+    },
+    { immediate: true }
+  )
+
+  onMounted(() => {
+    lastScrollY.value = window.scrollY
+    window.addEventListener('scroll', onWindowScroll, { passive: true })
+  })
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('scroll', onWindowScroll)
+
+    if (scrollRafId !== null) {
+      window.cancelAnimationFrame(scrollRafId)
+      scrollRafId = null
+    }
+  })
 </script>
 
 <template>
   <!-- Same margin as Nav height -->
   <nav class="mb-14">
-    <div v-intersection-observer="[onIntersectionObserver]" />
+    <div v-intersection-observer="onIntersectionObserver" />
 
     <div
       :class="{
         'fixed!': isPostsPage,
-        'bg-base-1000/60 shadow-lg backdrop-blur-lg backdrop-saturate-200 md:border-b-2': isPostsPage && !isOnTop
+        'bg-base-1000/60 shadow-lg backdrop-blur-lg backdrop-saturate-200 md:border-b-2': isPostsPage && !isOnTop,
+        '-translate-y-full': isPostsPage && !isOnTop && !isNavbarVisible,
+        'translate-y-0': !isPostsPage || isOnTop || isNavbarVisible
       }"
-      class="border-base-0/20 absolute inset-x-0 top-0 z-10 transition duration-200"
+      class="border-base-0/20 absolute inset-x-0 top-0 z-10 transform-gpu transition-[transform,background-color,box-shadow,backdrop-filter] duration-200 will-change-transform"
     >
       <!-- Navbar -->
       <div
