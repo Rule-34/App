@@ -62,6 +62,7 @@
     switch (true) {
       case isVideo.value:
         createVideoPlayer()
+
         break
 
       case isAnimatedMedia.value:
@@ -114,6 +115,10 @@
         primaryColor: 'rgba(0, 0, 0, 0.7)',
 
         fillToContainer: true,
+
+        autoPlay: autoplayAnimatedMedia.value,
+
+        mute: autoplayAnimatedMedia.value,
 
         preload: 'none',
 
