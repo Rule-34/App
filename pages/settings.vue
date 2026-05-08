@@ -13,9 +13,11 @@
 
   const appVersion = version
 
-  const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia, blockAiGeneratedImages } = useUserSettings()
+  const { postFullSizeImages, postsPerPage, postsLayout, autoplayAnimatedMedia, blockAiGeneratedImages } =
+    useUserSettings()
   const { isPremium } = useUserData()
   const { selectedList, selectedBlockList, defaultBlockList, customBlockList, resetCustomBlockList } = useBlockLists()
+  const postsLayoutOptions = ['list', 'grid']
 
   function onSelectedListChange(value: blockListOptions) {
     if (value === blockListOptions.Custom && !isPremium.value) {
@@ -164,6 +166,18 @@
 
             <template #description> How many posts to load per page</template>
           </SettingNumber>
+        </li>
+
+        <!-- postsLayout -->
+        <li>
+          <SettingSelect
+            v-model="postsLayout"
+            :options="postsLayoutOptions"
+          >
+            <template #name> Posts layout</template>
+
+            <template #description> Choose how posts are displayed by default </template>
+          </SettingSelect>
         </li>
 
         <!-- BlockList -->

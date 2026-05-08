@@ -1,8 +1,11 @@
 import { useLocalStorage } from '@vueuse/core'
 
+export type PostsLayout = 'list' | 'grid'
+
 export default function () {
   let postFullSizeImages = ref<boolean>(false)
   let postsPerPage = ref<number>(29)
+  let postsLayout = ref<PostsLayout>('list')
   let autoplayAnimatedMedia = ref<boolean>(false)
   let blockAiGeneratedImages = ref<boolean>(false)
 
@@ -11,6 +14,9 @@ export default function () {
       writeDefaults: false
     })
     postsPerPage = useLocalStorage('settings-postsPerPage', 29, {
+      writeDefaults: false
+    })
+    postsLayout = useLocalStorage<PostsLayout>('settings-postsLayout', 'list', {
       writeDefaults: false
     })
     autoplayAnimatedMedia = useLocalStorage('settings-autoplayAnimatedMedia', false, {
@@ -24,6 +30,7 @@ export default function () {
   return {
     postFullSizeImages,
     postsPerPage,
+    postsLayout,
     autoplayAnimatedMedia,
     blockAiGeneratedImages
   }
