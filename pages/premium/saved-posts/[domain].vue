@@ -3,7 +3,8 @@
   import { ArrowPathIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
-  import { throttle } from 'es-toolkit'
+  import { cloneDeep, throttle } from 'es-toolkit'
+  import { FetchError } from 'ofetch'
   import type { Ref } from 'vue'
   import { toast } from 'vue-sonner'
   import type { Domain } from '~/assets/js/domain'
@@ -17,6 +18,7 @@
 
   const router = useRouter()
   const route = useRoute()
+  const config = useRuntimeConfig()
 
   const { $pocketBase } = useNuxtApp()
 
@@ -25,6 +27,7 @@
 
   const { addUrlToPageHistory } = usePageHistory()
   const { savedPostList } = usePocketbase()
+  const { booruList: availableBooruList } = useBooruList()
 
   /**
    * URL
@@ -32,12 +35,23 @@
   const domainsFromPocketbase = await $pocketBase.collection('distinct_original_domain_from_posts').getFullList()
 
   const booruList = computed(() => {
+    const getKnownBooruMetadata = (domain: string) => {
+      const knownBooru = availableBooruList.value.find((booru) => booru.domain === domain)
+
+      return {
+        type: knownBooru?.type ?? booruTypeList[0],
+        config: knownBooru?.config ?? null
+      }
+    }
+
+    const productionBooruMetadata = getKnownBooruMetadata(project.urls.production.hostname)
+
     const _booruList: Domain[] = [
       // r34.app
       {
         domain: project.urls.production.hostname,
-        type: booruTypeList[0],
-        config: null,
+        type: productionBooruMetadata.type,
+        config: productionBooruMetadata.config,
         isCustom: false,
         isPremium: false
       }
@@ -46,10 +60,12 @@
     const booruNamesInDb: string[] = domainsFromPocketbase.map((domain) => domain.original_domain)
 
     booruNamesInDb.forEach((booruNameInDb) => {
+      const booruMetadata = getKnownBooruMetadata(booruNameInDb)
+
       _booruList.push({
         domain: booruNameInDb,
-        type: booruTypeList[0],
-        config: null,
+        type: booruMetadata.type,
+        config: booruMetadata.config,
         isCustom: false,
         isPremium: false
       })
@@ -226,8 +242,103 @@
   /**
    * Listeners
    */
+  let currentSearchRequestId = 0
+
   async function onSearchTag(tag: string) {
-    toast.error('Autocomplete not implemented')
+    const requestId = ++currentSearchRequestId
+    const trimmedTag = tag.trim()
+
+    if (!trimmedTag) {
+      tagResults.value = []
+      return
+    }
+
+    const apiBaseUrl = config.public.apiUrl
+
+    if (!apiBaseUrl) {
+      toast.error('API URL is not configured')
+      tagResults.value = []
+      return
+    }
+
+    const apiUrl = apiBaseUrl + '/booru/' + selectedBooru.value.type.type + '/tags'
+
+    let response: { data: Tag[] } | undefined
+
+    try {
+      response = await $fetch<{ data: Tag[] }>(apiUrl, {
+        params: {
+          baseEndpoint: selectedBooru.value.domain,
+
+          tag: trimmedTag,
+          order: 'count',
+          limit: 20,
+
+          // Booru options
+          httpScheme: selectedBooru.value.config?.options?.HTTPScheme ?? undefined
+        }
+      })
+    } catch (error) {
+      // Ignore if this is not the latest request
+      if (requestId !== currentSearchRequestId) {
+        return
+      }
+
+      if (error instanceof FetchError) {
+        switch (error.status) {
+          case 404:
+            toast.error('No tags found for query "' + trimmedTag + '"')
+            tagResults.value = []
+            break
+
+          case 429:
+            // TODO: Cant always check if 429 is the status code, always show?
+            toast.error(error.statusText, {
+              description: 'You sent too many requests in a short period of time',
+              action: {
+                label: 'Verify I am not a Bot',
+                onClick: () => window.open(apiBaseUrl + '/status', '_blank', 'noopener,noreferrer')
+              }
+            })
+            tagResults.value = []
+            break
+
+          default: {
+            const Sentry = await import('@sentry/nuxt')
+            Sentry.captureException(error)
+            toast.error(`Failed to load tags: "${error.message}"`)
+            tagResults.value = []
+            break
+          }
+        }
+
+        return
+      }
+
+      const Sentry = await import('@sentry/nuxt')
+      Sentry.captureException(error)
+      toast.error('Failed to load tags')
+      tagResults.value = []
+      return
+    }
+
+    // Ignore if this is not the latest request
+    if (requestId !== currentSearchRequestId) {
+      return
+    }
+
+    if (!(response && typeof response === 'object' && 'data' in response && Array.isArray(response.data))) {
+      const Sentry = await import('@sentry/nuxt')
+      const invalidTagsResponseError = Object.assign(new Error('Invalid tags response format'), {
+        response
+      })
+      Sentry.captureException(invalidTagsResponseError)
+      toast.error('Failed to load tags')
+      tagResults.value = []
+      return
+    }
+
+    tagResults.value = response.data
   }
 
   async function onDomainChange(domain: Domain) {
@@ -235,29 +346,65 @@
   }
 
   async function onSearchSubmit({ tags, filters }) {
-    // TODO: Tags
-    await reflectChangesInUrl({ page: null, filters })
+    await reflectChangesInUrl({ page: null, tags, filters })
   }
 
   /**
    * Adds the tag, or removes it if it already exists
    */
   async function onPostAddTag(tag: string) {
-    toast.error('Not implemented')
+    const isTagNegative = tag.startsWith('-')
+
+    let newTags = cloneDeep(selectedTags.value)
+
+    // Remove tag if it already exists
+    const isTagAlreadySelected = newTags.some((selectedTag) => selectedTag.name === tag)
+
+    if (isTagAlreadySelected) {
+      newTags = newTags.filter((selectedTag) => selectedTag.name !== tag)
+
+      await reflectChangesInUrl({ page: null, tags: newTags })
+      return
+    }
+
+    // Remove opposite variant to prevent conflicts
+    if (isTagNegative) {
+      // Removing negative prefix, check for positive counterpart
+      const positiveVariant = tag.slice(1)
+      newTags = newTags.filter((selectedTag) => selectedTag.name !== positiveVariant)
+    } else {
+      // Adding positive tag, check for negative counterpart
+      const negativeVariant = `-${tag}`
+      newTags = newTags.filter((selectedTag) => selectedTag.name !== negativeVariant)
+    }
+
+    newTags.push(new Tag({ name: tag }).toJSON())
+
+    await reflectChangesInUrl({ page: null, tags: newTags })
   }
 
   /**
    * Sets tags to only the given tag
    */
   async function onPostSetTag(tag: string) {
-    toast.error('Not implemented')
+    await reflectChangesInUrl({ page: null, tags: [new Tag({ name: tag }).toJSON()] })
   }
 
   /**
    * Opens the tag in a new tab
    */
-  async function onPostOpenTagInNewTab(tag: string) {
-    toast.error('Not implemented')
+  function onPostOpenTagInNewTab(tag: string) {
+    const tagUrl = generatePostsRoute(
+      '/premium/saved-posts',
+      selectedBooru.value.domain,
+      undefined,
+      [new Tag({ name: tag }).toJSON()],
+      undefined
+    )
+
+    const resolvedTagUrl = router.resolve(tagUrl).href
+
+    window.open(resolvedTagUrl, '_blank', 'noopener,noreferrer')
   }
 
   async function onLoadNextPostPage() {
@@ -308,6 +455,18 @@
    */
   interface IPostPageFromPocketBase extends Omit<IPostPage, 'links'> {}
 
+  const tagCategoryFields = ['tags_artist', 'tags_character', 'tags_copyright', 'tags_general', 'tags_meta'] as const
+
+  function buildTagFilterInAnyCategory(tag: string, tagParamKey: string) {
+    const tagFilterByCategory = tagCategoryFields.map((tagField) => {
+      return $pocketBase.filter(`${tagField} ?= {:${tagParamKey}}`, {
+        [tagParamKey]: tag
+      })
+    })
+
+    return `(${tagFilterByCategory.join(' || ')})`
+  }
+
   async function fetchPosts(options: any): Promise<IPostPageFromPocketBase> {
     const page = options.pageParam
 
@@ -343,11 +502,35 @@
       })
     }
 
-    // TODO
-    // if (selectedTags.value.length > 0) {
-    // }
+    if (selectedTags.value.length > 0) {
+      selectedTags.value.forEach((selectedTag, tagIndex) => {
+        const isNegativeTag = selectedTag.name.startsWith('-')
+        const normalizedTag = isNegativeTag ? selectedTag.name.slice(1) : selectedTag.name
 
-    if (selectedFilters.value.score) {
+        if (!normalizedTag) {
+          return
+        }
+
+        if (pocketbaseRequestFilter !== '') {
+          pocketbaseRequestFilter += ' && '
+        }
+
+        const tagFilter = buildTagFilterInAnyCategory(normalizedTag, `tag_${tagIndex}`)
+
+        if (isNegativeTag) {
+          pocketbaseRequestFilter += `!${tagFilter}`
+          return
+        }
+
+        pocketbaseRequestFilter += tagFilter
+      })
+    }
+
+    if (selectedFilters.value.score !== undefined) {
+      if (pocketbaseRequestFilter !== '') {
+        pocketbaseRequestFilter += ' && '
+      }
+
       pocketbaseRequestFilter += $pocketBase.filter('score >= {:score}', {
         score: selectedFilters.value.score
       })
