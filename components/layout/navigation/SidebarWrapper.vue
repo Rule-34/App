@@ -1,8 +1,21 @@
 <script setup>
   import { XMarkIcon } from '@heroicons/vue/24/outline'
+  import { useEventListener } from '@vueuse/core'
   import { sidebarNavigation } from 'assets/js/sidebarLinks'
 
   const { value: isMenuActive, toggle: toggleMenu } = useMenu()
+
+  function closeMenuOnDesktopBreakpoint() {
+    if (window.matchMedia('(min-width: 1024px)').matches) {
+      toggleMenu(false)
+    }
+  }
+
+  onMounted(() => {
+    closeMenuOnDesktopBreakpoint()
+  })
+
+  useEventListener('resize', closeMenuOnDesktopBreakpoint)
 </script>
 
 <template>

@@ -46,6 +46,7 @@
     <div
       :class="{
         'fixed!': isPostsPage,
+        'lg:left-64': isPostsPage,
         'bg-base-1000/60 shadow-lg backdrop-blur-lg backdrop-saturate-200 md:border-b-2': isPostsPage && !isOnTop
       }"
       class="border-base-0/20 absolute inset-x-0 top-0 z-10 transition duration-200"
@@ -61,7 +62,7 @@
         <!-- -->
 
         <!-- Right side: Menu button -->
-        <div class="absolute inset-y-0 left-0 flex items-center pl-2">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-2 lg:hidden">
           <button
             aria-label="Open main menu"
             class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util text-base-content-highlight inline-flex items-center justify-center rounded-md p-2 focus-visible:ring-inset"

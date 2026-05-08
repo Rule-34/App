@@ -60,51 +60,62 @@
 
 <!-- TODO: Restore gestures -->
 <template>
-  <div class="relative flex h-full flex-col">
-    <!-- Background -->
-    <div
-      aria-hidden="true"
-      class="absolute inset-x-0 -z-10 flex transform-gpu justify-center blur-xl md:blur-3xl"
-    >
-      <div
-        class="from-primary-300 to-accent-700 aspect-1108/632 w-full flex-none bg-linear-to-l opacity-25"
-        style="
-          clip-path: polygon(
-            100% 0%,
-            100% 82.2%,
-            92.5% 84.9%,
-            75.7% 64%,
-            70.64% 73.45%,
-            56.7% 36.26%,
-            46.53% 47.55%,
-            0% 0%
-          );
-        "
-      />
+  <div class="relative flex flex-col">
+    <div class="flex flex-row">
+      <!-- Desktop Sidebar (Visible only on lg+) -->
+      <aside class="bg-base-1000 border-base-0/10 hidden w-64 shrink-0 flex-col border-r lg:sticky lg:top-0 lg:flex lg:h-screen lg:overflow-y-auto">
+        <div class="flex flex-1 flex-col px-6">
+          <LazySidebar />
+        </div>
+      </aside>
+
+      <div class="relative flex min-w-0 flex-1 flex-col">
+        <!-- Background -->
+        <div
+          aria-hidden="true"
+          class="absolute inset-x-0 -z-10 flex transform-gpu justify-center blur-xl md:blur-3xl"
+        >
+          <div
+            class="from-primary-300 to-accent-700 aspect-1108/632 w-full flex-none bg-linear-to-l opacity-25"
+            style="
+              clip-path: polygon(
+                100% 0%,
+                100% 82.2%,
+                92.5% 84.9%,
+                75.7% 64%,
+                70.64% 73.45%,
+                56.7% 36.26%,
+                46.53% 47.55%,
+                0% 0%
+              );
+            "
+          />
+        </div>
+
+        <!-- TODO: Restore when needed -->
+        <!--    <PwaUpdater />-->
+
+        <ClientOnly>
+          <Toaster
+            :expand="true"
+            close-button
+            position="top-center"
+            theme="dark"
+          />
+
+          <DialogManager />
+        </ClientOnly>
+
+        <SidebarWrapper>
+          <LazySidebar />
+        </SidebarWrapper>
+
+        <Navbar />
+
+        <!-- Layout content -->
+        <!-- Use `flex-1` to take all remaining space -->
+        <slot />
+      </div>
     </div>
-
-    <!-- TODO: Restore when needed -->
-    <!--    <PwaUpdater />-->
-
-    <ClientOnly>
-      <Toaster
-        :expand="true"
-        close-button
-        position="top-center"
-        theme="dark"
-      />
-
-      <DialogManager />
-    </ClientOnly>
-
-    <SidebarWrapper>
-      <LazySidebar />
-    </SidebarWrapper>
-
-    <Navbar />
-
-    <!-- Layout content -->
-    <!-- Use `flex-1` to take all remaining space -->
-    <slot />
   </div>
 </template>
