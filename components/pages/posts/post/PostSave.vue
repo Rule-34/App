@@ -12,7 +12,7 @@
 
   const { $pocketBase } = useNuxtApp()
 
-  const { savedPostList } = usePocketbase()
+  const { savedPostList, removeSavedPostFolder } = usePocketbase()
   const { isPremium } = useUserData()
 
   const postInSavedList = computed(() => {
@@ -60,6 +60,8 @@
     const response = await $pocketBase.collection('posts').delete(postInSavedList.value.id)
 
     if (response === true) {
+      removeSavedPostFolder(postInSavedList.value.original_domain, postInSavedList.value.original_id)
+
       savedPostList.value = savedPostList.value.filter((savedPost) => savedPost.id !== postInSavedList.value.id)
     }
   }
