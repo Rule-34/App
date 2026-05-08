@@ -42,4 +42,21 @@ describe('generatePostsRoute', () => {
 
     expect(String(route.query?.tags)).toBe('panty_&_stocking_with_garterbelt|rating:safe')
   })
+
+  it('keeps filter values in query object', () => {
+    const route = generatePostsRoute('/posts', 'safebooru.org', undefined, undefined, {
+      type: 'video',
+      sort: 'score'
+    })
+
+    expect(route).toMatchObject({
+      path: '/posts/safebooru.org',
+      query: {
+        filter: {
+          type: 'video',
+          sort: 'score'
+        }
+      }
+    })
+  })
 })
