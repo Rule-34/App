@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ChevronDownIcon } from '@heroicons/vue/24/outline'
+  import { ArrowTopRightOnSquareIcon, ChevronDownIcon } from '@heroicons/vue/24/outline'
   import type { IPost } from '~/assets/js/post.dto'
   import Tag from '~/assets/js/tag.dto'
   import { project } from '@/config/project'
@@ -136,6 +136,20 @@
           :mediaName="`${post.domain}-${post.id}`"
           :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
         />
+
+        <NuxtLink
+          v-if="mediaFile.file"
+          :href="mediaFile.file"
+          aria-label="Open media in new tab"
+          class="hover:hover-bg-util focus-visible:focus-outline-util group rounded-md px-1.5 py-1"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <ArrowTopRightOnSquareIcon
+            aria-hidden="true"
+            class="group-hover:hover-text-util text-base-content h-5 w-5"
+          />
+        </NuxtLink>
 
         <PostSource
           :post-file-url="post.media_type === 'video' ? mediaFile.posterFile : mediaFile.file"
