@@ -3,7 +3,7 @@ import { ArrowRightOnRectangleIcon, BookmarkIcon, SparklesIcon } from '@heroicon
 import { sidebarNavigation } from '~/assets/js/sidebarLinks'
 import { project } from '@/config/project'
 
-const localePath = useLocalePath()
+  const localePath = useLocalePath()
   const { isPremium } = useUserData()
   const { seasonalEmoji } = useSeasonalIcon()
 </script>

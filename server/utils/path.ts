@@ -1,4 +1,3 @@
-import { hasProtocol } from 'ufo'
 import { localeCodes } from '~/config/i18n'
 
 export function stripLocaleFromPath(path: string) {
@@ -9,8 +8,4 @@ export function stripLocaleFromPath(path: string) {
 
   url.pathname = '/' + segments.slice(1).join('/')
   return url.pathname + url.search + url.hash
-}
-
-export function isExternalHref(href: string) {
-  return hasProtocol(href, { acceptRelative: true })
 }

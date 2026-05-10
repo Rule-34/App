@@ -21,13 +21,33 @@
  * Track upstream: https://github.com/nuxt-modules/i18n
  */
 
+function withTagsQuery(href: string, tags: string): string {
+  const parsed = new URL(href, 'https://example.com')
+  parsed.searchParams.set('tags', tags)
+
+  if (/^[a-z]+:\/\//i.test(href) || href.startsWith('//')) {
+    return parsed.toString()
+  }
+
+  return `${parsed.pathname}${parsed.search}${parsed.hash}`
+}
+
 function patchCanonicalTags(headHtml: string, tags: string): string {
   if (!tags) return headHtml
-  return headHtml.replace(
-    /(<link\b[^>]*\brel=["']canonical["'][^>]*href=["'])([^"']+)(["'][^>]*>)/i,
-    (_match, before: string, href: string, after: string) => {
-      if (!href) return `${before}${href}${after}`
-      return `${before}${href}?tags=${encodeURIComponent(tags)}${after}`
+
+  const withCanonical = headHtml.replace(
+    /<link\b(?=[^>]*\brel=["']canonical["'])(?=[^>]*\bhref=["']([^"']+)["'])[^>]*>/i,
+    (match: string, href: string) => {
+      if (!href) return match
+      return match.replace(href, withTagsQuery(href, tags))
+    }
+  )
+
+  return withCanonical.replace(
+    /<link\b(?=[^>]*\brel=["']alternate["'])(?=[^>]*\bhref=["']([^"']+)["'])[^>]*>/gi,
+    (match: string, href: string) => {
+      if (!href) return match
+      return match.replace(href, withTagsQuery(href, tags))
     }
   )
 }

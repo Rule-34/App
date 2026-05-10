@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { isExternalHref } from '~/composables/locale'
+  import { isExternalHref } from '~/composables/locale'
 
-const props = defineProps<{
+  const props = defineProps<{
     domain: string
 
     tags: {

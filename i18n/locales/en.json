@@ -122,7 +122,10 @@
       "resetLabel": "Reset",
       "resetDescription": "Clear settings, cookies, and all other app data",
       "languageName": "Language",
-      "languageDescription": "Choose the display language for the interface"
+      "languageDescription": "Choose the display language for the interface",
+      "blockListDefault": "Default",
+      "blockListCustom": "Custom",
+      "blockListNone": "None"
     },
     "otherSites": {
       "title": "Other sites",
@@ -465,10 +468,13 @@
   "search": {
     "label": "Search",
     "placeholder": "Search for tags",
-    "changeOptions": "Change options",
+    "changeOptions": "Change {label} options",
     "createTag": "Create \"{tag}\" tag",
     "selectedTags": "Selected tags",
     "excludeOrIncludeTag": "Exclude or Include tag",
+    "excludeTag": "Exclude tag",
+    "includeTag": "Include tag",
+    "submit": "Search",
     "tagNote": "Note:",
     "removeTagHint": "To remove a tag, click on its name",
     "excludeTagHint": "To exclude search results with a specific tag, click the block icon next to it",
@@ -498,7 +504,6 @@
     "socialTitle": "Get the best Hentai on social media! 📱",
     "socialText": "We're on Bluesky, Mastodon and Telegram"
   },
-  "settings": { "blockListDefault": "Default", "blockListCustom": "Custom", "blockListNone": "None" },
   "seoFooter": {
     "defaultTag": "Anime",
     "h2": "Rule 34 {tags} hentai images and videos",

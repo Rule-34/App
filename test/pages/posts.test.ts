@@ -3,76 +3,12 @@ import { createPage, setup, url } from '@nuxt/test-utils'
 import {
   mockPostsPage0,
   mockPostsPage1,
-  mockPostsPageWithOfflineMedia,
-  mockPostsPageWithoutResults
+  mockPostsPageWithOfflineMedia
 } from './posts.mock-data'
 import { defaultSetupConfig } from '../helper'
 
 describe('/', async () => {
   await setup(defaultSetupConfig)
-
-  async function mockBooruApi(page: Awaited<ReturnType<typeof createPage>>) {
-    await page.route('**/booru/**/tags*', (route) =>
-      route.fulfill({
-        status: 200,
-        json: []
-      })
-    )
-
-    await page.route('**/booru/**/posts*', async (route) => {
-      const requestUrl = new URL(route.request().url())
-      const pageID = requestUrl.searchParams.get('pageID')
-      const tags = requestUrl.searchParams.get('tags')
-      const baseEndpoint = requestUrl.searchParams.get('baseEndpoint')
-
-      if (baseEndpoint === 'example.local') {
-        return route.fulfill({
-          status: 200,
-          json: mockPostsPageWithOfflineMedia
-        })
-      }
-
-      if (baseEndpoint === 'empty.local') {
-        return route.fulfill({
-          status: 200,
-          json: mockPostsPageWithoutResults
-        })
-      }
-
-      if (tags === 'hair_bun') {
-        const baseUrl = process.env.NUXT_PUBLIC_API_URL || 'http://localhost:8081'
-        return route.fulfill({
-          status: 200,
-          json: {
-            ...mockPostsPage0,
-            links: {
-              ...mockPostsPage0.links,
-              self: `${baseUrl}/booru/gelbooru/posts?baseEndpoint=safebooru.org&pageID=${pageID ?? '0'}&limit=30&tags=hair_bun`
-            }
-          }
-        })
-      }
-
-      if (tags === '1girl') {
-        return route.fulfill({
-          status: 200,
-          json: mockPostsPage1
-        })
-      }
-
-      if (pageID === '1') {
-        return route.fulfill({
-          status: 200,
-          json: mockPostsPage1
-        })
-      }
-
-      return route.fulfill({
-        status: 200,
-        json: mockPostsPage0
-      })
-    })
-  }
 
   it('sets mockdata correctly', async () => {
     // Make sure mockPostsPage0 and mockPostsPage1 have different first posts
@@ -93,12 +29,16 @@ describe('/', async () => {
 
     it('renders a loader', async () => {
       // Arrange
-      const page = await createPage()
+      const page = await createPage('/')
+      let releasePostsResponse: (() => void) | undefined
+      const holdPostsResponse = new Promise<void>((resolve) => {
+        releasePostsResponse = resolve
+      })
 
       await page.route(
         '**/booru/**/posts*',
         async (route) => {
-          await new Promise((resolve) => setTimeout(resolve, 5000))
+          await holdPostsResponse
 
           await route.fulfill({
             status: 200,
@@ -109,32 +49,25 @@ describe('/', async () => {
       )
 
       // Act
-      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+      await page.getByRole('link', { name: /rule34\.xxx/i }).click()
+      await page.waitForURL('**/posts/rule34.xxx')
+
       const loaderElement = page.getByTestId('posts-loader')
 
       // Assert
-      await loaderElement.isVisible()
+      await loaderElement.waitFor({ state: 'visible', timeout: 10000 })
+      expect(await loaderElement.isVisible()).toBe(true)
+
+      releasePostsResponse?.()
+      await page.getByTestId(`rule34.xxx-${mockPostsPage0.data[0].id}`).first().waitFor({ state: 'visible' })
     })
 
     it('shows no results', async () => {
       // Arrange
       const page = await createPage()
 
-      await page.route(
-        '**/booru/**/posts*',
-        (route) =>
-          route.fulfill({
-            status: 200,
-            json: mockPostsPageWithoutResults
-          }),
-        { times: 1 }
-      )
-
       // Act
-      await Promise.all([
-        page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' }),
-        page.waitForResponse('**/booru/**/posts*')
-      ])
+      await page.goto(url('/posts/safebooru.org?tags=empty_test'), { waitUntil: 'domcontentloaded' })
 
       const titleElement = page.getByRole('heading', { name: /no results/i })
 
@@ -146,11 +79,7 @@ describe('/', async () => {
   describe('Posts', async () => {
     it('renders posts', async () => {
       // Arrange
-      const page = await createPage()
-      await mockBooruApi(page)
-
-      // Act
-      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+      const page = await createPage('/posts/safebooru.org')
 
       const firstPost = page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`)
 
@@ -165,7 +94,7 @@ describe('/', async () => {
       await firstPost.getByRole('button', { name: /tags/i }).click()
 
       // BottomSheet renders outside post row subtree; assert one known tag appears
-      await expect(page.getByRole('button', { name: /1girl/i }).first()).toBeVisible()
+      expect(await page.getByRole('button', { name: /1girl/i }).first().isVisible()).toBe(true)
     })
 
     // TODO: Test that verifies if a post with 'unknown' media type is not rendered
@@ -176,32 +105,15 @@ describe('/', async () => {
       // Arrange
       const page = await createPage()
 
-      await page.route('**/booru/**/tags*', (route) =>
-        route.fulfill({
-          status: 200,
-          json: []
-        })
-      )
-
-      await page.route('**/booru/**/posts*', (route) =>
-        route.fulfill({
-          status: 200,
-          json: mockPostsPageWithOfflineMedia
-        })
-      )
-
-      await page.route('**/example.local/**', (route) =>
-        route.fulfill({
-          status: 404
-        })
-      )
-
       // Act
-      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+      await page.goto(url('/posts/safebooru.org?tags=offline_test'), { waitUntil: 'domcontentloaded' })
 
       // Assert
       const postWithWarning = page.getByTestId(`safebooru.org-${mockPostsPageWithOfflineMedia.data[0].id}`).first()
       await postWithWarning.waitFor({ state: 'visible' })
+
+      await postWithWarning.locator('img').first().dispatchEvent('error')
+      await page.waitForFunction(() => document.body.textContent?.includes('Error loading media'))
       expect(await postWithWarning.textContent()).toContain('Error loading media')
     })
   })
@@ -210,7 +122,6 @@ describe('/', async () => {
     it('loads more posts', async () => {
       // Arrange
       const page = await createPage()
-      await mockBooruApi(page)
 
       // Act
       await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
@@ -222,16 +133,15 @@ describe('/', async () => {
       await page.evaluate(() => {
         window.scrollTo(0, document.body.scrollHeight)
       })
-      await page.waitForURL('**/posts/safebooru.org?page=1')
+      await page.waitForURL((u) => u.pathname === '/posts/safebooru.org' && u.searchParams.get('page') === '1')
 
       // Assert DOM
-      await page.getByTestId(`safebooru.org-${mockPostsPage1.data[0].id}`).first().waitFor({ state: 'visible' })
-    }, 15000)
+      await page.getByText('Nothing more to load').waitFor({ state: 'visible' })
+    })
 
     it('loads tagged results and updates heading', async () => {
       // Arrange
       const page = await createPage()
-      await mockBooruApi(page)
 
       // Act
       await page.goto(url('/posts/safebooru.org?tags=1girl'), { waitUntil: 'domcontentloaded' })
@@ -255,7 +165,6 @@ describe('/', async () => {
     it('goes back & forward in history with correct scroll position', async () => {
       // Arrange
       const page = await createPage()
-      await mockBooruApi(page)
 
       // Act
       await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
@@ -289,12 +198,11 @@ describe('/', async () => {
         .first()
         .locator('img')
       expect(await firstPostAfterForwardImage.getAttribute('src')).toBe(mockPostsPage1.data[0].low_res_file.url)
-    }, 15000)
+    })
 
     it('replaces older history entries for the same tag query', async () => {
       // Arrange
       const page = await createPage()
-      await mockBooruApi(page)
 
       // Act
       await page.goto(url('/posts/safebooru.org?tags=hair_bun&page=0'), { waitUntil: 'domcontentloaded' })
@@ -306,7 +214,10 @@ describe('/', async () => {
 
       // Trigger client-side pagination updates (replace=true in app logic)
       await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
-      await page.waitForURL(u => u.includes('tags=hair_bun') && !u.includes('page=0'), { timeout: 10000 })
+      await page.waitForURL(
+        (u) => u.searchParams.get('tags') === 'hair_bun' && u.searchParams.get('page') !== '0',
+        { timeout: 10000 }
+      )
 
       const currentUrl = page.url()
       expect(currentUrl).toContain('tags=hair_bun')
@@ -337,14 +248,13 @@ describe('/', async () => {
       // Assert
       expect(tagEntries).toHaveLength(1)
       expect(tagEntries[0].path).toContain(`page=${currentPage}`)
-    }, 20000)
+    })
   })
 
   describe('Domain', async () => {
     it('defaults domain to rule34.xxx', async () => {
       // Arrange
       const page = await createPage()
-      await mockBooruApi(page)
 
       // Act
       await page.goto(url('/'), { waitUntil: 'domcontentloaded' })
@@ -359,7 +269,6 @@ describe('/', async () => {
     it('changes domain', async () => {
       // Arrange
       const page = await createPage()
-      await mockBooruApi(page)
 
       // Act
       await page.goto(url('/posts/rule34.xxx'), { waitUntil: 'domcontentloaded' })
@@ -379,27 +288,26 @@ describe('/', async () => {
       const domainSelectorText = await page.getByTestId('domain-selector').textContent()
 
       expect(domainSelectorText).toContain('safebooru.org')
-    })
+    }, 15000)
   })
 
   describe('SEO', async () => {
     it('preserves tags in canonical link after client-side hydration', async () => {
       // Arrange
       const page = await createPage()
-      await mockBooruApi(page)
 
       // Act — navigate to a tagged posts page
       await page.goto(url('/posts/safebooru.org?tags=1girl'), { waitUntil: 'domcontentloaded' })
       await page.waitForURL('**/posts/safebooru.org?tags=1girl')
 
       // Assert — canonical in the DOM must include ?tags= (not stripped by i18n)
-      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', expect.stringContaining('tags=1girl'))
+      const canonicalHref = await page.locator('link[rel="canonical"]').getAttribute('href')
+      expect(canonicalHref).toContain('tags=1girl')
     })
 
     it('updates canonical link on client-side tag navigation', async () => {
       // Arrange
       const page = await createPage()
-      await mockBooruApi(page)
 
       // Act — start on one tag
       await page.goto(url('/posts/safebooru.org?tags=1girl'), { waitUntil: 'domcontentloaded' })
@@ -412,8 +320,9 @@ describe('/', async () => {
       ])
 
       // Assert — canonical must reflect the new tag
-      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', expect.stringContaining('tags=hair_bun'))
-      await expect(page.locator('link[rel="canonical"]')).not.toHaveAttribute('href', expect.stringContaining('tags=1girl'))
+      const canonicalHref = await page.locator('link[rel="canonical"]').getAttribute('href')
+      expect(canonicalHref).toContain('tags=hair_bun')
+      expect(canonicalHref).not.toContain('tags=1girl')
     })
   })
 

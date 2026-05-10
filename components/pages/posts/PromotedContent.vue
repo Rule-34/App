@@ -5,7 +5,7 @@
     premiumPromotions,
     referralPromotions
   } from '~/assets/js/promotions'
-  import { default as random_weighted_choice } from 'random-weighted-choice'
+  import { default as randomWeightedChoice } from 'random-weighted-choice'
   import { isExternalHref } from '~/composables/locale'
 
   const localePath = useLocalePath()
@@ -29,7 +29,7 @@
     }
   ]
 
-  const selectedPromotionsName = random_weighted_choice(weightedPromotions)
+  const selectedPromotionsName = randomWeightedChoice(weightedPromotions)
 
   let selectedPromotions = []
 
@@ -51,6 +51,8 @@
   }
 
   const promo = selectedPromotions[Math.floor(Math.random() * selectedPromotions.length)]
+
+  const isExternal = isExternalHref(promo.link)
 </script>
 
 <template>
@@ -76,10 +78,10 @@
     <!-- Media -->
     <NuxtLink
       v-else
-      :href="isExternalHref(promo.link) ? promo.link : localePath(promo.link)"
-:target="isExternalHref(promo.link) ? '_blank' : null"
+      :href="isExternal ? promo.link : localePath(promo.link)"
+:target="isExternal ? '_blank' : null"
 
-      :rel="isExternalHref(promo.link) ? 'nofollow noopener' : undefined"
+      :rel="isExternal ? 'nofollow noopener' : undefined"
     >
       <!-- TODO: Temporarily hardcode post index for promoted content -->
       <PostMedia
@@ -97,7 +99,7 @@
     <!-- Body -->
     <figcaption class="px-1 py-3 text-center text-sm whitespace-normal">
       <NuxtLink
-        :href="localePath('/premium?utm_source=internal&utm_medium=promo#pricing')"
+        :href="localePath({ path: '/premium', query: { utm_source: 'internal', utm_medium: 'promo' }, hash: '#pricing' })"
         class="hover:hover-text-util focus-visible:focus-outline-util underline"
         >{{ $t('media.getPremium')
         }}<!----></NuxtLink

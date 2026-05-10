@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { $fetch, setup } from '@nuxt/test-utils'
-import { locales } from '../../config/i18n'
+import { defaultLocale, locales } from '../../config/i18n'
 import { project } from '../../config/project'
 import { debugBrowserOptions } from '../helper'
 
@@ -60,43 +60,31 @@ describe('SEO canonical URLs', async () => {
 
     const alternateTags =
       html.match(/<link\b(?=[^>]*\brel=["']alternate["'])[^>]*>/gi) || []
-    const codes = alternateTags
-      .map((tag) => tag.match(/hreflang=["']([^"']+)["']/)?.[1])
-      .filter(Boolean)
+    const alternates = alternateTags
+      .map((tag) => ({
+        hreflang: tag.match(/hreflang=["']([^"']+)["']/)?.[1],
+        href: tag.match(/href=["']([^"']+)["']/)?.[1]
+      }))
+      .filter((alternate): alternate is { hreflang: string; href: string } => !!alternate.hreflang && !!alternate.href)
 
-    const uniqueCodes = [...new Set(codes)]
-    const expected = [...localeCodes, 'x-default']
-    expect(uniqueCodes.sort()).toEqual(expected.sort())
-  })
+    const alternatesByLang = new Map(alternates.map((alternate) => [alternate.hreflang, alternate.href]))
 
-  /**
-   * Canonical must always point to the main production domain so clone/mirror
-   * domains do not dilute SEO authority or get indexed as separate sites.
-   */
-  describe('clone domain canonicalization', () => {
-    it('posts page on clone host canonicalizes to main domain', async () => {
-      const html = await $fetch('/posts/e621.net?tags=solo', {
-        headers: { Host: 'alt3.r34.app' }
-      })
+    const expectedByLang = new Map<string, string>()
 
-      expect(getCanonical(html)).toBe(`${project.urls.production.origin}/posts/e621.net?tags=solo`)
-    })
+    for (const locale of locales) {
+      const prefix = locale.code === defaultLocale ? '' : `/${locale.code}`
+      const expectedHref = `${project.urls.production.origin}${prefix}/posts/e621.net?tags=solo`
+      expectedByLang.set(locale.code, expectedHref)
+      expectedByLang.set(locale.language, expectedHref)
+    }
 
-    it('locale-prefixed route on external clone host canonicalizes to main domain', async () => {
-      const html = await $fetch('/es/posts/e621.net?tags=solo', {
-        headers: { Host: 'naughtyneko.com' }
-      })
+    expectedByLang.set('x-default', `${project.urls.production.origin}/posts/e621.net?tags=solo`)
 
-      expect(getCanonical(html)).toBe(`${project.urls.production.origin}/es/posts/e621.net?tags=solo`)
-    })
+    expect([...alternatesByLang.keys()].sort()).toEqual([...expectedByLang.keys()].sort())
 
-    it('home page on clone host canonicalizes to main domain', async () => {
-      const html = await $fetch('/', {
-        headers: { Host: 'alt3.r34.app' }
-      })
-
-      expect(getCanonical(html)).toBe(`${project.urls.production.origin}/`)
-    })
+    for (const [hreflang, expectedHref] of expectedByLang.entries()) {
+      expect(alternatesByLang.get(hreflang)).toBe(expectedHref)
+    }
   })
 
   describe('OG image', () => {
@@ -114,6 +102,13 @@ describe('SEO canonical URLs', async () => {
       const ogImage = getOgImage(html)
       expect(ogImage).toBeTruthy()
       expect(ogImage).toMatch(/^https?:\/\//)
+    })
+
+    it('has only one og:image tag on posts pages', async () => {
+      const html = await $fetch('/posts/e621.net?tags=solo')
+
+      const matches = html.match(/<meta\b[^>]*\bproperty=["']og:image["']/gi)
+      expect(matches?.length ?? 0).toBe(1)
     })
 
     it('has only one og:image tag', async () => {

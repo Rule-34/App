@@ -40,7 +40,7 @@
     as="div"
     @update:modelValue="emit('update:modelValue', $event)"
   >
-    <HeadlessListboxLabel class="sr-only">{{ $t('search.changeOptions') }}</HeadlessListboxLabel>
+    <HeadlessListboxLabel class="sr-only">{{ $t('search.changeOptions', { label }) }}</HeadlessListboxLabel>
 
       <!-- Button -->
       <div class="inline-flex divide-x divide-base-0/20 rounded-md ring-1 ring-base-0/20">
@@ -83,7 +83,7 @@
             :value="option"
           >
             <div
-              :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+              :class="[active ? 'hover-bg-util text-base-content-highlight' : 'text-base-content']"
               class="cursor-default select-none px-4 py-2.5 text-sm"
             >
               <div class="flex flex-col">

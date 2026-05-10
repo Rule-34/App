@@ -6,47 +6,41 @@
   import { project } from '@/config/project'
   import { locales as i18nLocales } from '~/config/i18n'
 
-  const { t, locale, locales } = useI18n()
-  const router = useRouter()
-  const switchLocalePath = useSwitchLocalePath()
+  const { t, locale, setLocale } = useI18n()
 
-  const localeFlagByCode = Object.fromEntries(
-    i18nLocales.map((l) => [l.code, l.flag])
-  ) as Record<string, string>
+  const localeOptions = i18nLocales.map((l) => ({
+    code: l.code,
+    label: `${l.flag} ${l.name}`
+  }))
 
-  const localeOptions = computed(() =>
-    locales.value.map((l) => ({
-      code: l.code,
-      label: `${localeFlagByCode[l.code] ?? '🌐'} ${l.name}`
-    }))
-  )
-
-  const localeNames = computed(() => localeOptions.value.map((l) => l.label))
-  const currentLocaleName = computed(() => localeOptions.value.find((l) => l.code === locale.value)?.label ?? '')
+  const localeNames = localeOptions.map((l) => l.label)
+  const currentLocaleName = computed(() => localeOptions.find((l) => l.code === locale.value)?.label ?? '')
 
   function onLocaleChange(name: string) {
-    const loc = localeOptions.value.find((l) => l.label === name)
+    const loc = localeOptions.find((l) => l.label === name)
     if (loc) {
-      router.push(switchLocalePath(loc.code))
+      setLocale(loc.code)
     }
   }
 
   useSeoMeta({
-    title: computed(() => t('pages.settings.title')),
-    description: computed(() => t('pages.settings.description', { name: project.name }))
+    title: () => t('pages.settings.title'),
+    description: () => t('pages.settings.description', { name: project.name })
   })
 
   const appVersion = version
 
   const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia, blockAiGeneratedImages } = useUserSettings()
   const { isPremium } = useUserData()
-  const { selectedList, selectedBlockList, defaultBlockList, customBlockList, resetCustomBlockList } = useBlockLists()
+  const { selectedList, selectedBlockList, defaultBlockList, customBlockList } = useBlockLists()
 
   const blockListOptionsList = computed(() => [
-    { value: blockListOptions.Default, label: t('settings.blockListDefault') },
-    { value: blockListOptions.Custom, label: t('settings.blockListCustom') },
-    { value: blockListOptions.None, label: t('settings.blockListNone') }
+    { value: blockListOptions.Default, label: t('pages.settings.blockListDefault') },
+    { value: blockListOptions.Custom, label: t('pages.settings.blockListCustom') },
+    { value: blockListOptions.None, label: t('pages.settings.blockListNone') }
   ])
+
+  const blockListOptionsLabels = computed(() => blockListOptionsList.value.map((o) => o.label))
 
   const selectedListLabel = computed(
     () => blockListOptionsList.value.find((o) => o.value === selectedList.value)?.label ?? selectedList.value
@@ -203,7 +197,7 @@
         <li>
           <SettingSelect
             :modelValue="selectedListLabel"
-            :options="blockListOptionsList.map((o) => o.label)"
+            :options="blockListOptionsLabels"
             @update:modelValue="onSelectedListChange"
           >
             <template #name>{{ t('pages.settings.tagBlockListName') }}</template>

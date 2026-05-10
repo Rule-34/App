@@ -8,7 +8,6 @@ import { project } from '@/config/project'
 interface SelectedFilters {
     rating?: string
     sort?: string
-    score?: string
   }
 
   const RELATED_TAGS = ['highres', 'animated', 'cum', 'big_breasts', '1girl', '1boy']
@@ -66,7 +65,7 @@ interface SelectedFilters {
     return translated === key ? t('filters.ratingExplicit') : translated
   })
 
-  const formattedCount = computed(() => (props.postsCount > 0 ? `${props.postsCount}+ ` : ''))
+  const formattedCount = computed(() => (props.postsCount > 0 ? `${props.postsCount}+` : ''))
 
   const sortLabel = computed(() => {
     if (!props.selectedFilters.sort) return t('seoFooter.mostPopularUploads')

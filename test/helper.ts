@@ -19,5 +19,8 @@ export const debugBrowserOptions: TestOptions['browserOptions'] = {
 
 export const defaultSetupConfig: TestOptions = {
   browser: true,
-  browserOptions: defaultBrowserOptions
+  browserOptions: defaultBrowserOptions,
+  env: {
+    NUXT_PUBLIC_API_URL: ''
+  }
 }

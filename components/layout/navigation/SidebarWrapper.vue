@@ -99,7 +99,7 @@
         :key="link.nameKey"
       >
         <a
-          :href="localePath(link.href)"
+          :href="link.isExternal ? link.href : localePath(link.href)"
           :rel="link.isExternal ? 'noopener noreferrer nofollow' : ''"
         >
           {{ $t(link.nameKey) }}

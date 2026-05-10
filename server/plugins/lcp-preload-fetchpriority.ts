@@ -1,4 +1,4 @@
-import { stripLocaleFromPath } from '~/composables/locale'
+import { stripLocaleFromPath } from '~/server/utils/path'
 
 export default defineNitroPlugin((nitroApp) => {
   /**

@@ -14,11 +14,11 @@ const localePath = useLocalePath()
         .replace('/posts/', 'domain: ')
         .replace('?', '&')
         .split('&')
-        .map((_query) => {
-          let query = _query
+        .map((rawQuery) => {
+          let query = rawQuery
 
           try {
-            query = decodeURIComponent(_query)
+            query = decodeURIComponent(rawQuery)
           } catch {
             // Keep raw query when percent-encoding is malformed
           }

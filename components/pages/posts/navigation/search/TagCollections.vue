@@ -14,6 +14,7 @@
 
   const localePath = useLocalePath()
   const { isPremium } = useUserData()
+  const { t } = useI18n()
 
   const { tagCollections } = useTagCollections()
 
@@ -30,8 +31,6 @@
 
     emit('updateSelectedTags', selectedTags)
   }
-
-  const { t } = useI18n()
 
   function createTagCollectionFromSelectedTags() {
     const selectedTags = props.selectedTags
@@ -107,7 +106,9 @@
             <div class="flex items-center justify-center gap-x-1.5">
               <span>
                 {{ tagCollection.tags.length }}
-                <span class="sr-only">{{ $t('pages.premium.tagCollectionsPage.tagsInCollection', tagCollection.tags.length) }}</span>
+                <span class="sr-only">{{
+                $t('pages.premium.tagCollectionsPage.tagsInCollection', tagCollection.tags.length)
+              }}</span>
               </span>
 
               <TagIcon aria-hidden="true" class="h-5 w-5" />

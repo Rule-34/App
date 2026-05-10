@@ -215,7 +215,7 @@
             :value="customTagFromQuery"
           >
             <div
-              :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+              :class="[active ? 'hover-bg-util text-base-content-highlight' : 'text-base-content']"
               class="relative cursor-default py-2 pl-8 select-none"
             >
               <span :class="['block truncate', selected && 'font-semibold']">
@@ -242,7 +242,7 @@
             :value="tag"
           >
             <div
-              :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+              :class="[active ? 'hover-bg-util text-base-content-highlight' : 'text-base-content']"
               class="relative cursor-default py-2 pr-12 pl-8 select-none"
             >
               <!-- Check icon -->
@@ -350,7 +350,7 @@
 
           <!-- Exclude button -->
           <button
-            :aria-label="t('search.excludeOrIncludeTag')"
+            :aria-label="isTagExcluded(tag.name) ? t('search.includeTag') : t('search.excludeTag')"
             class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util group border-base-0/20 inline-flex h-full items-center rounded-r-full border py-1 pr-2.5 pl-1.5 focus-visible:ring-inset"
             type="button"
             @click="toggleSelectedTagAsExcluded(index)"
@@ -390,7 +390,7 @@
       type="submit"
       @click="onSubmitted"
     >
-      {{ t('search.label') }}
+      {{ t('search.submit') }}
     </button>
   </footer>
 </template>

@@ -4,8 +4,8 @@
   const { t } = useI18n()
 
   useSeoMeta({
-    title: computed(() => t('pages.legal.cookiePolicy')),
-    description: computed(() => t('pages.legal.cookiePolicyDescription', { name: project.name }))
+    title: () => t('pages.legal.cookiePolicy'),
+    description: () => t('pages.legal.cookiePolicyDescription', { name: project.name })
   })
 </script>
 

@@ -24,6 +24,13 @@ const { t } = useI18n()
   /**
    * Countdown timer showing remaining time (using VueUse's reactive now)
    */
+  const countdownLabels = computed(() => ({
+    days: t('time.days'),
+    hours: t('time.hours'),
+    minutes: t('time.minutes'),
+    seconds: t('time.seconds')
+  }))
+
   const countdownText = computed(() => {
     if (!endDate.value) return null
 
@@ -36,7 +43,10 @@ const { t } = useI18n()
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
     const seconds = Math.floor((diff % (1000 * 60)) / 1000)
 
-    const d = t('time.days'), h = t('time.hours'), m = t('time.minutes'), s = t('time.seconds')
+    const d = countdownLabels.value.days
+    const h = countdownLabels.value.hours
+    const m = countdownLabels.value.minutes
+    const s = countdownLabels.value.seconds
 
     if (days > 0) {
       return `${days}${d} ${hours}${h} ${minutes}${m} ${seconds}${s}`
@@ -74,14 +84,16 @@ const { t } = useI18n()
           class="text-base"
         >{{ activePromotion.emoji }}</span>
 
-        <span class="text-primary-400 text-sm font-bold"> {{ t('promotions.percentOff', { percent: activePromotion.discountPercent }) }} </span>
+        <span class="text-primary-400 text-sm font-bold">
+            {{ t('promotions.percentOff', { percent: activePromotion.discountPercent }) }}
+          </span>
       </div>
     </div>
 
     <div class="bg-base-1000/70 ring-base-0/10 relative rounded-2xl p-5 ring-2 backdrop-blur-sm sm:p-6">
       <!-- Close button -->
       <button
-        :aria-label="$t('common.closePromotionalBanner')"
+        :aria-label="t('common.closePromotionalBanner')"
         class="hover:hover-bg-util bg-base-1000 hover:hover-text-util focus-visible:focus-outline-util ring-base-0/20 absolute -top-4 -right-4 rounded-full p-1.5 text-2xl font-bold ring-2 ring-inset"
         type="button"
         @click="dismiss"

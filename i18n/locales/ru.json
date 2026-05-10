@@ -122,7 +122,10 @@
       "resetLabel": "Сброс",
       "resetDescription": "Очистить настройки, куки и все данные приложения",
       "languageName": "Язык",
-      "languageDescription": "Выберите язык отображения интерфейса"
+      "languageDescription": "Выберите язык отображения интерфейса",
+      "blockListDefault": "По умолчанию",
+      "blockListCustom": "Пользовательский",
+      "blockListNone": "Нет"
     },
     "otherSites": {
       "title": "Другие сайты",
@@ -473,8 +476,11 @@
     "excludeTagHint": "Чтобы исключить результаты с определённым тегом, нажмите значок блокировки рядом с ним",
     "placeholderWithExample": "Поиск тегов: genshin_impact",
     "searchTagOption": "Найти тег \"{tag}\"",
-    "changeOptions": "Изменить параметры",
-    "changeFilter": "Изменить {label}"
+    "changeOptions": "Изменить параметры {label}",
+    "changeFilter": "Изменить {label}",
+    "excludeTag": "Исключить тег",
+    "includeTag": "Включить тег",
+    "submit": "Поиск"
   },
   "promotions": {
     "percentOff": "СКИДКА {percent}%",
@@ -502,11 +508,6 @@
     "blockedText": "Получите доступ к {name} без ограничений через альтернативный сайт",
     "socialTitle": "Лучший хентай в социальных сетях! 📱",
     "socialText": "Мы есть в Bluesky, Mastodon и Telegram"
-  },
-  "settings": {
-    "blockListDefault": "По умолчанию",
-    "blockListCustom": "Пользовательский",
-    "blockListNone": "Нет"
   },
   "seoFooter": {
     "defaultTag": "Аниме",

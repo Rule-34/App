@@ -420,8 +420,7 @@ export default defineNuxtConfig({
 
     runtimeConfig: {
       public: {
-        apiUrl: '', // routes $fetch(baseURL: '') to local Nitro server
-        testAuthBypass: true
+        apiUrl: '' // routes $fetch(baseURL: '') to local Nitro server
       }
     },
 

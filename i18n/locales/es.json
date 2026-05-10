@@ -122,7 +122,10 @@
       "resetLabel": "Restablecer",
       "resetDescription": "Borrar ajustes, cookies y todos los demás datos de la aplicación",
       "languageName": "Idioma",
-      "languageDescription": "Elige el idioma de visualización de la interfaz"
+      "languageDescription": "Elige el idioma de visualización de la interfaz",
+      "blockListDefault": "Por defecto",
+      "blockListCustom": "Personalizada",
+      "blockListNone": "Ninguna"
     },
     "otherSites": {
       "title": "Otros sitios",
@@ -473,8 +476,11 @@
     "excludeTagHint": "Para excluir resultados con una etiqueta específica, haz clic en el ícono de bloqueo junto a ella",
     "placeholderWithExample": "Buscar etiquetas: genshin_impact",
     "searchTagOption": "Buscar etiqueta \"{tag}\"",
-    "changeOptions": "Cambiar opciones",
-    "changeFilter": "Cambiar {label}"
+    "changeOptions": "Cambiar opciones de {label}",
+    "changeFilter": "Cambiar {label}",
+    "excludeTag": "Excluir etiqueta",
+    "includeTag": "Incluir etiqueta",
+    "submit": "Buscar"
   },
   "promotions": {
     "percentOff": "{percent}% de descuento",
@@ -502,11 +508,6 @@
     "blockedText": "Accede a {name} sin restricciones, con el sitio alternativo",
     "socialTitle": "¡Obtén el mejor Hentai en redes sociales! 📱",
     "socialText": "Estamos en Bluesky, Mastodon y Telegram"
-  },
-  "settings": {
-    "blockListDefault": "Por defecto",
-    "blockListCustom": "Personalizada",
-    "blockListNone": "Ninguna"
   },
   "seoFooter": {
     "defaultTag": "Anime",

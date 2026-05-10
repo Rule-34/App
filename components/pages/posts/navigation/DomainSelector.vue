@@ -86,7 +86,7 @@
     >
       <span class="flex items-center">
         <img
-          :alt="$t('common.favicon')"
+          :alt="t('common.favicon')"
           :src="`https://icons.duckduckgo.com/ip2/${props.modelValue.domain}.ico`"
           class="h-5 w-5 shrink-0 rounded-sm"
           height="128"
@@ -140,7 +140,7 @@
             >
               <div class="flex items-center">
                 <img
-                  :alt="$t('common.favicon')"
+                  :alt="t('common.favicon')"
                   :src="`https://icons.duckduckgo.com/ip2/${booru.domain}.ico`"
                   class="h-5 w-5 shrink-0 rounded-sm"
                   height="128"
@@ -156,7 +156,7 @@
                   v-if="shouldBooruBeDisabled(booru)"
                   class="border-primary-500/60 text-base-content-highlight ml-2 inline-flex items-center rounded-full border-2 px-2.5 py-0.5 text-xs font-medium"
                 >
-                  {{ $t('common.premium') }}
+                  {{ t('common.premium') }}
                 </span>
               </div>
 

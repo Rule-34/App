@@ -122,7 +122,10 @@
       "resetLabel": "リセット",
       "resetDescription": "設定、Cookie、その他すべてのアプリデータを消去",
       "languageName": "言語",
-      "languageDescription": "インターフェースの表示言語を選択してください"
+      "languageDescription": "インターフェースの表示言語を選択してください",
+      "blockListDefault": "デフォルト",
+      "blockListCustom": "カスタム",
+      "blockListNone": "なし"
     },
     "otherSites": {
       "title": "その他のサイト",
@@ -473,8 +476,11 @@
     "excludeTagHint": "特定のタグを検索結果から除外するには、隣のブロックアイコンをクリックしてください",
     "placeholderWithExample": "タグを検索：genshin_impact",
     "searchTagOption": "\"{tag}\"タグを検索",
-    "changeOptions": "オプションを変更",
-    "changeFilter": "{label}を変更"
+    "changeOptions": "{label}のオプションを変更",
+    "changeFilter": "{label}を変更",
+    "excludeTag": "タグを除外",
+    "includeTag": "タグを含める",
+    "submit": "検索"
   },
   "promotions": {
     "percentOff": "{percent}%OFF",
@@ -502,11 +508,6 @@
     "blockedText": "代替サイトで{name}に制限なくアクセスできます",
     "socialTitle": "ソーシャルメディアで最高のヘンタイを！📱",
     "socialText": "Bluesky、Mastodon、Telegramにいます"
-  },
-  "settings": {
-    "blockListDefault": "デフォルト",
-    "blockListCustom": "カスタム",
-    "blockListNone": "なし"
   },
   "seoFooter": {
     "defaultTag": "アニメ",

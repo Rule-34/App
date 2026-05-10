@@ -179,7 +179,7 @@
                 >
                   <img
                     :src="`https://icons.duckduckgo.com/ip2/${getHostnameFromUrl(source)}.ico`"
-                    :alt="$t('common.favicon')"
+                    :alt="t('common.favicon')"
                     class="mr-3 h-5 w-5 shrink-0 rounded-sm"
                     height="128"
                     width="128"
@@ -213,7 +213,7 @@
               >
                 <img
                   :src="`https://icons.duckduckgo.com/ip2/${getHostnameFromUrl(service.link)}.ico`"
-                  :alt="$t('common.favicon')"
+                  :alt="t('common.favicon')"
                   class="mr-3 h-5 w-5 shrink-0 rounded-sm"
                   height="128"
                   width="128"
@@ -238,7 +238,7 @@
               >
                 <img
                   :src="`https://icons.duckduckgo.com/ip2/${getHostnameFromUrl(service.link)}.ico`"
-                  :alt="$t('common.favicon')"
+                  :alt="t('common.favicon')"
                   class="mr-3 h-5 w-5 shrink-0 rounded-sm"
                   height="128"
                   width="128"

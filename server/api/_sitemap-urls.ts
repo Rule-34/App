@@ -9,7 +9,8 @@ export default defineSitemapEventHandler(async () => {
   try {
     popularSiteSearchKeywords = await getPopularSiteSearchKeywordsFromMatomoApi()
   } catch (error) {
-    console.warn('[sitemap] Failed to fetch Matomo search keywords, sitemap will exclude dynamic tag URLs:', (error as Error).message)
+    const errMsg = error instanceof Error ? error.message : String(error)
+    console.warn('[sitemap] Failed to fetch Matomo search keywords, sitemap will exclude dynamic tag URLs:', errMsg)
   }
 
   return popularSiteSearchKeywords.map((keyword) =>

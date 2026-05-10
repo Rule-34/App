@@ -28,6 +28,7 @@ const props = defineProps<{
   const { isPremium } = useUserData()
   const { customBlockList, selectedList } = useBlockLists()
   const { copy } = useClipboard()
+  const { t } = useI18n()
 
   const referenceEl = ref<HTMLElement>()
   const floatingEl = ref<HTMLElement>()
@@ -44,8 +45,6 @@ const props = defineProps<{
   function isTagBlocked(tag: Tag): boolean {
     return customBlockList.value.includes(tag.name)
   }
-
-  const { t } = useI18n()
 
   async function copyTag() {
     await copy(props.tag.name)
