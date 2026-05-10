@@ -48,14 +48,17 @@
 
   function onSelectedListChange(label: string) {
     const option = blockListOptionsList.value.find((o) => o.label === label)
-    const value = (option?.value ?? label) as blockListOptions
 
-    if (value === blockListOptions.Custom && !isPremium.value) {
+    if (!option) {
+      return
+    }
+
+    if (option.value === blockListOptions.Custom && !isPremium.value) {
       toast.error(t('toasts.premiumRequiredBlocklist'))
       return
     }
 
-    selectedList.value = value
+    selectedList.value = option.value
   }
 
   function onBlockListFormSubmit(event: Event) {

@@ -41,18 +41,19 @@
     }
 
     const name = prompt(t('common.promptTagCollectionName'))
+    const trimmedName = name?.trim()
 
-    if (!name) {
+    if (!trimmedName) {
       return
     }
 
-    if (tagCollections.value.some((tagCollection) => tagCollection.name === name)) {
+    if (tagCollections.value.some((tagCollection) => tagCollection.name === trimmedName)) {
       toast.error(t('toasts.tagCollectionExists'))
       return
     }
 
     const tagCollection = new TagCollection({
-      name,
+      name: trimmedName,
       tags: selectedTags.map((tag) => tag.name)
     })
 

@@ -101,6 +101,9 @@ describe('/premium/backup', async () => {
 
     await fileChooser.setFiles(path.join(__dirname, 'backup.mock-data.json'))
 
+    // Wait for navigation to dashboard with success query parameter
+    await page.waitForURL('**/premium/dashboard?restoreSuccess=true')
+
     expect(pageErrors).toEqual([])
   })
 })

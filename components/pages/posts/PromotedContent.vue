@@ -79,8 +79,7 @@
     <NuxtLink
       v-else
       :href="isExternal ? promo.link : localePath(promo.link)"
-:target="isExternal ? '_blank' : null"
-
+      :target="isExternal ? '_blank' : undefined"
       :rel="isExternal ? 'nofollow noopener' : undefined"
     >
       <!-- TODO: Temporarily hardcode post index for promoted content -->
