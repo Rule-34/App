@@ -62,13 +62,7 @@
   }
 
   function historyDateToRelativeTime(date: Date | string) {
-    const timestamp = new Date(date).getTime()
-
-    if (Number.isNaN(timestamp)) {
-      return ''
-    }
-
-    const elapsed = timestamp - Date.now()
+    const elapsed = new Date(date).getTime() - Date.now()
 
     for (const { unit, ms } of relativeTimeUnits) {
       if (Math.abs(elapsed) >= ms || unit === 'second') {
@@ -80,13 +74,7 @@
   }
 
   function historyDateToISOString(date: Date | string) {
-    const timestamp = new Date(date)
-
-    if (Number.isNaN(timestamp.getTime())) {
-      return ''
-    }
-
-    return timestamp.toISOString()
+    return new Date(date).toISOString()
   }
 
   function onHistoryItemClick(path: string) {
