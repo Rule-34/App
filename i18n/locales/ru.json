@@ -335,7 +335,8 @@
       "newsTitle": "Новости",
       "topPosts": "Лучшие посты",
       "trendingPosts": "Популярные посты",
-      "animatedVideo": "Анимация (видео)"
+      "animatedVideo": "Анимация (видео)",
+      "noAi": "Без ИИ"
     },
     "newsletter": {
       "title": "Розыгрыш Premium",

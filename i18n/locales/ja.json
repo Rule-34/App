@@ -335,7 +335,8 @@
       "newsTitle": "ニュース",
       "topPosts": "トップ投稿",
       "trendingPosts": "トレンド投稿",
-      "animatedVideo": "アニメーション（動画）"
+      "animatedVideo": "アニメーション（動画）",
+      "noAi": "AIなし"
     },
     "newsletter": {
       "title": "Premiumプレゼント",

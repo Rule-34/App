@@ -335,7 +335,8 @@
       "newsTitle": "Noticias",
       "topPosts": "Top",
       "trendingPosts": "Trending",
-      "animatedVideo": "Animado (video)"
+      "animatedVideo": "Animado (video)",
+      "noAi": "Sin IA"
     },
     "newsletter": {
       "title": "Sorteo Premium",

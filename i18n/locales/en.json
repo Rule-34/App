@@ -335,7 +335,8 @@
       "newsTitle": "News",
       "topPosts": "Top posts",
       "trendingPosts": "Trending posts",
-      "animatedVideo": "Animated (video)"
+      "animatedVideo": "Animated (video)",
+      "noAi": "No AI"
     },
     "newsletter": {
       "title": "Premium Giveaway",

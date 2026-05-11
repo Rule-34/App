@@ -193,6 +193,39 @@ const config = useRuntimeConfig()
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/animated.jpeg' }]
         },
         {
+          name: t('pages.home.noAi'),
+          path: '/posts/rule34.xxx?tags=-ai_generated',
+          media: [
+            { type: 'image', src: '/img/featured/rule34.xxx/animated.jpeg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/atomic_heart.jpg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/brawl_stars.jpeg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/countryhumans.jpg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/five_nights_at_freddys.jpg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/friday_night_funkin.jpg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/genshin_impact.jpg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/honkai_star_rail.jpg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/minecraft.jpg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/murder_drones.jpg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-1.jpeg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-2.jpeg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-3.jpeg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-4.jpeg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-5.jpeg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-6.jpeg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-7.jpeg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/roblox.jpg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/top-1.jpg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/top-2.jpg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/top-3.jpg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/top-4.jpg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/top-5.jpg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/top-6.jpg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/top-7.jpg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/top-8.jpeg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/undertale.jpeg' }
+          ]
+        },
+        {
           name: 'Overwatch',
           path: '/posts/rule34.xxx?tags=overwatch',
           media: [
@@ -294,6 +327,26 @@ const config = useRuntimeConfig()
             { type: 'image', src: '/img/featured/rule34.paheal.net/animated-1.jpg' },
             { type: 'image', src: '/img/featured/rule34.paheal.net/animated-2.jpg' },
             { type: 'image', src: '/img/featured/rule34.paheal.net/animated-3.jpg' }
+          ]
+        },
+        {
+          name: t('pages.home.noAi'),
+          path: '/posts/rule34.paheal.net?tags=-ai_generated',
+          media: [
+            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-1.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-2.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-3.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-1.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-2.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-3.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-4.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-5.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-6.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-7.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-8.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-9.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-10.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-11.jpg' }
           ]
         },
         {
@@ -439,6 +492,23 @@ const config = useRuntimeConfig()
           name: t('pages.home.animatedVideo'),
           path: '/posts/e621.net?tags=animated',
           media: [{ type: 'image', src: '/img/featured/e621.net/animated.jpeg' }]
+        },
+        {
+          name: t('pages.home.noAi'),
+          path: '/posts/e621.net?tags=-ai_generated',
+          media: [
+            { type: 'image', src: '/img/featured/e621.net/animated.jpeg' },
+            { type: 'image', src: '/img/featured/e621.net/gay.jpeg' },
+            { type: 'image', src: '/img/featured/e621.net/pokemon.jpeg' },
+            { type: 'image', src: '/img/featured/e621.net/top-1.jpeg' },
+            { type: 'image', src: '/img/featured/e621.net/top-2.jpeg' },
+            { type: 'image', src: '/img/featured/e621.net/top-3.jpeg' },
+            { type: 'image', src: '/img/featured/e621.net/top-4.jpeg' },
+            { type: 'image', src: '/img/featured/e621.net/top-5.jpeg' },
+            { type: 'image', src: '/img/featured/e621.net/top-6.jpeg' },
+            { type: 'image', src: '/img/featured/e621.net/top-7.jpeg' },
+            { type: 'image', src: '/img/featured/e621.net/top-8.jpeg' }
+          ]
         },
         {
           name: 'Gay',
