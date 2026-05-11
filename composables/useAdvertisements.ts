@@ -64,8 +64,8 @@ export default function () {
     // },
     /**
      * Profiton
-     * Pros: 
-     * Cons: 
+     * Pros:
+     * Cons:
      */
     {
       id: 'https://je.deuxseethe.com/r1onMblLYR8e/rwnnn',
@@ -120,7 +120,7 @@ export default function () {
      */
     {
       id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
-      weight: 0.35
+      weight: 0.4
     },
     /**
      * AdMaven
@@ -129,7 +129,7 @@ export default function () {
      */
     {
       id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255040',
-      weight: 0.65
+      weight: 0.6
     }
   ]
 
@@ -178,7 +178,7 @@ export function useChatWithAiReferral() {
      */
     {
       id: 'https://crushon.ai/search?s={query}&ref=zdnmmzy&mist=1',
-      weight: 0.4
+      weight: 0.3
     },
     /**
      * SpicyChat
@@ -187,7 +187,7 @@ export function useChatWithAiReferral() {
      */
     {
       id: 'https://spicychat.ai/?public_characters_alias%2Fsort%2Fnum_messages_24h%3Adesc[query]={query}&ref=ode2nzn',
-      weight: 0.6
+      weight: 0.7
     }
   ]
 
