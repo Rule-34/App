@@ -5,7 +5,7 @@
     premiumPromotions,
     referralPromotions
   } from '~/assets/js/promotions'
-  import { default as randomWeightedChoice } from 'random-weighted-choice'
+  import randomWeightedChoice from 'random-weighted-choice'
   import { isExternalHref } from '~/composables/locale'
 
   const localePath = useLocalePath()
@@ -53,6 +53,16 @@
   const promo = selectedPromotions[Math.floor(Math.random() * selectedPromotions.length)]
 
   const isExternal = isExternalHref(promo.link)
+
+  const getInternalHref = (link) => {
+    const url = new URL(link, 'http://dummy')
+    const query = Object.fromEntries(url.searchParams.entries())
+    return localePath({
+      path: url.pathname,
+      query: Object.keys(query).length > 0 ? query : undefined,
+      hash: url.hash || undefined
+    })
+  }
 </script>
 
 <template>
@@ -78,7 +88,7 @@
     <!-- Media -->
     <NuxtLink
       v-else
-      :href="isExternal ? promo.link : localePath(promo.link)"
+      :href="isExternal ? promo.link : getInternalHref(promo.link)"
       :target="isExternal ? '_blank' : undefined"
       :rel="isExternal ? 'nofollow noopener' : undefined"
     >
