@@ -168,32 +168,12 @@
     <!-- Settings -->
     <section class="mx-2 mt-4 flex-auto">
       <ol class="space-y-4">
-        <!-- autoplayAnimatedMedia -->
+        <!-- blockAiGeneratedImages -->
         <li>
-          <SettingSwitch v-model="autoplayAnimatedMedia">
-            <template #name>{{ t('pages.settings.autoplayGifsName') }}</template>
-            <template #description>{{ t('pages.settings.autoplayGifsDescription') }}</template>
+          <SettingSwitch v-model="blockAiGeneratedImages">
+            <template #name>{{ t('pages.settings.blockAiPostsName') }}</template>
+            <template #description>{{ t('pages.settings.blockAiPostsDescription') }}</template>
           </SettingSwitch>
-        </li>
-
-        <!-- postFullSizeImages -->
-        <li>
-          <SettingSwitch v-model="postFullSizeImages">
-            <template #name>{{ t('pages.settings.fullSizeImagesName') }}</template>
-            <template #description>{{ t('pages.settings.fullSizeImagesDescription') }}</template>
-          </SettingSwitch>
-        </li>
-
-        <!-- postsPerPage -->
-        <li>
-          <SettingNumber
-            v-model.number="postsPerPage"
-            :max="100"
-            :min="1"
-          >
-            <template #name>{{ t('pages.settings.postsPerPageName') }}</template>
-            <template #description>{{ t('pages.settings.postsPerPageDescription') }}</template>
-          </SettingNumber>
         </li>
 
         <!-- BlockList -->
@@ -248,12 +228,32 @@
           </template>
         </li>
 
-        <!-- blockAiGeneratedImages -->
+        <!-- postFullSizeImages -->
         <li>
-          <SettingSwitch v-model="blockAiGeneratedImages">
-            <template #name>{{ t('pages.settings.blockAiPostsName') }}</template>
-            <template #description>{{ t('pages.settings.blockAiPostsDescription') }}</template>
+          <SettingSwitch v-model="postFullSizeImages">
+            <template #name>{{ t('pages.settings.fullSizeImagesName') }}</template>
+            <template #description>{{ t('pages.settings.fullSizeImagesDescription') }}</template>
           </SettingSwitch>
+        </li>
+
+        <!-- autoplayAnimatedMedia -->
+        <li>
+          <SettingSwitch v-model="autoplayAnimatedMedia">
+            <template #name>{{ t('pages.settings.autoplayGifsName') }}</template>
+            <template #description>{{ t('pages.settings.autoplayGifsDescription') }}</template>
+          </SettingSwitch>
+        </li>
+
+        <!-- postsPerPage -->
+        <li>
+          <SettingNumber
+            v-model.number="postsPerPage"
+            :max="100"
+            :min="1"
+          >
+            <template #name>{{ t('pages.settings.postsPerPageName') }}</template>
+            <template #description>{{ t('pages.settings.postsPerPageDescription') }}</template>
+          </SettingNumber>
         </li>
 
         <!-- Language -->
