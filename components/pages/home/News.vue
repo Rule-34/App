@@ -31,8 +31,8 @@
       text: t('news.socialText'),
       links: [
         {
-          text: 'Bluesky',
-          href: 'https://bsky.app/profile/r34app.bsky.social'
+          text: 'Twitter',
+          href: project.social.twitter
         },
         {
           text: 'Mastodon',
