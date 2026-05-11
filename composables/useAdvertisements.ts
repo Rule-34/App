@@ -33,7 +33,7 @@ export default function () {
      */
     {
       id: 'https://ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
-      weight: 0.25
+      weight: 0.375
     },
     /**
      * Clickadu
@@ -49,10 +49,10 @@ export default function () {
      * Pros: Good CPM (3.5)
      * Cons: Low Revenue (30) | Impression count lower than everybody else (less overall revenue) | Sometimes replaces current tab instead of opening in new tab | Possible malware: ads open requests to social media login
      */
-    {
-      id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255038',
-      weight: 0.25
-    },
+    // {
+    //   id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255038',
+    //   weight: 0.25
+    // },
     /**
      * AdsCarat
      * Pros: Great CPM (2.5)
@@ -64,12 +64,12 @@ export default function () {
     // },
     /**
      * Profiton
-     * Pros:
+     * Pros: Good CPM (2.15) | Counts visits well
      * Cons:
      */
     {
       id: 'https://je.deuxseethe.com/r1onMblLYR8e/rwnnn',
-      weight: 0.25
+      weight: 0.375
     }
   ]
 
@@ -125,7 +125,7 @@ export default function () {
     /**
      * AdMaven
      * Pros: Good CPM (4.5)
-     * Cons: Does not count visits well| Re-opens after closing
+     * Cons: Does not count visits well | Re-opens after closing
      */
     {
       id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255040',
