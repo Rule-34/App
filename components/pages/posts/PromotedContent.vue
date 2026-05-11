@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import {
     advertisementPromotions,
     otherPromotions,
@@ -54,9 +54,12 @@
 
   const isExternal = isExternalHref(promo.link)
 
-  const getInternalHref = (link) => {
-    const url = new URL(link, 'http://dummy')
-    const query = Object.fromEntries(url.searchParams.entries())
+  // Uses 'http://dummy' as a base URL to reliably parse relative paths with new URL().
+  // The dummy origin is ignored and only used for parsing pathname, query, and hash,
+  // which are then passed to localePath for internal route generation (see getInternalHref).
+  const getInternalHref = (link: string): string => {
+    const url: URL = new URL(link, 'http://dummy')
+    const query: Record<string, string> = Object.fromEntries(url.searchParams.entries())
     return localePath({
       path: url.pathname,
       query: Object.keys(query).length > 0 ? query : undefined,
