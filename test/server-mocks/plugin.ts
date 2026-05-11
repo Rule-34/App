@@ -10,6 +10,19 @@ import {
   mockPostsPageWithoutResults
 } from '../pages/posts.mock-data'
 
+export const validPocketbaseToken = [
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
+  'eyJleHAiOjQxMDI0NDQ4MDAsImlkIjoidGVzdC11c2VyIn0',
+  'signature'
+].join('.')
+
+export const authRecord = {
+  id: 'test-user',
+  email: 'test@example.com',
+  username: 'test-user',
+  subscription_expires_at: '2099-12-31T00:00:00.000Z'
+}
+
 const queryParamsToPreserve = ['baseEndpoint', 'limit', 'tags', 'order', 'rating', 'score', 'httpScheme']
 
 function localizeMockPageLinks(page: typeof mockPostsPage0, requestUrl: URL) {
@@ -106,5 +119,12 @@ export default defineNitroPlugin((nitroApp) => {
     // Any other /booru/* path returns 404.
     // If a test hits this, add the missing endpoint above.
     throw createError({ statusCode: 404, statusMessage: 'Not Found' })
+  }))
+
+  nitroApp.router.use('/api/collections/users/auth-refresh**', defineEventHandler(() => {
+    return {
+      token: validPocketbaseToken,
+      record: authRecord
+    }
   }))
 })

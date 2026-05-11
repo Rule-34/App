@@ -1,53 +1,26 @@
-import type { Page } from 'playwright'
 import { describe, expect, it } from 'vitest'
 import { setup, url } from '@nuxt/test-utils'
 import { defaultSetupConfig, useTrackedPageFactory } from '../../helper'
+import { validPocketbaseToken, authRecord } from '../../server-mocks/plugin'
 import path from 'path'
 
 let createTrackedPage: ReturnType<typeof useTrackedPageFactory>
-
-const validPocketbaseToken = [
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
-  'eyJleHAiOjQxMDI0NDQ4MDAsImlkIjoidGVzdC11c2VyIn0',
-  'signature'
-].join('.')
 
 const authCookieValue = encodeURIComponent(
   JSON.stringify({
     token: validPocketbaseToken,
     model: {
-      email: 'test@example.com',
-      username: 'test-user',
-      subscription_expires_at: '2099-12-31T00:00:00.000Z'
+      email: authRecord.email,
+      username: authRecord.username,
+      subscription_expires_at: authRecord.subscription_expires_at
     }
   })
 )
-
-const authRecord = {
-  id: 'test-user',
-  email: 'test@example.com',
-  username: 'test-user',
-  subscription_expires_at: '2099-12-31T00:00:00.000Z'
-}
-
-async function mockPocketbaseAuthRefresh(page: Page) {
-  await page.route('**/api/collections/users/auth-refresh*', (route) =>
-    route.fulfill({
-      status: 200,
-      json: {
-        token: validPocketbaseToken,
-        record: authRecord
-      }
-    })
-  )
-}
 
 async function createAuthedBackupPage() {
   const page = await createTrackedPage()
   const backupUrl = url('/premium/backup')
   const { hostname } = new URL(backupUrl)
-
-  await mockPocketbaseAuthRefresh(page)
 
   await page.context().addCookies([
     {

@@ -30,39 +30,50 @@
   ]
 
   function historyPathToTitle(path: string) {
-    const url = new URL(path, 'https://r34.app')
-    const lines = [`${t('common.domain')}: ${url.pathname.replace(/^\/posts\//, '')}`]
-    const page = url.searchParams.get('page')
-    const tags = url.searchParams.get('tags')
-    const sort = url.searchParams.get('filter[sort]')
-    const rating = url.searchParams.get('filter[rating]')
-    const score = url.searchParams.get('filter[score]')
+    try {
+      const url = new URL(path, 'https://r34.app')
+      const lines = [`${t('common.domain')}: ${url.pathname.replace(/^\/posts\//, '')}`]
+      const page = url.searchParams.get('page')
+      const tags = url.searchParams.get('tags')
+      const sort = url.searchParams.get('filter[sort]')
+      const rating = url.searchParams.get('filter[rating]')
+      const score = url.searchParams.get('filter[score]')
 
-    if (page) {
-      lines.push(`${t('common.page')}: ${page}`)
+      if (page) {
+        lines.push(`${t('common.page')}: ${page}`)
+      }
+
+      if (tags) {
+        lines.push(`${t('common.tags')}: ${tags.replace(/\|/g, ', ')}`)
+      }
+
+      if (sort) {
+        lines.push(`${t('filters.sort')}: ${t(sortValueKeys[sort] ?? sort)}`)
+      }
+
+      if (rating) {
+        lines.push(`${t('filters.rating')}: ${t(ratingValueKeys[rating] ?? rating)}`)
+      }
+
+      if (score) {
+        lines.push(`${t('filters.score')}: ${score}`)
+      }
+
+      return lines.join('\n')
+    } catch (error) {
+      console.error('Failed to parse history path:', error)
+      return `${t('common.domain')}: ${path}`
     }
-
-    if (tags) {
-      lines.push(`${t('common.tags')}: ${tags.replace(/\|/g, ', ')}`)
-    }
-
-    if (sort) {
-      lines.push(`${t('filters.sort')}: ${t(sortValueKeys[sort] ?? sort)}`)
-    }
-
-    if (rating) {
-      lines.push(`${t('filters.rating')}: ${t(ratingValueKeys[rating] ?? rating)}`)
-    }
-
-    if (score) {
-      lines.push(`${t('filters.score')}: ${score}`)
-    }
-
-    return lines.join('\n')
   }
 
   function historyDateToRelativeTime(date: Date | string) {
-    const elapsed = new Date(date).getTime() - Date.now()
+    const timestamp = new Date(date).getTime()
+
+    if (!Number.isFinite(timestamp)) {
+      return ''
+    }
+
+    const elapsed = timestamp - Date.now()
 
     for (const { unit, ms } of relativeTimeUnits) {
       if (Math.abs(elapsed) >= ms || unit === 'second') {
