@@ -22,12 +22,12 @@
         as="h3"
         class="text-base-content-highlight text-base leading-6 font-semibold"
       >
-        Got a minute?
+        {{ $t('modals.feedback.title') }}
       </HeadlessDialogTitle>
 
       <div class="mt-2">
         <p class="text-nice text-pretty">
-          Vote on new features, report bugs, and share your ideas to make {{ project.shortName }} even better
+          {{ $t('modals.feedback.description', { name: project.shortName }) }}
         </p>
       </div>
     </div>
@@ -41,7 +41,7 @@
       :to="`https://feedback.${project.urls.production.hostname}`"
     >
       <img
-        alt="Feedback website preview"
+        :alt="$t('modals.feedback.previewAlt')"
         class="h-auto max-h-[50svh] w-full object-cover"
         height="1080"
         :src="`https://screenshot.akbal.dev/v1/capture?width=720&height=1080&url=https://feedback.${project.urls.production.hostname}/`"
@@ -58,7 +58,7 @@
       target="_blank"
       :to="`https://feedback.${project.urls.production.hostname}`"
     >
-      Go to Feedback page
+      {{ $t('modals.feedback.goToFeedbackPage') }}
     </NuxtLink>
 
     <button
@@ -66,7 +66,7 @@
       type="button"
       @click="close()"
     >
-      Dismiss
+      {{ $t('common.close') }}
     </button>
   </div>
 </template>

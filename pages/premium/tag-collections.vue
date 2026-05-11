@@ -6,6 +6,7 @@
   import { type ITagCollection, TagCollection } from '~/assets/js/tagCollection.dto'
   import Slideover from '~/components/layout/Slideover.vue'
 
+  const { t } = useI18n()
   const { tagCollections, resetTagCollections } = useTagCollections()
 
   const sortableElement = ref<HTMLElement | null>(null)
@@ -42,7 +43,7 @@
   )
 
   function resetTagCollectionsToDefault() {
-    if (!confirm('Are you sure you want to reset all Tag collections to default?')) {
+    if (!confirm(t('common.confirmResetTagCollections'))) {
       return
     }
 
@@ -83,12 +84,12 @@
   function createItem() {
     // Validations
     if (!currentItem.value.name || !currentItem.value.tags.length) {
-      toast.error('Please fill out all fields')
+      toast.error(t('toasts.fillOutAllFields'))
       return
     }
 
     if (tagCollections.value.find((tagCollection) => tagCollection.name === currentItem.value.name)) {
-      toast.error('Tag collection with this name already exists')
+      toast.error(t('toasts.tagCollectionExists'))
       return
     }
 
@@ -106,7 +107,7 @@
   function editItem() {
     // Validations
     if (!currentItem.value.name || !currentItem.value.tags.length) {
-      toast.error('Please fill out all fields')
+      toast.error(t('toasts.fillOutAllFields'))
       return
     }
 
@@ -138,7 +139,7 @@
   }
 
   useSeoMeta({
-    title: 'Tag collections'
+    title: computed(() => t('pages.premium.tagCollectionsPage.seoTitle'))
   })
 
   definePageMeta({
@@ -149,8 +150,8 @@
 <template>
   <main class="container mx-auto flex max-w-3xl flex-1 flex-col px-4 py-4 sm:px-6 lg:px-8">
     <PageHeader>
-      <template #title>Tag collections</template>
-      <template #text>Lists of tags to quickly search or filter posts</template>
+      <template #title>{{ $t('pages.premium.tagCollectionsPage.pageTitle') }}</template>
+      <template #text>{{ $t('pages.premium.tagCollectionsPage.pageDescription') }}</template>
     </PageHeader>
 
     <!-- List -->
@@ -167,7 +168,7 @@
         >
           <!-- Handle -->
           <div class="handle mr-2 cursor-move">
-            <span class="sr-only">Drag to reorder</span>
+            <span class="sr-only">{{ $t('pages.premium.tagCollectionsPage.dragToReorder') }}</span>
 
             <Bars2Icon aria-hidden="true" class="text-base-content group-hover:text-base-content-hover h-4 w-4" />
           </div>
@@ -178,7 +179,7 @@
           >
             {{ tagCollection.tags.length }}
 
-            <span class="sr-only"> Tags in tag collection </span>
+            <span class="sr-only"> {{ $t('pages.premium.tagCollectionsPage.tagsInCollection', tagCollection.tags.length) }} </span>
           </div>
 
           <!-- Name -->
@@ -193,7 +194,7 @@
           <div class="flex gap-2">
             <!-- Edit -->
             <button
-              aria-label="Edit"
+              :aria-label="t('common.edit')"
               class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util inline-flex items-center justify-center rounded-md p-2"
               type="button"
               @click="openEditDialog(index)"
@@ -215,7 +216,7 @@
       >
         <ArrowUturnLeftIcon aria-hidden="true" class="mr-2 h-4 w-4" />
 
-        Reset to default
+        {{ $t('pages.premium.tagCollectionsPage.resetToDefault') }}
       </button>
 
       <!-- Add -->
@@ -224,7 +225,7 @@
         type="button"
         @click="openCreateDialog"
       >
-        Create collection
+        {{ $t('pages.premium.tagCollectionsPage.createCollection') }}
 
         <PlusIcon aria-hidden="true" class="mr-2 ml-2 h-4 w-4" />
       </button>
@@ -236,7 +237,7 @@
     :is-open="dialogOpen"
     @close="dialogOpen = false"
   >
-    <template #title> {{ dialogMode === 'create' ? 'Create' : 'Edit' }} tag collection</template>
+    <template #title>{{ dialogMode === 'create' ? $t('pages.premium.tagCollectionsPage.createTitle') : $t('pages.premium.tagCollectionsPage.editTitle') }}</template>
 
     <div class="divide-y divide-gray-200 px-4 sm:px-6">
       <!-- Form -->
@@ -251,7 +252,7 @@
             class="text-base-content-highlight block leading-8 font-medium"
             for="name"
           >
-            Name
+            {{ $t('pages.premium.tagCollectionsPage.nameLabel') }}
           </label>
 
           <input
@@ -270,7 +271,7 @@
             class="text-base-content-highlight block leading-8 font-medium"
             for="tags"
           >
-            Tags
+            {{ $t('pages.premium.tagCollectionsPage.tagsLabel') }}
           </label>
 
           <textarea
@@ -287,11 +288,15 @@
             id="tags-description"
             class="mt-2 text-sm"
           >
-            One tag per line
+            {{ $t('pages.premium.tagCollectionsPage.oneTagPerLine') }}
 
             <br />
 
-            Use <code>-</code> to exclude tags
+            <i18n-t keypath="pages.premium.tagCollectionsPage.excludeTagsHint">
+              <template #code>
+                <code>-</code>
+              </template>
+            </i18n-t>
           </p>
         </div>
       </form>
@@ -304,7 +309,7 @@
         type="button"
         @click="deleteItem"
       >
-        Delete
+        {{ $t('pages.premium.tagCollectionsPage.deleteButton') }}
       </button>
 
       <button
@@ -312,7 +317,7 @@
         form="create-form"
         type="submit"
       >
-        {{ dialogMode === 'create' ? 'Create' : 'Save' }}
+        {{ dialogMode === 'create' ? $t('pages.premium.tagCollectionsPage.createButton') : $t('pages.premium.tagCollectionsPage.saveButton') }}
       </button>
     </template>
   </Slideover>

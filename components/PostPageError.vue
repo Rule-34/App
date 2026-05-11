@@ -14,6 +14,7 @@
   const props = defineProps<Props>()
 
   const config = useRuntimeConfig()
+  const { t } = useI18n()
 </script>
 
 <template>
@@ -24,11 +25,10 @@
     />
 
     <div v-if="error.status === 429">
-      <h3 class="text-lg leading-10 font-semibold">Too many requests</h3>
+      <h3 class="text-lg leading-10 font-semibold">{{ t('errors.tooManyRequests') }}</h3>
 
       <span class="w-full overflow-x-auto text-pretty">
-        You sent too many requests in a short period of time. Use the button below to continue using the
-        {{ project.name }}
+        {{ t('errors.tooManyRequestsDescription', { name: project.name }) }}
       </span>
 
       <NuxtLink
@@ -37,12 +37,12 @@
         rel="nofollow noopener noreferrer"
         target="_blank"
       >
-        Verify I am not a Bot
+        {{ t('errors.verifyNotBot') }}
       </NuxtLink>
     </div>
 
     <div v-else>
-      <h3 class="text-lg leading-10 font-semibold">Failed to load posts</h3>
+      <h3 class="text-lg leading-10 font-semibold">{{ t('errors.failedToLoadPosts') }}</h3>
 
       <span class="w-full overflow-x-auto text-pretty">
         {{ error.data?.message ?? error.message }}
@@ -55,7 +55,7 @@
       type="button"
       @click="onRetry"
     >
-      Retry
+      {{ t('errors.retry') }}
     </button>
   </div>
 </template>

@@ -6,6 +6,8 @@
   import PageHeader from '~/components/layout/PageHeader.vue'
   import { project } from '@/config/project'
 
+  const { t } = useI18n()
+  const localePath = useLocalePath()
   const fileInputElement = ref<HTMLInputElement | null>(null)
 
   async function createBackup() {
@@ -35,31 +37,34 @@
 
   async function restoreBackup() {
     if (!fileInputElement.value) {
-      toast.error('No file selected')
+      toast.error(t('toasts.noFileSelected'))
       return
     }
 
     const file = fileInputElement.value.files?.[0]
 
     if (!file) {
-      toast.error('No file selected')
+      toast.error(t('toasts.noFileSelected'))
       return
     }
-
-    const backupState: IBackupState = JSON.parse(await file.text())
 
     try {
+      const backupState: IBackupState = JSON.parse(await file.text())
       await tryToRestoreV2OrV3Backup(backupState)
     } catch (error) {
-      toast.error(`Failed to restore backup: ${error}`)
+      const message =
+        error instanceof Error && error.message === 'Backup version not supported'
+          ? t('errors.backupVersionNotSupported')
+          : String(error)
+      toast.error(t('toasts.failedToRestoreBackup', { error: message }))
       return
     }
 
-    window.location.href = '/premium/dashboard?message=Backup restored successfully!'
+    window.location.href = localePath({ path: '/premium/dashboard', query: { restoreSuccess: 'true' } })
   }
 
   useSeoMeta({
-    title: 'Backup'
+    title: computed(() => t('pages.premium.backupPage.seoTitle'))
   })
 
   definePageMeta({
@@ -72,12 +77,12 @@
     <!-- -->
 
     <PageHeader>
-      <template #title>Backup & Restore</template>
+      <template #title>{{ $t('pages.premium.backupPage.pageTitle') }}</template>
       <template #text>
         <div class="text-sm">
-          Backup your tag collections and settings
+          {{ $t('pages.premium.backupPage.pageDescription') }}
 
-          <span class="mt-3 block italic"> This is a manual process. Remember to backup your data regularly </span>
+          <span class="mt-3 block italic"> {{ $t('pages.premium.backupPage.manualNote') }} </span>
         </div>
       </template>
     </PageHeader>
@@ -93,7 +98,7 @@
       >
         <ArrowDownTrayIcon class="h-6 w-6" />
 
-        Backup
+        {{ $t('pages.premium.backupPage.backupButton') }}
       </button>
 
       <!-- Restore -->
@@ -112,7 +117,7 @@
       >
         <ArrowUturnLeftIcon class="h-6 w-6" />
 
-        Restore
+        {{ $t('pages.premium.backupPage.restoreButton') }}
       </button>
     </section>
   </main>

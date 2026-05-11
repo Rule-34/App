@@ -1,15 +1,18 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  const { t } = useI18n()
+  const localePath = useLocalePath()
+</script>
 
 <template>
   <div
-    class="relative isolate overflow-hidden bg-transparent px-6 pb-12 pt-16 shadow-2xl sm:rounded-3xl sm:px-24 sm:py-28"
+    class="relative isolate overflow-hidden bg-transparent px-6 pt-16 pb-12 shadow-2xl sm:rounded-3xl sm:px-24 sm:py-28"
   >
-    <h2 class="mx-auto max-w-2xl text-center text-3xl font-bold tracking-tight text-base-content-highlight sm:text-4xl">
-      Premium Giveaway
+    <h2 class="text-base-content-highlight mx-auto max-w-2xl text-center text-3xl font-bold tracking-tight sm:text-4xl">
+      {{ t('pages.newsletter.title') }}
     </h2>
 
     <p class="mx-auto mt-2 max-w-xl text-center text-lg leading-8">
-      Join our newsletter to participate in our monthly giveaways!
+      {{ t('pages.newsletter.description') }}
     </p>
 
     <form
@@ -21,22 +24,22 @@
       <label
         class="sr-only"
         for="email-address"
-        >Email address</label
+        >{{ t('pages.newsletter.emailLabel') }}</label
       >
 
       <input
         id="email-address"
         autocomplete="email"
-        class="focus-visible:focus-outline-util min-w-0 flex-auto rounded-md border-0 bg-base-0/10 px-3.5 py-2 text-base-content-highlight ring-1 ring-inset ring-base-0/10 sm:text-sm sm:leading-6"
+        class="focus-visible:focus-outline-util bg-base-0/10 text-base-content-highlight ring-base-0/10 min-w-0 flex-auto rounded-md border-0 px-3.5 py-2 ring-1 ring-inset sm:text-sm sm:leading-6"
         name="email"
-        placeholder="Enter your email"
+        :placeholder="t('pages.newsletter.placeholder')"
         required
         type="email"
       />
 
       <!-- Honeypot -->
       <div style="position: absolute; left: -9999px">
-        <label for="name">Your name</label>
+        <label for="name">{{ t('pages.newsletter.nameLabel') }}</label>
         <input
           id="name"
           autocomplete="nope"
@@ -47,29 +50,29 @@
       </div>
 
       <button
-        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util flex-none rounded-md bg-base-1000 px-3.5 py-2.5 text-sm font-medium ring-1 ring-base-0/20"
+        class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util bg-base-1000 ring-base-0/20 flex-none rounded-md px-3.5 py-2.5 text-sm font-medium ring-1"
         type="submit"
       >
-        Notify me
+        {{ t('pages.newsletter.notifyMe') }}
       </button>
     </form>
 
     <p class="mx-auto mt-10 text-center text-sm leading-6">
-      Unsubscribe anytime
+      {{ t('pages.newsletter.unsubscribeAnytime') }}
       <br />
-      We care about your data, read our
+      {{ t('pages.newsletter.privacyText') }}
       <NuxtLink
+        :href="localePath('/privacy-policy')"
         class="hover:hover-text-util focus-visible:focus-outline-util"
-        href="/privacy-policy"
       >
-        privacy&nbsp;policy
+        {{ t('pages.newsletter.privacyLink') }}
       </NuxtLink>
     </p>
 
     <!-- Background -->
     <svg
       aria-hidden="true"
-      class="absolute left-1/2 top-1/2 -z-10 h-[64rem] w-[64rem] -translate-x-1/2"
+      class="absolute top-1/2 left-1/2 -z-10 h-[64rem] w-[64rem] -translate-x-1/2"
       viewBox="0 0 1024 1024"
     >
       <circle

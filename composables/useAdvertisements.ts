@@ -33,7 +33,7 @@ export default function () {
      */
     {
       id: 'https://ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
-      weight: 0.25
+      weight: 0.375
     },
     /**
      * Clickadu
@@ -49,10 +49,10 @@ export default function () {
      * Pros: Good CPM (3.5)
      * Cons: Low Revenue (30) | Impression count lower than everybody else (less overall revenue) | Sometimes replaces current tab instead of opening in new tab | Possible malware: ads open requests to social media login
      */
-    {
-      id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255038',
-      weight: 0.25
-    },
+    // {
+    //   id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255038',
+    //   weight: 0.25
+    // },
     /**
      * AdsCarat
      * Pros: Great CPM (2.5)
@@ -64,12 +64,12 @@ export default function () {
     // },
     /**
      * Profiton
-     * Pros: 
-     * Cons: 
+     * Pros: Good CPM (2.15) | Counts visits well
+     * Cons:
      */
     {
       id: 'https://je.deuxseethe.com/r1onMblLYR8e/rwnnn',
-      weight: 0.25
+      weight: 0.375
     }
   ]
 
@@ -120,16 +120,16 @@ export default function () {
      */
     {
       id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
-      weight: 0.35
+      weight: 0.4
     },
     /**
      * AdMaven
      * Pros: Good CPM (4.5)
-     * Cons: Does not count visits well| Re-opens after closing
+     * Cons: Does not count visits well | Re-opens after closing
      */
     {
       id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255040',
-      weight: 0.65
+      weight: 0.6
     }
   ]
 
@@ -178,7 +178,7 @@ export function useChatWithAiReferral() {
      */
     {
       id: 'https://crushon.ai/search?s={query}&ref=zdnmmzy&mist=1',
-      weight: 0.4
+      weight: 0.3
     },
     /**
      * SpicyChat
@@ -187,7 +187,7 @@ export function useChatWithAiReferral() {
      */
     {
       id: 'https://spicychat.ai/?public_characters_alias%2Fsort%2Fnum_messages_24h%3Adesc[query]={query}&ref=ode2nzn',
-      weight: 0.6
+      weight: 0.7
     }
   ]
 

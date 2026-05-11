@@ -4,26 +4,61 @@
   import { toast } from 'vue-sonner'
   import { downloadBlob } from '~/assets/js/DownloadHelper'
   import { project } from '@/config/project'
+  import { locales as i18nLocales } from '~/config/i18n'
+
+  const { t, locale, setLocale } = useI18n()
+
+  const localeOptions = i18nLocales.map((l) => ({
+    code: l.code,
+    label: `${l.flag} ${l.name}`
+  }))
+
+  const localeNames = localeOptions.map((l) => l.label)
+  const currentLocaleName = computed(() => localeOptions.find((l) => l.code === locale.value)?.label ?? '')
+
+  function onLocaleChange(name: string) {
+    const loc = localeOptions.find((l) => l.label === name)
+    if (loc) {
+      setLocale(loc.code)
+    }
+  }
 
   useSeoMeta({
-    title: 'Settings',
-
-    description: `Options to configure how ${project.name} works.`
+    title: () => t('pages.settings.title'),
+    description: () => t('pages.settings.description', { name: project.name })
   })
 
   const appVersion = version
 
   const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia, blockAiGeneratedImages } = useUserSettings()
   const { isPremium } = useUserData()
-  const { selectedList, selectedBlockList, defaultBlockList, customBlockList, resetCustomBlockList } = useBlockLists()
+  const { selectedList, selectedBlockList, defaultBlockList, customBlockList } = useBlockLists()
 
-  function onSelectedListChange(value: blockListOptions) {
-    if (value === blockListOptions.Custom && !isPremium.value) {
-      toast.error('You need to be a Premium member to use the custom blocklist')
+  const blockListOptionsList = computed(() => [
+    { value: blockListOptions.Default, label: t('pages.settings.blockListDefault') },
+    { value: blockListOptions.Custom, label: t('pages.settings.blockListCustom') },
+    { value: blockListOptions.None, label: t('pages.settings.blockListNone') }
+  ])
+
+  const blockListOptionsLabels = computed(() => blockListOptionsList.value.map((o) => o.label))
+
+  const selectedListLabel = computed(
+    () => blockListOptionsList.value.find((o) => o.value === selectedList.value)?.label ?? selectedList.value
+  )
+
+  function onSelectedListChange(label: string) {
+    const option = blockListOptionsList.value.find((o) => o.label === label)
+
+    if (!option) {
       return
     }
 
-    selectedList.value = value
+    if (option.value === blockListOptions.Custom && !isPremium.value) {
+      toast.error(t('toasts.premiumRequiredBlocklist'))
+      return
+    }
+
+    selectedList.value = option.value
   }
 
   function onBlockListFormSubmit(event: Event) {
@@ -48,12 +83,12 @@
 
     customBlockList.value = tags
 
-    toast.success('Custom block list saved')
+    toast.success(t('toasts.customBlockListSaved'))
   }
 
   function exportBlockList() {
     if (selectedBlockList.value.length === 0) {
-      toast.error('No blocked tags to export')
+      toast.error(t('toasts.noBlockedTagsToExport'))
       return
     }
 
@@ -61,11 +96,11 @@
     const fileName = `${project.urls.production.hostname}_Blocklist.txt`
 
     downloadBlob(blob, fileName)
-    toast.success('Block list exported')
+    toast.success(t('toasts.blockListExported'))
   }
 
   async function removeAllData() {
-    if (!confirm('Are you sure you want to reset all data?')) {
+    if (!confirm(t('common.resetDataConfirm'))) {
       return
     }
 
@@ -126,63 +161,37 @@
     <!-- -->
 
     <PageHeader>
-      <template #title>Settings</template>
-      <template #text> Options to configure how {{ project.name }} works</template>
+      <template #title>{{ t('pages.settings.title') }}</template>
+      <template #text>{{ t('pages.settings.description', { name: project.name }) }}</template>
     </PageHeader>
 
     <!-- Settings -->
     <section class="mx-2 mt-4 flex-auto">
       <ol class="space-y-4">
-        <!-- autoplayAnimatedMedia -->
+        <!-- blockAiGeneratedImages -->
         <li>
-          <SettingSwitch v-model="autoplayAnimatedMedia">
-            <template #name> Autoplay GIFs</template>
-
-            <template #description> Automatically play animated GIFs without requiring a click </template>
+          <SettingSwitch v-model="blockAiGeneratedImages">
+            <template #name>{{ t('pages.settings.blockAiPostsName') }}</template>
+            <template #description>{{ t('pages.settings.blockAiPostsDescription') }}</template>
           </SettingSwitch>
-        </li>
-
-        <!-- postFullSizeImages -->
-        <li>
-          <SettingSwitch v-model="postFullSizeImages">
-            <template #name> Full size images</template>
-
-            <template #description>
-              Display the highest-resolution image available on posts, even though it may consume more data and memory
-            </template>
-          </SettingSwitch>
-        </li>
-
-        <!-- postsPerPage -->
-        <li>
-          <SettingNumber
-            v-model.number="postsPerPage"
-            :max="100"
-            :min="1"
-          >
-            <template #name> Posts per page</template>
-
-            <template #description> How many posts to load per page</template>
-          </SettingNumber>
         </li>
 
         <!-- BlockList -->
         <li>
           <SettingSelect
-            :modelValue="selectedList"
-            :options="Object.values(blockListOptions)"
+            :modelValue="selectedListLabel"
+            :options="blockListOptionsLabels"
             @update:modelValue="onSelectedListChange"
           >
-            <template #name> Tag block list</template>
-
-            <template #description> Automatically block posts that contain any tags that you dont want to see</template>
+            <template #name>{{ t('pages.settings.tagBlockListName') }}</template>
+            <template #description>{{ t('pages.settings.tagBlockListDescription') }}</template>
           </SettingSelect>
 
           <p
             v-if="selectedList === blockListOptions.Default"
             class="text-base-content mt-2 text-xs"
           >
-            Tags blocked by default:
+            {{ t('pages.settings.tagsBlockedByDefault') }}
             {{ defaultBlockList.join(', ') }}
           </p>
 
@@ -192,7 +201,7 @@
               @submit.prevent="onBlockListFormSubmit"
             >
               <textarea
-                :placeholder="'One tag per line:\n' + defaultBlockList.join('\n')"
+                :placeholder="t('pages.settings.oneTagPerLine') + '\n' + defaultBlockList.join('\n')"
                 :value="customBlockList.join('\n')"
                 class="focus-visible:focus-outline-util hover:hover-bg-util text-base-content-highlight ring-base-0/20 placeholder:text-base-content block w-full rounded-md border-0 bg-transparent py-1.5 text-sm shadow-xs ring-1 ring-inset sm:leading-6"
                 name="customBlockList"
@@ -205,27 +214,58 @@
                   type="button"
                   @click="exportBlockList"
                 >
-                  Export .txt
+                  {{ t('pages.settings.exportTxt') }}
                 </button>
 
                 <button
                   class="hover:hover-bg-util focus-visible:focus-outline-util hover:hover-text-util ring-base-0/20 rounded-lg px-3 py-1.5 text-sm font-medium ring-1 transition-colors focus-visible:ring-inset"
                   type="submit"
                 >
-                  Save
+                  {{ t('pages.settings.save') }}
                 </button>
               </div>
             </form>
           </template>
         </li>
 
-        <!-- blockAiGeneratedImages -->
+        <!-- postFullSizeImages -->
         <li>
-          <SettingSwitch v-model="blockAiGeneratedImages">
-            <template #name> Block AI posts </template>
-
-            <template #description> Hide posts that are tagged as AI generated </template>
+          <SettingSwitch v-model="postFullSizeImages">
+            <template #name>{{ t('pages.settings.fullSizeImagesName') }}</template>
+            <template #description>{{ t('pages.settings.fullSizeImagesDescription') }}</template>
           </SettingSwitch>
+        </li>
+
+        <!-- autoplayAnimatedMedia -->
+        <li>
+          <SettingSwitch v-model="autoplayAnimatedMedia">
+            <template #name>{{ t('pages.settings.autoplayGifsName') }}</template>
+            <template #description>{{ t('pages.settings.autoplayGifsDescription') }}</template>
+          </SettingSwitch>
+        </li>
+
+        <!-- postsPerPage -->
+        <li>
+          <SettingNumber
+            v-model.number="postsPerPage"
+            :max="100"
+            :min="1"
+          >
+            <template #name>{{ t('pages.settings.postsPerPageName') }}</template>
+            <template #description>{{ t('pages.settings.postsPerPageDescription') }}</template>
+          </SettingNumber>
+        </li>
+
+        <!-- Language -->
+        <li>
+          <SettingSelect
+            :modelValue="currentLocaleName"
+            :options="localeNames"
+            @update:modelValue="onLocaleChange"
+          >
+            <template #name>{{ t('pages.settings.languageName') }}</template>
+            <template #description>{{ t('pages.settings.languageDescription') }}</template>
+          </SettingSelect>
         </li>
       </ol>
     </section>
@@ -234,14 +274,14 @@
     <section class="mx-2 mt-24 flex flex-row items-center justify-between gap-2">
       <label for="reset">
         <span class="text-base-content-highlight leading-8 font-medium">
-          Reset
+          {{ t('pages.settings.resetLabel') }}
           <ExclamationTriangleIcon
             aria-hidden="true"
             class="inline-block h-4 w-4"
           />
         </span>
 
-        <span class="block text-sm"> Clear settings, cookies, and all other app data </span>
+        <span class="block text-sm">{{ t('pages.settings.resetDescription') }}</span>
       </label>
 
       <button
@@ -250,7 +290,7 @@
         type="button"
         @click="removeAllData"
       >
-        Reset
+        {{ t('pages.settings.resetLabel') }}
       </button>
     </section>
 

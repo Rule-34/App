@@ -28,6 +28,7 @@ const props = defineProps<{
   const { isPremium } = useUserData()
   const { customBlockList, selectedList } = useBlockLists()
   const { copy } = useClipboard()
+  const { t } = useI18n()
 
   const referenceEl = ref<HTMLElement>()
   const floatingEl = ref<HTMLElement>()
@@ -48,7 +49,7 @@ const props = defineProps<{
   async function copyTag() {
     await copy(props.tag.name)
 
-    toast.success('Tag copied to clipboard')
+    toast.success(t('toasts.tagCopiedToClipboard'))
   }
 
   async function toggleBlockedTag(tag: Tag) {
@@ -60,7 +61,7 @@ const props = defineProps<{
     }
 
     if (isTagBlocked(tag)) {
-      customBlockList.value = customBlockList.value.filter((t) => t !== tag.name)
+      customBlockList.value = customBlockList.value.filter((blockedTag) => blockedTag !== tag.name)
     } else {
       customBlockList.value = [...customBlockList.value, tag.name]
 
@@ -69,8 +70,8 @@ const props = defineProps<{
         selectedList.value = blockListOptions.Custom
       }
 
-      toast.info('Tag added to blocklist', {
-        description: 'To see the effect, reload the website or make a new search',
+      toast.info(t('toasts.tagAddedToBlocklist'), {
+        description: t('toasts.tagAddedToBlocklistDescription'),
         duration: 10000 // 10 seconds
       })
     }
@@ -126,7 +127,7 @@ const props = defineProps<{
                   class="mr-3 h-4 w-4 shrink-0 rounded-sm"
                 />
 
-                {{ isTagInSelectedTags(tag) ? 'Remove tag' : 'Add tag' }}
+                {{ isTagInSelectedTags(tag) ? $t('tags.removeTag') : $t('tags.addTag') }}
               </button>
             </HeadlessMenuItem>
           </div>
@@ -145,7 +146,7 @@ const props = defineProps<{
                   class="mr-3 h-4 w-4 shrink-0 rounded-sm"
                 />
 
-                Exclude tag
+                {{ $t('tags.excludeTag') }}
               </button>
             </HeadlessMenuItem>
           </div>
@@ -164,7 +165,7 @@ const props = defineProps<{
                   class="mr-3 h-4 w-4 shrink-0 rounded-sm"
                 />
 
-                Set tag
+                {{ $t('tags.setTag') }}
               </button>
             </HeadlessMenuItem>
           </div>
@@ -183,7 +184,7 @@ const props = defineProps<{
                   class="mr-3 h-4 w-4 shrink-0 rounded-sm"
                 />
 
-                Copy tag
+                {{ $t('tags.copyTag') }}
               </button>
             </HeadlessMenuItem>
           </div>
@@ -201,7 +202,7 @@ const props = defineProps<{
                   aria-hidden="true"
                   class="mr-3 h-4 w-4 shrink-0 rounded-sm"
                 />
-                {{ isTagBlocked(tag) ? 'Remove from blocklist' : 'Add to blocklist' }}
+                {{ isTagBlocked(tag) ? $t('tags.removeFromBlocklist') : $t('tags.addToBlocklist') }}
               </button>
             </HeadlessMenuItem>
           </div>
@@ -220,7 +221,7 @@ const props = defineProps<{
                   class="mr-3 h-4 w-4 shrink-0 rounded-sm"
                 />
 
-                Open in new tab
+                {{ $t('tags.openInNewTab') }}
               </button>
             </HeadlessMenuItem>
           </div>

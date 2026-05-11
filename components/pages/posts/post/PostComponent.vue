@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-  import { ChevronDownIcon } from '@heroicons/vue/24/outline'
-  import type { IPost } from '~/assets/js/post.dto'
-  import Tag from '~/assets/js/tag.dto'
-  import { project } from '@/config/project'
+import { ChevronDownIcon } from '@heroicons/vue/24/outline'
+import type { IPost } from '~/assets/js/post.dto'
+import Tag, { TagDTO } from '~/assets/js/tag.dto'
+import { project } from '@/config/project'
 
-  const props = defineProps<{
+const props = defineProps<{
     postIndex: number
 
     post: IPost
@@ -25,10 +25,26 @@
 
   const currentUrl = useRequestURL()
 
+  const { t } = useI18n()
+
+  type PostTagType = keyof IPost['tags']
+
+  const tagTypeLabels = computed<Record<PostTagType, string>>(() => ({
+    artist: t('tags.categories.artist'),
+    character: t('tags.categories.character'),
+    copyright: t('tags.categories.copyright'),
+    general: t('tags.categories.general'),
+    meta: t('tags.categories.meta')
+  }))
+
   const { postFullSizeImages } = useUserSettings()
   const { isPremium } = useUserData()
 
   const areTagsOpen = ref(false)
+
+  function createTag(name: string, type: PostTagType) {
+    return new Tag(Object.assign(new TagDTO(), { name, type }))
+  }
 
   const mediaFile = computed(() => {
     const stripFragment = (url?: string | null) => url?.split('#')[0] ?? null
@@ -44,7 +60,7 @@
       width: null,
       height: null,
       posterFile: null,
-      alt: 'Post #' + props.post.id
+      alt: t('media.postAlt', { id: props.post.id })
     }
 
     switch (props.post.media_type) {
@@ -93,8 +109,16 @@
   })
 
   // Only tagtypes that have at least one tag
-  const tagTypesWithTags = computed(() => {
-    return Object.keys(props.post.tags).filter((tagType) => props.post.tags[tagType].length > 0)
+  const tagTypesWithTags = computed<PostTagType[]>(() => {
+    return (Object.keys(props.post.tags) as PostTagType[]).filter((tagType) => props.post.tags[tagType].length > 0)
+  })
+
+  const postSourceFileUrl = computed(() => {
+    if (props.post.media_type === 'video') {
+      return mediaFile.value.posterFile ?? mediaFile.value.file
+    }
+
+    return mediaFile.value.file
   })
 </script>
 
@@ -113,15 +137,16 @@
     <figcaption>
       <!-- Post description -->
       <span class="sr-only">
-        {{ post.media_type }} #{{ post.id }}
-        <!--        -->
-        from {{ post.domain }}
-        <!--        -->
-        with a score of {{ post.score }},
-        <!--        -->
-        {{ post.rating }} rating,
-        <!--        -->
-        tagged with {{ Object.values(post.tags).flat().join(', ') }}
+        {{
+          $t('media.postDescription', {
+            mediaType: post.media_type,
+            id: post.id,
+            domain: post.domain,
+            score: post.score,
+            rating: post.rating,
+            tags: Object.values(post.tags).flat().join(', ')
+          })
+        }}
       </span>
 
       <!-- Actions -->
@@ -134,17 +159,17 @@
         <PostDownload
           v-if="mediaFile.file"
           :mediaName="`${post.domain}-${post.id}`"
-          :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
+          :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? mediaFile.file"
         />
 
         <PostSource
-          :post-file-url="post.media_type === 'video' ? mediaFile.posterFile : mediaFile.file"
+          :post-file-url="postSourceFileUrl"
           :post-sources="post.sources"
         />
 
         <ShareButton
-          :text="`Found on ${project.name}: ${currentUrl.href}`"
-          :title="`Post #${post.id} from ${post.domain}`"
+          :text="$t('media.shareFoundOn', { name: project.name, url: currentUrl.href })"
+          :title="$t('media.sharePostTitle', { id: post.id, domain: post.domain })"
           :url="mediaFile.file ?? undefined"
           class="px-1.5 py-1"
         />
@@ -161,7 +186,7 @@
           type="button"
           @click="areTagsOpen = !areTagsOpen"
         >
-          <span class="group-hover:hover-text-util text-base-content text-sm"> Tags </span>
+          <span class="group-hover:hover-text-util text-base-content text-sm"> {{ $t('common.tags') }} </span>
 
           <ChevronDownIcon
             :class="{
@@ -185,20 +210,17 @@
 
             <div>
               <h3 class="text-base-content-highlight text-lg leading-7 font-bold tracking-tight">
-                {{ tagType.charAt(0).toUpperCase() + tagType.slice(1) }}
+                {{ tagTypeLabels[tagType] }}
               </h3>
 
-              <ol
-                as="ol"
-                class="flex flex-wrap gap-2 p-2"
-              >
+              <ol class="flex flex-wrap gap-2 p-2">
                 <li
                   v-for="tag in post.tags[tagType]"
                   :key="tag"
                 >
                   <PostTag
                     :selectedTags="selectedTags"
-                    :tag="new Tag({ name: tag, type: tagType })"
+                    :tag="createTag(tag, tagType)"
                     @addTag="emit('addTag', $event)"
                     @openTagInNewTab="emit('openTagInNewTab', $event)"
                     @setTag="emit('setTag', $event)"

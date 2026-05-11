@@ -1,8 +1,16 @@
-<script setup>
-import { advertisementPromotions, otherPromotions, premiumPromotions, referralPromotions } from '~/assets/js/promotions'
-import { default as random_weighted_choice } from 'random-weighted-choice'
+<script setup lang="ts">
+  import {
+    advertisementPromotions,
+    otherPromotions,
+    premiumPromotions,
+    referralPromotions
+  } from '~/assets/js/promotions'
+  import randomWeightedChoice from 'random-weighted-choice'
+  import { isExternalHref } from '~/composables/locale'
 
-const weightedPromotions = [
+  const localePath = useLocalePath()
+
+  const weightedPromotions = [
     {
       id: 'premiumPromotions',
       weight: 3
@@ -21,7 +29,7 @@ const weightedPromotions = [
     }
   ]
 
-  const selectedPromotionsName = random_weighted_choice(weightedPromotions)
+  const selectedPromotionsName = randomWeightedChoice(weightedPromotions)
 
   let selectedPromotions = []
 
@@ -43,6 +51,21 @@ const weightedPromotions = [
   }
 
   const promo = selectedPromotions[Math.floor(Math.random() * selectedPromotions.length)]
+
+  const isExternal = isExternalHref(promo.link)
+
+  // Uses 'http://dummy' as a base URL to reliably parse relative paths with new URL().
+  // The dummy origin is ignored and only used for parsing pathname, query, and hash,
+  // which are then passed to localePath for internal route generation (see getInternalHref).
+  const getInternalHref = (link: string): string => {
+    const url: URL = new URL(link, 'http://dummy')
+    const query: Record<string, string> = Object.fromEntries(url.searchParams.entries())
+    return localePath({
+      path: url.pathname,
+      query: Object.keys(query).length > 0 ? query : undefined,
+      hash: url.hash || undefined
+    })
+  }
 </script>
 
 <template>
@@ -68,15 +91,14 @@ const weightedPromotions = [
     <!-- Media -->
     <NuxtLink
       v-else
-      :href="promo.link"
-      :target="promo.link.startsWith('http') ? '_blank' : null"
-      class="focus-visible:focus-outline-util focus-visible:ring-inset"
-      rel="nofollow noopener"
+      :href="isExternal ? promo.link : getInternalHref(promo.link)"
+      :target="isExternal ? '_blank' : undefined"
+      :rel="isExternal ? 'nofollow noopener' : undefined"
     >
       <!-- TODO: Temporarily hardcode post index for promoted content -->
       <PostMedia
         :alt-media-src="null"
-        :media-alt="'Promoted content'"
+        :media-alt="$t('media.promotedContent')"
         :media-poster-src="null"
         :media-src="promo.media"
         :media-src-height="promo.mediaHeight"
@@ -89,10 +111,11 @@ const weightedPromotions = [
     <!-- Body -->
     <figcaption class="px-1 py-3 text-center text-sm whitespace-normal">
       <NuxtLink
+        :href="localePath({ path: '/premium', query: { utm_source: 'internal', utm_medium: 'promo' }, hash: '#pricing' })"
         class="hover:hover-text-util focus-visible:focus-outline-util underline"
-        href="/premium?utm_source=internal&utm_medium=promo"
-        >Get Premium<!----></NuxtLink
-      ><!---->: No ads + exclusive features
+        >{{ $t('media.getPremium')
+        }}<!----></NuxtLink
+      ><!---->: {{ $t('media.promotedDescription') }}
     </figcaption>
   </figure>
 </template>

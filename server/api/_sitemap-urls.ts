@@ -4,15 +4,21 @@ const config = useRuntimeConfig()
  * @see https://github.com/harlan-zw/nuxt-simple-sitemap#handling-dynamic-urls
  */
 export default defineSitemapEventHandler(async () => {
-  // TODO: Fetch more data
-  const popularSiteSearchKeywords = await getPopularSiteSearchKeywordsFromMatomoApi()
+  let popularSiteSearchKeywords: MatomoResponse[] = []
+
+  try {
+    popularSiteSearchKeywords = await getPopularSiteSearchKeywordsFromMatomoApi()
+  } catch (error) {
+    const errMsg = error instanceof Error ? error.message : String(error)
+    console.warn('[sitemap] Failed to fetch Matomo search keywords, sitemap will exclude dynamic tag URLs:', errMsg)
+  }
 
   return popularSiteSearchKeywords.map((keyword) =>
     asSitemapUrl({
       loc: `/posts/rule34.xxx?tags=${keyword.label}`,
       changefreq: 'daily',
       priority: 0.8,
-      _sitemap: 'pages'
+      _i18nTransform: true
     })
   )
 })

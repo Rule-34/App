@@ -21,10 +21,21 @@ This app can browse the following Boorus.
 
 - rule34.xxx
 - rule34.paheal.net
-- gelbooru.com
 - e621.net
-- safebooru.org
+- e6ai.net
 - e926.net
+- safebooru.org
+- gelbooru.com
+- danbooru.donmai.us
+- realbooru.com
+- tbib.org
+- xbooru.com
+- yande.re
+- konachan.com
+- hypnohub.net
+- aibooru.online
+- booru.allthefallen.moe
+- sakugabooru.com
 
 ### Documentation
 
@@ -56,7 +67,7 @@ HTML, CSS, JavaScript, NodeJS.
 
 ### Frameworks and tools
 
-NuxtJS, VueJS, TailwindCSS, etc.
+Nuxt, Vue, TypeScript, TailwindCSS, and more.
 
 Check the [package.json](./package.json) for more information.
 
@@ -68,7 +79,7 @@ This App uses an [API](https://github.com/Rule-34/API) to communicate with all t
 
 ### Requirements
 
-- NodeJS >= 20
+- NodeJS >= 24
 - NPM
 
 ### Setup
@@ -82,7 +93,7 @@ some necessary resources.
 
 ```bash
 # Modify .env file
-cp .env.example .env
+cp .example.env .env
 ```
 
 #### NodeJS
@@ -93,6 +104,9 @@ npm install
 
 # Serve with hot reload at localhost:8080
 npm run dev
+
+# Build for production
+npm run build
 
 # Generate static project
 npm run generate

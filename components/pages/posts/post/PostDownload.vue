@@ -42,7 +42,7 @@
 
 <template>
   <button
-    aria-label="Download post"
+    :aria-label="$t('common.downloadPost')"
     class="hover:hover-bg-util focus-visible:focus-outline-util group rounded-md px-1.5 py-1"
     type="button"
     @click="downloadMedia"

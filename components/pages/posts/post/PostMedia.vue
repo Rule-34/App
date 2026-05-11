@@ -11,6 +11,8 @@
   }
 
   const requestUrl = useRequestURL()
+  const localePath = useLocalePath()
+  const { t } = useI18n()
   const { isPremium } = useUserData()
   const { autoplayAnimatedMedia } = useUserSettings()
   let { timesVideoHasRendered } = useEthics()
@@ -139,11 +141,11 @@
 
           links: [
             {
-              label: 'Remove ads',
-              href: '/premium?utm_source=internal&utm_medium=player-context-menu'
+              label: t('media.removeAds'),
+              href: localePath('/premium?utm_source=internal&utm_medium=player-context-menu#pricing')
             },
             {
-              label: 'Download',
+              label: t('media.download'),
               href: localSrc.value
             }
           ]
@@ -159,7 +161,7 @@
       },
 
       vastOptions: {
-        adText: 'Only one ad per hour. Never see ads again with Premium!',
+        adText: t('media.adText'),
 
         vastAdvanced: {
           /**
@@ -336,7 +338,7 @@
       }
     }
 
-    error.value = new Error('Error loading media')
+    error.value = new Error(t('errors.mediaLoadError'))
   }
 
   function manuallyReloadMedia() {
@@ -419,7 +421,7 @@
             type="button"
             @click="manuallyReloadMedia"
           >
-            Try again?
+            {{ t('media.tryAgain') }}
           </button>
         </div>
 
@@ -430,14 +432,14 @@
           class="text-base-content text-xs"
         >
           <NuxtLink
+            :href="localePath('/premium?utm_source=internal&utm_medium=media-error#pricing')"
             class="hover:hover-text-util focus-visible:focus-outline-util underline"
-            href="/premium?utm_source=internal&utm_medium=media-error"
           >
             <!-- @formatter:off -->
-            Get Premium</NuxtLink
+            {{ t('media.getPremium') }}</NuxtLink
           >
 
-          <span> to bypass website blocks</span>
+          <span> {{ t('media.toBypassBlocks') }}</span>
         </div>
       </div>
     </template>
@@ -550,7 +552,7 @@
         v-if="isAnimatedMediaLoading && isAnimatedMediaPlaying"
         class="absolute inset-0 flex items-center justify-center rounded-t-md bg-black/20"
       >
-        <span class="sr-only"> Loading media&hellip; </span>
+        <span class="sr-only"> {{ t('media.loadingMedia') }} </span>
 
         <span class="rounded-full bg-black/65 p-2">
           <svg
@@ -580,7 +582,7 @@
       <!-- Play button overlay - only shown when GIF is not playing -->
       <button
         v-if="!isAnimatedMediaPlaying"
-        aria-label="Play"
+        :aria-label="t('media.play')"
         class="absolute inset-0 flex items-center justify-center rounded-t-md bg-black/20"
         type="button"
         @click="startPlayingAnimatedMedia"

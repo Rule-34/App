@@ -12,11 +12,15 @@
   import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
   import type { IPost, IPostPage } from 'assets/js/post.dto'
   import { generatePostsRoute } from '~/assets/js/RouterHelper'
+  import { useTagTitle } from '~/composables/useTagTitle'
   import type { IPocketbasePost } from '~/assets/js/pocketbase.dto'
   import { project } from '@/config/project'
 
   const router = useRouter()
   const route = useRoute()
+  const localePath = useLocalePath()
+  const { t } = useI18n()
+  const buildTagTitle = useTagTitle()
 
   const { $pocketBase } = useNuxtApp()
 
@@ -69,7 +73,7 @@
     const booru = booruList.value.find((booru) => booru.domain === domain)
 
     if (!booru) {
-      toast.error(`Booru "${domain}" not found`)
+      toast.error(t('toasts.booruNotFound', { domain }))
       throw new Error(`Booru "${domain}" not found`)
     }
 
@@ -109,50 +113,50 @@
     }
   })
 
-  const filterConfig = {
+  const filterConfig = computed(() => ({
     type: {
       type: 'select' as const,
-      label: 'Type',
+      label: t('filters.type'),
       icon: PhotoIcon,
       options: [
-        { label: 'Type', value: undefined },
-        { label: 'Image', value: 'image' },
-        { label: 'Animated (GIF)', value: 'animated' },
-        { label: 'Video', value: 'video' }
+        { label: t('filters.type'), value: undefined },
+        { label: t('filters.typeImage'), value: 'image' },
+        { label: t('filters.typeAnimated'), value: 'animated' },
+        { label: t('filters.typeVideo'), value: 'video' }
       ]
     },
     sort: {
       type: 'select' as const,
-      label: 'Sort',
+      label: t('filters.sort'),
       icon: Bars3BottomRightIcon,
       options: [
-        { label: 'Sort', value: undefined },
-        { label: 'Score', value: '-score' },
-        { label: 'Score (asc)', value: 'score' },
-        { label: 'Created', value: '-created' },
-        { label: 'Created (asc)', value: 'created' },
-        { label: 'Random', value: '@random' }
+        { label: t('filters.sort'), value: undefined },
+        { label: t('filters.sortByScore'), value: '-score' },
+        { label: t('filters.sortByScoreAsc'), value: 'score' },
+        { label: t('filters.sortByCreated'), value: '-created' },
+        { label: t('filters.sortByCreatedAsc'), value: 'created' },
+        { label: t('filters.sortByRandom'), value: '@random' }
       ]
     },
     rating: {
       type: 'select' as const,
-      label: 'Rating',
+      label: t('filters.rating'),
       icon: EyeIcon,
       options: [
-        { label: 'Rating', value: undefined },
-        { label: 'Safe', value: 'safe' },
-        { label: 'General', value: 'general' },
-        { label: 'Sensitive', value: 'sensitive' },
-        { label: 'Questionable', value: 'questionable' },
-        { label: 'Explicit', value: 'explicit' }
+        { label: t('filters.rating'), value: undefined },
+        { label: t('filters.ratingSafe'), value: 'safe' },
+        { label: t('filters.ratingGeneral'), value: 'general' },
+        { label: t('filters.ratingSensitive'), value: 'sensitive' },
+        { label: t('filters.ratingQuestionable'), value: 'questionable' },
+        { label: t('filters.ratingExplicit'), value: 'explicit' }
       ]
     },
     score: {
       type: 'select' as const,
-      label: 'Score',
+      label: t('filters.score'),
       icon: StarIcon,
       options: [
-        { label: 'Score', value: undefined },
+        { label: t('filters.score'), value: undefined },
         { label: '>= 0', value: 0 },
 
         { label: '>= 5', value: 5 },
@@ -171,7 +175,7 @@
         { label: '>= 1000', value: 1000 }
       ]
     }
-  }
+  }))
 
   /**
    * Misc
@@ -220,14 +224,17 @@
 
     const postsRoute = generatePostsRoute('/premium/saved-posts', domain, page, tags, filters)
 
-    await navigateTo({ ...postsRoute }, { replace })
+    await navigateTo(
+      { path: localePath(postsRoute.path), query: postsRoute.query },
+      { replace }
+    )
   }
 
   /**
    * Listeners
    */
   async function onSearchTag(tag: string) {
-    toast.error('Autocomplete not implemented')
+    toast.error(t('toasts.autocompleteNotImplemented'))
   }
 
   async function onDomainChange(domain: Domain) {
@@ -243,21 +250,21 @@
    * Adds the tag, or removes it if it already exists
    */
   async function onPostAddTag(tag: string) {
-    toast.error('Not implemented')
+    toast.error(t('toasts.notImplemented'))
   }
 
   /**
    * Sets tags to only the given tag
    */
   async function onPostSetTag(tag: string) {
-    toast.error('Not implemented')
+    toast.error(t('toasts.notImplemented'))
   }
 
   /**
    * Opens the tag in a new tab
    */
   async function onPostOpenTagInNewTab(tag: string) {
-    toast.error('Not implemented')
+    toast.error(t('toasts.notImplemented'))
   }
 
   async function onLoadNextPostPage() {
@@ -276,7 +283,7 @@
   })
 
   async function onPageIndicatorClick() {
-    const pagePrompt = prompt('To which page do you want to go?')
+    const pagePrompt = prompt(t('common.promptPageNumber'))
 
     if (pagePrompt == null) {
       return
@@ -285,7 +292,7 @@
     const page = parseInt(pagePrompt, 10)
 
     if (isNaN(page)) {
-      toast.error('Invalid page number')
+      toast.error(t('toasts.invalidPageNumber'))
       return
     }
 
@@ -551,90 +558,55 @@
   /**
    * SEO
    */
-  const completeTitle = computed(() => {
-    let title = ''
-
-    // Page
-    if (selectedPage.value !== selectedBooru.value.type.initialPageID) {
-      title += `Page ${selectedPage.value} of `
-    }
-
-    title += 'Saved Posts'
-
-    // Tags
-
-    if (selectedTags.value.length > 0) {
-      title += ` tagged ${tagArrayToTitle(selectedTags.value)} hentai videos, GIFs, and images`
-    }
-
-    // Filters
-    if (selectedFilters.value.type) {
-      title += `, ${selectedFilters.value.type} only`
-    }
-
-    if (selectedFilters.value.rating) {
-      title += `, rated ${selectedFilters.value.rating}`
-    }
-
-    if (selectedFilters.value.sort) {
-      title += `, sorted by ${selectedFilters.value.sort}`
-    }
-
-    if (selectedFilters.value.score) {
-      title += `, score of ${selectedFilters.value.score}`
-    }
-
-    // Domain
-    title += `, from ${selectedBooru.value.domain}`
-
-    title = title.trim()
-
-    return title
-  })
-
   const shortTitle = computed(() => {
-    let _title = completeTitle.value
+    const hasTags = selectedTags.value.length > 0
+    const hasPaging = selectedPage.value !== selectedBooru.value.type.initialPageID
 
-    _title = _title.replace(/Posts tagged/, '')
-    _title = _title.replace(/with /, '')
-    _title = _title.replace(/and ?without /, ' w/o ')
-    _title = _title.replace(/with a score of/, 'score')
+    let title = hasPaging ? t('posts.seo.pageOf', { page: selectedPage.value }) : ''
 
-    if (selectedTags.value.length > 0) {
-      _title = _title.replace(/, from .+$/, '')
+    if (hasTags) {
+      const tagTitle = buildTagTitle(selectedTags.value)
+      title += t('posts.seo.taggedHentai', { tags: tagTitle })
+    } else {
+      title += t('posts.seo.savedPosts')
+
+      const filterParts: string[] = []
+      if (selectedFilters.value.type) filterParts.push(t('posts.seo.typeOnly', { type: selectedFilters.value.type }))
+      if (selectedFilters.value.rating) filterParts.push(t('posts.seo.rated', { rating: selectedFilters.value.rating }))
+      if (selectedFilters.value.sort) filterParts.push(t('posts.seo.sortedBy', { sort: selectedFilters.value.sort }))
+      if (selectedFilters.value.score) filterParts.push(t('posts.seo.scoreOf', { score: selectedFilters.value.score }))
+      if (filterParts.length) title += ', ' + filterParts.join(', ')
+
+      title += t('posts.seo.fromDomain', { domain: selectedBooru.value.domain })
     }
 
-    _title = _title.trim()
-    // Capitalize first letter - https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
-    _title = _title.charAt(0).toUpperCase() + _title.slice(1)
-
-    return _title
+    return title.trim()
   })
 
   const titleForBody = computed(() => {
-    let _title = completeTitle.value
+    const hasTags = selectedTags.value.length > 0
 
-    // TODO: Show page number in body title
-    _title = _title.replace(/page \d+ of /i, '')
-
-    _title = _title.replace(/saved posts/i, '')
-
-    _title = _title.replace(/tagged with/i, '')
-
-    _title = _title.replace(/hentai videos, GIFs, and images/i, 'rule 34 hentai')
-
-    _title = _title.replace(/, from .+$/, '')
-
-    // Edge case: ", sorted by" || ", rated" || ", with a score of"
-    if (_title.startsWith(', ')) {
-      _title = _title.slice(2)
+    if (hasTags) {
+      const tagTitle = buildTagTitle(selectedTags.value)
+      const title = t('posts.seo.tagsRule34', { tags: tagTitle })
+      const filterParts: string[] = []
+      if (selectedFilters.value.type) filterParts.push(t('posts.seo.typeOnly', { type: selectedFilters.value.type }))
+      if (selectedFilters.value.rating) filterParts.push(t('posts.seo.rated', { rating: selectedFilters.value.rating }))
+      if (selectedFilters.value.sort) filterParts.push(t('posts.seo.sortedBy', { sort: selectedFilters.value.sort }))
+      if (selectedFilters.value.score) filterParts.push(t('posts.seo.scoreOf', { score: selectedFilters.value.score }))
+      const full = filterParts.length ? `${title}, ${filterParts.join(', ')}` : title
+      return full.charAt(0).toUpperCase() + full.slice(1)
     }
 
-    _title = _title.trim()
-    // Capitalize first letter - https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
-    _title = _title.charAt(0).toUpperCase() + _title.slice(1)
+    const filterParts: string[] = []
+    if (selectedFilters.value.type) filterParts.push(t('posts.seo.typeOnly', { type: selectedFilters.value.type }))
+    if (selectedFilters.value.rating) filterParts.push(t('posts.seo.rated', { rating: selectedFilters.value.rating }))
+    if (selectedFilters.value.sort) filterParts.push(t('posts.seo.sortedBy', { sort: selectedFilters.value.sort }))
+    if (selectedFilters.value.score) filterParts.push(t('posts.seo.scoreOf', { score: selectedFilters.value.score }))
+    if (!filterParts.length) return ''
 
-    return _title
+    const joined = filterParts.join(', ')
+    return joined.charAt(0).toUpperCase() + joined.slice(1)
   })
 
   useSeoMeta({
@@ -670,7 +642,7 @@
   <ClientOnly>
     <Teleport to="#navbar-actions">
       <button
-        aria-label="Search posts"
+        :aria-label="t('common.searchPosts')"
         class="focus-visible:focus-outline-util hover:hover-bg-util hover:hover-text-util relative rounded-md p-2"
         type="button"
         @click="toggleSearchMenu()"
@@ -722,7 +694,7 @@
         as="h2"
         class="flex-1"
       >
-        <template #title>Saved Posts</template>
+        <template #title>{{ t('common.savedPosts') }}</template>
         <template
           v-if="titleForBody"
           #text
@@ -748,7 +720,7 @@
             class="h-12 w-12 animate-spin"
           />
 
-          <h3>Loading posts&hellip;</h3>
+          <h3>{{ t('posts.loadingPosts') }}</h3>
         </div>
       </template>
 
@@ -769,9 +741,9 @@
             class="mx-auto mb-1 h-12 w-12"
           />
 
-          <h3 class="text-lg leading-10 font-semibold">No results</h3>
+          <h3 class="text-lg leading-10 font-semibold">{{ t('posts.noResults') }}</h3>
 
-          <span class="w-full overflow-x-auto text-pretty">Try changing the tags or filters</span>
+          <span class="w-full overflow-x-auto text-pretty">{{ t('posts.tryChangingTagsOrFilters') }}</span>
         </div>
       </template>
 
@@ -827,9 +799,9 @@
                   v-else
                   class="block rounded-md px-1.5 py-1"
                 >
-                  <template v-if="isFetching"> Loading more... </template>
+                  <template v-if="isFetching"> {{ t('posts.loadingMore') }} </template>
 
-                  <template v-else-if="hasNextPage"> Reach here to load more </template>
+                  <template v-else-if="hasNextPage"> {{ t('posts.reachHereToLoadMore') }} </template>
                 </span>
               </div>
 
@@ -843,7 +815,7 @@
                   type="button"
                   @click="onPageIndicatorClick"
                 >
-                  &dharl; Page {{ allRows[virtualRow.index].current_page }} &dharr;
+                  &dharl; {{ $t('common.pageNumber', { page: allRows[virtualRow.index].current_page }) }} &dharr;
                 </button>
 
                 <!-- Post -->
@@ -867,7 +839,7 @@
           v-if="!hasNextPage && !isFetching && allRows.length"
           class="text-base-content mt-4 flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
         >
-          <span class="block rounded-md px-1.5 py-1"> Nothing more to load </span>
+          <span class="block rounded-md px-1.5 py-1"> {{ t('posts.nothingMoreToLoad') }} </span>
         </div>
       </div>
     </section>

@@ -12,7 +12,9 @@
     updateSelectedTags: [selectedTags: Tag[]]
   }>()
 
+  const localePath = useLocalePath()
   const { isPremium } = useUserData()
+  const { t } = useI18n()
 
   const { tagCollections } = useTagCollections()
 
@@ -34,23 +36,24 @@
     const selectedTags = props.selectedTags
 
     if (selectedTags.length === 0) {
-      toast.error('You need to select at least one tag')
+      toast.error(t('toasts.selectAtLeastOneTag'))
       return
     }
 
-    const name = prompt('Enter a name for the new tag collection')
+    const name = prompt(t('common.promptTagCollectionName'))
+    const trimmedName = name?.trim()
 
-    if (!name) {
+    if (!trimmedName) {
       return
     }
 
-    if (tagCollections.value.some((tagCollection) => tagCollection.name === name)) {
-      toast.error('A tag collection with this name already exists')
+    if (tagCollections.value.some((tagCollection) => tagCollection.name === trimmedName)) {
+      toast.error(t('toasts.tagCollectionExists'))
       return
     }
 
     const tagCollection = new TagCollection({
-      name,
+      name: trimmedName,
       tags: selectedTags.map((tag) => tag.name)
     })
 
@@ -67,18 +70,18 @@
         as="h3"
         class="text-base-content-highlight text-lg leading-10 font-medium"
       >
-        Tag Collections
+        {{ $t('pages.premium.tagCollections') }}
       </HeadlessDialogTitle>
 
-      <h4 class="text-sm">List of tags that you can create for easy access</h4>
+      <h4 class="text-sm">{{ $t('common.tagCollectionsDescription') }}</h4>
     </header>
 
     <div class="absolute top-0.5 right-0">
       <NuxtLink
         class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util inline-flex w-full items-center gap-x-1.5 rounded-md p-1"
-        to="/premium/tag-collections"
+        :to="localePath('/premium/tag-collections')"
       >
-        <span class="sr-only"> Manage tag collections </span>
+        <span class="sr-only"> {{ $t('common.manageTagCollections') }} </span>
 
         <Cog6ToothIcon aria-hidden="true" class="h-6 w-6" />
       </NuxtLink>
@@ -97,13 +100,16 @@
             type="button"
             @click="setTagCollectionAsSelected(tagCollection)"
           >
-            <span class="sr-only">Select tag:</span>
+            <span class="sr-only">{{ $t('common.selectTag') }}</span>
 
             <span>{{ tagCollection.name }}</span>
 
             <div class="flex items-center justify-center gap-x-1.5">
               <span>
                 {{ tagCollection.tags.length }}
+                <span class="sr-only">{{
+                $t('pages.premium.tagCollectionsPage.tagsInCollection', tagCollection.tags.length)
+              }}</span>
               </span>
 
               <TagIcon aria-hidden="true" class="h-5 w-5" />
@@ -119,7 +125,7 @@
             type="button"
             @click="createTagCollectionFromSelectedTags"
           >
-            <span class="whitespace-nowrap">Create from current tags</span>
+            <span class="whitespace-nowrap">{{ $t('common.createFromCurrentTags') }}</span>
 
             <PlusIcon aria-hidden="true" class="h-5 w-5" />
           </button>

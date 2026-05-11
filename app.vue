@@ -3,87 +3,27 @@
 
   provideHeadlessUseId(() => useId())
 
-  const route = useRoute()
   const runtimeConfig = useRuntimeConfig()
-
-  const canonicalUrl = computed(() => {
-    const url = 'https://' + project.urls.production.hostname + route.fullPath
-
-    const parsedUrl = new URL(url)
-    const canonicalIgnoredParams = new Set(['page', 'cursor', 'source_booru'])
-
-    // Keep canonical URLs focused on content-defining params only.
-    // Redirect attribution params (utm_* and source_booru) are intentionally removed so
-    // premium-redirect landings don't create duplicate canonicals for the same page.
-    for (const key of [...parsedUrl.searchParams.keys()]) {
-      if (canonicalIgnoredParams.has(key) || key.startsWith('utm_')) {
-        parsedUrl.searchParams.delete(key)
-      }
-    }
-
-    return parsedUrl.href
-  })
+  const { t } = useI18n()
 
   useHead({
-    htmlAttrs: {
-      lang: 'en'
-    },
-
     titleTemplate: (titleChunk) => {
-      return titleChunk ? `${titleChunk} | ${project.name}` : project.seo.title
-    },
-
-    link: [
-      // Favicon
-      {
-        rel: 'icon',
-        href: '/favicon.ico',
-        sizes: '48x48'
-      },
-      {
-        rel: 'icon',
-        href: '/icon.svg',
-        sizes: 'any',
-        type: 'image/svg+xml'
-      },
-      {
-        rel: 'apple-touch-icon',
-        href: '/apple-touch-icon-180x180.png'
-      },
-      // Canonical URL
-      {
-        rel: 'canonical',
-        href: canonicalUrl
-      },
-      // Preconnect to API
-      {
-        rel: 'preconnect',
-        href: runtimeConfig.public.apiUrl
-      }
-    ]
-  })
-
-  useSeoMeta({
-    charset: 'utf-8',
-    viewport: 'width=device-width, initial-scale=1',
-
-    description: project.seo.description,
-
-    keywords: project.seo.keywords.join(', '),
-
-    rating: 'adult',
-
-    colorScheme: 'dark',
-    themeColor: project.branding.colors.background,
-
-    monetization: '$ilp.uphold.com/Hf3zAn3pQ7fD',
-
-    ogImage: {
-      url: '/social.jpg',
-      width: 1200,
-      height: 630
+      return titleChunk ? `${titleChunk} | ${project.name}` : t('seo.title')
     }
   })
+
+  // These meta tags will only be added during server-side rendering
+  if (import.meta.server) {
+    const requestUrl = useRequestURL()
+
+    useSeoMeta({
+      description: computed(() => t('seo.description')),
+      keywords: computed(() => t('seo.keywords')),
+      ogImage: `${requestUrl.origin}/social.jpg`,
+      ogImageWidth: 1200,
+      ogImageHeight: 630
+    })
+  }
 </script>
 
 <template>

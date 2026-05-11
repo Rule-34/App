@@ -9,6 +9,7 @@
   }
 
   const props = defineProps<ShareButtonProps>()
+  const { t } = useI18n()
 
   async function share() {
     const url = props.url ?? window.location.href
@@ -35,9 +36,9 @@
   async function copyToClipboard(text: string) {
     try {
       await navigator.clipboard.writeText(text)
-      toast.success('Link copied to clipboard!')
+      toast.success(t('toasts.linkCopiedToClipboard'))
     } catch (err) {
-      toast.error('Failed to copy link to clipboard')
+      toast.error(t('toasts.failedToCopyLink'))
     }
   }
 
@@ -59,7 +60,7 @@
 
 <template>
   <button
-    aria-label="Share page"
+    :aria-label="t('common.sharePage')"
     class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util rounded-md"
     type="button"
     @click="share"

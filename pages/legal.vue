@@ -1,17 +1,20 @@
 <script setup>
   import { project } from '@/config/project'
 
-  useSeoMeta({
-    title: 'Legal',
+  const localePath = useLocalePath()
+  const { t } = useI18n()
 
-    description: `Legal information about ${project.name}`
+  useSeoMeta({
+    title: () => t('pages.legal.title'),
+    description: () => t('pages.legal.description', { name: project.name })
   })
+
 </script>
 
 <template>
   <main class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
     <PageHeader>
-      <template #title>Legal</template>
+      <template #title>{{ $t('pages.legal.title') }}</template>
     </PageHeader>
 
     <ol class="mx-2 mt-4 space-y-4">
@@ -20,12 +23,12 @@
         <ContentContainer
           :links="[
             {
-              text: 'Privacy policy',
-              href: '/privacy-policy'
+              text: $t('pages.legal.privacyPolicy'),
+              href: localePath('/privacy-policy')
             }
           ]"
-          text="You can find the privacy policy in the next link"
-          title="Privacy policy"
+          :text="$t('pages.legal.privacyPolicyText')"
+          :title="$t('pages.legal.privacyPolicy')"
         />
       </li>
 
@@ -34,12 +37,12 @@
         <ContentContainer
           :links="[
             {
-              text: 'Terms of service',
-              href: '/terms-of-service'
+              text: $t('pages.legal.termsOfService'),
+              href: localePath('/terms-of-service')
             }
           ]"
-          text="You can find the terms of service in the next link"
-          title="Terms of service"
+          :text="$t('pages.legal.termsOfServiceText')"
+          :title="$t('pages.legal.termsOfService')"
         />
       </li>
 
@@ -48,12 +51,12 @@
         <ContentContainer
           :links="[
             {
-              text: 'Cookie policy',
-              href: '/cookie-policy'
+              text: $t('pages.legal.cookiePolicy'),
+              href: localePath('/cookie-policy')
             }
           ]"
-          text="You can find the cookie policy in the next link"
-          title="Cookie policy"
+          :text="$t('pages.legal.cookiePolicyText')"
+          :title="$t('pages.legal.cookiePolicy')"
         />
       </li>
 
@@ -62,12 +65,12 @@
         <ContentContainer
           :links="[
             {
-              text: 'DMCA',
-              href: '/dmca'
+              text: $t('pages.legal.dmca'),
+              href: localePath('/dmca')
             }
           ]"
-          text="Want to submit a takedown request? You can find more information in the next link"
-          title="DMCA Notice"
+          :text="$t('pages.legal.dmcaText')"
+          :title="$t('pages.legal.dmca')"
         />
       </li>
 
@@ -81,8 +84,8 @@
               target: '_blank'
             }
           ]"
-          text="Reach us for any question, suggestion, request, or any other concern"
-          title="Contact"
+          :text="$t('pages.legal.contactText')"
+          :title="$t('pages.legal.contactTitle')"
         />
       </li>
     </ol>

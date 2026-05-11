@@ -25,18 +25,12 @@
         as="h3"
         class="text-base-content-highlight text-base leading-6 font-semibold"
       >
-        Install the App?
+        {{ $t('modals.pwa.title') }}
       </HeadlessDialogTitle>
 
       <div class="mt-2">
         <p class="text-sm text-pretty">
-          Add it to your home screen for quick and easy access,
-          <!--          -->
-          it doesnt need any permissions,
-          <!--          -->
-          <!--          is automatically updated,-->
-          <!--          -->
-          and it doesn't take any storage!
+          {{ $t('modals.pwa.description') }}
         </p>
       </div>
     </div>
@@ -50,7 +44,7 @@
       class="mt-5 h-screen max-h-[60vh] w-full rounded-md sm:mt-6"
       credentialless
       :src="`https://www.installpwa.com/from/${project.urls.production.hostname}/embed?theme=dark`"
-      title="Install PWA"
+      :title="$t('modals.pwa.iframeTitle')"
       @load="isIframeLoaded = true"
     />
 
@@ -58,7 +52,7 @@
       <div class="absolute inset-0 flex w-full animate-pulse flex-col items-center justify-center gap-4 text-lg">
         <ArrowPathIcon class="h-12 w-12 animate-spin" />
 
-        <h3>Loading&hellip;</h3>
+        <h3>{{ $t('modals.pwa.loading') }}</h3>
       </div>
     </template>
   </div>
@@ -70,7 +64,7 @@
       type="button"
       @click="close()"
     >
-      Dismiss
+      {{ $t('common.close') }}
     </button>
   </div>
 </template>

@@ -14,12 +14,12 @@
           aria-hidden="true"
           class="me-2 h-6 w-6 shrink-0"
         />
-        <span class="sr-only">Info</span>
+        <span class="sr-only">{{ $t('common.info') }}</span>
 
-        <h3 class="text-lg font-medium text-base-content-highlight">There is a new update</h3>
+        <h3 class="text-lg font-medium text-base-content-highlight">{{ $t('modals.pwaUpdater.title') }}</h3>
       </div>
 
-      <div class="mb-4 mt-2 text-sm">Refresh or click the button below to apply the update</div>
+      <div class="mb-4 mt-2 text-sm">{{ $t('modals.pwaUpdater.description') }}</div>
 
       <div class="flex">
         <button
@@ -27,7 +27,7 @@
           type="button"
           @click="$pwa.updateServiceWorker()"
         >
-          Refresh
+          {{ $t('common.refresh') }}
         </button>
       </div>
     </div>

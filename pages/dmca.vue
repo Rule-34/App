@@ -1,17 +1,18 @@
 <script setup>
   import { project } from '@/config/project'
 
-  useSeoMeta({
-    title: 'DMCA Notice of Copyright infringement',
+  const { t } = useI18n()
 
-    description: `Learn how to submit a DMCA notice of copyright infringement to ${project.name}`
+  useSeoMeta({
+    title: computed(() => t('pages.legal.dmcaSeoTitle')),
+    description: computed(() => t('pages.legal.dmcaDescription', { name: project.name }))
   })
 </script>
 
 <template>
   <main class="richtext container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
     <PageHeader>
-      <template #title>DMCA Notice</template>
+      <template #title>{{ $t('pages.legal.dmca') }}</template>
     </PageHeader>
 
     <div>

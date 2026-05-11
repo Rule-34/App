@@ -2,6 +2,8 @@
   import { PencilSquareIcon } from '@heroicons/vue/24/outline'
   import { project } from '@/config/project'
 
+  const { t } = useI18n()
+
   function handleClick(event: Event) {
     window.open(`https://feedback.${project.urls.production.hostname}`, '_blank')
   }
@@ -18,7 +20,7 @@
         target="_blank"
         :to="`https://feedback.${project.urls.production.hostname}`"
       >
-        <span class="text-base font-medium"> Feedback </span>
+        <span class="text-base font-medium"> {{ t('common.feedback') }} </span>
 
         <PencilSquareIcon
           class="h-5 w-5"

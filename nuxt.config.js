@@ -1,5 +1,47 @@
 import tailwindcss from '@tailwindcss/vite'
 import { project } from './config/project'
+import { locales, defaultLocale, prefixedLocaleCodes } from './config/i18n'
+
+const cacheHeaders = { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0' }
+
+const pageRouteRules = {
+  // Not prerendered because it needs to redirect old URLs
+  '/': { headers: cacheHeaders },
+
+  // @see https://github.com/Baroshem/nuxt-security/issues/364
+  '/posts/**': { security: { xssValidator: false }, headers: cacheHeaders },
+
+  // Static pages (prerendered)
+  '/other-sites': { prerender: true, headers: cacheHeaders },
+  '/legal': { prerender: true, headers: cacheHeaders },
+  '/privacy-policy': { prerender: true, headers: cacheHeaders },
+  '/terms-of-service': { prerender: true, headers: cacheHeaders },
+  '/cookie-policy': { prerender: true, headers: cacheHeaders },
+  '/dmca': { prerender: true, headers: cacheHeaders },
+
+  '/settings': { ssr: false, headers: cacheHeaders },
+
+  '/premium': { prerender: true, headers: cacheHeaders },
+  '/premium/sign-in': { prerender: true, headers: cacheHeaders },
+  '/premium/forgot-password': { prerender: true, headers: cacheHeaders },
+
+  // Premium dashboard pages (client-side rendered)
+  '/premium/dashboard': { ssr: false, headers: cacheHeaders },
+  '/premium/saved-posts/**': { ssr: false, headers: cacheHeaders },
+  '/premium/tag-collections': { ssr: false, headers: cacheHeaders },
+  '/premium/additional-boorus': { ssr: false, headers: cacheHeaders },
+  '/premium/backup': { ssr: false, headers: cacheHeaders }
+}
+
+const mirroredRouteRules = (rules) =>
+  Object.fromEntries(
+    prefixedLocaleCodes.flatMap((locale) =>
+      Object.entries(rules).map(([path, rule]) => [
+        path === '/' ? `/${locale}` : `/${locale}${path}`,
+        rule
+      ])
+    )
+  )
 
 export default defineNuxtConfig({
   srcDir: '.',
@@ -22,6 +64,23 @@ export default defineNuxtConfig({
           type: 'text/css',
           children: `html { background-color: ${project.branding.colors.background}; }`
         }
+      ],
+      link: [
+        { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
+        { rel: 'icon', href: '/icon.svg', sizes: 'any', type: 'image/svg+xml' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon-180x180.png' },
+
+        ...(process.env.NUXT_PUBLIC_API_URL
+          ? [{ rel: 'preconnect', href: process.env.NUXT_PUBLIC_API_URL }]
+          : [])
+      ],
+      meta: [
+        { name: 'rating', content: 'adult' },
+
+        { name: 'color-scheme', content: 'dark' },
+        { name: 'theme-color', content: project.branding.colors.background },
+
+        { name: 'monetization', content: '$ilp.uphold.com/Hf3zAn3pQ7fD' }
       ]
     }
   },
@@ -30,131 +89,17 @@ export default defineNuxtConfig({
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
    */
   routeRules: {
-    '/': {
-      // Not prerendered because it needs to redirect old URLs
-      // prerender: true,
-      headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
-      }
-    },
-
     // Redirect public disabled Boorus to / to not lose SEO
     // @see useBooruList.ts
     // '/posts/gelbooru.com': {
     //   redirect: '/posts/rule34.xxx'
     // },
 
-    '/posts/**': {
-      // @see https://github.com/Baroshem/nuxt-security/issues/364
-      security: {
-        xssValidator: false
-      },
-      // TODO: Reactivate SWR once memory fix is found
-      headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
-      }
-    },
+    ...pageRouteRules,
 
-    // Static pages are prerendered
-    '/other-sites': {
-      prerender: true,
-      headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
-      }
-    },
-
-    '/legal': {
-      prerender: true,
-      headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
-      }
-    },
-
-    '/privacy-policy': {
-      prerender: true,
-      headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
-      }
-    },
-
-    '/terms-of-service': {
-      prerender: true,
-      headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
-      }
-    },
-
-    '/cookie-policy': {
-      prerender: true,
-      headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
-      }
-    },
-
-    '/dmca': {
-      prerender: true,
-      headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
-      }
-    },
-
-    '/settings': {
-      ssr: false,
-      headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
-      }
-    },
-
-    '/premium': {
-      prerender: true,
-      headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
-      }
-    },
-    '/premium/sign-in': {
-      prerender: true,
-      headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
-      }
-    },
-    '/premium/forgot-password': {
-      prerender: true,
-      headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
-      }
-    },
-
-    // All premium pages are client-side rendered
-    '/premium/dashboard': {
-      ssr: false,
-      headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
-      }
-    },
-    '/premium/saved-posts/**': {
-      ssr: false,
-      headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
-      }
-    },
-    '/premium/tag-collections': {
-      ssr: false,
-      headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
-      }
-    },
-    '/premium/additional-boorus': {
-      ssr: false,
-      headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
-      }
-    },
-    '/premium/backup': {
-      ssr: false,
-      headers: {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300, stale-if-error=0'
-      }
-    },
+    // Locale-prefixed variants (ru, es, ja) — with prefix_except_default,
+    // /ru/posts/** etc. don't inherit unprefixed rules.
+    ...mirroredRouteRules(pageRouteRules),
 
     /**
      * Public assets
@@ -233,9 +178,40 @@ export default defineNuxtConfig({
     '@formkit/auto-animate/nuxt',
     '@vite-pwa/nuxt',
     '@nuxtjs/sitemap',
+    '@nuxtjs/i18n',
     'nuxt-schema-org',
     'nuxt-security'
   ],
+
+  /** @type {import('@nuxtjs/i18n').ModuleOptions} */
+  i18n: {
+    baseUrl: project.urls.production.toString(),
+
+    locales,
+    defaultLocale,
+
+    parallelPlugin: true,
+
+    /**
+     * BUG: canonicalQueries is ignored by @nuxtjs/i18n v10 (up to 10.3.0).
+     * The config array is discarded at build time and never reaches the runtime.
+     *
+     * WORKAROUND (two-part fix):
+     *   1. SSR: server/plugins/fix-canonical-queries.ts patches the canonical
+     *      link into the rendered HTML before it reaches the browser.
+     *   2. CSR: pages/posts/[domain].vue uses `useHead` to re-apply the
+     *      canonical after the i18n module overwrites it on client hydration.
+     *
+     * TODO: Remove both parts once upstream fixes canonicalQueries.
+     *       Track: https://github.com/nuxt-modules/i18n
+     */
+    experimental: {
+      strictSeo: {
+        canonicalQueries: ['tags'] // Non-functional — kept as intent. See server/plugins/.
+      },
+      compactRoutes: true // TODO: Remove once default
+    }
+  },
 
   /**
    * vue-sonner
@@ -296,7 +272,7 @@ export default defineNuxtConfig({
 
     ipx: {
       maxAge: 60 * 60 * 24 * 365 // 1 year
-    },
+    }
   },
 
   /** @type {import('@vite-pwa/nuxt').ModuleOptions} */
@@ -434,5 +410,22 @@ export default defineNuxtConfig({
   },
 
   telemetry: false,
-  compatibilityDate: '2025-03-12'
+  compatibilityDate: '2025-03-12',
+
+  /** Test overrides — only applied when running vitest. */
+  $test: {
+    sentry: {
+      enabled: false
+    },
+
+    runtimeConfig: {
+      public: {
+        apiUrl: '' // routes $fetch(baseURL: '') to local Nitro server
+      }
+    },
+
+    nitro: {
+      plugins: ['~/test/server-mocks/plugin.ts']
+    }
+  }
 })

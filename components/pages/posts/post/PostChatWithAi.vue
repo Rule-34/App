@@ -5,7 +5,7 @@ import { useChatWithAiReferral } from '~/composables/useAdvertisements'
 import useAppStatistics from '~/composables/useAppStatistics'
 import type { IPost } from '~/assets/js/post.dto'
 
-const props = defineProps<{
+  const props = defineProps<{
     tags: IPost['tags']
     mediaType: IPost['media_type']
     mediaUrl: string | null
@@ -13,6 +13,7 @@ const props = defineProps<{
 
   const { chatWithAiReferralTemplate } = useChatWithAiReferral()
   const { tutorialChatWithAi } = useAppStatistics()
+  const { t } = useI18n()
 
   const referenceEl = ref<HTMLElement>()
   const floatingEl = ref<HTMLElement>()
@@ -87,7 +88,7 @@ const props = defineProps<{
   >
     <HeadlessMenuButton
       ref="referenceEl"
-      aria-label="Chat with AI"
+      :aria-label="t('common.chatWithAi')"
       class="hover:hover-bg-util focus-visible:focus-outline-util group flex items-center gap-1 rounded-md px-1.5 py-1"
       @click="onChatMenuOpen"
     >
@@ -126,7 +127,7 @@ const props = defineProps<{
             v-if="nud3Url"
             class="py-1"
           >
-            <div class="text-base-content-highlight px-4 py-2 text-sm font-medium">Fuck with AI</div>
+            <div class="text-base-content-highlight px-4 py-2 text-sm font-medium">{{ t('common.aiVideo') }}</div>
 
             <HeadlessMenuItem v-slot="{ active }">
               <NuxtLink
@@ -140,13 +141,13 @@ const props = defineProps<{
                   aria-hidden="true"
                   class="h-5 w-5"
                 />
-                <span class="truncate font-bold">AI Video</span>
+                <span class="truncate font-bold">{{ t('common.aiVideo') }}</span>
               </NuxtLink>
             </HeadlessMenuItem>
           </div>
 
           <div class="py-1">
-            <div class="text-base-content-highlight px-4 py-2 text-sm font-medium">Chat with AI</div>
+            <div class="text-base-content-highlight px-4 py-2 text-sm font-medium">{{ t('common.chatWithCharacters') }}</div>
 
             <template v-if="normalizedTags.length > 0">
               <HeadlessMenuItem
@@ -172,7 +173,7 @@ const props = defineProps<{
               v-else
               class="block px-4 py-2 text-sm"
             >
-              No tags available
+              {{ t('common.noTagsAvailable') }}
             </span>
           </div>
         </HeadlessMenuItems>

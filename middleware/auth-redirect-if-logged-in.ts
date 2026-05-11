@@ -1,5 +1,6 @@
 export default defineNuxtRouteMiddleware((to, from) => {
   const { $pocketBase } = useNuxtApp()
+  const localePath = useLocalePath()
 
   // Skip if license query is set
   if (to.query.license) {
@@ -7,7 +8,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   }
 
   if ($pocketBase.authStore.isValid) {
-    return navigateTo('/premium/dashboard')
+    return navigateTo(localePath('/premium/dashboard'))
   }
 
   // Continue

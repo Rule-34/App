@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'vitest'
-import { createPage, setup } from '@nuxt/test-utils'
-import { defaultSetupConfig } from '../helper'
+import { setup } from '@nuxt/test-utils'
+import { defaultSetupConfig, useTrackedPageFactory } from '../helper'
 
 describe('/other-sites', async () => {
   await setup(defaultSetupConfig)
 
+  const createTrackedPage = useTrackedPageFactory()
+
   it('renders', async () => {
-    const page = await createPage('/other-sites')
+    const page = await createTrackedPage('/other-sites')
 
     await page.waitForSelector('h1')
 

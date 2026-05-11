@@ -7,6 +7,7 @@
   import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
   import Slideover from '~/components/layout/Slideover.vue'
 
+  const { t } = useI18n()
   const { userBooruList, resetUserBooruList } = useBooruList()
 
   const sortableElement = ref<HTMLElement | null>(null)
@@ -65,7 +66,7 @@
   })
 
   function resetUserBooruListToDefault() {
-    if (!confirm('Are you sure you want to reset all Boorus to default?')) {
+    if (!confirm(t('common.confirmResetBoorus'))) {
       return
     }
 
@@ -105,21 +106,21 @@
   function createBooru() {
     // Validations
     if (!currentBooru.value.domain || !currentBooru.value.type) {
-      toast.error('Please fill out all fields')
+      toast.error(t('toasts.fillOutAllFields'))
       return
     }
 
     const booruType = booruTypeList.find((booruType) => booruType.type === currentBooru.value.type)
 
     if (!booruType) {
-      toast.error('Invalid Booru type')
+      toast.error(t('toasts.invalidBooruType'))
       return
     }
 
     // TODO: Validate with Domain object
 
     if (userBooruList.value.find((booruFromList) => booruFromList.domain === currentBooru.value.domain)) {
-      toast.error('Booru already exists')
+      toast.error(t('toasts.booruAlreadyExists'))
       return
     }
 
@@ -140,14 +141,14 @@
   function editBooru() {
     // Validations
     if (!currentBooru.value.domain || !currentBooru.value.type) {
-      toast.error('Please fill out all fields')
+      toast.error(t('toasts.fillOutAllFields'))
       return
     }
 
     const booruType = booruTypeList.find((booruType) => booruType.type === currentBooru.value.type)
 
     if (!booruType) {
-      toast.error('Invalid Booru type')
+      toast.error(t('toasts.invalidBooruType'))
       return
     }
 
@@ -172,7 +173,7 @@
   }
 
   useSeoMeta({
-    title: 'Additional Boorus'
+    title: computed(() => t('pages.premium.additionalBoorusPage.seoTitle'))
   })
 
   definePageMeta({
@@ -183,8 +184,8 @@
 <template>
   <main class="container mx-auto flex max-w-3xl flex-1 flex-col px-4 py-4 sm:px-6 lg:px-8">
     <PageHeader>
-      <template #title>Additional Boorus</template>
-      <template #text> Add and edit compatible Boorus</template>
+      <template #title>{{ $t('pages.premium.additionalBoorusPage.pageTitle') }}</template>
+      <template #text>{{ $t('pages.premium.additionalBoorusPage.pageDescription') }}</template>
     </PageHeader>
 
     <section class="mx-2 mt-4 flex-auto">
@@ -192,9 +193,9 @@
         <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-center text-lg">
           <ExclamationCircleIcon aria-hidden="true" class="h-12 w-12" />
 
-          <h3>Start adding Boorus!</h3>
+          <h3>{{ $t('pages.premium.additionalBoorusPage.emptyState') }}</h3>
 
-          <span class="w-full overflow-x-auto text-sm italic"> Default Boorus can't be edited </span>
+          <span class="w-full overflow-x-auto text-sm italic"> {{ $t('pages.premium.additionalBoorusPage.defaultCannotEdit') }} </span>
         </div>
       </template>
 
@@ -211,7 +212,7 @@
           >
             <!-- Handle -->
             <div class="handle mr-2 cursor-move">
-              <span class="sr-only">Drag to reorder</span>
+              <span class="sr-only">{{ $t('pages.premium.additionalBoorusPage.dragToReorder') }}</span>
 
               <Bars2Icon aria-hidden="true" class="text-base-content group-hover:text-base-content-hover h-4 w-4" />
             </div>
@@ -219,7 +220,7 @@
             <!-- Favicon -->
             <img
               :src="`https://icons.duckduckgo.com/ip2/${booru.domain}.ico`"
-              alt="Favicon"
+              :alt="$t('common.favicon')"
               class="h-5 w-5 shrink-0 rounded-sm"
               height="128"
               width="128"
@@ -237,7 +238,7 @@
             <div class="flex gap-2">
               <!-- Edit -->
               <button
-                aria-label="Edit"
+                :aria-label="t('common.edit')"
                 class="hover:hover-text-util focus-visible:focus-outline-util hover:hover-bg-util inline-flex items-center justify-center rounded-md p-2"
                 type="button"
                 @click="openEditBooru(index)"
@@ -260,7 +261,7 @@
       >
         <ArrowUturnLeftIcon aria-hidden="true" class="mr-2 h-4 w-4" />
 
-        Reset
+        {{ $t('pages.premium.additionalBoorusPage.resetButton') }}
       </button>
 
       <!-- Add Booru -->
@@ -269,7 +270,7 @@
         type="button"
         @click="openCreateBooruDialog"
       >
-        Add Booru
+        {{ $t('pages.premium.additionalBoorusPage.addBooruButton') }}
 
         <PlusIcon aria-hidden="true" class="mr-2 ml-2 h-4 w-4" />
       </button>
@@ -281,7 +282,7 @@
     :is-open="dialogOpen"
     @close="dialogOpen = false"
   >
-    <template #title> {{ dialogMode === 'create' ? 'Add' : 'Edit' }} Booru</template>
+    <template #title>{{ dialogMode === 'create' ? $t('pages.premium.additionalBoorusPage.addTitle') : $t('pages.premium.additionalBoorusPage.editTitle') }}</template>
 
     <!--    <template #description> Remember to test the Booru before saving it</template>-->
 
@@ -298,7 +299,7 @@
             class="text-base-content-highlight block leading-8 font-medium"
             for="domain"
           >
-            Domain
+            {{ $t('pages.premium.additionalBoorusPage.domainLabel') }}
           </label>
 
           <div class="ring-base-0/20 mt-2 flex rounded-md shadow-xs ring-1 ring-inset">
@@ -320,7 +321,7 @@
             id="domain-description"
             class="mt-2 text-sm"
           >
-            Only the domain. Not the full URL
+            {{ $t('pages.premium.additionalBoorusPage.domainDescription') }}
           </p>
         </div>
 
@@ -330,7 +331,7 @@
             class="text-base-content-highlight block leading-8 font-medium"
             for="type"
           >
-            Type
+            {{ $t('pages.premium.additionalBoorusPage.typeLabel') }}
           </label>
 
           <select
@@ -353,9 +354,9 @@
             id="type-description"
             class="mt-2 text-sm"
           >
-            Usually indicated in the footer (bottom) of a Booru's website
+            {{ $t('pages.premium.additionalBoorusPage.typeDescription') }}
 
-            <span class="mt-2 block text-xs italic"> If the type is equal to the domain, choose that option </span>
+            <span class="mt-2 block text-xs italic"> {{ $t('pages.premium.additionalBoorusPage.typeNote') }} </span>
           </p>
         </div>
       </form>
@@ -368,7 +369,7 @@
         type="button"
         @click="deleteBooru"
       >
-        Delete
+        {{ $t('pages.premium.additionalBoorusPage.deleteButton') }}
       </button>
 
       <!-- TODO: Test Booru functionality -->
@@ -384,7 +385,7 @@
         form="booru-create-form"
         type="submit"
       >
-        {{ dialogMode === 'create' ? 'Add' : 'Save' }}
+        {{ dialogMode === 'create' ? $t('pages.premium.additionalBoorusPage.addButton') : $t('pages.premium.additionalBoorusPage.saveButton') }}
       </button>
     </template>
   </Slideover>

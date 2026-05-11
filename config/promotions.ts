@@ -58,14 +58,14 @@ export const promotions: Promotion[] = [
     baseId: 'black-friday',
     startDate: { month: 11, day: 25 }, // November 25
     endDate: { month: 12, day: 5 }, // December 5
-    title: 'Black Friday Sale',
-    description: 'Get Premium at half price!',
+    title: 'promotions.blackFriday.title',
+    description: 'promotions.blackFriday.description',
     discountPercent: 50,
     emoji: '🔥',
     monthlyCode: 'BLACKFRIDAY-MONTHLY',
     yearlyCode: 'BLACKFRIDAY-YEARLY',
     cta: {
-      text: 'Get Premium',
+      text: 'promotions.blackFriday.cta',
       link: '/premium#pricing'
     }
   },
@@ -73,14 +73,14 @@ export const promotions: Promotion[] = [
     baseId: 'valentines',
     startDate: { month: 2, day: 10 }, // February 10
     endDate: { month: 2, day: 15 }, // February 15
-    title: "Valentine's Day Special",
-    description: 'Love is in the air! Get 30% off Premium',
+    title: 'promotions.valentines.title',
+    description: 'promotions.valentines.description',
     discountPercent: 30,
     emoji: '💝',
     monthlyCode: 'LOVE-MONTHLY',
     yearlyCode: 'LOVE-YEARLY',
     cta: {
-      text: 'Get Premium',
+      text: 'promotions.valentines.cta',
       link: '/premium#pricing'
     }
   }
