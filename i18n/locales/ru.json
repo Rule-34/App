@@ -44,10 +44,12 @@
     "edit": "Редактировать",
     "goToSelectedBooru": "Перейти к выбранному Booru",
     "feedback": "Отзыв",
+    "domain": "Домен",
     "tags": "Теги",
     "logo": "Логотип",
     "featurePromotion": "Рекламная функция",
     "favicon": "Favicon",
+    "page": "Страница",
     "pageNumber": "Страница {page}"
   },
   "seo": {
@@ -309,7 +311,7 @@
         "planMonthlyDescription": "Оплата ежемесячно",
         "plan30DaysName": "30 дней доступа",
         "planYearlyName": "@:common.yearly",
-        "planYearlyDescription": "Счёт €59,64; Экономия 4 месяца",
+        "planYearlyDescription": "Оплата €59,64; Экономия 4 месяца",
         "planLifetimeName": "Пожизненно",
         "oneTimePayment": "Единовременный платёж",
         "perMonth": "мес.",

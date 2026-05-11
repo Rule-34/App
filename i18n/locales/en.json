@@ -44,10 +44,12 @@
     "edit": "Edit",
     "goToSelectedBooru": "Go to selected Booru",
     "feedback": "Feedback",
+    "domain": "Domain",
     "tags": "Tags",
     "logo": "Logo",
     "featurePromotion": "Feature promotion",
     "favicon": "Favicon",
+    "page": "Page",
     "pageNumber": "Page {page}"
   },
   "seo": {

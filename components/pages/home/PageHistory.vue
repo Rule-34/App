@@ -1,45 +1,92 @@
 <script lang="ts" setup>
-import { XMarkIcon } from '@heroicons/vue/20/solid'
-import { formatTimeAgo } from '@vueuse/core'
+  import { XMarkIcon } from '@heroicons/vue/20/solid'
 
-const localePath = useLocalePath()
-
+  const localePath = useLocalePath()
+  const { t, locale } = useI18n()
   const { isPremium } = useUserData()
   const { pageHistory } = usePageHistory()
 
+  const relativeTimeFormatter = computed(() => new Intl.RelativeTimeFormat(locale.value, { numeric: 'auto' }))
+  const sortValueKeys = {
+    score: 'filters.sortByScore',
+    id: 'filters.sortByCreated',
+    random: 'filters.sortByRandom'
+  } as const
+  const ratingValueKeys = {
+    safe: 'filters.ratingSafe',
+    general: 'filters.ratingGeneral',
+    sensitive: 'filters.ratingSensitive',
+    questionable: 'filters.ratingQuestionable',
+    explicit: 'filters.ratingExplicit'
+  } as const
+  const relativeTimeUnits: Array<{ unit: Intl.RelativeTimeFormatUnit; ms: number }> = [
+    { unit: 'year', ms: 1000 * 60 * 60 * 24 * 365 },
+    { unit: 'month', ms: 1000 * 60 * 60 * 24 * 30 },
+    { unit: 'week', ms: 1000 * 60 * 60 * 24 * 7 },
+    { unit: 'day', ms: 1000 * 60 * 60 * 24 },
+    { unit: 'hour', ms: 1000 * 60 * 60 },
+    { unit: 'minute', ms: 1000 * 60 },
+    { unit: 'second', ms: 1000 }
+  ]
+
   function historyPathToTitle(path: string) {
-    return (
-      path
-        //
-        .replace('/posts/', 'domain: ')
-        .replace('?', '&')
-        .split('&')
-        .map((rawQuery) => {
-          let query = rawQuery
+    const url = new URL(path, 'https://r34.app')
+    const lines = [`${t('common.domain')}: ${url.pathname.replace(/^\/posts\//, '')}`]
+    const page = url.searchParams.get('page')
+    const tags = url.searchParams.get('tags')
+    const sort = url.searchParams.get('filter[sort]')
+    const rating = url.searchParams.get('filter[rating]')
+    const score = url.searchParams.get('filter[score]')
 
-          try {
-            query = decodeURIComponent(rawQuery)
-          } catch {
-            // Keep raw query when percent-encoding is malformed
-          }
+    if (page) {
+      lines.push(`${t('common.page')}: ${page}`)
+    }
 
-          return (
-            query
-              // Capitalize first character
-              .charAt(0)
-              .toUpperCase() +
-            query
-              .slice(1)
+    if (tags) {
+      lines.push(`${t('common.tags')}: ${tags.replace(/\|/g, ', ')}`)
+    }
 
-              // Replace first '=' with ': '
-              .replace(/=/, ': ')
-          )
-        })
-        // Query separator
-        .join('\n')
-        // Separate tags
-        .replace(/\|/g, ', ')
-    )
+    if (sort) {
+      lines.push(`${t('filters.sort')}: ${t(sortValueKeys[sort] ?? sort)}`)
+    }
+
+    if (rating) {
+      lines.push(`${t('filters.rating')}: ${t(ratingValueKeys[rating] ?? rating)}`)
+    }
+
+    if (score) {
+      lines.push(`${t('filters.score')}: ${score}`)
+    }
+
+    return lines.join('\n')
+  }
+
+  function historyDateToRelativeTime(date: Date | string) {
+    const timestamp = new Date(date).getTime()
+
+    if (Number.isNaN(timestamp)) {
+      return ''
+    }
+
+    const elapsed = timestamp - Date.now()
+
+    for (const { unit, ms } of relativeTimeUnits) {
+      if (Math.abs(elapsed) >= ms || unit === 'second') {
+        return relativeTimeFormatter.value.format(Math.round(elapsed / ms), unit)
+      }
+    }
+
+    return ''
+  }
+
+  function historyDateToISOString(date: Date | string) {
+    const timestamp = new Date(date)
+
+    if (Number.isNaN(timestamp.getTime())) {
+      return ''
+    }
+
+    return timestamp.toISOString()
   }
 
   function onHistoryItemClick(path: string) {
@@ -94,10 +141,10 @@ const localePath = useLocalePath()
       </button>
 
       <time
-        :datetime="historyItem.date"
+        :datetime="historyDateToISOString(historyItem.date)"
         class="flex-none py-0.5 text-xs leading-5"
       >
-        {{ formatTimeAgo(new Date(historyItem.date)) }}
+        {{ historyDateToRelativeTime(historyItem.date) }}
       </time>
 
       <button
