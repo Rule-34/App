@@ -1,20 +1,23 @@
 import { describe, expect, it } from 'vitest'
-import { createPage, setup } from '@nuxt/test-utils'
+import { setup } from '@nuxt/test-utils'
+import { useTrackedPageFactory } from '../helper'
 
 describe('/', async () => {
   await setup({
     browser: true
   })
 
+  const createTrackedPage = useTrackedPageFactory()
+
   it('renders', async () => {
-    const page = await createPage('/')
+    const page = await createTrackedPage('/')
 
     await page.locator('h1', { hasText: 'App' }).isVisible()
   })
 
   it('redirects to /posts with query params', async () => {
     // Arrange
-    const page = await createPage('/?domain=safebooru.org&page=3&tags=cat|black_hair')
+    const page = await createTrackedPage('/?domain=safebooru.org&page=3&tags=cat|black_hair')
 
     // Act
     await page.waitForSelector('h1')

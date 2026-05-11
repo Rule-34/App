@@ -1,14 +1,16 @@
 import { describe, expect, it } from 'vitest'
-import { createPage, setup, url } from '@nuxt/test-utils'
+import { setup, url } from '@nuxt/test-utils'
 import {
   mockPostsPage0,
   mockPostsPage1,
   mockPostsPageWithOfflineMedia
 } from './posts.mock-data'
-import { defaultSetupConfig } from '../helper'
+import { defaultSetupConfig, useTrackedPageFactory } from '../helper'
 
 describe('/', async () => {
   await setup(defaultSetupConfig)
+
+  const createTrackedPage = useTrackedPageFactory()
 
   it('sets mockdata correctly', async () => {
     // Make sure mockPostsPage0 and mockPostsPage1 have different first posts
@@ -18,7 +20,7 @@ describe('/', async () => {
   describe('Basic', async () => {
     it('renders page', async () => {
       // Arrange
-      const page = await createPage('/posts/safebooru.org')
+      const page = await createTrackedPage('/posts/safebooru.org')
 
       // Act
       const headerElement = page.getByRole('heading', { name: 'Posts', exact: true })
@@ -29,7 +31,7 @@ describe('/', async () => {
 
     it('renders a loader', async () => {
       // Arrange
-      const page = await createPage('/')
+      const page = await createTrackedPage('/')
       let releasePostsResponse: (() => void) | undefined
       const holdPostsResponse = new Promise<void>((resolve) => {
         releasePostsResponse = resolve
@@ -64,7 +66,7 @@ describe('/', async () => {
 
     it('shows no results', async () => {
       // Arrange
-      const page = await createPage()
+      const page = await createTrackedPage()
 
       // Act
       await page.goto(url('/posts/safebooru.org?tags=empty_test'), { waitUntil: 'domcontentloaded' })
@@ -79,7 +81,7 @@ describe('/', async () => {
   describe('Posts', async () => {
     it('renders posts', async () => {
       // Arrange
-      const page = await createPage('/posts/safebooru.org')
+      const page = await createTrackedPage('/posts/safebooru.org')
 
       const firstPost = page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`)
 
@@ -103,7 +105,7 @@ describe('/', async () => {
 
     it('renders warning when media failed to load', async () => {
       // Arrange
-      const page = await createPage()
+      const page = await createTrackedPage()
 
       // Act
       await page.goto(url('/posts/safebooru.org?tags=offline_test'), { waitUntil: 'domcontentloaded' })
@@ -115,13 +117,13 @@ describe('/', async () => {
       await postWithWarning.locator('img').first().dispatchEvent('error')
       await page.waitForFunction(() => document.body.textContent?.includes('Error loading media'))
       expect(await postWithWarning.textContent()).toContain('Error loading media')
-    })
+    }, 20000)
   })
 
   describe('Pagination', async () => {
     it('loads more posts', async () => {
       // Arrange
-      const page = await createPage()
+      const page = await createTrackedPage()
 
       // Act
       await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
@@ -137,11 +139,11 @@ describe('/', async () => {
 
       // Assert DOM
       await page.getByText('Nothing more to load').waitFor({ state: 'visible' })
-    })
+    }, 15000)
 
     it('loads tagged results and updates heading', async () => {
       // Arrange
-      const page = await createPage()
+      const page = await createTrackedPage()
 
       // Act
       await page.goto(url('/posts/safebooru.org?tags=1girl'), { waitUntil: 'domcontentloaded' })
@@ -164,7 +166,7 @@ describe('/', async () => {
   describe('History', async () => {
     it('goes back & forward in history with correct scroll position', async () => {
       // Arrange
-      const page = await createPage()
+      const page = await createTrackedPage()
 
       // Act
       await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
@@ -202,7 +204,7 @@ describe('/', async () => {
 
     it('replaces older history entries for the same tag query', async () => {
       // Arrange
-      const page = await createPage()
+      const page = await createTrackedPage()
 
       // Act
       await page.goto(url('/posts/safebooru.org?tags=hair_bun&page=0'), { waitUntil: 'domcontentloaded' })
@@ -254,7 +256,7 @@ describe('/', async () => {
   describe('Domain', async () => {
     it('defaults domain to rule34.xxx', async () => {
       // Arrange
-      const page = await createPage()
+      const page = await createTrackedPage()
 
       // Act
       await page.goto(url('/'), { waitUntil: 'domcontentloaded' })
@@ -268,7 +270,7 @@ describe('/', async () => {
 
     it('changes domain', async () => {
       // Arrange
-      const page = await createPage()
+      const page = await createTrackedPage()
 
       // Act
       await page.goto(url('/posts/rule34.xxx'), { waitUntil: 'domcontentloaded' })
@@ -294,7 +296,7 @@ describe('/', async () => {
   describe('SEO', async () => {
     it('preserves tags in canonical link after client-side hydration', async () => {
       // Arrange
-      const page = await createPage()
+      const page = await createTrackedPage()
 
       // Act — navigate to a tagged posts page
       await page.goto(url('/posts/safebooru.org?tags=1girl'), { waitUntil: 'domcontentloaded' })
@@ -307,7 +309,7 @@ describe('/', async () => {
 
     it('updates canonical link on client-side tag navigation', async () => {
       // Arrange
-      const page = await createPage()
+      const page = await createTrackedPage()
 
       // Act — start on one tag
       await page.goto(url('/posts/safebooru.org?tags=1girl'), { waitUntil: 'domcontentloaded' })

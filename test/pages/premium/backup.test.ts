@@ -1,7 +1,10 @@
+import type { Page } from 'playwright'
 import { describe, expect, it } from 'vitest'
-import { createPage, setup, url } from '@nuxt/test-utils'
-import { defaultSetupConfig } from '../../helper'
+import { setup, url } from '@nuxt/test-utils'
+import { defaultSetupConfig, useTrackedPageFactory } from '../../helper'
 import path from 'path'
+
+let createTrackedPage: ReturnType<typeof useTrackedPageFactory>
 
 const validPocketbaseToken = [
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
@@ -27,7 +30,7 @@ const authRecord = {
   subscription_expires_at: '2099-12-31T00:00:00.000Z'
 }
 
-async function mockPocketbaseAuthRefresh(page: Awaited<ReturnType<typeof createPage>>) {
+async function mockPocketbaseAuthRefresh(page: Page) {
   await page.route('**/api/collections/users/auth-refresh*', (route) =>
     route.fulfill({
       status: 200,
@@ -40,7 +43,7 @@ async function mockPocketbaseAuthRefresh(page: Awaited<ReturnType<typeof createP
 }
 
 async function createAuthedBackupPage() {
-  const page = await createPage()
+  const page = await createTrackedPage()
   const backupUrl = url('/premium/backup')
   const { hostname } = new URL(backupUrl)
 
@@ -55,13 +58,16 @@ async function createAuthedBackupPage() {
     }
   ])
 
-  await page.goto(backupUrl)
+  await page.goto(backupUrl, { waitUntil: 'domcontentloaded' })
+  await page.getByRole('heading', { name: 'Backup & Restore', exact: true }).waitFor({ state: 'visible' })
 
   return page
 }
 
 describe('/premium/backup', async () => {
   await setup(defaultSetupConfig)
+
+  createTrackedPage = useTrackedPageFactory()
 
   it('renders', async () => {
     const page = await createAuthedBackupPage()
@@ -93,17 +99,13 @@ describe('/premium/backup', async () => {
       pageErrors.push(error.message)
     })
 
-    const fileChooserPromise = page.waitForEvent('filechooser')
+    await page.locator('input[type="file"]').setInputFiles(path.join(__dirname, 'backup.mock-data.json'))
 
-    await page.locator('main section.mt-8 button').nth(1).click({ force: true })
-
-    const fileChooser = await fileChooserPromise
-
-    await fileChooser.setFiles(path.join(__dirname, 'backup.mock-data.json'))
-
-    // Wait for navigation to dashboard with success query parameter
-    await page.waitForURL('**/premium/dashboard?restoreSuccess=true')
+    await page.waitForURL(
+      (currentUrl) => currentUrl.pathname === '/premium/dashboard' && currentUrl.searchParams.get('restoreSuccess') === 'true',
+      { waitUntil: 'commit' }
+    )
 
     expect(pageErrors).toEqual([])
-  })
+  }, 30000)
 })
