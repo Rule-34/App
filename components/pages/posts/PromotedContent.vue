@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts">
   import {
     advertisementPromotions,
     otherPromotions,
     premiumPromotions,
     referralPromotions
   } from '~/assets/js/promotions'
-  import { default as randomWeightedChoice } from 'random-weighted-choice'
+  import randomWeightedChoice from 'random-weighted-choice'
   import { isExternalHref } from '~/composables/locale'
 
   const localePath = useLocalePath()
@@ -53,6 +53,19 @@
   const promo = selectedPromotions[Math.floor(Math.random() * selectedPromotions.length)]
 
   const isExternal = isExternalHref(promo.link)
+
+  // Uses 'http://dummy' as a base URL to reliably parse relative paths with new URL().
+  // The dummy origin is ignored and only used for parsing pathname, query, and hash,
+  // which are then passed to localePath for internal route generation (see getInternalHref).
+  const getInternalHref = (link: string): string => {
+    const url: URL = new URL(link, 'http://dummy')
+    const query: Record<string, string> = Object.fromEntries(url.searchParams.entries())
+    return localePath({
+      path: url.pathname,
+      query: Object.keys(query).length > 0 ? query : undefined,
+      hash: url.hash || undefined
+    })
+  }
 </script>
 
 <template>
@@ -78,7 +91,7 @@
     <!-- Media -->
     <NuxtLink
       v-else
-      :href="isExternal ? promo.link : localePath(promo.link)"
+      :href="isExternal ? promo.link : getInternalHref(promo.link)"
       :target="isExternal ? '_blank' : undefined"
       :rel="isExternal ? 'nofollow noopener' : undefined"
     >
