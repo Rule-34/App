@@ -25,6 +25,7 @@ const props = defineProps<{
 
   const currentUrl = useRequestURL()
 
+  const localePath = useLocalePath()
   const { t } = useI18n()
 
   type PostTagType = keyof IPost['tags']
@@ -237,7 +238,7 @@ const props = defineProps<{
         Tags:
         <template v-for="tagType in tagTypesWithTags">
           <template v-for="tag in post.tags[tagType]">
-            <a :href="`/posts/${post.domain}?tags=${encodeURIComponent(tag)}`">{{ tag }}</a>
+            <a :href="localePath(`/posts/${post.domain}?tags=${encodeURIComponent(tag)}`)">{{ tag }}</a>
           </template>
         </template>
       </div>

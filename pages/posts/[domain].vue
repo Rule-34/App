@@ -911,7 +911,7 @@
 
         return navigateTo(
           {
-            path: `/posts/${fallbackBooruDomain}`,
+            path: localePath(`/posts/${fallbackBooruDomain}`),
             query: redirectQuery
           },
           {
