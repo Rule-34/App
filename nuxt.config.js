@@ -189,6 +189,13 @@ export default defineNuxtConfig({
 
     parallelPlugin: true,
 
+    bundle: {
+      // Tree-shake unused i18n components (<i18n-d>, <i18n-n>, v-t).
+      fullInstall: false,
+      // JSON locale files are pre-compiled, no need for runtime message compiler.
+      dropMessageCompiler: true
+    },
+
     /**
      * BUG: canonicalQueries is ignored by @nuxtjs/i18n v10 (up to 10.3.0).
      * The config array is discarded at build time and never reaches the runtime.

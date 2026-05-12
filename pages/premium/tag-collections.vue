@@ -292,11 +292,7 @@
 
             <br />
 
-            <i18n-t keypath="pages.premium.tagCollectionsPage.excludeTagsHint">
-              <template #code>
-                <code>-</code>
-              </template>
-            </i18n-t>
+            {{ $t('pages.premium.tagCollectionsPage.excludeTagsHint', { code: '-' }) }}
           </p>
         </div>
       </form>
