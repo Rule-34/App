@@ -191,9 +191,8 @@ export default defineNuxtConfig({
 
     bundle: {
       // Tree-shake unused i18n components (<i18n-d>, <i18n-n>, v-t).
-      fullInstall: false,
-      // JSON locale files are pre-compiled, no need for runtime message compiler.
-      dropMessageCompiler: true
+      // <i18n-t> is converted to $t() so it can also be removed — see tag-collections.vue.
+      fullInstall: false
     },
 
     /**
