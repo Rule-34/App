@@ -881,6 +881,7 @@
       (to) => {
         const { booruList } = useBooruList()
         const { isPremium } = useUserData()
+        const localePath = useLocalePath()
 
         if (isPremium.value) {
           return
