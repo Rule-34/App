@@ -33,7 +33,7 @@ export default function () {
      */
     {
       id: 'https://ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
-      weight: 0.375
+      weight: 0.35
     },
     /**
      * Clickadu
@@ -42,7 +42,7 @@ export default function () {
      */
     {
       id: '/js/popunder2.js?v=10',
-      weight: 0.25
+      weight: 0.15
     },
     /**
      * AdMaven
@@ -69,7 +69,7 @@ export default function () {
      */
     {
       id: 'https://je.deuxseethe.com/r1onMblLYR8e/rwnnn',
-      weight: 0.375
+      weight: 0.5
     }
   ]
 
@@ -120,7 +120,7 @@ export default function () {
      */
     {
       id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
-      weight: 0.4
+      weight: 0.5
     },
     /**
      * AdMaven
@@ -129,7 +129,7 @@ export default function () {
      */
     {
       id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255040',
-      weight: 0.6
+      weight: 0.5
     }
   ]
 
