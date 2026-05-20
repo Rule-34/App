@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import routerOptions from '../app/router.options'
 
 const route = ({ path = '/posts/safebooru.org', hash = '', query = {} } = {}) =>
@@ -6,7 +7,7 @@ const route = ({ path = '/posts/safebooru.org', hash = '', query = {} } = {}) =>
     path,
     hash,
     query
-  }) as any
+  }) as unknown as RouteLocationNormalizedLoaded
 
 describe('router scroll behavior', () => {
   const scrollBehavior = routerOptions.scrollBehavior!

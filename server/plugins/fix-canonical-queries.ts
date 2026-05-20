@@ -8,19 +8,19 @@
  * This plugin is PART OF A TWO-PART FIX:
  *   1. SSR (this file): Patches the rendered HTML to include or replace tags in
  *      the canonical link before it reaches the browser/SEO crawlers.
- *   2. CSR (pages/posts/[domain]/index.vue): A `useHead` call re-applies the
+ *   2. CSR (app/pages/posts/[domain]/index.vue): A `useHead` call re-applies the
  *      canonical with tags after the i18n module overwrites it on hydration.
  *
  * Removal checklist (when upstream fixes canonicalQueries):
  *   - [ ] Delete this file
- *   - [ ] Remove the `useHead` canonical override in pages/posts/[domain]/index.vue
- *   - [ ] Remove the `canonicalQueries: ['tags']` line from nuxt.config.js
- *   - [ ] Update the comment block in nuxt.config.js
+ *   - [ ] Remove the `useHead` canonical override in app/pages/posts/[domain]/index.vue
+ *   - [ ] Remove the `canonicalQueries: ['tags']` line from nuxt.config.ts
+ *   - [ ] Update the comment block in nuxt.config.ts
  *   - [ ] Delete test/server/fix-canonical-queries.test.ts (or update assertions)
  *
  * Track upstream: https://github.com/nuxt-modules/i18n
  */
-import { generatePostTagLandingPath, getSinglePositiveTagQueryValue } from '../../assets/js/RouterHelper'
+import { generatePostTagLandingPath, getSinglePositiveTagQueryValue } from '../../app/assets/js/RouterHelper'
 
 function withTagsQuery(href: string, tags: string): string {
   const parsed = new URL(href, 'https://example.com')

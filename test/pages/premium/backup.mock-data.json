@@ -28,14 +28,10 @@
           "artist": [],
           "character": [],
           "copyright": [],
-          "general": [
-            "1girl"
-          ],
+          "general": ["1girl"],
           "meta": []
         },
-        "sources": [
-          "http://www.pixiv.net/artworks/7824792"
-        ],
+        "sources": ["http://www.pixiv.net/artworks/7824792"],
         "rating": "safe",
         "media_type": "image"
       }
@@ -44,11 +40,7 @@
   "tag_collections": [
     {
       "name": "Test collection",
-      "tags": [
-        "tag",
-        "tag2",
-        "tag3"
-      ]
+      "tags": ["tag", "tag2", "tag3"]
     }
   ],
   "settings": {

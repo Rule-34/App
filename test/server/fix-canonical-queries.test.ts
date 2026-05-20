@@ -4,8 +4,6 @@ import { defaultLocale, locales } from '../../config/i18n'
 import { project } from '../../config/project'
 import { debugBrowserOptions } from '../helper'
 
-const localeCodes = locales.map((l) => l.code)
-
 describe('SEO canonical URLs', async () => {
   await setup({ browser: true, browserOptions: debugBrowserOptions })
 

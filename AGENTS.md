@@ -5,7 +5,7 @@
 - **Nuxt 4** (SSR, Nitro server) with **Vue 3** + TypeScript
 - **TailwindCSS v4** via `@tailwindcss/vite` Vite plugin (NOT PostCSS)
 - **Vitest** + `@nuxt/test-utils` with Playwright browser mode for testing
-- **Prettier** (formatting). ESLint config exists but is not wired to any package script.
+- **Prettier** (formatting) + Nuxt flat ESLint via `@nuxt/eslint`
 
 ## Setup
 
@@ -14,47 +14,49 @@ cp .example.env .env   # then edit .env
 pnpm install            # triggers nuxt prepare via postinstall
 ```
 
-- **Node ≥ 24** required (`package.json` engines)
-- **pnpm ≥ 11.1** required (`packageManager` pins the expected version)
-- **Git submodule** at `assets/lib/rule-34-shared-resources` — clone with `--recursive`
+- **Node 24** required (`package.json` engines)
+- **pnpm ≥ 11.2.2** required (`packageManager` pins the expected version)
+- **Git submodule** at `app/assets/lib/rule-34-shared-resources` — clone with `--recursive`
 - **External API**: the app calls a separate API service at `NUXT_PUBLIC_API_URL` (default `http://localhost:8081`). The
   API codebase is at [github.com/Rule-34/API](https://github.com/Rule-34/API).
 
 ## Commands
 
-| Command           | What it does                                  |
-| ----------------- | --------------------------------------------- |
-| `pnpm dev`        | Dev server at `localhost:8080`                |
-| `pnpm build`      | Production build into `.output/`              |
-| `pnpm generate`   | Static generation                             |
-| `pnpm test`       | `vitest run`                                  |
-| `pnpm test:watch` | `vitest watch`                                |
-| `pnpm release`    | `standard-version` for versioning + changelog |
+| Command           | What it does                                                                   |
+| ----------------- | ------------------------------------------------------------------------------ |
+| `pnpm dev`        | Dev server at `localhost:8080`                                                 |
+| `pnpm build`      | Production build into `.output/`                                               |
+| `pnpm generate`   | Static generation                                                              |
+| `pnpm format`     | Prettier write                                                                 |
+| `pnpm lint`       | ESLint flat config                                                             |
+| `pnpm typecheck`  | `nuxt typecheck`                                                               |
+| `pnpm test`       | `vitest run`                                                                   |
+| `pnpm test:watch` | `vitest watch`                                                                 |
+| `pnpm check`      | Strict local gate: format check, lint, typecheck, test typecheck, tests, build |
+| `pnpm release`    | `commit-and-tag-version` for versioning + changelog                            |
 
 ## Architecture
 
 Single Nuxt app. Key directories:
 
-| Dir                  | Purpose                                                                                   |
-| -------------------- | ----------------------------------------------------------------------------------------- |
-| `config/`            | Centralized project config (`project.ts` for branding/URLs, `i18n.ts` for locales)        |
-| `app/`               | Nuxt app-level config (router options, SPA loading template)                              |
-| `composables/`       | Shared Vue composables (auto-imported by Nuxt)                                            |
-| `plugins/`           | Client plugins loaded in order by numeric prefix (`020.`, `030.`, `035.`, `040.`, `050.`) |
-| `server/api/`        | Nitro server API routes                                                                   |
-| `server/middleware/` | Nitro middleware                                                                          |
-| `server/plugins/`    | Nitro plugins                                                                             |
-| `assets/js/`         | Shared JS utilities, DTOs, custom providers                                               |
-| `assets/lib/`        | Git submodule for shared resources                                                        |
-| `i18n/locales/`      | i18n JSON files (en, ru, es, ja)                                                          |
-| `components/`        | Vue components — **auto-imported flat** (`pathPrefix: false`, no folder prefix)           |
-| `test/`              | Page tests, server tests, mocks                                                           |
+| Dir                  | Purpose                                                                                                                              |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `app/`               | Nuxt 4 app source (`app.vue`, router options, assets, components, composables, layouts, middleware, pages, plugins, app-local types) |
+| `config/`            | Centralized root config (`project.ts` for branding/URLs, `i18n.ts` for locales)                                                      |
+| `server/api/`        | Nitro server API routes                                                                                                              |
+| `server/middleware/` | Nitro middleware                                                                                                                     |
+| `server/plugins/`    | Nitro plugins                                                                                                                        |
+| `app/assets/js/`     | Shared app JS utilities, DTOs, custom providers                                                                                      |
+| `app/assets/lib/`    | Git submodule for shared resources                                                                                                   |
+| `i18n/locales/`      | i18n JSON files (en, ru, es, ja, pt, de, fr)                                                                                         |
+| `app/components/`    | Vue components — **auto-imported flat** (`pathPrefix: false`, no folder prefix)                                                      |
+| `test/`              | Page tests, server tests, mocks                                                                                                      |
 
 ## Conventions & Gotchas
 
 ### Component auto-imports
 
-Components are registered **without path prefix** (`nuxt.config.js` → `components: [{ pathPrefix: false }]`). Import
+Components are registered **without path prefix** (`nuxt.config.ts` → `components: [{ pathPrefix: false }]`). Import
 them as `<DomainSelector>` not `<Input/DomainSelector>`.
 
 ### i18n
@@ -64,16 +66,16 @@ them as `<DomainSelector>` not `<Input/DomainSelector>`.
   `mirroredRouteRules()` helper so prefixed paths get the same caching/SSR rules.
 - **Known bug**: `canonicalQueries` in the i18n module config is a no-op in v10. A two-part workaround is required:
   1. SSR: `server/plugins/fix-canonical-queries.ts` patches the canonical `<link>` in rendered HTML.
-  2. CSR: `pages/posts/[domain]/index.vue` uses `useHead` to re-apply the canonical after i18n overwrites it on hydration.
+  2. CSR: `app/pages/posts/[domain]/index.vue` uses `useHead` to re-apply the canonical after i18n overwrites it on hydration.
      See the removal checklist in `fix-canonical-queries.ts` for when upstream fixes this.
 
 ### SEO & Head Management
 
-- **Static global tags** (favicon, rating, monetization, color-scheme) can live in `nuxt.config.js` `head.meta`.
-- **Dynamic global tags** that need the request host (description, keywords, OG image) belong in `app.vue` using
-  `useSeoMeta` inside an `if (import.meta.server)` guard — `nuxt.config.js` runs too early to know the host.
+- **Static global tags** (favicon, rating, monetization, color-scheme) can live in `nuxt.config.ts` `head.meta`.
+- **Dynamic global tags** that need the request host (description, keywords, OG image) belong in `app/app.vue` using
+  `useSeoMeta` inside an `if (import.meta.server)` guard — `nuxt.config.ts` runs too early to know the host.
 - **OG image must be absolute**: Open Graph requires absolute URLs. Build it dynamically with
-  `useRequestURL().origin` on the server only (`app.vue`). i18n does not touch `og:image` during hydration.
+  `useRequestURL().origin` on the server only (`app/app.vue`). i18n does not touch `og:image` during hydration.
 - **Canonical URLs must point to production** (`https://r34.app/…`) even when served from clone domains. This is
   intentional for SEO — canonicals prevent duplicate content. Use `project.urls.production` for canonicals.
 - **Schema.org breadcrumb item URLs should stay local/locale-relative**. Do not convert breadcrumb items to
@@ -91,7 +93,7 @@ them as `<DomainSelector>` not `<Input/DomainSelector>`.
 
 ### Images
 
-A custom `imgproxy` provider is registered for `<NuxtImg>` (see `nuxt.config.js` → `image.providers`). Images are
+A custom `imgproxy` provider is registered for `<NuxtImg>` (see `nuxt.config.ts` → `image.providers`). Images are
 deliberately generated at 1x density only (webp format) to reduce bandwidth.
 
 - `@nuxt/image` v2 supports `preload: { fetchPriority: 'high' }`. Use the module API for image preload priority instead
@@ -101,7 +103,7 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
 
 ### Headless UI
 
-- Do not add `provideHeadlessUseId` in `app.vue` while the project uses Vue 3.5+ and `@headlessui/vue` 1.7.23+; those
+- Do not add `provideHeadlessUseId` in `app/app.vue` while the project uses Vue 3.5+ and `@headlessui/vue` 1.7.23+; those
   versions use Vue's native `useId` and the Nuxt Headless UI workaround is only for older versions.
 
 ### Performance
@@ -129,8 +131,8 @@ The service worker is intentionally disabled (`selfDestroying: true`). Do not ad
 
 ### TailwindCSS
 
-Tailwind v4 uses CSS-based config (`assets/css/main.css`), NOT PostCSS. The `tailwind.config.js` remains only for the
-`@headlessui/tailwindcss` plugin.
+Tailwind v4 uses CSS-based config (`app/assets/css/main.css`), NOT PostCSS. The `tailwind.config.js` remains only for
+the `@headlessui/tailwindcss` plugin.
 
 ### Sentry
 
@@ -143,10 +145,10 @@ Tailwind v4 uses CSS-based config (`assets/css/main.css`), NOT PostCSS. The `tai
 
 - Tests use `@nuxt/test-utils` with Playwright inside `describe` blocks that call `await setup({ browser: true })`.
 - Server-side API calls are mocked via a test-only Nitro plugin at `test/server-mocks/plugin.ts`, injected through
-  `nuxt.config.js` → `$test.nitro.plugins`.
+  `nuxt.config.ts` → `$test.nitro.plugins`.
 - In test mode, `$test.runtimeConfig.public.apiUrl` is set to `''` so `$fetch(baseURL: '')` routes to the local Nitro
   test server.
-- Sentry is fully disabled in tests via `$test.sentry.enabled: false` in `nuxt.config.js`.
+- Sentry is fully disabled in tests via `$test.sentry.enabled: false` in `nuxt.config.ts`.
 - Debug mode: import `debugBrowserOptions` from `test/helper.ts` for headful playback with slowMo.
 
 ### Docker production build

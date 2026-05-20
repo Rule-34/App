@@ -4,8 +4,8 @@ import {
   generatePostsRoute,
   getFilterQueryValue,
   getSinglePositiveTagQueryValue
-} from '../../assets/js/RouterHelper'
-import Tag from '../../assets/js/tag.dto'
+} from '../../app/assets/js/RouterHelper'
+import Tag from '../../app/assets/js/tag.dto'
 
 describe('generatePostsRoute', () => {
   it('keeps raw tag values in route query objects', () => {

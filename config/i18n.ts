@@ -16,8 +16,6 @@ export const defaultLocale = 'en' as const
 
 export type LocaleCode = (typeof locales)[number]['code']
 
-export const prefixedLocaleCodes = locales
-  .filter((l) => l.code !== defaultLocale)
-  .map((l) => l.code)
+export const prefixedLocaleCodes = locales.filter((l) => l.code !== defaultLocale).map((l) => l.code)
 
-export const localeCodes = new Set(locales.map((l) => l.code))
+export const localeCodes = new Set<string>(locales.map((l) => l.code))

@@ -1,4 +1,4 @@
-import { generatePostTagLandingPath, getSinglePositiveTagQueryValue } from '../../assets/js/RouterHelper'
+import { generatePostTagLandingPath, getSinglePositiveTagQueryValue } from '../../app/assets/js/RouterHelper'
 
 const config = useRuntimeConfig()
 
@@ -9,7 +9,7 @@ export default defineSitemapEventHandler(async () => {
   let popularSiteSearchKeywords: MatomoResponse[] = []
 
   if (process.env.NODE_ENV !== 'production' || !config.matomoApiKey) {
-    return popularSiteSearchKeywords
+    return []
   }
 
   try {
@@ -66,11 +66,26 @@ async function getPopularSiteSearchKeywordsFromMatomoApi(): Promise<MatomoRespon
     throw new Error(response.statusText)
   }
 
-  const data: MatomoResponse[] | MatomoErrorResponse = await response.json()
+  const data: unknown = await response.json()
 
-  if (data.result === 'error') {
+  if (isMatomoErrorResponse(data)) {
     throw new Error(data.message)
   }
 
+  if (!Array.isArray(data)) {
+    throw new Error('Unexpected Matomo response')
+  }
+
   return data
+}
+
+function isMatomoErrorResponse(data: unknown): data is MatomoErrorResponse {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'result' in data &&
+    data.result === 'error' &&
+    'message' in data &&
+    typeof data.message === 'string'
+  )
 }
