@@ -386,6 +386,8 @@
     "reachHereToLoadMore": "Прокрутите до этого места для загрузки",
     "nothingMoreToLoad": "Больше нечего загружать",
     "title": "Посты",
+    "browseAllTaggedPosts": "Все посты с тегом {tag}",
+    "moreFromDomain": "Ещё с {domain}",
     "seo": {
       "pageOf": "Страница {page} из ",
       "posts": "Посты",
@@ -399,7 +401,7 @@
       "fromDomain": ", с {domain}",
       "descriptionBase": "Смотрите и скачивайте {tags} хентай-видео, GIF и изображения",
       "descriptionVarious": "различные",
-      "descriptionScoreOf": ", с оценкой {score}",
+      "descriptionScoreOf": "с оценкой {score}",
       "descriptionEnding": ". Бесплатный аниме-хентай на {name}"
     }
   },

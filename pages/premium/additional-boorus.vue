@@ -1,13 +1,15 @@
 <script lang="ts" setup>
   import { ArrowUturnLeftIcon, Bars2Icon, PencilIcon, PlusIcon } from '@heroicons/vue/20/solid'
   import { ExclamationCircleIcon } from '@heroicons/vue/24/solid'
+  import { vAutoAnimate } from '@formkit/auto-animate/vue'
   import { moveArrayElement, useSortable } from '@vueuse/integrations/useSortable'
   import type { Ref } from 'vue'
-  import { toast } from 'vue-sonner'
   import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
   import Slideover from '~/components/layout/Slideover.vue'
 
   const { t } = useI18n()
+  const { toast } = useLazyToast()
+  const localePath = useLocalePath()
   const { userBooruList, resetUserBooruList } = useBooruList()
 
   const sortableElement = ref<HTMLElement | null>(null)
@@ -176,6 +178,16 @@
     title: computed(() => t('pages.premium.additionalBoorusPage.seoTitle'))
   })
 
+  useSchemaOrg([
+    defineBreadcrumb({
+      itemListElement: [
+        { name: t('nav.home'), item: localePath('/') },
+        { name: t('pages.premium.landingPage.seoTitle'), item: localePath('/premium') },
+        { name: t('pages.premium.additionalBoorusPage.seoTitle'), item: localePath('/premium/additional-boorus') }
+      ]
+    })
+  ])
+
   definePageMeta({
     middleware: ['auth']
   })
@@ -191,11 +203,16 @@
     <section class="mx-2 mt-4 flex-auto">
       <template v-if="!userBooruList.length">
         <div class="flex h-80 w-full flex-col items-center justify-center gap-4 text-center text-lg">
-          <ExclamationCircleIcon aria-hidden="true" class="h-12 w-12" />
+          <ExclamationCircleIcon
+            aria-hidden="true"
+            class="h-12 w-12"
+          />
 
           <h3>{{ $t('pages.premium.additionalBoorusPage.emptyState') }}</h3>
 
-          <span class="w-full overflow-x-auto text-sm italic"> {{ $t('pages.premium.additionalBoorusPage.defaultCannotEdit') }} </span>
+          <span class="w-full overflow-x-auto text-sm italic">
+            {{ $t('pages.premium.additionalBoorusPage.defaultCannotEdit') }}
+          </span>
         </div>
       </template>
 
@@ -214,16 +231,19 @@
             <div class="handle mr-2 cursor-move">
               <span class="sr-only">{{ $t('pages.premium.additionalBoorusPage.dragToReorder') }}</span>
 
-              <Bars2Icon aria-hidden="true" class="text-base-content group-hover:text-base-content-hover h-4 w-4" />
+              <Bars2Icon
+                aria-hidden="true"
+                class="text-base-content group-hover:text-base-content-hover h-4 w-4"
+              />
             </div>
 
             <!-- Favicon -->
             <img
-              :src="`https://icons.duckduckgo.com/ip2/${booru.domain}.ico`"
               :alt="$t('common.favicon')"
+              :src="useFaviconUrl(booru.domain)"
               class="h-5 w-5 shrink-0 rounded-sm"
-              height="128"
-              width="128"
+              height="64"
+              width="64"
             />
 
             <!-- Domain -->
@@ -243,7 +263,10 @@
                 type="button"
                 @click="openEditBooru(index)"
               >
-                <PencilIcon aria-hidden="true" class="h-4 w-4" />
+                <PencilIcon
+                  aria-hidden="true"
+                  class="h-4 w-4"
+                />
               </button>
             </div>
           </li>
@@ -259,7 +282,10 @@
         type="button"
         @click="resetUserBooruListToDefault"
       >
-        <ArrowUturnLeftIcon aria-hidden="true" class="mr-2 h-4 w-4" />
+        <ArrowUturnLeftIcon
+          aria-hidden="true"
+          class="mr-2 h-4 w-4"
+        />
 
         {{ $t('pages.premium.additionalBoorusPage.resetButton') }}
       </button>
@@ -272,7 +298,10 @@
       >
         {{ $t('pages.premium.additionalBoorusPage.addBooruButton') }}
 
-        <PlusIcon aria-hidden="true" class="mr-2 ml-2 h-4 w-4" />
+        <PlusIcon
+          aria-hidden="true"
+          class="mr-2 ml-2 h-4 w-4"
+        />
       </button>
     </section>
   </main>
@@ -282,7 +311,11 @@
     :is-open="dialogOpen"
     @close="dialogOpen = false"
   >
-    <template #title>{{ dialogMode === 'create' ? $t('pages.premium.additionalBoorusPage.addTitle') : $t('pages.premium.additionalBoorusPage.editTitle') }}</template>
+    <template #title>{{
+      dialogMode === 'create'
+        ? $t('pages.premium.additionalBoorusPage.addTitle')
+        : $t('pages.premium.additionalBoorusPage.editTitle')
+    }}</template>
 
     <!--    <template #description> Remember to test the Booru before saving it</template>-->
 
@@ -385,7 +418,11 @@
         form="booru-create-form"
         type="submit"
       >
-        {{ dialogMode === 'create' ? $t('pages.premium.additionalBoorusPage.addButton') : $t('pages.premium.additionalBoorusPage.saveButton') }}
+        {{
+          dialogMode === 'create'
+            ? $t('pages.premium.additionalBoorusPage.addButton')
+            : $t('pages.premium.additionalBoorusPage.saveButton')
+        }}
       </button>
     </template>
   </Slideover>

@@ -38,7 +38,7 @@ const operationsGenerator = createOperationsGenerator({
 
 function urlSafeBase64(string: string) {
   const bytes = new TextEncoder().encode(string)
-  const binaryString = Array.from(bytes, byte => String.fromCodePoint(byte)).join('')
+  const binaryString = Array.from(bytes, (byte) => String.fromCodePoint(byte)).join('')
 
   return btoa(binaryString).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
 }
@@ -76,7 +76,7 @@ const getImage: ProviderGetImage<ImgproxyProviderOptions> = (src, options) => {
 
   const mergeModifiers = { ...defaultModifiers, ...modifiers }
 
-  // Remove width and height to generate more common URLs for better caching
+  // Remove dimensions from imgproxy operations so the same source reuses a common cached URL.
   const { width, height, ...modifiersWithoutSize } = mergeModifiers
 
   // Build rewriter URL: nginx-proxy fetches the source and strips headers

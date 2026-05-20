@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
   import { PlusIcon } from '@heroicons/vue/24/solid'
-  import { toast } from 'vue-sonner'
   import { flip, offset, shift, useFloating } from '@floating-ui/vue'
   import type { Domain } from '~/assets/js/domain'
 
@@ -21,6 +20,7 @@
   const emit = defineEmits(['update:modelValue'])
 
   const { t } = useI18n()
+  const { toast } = useLazyToast()
   const localePath = useLocalePath()
   const { isPremium } = useUserData()
   const { tutorialDomainSwitcher } = useAppStatistics()
@@ -42,7 +42,6 @@
       promptPremium.value = true
       return
     }
-
 
     emit('update:modelValue', domain)
   }
@@ -87,10 +86,10 @@
       <span class="flex items-center">
         <img
           :alt="t('common.favicon')"
-          :src="`https://icons.duckduckgo.com/ip2/${props.modelValue.domain}.ico`"
+          :src="useFaviconUrl(props.modelValue.domain)"
           class="h-5 w-5 shrink-0 rounded-sm"
-          height="128"
-          width="128"
+          height="64"
+          width="64"
         />
 
         <span class="sr-only"> {{ t('common.websiteToBrowse') }} </span>
@@ -141,10 +140,10 @@
               <div class="flex items-center">
                 <img
                   :alt="t('common.favicon')"
-                  :src="`https://icons.duckduckgo.com/ip2/${booru.domain}.ico`"
+                  :src="useFaviconUrl(booru.domain)"
                   class="h-5 w-5 shrink-0 rounded-sm"
-                  height="128"
-                  width="128"
+                  height="64"
+                  width="64"
                 />
 
                 <span :class="[selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate']">{{

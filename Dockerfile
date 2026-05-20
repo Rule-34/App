@@ -7,21 +7,23 @@ ARG NITRO_PRESET
 ARG SENTRY_ORG
 ARG SENTRY_PROJECT
 ARG SENTRY_AUTH_TOKEN
+ARG SENTRY_UPLOAD_SOURCE_MAPS=true
 
 ENV NITRO_PRESET=${NITRO_PRESET} \
     SENTRY_ORG=${SENTRY_ORG} \
     SENTRY_PROJECT=${SENTRY_PROJECT} \
-    SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
+    SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN} \
+    SENTRY_UPLOAD_SOURCE_MAPS=${SENTRY_UPLOAD_SOURCE_MAPS}
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-RUN npm ci
+RUN corepack enable && pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN npm run build
+RUN pnpm run build
 
 # Stage 2: Production
 FROM node:${NODE_VERSION}-alpine AS production

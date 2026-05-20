@@ -1,11 +1,16 @@
 <script setup>
-import { ArrowRightOnRectangleIcon, BookmarkIcon, SparklesIcon } from '@heroicons/vue/24/outline'
-import { sidebarNavigation } from '~/assets/js/sidebarLinks'
-import { project } from '@/config/project'
+  import { ArrowRightOnRectangleIcon, BookmarkIcon, SparklesIcon } from '@heroicons/vue/24/outline'
+  import { sidebarLinks } from '~/assets/js/sidebarLinks'
+  import { project } from '@/config/project'
 
   const localePath = useLocalePath()
   const { isPremium } = useUserData()
   const { seasonalEmoji } = useSeasonalIcon()
+  const visibilityByLinkId = {
+    'install-app': () => !import.meta.client || !window.matchMedia('(display-mode: standalone)').matches
+  }
+
+  const visibleSidebarLinks = computed(() => sidebarLinks.filter((item) => visibilityByLinkId[item.id]?.() ?? true))
 </script>
 
 <template>
@@ -39,8 +44,8 @@ import { project } from '@/config/project'
       role="list"
     >
       <li
-        v-for="item in sidebarNavigation"
-        :key="item.nameKey"
+        v-for="item in visibleSidebarLinks"
+        :key="item.id"
         class="-mx-2"
       >
         <NuxtLink

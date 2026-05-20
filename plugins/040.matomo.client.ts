@@ -1,4 +1,5 @@
 import { defineNuxtPlugin } from '#imports'
+import { useIdleTask } from '~/composables/useIdleTask'
 
 type MatomoQueueItem = [string, ...unknown[]]
 type MatomoQueue = MatomoQueueItem[]
@@ -37,12 +38,13 @@ export default defineNuxtPlugin({
     })
 
     const { hasInteracted } = useInteractionDetector()
+    const { schedule } = useIdleTask()
 
     const stop = watch(
       hasInteracted,
       (val) => {
         if (val) {
-          ensureMatomoLoaded()
+          schedule(ensureMatomoLoaded)
           stop()
         }
       },

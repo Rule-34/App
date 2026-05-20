@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import Tag from '~/assets/js/tag.dto'
   import { Cog6ToothIcon, PlusIcon, TagIcon } from '@heroicons/vue/24/outline'
-  import { toast } from 'vue-sonner'
   import { TagCollection } from '~/assets/js/tagCollection.dto'
 
   const props = defineProps<{
@@ -15,6 +14,7 @@
   const localePath = useLocalePath()
   const { isPremium } = useUserData()
   const { t } = useI18n()
+  const { toast } = useLazyToast()
 
   const { tagCollections } = useTagCollections()
 
@@ -83,7 +83,10 @@
       >
         <span class="sr-only"> {{ $t('common.manageTagCollections') }} </span>
 
-        <Cog6ToothIcon aria-hidden="true" class="h-6 w-6" />
+        <Cog6ToothIcon
+          aria-hidden="true"
+          class="h-6 w-6"
+        />
       </NuxtLink>
     </div>
 
@@ -108,11 +111,14 @@
               <span>
                 {{ tagCollection.tags.length }}
                 <span class="sr-only">{{
-                $t('pages.premium.tagCollectionsPage.tagsInCollection', tagCollection.tags.length)
-              }}</span>
+                  $t('pages.premium.tagCollectionsPage.tagsInCollection', tagCollection.tags.length)
+                }}</span>
               </span>
 
-              <TagIcon aria-hidden="true" class="h-5 w-5" />
+              <TagIcon
+                aria-hidden="true"
+                class="h-5 w-5"
+              />
             </div>
           </button>
         </li>
@@ -127,7 +133,10 @@
           >
             <span class="whitespace-nowrap">{{ $t('common.createFromCurrentTags') }}</span>
 
-            <PlusIcon aria-hidden="true" class="h-5 w-5" />
+            <PlusIcon
+              aria-hidden="true"
+              class="h-5 w-5"
+            />
           </button>
         </li>
       </ol>

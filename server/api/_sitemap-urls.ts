@@ -6,16 +6,20 @@ const config = useRuntimeConfig()
 export default defineSitemapEventHandler(async () => {
   let popularSiteSearchKeywords: MatomoResponse[] = []
 
+  if (process.env.NODE_ENV !== 'production' || !config.matomoApiKey) {
+    return popularSiteSearchKeywords
+  }
+
   try {
     popularSiteSearchKeywords = await getPopularSiteSearchKeywordsFromMatomoApi()
   } catch (error) {
     const errMsg = error instanceof Error ? error.message : String(error)
-    console.warn('[sitemap] Failed to fetch Matomo search keywords, sitemap will exclude dynamic tag URLs:', errMsg)
+    console.warn('[sitemap] Failed to fetch Matomo search keywords, sitemap will exclude dynamic post URLs:', errMsg)
   }
 
   return popularSiteSearchKeywords.map((keyword) =>
     asSitemapUrl({
-      loc: `/posts/rule34.xxx?tags=${keyword.label}`,
+      loc: `/posts/rule34.xxx?tags=${encodeURIComponent(keyword.label)}`,
       changefreq: 'daily',
       priority: 0.8,
       _i18nTransform: true

@@ -2,11 +2,22 @@
   import { project } from '@/config/project'
 
   const { t } = useI18n()
+  const localePath = useLocalePath()
 
   useSeoMeta({
     title: computed(() => t('pages.legal.termsOfService')),
     description: computed(() => t('pages.legal.termsOfServiceDescription', { name: project.name }))
   })
+
+  useSchemaOrg(() => [
+    defineBreadcrumb({
+      itemListElement: [
+        { name: t('nav.home'), item: localePath('/') },
+        { name: t('pages.legal.termsOfService'), item: localePath('/terms-of-service') }
+      ]
+    }),
+    defineWebPage()
+  ])
 </script>
 
 <template>

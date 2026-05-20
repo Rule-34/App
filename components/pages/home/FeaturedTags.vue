@@ -1,31 +1,40 @@
 <script lang="ts" setup>
   import { isExternalHref } from '~/composables/locale'
 
-  const props = defineProps<{
-    domain: string
+  const props = withDefaults(
+    defineProps<{
+      domain: string
+      priorityCount?: number
 
-    tags: {
-      name: string
-      path: string
-      isAdvertisement: boolean | undefined
-      media: {
-        type: 'image' | 'iframe'
-        src: string
+      tags: {
+        name: string
+        path: string
+        isAdvertisement: boolean | undefined
+        media: {
+          type: 'image' | 'iframe'
+          src: string
+        }[]
       }[]
-    }[]
-  }>()
+    }>(),
+    {
+      priorityCount: 0
+    }
+  )
 
   const { t } = useI18n()
   const localePath = useLocalePath()
 
   const { isPremium } = useUserData()
 
-  const tagsKey = 'preselectedTags:' + `${props.domain}:` + props.tags.map((tag) => tag.media.length).join('-')
+  const tagsWithMedia = computed(() => props.tags.filter((tag) => tag.media.length > 0))
+  const tagsKey = computed(
+    () => 'preselectedTags:' + `${props.domain}:` + tagsWithMedia.value.map((tag) => tag.media.length).join('-')
+  )
 
-  const preselectedTags = useState<typeof props.tags>(tagsKey)
+  const preselectedTags = useState<typeof props.tags>(tagsKey.value)
 
-  callOnce(tagsKey, () => {
-    preselectedTags.value = props.tags.map((tag) => ({
+  callOnce(tagsKey.value, () => {
+    preselectedTags.value = tagsWithMedia.value.map((tag) => ({
       ...tag,
       media: [getRandomMedia(tag.media)]
     }))
@@ -33,6 +42,10 @@
 
   function getRandomMedia(media: { type: string; src: string }[]) {
     return media[Math.floor(Math.random() * media.length)]
+  }
+
+  function isPriorityMedia(index: number) {
+    return index < props.priorityCount
   }
 </script>
 
@@ -57,7 +70,7 @@
             <!-- -->
 
             <iframe
-              :loading="index > 5 ? 'lazy' : 'eager'"
+              :loading="isPriorityMedia(index) ? 'eager' : 'lazy'"
               :src="tag.media[0].src"
               allow="autoplay"
               class="h-auto w-full grow rounded-t-md"
@@ -90,11 +103,13 @@
           >
             <figure>
               <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
-              <NuxtPicture
+              <!-- Keep the default IPX provider here; it gives these local featured images better Nuxt Image sizing. -->
+              <NuxtImg
                 :alt="t('common.featuredTag', { name: tag.name })"
-                :decoding="index <= 4 ? undefined : 'async'"
-                :loading="index <= 4 ? undefined : 'lazy'"
-                :preload="index <= 4"
+                :decoding="isPriorityMedia(index) ? undefined : 'async'"
+                :fetchpriority="isPriorityMedia(index) ? undefined : 'low'"
+                :loading="isPriorityMedia(index) ? 'eager' : 'lazy'"
+                :preload="isPriorityMedia(index) ? { fetchPriority: 'high' } : false"
                 :src="tag.media[0].src"
                 class="h-auto w-full rounded-t-md"
                 height="600"

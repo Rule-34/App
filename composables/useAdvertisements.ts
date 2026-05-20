@@ -71,6 +71,15 @@ export default function () {
       id: 'https://je.deuxseethe.com/r1onMblLYR8e/rwnnn',
       weight: 0.375
     }
+    /**
+     * AdsTerra
+     * Pros:
+     * Cons:
+     */
+    // {
+    //   id: 'https://laughedentrust.com/a2/bb/43/a2bb432972963284b6754dd20c826521.js',
+    //   weight: 1
+    // }
   ]
 
   /**

@@ -8,6 +8,16 @@
     title: computed(() => t('pages.legal.privacyPolicy')),
     description: computed(() => t('pages.legal.privacyPolicyDescription', { name: project.name }))
   })
+
+  useSchemaOrg(() => [
+    defineBreadcrumb({
+      itemListElement: [
+        { name: t('nav.home'), item: localePath('/') },
+        { name: t('pages.legal.privacyPolicy'), item: localePath('/privacy-policy') }
+      ]
+    }),
+    defineWebPage()
+  ])
 </script>
 
 <template>

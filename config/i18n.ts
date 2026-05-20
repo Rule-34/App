@@ -6,7 +6,10 @@ export const locales = [
   { code: 'en', language: 'en-US', name: 'English', file: 'en.json', flag: '🇺🇸' },
   { code: 'ru', language: 'ru-RU', name: 'Русский', file: 'ru.json', flag: '🇷🇺' },
   { code: 'es', language: 'es-ES', name: 'Español', file: 'es.json', flag: '🇪🇸' },
-  { code: 'ja', language: 'ja-JP', name: '日本語', file: 'ja.json', flag: '🇯🇵' }
+  { code: 'ja', language: 'ja-JP', name: '日本語', file: 'ja.json', flag: '🇯🇵' },
+  { code: 'pt', language: 'pt-BR', name: 'Português', file: 'pt.json', flag: '🇧🇷' },
+  { code: 'de', language: 'de-DE', name: 'Deutsch', file: 'de.json', flag: '🇩🇪' },
+  { code: 'fr', language: 'fr-FR', name: 'Français', file: 'fr.json', flag: '🇫🇷' }
 ] as const
 
 export const defaultLocale = 'en' as const

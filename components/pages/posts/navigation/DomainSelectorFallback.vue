@@ -11,6 +11,8 @@
   }
 
   const props = defineProps<DomainSelectorProps>()
+
+  const faviconUrl = useFaviconUrl(project.urls.production.hostname)
 </script>
 
 <template>
@@ -21,11 +23,11 @@
   >
     <span class="flex items-center">
       <img
-        :src="`https://icons.duckduckgo.com/ip2/${project.urls.production.hostname}.ico`"
         :alt="$t('common.favicon')"
+        :src="faviconUrl"
         class="h-5 w-5 shrink-0 rounded-sm"
-        height="128"
-        width="128"
+        height="20"
+        width="20"
       />
 
       <span class="sr-only"> {{ $t('common.websiteToBrowse') }} </span>

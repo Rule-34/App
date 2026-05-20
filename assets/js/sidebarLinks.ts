@@ -9,54 +9,54 @@ import {
 } from '@heroicons/vue/24/outline'
 import { project } from '@/config/project'
 
-export const sidebarNavigation = [
+export const sidebarLinks = [
   {
+    id: 'home',
     nameKey: 'nav.home',
-    icon: HomeIcon,
     href: '/',
-    isExternal: false
+    isExternal: false,
+    icon: HomeIcon
   },
   {
+    id: 'other-sites',
     nameKey: 'nav.otherSites',
-    icon: UserGroupIcon,
     href: '/other-sites',
-    isExternal: false
+    isExternal: false,
+    icon: UserGroupIcon
   },
-
-  // Hide "Install App" when in standalone mode
-  ...(import.meta.client && window.matchMedia('(display-mode: standalone)').matches
-    ? []
-    : [
-        {
-          nameKey: 'nav.installApp',
-          icon: ArrowDownTrayIcon,
-          href: `https://www.installpwa.com/from/${project.urls.production.hostname}`,
-          isExternal: true
-        }
-      ]),
-
   {
+    id: 'install-app',
+    nameKey: 'nav.installApp',
+    href: `https://www.installpwa.com/from/${project.urls.production.hostname}`,
+    isExternal: true,
+    icon: ArrowDownTrayIcon
+  },
+  {
+    id: 'faq',
     nameKey: 'nav.faq',
-    icon: QuestionMarkCircleIcon,
     href: 'https://rule34.app/frequently-asked-questions',
-    isExternal: true
+    isExternal: true,
+    icon: QuestionMarkCircleIcon
   },
   {
+    id: 'blog',
     nameKey: 'nav.blog',
-    icon: NewspaperIcon,
     href: `${project.urls.production.toString()}blog`,
-    isExternal: true
+    isExternal: true,
+    icon: NewspaperIcon
   },
   {
+    id: 'legal',
     nameKey: 'nav.legal',
-    icon: BuildingLibraryIcon,
     href: '/legal',
-    isExternal: false
+    isExternal: false,
+    icon: BuildingLibraryIcon
   },
   {
+    id: 'settings',
     nameKey: 'nav.settings',
-    icon: Cog6ToothIcon,
     href: '/settings',
-    isExternal: false
+    isExternal: false,
+    icon: Cog6ToothIcon
   }
 ]

@@ -1,15 +1,8 @@
 import type { RouterConfig } from '@nuxt/schema'
-import qs from 'qs'
-import { isEqual } from 'es-toolkit'
 import type { RouteLocationNormalized, RouteLocationNormalizedLoaded } from 'vue-router'
 
 // https://router.vuejs.org/api/interfaces/routeroptions.html
 export default <RouterConfig>{
-  // Fix router query parser - https://github.com/vuejs/vue-router/issues/1259#issuecomment-1571553624
-  parseQuery: qs.parse,
-
-  stringifyQuery: qs.stringify,
-
   scrollBehavior: (to, from, savedPosition) => {
     if (savedPosition) {
       return savedPosition
@@ -50,17 +43,43 @@ function shouldSkipIfOnlyPageQueryChanged(to: RouteLocationNormalized, from: Rou
     return false
   }
 
-  const toQueryWithoutPage = { ...to.query, page: undefined }
-  const fromQueryWithoutPage = { ...from.query, page: undefined }
+  return areQueriesEqualWithoutPage(to.query, from.query)
+}
 
-  const queriesWithoutPageAreEqual = isEqual(toQueryWithoutPage, fromQueryWithoutPage)
+function areQueriesEqualWithoutPage(
+  toQuery: RouteLocationNormalized['query'],
+  fromQuery: RouteLocationNormalized['query']
+) {
+  const { page: _toPage, ...toQueryWithoutPage } = toQuery
+  const { page: _fromPage, ...fromQueryWithoutPage } = fromQuery
 
-  // console.log('toQueryWithoutPage', toQueryWithoutPage)
-  // console.log('fromQueryWithoutPage', fromQueryWithoutPage)
+  const toKeys = Object.keys(toQueryWithoutPage)
+  const fromKeys = Object.keys(fromQueryWithoutPage)
 
-  // if (!queriesWithoutPageAreEqual) {
-  //   return false
-  // }
+  if (toKeys.length !== fromKeys.length) {
+    return false
+  }
 
-  return true
+  return toKeys.every((key) => {
+    if (!Object.prototype.hasOwnProperty.call(fromQueryWithoutPage, key)) {
+      return false
+    }
+
+    return areQueryValuesEqual(toQueryWithoutPage[key], fromQueryWithoutPage[key])
+  })
+}
+
+function areQueryValuesEqual(
+  toValue: RouteLocationNormalized['query'][string],
+  fromValue: RouteLocationNormalized['query'][string]
+) {
+  if (Array.isArray(toValue) || Array.isArray(fromValue)) {
+    if (!Array.isArray(toValue) || !Array.isArray(fromValue)) {
+      return false
+    }
+
+    return toValue.length === fromValue.length && toValue.every((value, index) => value === fromValue[index])
+  }
+
+  return toValue === fromValue
 }

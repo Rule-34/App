@@ -1,36 +1,38 @@
 <script lang="ts" setup>
-import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
-import { vIntersectionObserver } from '@vueuse/components'
+  import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
+  import { useEventListener } from '@vueuse/core'
 
-const route = useRoute()
-const localePath = useLocalePath()
-const getRouteBaseName = useRouteBaseName()
+  const route = useRoute()
+  const localePath = useLocalePath()
+  const getRouteBaseName = useRouteBaseName()
 
-const { value: isMenuActive, toggle: toggleMenu } = useMenu()
+  const { value: isMenuActive, toggle: toggleMenu } = useMenu()
 
-const { seasonalEmoji } = useSeasonalIcon()
+  const { seasonalEmoji } = useSeasonalIcon()
 
-const isPageWithLogoDisabled = computed(() => getRouteBaseName(route) === 'index')
+  const isPageWithLogoDisabled = computed(() => getRouteBaseName(route) === 'index')
 
-const isPostsPage = computed(() => {
-  const baseName = getRouteBaseName(route)
+  const isPostsPage = computed(() => {
+    const baseName = getRouteBaseName(route)
 
-  return baseName === 'posts-domain' || baseName === 'premium-saved-posts-domain'
-})
+    return baseName === 'posts-domain' || baseName === 'premium-saved-posts-domain'
+  })
 
-const isOnTop = ref(true)
+  const isOnTop = ref(true)
 
-function onIntersectionObserver(entries: IntersectionObserverEntry[]) {
-  const [entry] = entries
-  isOnTop.value = !!entry?.isIntersecting
-}
+  function updateIsOnTop() {
+    isOnTop.value = window.scrollY <= 0
+  }
+
+  onMounted(() => {
+    updateIsOnTop()
+    useEventListener(window, 'scroll', updateIsOnTop, { passive: true })
+  })
 </script>
 
 <template>
   <!-- Same margin as Nav height -->
   <nav class="mb-14">
-    <div v-intersection-observer="onIntersectionObserver" />
-
     <div
       :class="{
         'fixed!': isPostsPage,

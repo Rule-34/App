@@ -25,6 +25,9 @@ export const authRecord = {
 
 const queryParamsToPreserve = ['baseEndpoint', 'limit', 'tags', 'order', 'rating', 'score', 'httpScheme']
 
+const defineNitroPluginSafe =
+  typeof defineNitroPlugin === 'function' ? defineNitroPlugin : <T extends (...args: any[]) => any>(plugin: T) => plugin
+
 function localizeMockPageLinks(page: typeof mockPostsPage0, requestUrl: URL) {
   const localizedPage = structuredClone(page)
 
@@ -104,27 +107,33 @@ function resolveMockPostsPage(requestUrl: URL) {
   return mockPostsPage0
 }
 
-export default defineNitroPlugin((nitroApp) => {
-  nitroApp.router.use('/booru/**', defineEventHandler((event) => {
-    const requestUrl = getRequestURL(event)
+export default defineNitroPluginSafe((nitroApp) => {
+  nitroApp.router.use(
+    '/booru/**',
+    defineEventHandler((event) => {
+      const requestUrl = getRequestURL(event)
 
-    if (requestUrl.pathname.endsWith('/posts')) {
-      return localizeMockPageLinks(resolveMockPostsPage(requestUrl), requestUrl)
-    }
+      if (requestUrl.pathname.endsWith('/posts')) {
+        return localizeMockPageLinks(resolveMockPostsPage(requestUrl), requestUrl)
+      }
 
-    if (requestUrl.pathname.endsWith('/tags')) {
-      return []
-    }
+      if (requestUrl.pathname.endsWith('/tags')) {
+        return []
+      }
 
-    // Any other /booru/* path returns 404.
-    // If a test hits this, add the missing endpoint above.
-    throw createError({ statusCode: 404, statusMessage: 'Not Found' })
-  }))
+      // Any other /booru/* path returns 404.
+      // If a test hits this, add the missing endpoint above.
+      throw createError({ statusCode: 404, statusMessage: 'Not Found' })
+    })
+  )
 
-  nitroApp.router.use('/api/collections/users/auth-refresh**', defineEventHandler(() => {
-    return {
-      token: validPocketbaseToken,
-      record: authRecord
-    }
-  }))
+  nitroApp.router.use(
+    '/api/collections/users/auth-refresh**',
+    defineEventHandler(() => {
+      return {
+        token: validPocketbaseToken,
+        record: authRecord
+      }
+    })
+  )
 })

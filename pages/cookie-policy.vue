@@ -2,11 +2,22 @@
   import { project } from '@/config/project'
 
   const { t } = useI18n()
+  const localePath = useLocalePath()
 
   useSeoMeta({
     title: () => t('pages.legal.cookiePolicy'),
     description: () => t('pages.legal.cookiePolicyDescription', { name: project.name })
   })
+
+  useSchemaOrg(() => [
+    defineBreadcrumb({
+      itemListElement: [
+        { name: t('nav.home'), item: localePath('/') },
+        { name: t('pages.legal.cookiePolicy'), item: localePath('/cookie-policy') }
+      ]
+    }),
+    defineWebPage()
+  ])
 </script>
 
 <template>

@@ -1,22 +1,15 @@
 <script lang="ts" setup>
   import type { IPost } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
-  import fluidPlayer from 'fluid-player'
   import { proxyUrl } from 'assets/js/proxy'
-  import { project } from '@/config/project'
 
-  // Lazy-load Fluid Player CSS only when this component is used
-  if (import.meta.client) {
-    import('fluid-player/src/css/fluidplayer.css')
-  }
-
-  const requestUrl = useRequestURL()
   const localePath = useLocalePath()
   const { t } = useI18n()
   const { isPremium } = useUserData()
   const { autoplayAnimatedMedia } = useUserSettings()
   let { timesVideoHasRendered } = useEthics()
   const { wasCurrentPageSSR } = useSSRDetection()
+  const { schedule: scheduleIdleTask } = useIdleTask()
 
   export interface PostMediaProps {
     postIndex: number
@@ -31,8 +24,6 @@
 
   const props = defineProps<PostMediaProps>()
 
-  const isMainHost = computed(() => import.meta.dev || requestUrl.hostname === project.urls.production.hostname)
-
   const mediaElement = ref<HTMLElement | null>(null)
 
   const localSrc = shallowRef(props.mediaSrc)
@@ -46,11 +37,42 @@
   const isAnimatedMedia = computed(
     () => props.mediaType === 'animated' || (props.mediaType === 'image' && props.mediaSrc.endsWith('.gif'))
   )
+  const postImageSizes = {
+    sm: '400px',
+    md: '768px'
+  }
+  const isLikelyLcpMedia = computed(() => props.postIndex === 0)
+  const mediaDecoding = computed(() => (props.postIndex < 3 ? undefined : 'async'))
+  const mediaFetchPriority = computed(() => (isLikelyLcpMedia.value ? 'high' : undefined))
+  const mediaLoading = computed(() => (isLikelyLcpMedia.value ? 'eager' : 'lazy'))
+  const mediaPreload = computed(() => (isLikelyLcpMedia.value ? { fetchPriority: 'high' as const } : false))
+  const lcpVideoPosterPreloadLinks = computed(() => {
+    if (!isLikelyLcpMedia.value || !isVideo.value || !localPosterSrc.value) {
+      return []
+    }
+
+    return [
+      {
+        rel: 'preload',
+        as: 'image',
+        href: localPosterSrc.value,
+        fetchpriority: 'high'
+      }
+    ]
+  })
+
+  useHead(() => ({
+    link: lcpVideoPosterPreloadLinks.value
+  }))
 
   const triedToLoadWithProxy = shallowRef(false)
   const triedToLoadPosterWithProxy = shallowRef(false)
 
   let videoPlayer: FluidPlayerInstance | undefined
+  let videoPlayerInitPromise: Promise<void> | null = null
+  let videoPlayerIdleScheduled = false
+  let videoPlayerInitTimeout: ReturnType<typeof window.setTimeout> | null = null
+  let isUnmounted = false
 
   const isAnimatedMediaLoading = ref(false)
   const isAnimatedMediaPlaying = ref(false)
@@ -61,20 +83,20 @@
       return
     }
 
-    switch (true) {
-      case isVideo.value:
-        createVideoPlayer()
-        break
-
-      case isAnimatedMedia.value:
-        if (autoplayAnimatedMedia.value && !isAnimatedMediaPlaying.value) {
-          startPlayingAnimatedMedia()
-        }
-        break
+    if (isAnimatedMedia.value && autoplayAnimatedMedia.value && !isAnimatedMediaPlaying.value) {
+      startPlayingAnimatedMedia()
     }
   })
 
   onBeforeUnmount(() => {
+    isUnmounted = true
+
+    if (videoPlayerInitTimeout !== null) {
+      window.clearTimeout(videoPlayerInitTimeout)
+      videoPlayerInitTimeout = null
+      videoPlayerIdleScheduled = false
+    }
+
     let finalMediaElement = mediaElement.value
 
     if (finalMediaElement == null) {
@@ -102,7 +124,7 @@
     }
   })
 
-  function createVideoPlayer() {
+  async function createVideoPlayer() {
     if (!mediaElement.value) {
       throw new Error('Media element not found')
     }
@@ -110,6 +132,17 @@
     if (!isVideo.value) {
       throw new Error('Media is not a video')
     }
+
+    const [fluidPlayerModule] = await Promise.all([
+      import('fluid-player'),
+      import('fluid-player/src/css/fluidplayer.css')
+    ])
+
+    if (isUnmounted || !mediaElement.value) {
+      return
+    }
+
+    const fluidPlayer = fluidPlayerModule.default
 
     const fluidPlayerOptions: Partial<FluidPlayerOptions> = {
       layoutControls: {
@@ -246,30 +279,69 @@
     // TODO: Handle poster error
   }
 
-  function destroyVideoPlayer() {
-    if (!videoPlayer) {
-      throw new Error('Player not found')
+  function initializeVideoPlayer() {
+    if (videoPlayer || videoPlayerInitPromise) {
+      return videoPlayerInitPromise
     }
 
-    videoPlayer.destroy()
+    videoPlayerInitPromise = createVideoPlayer()
+      .catch(() => {
+        // Dynamic import or player initialization failed; the native video remains usable.
+      })
+      .finally(() => {
+        videoPlayerInitPromise = null
+      })
+
+    return videoPlayerInitPromise
   }
 
-  function reloadVideoPlayer(shouldPlay: boolean = false) {
-    nextTick(() => {
-      destroyVideoPlayer()
+  function scheduleVideoPlayerInitialization(delay = 1200, timeout = 4000) {
+    if (videoPlayer || videoPlayerInitPromise || videoPlayerIdleScheduled) {
+      return
+    }
 
-      nextTick(() => {
-        createVideoPlayer()
+    videoPlayerIdleScheduled = true
 
-        if (!shouldPlay) {
+    videoPlayerInitTimeout = window.setTimeout(() => {
+      videoPlayerInitTimeout = null
+
+      scheduleIdleTask(() => {
+        videoPlayerIdleScheduled = false
+
+        if (isUnmounted || videoPlayer || videoPlayerInitPromise || !mediaElement.value || !isVideo.value) {
           return
         }
 
-        nextTick(() => {
-          videoPlayer?.play()
-        })
-      })
-    })
+        initializeVideoPlayer()
+      }, timeout)
+    }, delay)
+  }
+
+  function destroyVideoPlayer() {
+    if (!videoPlayer) {
+      return
+    }
+
+    videoPlayer.destroy()
+    videoPlayer = undefined
+  }
+
+  async function reloadVideoPlayer(shouldPlay: boolean = false) {
+    await nextTick()
+    destroyVideoPlayer()
+
+    await nextTick()
+    try {
+      await initializeVideoPlayer()
+    } catch {
+      // Player re-creation failed
+      return
+    }
+
+    if (shouldPlay) {
+      await nextTick()
+      videoPlayer?.play()
+    }
   }
 
   function startPlayingAnimatedMedia() {
@@ -369,6 +441,11 @@
 
     const entry = entries[0]
 
+    if (entry.isIntersecting) {
+      scheduleVideoPlayerInitialization(isLikelyLcpMedia.value ? 1200 : 1600)
+      return
+    }
+
     if (!entry.isIntersecting) {
       videoPlayer?.pause()
     }
@@ -461,17 +538,18 @@
         <NuxtPicture
           ref="mediaElement"
           :alt="mediaAlt"
-          :decoding="postIndex < 3 ? undefined : 'async'"
+          :decoding="mediaDecoding"
           :height="mediaSrcHeight"
           :imgAttrs="
             {
               class: 'h-auto w-full rounded-t-md',
               style: 'aspect-ratio: ' + mediaSrcWidth + '/' + mediaSrcHeight,
-              fetchpriority: postIndex === 0 ? 'high' : undefined
+              fetchpriority: mediaFetchPriority
             } as any
           "
-          :loading="postIndex === 0 ? 'eager' : 'lazy'"
-          :preload="postIndex === 0"
+          :loading="mediaLoading"
+          :preload="mediaPreload"
+          :sizes="postImageSizes"
           :src="localSrc"
           :width="mediaSrcWidth"
           provider="imgproxy"
@@ -482,22 +560,23 @@
 
       <!-- Regular images for non-premium users -->
       <template v-else>
-        <!-- SSR + first 7: Imgproxy via Nuxt Picture -->
+        <!-- SSR + first posts: imgproxy keeps crawler/LCP images optimized. -->
         <NuxtPicture
-          v-if="wasCurrentPageSSR && postIndex < 8 && isMainHost"
+          v-if="wasCurrentPageSSR && postIndex < 8"
           ref="mediaElement"
           :alt="mediaAlt"
-          :decoding="postIndex < 3 ? undefined : 'async'"
+          :decoding="mediaDecoding"
           :height="mediaSrcHeight"
           :imgAttrs="
             {
               class: 'h-auto w-full rounded-t-md',
               style: 'aspect-ratio: ' + mediaSrcWidth + '/' + mediaSrcHeight,
-              fetchpriority: postIndex === 0 ? 'high' : undefined
+              fetchpriority: mediaFetchPriority
             } as any
           "
-          :loading="postIndex === 0 ? 'eager' : 'lazy'"
-          :preload="postIndex === 0"
+          :loading="mediaLoading"
+          :preload="mediaPreload"
+          :sizes="postImageSizes"
           :src="localSrc"
           :width="mediaSrcWidth"
           provider="imgproxy"
@@ -505,17 +584,17 @@
           @load="onMediaLoad"
         />
 
-        <!-- Non-SSR (or after SPA nav): regular NuxtImg -->
+        <!-- Non-SSR / SPA navigation keeps the direct image path. -->
         <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
         <NuxtImg
           v-else
           ref="mediaElement"
           :alt="mediaAlt"
-          :decoding="postIndex < 3 ? undefined : 'async'"
-          :fetch-priority="postIndex === 0 ? 'high' : undefined"
+          :decoding="mediaDecoding"
+          :fetchpriority="mediaFetchPriority"
           :height="mediaSrcHeight"
-          :loading="postIndex === 0 ? 'eager' : 'lazy'"
-          :preload="postIndex === 0"
+          :loading="mediaLoading"
+          :preload="mediaPreload"
           :src="localSrc"
           :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
           :width="mediaSrcWidth"
@@ -534,11 +613,11 @@
       <NuxtImg
         ref="mediaElement"
         :alt="mediaAlt"
-        :decoding="postIndex < 3 ? undefined : 'async'"
-        :fetch-priority="postIndex === 0 ? 'high' : undefined"
+        :decoding="mediaDecoding"
+        :fetchpriority="mediaFetchPriority"
         :height="mediaSrcHeight"
-        :loading="postIndex === 0 ? 'eager' : 'lazy'"
-        :preload="postIndex === 0"
+        :loading="mediaLoading"
+        :preload="mediaPreload"
         :src="isAnimatedMediaPlaying ? localSrc : localPosterSrc"
         :style="`aspect-ratio: ${mediaSrcWidth}/${mediaSrcHeight};`"
         :width="mediaSrcWidth"
@@ -622,6 +701,9 @@
         playsinline
         preload="none"
         @error="onMediaError"
+        @focus="initializeVideoPlayer"
+        @pointerdown="initializeVideoPlayer"
+        @pointerenter="initializeVideoPlayer"
       />
     </div>
   </div>

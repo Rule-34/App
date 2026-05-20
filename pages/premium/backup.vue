@@ -1,12 +1,12 @@
 <script lang="ts" setup>
   import { ArrowDownTrayIcon, ArrowUturnLeftIcon } from '@heroicons/vue/24/solid'
-  import { toast } from 'vue-sonner'
   import { downloadBlob } from '~/assets/js/DownloadHelper'
   import { createBackupState, type IBackupState, tryToRestoreV2OrV3Backup } from '~/assets/js/BackupHelper'
   import PageHeader from '~/components/layout/PageHeader.vue'
   import { project } from '@/config/project'
 
   const { t } = useI18n()
+  const { toast } = useLazyToast()
   const localePath = useLocalePath()
   const fileInputElement = ref<HTMLInputElement | null>(null)
 
@@ -60,12 +60,23 @@
       return
     }
 
+    // Force a full reload so third-party scripts and restored global state start from a clean runtime.
     window.location.href = localePath({ path: '/premium/dashboard', query: { restoreSuccess: 'true' } })
   }
 
   useSeoMeta({
     title: computed(() => t('pages.premium.backupPage.seoTitle'))
   })
+
+  useSchemaOrg([
+    defineBreadcrumb({
+      itemListElement: [
+        { name: t('nav.home'), item: localePath('/') },
+        { name: t('pages.premium.landingPage.seoTitle'), item: localePath('/premium') },
+        { name: t('pages.premium.backupPage.seoTitle'), item: localePath('/premium/backup') }
+      ]
+    })
+  ])
 
   definePageMeta({
     middleware: ['auth']
@@ -113,7 +124,7 @@
       <button
         class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util inline-flex min-w-[5rem] flex-col items-center gap-1.5 rounded-md p-2"
         type="button"
-        @click="$refs.fileInputElement.click()"
+        @click="fileInputElement?.click()"
       >
         <ArrowUturnLeftIcon class="h-6 w-6" />
 

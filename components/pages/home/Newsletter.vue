@@ -42,7 +42,7 @@
         <label for="name">{{ t('pages.newsletter.nameLabel') }}</label>
         <input
           id="name"
-          autocomplete="nope"
+          autocomplete="off"
           name="name"
           tabindex="-1"
           type="text"

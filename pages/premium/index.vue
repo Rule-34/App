@@ -174,11 +174,11 @@
   const paymentMethods = computed(() => ({
     creditCard: {
       name: t('pages.premium.landingPage.creditCard'),
-      icon: 'https://icons.duckduckgo.com/ip2/mastercard.us.ico'
+      icon: useFaviconUrl('mastercard.us')
     },
     crypto: {
       name: t('pages.premium.landingPage.cryptocurrency'),
-      icon: 'https://icons.duckduckgo.com/ip2/bitcoin.org.ico'
+      icon: useFaviconUrl('bitcoin.org')
     }
   }))
 
@@ -194,20 +194,17 @@
       .filter((group) => group.links.length > 0)
   )
 
-  function getFaviconUrl(url: string) {
-    try {
-      const hostname = new URL(url).hostname
-      return `https://icons.duckduckgo.com/ip2/${hostname}.ico`
-    } catch {
-      return ''
-    }
-  }
-
   useSeoMeta({
     title: computed(() => t('pages.premium.landingPage.seoTitle'))
   })
 
   useSchemaOrg([
+    defineBreadcrumb({
+      itemListElement: [
+        { name: t('nav.home'), item: localePath('/') },
+        { name: t('pages.premium.landingPage.seoTitle'), item: localePath('/premium') }
+      ]
+    }),
     defineProduct({
       name: project.name,
       // @see https://www.trustpilot.com/review/r34.app
@@ -666,10 +663,10 @@
                     >
                       <img
                         :alt="`${link.name} favicon`"
-                        :src="getFaviconUrl(link.faviconDomain ?? link.url)"
+                        :src="useFaviconUrl(link.faviconDomain ?? link.url)"
                         class="h-5 w-5 shrink-0 rounded-sm"
-                        height="128"
-                        width="128"
+                        height="64"
+                        width="64"
                       />
                       <span>
                         {{ link.cta }}

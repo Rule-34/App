@@ -6,13 +6,49 @@ const cacheHeaders = {
   'Cache-Control': 'public, max-age=300, s-maxage=300, stale-while-revalidate=300, stale-if-error=0'
 }
 
+const immutableCacheHeaders = {
+  'Cache-Control': 'public, max-age=31536000, immutable'
+}
+
+const assetCacheHeaders = {
+  'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800'
+}
+
+function getExternalOrigin(value) {
+  const url = value ? URL.parse(value) : null
+
+  if (!url) {
+    return null
+  }
+
+  if (['localhost', '127.0.0.1', '::1'].includes(url.hostname)) {
+    return null
+  }
+
+  return url.origin
+}
+
+const externalApiOrigin = getExternalOrigin(process.env.NUXT_PUBLIC_API_URL)
+
+const resourceHints = [
+  ...(externalApiOrigin
+    ? [
+        { rel: 'preconnect', href: externalApiOrigin },
+        { rel: 'dns-prefetch', href: externalApiOrigin }
+      ]
+    : [])
+]
+
+const shouldUploadSentrySourceMaps =
+  process.env.SENTRY_UPLOAD_SOURCE_MAPS === 'true' &&
+  Boolean(process.env.SENTRY_ORG && process.env.SENTRY_PROJECT && process.env.SENTRY_AUTH_TOKEN)
+
 const pageRouteRules = {
   // Not prerendered because it needs to redirect old URLs
   '/': { headers: cacheHeaders },
 
   // @see https://github.com/Baroshem/nuxt-security/issues/364
   '/posts/**': { security: { xssValidator: false }, headers: cacheHeaders },
-
   // Static pages (prerendered)
   '/other-sites': { prerender: true, headers: cacheHeaders },
   '/legal': { prerender: true, headers: cacheHeaders },
@@ -53,7 +89,7 @@ export default defineNuxtConfig({
   spaLoadingTemplate: true,
 
   features: {
-    inlineStyles: true
+    inlineStyles: false
   },
 
   app: {
@@ -61,7 +97,7 @@ export default defineNuxtConfig({
       style: [
         {
           type: 'text/css',
-          children: `html { background-color: ${project.branding.colors.background}; }`
+          innerHTML: `html { background-color: ${project.branding.colors.background}; }`
         }
       ],
       link: [
@@ -69,7 +105,7 @@ export default defineNuxtConfig({
         { rel: 'icon', href: '/icon.svg', sizes: 'any', type: 'image/svg+xml' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon-180x180.png' },
 
-        ...(process.env.NUXT_PUBLIC_API_URL ? [{ rel: 'preconnect', href: process.env.NUXT_PUBLIC_API_URL }] : [])
+        ...resourceHints
       ],
       meta: [
         { name: 'rating', content: 'adult' },
@@ -94,7 +130,7 @@ export default defineNuxtConfig({
 
     ...pageRouteRules,
 
-    // Locale-prefixed variants (ru, es, ja) — with prefix_except_default,
+    // Locale-prefixed variants (ru, es, ja, pt, de, fr) — with prefix_except_default,
     // /ru/posts/** etc. don't inherit unprefixed rules.
     ...mirroredRouteRules(pageRouteRules),
 
@@ -102,38 +138,63 @@ export default defineNuxtConfig({
      * Public assets
      */
     '/icon.svg': {
-      headers: {
-        'Cache-Control': 'public, max-age=31536000, immutable'
-      }
+      headers: assetCacheHeaders
     },
 
     '/favicon.ico': {
-      headers: {
-        'Cache-Control': 'public, max-age=31536000, immutable'
-      }
+      headers: assetCacheHeaders
+    },
+
+    '/apple-touch-icon-180x180.png': {
+      headers: assetCacheHeaders
+    },
+
+    '/pwa-64x64.png': {
+      headers: assetCacheHeaders
+    },
+
+    '/pwa-192x192.png': {
+      headers: assetCacheHeaders
+    },
+
+    '/pwa-512x512.png': {
+      headers: assetCacheHeaders
+    },
+
+    '/maskable-icon-512x512.png': {
+      headers: assetCacheHeaders
     },
 
     '/img/**': {
-      headers: {
-        'Cache-Control': 'public, max-age=31536000, immutable'
-      }
+      headers: immutableCacheHeaders
+    },
+
+    '/_i18n/**': {
+      headers: assetCacheHeaders
     },
 
     '/js/**': {
-      headers: {
-        'Cache-Control': 'public, max-age=86400'
-      }
+      headers: assetCacheHeaders
+    },
+
+    '/social.jpg': {
+      headers: assetCacheHeaders
     }
   },
 
   experimental: {
     // @see https://nuxt.com/docs/guide/going-further/experimental-features#emitroutechunkerror
-    emitRouteChunkError: 'automatic-immediate'
+    emitRouteChunkError: 'automatic-immediate',
+
+    defaults: {
+      nuxtLink: {
+        // Post pages contain many internal SEO links; eager route prefetching adds avoidable client and server work.
+        prefetch: false
+      }
+    }
   },
 
   nitro: {
-    plugins: ['~/server/plugins/lcp-preload-fetchpriority'],
-
     esbuild: {
       options: {
         // This only affects the Nitro/server bundle (SSR + `server/*` routes/middleware).
@@ -143,10 +204,16 @@ export default defineNuxtConfig({
   },
 
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+
+    ssr: {
+      // Keep TanStack Vue packages inside Vite's SSR module graph so their Vue scope APIs
+      // see Nuxt's active setup/effect scope during dev SSR.
+      noExternal: ['@tanstack/vue-query', '@tanstack/vue-virtual']
+    }
   },
 
-  sourcemap: { client: 'hidden' },
+  sourcemap: shouldUploadSentrySourceMaps ? { client: 'hidden' } : false,
 
   runtimeConfig: {
     matomoApiKey: undefined,
@@ -170,9 +237,7 @@ export default defineNuxtConfig({
   modules: [
     '@sentry/nuxt/module',
     'nuxt-headlessui',
-    'vue-sonner/nuxt',
     '@nuxt/image',
-    '@formkit/auto-animate/nuxt',
     '@vite-pwa/nuxt',
     '@nuxtjs/sitemap',
     '@nuxtjs/i18n',
@@ -216,20 +281,12 @@ export default defineNuxtConfig({
     }
   },
 
-  /**
-   * vue-sonner
-   * Disable global CSS injection so it doesn't end up in the main SSR inline <head> styles.
-   * We'll lazy-load `vue-sonner/style.css` on the client (see `layouts/default.vue`).
-   */
-  vueSonner: {
-    css: false
-  },
-
   /** @type {import('@sentry/nuxt/module').ModuleOptions} */
   sentry: {
     // Ensure server-side Sentry is actually preloaded without requiring `node --import ...`
     autoInjectServerSentry: 'experimental_dynamic-import',
     sourceMapsUploadOptions: {
+      enabled: shouldUploadSentrySourceMaps,
       org: process.env.SENTRY_ORG,
       project: process.env.SENTRY_PROJECT,
       authToken: process.env.SENTRY_AUTH_TOKEN,
@@ -347,7 +404,7 @@ export default defineNuxtConfig({
     },
 
     devOptions: {
-      enabled: true,
+      enabled: process.env.NODE_ENV !== 'production',
       suppressWarnings: true,
       navigateFallbackAllowlist: [/^\/$/],
       type: 'module'
@@ -409,7 +466,7 @@ export default defineNuxtConfig({
   },
 
   devtools: {
-    enabled: true
+    enabled: process.env.NODE_ENV !== 'production'
   },
 
   telemetry: false,

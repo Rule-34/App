@@ -5,9 +5,14 @@
 <template>
   <button
     :aria-label="$t('common.savePost')"
-    class="hover:hover-bg-util focus-visible:focus-outline-util group rounded-md px-1.5 py-1"
+    class="rounded-md px-1.5 py-1"
+    disabled
+    tabindex="-1"
     type="button"
   >
-    <BookmarkIcon aria-hidden="true" class="group-hover:hover-text-util text-base-content h-5 w-5" />
+    <BookmarkIcon
+      aria-hidden="true"
+      class="text-base-content h-5 w-5"
+    />
   </button>
 </template>

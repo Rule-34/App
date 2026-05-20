@@ -1,4 +1,5 @@
 import { defineNuxtPlugin } from '#imports'
+import { useIdleTask } from '~/composables/useIdleTask'
 import { project } from '@/config/project'
 
 export default defineNuxtPlugin({
@@ -21,12 +22,15 @@ export default defineNuxtPlugin({
     })
 
     const { hasInteracted } = useInteractionDetector()
+    const { schedule } = useIdleTask()
 
     const stop = watch(
       hasInteracted,
       (hasInteracted) => {
         if (hasInteracted) {
-          void loadFormbricks()
+          schedule(() => {
+            void loadFormbricks()
+          })
           stop()
         }
       },

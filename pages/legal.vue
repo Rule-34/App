@@ -9,6 +9,16 @@
     description: () => t('pages.legal.description', { name: project.name })
   })
 
+  useSchemaOrg(() => [
+    defineBreadcrumb({
+      // Breadcrumb items stay locale-relative; production-absolute URLs are reserved for canonicals.
+      itemListElement: [
+        { name: t('nav.home'), item: localePath('/') },
+        { name: t('pages.legal.title'), item: localePath('/legal') }
+      ]
+    }),
+    defineWebPage()
+  ])
 </script>
 
 <template>

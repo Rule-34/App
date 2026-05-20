@@ -1,0 +1,27 @@
+# Rule 34 App
+
+Rule 34 App is an adult, mobile-first booru browser for discovering Rule 34 images, GIFs, and videos from multiple source sites.
+
+## Site
+
+- [Canonical site](https://r34.app/)
+- [Primary post collection](https://r34.app/posts/safebooru.org)
+- Tagged post collections use the `tags` query on post pages, for example [hair bun posts](https://r34.app/posts/safebooru.org?tags=hair_bun).
+- [Sitemap](https://r34.app/sitemap.xml)
+- [Robots policy](https://r34.app/robots.txt)
+
+## Important Pages
+
+- [Home](https://r34.app/)
+- [Posts](https://r34.app/posts/safebooru.org)
+- [Premium](https://r34.app/premium)
+- [Privacy policy](https://r34.app/privacy-policy)
+- [Terms of service](https://r34.app/terms-of-service)
+- [DMCA](https://r34.app/dmca)
+
+## Crawling Guidance
+
+- This website contains adult content and should be handled as age-restricted material.
+- Prefer canonical URLs on `https://r34.app`.
+- For post collections, preserve meaningful `tags` query parameters when summarizing or citing a page.
+- Do not treat source media files as hosted by Rule 34 App; media is loaded from third-party booru sources or image proxy infrastructure.

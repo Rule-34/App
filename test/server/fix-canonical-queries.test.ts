@@ -11,9 +11,7 @@ describe('SEO canonical URLs', async () => {
 
   /** Extract canonical href from SSR HTML. */
   function getCanonical(html: string): string | null {
-    const m = html.match(
-      /<link\b(?=[^>]*\brel=["']canonical["'])(?=[^>]*\bhref=["']([^"']+)["'])[^>]*>/i
-    )
+    const m = html.match(/<link\b(?=[^>]*\brel=["']canonical["'])(?=[^>]*\bhref=["']([^"']+)["'])[^>]*>/i)
     return m?.[1] ?? null
   }
 
@@ -23,7 +21,7 @@ describe('SEO canonical URLs', async () => {
     return m?.[1] ?? null
   }
 
-  it('includes tags in canonical when present', async () => {
+  it('keeps single-tag posts canonicals on posts pages', async () => {
     const html = await $fetch('/posts/e621.net?tags=solo')
 
     expect(getCanonical(html)).toBe(`${project.urls.production.origin}/posts/e621.net?tags=solo`)
@@ -32,12 +30,10 @@ describe('SEO canonical URLs', async () => {
   it('encodes pipe characters in tags', async () => {
     const html = await $fetch('/posts/e621.net?tags=bored%7Ccum%7C-white_fur')
 
-    expect(getCanonical(html)).toBe(
-      `${project.urls.production.origin}/posts/e621.net?tags=bored%7Ccum%7C-white_fur`
-    )
+    expect(getCanonical(html)).toBe(`${project.urls.production.origin}/posts/e621.net?tags=bored%7Ccum%7C-white_fur`)
   })
 
-  it('strips non-canonical params (page) while keeping tags', async () => {
+  it('strips non-canonical params (page) while keeping tags on paginated posts pages', async () => {
     const html = await $fetch('/posts/e621.net?page=4&tags=1girl')
 
     expect(getCanonical(html)).toBe(`${project.urls.production.origin}/posts/e621.net?tags=1girl`)
@@ -58,8 +54,7 @@ describe('SEO canonical URLs', async () => {
   it('includes alternate hreflang links for all locales', async () => {
     const html = await $fetch('/es/posts/e621.net?tags=solo')
 
-    const alternateTags =
-      html.match(/<link\b(?=[^>]*\brel=["']alternate["'])[^>]*>/gi) || []
+    const alternateTags = html.match(/<link\b(?=[^>]*\brel=["']alternate["'])[^>]*>/gi) || []
     const alternates = alternateTags
       .map((tag) => ({
         hreflang: tag.match(/hreflang=["']([^"']+)["']/)?.[1],

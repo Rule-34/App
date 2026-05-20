@@ -1,9 +1,6 @@
 <script setup>
   import { project } from './config/project.ts'
 
-  provideHeadlessUseId(() => useId())
-
-  const runtimeConfig = useRuntimeConfig()
   const { t } = useI18n()
 
   useHead({

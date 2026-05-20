@@ -1,12 +1,13 @@
 <script lang="ts" setup>
   import { version } from '~/package.json'
   import { ExclamationTriangleIcon } from '@heroicons/vue/20/solid'
-  import { toast } from 'vue-sonner'
   import { downloadBlob } from '~/assets/js/DownloadHelper'
   import { project } from '@/config/project'
   import { locales as i18nLocales } from '~/config/i18n'
 
   const { t, locale, setLocale } = useI18n()
+  const { toast } = useLazyToast()
+  const localePath = useLocalePath()
 
   const localeOptions = i18nLocales.map((l) => ({
     code: l.code,
@@ -27,6 +28,15 @@
     title: () => t('pages.settings.title'),
     description: () => t('pages.settings.description', { name: project.name })
   })
+
+  useSchemaOrg([
+    defineBreadcrumb({
+      itemListElement: [
+        { name: t('nav.home'), item: localePath('/') },
+        { name: t('pages.settings.title'), item: localePath('/settings') }
+      ]
+    })
+  ])
 
   const appVersion = version
 

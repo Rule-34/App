@@ -1,7 +1,7 @@
 import { watch } from 'vue'
 import { defineNuxtPlugin, useRuntimeConfig } from '#imports'
 import { useInteractionDetector } from '~/composables/useInteractionDetector'
-import { buildSentryClientInitOptions } from '~/sentry.client.options'
+import { useIdleTask } from '~/composables/useIdleTask'
 
 /**
  * NOTE: This plugin intentionally mirrors the `@sentry/nuxt/module` client runtime plugin behavior,
@@ -22,6 +22,7 @@ export default defineNuxtPlugin({
     if (!dsn) return
 
     const { hasInteracted } = useInteractionDetector()
+    const { schedule } = useIdleTask()
 
     let initPromise: Promise<void> | null = null
 
@@ -29,7 +30,9 @@ export default defineNuxtPlugin({
       hasInteracted,
       (hasInteracted) => {
         if (hasInteracted) {
-          void init()
+          schedule(() => {
+            void init()
+          })
           stop()
         }
       },
@@ -40,38 +43,45 @@ export default defineNuxtPlugin({
       if (initPromise) return initPromise
 
       initPromise = (async () => {
-        const Sentry = await import('@sentry/nuxt')
-        const { isNuxtError } = await import('nuxt/app')
-        // Risky on purpose: reuse the `@sentry/nuxt/module` internal helper for Nuxt/Vue error reporting.
-        // This is a deep import and may break on Sentry upgrades or due to package "exports" restrictions.
-        const { reportNuxtError } = await import('../node_modules/@sentry/nuxt/build/module/runtime/utils.js')
+        try {
+          const [Sentry, { isNuxtError }, { reportNuxtError }, { buildSentryClientInitOptions }] = await Promise.all([
+            import('@sentry/nuxt'),
+            import('nuxt/app'),
+            // Risky on purpose: reuse the `@sentry/nuxt/module` internal helper for Nuxt/Vue error reporting.
+            // This is a deep import and may break on Sentry upgrades or due to package "exports" restrictions.
+            import('../node_modules/@sentry/nuxt/build/module/runtime/utils.js'),
+            import('~/sentry.client.options')
+          ])
 
-        Sentry.init(
-          buildSentryClientInitOptions({
-            dsn,
-            Sentry
-          })
-        )
+          Sentry.init(
+            buildSentryClientInitOptions({
+              dsn,
+              Sentry
+            })
+          )
 
-        // NOTE: We intentionally do NOT install `@sentry/vue`'s `vueIntegration` here.
-        // With interaction-gated init, the Vue app is already mounted, and `@sentry/vue` will warn:
-        // "Misconfigured SDK. Vue app is already mounted. Make sure to call `app.mount()` after `Sentry.init()`."
-        // We rely on Nuxt hooks (`app:error` + `vue:error`) + `reportNuxtError` instead.
+          // NOTE: We intentionally do NOT install `@sentry/vue`'s `vueIntegration` here.
+          // With interaction-gated init, the Vue app is already mounted, and `@sentry/vue` will warn:
+          // "Misconfigured SDK. Vue app is already mounted. Make sure to call `app.mount()` after `Sentry.init()`."
+          // We rely on Nuxt hooks (`app:error` + `vue:error`) + `reportNuxtError` instead.
 
-        // Capture Nuxt-level errors (after init)
-        nuxtApp.hook('app:error', (error) => {
-          if (isNuxtError(error)) {
-            if (error.status >= 300 && error.status < 500) {
-              return
+          // Capture Nuxt-level errors (after init)
+          nuxtApp.hook('app:error', (error) => {
+            if (isNuxtError(error)) {
+              if (error.status >= 300 && error.status < 500) {
+                return
+              }
             }
-          }
 
-          reportNuxtError({ error })
-        })
+            reportNuxtError({ error })
+          })
 
-        nuxtApp.hook('vue:error', (error, instance, info) => {
-          reportNuxtError({ error, instance, info })
-        })
+          nuxtApp.hook('vue:error', (error, instance, info) => {
+            reportNuxtError({ error, instance, info })
+          })
+        } catch (error) {
+          console.error('Failed to initialize Sentry client', error)
+        }
       })()
 
       return initPromise

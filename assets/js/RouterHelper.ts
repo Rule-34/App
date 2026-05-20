@@ -1,5 +1,5 @@
 import Tag from './tag.dto'
-import type { RouteLocationRaw } from 'vue-router'
+import type { LocationQuery, LocationQueryRaw, RouteLocationRaw } from 'vue-router'
 
 export const fallbackBooruDomain = 'rule34.xxx'
 
@@ -8,7 +8,7 @@ export function generatePostsRoute(
   domain?: string | undefined | null,
   page?: number | undefined | null,
   tags?: Tag[] | undefined | null,
-  filters?: Object | undefined | null
+  filters?: Record<string, unknown> | undefined | null
 ) {
   const route: RouteLocationRaw = {
     path,
@@ -29,10 +29,20 @@ export function generatePostsRoute(
 
   // Check if object keys are not undefined
   if (filters != null && !isObjectEmpty(filters)) {
-    route.query.filter = filters
+    assignFilterQuery(route.query, filters)
   }
 
   return route
+}
+
+export function getFilterQueryValue(query: LocationQuery, key: string) {
+  const nestedFilter = query.filter
+
+  if (nestedFilter && typeof nestedFilter === 'object' && !Array.isArray(nestedFilter)) {
+    return getSingleQueryValue((nestedFilter as LocationQuery)[key])
+  }
+
+  return getSingleQueryValue(query[`filter[${key}]`])
 }
 
 export function getSingleQueryValue(value: string | string[] | null | (string | null)[] | undefined) {
@@ -47,6 +57,16 @@ export function getSingleQueryValue(value: string | string[] | null | (string | 
   }
 
   return value
+}
+
+function assignFilterQuery(query: LocationQueryRaw, filters: Record<string, unknown>) {
+  for (const [key, value] of Object.entries(filters)) {
+    if (value === undefined) {
+      continue
+    }
+
+    query[`filter[${key}]`] = value as LocationQueryRaw[string]
+  }
 }
 
 function isObjectEmpty(obj) {

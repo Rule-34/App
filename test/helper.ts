@@ -1,5 +1,20 @@
-import { createPage, type TestOptions } from '@nuxt/test-utils'
+import { createPage, type TestOptions, url } from '@nuxt/test-utils'
 import { afterEach } from 'vitest'
+
+const transparentImage = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=',
+  'base64'
+)
+
+async function mockExternalImages(page: Awaited<ReturnType<typeof createPage>>) {
+  await page.route(/https:\/\/(imgproxy2\.r34\.app|safebooru\.org|rule34\.xxx)\//, async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'image/png',
+      body: transparentImage
+    })
+  })
+}
 
 export const defaultBrowserOptions: TestOptions['browserOptions'] = {
   type: 'chromium'
@@ -44,9 +59,14 @@ export function useTrackedPageFactory() {
   })
 
   return async function createTrackedPage(path?: string) {
-    const page = path == null ? await createPage() : await createPage(path)
-
+    const page = await createPage()
     pages.add(page)
+
+    await mockExternalImages(page)
+
+    if (path != null) {
+      await page.goto(url(path))
+    }
 
     return page
   }

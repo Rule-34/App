@@ -5,13 +5,12 @@
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
   import { throttle } from 'es-toolkit'
   import type { Ref } from 'vue'
-  import { toast } from 'vue-sonner'
   import type { Domain } from '~/assets/js/domain'
   import Post from '~/assets/js/post.dto'
   import Tag from '~/assets/js/tag.dto'
   import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
   import type { IPost, IPostPage } from 'assets/js/post.dto'
-  import { generatePostsRoute } from '~/assets/js/RouterHelper'
+  import { generatePostsRoute, getFilterQueryValue, getSingleQueryValue } from '~/assets/js/RouterHelper'
   import { useTagTitle } from '~/composables/useTagTitle'
   import type { IPocketbasePost } from '~/assets/js/pocketbase.dto'
   import { project } from '@/config/project'
@@ -20,6 +19,7 @@
   const route = useRoute()
   const localePath = useLocalePath()
   const { t } = useI18n()
+  const { toast } = useLazyToast()
   const buildTagTitle = useTagTitle()
 
   const { $pocketBase } = useNuxtApp()
@@ -29,6 +29,13 @@
 
   const { addUrlToPageHistory } = usePageHistory()
   const { savedPostList } = usePocketbase()
+
+  useHead({
+    link: [
+      { key: 'imgproxy-preconnect', rel: 'preconnect', href: project.imgproxy.baseUrl },
+      { key: 'imgproxy-dns-prefetch', rel: 'dns-prefetch', href: project.imgproxy.baseUrl }
+    ]
+  })
 
   /**
    * URL
@@ -81,15 +88,13 @@
   })
 
   const selectedTags = computed(() => {
-    const tags = route.query.tags as string
+    const tags = getSingleQueryValue(route.query.tags)
 
     if (!tags) {
       return []
     }
 
-    return tags
-      .split('|')
-      .map((tag) => new Tag({ name: tag }).toJSON())
+    return tags.split('|').map((tag) => new Tag({ name: tag }).toJSON())
   })
 
   const selectedPage = computed(() => {
@@ -106,10 +111,10 @@
     // TODO: Validate
 
     return {
-      type: route.query.filter?.type ?? undefined,
-      rating: route.query.filter?.rating ?? undefined,
-      sort: route.query.filter?.sort ?? undefined,
-      score: route.query.filter?.score ?? undefined
+      type: getFilterQueryValue(route.query, 'type') ?? undefined,
+      rating: getFilterQueryValue(route.query, 'rating') ?? undefined,
+      sort: getFilterQueryValue(route.query, 'sort') ?? undefined,
+      score: getFilterQueryValue(route.query, 'score') ?? undefined
     }
   })
 
@@ -224,10 +229,7 @@
 
     const postsRoute = generatePostsRoute('/premium/saved-posts', domain, page, tags, filters)
 
-    await navigateTo(
-      { path: localePath(postsRoute.path), query: postsRoute.query },
-      { replace }
-    )
+    await navigateTo({ path: localePath(postsRoute.path), query: postsRoute.query }, { replace })
   }
 
   /**
@@ -612,6 +614,16 @@
   useSeoMeta({
     title: shortTitle
   })
+
+  useSchemaOrg([
+    defineBreadcrumb({
+      itemListElement: [
+        { name: t('nav.home'), item: localePath('/') },
+        { name: t('pages.premium.landingPage.seoTitle'), item: localePath('/premium') },
+        { name: t('pages.premium.savedPostsPage.title'), item: route.path }
+      ]
+    })
+  ])
 
   definePageMeta({
     middleware: ['auth'],
