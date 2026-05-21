@@ -632,6 +632,7 @@
   const virtualRows = computed(() => rowVirtualizer.value.getVirtualItems())
 
   const totalSize = computed(() => rowVirtualizer.value.getTotalSize())
+  const virtualItemEls: Ref<(HTMLElement | null)[]> = shallowRef([])
 
   // Next page loader
   watchEffect(() => {
@@ -667,8 +668,10 @@
   })
 
   // FIX: Remove when this issue is fixed - https://github.com/TanStack/virtual/issues/619#issuecomment-1969516091
-  const measureElement = (el) => {
-    nextTick(() => {
+  const measureAll = () => {
+    rowVirtualizer.value.measureElement(null)
+
+    virtualItemEls.value.forEach((el) => {
       if (!el) {
         return
       }
@@ -676,6 +679,14 @@
       rowVirtualizer.value.measureElement(el)
     })
   }
+
+  onMounted(() => {
+    measureAll()
+  })
+
+  onUpdated(() => {
+    measureAll()
+  })
 
   /**
    * Helper to translate filter values to localized labels
@@ -1099,7 +1110,7 @@
             <li
               v-for="virtualRow in virtualRows"
               :key="virtualRow.key"
-              :ref="measureElement"
+              ref="virtualItemEls"
               :data-index="virtualRow.index"
               :data-testid="
                 virtualRow.index <= allRows.length - 1
