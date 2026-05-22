@@ -86,5 +86,8 @@ describe('tag landing route helpers', () => {
     expect(getSinglePositiveTagQueryValue('rating:safe')).toBeUndefined()
     expect(getSinglePositiveTagQueryValue(['solo', 'cum'])).toBeUndefined()
     expect(getSinglePositiveTagQueryValue('')).toBeUndefined()
+    expect(getSinglePositiveTagQueryValue(undefined)).toBeUndefined()
+    expect(getSinglePositiveTagQueryValue(null)).toBeUndefined()
+    expect(getSinglePositiveTagQueryValue([null])).toBeUndefined()
   })
 })

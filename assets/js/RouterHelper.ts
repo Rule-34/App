@@ -62,9 +62,13 @@ export function getSinglePositiveTagQueryValue(value: string | string[] | null |
 
   const tag = getSingleQueryValue(value)
 
+  if (!tag || tag.startsWith('-') || tag.includes('|') || /\s/.test(tag)) {
+    return undefined
+  }
+
   const tagPrefix = tag.split(':', 1)[0]
 
-  if (!tag || tag.startsWith('-') || tag.includes('|') || /\s/.test(tag) || facetedTagPrefixes.has(tagPrefix)) {
+  if (facetedTagPrefixes.has(tagPrefix)) {
     return undefined
   }
 
