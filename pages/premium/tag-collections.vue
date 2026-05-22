@@ -1,12 +1,14 @@
 <script lang="ts" setup>
   import { ArrowUturnLeftIcon, Bars2Icon, PencilIcon, PlusIcon } from '@heroicons/vue/20/solid'
+  import { vAutoAnimate } from '@formkit/auto-animate/vue'
   import { moveArrayElement, useSortable } from '@vueuse/integrations/useSortable'
   import type { ComputedRef, Ref } from 'vue'
-  import { toast } from 'vue-sonner'
   import { type ITagCollection, TagCollection } from '~/assets/js/tagCollection.dto'
   import Slideover from '~/components/layout/Slideover.vue'
 
   const { t } = useI18n()
+  const { toast } = useLazyToast()
+  const localePath = useLocalePath()
   const { tagCollections, resetTagCollections } = useTagCollections()
 
   const sortableElement = ref<HTMLElement | null>(null)
@@ -142,6 +144,16 @@
     title: computed(() => t('pages.premium.tagCollectionsPage.seoTitle'))
   })
 
+  useSchemaOrg([
+    defineBreadcrumb({
+      itemListElement: [
+        { name: t('nav.home'), item: localePath('/') },
+        { name: t('pages.premium.landingPage.seoTitle'), item: localePath('/premium') },
+        { name: t('pages.premium.tagCollectionsPage.seoTitle'), item: localePath('/premium/tag-collections') }
+      ]
+    })
+  ])
+
   definePageMeta({
     middleware: ['auth']
   })
@@ -170,7 +182,10 @@
           <div class="handle mr-2 cursor-move">
             <span class="sr-only">{{ $t('pages.premium.tagCollectionsPage.dragToReorder') }}</span>
 
-            <Bars2Icon aria-hidden="true" class="text-base-content group-hover:text-base-content-hover h-4 w-4" />
+            <Bars2Icon
+              aria-hidden="true"
+              class="text-base-content group-hover:text-base-content-hover h-4 w-4"
+            />
           </div>
 
           <!-- Tag Length -->
@@ -179,7 +194,9 @@
           >
             {{ tagCollection.tags.length }}
 
-            <span class="sr-only"> {{ $t('pages.premium.tagCollectionsPage.tagsInCollection', tagCollection.tags.length) }} </span>
+            <span class="sr-only">
+              {{ $t('pages.premium.tagCollectionsPage.tagsInCollection', tagCollection.tags.length) }}
+            </span>
           </div>
 
           <!-- Name -->
@@ -199,7 +216,10 @@
               type="button"
               @click="openEditDialog(index)"
             >
-              <PencilIcon aria-hidden="true" class="h-4 w-4" />
+              <PencilIcon
+                aria-hidden="true"
+                class="h-4 w-4"
+              />
             </button>
           </div>
         </li>
@@ -214,7 +234,10 @@
         type="button"
         @click="resetTagCollectionsToDefault"
       >
-        <ArrowUturnLeftIcon aria-hidden="true" class="mr-2 h-4 w-4" />
+        <ArrowUturnLeftIcon
+          aria-hidden="true"
+          class="mr-2 h-4 w-4"
+        />
 
         {{ $t('pages.premium.tagCollectionsPage.resetToDefault') }}
       </button>
@@ -227,7 +250,10 @@
       >
         {{ $t('pages.premium.tagCollectionsPage.createCollection') }}
 
-        <PlusIcon aria-hidden="true" class="mr-2 ml-2 h-4 w-4" />
+        <PlusIcon
+          aria-hidden="true"
+          class="mr-2 ml-2 h-4 w-4"
+        />
       </button>
     </section>
   </main>
@@ -237,7 +263,11 @@
     :is-open="dialogOpen"
     @close="dialogOpen = false"
   >
-    <template #title>{{ dialogMode === 'create' ? $t('pages.premium.tagCollectionsPage.createTitle') : $t('pages.premium.tagCollectionsPage.editTitle') }}</template>
+    <template #title>{{
+      dialogMode === 'create'
+        ? $t('pages.premium.tagCollectionsPage.createTitle')
+        : $t('pages.premium.tagCollectionsPage.editTitle')
+    }}</template>
 
     <div class="divide-y divide-gray-200 px-4 sm:px-6">
       <!-- Form -->
@@ -313,7 +343,11 @@
         form="create-form"
         type="submit"
       >
-        {{ dialogMode === 'create' ? $t('pages.premium.tagCollectionsPage.createButton') : $t('pages.premium.tagCollectionsPage.saveButton') }}
+        {{
+          dialogMode === 'create'
+            ? $t('pages.premium.tagCollectionsPage.createButton')
+            : $t('pages.premium.tagCollectionsPage.saveButton')
+        }}
       </button>
     </template>
   </Slideover>

@@ -2,10 +2,12 @@
   "name": "rule-34-app",
   "version": "3.2.0",
   "private": true,
+  "packageManager": "pnpm@11.1.2",
   "description": "Stream and download Rule 34 porn videos, GIFs, and images from multiple Boorus in a mobile-first web app",
   "author": "Alejandro Akbal",
   "engines": {
-    "node": "^24"
+    "node": "^24",
+    "pnpm": "^11.1.2"
   },
   "scripts": {
     "start": "node .output/server/index.mjs",
@@ -50,7 +52,6 @@
     "nuxt-schema-org": "^6.0.4",
     "nuxt-security": "^2.5.1",
     "pocketbase": "^0.26.9",
-    "qs": "^6.15.1",
     "random-weighted-choice": "^0.1.4",
     "rxjs": "^7.8.2",
     "sortablejs": "^1.15.7",
@@ -59,7 +60,6 @@
   },
   "devDependencies": {
     "@nuxt/test-utils": "^4.0.3",
-    "@types/qs": "^6.15.1",
     "nuxt": "^4.4.5",
     "playwright": "^1.59.1",
     "prettier": "^3.8.3",

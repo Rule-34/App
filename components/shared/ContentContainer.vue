@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+  import { isExternalHref } from '~/composables/locale'
+
   export interface PageTextProps {
     as?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span'
 
@@ -21,7 +23,7 @@
     <!-- Title -->
     <component
       :is="props.as"
-      class="text-lg font-bold leading-8 tracking-wide text-base-content-highlight"
+      class="text-base-content-highlight text-lg leading-8 font-bold tracking-wide"
     >
       {{ title }}
     </component>
@@ -30,7 +32,7 @@
     <!-- Using v-text as using {{}} would add a `new line` character that `whitespace-pre-line` would interpret. -->
     <p
       v-if="props.text"
-      class="whitespace-pre-line text-sm text-base-content"
+      class="text-base-content text-sm whitespace-pre-line"
       v-text="props.text"
     />
 
@@ -43,9 +45,15 @@
       >
         <NuxtLink
           :href="link.href"
+          :rel="
+            isExternalHref(link.href)
+              ? 'nofollow noopener noreferrer'
+              : link.target === '_blank'
+                ? 'noopener noreferrer'
+                : undefined
+          "
           :target="link.target"
-          rel='nofollow noopener noreferrer'
-          class="hover:hover-text-util focus-visible:focus-outline-util text-sm text-base-content underline"
+          class="hover:hover-text-util focus-visible:focus-outline-util text-base-content text-sm underline"
         >
           {{ link.text }}
         </NuxtLink>

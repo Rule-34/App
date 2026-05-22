@@ -6,8 +6,13 @@
   import { cloneDeep, throttle } from 'es-toolkit'
   import { FetchError } from 'ofetch'
   import type { Ref } from 'vue'
-  import { toast } from 'vue-sonner'
-  import { fallbackBooruDomain, generatePostsRoute, getSingleQueryValue } from '~/assets/js/RouterHelper'
+  import {
+    fallbackBooruDomain,
+    generatePostsRoute,
+    getFilterQueryValue,
+    getSinglePositiveTagQueryValue,
+    getSingleQueryValue
+  } from '~/assets/js/RouterHelper'
   import { stripLocaleFromPath } from '~/composables/locale'
   import { useTagTitle } from '~/composables/useTagTitle'
   import type { Domain } from '~/assets/js/domain'
@@ -18,19 +23,29 @@
   const router = useRouter()
   const route = useRoute()
   const config = useRuntimeConfig()
+  const nuxtApp = useNuxtApp()
   const localePath = useLocalePath()
   const { t } = useI18n()
+  const { toast } = useLazyToast()
   const buildTagTitle = useTagTitle()
 
   const { postsPerPage } = useUserSettings()
   const { isPremium } = useUserData()
   const { hasInteracted } = useInteractionDetector()
+  const { schedule: scheduleIdleTask } = useIdleTask()
   const { booruList } = useBooruList()
   const { selectedBlockList } = useBlockLists()
   const { addUrlToPageHistory } = usePageHistory()
-  const { toggle: toggleSearchMenu } = useSearchMenu()
+  const { value: isSearchMenuActive, toggle: toggleSearchMenu } = useSearchMenu()
 
   const { selectedDomainFromStorage } = useSelectedDomainFromStorage()
+
+  useHead({
+    link: [
+      { key: 'imgproxy-preconnect', rel: 'preconnect', href: project.imgproxy.baseUrl },
+      { key: 'imgproxy-dns-prefetch', rel: 'dns-prefetch', href: project.imgproxy.baseUrl }
+    ]
+  })
 
   const additionalBoorusPremiumSlideIndex = 4
 
@@ -55,9 +70,16 @@
           return
         }
 
-        hasLoadedAds.value = true
+        scheduleIdleTask(async () => {
+          if (hasLoadedAds.value || isPremium.value) {
+            return
+          }
 
-        useAdvertisements()
+          hasLoadedAds.value = true
+
+          const { default: useAdvertisements } = await import('~/composables/useAdvertisements')
+          nuxtApp.runWithContext(useAdvertisements)
+        })
       },
       { immediate: true }
     )
@@ -129,9 +151,9 @@
     // TODO: Validate
 
     return {
-      rating: route.query.filter?.rating ?? undefined,
-      sort: route.query.filter?.sort ?? undefined,
-      score: route.query.filter?.score ?? undefined
+      rating: getFilterQueryValue(route.query, 'rating') ?? undefined,
+      sort: getFilterQueryValue(route.query, 'sort') ?? undefined,
+      score: getFilterQueryValue(route.query, 'score') ?? undefined
     }
   })
 
@@ -453,6 +475,20 @@
   }
 
   // TODO: Save cache from and to History API state
+  const postsQueryKey = [
+    //
+    'posts',
+    //
+    selectedBooru,
+    selectedTags,
+    selectedFilters,
+    // Capture the initial page without tracking later ?page= progress updates
+    // from infinite scroll. Making this reactive resets the appended list.
+    selectedPage.value,
+    //
+    postsPerPage.value
+  ]
+
   const {
     suspense,
 
@@ -474,18 +510,7 @@
     isError,
     isFetchNextPageError
   } = useInfiniteQuery({
-    queryKey: [
-      //
-      'posts',
-      //
-      selectedBooru,
-      selectedTags,
-      selectedFilters,
-      //
-      selectedPage.value,
-      //
-      postsPerPage.value
-    ],
+    queryKey: postsQueryKey,
 
     queryFn: fetchPosts,
 
@@ -563,17 +588,14 @@
     }
   })
 
-  // TODO: Find a better way to prefetch on server?
-  // onServerPrefetch(async () => {
-  //   await suspense()
-  // })
-  if (import.meta.server) {
-    await suspense()
-  }
+  onServerPrefetch(suspense)
 
   /**
    * Virtualization
    */
+  const estimatedRowSize = 600
+  const rowGap = 16
+
   const allRows = computed<IPost[]>(() => {
     if (!data.value) {
       return []
@@ -602,16 +624,18 @@
 
   const parentRef = ref<HTMLElement | null>(null)
   const parentOffsetRef = ref(0)
+  const isClientVirtualizerReady = ref(false)
 
   onMounted(() => {
     parentOffsetRef.value = parentRef.value?.offsetTop ?? 0
+    isClientVirtualizerReady.value = true
   })
 
   const rowVirtualizerOptions = computed(() => {
     return {
       count: hasNextPage.value ? allRows.value.length + 1 : allRows.value.length,
 
-      estimateSize: () => 600,
+      estimateSize: () => estimatedRowSize,
 
       // For SSR
       initialRect: {
@@ -623,15 +647,46 @@
 
       overscan: 5,
 
-      gap: 16
+      gap: rowGap
     }
   })
 
   const rowVirtualizer = useWindowVirtualizer(rowVirtualizerOptions)
 
-  const virtualRows = computed(() => rowVirtualizer.value.getVirtualItems())
+  // Keep the server render and the client hydration pass identical. Once mounted,
+  // TanStack Virtual can measure the real viewport and take over.
+  const initialVirtualRows = computed(() => {
+    const { count, initialRect, overscan } = rowVirtualizerOptions.value
+    const visibleRows = Math.ceil(initialRect.height / estimatedRowSize)
+    const rowCount = Math.min(count, visibleRows + overscan)
 
-  const totalSize = computed(() => rowVirtualizer.value.getTotalSize())
+    return Array.from({ length: rowCount }, (_, index) => {
+      const start = index * (estimatedRowSize + rowGap)
+
+      return {
+        index,
+        start,
+        size: estimatedRowSize,
+        end: start + estimatedRowSize,
+        key: index,
+        lane: 0
+      }
+    })
+  })
+
+  const initialTotalSize = computed(() => {
+    const { count } = rowVirtualizerOptions.value
+
+    return count > 0 ? count * estimatedRowSize + Math.max(0, count - 1) * rowGap : 0
+  })
+
+  const virtualRows = computed(() =>
+    isClientVirtualizerReady.value ? rowVirtualizer.value.getVirtualItems() : initialVirtualRows.value
+  )
+
+  const totalSize = computed(() =>
+    isClientVirtualizerReady.value ? rowVirtualizer.value.getTotalSize() : initialTotalSize.value
+  )
 
   // Next page loader
   watchEffect(() => {
@@ -683,20 +738,20 @@
   function getLocalizedFilterLabel(filterKey: string, filterValue: string): string {
     if (filterKey === 'sort') {
       const sortMapping = {
-        'score': t('filters.sortByScore'),
-        'id': t('filters.sortByCreated'),
-        'random': t('filters.sortByRandom')
+        score: t('filters.sortByScore'),
+        id: t('filters.sortByCreated'),
+        random: t('filters.sortByRandom')
       }
       return sortMapping[filterValue] || filterValue
     }
 
     if (filterKey === 'rating') {
       const ratingMapping = {
-        'safe': t('filters.ratingSafe'),
-        'general': t('filters.ratingGeneral'),
-        'sensitive': t('filters.ratingSensitive'),
-        'questionable': t('filters.ratingQuestionable'),
-        'explicit': t('filters.ratingExplicit')
+        safe: t('filters.ratingSafe'),
+        general: t('filters.ratingGeneral'),
+        sensitive: t('filters.ratingSensitive'),
+        questionable: t('filters.ratingQuestionable'),
+        explicit: t('filters.ratingExplicit')
       }
       return ratingMapping[filterValue] || filterValue
     }
@@ -711,7 +766,10 @@
   /**
    * Helper to build SEO filter parts from selectedFilters
    */
-  function buildSeoFilterParts(filters: typeof selectedFilters.value, variant: 'default' | 'description' = 'default'): string[] {
+  function buildSeoFilterParts(
+    filters: typeof selectedFilters.value,
+    variant: 'default' | 'description' = 'default'
+  ): string[] {
     const filterParts: string[] = []
 
     if (filters.rating) {
@@ -781,13 +839,9 @@
     let desc = t('posts.seo.descriptionBase', { tags: tagsTitle ?? t('posts.seo.descriptionVarious') })
 
     const filterParts = buildSeoFilterParts(selectedFilters.value, 'description')
-    filterParts.forEach((part, index) => {
-      if (index < 2) {
-        desc += `, ${part}`
-      } else {
-        desc += part
-      }
-    })
+    if (filterParts.length) {
+      desc += ', ' + filterParts.join(', ')
+    }
 
     desc += t('posts.seo.fromDomain', { domain: selectedBooru.value.domain })
     desc += t('posts.seo.descriptionEnding', { name: project.shortName })
@@ -801,14 +855,23 @@
     description
   })
 
-  // [TEMPORARY WORKAROUND] Override canonical to include tags.
-  // i18n v10 strips query params on client hydration, so we re-apply them.
+  // [TEMPORARY WORKAROUND] Override canonical for tagged post URLs.
+  // i18n v10 strips query params on client hydration, so we re-apply or replace them.
   // Part 2 of a two-part fix — see server/plugins/fix-canonical-queries.ts
   // for the removal checklist.
   const canonicalUrl = computed(() => {
-    const base = `${project.urls.production.origin}${route.path}`
+    const base = new URL(route.path, project.urls.production).href
     const tags = getSingleQueryValue(route.query.tags)
+
     if (!tags) return base
+
+    const tagLandingTag = getSinglePositiveTagQueryValue(route.query.tags)
+    const isSimpleSingleTagQuery = Object.keys(route.query).length === 1 && !Array.isArray(route.query.tags)
+
+    if (tagLandingTag && isSimpleSingleTagQuery) {
+      return new URL(`${route.path}/${encodeURIComponent(tagLandingTag)}`, project.urls.production).href
+    }
+
     return `${base}?tags=${encodeURIComponent(tags)}`
   })
 
@@ -817,40 +880,27 @@
   }))
 
   const firstPostsPageAsSchema = computed(() => {
-    if (!data.value?.pages.length) {
-      return []
-    }
+    const firstPagePosts = data.value?.pages[0]?.data ?? []
 
-    return data.value?.pages[0].data.map((post) => {
-      switch (post.media_type) {
-        case 'image':
-        case 'animated':
-          return defineImage({
-            url: post.high_res_file.url,
-
-            height: post.high_res_file.height,
-            width: post.high_res_file.width
-
-            // author: post.tags.artist.map((tag) => tag.name).join(', ')
-          })
-
-        case 'video':
-          return defineVideo({
-            url: post.high_res_file.url,
-
-            thumbnailUrl: post.preview_file.url,
-
-            height: post.high_res_file.height,
-            width: post.high_res_file.width,
-
-            // Unknown, so default to 0
-            uploadDate: '1970-01-01',
-
-            isFamilyFriendly: false
-          })
-        default:
-          return
+    return firstPagePosts.slice(0, 8).map((post) => {
+      if (post.media_type === 'video') {
+        return defineVideo({
+          url: post.high_res_file.url,
+          thumbnailUrl: post.preview_file.url,
+          height: post.high_res_file.height,
+          width: post.high_res_file.width,
+          isFamilyFriendly: false
+        })
       }
+
+      return defineImage({
+        url: post.high_res_file.url,
+        height: post.high_res_file.height,
+        width: post.high_res_file.width,
+        caption: [...post.tags.character, ...post.tags.copyright].join(', '),
+        author: post.tags.artist.length ? post.tags.artist.join(', ') : undefined,
+        isFamilyFriendly: false
+      })
     })
   })
 
@@ -861,6 +911,7 @@
     }),
 
     defineBreadcrumb({
+      // Breadcrumb items stay locale-relative; production-absolute URLs are reserved for canonicals.
       itemListElement: [
         {
           name: t('nav.home'),
@@ -980,7 +1031,7 @@
   </ClientOnly>
 
   <!-- Search menu -->
-  <SearchMenuWrapper>
+  <LazySearchMenuWrapper v-if="isSearchMenuActive">
     <LazySearchMenu
       :filter-config="filterConfig"
       :initial-selected-filters="selectedFilters"
@@ -989,7 +1040,7 @@
       @submit="onSearchSubmit"
       @search-tag="onSearchTag"
     />
-  </SearchMenuWrapper>
+  </LazySearchMenuWrapper>
 
   <ScrollTopButton />
 
@@ -1084,14 +1135,13 @@
             position: 'relative'
           }"
         >
-          <!-- TODO: Fix SSR mismatches -->
           <ol
             :style="{
               position: 'absolute',
               top: 0,
               left: 0,
               width: '100%',
-              transform: `translateY(${virtualRows[0]?.start - rowVirtualizer.options.scrollMargin}px)`
+              transform: `translateY(${(virtualRows[0]?.start ?? 0) - rowVirtualizer.options.scrollMargin}px)`
             }"
             data-testid="posts-list"
             class="space-y-4"
@@ -1160,7 +1210,7 @@
 
                 <!-- Promoted content -->
                 <template v-if="!isPremium && virtualRow.index !== 0 && virtualRow.index % 7 === 0">
-                  <PromotedContent class="mt-4" />
+                  <LazyPromotedContent class="mt-4" />
                 </template>
               </template>
             </li>

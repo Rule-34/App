@@ -1,20 +1,19 @@
 <script lang="ts" setup>
-import {
-  ArrowTopRightOnSquareIcon,
-  DocumentDuplicateIcon,
-  MagnifyingGlassIcon,
-  MinusIcon,
-  NoSymbolIcon,
-  PlusIcon,
-  ShieldExclamationIcon
-} from '@heroicons/vue/24/outline'
-import { useClipboard } from '@vueuse/core'
-import { toast } from 'vue-sonner'
-import { flip, offset, shift, useFloating } from '@floating-ui/vue'
-import type Tag from '~/assets/js/tag.dto'
-import { blockListOptions } from '~/composables/useBlockLists'
+  import {
+    ArrowTopRightOnSquareIcon,
+    DocumentDuplicateIcon,
+    MagnifyingGlassIcon,
+    MinusIcon,
+    NoSymbolIcon,
+    PlusIcon,
+    ShieldExclamationIcon
+  } from '@heroicons/vue/24/outline'
+  import { useClipboard } from '@vueuse/core'
+  import { flip, offset, shift, useFloating } from '@floating-ui/vue'
+  import type Tag from '~/assets/js/tag.dto'
+  import { blockListOptions } from '~/composables/useBlockLists'
 
-const props = defineProps<{
+  const props = defineProps<{
     tag: Tag
     selectedTags: Tag[]
   }>()
@@ -29,6 +28,7 @@ const props = defineProps<{
   const { customBlockList, selectedList } = useBlockLists()
   const { copy } = useClipboard()
   const { t } = useI18n()
+  const { toast } = useLazyToast()
 
   const referenceEl = ref<HTMLElement>()
   const floatingEl = ref<HTMLElement>()

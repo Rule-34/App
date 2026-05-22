@@ -1,6 +1,5 @@
 <script lang="ts" setup>
   import { LinkIcon } from '@heroicons/vue/24/outline'
-  import { toast } from 'vue-sonner'
   import { useFloating, offset, flip, shift } from '@floating-ui/vue'
   import type { IPost } from '~/assets/js/post.dto'
 
@@ -11,6 +10,7 @@
   }>()
 
   const { t } = useI18n()
+  const { toast } = useLazyToast()
   const { isPremium } = useUserData()
   const { tutorialPostSource } = useAppStatistics()
 
@@ -75,19 +75,10 @@
     })
   }
 
-  function isSourceAnUrl(source: string) {
-    try {
-      new URL(source)
-      return true
-    } catch {
-      return false
-    }
-  }
+  const canParseUrl = URL.canParse
 
-  function getHostnameFromUrl(url: string) {
-    const source = new URL(url)
-
-    return source.hostname
+  function getHostnameFromUrl(source: string) {
+    return canParseUrl(source) ? new URL(source).hostname : source
   }
 
   function getFriendlyStringFromHostname(hostname: string) {
@@ -170,7 +161,7 @@
               :key="source"
               v-slot="{ active }"
             >
-              <template v-if="isSourceAnUrl(source)">
+              <template v-if="canParseUrl(source)">
                 <NuxtLink
                   :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
                   :href="source"
@@ -178,11 +169,11 @@
                   target="_blank"
                 >
                   <img
-                    :src="`https://icons.duckduckgo.com/ip2/${getHostnameFromUrl(source)}.ico`"
                     :alt="t('common.favicon')"
+                    :src="useFaviconUrl(source)"
                     class="mr-3 h-5 w-5 shrink-0 rounded-sm"
-                    height="128"
-                    width="128"
+                    height="64"
+                    width="64"
                   />
 
                   <span class="truncate">
@@ -212,11 +203,11 @@
                 @click="openSourceFinder(service.link)"
               >
                 <img
-                  :src="`https://icons.duckduckgo.com/ip2/${getHostnameFromUrl(service.link)}.ico`"
                   :alt="t('common.favicon')"
+                  :src="useFaviconUrl(service.link)"
                   class="mr-3 h-5 w-5 shrink-0 rounded-sm"
-                  height="128"
-                  width="128"
+                  height="64"
+                  width="64"
                 />
 
                 {{ getServiceTitle(service.action, service.serviceName) }}
@@ -237,11 +228,11 @@
                 @click="openSourceFinder(service.link)"
               >
                 <img
-                  :src="`https://icons.duckduckgo.com/ip2/${getHostnameFromUrl(service.link)}.ico`"
                   :alt="t('common.favicon')"
+                  :src="useFaviconUrl(service.link)"
                   class="mr-3 h-5 w-5 shrink-0 rounded-sm"
-                  height="128"
-                  width="128"
+                  height="64"
+                  width="64"
                 />
 
                 {{ getServiceTitle(service.action, service.serviceName) }}

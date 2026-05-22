@@ -386,6 +386,8 @@
     "reachHereToLoadMore": "ここに達すると読み込みます",
     "nothingMoreToLoad": "これ以上読み込むものはありません",
     "title": "投稿",
+    "browseAllTaggedPosts": "{tag} の投稿をすべて見る",
+    "moreFromDomain": "{domain} の他の投稿",
     "seo": {
       "pageOf": "{page}ページ目 ",
       "posts": "投稿",
@@ -399,7 +401,7 @@
       "fromDomain": "（{domain}より）",
       "descriptionBase": "{tags} のエロ動画、GIF、画像をストリーミング・ダウンロード",
       "descriptionVarious": "様々な",
-      "descriptionScoreOf": "、スコア：{score}",
+      "descriptionScoreOf": "スコア：{score}",
       "descriptionEnding": "。{name}で無料アニメエロを楽しもう"
     }
   },

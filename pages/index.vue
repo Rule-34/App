@@ -1,27 +1,28 @@
 <script lang="ts" setup>
-import { toast } from 'vue-sonner'
-import type { Ref } from 'vue'
-import Tag from '~/assets/js/tag.dto'
-import type { Domain } from '~/assets/js/domain'
-import { ArrowRightIcon } from '@heroicons/vue/24/solid'
-import { FetchError } from 'ofetch'
-import { project } from '@/config/project'
+  import type { Ref } from 'vue'
+  import Tag from '~/assets/js/tag.dto'
+  import type { Domain } from '~/assets/js/domain'
+  import { ArrowRightIcon } from '@heroicons/vue/24/solid'
+  import { FetchError } from 'ofetch'
+  import { project } from '@/config/project'
 
-const config = useRuntimeConfig()
+  const config = useRuntimeConfig()
+  const nuxtApp = useNuxtApp()
   const { t } = useI18n()
+  const { toast } = useLazyToast()
   const localePath = useLocalePath()
 
   const { isPremium } = useUserData()
   const { hasInteracted } = useInteractionDetector()
+  const { schedule: scheduleIdleTask } = useIdleTask()
   const { seasonalEmoji } = useSeasonalIcon()
   const { shouldShow } = useActivePromotion()
-
-  const { pageHistory } = usePageHistory()
 
   const { booruList } = useBooruList()
   const { selectedDomainFromStorage } = useSelectedDomainFromStorage()
 
   const selectedBooru = ref<Domain>(getDefaultBooru())
+  const shouldLoadHistorySection = ref(false)
 
   watch(selectedBooru, (booru) => {
     selectedDomainFromStorage.value = booru.domain
@@ -120,10 +121,33 @@ const config = useRuntimeConfig()
     })
   }
 
+  function hasStoredPageHistory() {
+    const rawPageHistory = window.localStorage.getItem('settings-pageHistory')
+
+    if (!rawPageHistory || rawPageHistory === '[]') {
+      return false
+    }
+
+    try {
+      const pageHistory = JSON.parse(rawPageHistory)
+      return Array.isArray(pageHistory) ? pageHistory.length > 0 : Boolean(pageHistory)
+    } catch {
+      return true
+    }
+  }
+
   /**
    * Show popunders for non-premium users
    */
   onMounted(() => {
+    scheduleIdleTask(() => {
+      if (!hasStoredPageHistory()) {
+        return
+      }
+
+      shouldLoadHistorySection.value = true
+    })
+
     const hasLoadedAds = ref(false)
 
     watch(
@@ -141,9 +165,16 @@ const config = useRuntimeConfig()
           return
         }
 
-        hasLoadedAds.value = true
+        scheduleIdleTask(async () => {
+          if (hasLoadedAds.value || isPremium.value) {
+            return
+          }
 
-        useAdvertisements()
+          hasLoadedAds.value = true
+
+          const { default: useAdvertisements } = await import('~/composables/useAdvertisements')
+          nuxtApp.runWithContext(useAdvertisements)
+        })
       },
       { immediate: true }
     )
@@ -621,13 +652,22 @@ const config = useRuntimeConfig()
   ])
 
   useSchemaOrg([
+    defineBreadcrumb({
+      itemListElement: [
+        {
+          name: t('nav.home'),
+          item: localePath('/')
+        }
+      ]
+    }),
+
     defineWebSite({
       name: project.name,
 
       potentialAction: [
         // TODO: Listen to router
         defineSearchAction({
-          target: '/?query={search_term_string}'
+          target: '/posts/rule34.xxx?tags={search_term_string}'
         })
       ]
     }),
@@ -744,17 +784,7 @@ const config = useRuntimeConfig()
           />
         </section>
 
-        <!-- History -->
-        <section v-if="pageHistory.length">
-          <PageHeader as="h2">
-            <template #title>{{ $t('pages.home.historyTitle') }}</template>
-            <template #text>{{ $t('pages.home.historyText') }}</template>
-          </PageHeader>
-
-          <ShowMore :max-height-in-rem="12">
-            <PageHistory class="mt-4 sm:pr-4" />
-          </ShowMore>
-        </section>
+        <LazyPageHistorySection v-if="shouldLoadHistorySection" />
       </ClientOnly>
 
       <!-- Featured tags -->
@@ -767,7 +797,7 @@ const config = useRuntimeConfig()
         <!-- TODO: Figure out a way for negative margin to work inside an overflow-hidden -->
         <ol class="mt-4 space-y-4">
           <li
-            v-for="featuredDomain in featuredDomains"
+            v-for="(featuredDomain, featuredDomainIndex) in featuredDomains"
             :key="featuredDomain.domain + '-' + featuredDomain.tags.length"
           >
             <div class="flex items-center pr-2">
@@ -777,10 +807,13 @@ const config = useRuntimeConfig()
               >
                 <img
                   :alt="$t('common.favicon')"
-                  :src="`https://icons.duckduckgo.com/ip2/${featuredDomain.domain}.ico`"
+                  :decoding="featuredDomainIndex === 0 ? undefined : 'async'"
+                  :fetchpriority="featuredDomainIndex === 0 ? undefined : 'low'"
+                  :loading="featuredDomainIndex === 0 ? 'eager' : 'lazy'"
+                  :src="useFaviconUrl(featuredDomain.domain)"
                   class="h-5 w-5 rounded-sm"
-                  height="128"
-                  width="128"
+                  height="64"
+                  width="64"
                 />
 
                 <!-- TODO: Add icon for top posts, animated, etc. -->
@@ -802,6 +835,7 @@ const config = useRuntimeConfig()
 
             <FeaturedTags
               :domain="featuredDomain.domain"
+              :priority-count="featuredDomainIndex === 0 ? 1 : 0"
               :tags="featuredDomain.tags"
               class="-mx-4 px-4 py-2"
             />

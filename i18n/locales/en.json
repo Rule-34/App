@@ -386,6 +386,8 @@
     "reachHereToLoadMore": "Reach here to load more",
     "nothingMoreToLoad": "Nothing more to load",
     "title": "Posts",
+    "browseAllTaggedPosts": "Browse all {tag} posts",
+    "moreFromDomain": "More from {domain}",
     "seo": {
       "pageOf": "Page {page} of ",
       "posts": "Posts",
@@ -399,7 +401,7 @@
       "fromDomain": ", from {domain}",
       "descriptionBase": "Stream and download {tags} Hentai porn videos, GIFs and images",
       "descriptionVarious": "various",
-      "descriptionScoreOf": ", with a score of {score}",
+      "descriptionScoreOf": "with a score of {score}",
       "descriptionEnding": ". Free anime hentai here on {name}"
     }
   },

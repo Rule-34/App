@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-  import { toast } from 'vue-sonner'
   import { project } from '@/config/project'
 
   const { t } = useI18n()
+  const { toast } = useLazyToast()
   const localePath = useLocalePath()
   const { $pocketBase } = useNuxtApp()
 
@@ -36,6 +36,16 @@
     title: computed(() => t('pages.premium.forgotPassword.seoTitle')),
     description: computed(() => t('pages.premium.forgotPassword.seoDescription', { name: project.name }))
   })
+
+  useSchemaOrg([
+    defineBreadcrumb({
+      itemListElement: [
+        { name: t('nav.home'), item: localePath('/') },
+        { name: t('pages.premium.landingPage.seoTitle'), item: localePath('/premium') },
+        { name: t('pages.premium.forgotPassword.seoTitle'), item: localePath('/premium/forgot-password') }
+      ]
+    })
+  ])
 
   definePageMeta({
     middleware: 'auth-redirect-if-logged-in'

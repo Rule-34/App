@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest'
 
 vi.mock('~/config/i18n', () => ({
-  localeCodes: new Set(['en', 'ru', 'es', 'ja'])
+  localeCodes: new Set(['en', 'ru', 'es', 'ja', 'pt', 'de', 'fr'])
 }))
 
 let stripLocaleFromPath: typeof import('../../server/utils/path').stripLocaleFromPath

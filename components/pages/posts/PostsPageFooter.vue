@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import type { PropType } from 'vue'
-import type { Domain } from '~/assets/js/domain'
-import type { ITag } from '~/assets/js/tag.dto'
-import { normalizeStringForTitle } from '~/assets/js/SeoHelper'
-import { project } from '@/config/project'
+  import type { PropType } from 'vue'
+  import type { Domain } from '~/assets/js/domain'
+  import type { ITag } from '~/assets/js/tag.dto'
+  import { generatePostTagLandingPath } from '~/assets/js/RouterHelper'
+  import { normalizeStringForTitle } from '~/assets/js/SeoHelper'
+  import { project } from '@/config/project'
 
-interface SelectedFilters {
+  interface SelectedFilters {
     rating?: string
     sort?: string
   }
@@ -122,7 +123,7 @@ interface SelectedFilters {
               v-for="(tag, index) in RELATED_TAGS"
               :key="tag"
               :title="$t('seoFooter.relatedTagTitle', { tag: formattedRelatedTags[index] })"
-              :to="localePath(`/posts/${selectedBooru.domain}?tags=${encodeURIComponent(tag)}`)"
+              :to="localePath(generatePostTagLandingPath(selectedBooru.domain, tag))"
               class="text-primary text-sm hover:underline"
             >
               {{ formattedRelatedTags[index] }}

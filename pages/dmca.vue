@@ -2,11 +2,23 @@
   import { project } from '@/config/project'
 
   const { t } = useI18n()
+  const localePath = useLocalePath()
 
   useSeoMeta({
     title: computed(() => t('pages.legal.dmcaSeoTitle')),
     description: computed(() => t('pages.legal.dmcaDescription', { name: project.name }))
   })
+
+  useSchemaOrg(() => [
+    defineBreadcrumb({
+      // Breadcrumb items stay locale-relative; production-absolute URLs are reserved for canonicals.
+      itemListElement: [
+        { name: t('nav.home'), item: localePath('/') },
+        { name: t('pages.legal.dmca'), item: localePath('/dmca') }
+      ]
+    }),
+    defineWebPage()
+  ])
 </script>
 
 <template>
@@ -35,9 +47,9 @@
       </ol>
 
       <p>
-        Please note that {{ project.name }} cannot process DMCA notices or remove content from third-party websites.
-        We are merely a search engine that indexes and links to content hosted elsewhere on the internet. If you have
-        any further questions or concerns, please contact us at {{ project.email }}.
+        Please note that {{ project.name }} cannot process DMCA notices or remove content from third-party websites. We
+        are merely a search engine that indexes and links to content hosted elsewhere on the internet. If you have any
+        further questions or concerns, please contact us at {{ project.email }}.
       </p>
     </div>
   </main>

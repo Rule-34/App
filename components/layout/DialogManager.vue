@@ -1,162 +1,80 @@
 <script lang="ts" setup>
-  function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms))
-  }
-
-  const { timesTheAppHasBeenOpened, promptInstallPwa, promptFeedback, promptNewsletter, promptReview } =
-    useAppStatistics()
+  const { pendingDialog, closeDialog } = useDialogManagerState()
 
   const isDialogReady = ref(false)
-
   const isNuxtReady = ref(false)
+  let dialogReadyTimer: ReturnType<typeof window.setTimeout> | undefined
 
   onNuxtReady(() => {
     isNuxtReady.value = true
   })
 
-  const dialogs = [
-    // PWA prompt
-    {
-      condition: () => {
-        if (promptInstallPwa.value) {
-          return false
-        }
-
-        // Show after 3 times
-        if (timesTheAppHasBeenOpened.value < 3) {
-          return false
-        }
-
-        if (window.matchMedia('(display-mode: standalone)').matches) {
-          return false
-        }
-
-        sleep(1000 * 3) // 3 seconds
-          .then(() => {
-            isDialogReady.value = true
-          })
-
-        return true
-      },
-      close: () => {
-        isDialogReady.value = false
-        promptInstallPwa.value = true
-      },
+  const dialogs = {
+    installPwa: {
       component: resolveComponent('LazyPwaPrompt'),
       closeableFromBackground: false
     },
-
-    // Feedback prompt
-    {
-      condition: () => {
-        if (promptFeedback.value) {
-          return false
-        }
-
-        // Show after 6 times
-        if (timesTheAppHasBeenOpened.value < 6) {
-          return false
-        }
-
-        sleep(1000 * 3) // 3 seconds
-          .then(() => {
-            isDialogReady.value = true
-          })
-
-        return true
-      },
-      close: () => {
-        isDialogReady.value = false
-        promptFeedback.value = true
-      },
+    feedback: {
       component: resolveComponent('LazyFeedbackPrompt'),
       closeableFromBackground: false
     },
-
-    // Newsletter Prompt
-    {
-      condition: () => {
-        if (promptNewsletter.value) {
-          return false
-        }
-
-        // Show after 9 times
-        if (timesTheAppHasBeenOpened.value < 9) {
-          return false
-        }
-
-        sleep(1000 * 3) // 3 seconds
-          .then(() => {
-            isDialogReady.value = true
-          })
-
-        return true
-      },
-      close: () => {
-        isDialogReady.value = false
-        promptNewsletter.value = true
-      },
+    newsletter: {
       component: resolveComponent('LazyNewsletterPrompt'),
       closeableFromBackground: false
     },
-
-    // Review prompt
-    {
-      condition: () => {
-        if (promptReview.value) {
-          return false
-        }
-
-        // Show after 12 times
-        if (timesTheAppHasBeenOpened.value < 12) {
-          return false
-        }
-
-        sleep(1000 * 3) // 3 seconds
-          .then(() => {
-            isDialogReady.value = true
-          })
-
-        return true
-      },
-      close: () => {
-        isDialogReady.value = false
-        promptReview.value = true
-      },
+    review: {
       component: resolveComponent('LazyReviewPrompt'),
       closeableFromBackground: false
     },
-
-    // Premium Prompt
-    {
-      condition: () => {
-        const { open: promptPremium } = usePremiumDialog()
-
-        if (!promptPremium.value) {
-          return false
-        }
-
-        isDialogReady.value = true
-        return true
-      },
-      close: () => {
-        const { open } = usePremiumDialog()
-
-        isDialogReady.value = false
-        open.value = false
-      },
+    premium: {
       component: resolveComponent('LazyPremiumPrompt'),
       closeableFromBackground: true
     }
-  ]
+  }
 
-  const dialog = computed(() => {
-    if (!isNuxtReady.value) {
+  function clearDialogReadyTimer() {
+    if (dialogReadyTimer === undefined) {
       return
     }
 
-    return dialogs.find((dialog) => dialog.condition())
+    window.clearTimeout(dialogReadyTimer)
+    dialogReadyTimer = undefined
+  }
+
+  watch(
+    [isNuxtReady, pendingDialog],
+    ([ready, dialog]) => {
+      clearDialogReadyTimer()
+      isDialogReady.value = false
+
+      if (!ready || !dialog) {
+        return
+      }
+
+      if (dialog === 'premium') {
+        isDialogReady.value = true
+        return
+      }
+
+      dialogReadyTimer = window.setTimeout(() => {
+        isDialogReady.value = true
+      }, 1000 * 3)
+    },
+    { immediate: true }
+  )
+
+  onBeforeUnmount(clearDialogReadyTimer)
+
+  const dialog = computed(() => {
+    const currentDialog = pendingDialog.value
+
+    return currentDialog ? dialogs[currentDialog] : undefined
   })
+
+  function closeCurrentDialog() {
+    isDialogReady.value = false
+    closeDialog()
+  }
 </script>
 
 <template>
@@ -167,7 +85,7 @@
     <HeadlessDialog
       as="div"
       class="relative z-10"
-      @close="dialog?.closeableFromBackground ? dialog?.close() : null"
+      @close="dialog?.closeableFromBackground ? closeCurrentDialog() : null"
     >
       <!-- Background -->
       <HeadlessTransitionChild
@@ -179,7 +97,7 @@
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 bg-base-1000/80 backdrop-blur-sm transition-opacity" />
+        <div class="bg-base-1000/80 fixed inset-0 backdrop-blur-sm transition-opacity" />
       </HeadlessTransitionChild>
 
       <!-- Body -->
@@ -195,11 +113,11 @@
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <HeadlessDialogPanel
-              class="relative w-full transform overflow-hidden rounded-lg bg-base-1000 px-4 pb-4 pt-5 text-left shadow-xl ring-1 ring-base-0/10 transition-all sm:my-8 sm:max-w-2xl sm:p-6"
+              class="bg-base-1000 ring-base-0/10 relative w-full transform overflow-hidden rounded-lg px-4 pt-5 pb-4 text-left shadow-xl ring-1 transition-all sm:my-8 sm:max-w-2xl sm:p-6"
             >
               <component
                 :is="dialog?.component"
-                :close="dialog?.close"
+                :close="closeCurrentDialog"
               />
             </HeadlessDialogPanel>
           </HeadlessTransitionChild>

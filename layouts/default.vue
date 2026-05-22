@@ -1,16 +1,9 @@
 <script setup>
-import { useEventListener } from '@vueuse/core'
-import { toast, Toaster } from 'vue-sonner'
+  import { useEventListener } from '@vueuse/core'
 
-// Lazy-load vue-sonner CSS on the client so it doesn't get inlined into SSR <head>.
-  onMounted(async () => {
-    import('vue-sonner/style.css')
-  })
-
-  useAppStatistics()
-
-  const { toggle: toggleMenu } = useMenu()
+  const { value: isMenuActive, toggle: toggleMenu } = useMenu()
   const { toggle: toggleSearchMenu } = useSearchMenu()
+  const { toast, shouldRenderToaster } = useLazyToast()
 
   const router = useRouter()
 
@@ -34,13 +27,19 @@ import { toast, Toaster } from 'vue-sonner'
       return
     }
 
+    const target = event.target
+
+    if (!(target instanceof Element)) {
+      return
+    }
+
     await nextTick()
 
     await new Promise((resolve) => setTimeout(resolve, 50))
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        event.target.scrollIntoView({
+        target.scrollIntoView({
           block: 'center',
           inline: 'center'
         })
@@ -89,17 +88,12 @@ import { toast, Toaster } from 'vue-sonner'
     <!--    <PwaUpdater />-->
 
     <ClientOnly>
-      <Toaster
-        :expand="true"
-        close-button
-        position="top-center"
-        theme="dark"
-      />
+      <LazyClientToaster v-if="shouldRenderToaster" />
 
-      <DialogManager />
+      <LazyDialogManager />
     </ClientOnly>
 
-    <SidebarWrapper>
+    <SidebarWrapper :show="isMenuActive">
       <LazySidebar />
     </SidebarWrapper>
 

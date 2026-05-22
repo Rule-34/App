@@ -100,16 +100,16 @@ cp .example.env .env
 
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Serve with hot reload at localhost:8080
-npm run dev
+pnpm dev
 
 # Build for production
-npm run build
+pnpm build
 
 # Generate static project
-npm run generate
+pnpm generate
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).

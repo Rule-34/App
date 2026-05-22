@@ -1,16 +1,36 @@
 <script lang="ts" setup>
-import { ChevronDownIcon } from '@heroicons/vue/24/outline'
-import type { IPost } from '~/assets/js/post.dto'
-import Tag, { TagDTO } from '~/assets/js/tag.dto'
-import { project } from '@/config/project'
+  import { ChevronDownIcon } from '@heroicons/vue/24/outline'
+  import { generatePostTagLandingPath } from '~/assets/js/RouterHelper'
+  import type { IPost } from '~/assets/js/post.dto'
+  import Tag, { TagDTO } from '~/assets/js/tag.dto'
+  import { project } from '@/config/project'
 
-const props = defineProps<{
+  const props = defineProps<{
     postIndex: number
 
     post: IPost
 
     selectedTags: Tag[]
   }>()
+
+  /**
+   * Build a descriptive alt attribute for media from the post's tags.
+   * Prioritizes character > copyright > artist > general tags,
+   * limited to the first 5 tags for a concise but meaningful description.
+   * Falls back to "Post #id" if no tags are available.
+   */
+  function buildMediaAlt(post: IPost): string {
+    const allTags = [...post.tags.character, ...post.tags.copyright, ...post.tags.artist, ...post.tags.general].filter(
+      Boolean
+    )
+
+    const topTags = allTags.slice(0, 5)
+    if (!topTags.length) {
+      return t('media.postAlt', { id: post.id })
+    }
+
+    return topTags.join(', ')
+  }
 
   // TODO: Find a better way to bubble events up
   /**
@@ -47,6 +67,14 @@ const props = defineProps<{
     return new Tag(Object.assign(new TagDTO(), { name, type }))
   }
 
+  function buildMediaDescriptionTags(post: IPost): string {
+    const allTags = [...post.tags.character, ...post.tags.copyright, ...post.tags.artist, ...post.tags.general].filter(
+      Boolean
+    )
+
+    return allTags.slice(0, 8).join(', ')
+  }
+
   const mediaFile = computed(() => {
     const stripFragment = (url?: string | null) => url?.split('#')[0] ?? null
 
@@ -61,7 +89,7 @@ const props = defineProps<{
       width: null,
       height: null,
       posterFile: null,
-      alt: t('media.postAlt', { id: props.post.id })
+      alt: buildMediaAlt(props.post)
     }
 
     switch (props.post.media_type) {
@@ -145,100 +173,121 @@ const props = defineProps<{
             domain: post.domain,
             score: post.score,
             rating: post.rating,
-            tags: Object.values(post.tags).flat().join(', ')
+            tags: buildMediaDescriptionTags(post)
           })
         }}
       </span>
 
-      <!-- Actions -->
-      <div class="flex items-center p-2">
-        <PostSave
-          v-if="mediaFile.file"
-          :post="post"
-        />
-
-        <PostDownload
-          v-if="mediaFile.file"
-          :mediaName="`${post.domain}-${post.id}`"
-          :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? mediaFile.file"
-        />
-
-        <PostSource
-          :post-file-url="postSourceFileUrl"
-          :post-sources="post.sources"
-        />
-
-        <ShareButton
-          :text="$t('media.shareFoundOn', { name: project.name, url: currentUrl.href })"
-          :title="$t('media.sharePostTitle', { id: post.id, domain: post.domain })"
-          :url="mediaFile.file ?? undefined"
-          class="px-1.5 py-1"
-        />
-
-        <PostChatWithAi
-          v-if="!isPremium"
-          :mediaType="post.media_type"
-          :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
-          :tags="post.tags"
-        />
-
-        <button
-          class="hover:hover-bg-util focus-visible:focus-outline-util group ml-auto flex items-center gap-1 rounded-md px-1.5 py-1"
-          type="button"
-          @click="areTagsOpen = !areTagsOpen"
-        >
-          <span class="group-hover:hover-text-util text-base-content text-sm"> {{ $t('common.tags') }} </span>
-
-          <ChevronDownIcon
-            :class="{
-              'rotate-180 transform': areTagsOpen,
-              'rotate-0 transform': !areTagsOpen
-            }"
-            class="group-hover:hover-text-util text-base-content h-5 w-5"
+      <ClientOnly>
+        <!-- Actions -->
+        <div class="flex items-center p-2">
+          <LazyPostSave
+            v-if="mediaFile.file"
+            :post="post"
           />
-        </button>
-      </div>
 
-      <!-- Tags -->
-      <BottomSheetWrapper v-model="areTagsOpen">
-        <!--  -->
+          <LazyPostDownload
+            v-if="mediaFile.file"
+            :mediaName="`${post.domain}-${post.id}`"
+            :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? mediaFile.file"
+          />
 
-        <div class="space-y-2 px-4 py-4">
+          <LazyPostSource
+            :post-file-url="postSourceFileUrl"
+            :post-sources="post.sources"
+          />
+
+          <LazyShareButton
+            :text="$t('media.shareFoundOn', { name: project.name, url: currentUrl.href })"
+            :title="$t('media.sharePostTitle', { id: post.id, domain: post.domain })"
+            :url="mediaFile.file ?? undefined"
+            class="px-1.5 py-1"
+          />
+
+          <LazyPostChatWithAi
+            v-if="!isPremium"
+            :mediaType="post.media_type"
+            :mediaUrl="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
+            :tags="post.tags"
+          />
+
+          <button
+            class="hover:hover-bg-util focus-visible:focus-outline-util group ml-auto flex items-center gap-1 rounded-md px-1.5 py-1"
+            type="button"
+            @click="areTagsOpen = !areTagsOpen"
+          >
+            <span class="group-hover:hover-text-util text-base-content text-sm"> {{ $t('common.tags') }} </span>
+
+            <ChevronDownIcon
+              :class="{
+                'rotate-180 transform': areTagsOpen,
+                'rotate-0 transform': !areTagsOpen
+              }"
+              class="group-hover:hover-text-util text-base-content h-5 w-5"
+            />
+          </button>
+        </div>
+
+        <!-- Tags -->
+        <LazyBottomSheetWrapper v-model="areTagsOpen">
           <!--  -->
 
-          <template v-for="tagType of tagTypesWithTags">
+          <div class="space-y-2 px-4 py-4">
             <!--  -->
 
-            <div>
-              <h3 class="text-base-content-highlight text-lg leading-7 font-bold tracking-tight">
-                {{ tagTypeLabels[tagType] }}
-              </h3>
+            <template v-for="tagType of tagTypesWithTags">
+              <!--  -->
 
-              <ol class="flex flex-wrap gap-2 p-2">
-                <li
-                  v-for="tag in post.tags[tagType]"
-                  :key="tag"
-                >
-                  <PostTag
-                    :selectedTags="selectedTags"
-                    :tag="createTag(tag, tagType)"
-                    @addTag="emit('addTag', $event)"
-                    @openTagInNewTab="emit('openTagInNewTab', $event)"
-                    @setTag="emit('setTag', $event)"
-                  />
-                </li>
-              </ol>
-            </div>
-          </template>
-        </div>
-      </BottomSheetWrapper>
+              <div>
+                <h3 class="text-base-content-highlight text-lg leading-7 font-bold tracking-tight">
+                  {{ tagTypeLabels[tagType] }}
+                </h3>
+
+                <ol class="flex flex-wrap gap-2 p-2">
+                  <li
+                    v-for="tag in post.tags[tagType]"
+                    :key="tag"
+                  >
+                    <LazyPostTag
+                      :selectedTags="selectedTags"
+                      :tag="createTag(tag, tagType)"
+                      @addTag="emit('addTag', $event)"
+                      @openTagInNewTab="emit('openTagInNewTab', $event)"
+                      @setTag="emit('setTag', $event)"
+                    />
+                  </li>
+                </ol>
+              </div>
+            </template>
+          </div>
+        </LazyBottomSheetWrapper>
+
+        <template #fallback>
+          <div
+            aria-hidden="true"
+            class="flex items-center p-2"
+          >
+            <PostSaveFallback v-if="mediaFile.file" />
+
+            <PostDownloadFallback v-if="mediaFile.file" />
+
+            <PostSourceFallback />
+
+            <PostShareFallback />
+
+            <PostChatWithAiFallback v-if="!isPremium" />
+
+            <PostTagsToggleFallback />
+          </div>
+        </template>
+      </ClientOnly>
 
       <!-- Internal Links for Search Engines-->
       <div class="hidden">
         Tags:
         <template v-for="tagType in tagTypesWithTags">
           <template v-for="tag in post.tags[tagType]">
-            <a :href="localePath(`/posts/${post.domain}?tags=${encodeURIComponent(tag)}`)">{{ tag }}</a>
+            <a :href="localePath(generatePostTagLandingPath(post.domain, tag))">{{ tag }}</a>
           </template>
         </template>
       </div>

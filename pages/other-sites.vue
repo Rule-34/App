@@ -2,6 +2,7 @@
   import { project } from '@/config/project'
 
   const { t } = useI18n()
+  const localePath = useLocalePath()
 
   useHead({
     script: [
@@ -19,6 +20,15 @@
     title: computed(() => t('pages.otherSites.title')),
     description: computed(() => t('pages.otherSites.description', { name: project.name }))
   })
+
+  useSchemaOrg([
+    defineBreadcrumb({
+      itemListElement: [
+        { name: t('nav.home'), item: localePath('/') },
+        { name: t('pages.otherSites.title'), item: localePath('/other-sites') }
+      ]
+    })
+  ])
 </script>
 
 <template>

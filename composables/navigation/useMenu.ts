@@ -1,4 +1,4 @@
-import {useToggle} from '@vueuse/core'
+import { useToggle } from '@vueuse/core'
 
 export default function () {
   const value = useState<boolean>('menu-open', () => false)

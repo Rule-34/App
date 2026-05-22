@@ -386,6 +386,8 @@
     "reachHereToLoadMore": "Llega aquí para cargar más",
     "nothingMoreToLoad": "No hay más contenido",
     "title": "Publicaciones",
+    "browseAllTaggedPosts": "Ver todas las publicaciones de {tag}",
+    "moreFromDomain": "Más de {domain}",
     "seo": {
       "pageOf": "Página {page} de ",
       "posts": "Publicaciones",
@@ -399,7 +401,7 @@
       "fromDomain": ", de {domain}",
       "descriptionBase": "Transmite y descarga {tags} videos porno, GIFs e imágenes hentai",
       "descriptionVarious": "varios",
-      "descriptionScoreOf": ", con una puntuación de {score}",
+      "descriptionScoreOf": "con una puntuación de {score}",
       "descriptionEnding": ". Hentai de anime gratis en {name}"
     }
   },

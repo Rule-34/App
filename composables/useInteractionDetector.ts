@@ -1,4 +1,4 @@
-import { useEventListener } from '@vueuse/core'
+import { defaultWindow, useEventListener } from '@vueuse/core'
 
 export function useInteractionDetector() {
   const hasInteracted = useState('hasInteracted', () => false)
@@ -7,13 +7,15 @@ export function useInteractionDetector() {
     return { hasInteracted }
   }
 
-  const interactionEvents = ['mousedown', 'touchstart']
+  const interactionEvents = ['pointerdown', 'keydown']
   const ignoreSelectors = [
     // Dialogs
     '[role="dialog"]'
   ]
 
-  const cleanup = interactionEvents.map((event) => useEventListener(window, event, handleInteraction))
+  const cleanup = defaultWindow
+    ? interactionEvents.map((event) => useEventListener(defaultWindow, event, handleInteraction, { passive: true }))
+    : []
 
   function handleInteraction(event: Event) {
     //

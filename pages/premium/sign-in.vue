@@ -1,11 +1,11 @@
 <script lang="ts" setup>
   import { ClientResponseError } from 'pocketbase'
-  import { toast } from 'vue-sonner'
   import { project } from '@/config/project'
 
   const { $pocketBase } = useNuxtApp()
   const localePath = useLocalePath()
   const { t } = useI18n()
+  const { toast } = useLazyToast()
 
   const formData = shallowRef({
     password: ''
@@ -57,6 +57,16 @@
     title: computed(() => t('pages.premium.signIn.seoTitle')),
     description: computed(() => t('pages.premium.signIn.seoDescription', { name: project.name }))
   })
+
+  useSchemaOrg([
+    defineBreadcrumb({
+      itemListElement: [
+        { name: t('nav.home'), item: localePath('/') },
+        { name: t('pages.premium.landingPage.seoTitle'), item: localePath('/premium') },
+        { name: t('pages.premium.signIn.seoTitle'), item: localePath('/premium/sign-in') }
+      ]
+    })
+  ])
 
   definePageMeta({
     middleware: 'auth-redirect-if-logged-in'

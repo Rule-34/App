@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { XMarkIcon } from '@heroicons/vue/20/solid'
+  import { project } from '@/config/project'
 
   const localePath = useLocalePath()
   const { t, locale } = useI18n()
@@ -31,7 +32,7 @@
 
   function historyPathToTitle(path: string) {
     try {
-      const url = new URL(path, 'https://r34.app')
+      const url = new URL(path, project.urls.production)
       const lines = [`${t('common.domain')}: ${url.pathname.replace(/^\/posts\//, '')}`]
       const page = url.searchParams.get('page')
       const tags = url.searchParams.get('tags')

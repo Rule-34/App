@@ -44,7 +44,9 @@
       <img
         :alt="$t('modals.review.trustpilotAlt')"
         class="mr-0.5 h-6 w-6"
-        src="https://icons.duckduckgo.com/ip2/trustpilot.com.ico"
+        :src="useFaviconUrl('trustpilot.com')"
+        height="24"
+        width="24"
       />
 
       Trustpilot

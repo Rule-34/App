@@ -1,6 +1,5 @@
 <script lang="ts" setup>
   import { ShareIcon } from '@heroicons/vue/24/outline'
-  import { toast } from 'vue-sonner'
 
   interface ShareButtonProps {
     title: string
@@ -9,7 +8,9 @@
   }
 
   const props = defineProps<ShareButtonProps>()
+
   const { t } = useI18n()
+  const { toast } = useLazyToast()
 
   async function share() {
     const url = props.url ?? window.location.href
