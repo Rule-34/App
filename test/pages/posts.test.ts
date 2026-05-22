@@ -236,6 +236,53 @@ describe('/', async () => {
       await page.getByText('Nothing more to load').waitFor({ state: 'visible' })
     }, 30000)
 
+    it('keeps scroll position when loading more posts', async () => {
+      const page = await createTrackedPage()
+      let releaseNextPageResponse: (() => void) | undefined
+      const holdNextPageResponse = new Promise<void>((resolve) => {
+        releaseNextPageResponse = resolve
+      })
+
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+      await page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`).first().waitFor({ state: 'visible' })
+
+      await page.route(
+        '**/booru/gelbooru/posts*pageID=1*',
+        async (route) => {
+          await holdNextPageResponse
+
+          await route.fulfill({
+            status: 200,
+            json: {
+              ...mockPostsPage1,
+              links: {
+                ...mockPostsPage1.links,
+                next: null
+              }
+            }
+          })
+        },
+        { times: 1 }
+      )
+
+      await page.evaluate(async () => {
+        for (let i = 0; i < 20; i++) {
+          window.scrollTo(0, document.documentElement.scrollHeight)
+          window.dispatchEvent(new Event('scroll'))
+          await new Promise((resolve) => requestAnimationFrame(resolve))
+        }
+      })
+
+      await page.waitForURL((u) => u.pathname === '/posts/safebooru.org' && u.searchParams.get('page') === '1')
+      await page.waitForTimeout(100)
+
+      const scrollY = await page.evaluate(() => window.scrollY)
+      releaseNextPageResponse?.()
+
+      expect(scrollY).toBeGreaterThan(100)
+      await page.getByText('Nothing more to load').waitFor({ state: 'visible' })
+    }, 30000)
+
     it('loads tagged results and updates heading', async () => {
       // Arrange
       const page = await createTrackedPage()

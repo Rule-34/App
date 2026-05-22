@@ -482,8 +482,8 @@
     selectedBooru.value,
     selectedTags.value,
     selectedFilters.value,
-    //
-    selectedPage.value,
+    // The page query tracks infinite-scroll progress in the URL. It must not
+    // invalidate the existing list when auto-pagination updates it.
     //
     postsPerPage.value
   ])
