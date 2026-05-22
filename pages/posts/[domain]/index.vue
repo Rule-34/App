@@ -475,18 +475,19 @@
   }
 
   // TODO: Save cache from and to History API state
-  const postsQueryKey = computed(() => [
+  const postsQueryKey = [
     //
     'posts',
     //
-    selectedBooru.value,
-    selectedTags.value,
-    selectedFilters.value,
-    // The page query tracks infinite-scroll progress in the URL. It must not
-    // invalidate the existing list when auto-pagination updates it.
+    selectedBooru,
+    selectedTags,
+    selectedFilters,
+    // Capture the initial page without tracking later ?page= progress updates
+    // from infinite scroll. Making this reactive resets the appended list.
+    selectedPage.value,
     //
     postsPerPage.value
-  ])
+  ]
 
   const {
     suspense,
