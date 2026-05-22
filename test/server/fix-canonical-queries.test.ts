@@ -21,10 +21,10 @@ describe('SEO canonical URLs', async () => {
     return m?.[1] ?? null
   }
 
-  it('keeps single-tag posts canonicals on posts pages', async () => {
+  it('canonicalizes simple single-tag posts queries to tag landing pages', async () => {
     const html = await $fetch('/posts/e621.net?tags=solo')
 
-    expect(getCanonical(html)).toBe(`${project.urls.production.origin}/posts/e621.net?tags=solo`)
+    expect(getCanonical(html)).toBe(`${project.urls.production.origin}/posts/e621.net/solo`)
   })
 
   it('encodes pipe characters in tags', async () => {
@@ -33,7 +33,7 @@ describe('SEO canonical URLs', async () => {
     expect(getCanonical(html)).toBe(`${project.urls.production.origin}/posts/e621.net?tags=bored%7Ccum%7C-white_fur`)
   })
 
-  it('strips non-canonical params (page) while keeping tags on paginated posts pages', async () => {
+  it('uses posts query canonicals for paginated tag pages', async () => {
     const html = await $fetch('/posts/e621.net?page=4&tags=1girl')
 
     expect(getCanonical(html)).toBe(`${project.urls.production.origin}/posts/e621.net?tags=1girl`)
@@ -49,6 +49,12 @@ describe('SEO canonical URLs', async () => {
     const html = await $fetch('/?tags=solo')
 
     expect(getCanonical(html)).toBe(`${project.urls.production.origin}/`)
+  })
+
+  it('does not patch tag landing page canonicals when tags query is present', async () => {
+    const html = await $fetch('/posts/e621.net/solo?tags=bar')
+
+    expect(getCanonical(html)).toBe(`${project.urls.production.origin}/posts/e621.net/solo`)
   })
 
   it('includes alternate hreflang links for all locales', async () => {
@@ -68,12 +74,12 @@ describe('SEO canonical URLs', async () => {
 
     for (const locale of locales) {
       const prefix = locale.code === defaultLocale ? '' : `/${locale.code}`
-      const expectedHref = `${project.urls.production.origin}${prefix}/posts/e621.net?tags=solo`
+      const expectedHref = `${project.urls.production.origin}${prefix}/posts/e621.net/solo`
       expectedByLang.set(locale.code, expectedHref)
       expectedByLang.set(locale.language, expectedHref)
     }
 
-    expectedByLang.set('x-default', `${project.urls.production.origin}/posts/e621.net?tags=solo`)
+    expectedByLang.set('x-default', `${project.urls.production.origin}/posts/e621.net/solo`)
 
     expect([...alternatesByLang.keys()].sort()).toEqual([...expectedByLang.keys()].sort())
 

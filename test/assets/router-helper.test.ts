@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { generatePostsRoute, getFilterQueryValue } from '../../assets/js/RouterHelper'
+import {
+  generatePostTagLandingPath,
+  generatePostsRoute,
+  getFilterQueryValue,
+  getSinglePositiveTagQueryValue,
+  getTagLandingPathFromPostsQueryPath
+} from '../../assets/js/RouterHelper'
 import Tag from '../../assets/js/tag.dto'
 
 describe('generatePostsRoute', () => {
@@ -63,5 +69,30 @@ describe('generatePostsRoute', () => {
   it('reads flat and legacy nested filter query values', () => {
     expect(getFilterQueryValue({ 'filter[sort]': 'score' }, 'sort')).toBe('score')
     expect(getFilterQueryValue({ filter: { score: '>=25' } }, 'score')).toBe('>=25')
+  })
+})
+
+describe('tag landing route helpers', () => {
+  it('builds encoded single-tag landing paths under posts', () => {
+    expect(generatePostTagLandingPath('rule34.xxx', 'honkai:_star_rail')).toBe('/posts/rule34.xxx/honkai%3A_star_rail')
+    expect(generatePostTagLandingPath('rule34.xxx', '100%')).toBe('/posts/rule34.xxx/100%25')
+  })
+
+  it('accepts only single positive tag query values for landing pages', () => {
+    expect(getSinglePositiveTagQueryValue('1girl')).toBe('1girl')
+    expect(getSinglePositiveTagQueryValue('honkai:_star_rail')).toBe('honkai:_star_rail')
+    expect(getSinglePositiveTagQueryValue('-ai_generated')).toBeUndefined()
+    expect(getSinglePositiveTagQueryValue('bored|cum')).toBeUndefined()
+    expect(getSinglePositiveTagQueryValue('big breasts')).toBeUndefined()
+    expect(getSinglePositiveTagQueryValue('rating:safe')).toBeUndefined()
+    expect(getSinglePositiveTagQueryValue(['solo', 'cum'])).toBeUndefined()
+    expect(getSinglePositiveTagQueryValue('')).toBeUndefined()
+  })
+
+  it('converts simple posts tag query paths to landing paths', () => {
+    expect(getTagLandingPathFromPostsQueryPath('/posts/rule34.xxx?tags=overwatch')).toBe('/posts/rule34.xxx/overwatch')
+    expect(getTagLandingPathFromPostsQueryPath('/posts/rule34.xxx?tags=solo&page=2')).toBeUndefined()
+    expect(getTagLandingPathFromPostsQueryPath('/posts/rule34.xxx?tags=solo%7Ccum')).toBeUndefined()
+    expect(getTagLandingPathFromPostsQueryPath('/posts/rule34.xxx?tags=-ai_generated')).toBeUndefined()
   })
 })

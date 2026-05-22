@@ -10,6 +10,7 @@
     fallbackBooruDomain,
     generatePostsRoute,
     getFilterQueryValue,
+    getSinglePositiveTagQueryValue,
     getSingleQueryValue
   } from '~/assets/js/RouterHelper'
   import { stripLocaleFromPath } from '~/composables/locale'
@@ -853,8 +854,8 @@
     description
   })
 
-  // [TEMPORARY WORKAROUND] Override canonical to include tags.
-  // i18n v10 strips query params on client hydration, so we re-apply them.
+  // [TEMPORARY WORKAROUND] Override canonical for tagged post URLs.
+  // i18n v10 strips query params on client hydration, so we re-apply or replace them.
   // Part 2 of a two-part fix — see server/plugins/fix-canonical-queries.ts
   // for the removal checklist.
   const canonicalUrl = computed(() => {
@@ -862,6 +863,14 @@
     const tags = getSingleQueryValue(route.query.tags)
 
     if (!tags) return base
+
+    const tagLandingTag = getSinglePositiveTagQueryValue(route.query.tags)
+    const isSimpleSingleTagQuery = Object.keys(route.query).length === 1 && !Array.isArray(route.query.tags)
+
+    if (tagLandingTag && isSimpleSingleTagQuery) {
+      return new URL(`${route.path}/${encodeURIComponent(tagLandingTag)}`, project.urls.production).href
+    }
+
     return `${base}?tags=${encodeURIComponent(tags)}`
   })
 
@@ -991,7 +1000,6 @@
       return true
     }
   })
-
 </script>
 
 <template>

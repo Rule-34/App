@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { ChevronDownIcon } from '@heroicons/vue/24/outline'
+  import { generatePostTagLandingPath } from '~/assets/js/RouterHelper'
   import type { IPost } from '~/assets/js/post.dto'
   import Tag, { TagDTO } from '~/assets/js/tag.dto'
   import { project } from '@/config/project'
@@ -286,7 +287,7 @@
         Tags:
         <template v-for="tagType in tagTypesWithTags">
           <template v-for="tag in post.tags[tagType]">
-            <a :href="localePath(`/posts/${post.domain}?tags=${encodeURIComponent(tag)}`)">{{ tag }}</a>
+            <a :href="localePath(generatePostTagLandingPath(post.domain, tag))">{{ tag }}</a>
           </template>
         </template>
       </div>

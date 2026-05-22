@@ -193,7 +193,7 @@
 
         return navigateTo(
           {
-            path: localePath(`/tags/${fallbackBooruDomain}/${encodeURIComponent(tag)}`),
+            path: localePath(`/posts/${fallbackBooruDomain}/${encodeURIComponent(tag)}`),
             query: {
               utm_source: 'internal',
               utm_medium: 'unauthorized-tag-booru-redirect',

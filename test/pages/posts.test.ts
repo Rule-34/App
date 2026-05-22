@@ -405,7 +405,7 @@ describe('/', async () => {
   })
 
   describe('SEO', async () => {
-    it('preserves tags in canonical link after client-side hydration', async () => {
+    it('canonicalizes simple single-tag posts queries after client-side hydration', async () => {
       // Arrange
       const page = await createTrackedPage()
 
@@ -413,18 +413,15 @@ describe('/', async () => {
       await page.goto(url('/posts/safebooru.org?tags=1girl'), { waitUntil: 'domcontentloaded' })
       await page.waitForURL('**/posts/safebooru.org?tags=1girl')
 
-      // Assert — tagged posts pages keep their posts URL canonical.
+      // Assert — simple single-tag posts queries use the tag landing URL canonical.
       await page.waitForFunction(
         () =>
-          document
-            .querySelector('link[rel="canonical"]')
-            ?.getAttribute('href')
-            ?.includes('/posts/safebooru.org?tags=1girl'),
+          document.querySelector('link[rel="canonical"]')?.getAttribute('href')?.includes('/posts/safebooru.org/1girl'),
         undefined,
         { timeout: 20000 }
       )
       const canonicalHref = await page.locator('link[rel="canonical"]').getAttribute('href')
-      expect(canonicalHref).toContain('/posts/safebooru.org?tags=1girl')
+      expect(canonicalHref).toContain('/posts/safebooru.org/1girl')
     }, 30000)
 
     it('updates canonical link on client-side tag navigation', async () => {
@@ -441,19 +438,19 @@ describe('/', async () => {
         page.waitForURL('**/posts/safebooru.org?tags=hair_bun')
       ])
 
-      // Assert — canonical must reflect the new tagged posts URL
+      // Assert — canonical must reflect the new tag landing URL
       await page.waitForFunction(
         () =>
           document
             .querySelector('link[rel="canonical"]')
             ?.getAttribute('href')
-            ?.includes('/posts/safebooru.org?tags=hair_bun'),
+            ?.includes('/posts/safebooru.org/hair_bun'),
         undefined,
         { timeout: 20000 }
       )
       const canonicalHref = await page.locator('link[rel="canonical"]').getAttribute('href')
-      expect(canonicalHref).toContain('/posts/safebooru.org?tags=hair_bun')
-      expect(canonicalHref).not.toContain('/posts/safebooru.org?tags=1girl')
+      expect(canonicalHref).toContain('/posts/safebooru.org/hair_bun')
+      expect(canonicalHref).not.toContain('/posts/safebooru.org/1girl')
     }, 30000)
 
     it('description with sort filter', async () => {
@@ -495,7 +492,7 @@ describe('/', async () => {
   describe('Tag landing page', async () => {
     it('renders tag landing page with posts', async () => {
       const page = await createTrackedPage()
-      await page.goto(url('/tags/safebooru.org/1girl'), { waitUntil: 'domcontentloaded' })
+      await page.goto(url('/posts/safebooru.org/1girl'), { waitUntil: 'domcontentloaded' })
 
       const heading = page.getByRole('heading', { level: 1 })
       await heading.waitFor({ state: 'visible' })
@@ -506,22 +503,22 @@ describe('/', async () => {
 
     it('has clean canonical on tag landing page', async () => {
       const page = await createTrackedPage()
-      await page.goto(url('/tags/safebooru.org/1girl'), { waitUntil: 'domcontentloaded' })
+      await page.goto(url('/posts/safebooru.org/1girl'), { waitUntil: 'domcontentloaded' })
 
       const canonicalHref = await page.locator('link[rel="canonical"]').getAttribute('href')
-      expect(canonicalHref).toContain('/tags/safebooru.org/1girl')
+      expect(canonicalHref).toContain('/posts/safebooru.org/1girl')
       expect(canonicalHref).not.toContain('?tags=')
     }, 30000)
 
     it('keeps encoded percent tags stable', async () => {
       const page = await createTrackedPage()
-      await page.goto(url('/tags/safebooru.org/100%25'), { waitUntil: 'domcontentloaded' })
+      await page.goto(url('/posts/safebooru.org/100%25'), { waitUntil: 'domcontentloaded' })
 
       const heading = page.getByRole('heading', { level: 1 })
       await heading.waitFor({ state: 'visible' })
 
       const canonicalHref = await page.locator('link[rel="canonical"]').getAttribute('href')
-      expect(canonicalHref).toContain('/tags/safebooru.org/100%25')
+      expect(canonicalHref).toContain('/posts/safebooru.org/100%25')
 
       const browseAllHref = await page.getByRole('link', { name: /browse all/i }).getAttribute('href')
       expect(browseAllHref).toContain('tags=100%25')
@@ -529,10 +526,10 @@ describe('/', async () => {
 
     it('keeps locale prefix in tag landing canonical', async () => {
       const page = await createTrackedPage()
-      await page.goto(url('/es/tags/safebooru.org/1girl'), { waitUntil: 'domcontentloaded' })
+      await page.goto(url('/es/posts/safebooru.org/1girl'), { waitUntil: 'domcontentloaded' })
 
       const canonicalHref = await page.locator('link[rel="canonical"]').getAttribute('href')
-      expect(new URL(canonicalHref!).pathname).toBe('/es/tags/safebooru.org/1girl')
+      expect(new URL(canonicalHref!).pathname).toBe('/es/posts/safebooru.org/1girl')
     }, 30000)
   })
 

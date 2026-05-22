@@ -1,3 +1,5 @@
+import { generatePostTagLandingPath, getSinglePositiveTagQueryValue } from '../../assets/js/RouterHelper'
+
 const config = useRuntimeConfig()
 
 /**
@@ -17,14 +19,17 @@ export default defineSitemapEventHandler(async () => {
     console.warn('[sitemap] Failed to fetch Matomo search keywords, sitemap will exclude dynamic post URLs:', errMsg)
   }
 
-  return popularSiteSearchKeywords.map((keyword) =>
-    asSitemapUrl({
-      loc: `/posts/rule34.xxx?tags=${encodeURIComponent(keyword.label)}`,
-      changefreq: 'daily',
-      priority: 0.8,
-      _i18nTransform: true
-    })
-  )
+  return popularSiteSearchKeywords
+    .map((keyword) => getSinglePositiveTagQueryValue(keyword.label))
+    .filter((tag): tag is string => tag != null)
+    .map((tag) =>
+      asSitemapUrl({
+        loc: generatePostTagLandingPath('rule34.xxx', tag),
+        changefreq: 'daily',
+        priority: 0.8,
+        _i18nTransform: true
+      })
+    )
 })
 
 interface MatomoResponse {

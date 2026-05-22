@@ -64,7 +64,7 @@ them as `<DomainSelector>` not `<Input/DomainSelector>`.
   `mirroredRouteRules()` helper so prefixed paths get the same caching/SSR rules.
 - **Known bug**: `canonicalQueries` in the i18n module config is a no-op in v10. A two-part workaround is required:
   1. SSR: `server/plugins/fix-canonical-queries.ts` patches the canonical `<link>` in rendered HTML.
-  2. CSR: `pages/posts/[domain].vue` uses `useHead` to re-apply the canonical after i18n overwrites it on hydration.
+  2. CSR: `pages/posts/[domain]/index.vue` uses `useHead` to re-apply the canonical after i18n overwrites it on hydration.
      See the removal checklist in `fix-canonical-queries.ts` for when upstream fixes this.
 
 ### SEO & Head Management

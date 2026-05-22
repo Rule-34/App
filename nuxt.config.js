@@ -267,7 +267,7 @@ export default defineNuxtConfig({
      * WORKAROUND (two-part fix):
      *   1. SSR: server/plugins/fix-canonical-queries.ts patches the canonical
      *      link into the rendered HTML before it reaches the browser.
-     *   2. CSR: pages/posts/[domain].vue uses `useHead` to re-apply the
+     *   2. CSR: pages/posts/[domain]/index.vue uses `useHead` to re-apply the
      *      canonical after the i18n module overwrites it on client hydration.
      *
      * TODO: Remove both parts once upstream fixes canonicalQueries.

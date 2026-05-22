@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { isExternalHref } from '~/composables/locale'
+  import { getTagLandingPathFromPostsQueryPath } from '~/assets/js/RouterHelper'
 
   const props = withDefaults(
     defineProps<{
@@ -46,6 +47,11 @@
 
   function isPriorityMedia(index: number) {
     return index < props.priorityCount
+  }
+
+  function getFeaturedTagHref(path: string) {
+    if (isExternalHref(path)) return path
+    return localePath(getTagLandingPathFromPostsQueryPath(path) ?? path)
   }
 </script>
 
@@ -96,7 +102,7 @@
           <!-- -->
 
           <NuxtLink
-            :href="isExternalHref(tag.path) ? tag.path : localePath(tag.path)"
+            :href="getFeaturedTagHref(tag.path)"
             :rel="isExternalHref(tag.path) ? 'noopener noreferrer nofollow' : undefined"
             :target="isExternalHref(tag.path) ? '_blank' : undefined"
             class="focus-visible:focus-outline-util hover:hover-text-util hover:hover-bg-util block rounded-md"

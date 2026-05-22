@@ -3,6 +3,22 @@ import type { LocationQuery, LocationQueryRaw, RouteLocationRaw } from 'vue-rout
 
 export const fallbackBooruDomain = 'rule34.xxx'
 
+const facetedTagPrefixes = new Set([
+  'date',
+  'height',
+  'id',
+  'limit',
+  'mpixels',
+  'order',
+  'parent',
+  'rating',
+  'score',
+  'sort',
+  'source',
+  'user',
+  'width'
+])
+
 export function generatePostsRoute(
   path: string = '/posts',
   domain?: string | undefined | null,
@@ -33,6 +49,50 @@ export function generatePostsRoute(
   }
 
   return route
+}
+
+export function generatePostTagLandingPath(domain: string, tag: string, basePath: string = '/posts') {
+  return `${basePath}/${domain}/${encodeURIComponent(tag)}`
+}
+
+export function getSinglePositiveTagQueryValue(value: string | string[] | null | (string | null)[] | undefined) {
+  if (Array.isArray(value) && value.length !== 1) {
+    return undefined
+  }
+
+  const tag = getSingleQueryValue(value)
+
+  const tagPrefix = tag.split(':', 1)[0]
+
+  if (!tag || tag.startsWith('-') || tag.includes('|') || /\s/.test(tag) || facetedTagPrefixes.has(tagPrefix)) {
+    return undefined
+  }
+
+  return tag
+}
+
+export function getTagLandingPathFromPostsQueryPath(path: string) {
+  const parsed = new URL(path, 'https://example.com')
+
+  if (parsed.searchParams.size !== 1 || parsed.searchParams.getAll('tags').length !== 1) {
+    return undefined
+  }
+
+  const tag = getSinglePositiveTagQueryValue(parsed.searchParams.get('tags'))
+  const match = parsed.pathname.match(/^(\/[a-z]{2})?\/posts\/([^/]+)$/)
+
+  if (!tag || !match) {
+    return undefined
+  }
+
+  const localePrefix = match[1] ?? ''
+  const domain = match[2]
+
+  if (!domain) {
+    return undefined
+  }
+
+  return generatePostTagLandingPath(domain, tag, `${localePrefix}/posts`)
 }
 
 export function getFilterQueryValue(query: LocationQuery, key: string) {

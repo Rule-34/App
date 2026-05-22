@@ -2,6 +2,7 @@
   import type { PropType } from 'vue'
   import type { Domain } from '~/assets/js/domain'
   import type { ITag } from '~/assets/js/tag.dto'
+  import { generatePostTagLandingPath } from '~/assets/js/RouterHelper'
   import { normalizeStringForTitle } from '~/assets/js/SeoHelper'
   import { project } from '@/config/project'
 
@@ -122,7 +123,7 @@
               v-for="(tag, index) in RELATED_TAGS"
               :key="tag"
               :title="$t('seoFooter.relatedTagTitle', { tag: formattedRelatedTags[index] })"
-              :to="localePath({ path: `/posts/${selectedBooru.domain}`, query: { tags: tag } })"
+              :to="localePath(generatePostTagLandingPath(selectedBooru.domain, tag))"
               class="text-primary text-sm hover:underline"
             >
               {{ formattedRelatedTags[index] }}
