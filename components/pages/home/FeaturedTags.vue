@@ -1,6 +1,5 @@
 <script lang="ts" setup>
   import { isExternalHref } from '~/composables/locale'
-  import { getTagLandingPathFromPostsQueryPath } from '~/assets/js/RouterHelper'
 
   const props = withDefaults(
     defineProps<{
@@ -51,7 +50,7 @@
 
   function getFeaturedTagHref(path: string) {
     if (isExternalHref(path)) return path
-    return localePath(getTagLandingPathFromPostsQueryPath(path) ?? path)
+    return localePath(path)
   }
 </script>
 

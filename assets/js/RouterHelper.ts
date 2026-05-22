@@ -71,30 +71,6 @@ export function getSinglePositiveTagQueryValue(value: string | string[] | null |
   return tag
 }
 
-export function getTagLandingPathFromPostsQueryPath(path: string) {
-  const parsed = new URL(path, 'https://example.com')
-
-  if (parsed.searchParams.size !== 1 || parsed.searchParams.getAll('tags').length !== 1) {
-    return undefined
-  }
-
-  const tag = getSinglePositiveTagQueryValue(parsed.searchParams.get('tags'))
-  const match = parsed.pathname.match(/^(\/[a-z]{2})?\/posts\/([^/]+)$/)
-
-  if (!tag || !match) {
-    return undefined
-  }
-
-  const localePrefix = match[1] ?? ''
-  const domain = match[2]
-
-  if (!domain) {
-    return undefined
-  }
-
-  return generatePostTagLandingPath(domain, tag, `${localePrefix}/posts`)
-}
-
 export function getFilterQueryValue(query: LocationQuery, key: string) {
   const nestedFilter = query.filter
 

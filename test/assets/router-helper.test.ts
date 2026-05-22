@@ -3,8 +3,7 @@ import {
   generatePostTagLandingPath,
   generatePostsRoute,
   getFilterQueryValue,
-  getSinglePositiveTagQueryValue,
-  getTagLandingPathFromPostsQueryPath
+  getSinglePositiveTagQueryValue
 } from '../../assets/js/RouterHelper'
 import Tag from '../../assets/js/tag.dto'
 
@@ -87,12 +86,5 @@ describe('tag landing route helpers', () => {
     expect(getSinglePositiveTagQueryValue('rating:safe')).toBeUndefined()
     expect(getSinglePositiveTagQueryValue(['solo', 'cum'])).toBeUndefined()
     expect(getSinglePositiveTagQueryValue('')).toBeUndefined()
-  })
-
-  it('converts simple posts tag query paths to landing paths', () => {
-    expect(getTagLandingPathFromPostsQueryPath('/posts/rule34.xxx?tags=overwatch')).toBe('/posts/rule34.xxx/overwatch')
-    expect(getTagLandingPathFromPostsQueryPath('/posts/rule34.xxx?tags=solo&page=2')).toBeUndefined()
-    expect(getTagLandingPathFromPostsQueryPath('/posts/rule34.xxx?tags=solo%7Ccum')).toBeUndefined()
-    expect(getTagLandingPathFromPostsQueryPath('/posts/rule34.xxx?tags=-ai_generated')).toBeUndefined()
   })
 })

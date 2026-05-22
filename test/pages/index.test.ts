@@ -30,4 +30,15 @@ describe('/', async () => {
     expect(currentUrl.searchParams.get('page')).toBe('3')
     expect(currentUrl.searchParams.get('tags')).toBe('cat|black_hair')
   })
+
+  it('links featured tags directly to post results', async () => {
+    const page = await createTrackedPage('/')
+
+    const animatedLink = page.locator('a:has(img[alt="Featured tag: Animated (video)"])').first()
+    await animatedLink.waitFor({ state: 'visible' })
+
+    const href = await animatedLink.getAttribute('href')
+    expect(href).toContain('/posts/rule34.xxx?tags=animated')
+    expect(href).not.toContain('/posts/rule34.xxx/animated')
+  })
 })
