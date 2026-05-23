@@ -79,8 +79,8 @@ This App uses an [API](https://github.com/Rule-34/API) to communicate with all t
 
 ### Requirements
 
-- NodeJS >= 24
-- NPM
+- Node.js 24
+- pnpm 11.2.2 or newer
 
 ### Setup
 
@@ -88,6 +88,8 @@ This App uses an [API](https://github.com/Rule-34/API) to communicate with all t
 
 Use `git clone --recursively` because [this repository](https://github.com/Rule-34/Shared-Resources) is used to share
 some necessary resources.
+
+The shared resources submodule lives at `app/assets/lib/rule-34-shared-resources`.
 
 #### Environment variables
 
@@ -110,6 +112,15 @@ pnpm build
 
 # Generate static project
 pnpm generate
+
+# Run the strict local gate
+pnpm check
 ```
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+## Project layout
+
+This is a Nuxt 4 app using the default `app/` source layout. Pages, components, composables, plugins, middleware,
+layouts, app assets, and app-local types live under `app/`. Root-level `config/`, `i18n/`, `server/`, `public/`, and
+`test/` stay at the repository root.
+
+For detailed explanation on how things work, check out [Nuxt docs](https://nuxt.com).

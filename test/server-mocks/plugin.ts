@@ -25,8 +25,10 @@ export const authRecord = {
 
 const queryParamsToPreserve = ['baseEndpoint', 'limit', 'tags', 'order', 'rating', 'score', 'httpScheme']
 
+type NitroPlugin = (nitroApp: unknown) => unknown
+
 const defineNitroPluginSafe =
-  typeof defineNitroPlugin === 'function' ? defineNitroPlugin : <T extends (...args: any[]) => any>(plugin: T) => plugin
+  typeof defineNitroPlugin === 'function' ? defineNitroPlugin : <T extends NitroPlugin>(plugin: T) => plugin
 
 function localizeMockPageLinks(page: typeof mockPostsPage0, requestUrl: URL) {
   const localizedPage = structuredClone(page)

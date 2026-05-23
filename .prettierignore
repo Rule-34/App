@@ -77,6 +77,16 @@ typings/
 # Nuxt generate
 dist
 
+# Nuxt build output
+.output
+
+# Generated app metadata
+.nuxt
+
+# Submodules and third-party browser scripts
+app/assets/lib/rule-34-shared-resources
+public/js
+
 # vuepress build output
 .vuepress/dist
 

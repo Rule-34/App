@@ -1,0 +1,104 @@
+<script lang="ts" setup>
+  const { t } = useI18n()
+  const localePath = useLocalePath()
+</script>
+
+<template>
+  <div
+    class="relative isolate overflow-hidden bg-transparent px-6 pt-16 pb-12 shadow-2xl sm:rounded-3xl sm:px-24 sm:py-28"
+  >
+    <h2 class="mx-auto max-w-2xl text-center text-3xl font-bold tracking-tight text-base-content-highlight sm:text-4xl">
+      {{ t('pages.newsletter.title') }}
+    </h2>
+
+    <p class="mx-auto mt-2 max-w-xl text-center text-lg leading-8">
+      {{ t('pages.newsletter.description') }}
+    </p>
+
+    <form
+      action="https://mailcoach.akbal.dev/subscribe/a97031df-b6c5-47f3-8c09-1d373fcc907d"
+      class="mx-auto mt-10 flex max-w-md gap-x-4"
+      method="post"
+      target="_blank"
+    >
+      <label
+        class="sr-only"
+        for="email-address"
+        >{{ t('pages.newsletter.emailLabel') }}</label
+      >
+
+      <input
+        id="email-address"
+        autocomplete="email"
+        class="min-w-0 flex-auto rounded-md border-0 bg-base-0/10 px-3.5 py-2 text-base-content-highlight ring-1 ring-base-0/10 ring-inset focus-visible:focus-outline-util sm:text-sm sm:leading-6"
+        name="email"
+        :placeholder="t('pages.newsletter.placeholder')"
+        required
+        type="email"
+      />
+
+      <!-- Honeypot -->
+      <div style="position: absolute; left: -9999px">
+        <label for="name">{{ t('pages.newsletter.nameLabel') }}</label>
+        <input
+          id="name"
+          autocomplete="off"
+          name="name"
+          tabindex="-1"
+          type="text"
+        />
+      </div>
+
+      <button
+        class="flex-none rounded-md bg-base-1000 px-3.5 py-2.5 text-sm font-medium ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+        type="submit"
+      >
+        {{ t('pages.newsletter.notifyMe') }}
+      </button>
+    </form>
+
+    <p class="mx-auto mt-10 text-center text-sm leading-6">
+      {{ t('pages.newsletter.unsubscribeAnytime') }}
+      <br />
+      {{ t('pages.newsletter.privacyText') }}
+      <NuxtLink
+        :href="localePath('/privacy-policy')"
+        class="hover:hover-text-util focus-visible:focus-outline-util"
+      >
+        {{ t('pages.newsletter.privacyLink') }}
+      </NuxtLink>
+    </p>
+
+    <!-- Background -->
+    <svg
+      aria-hidden="true"
+      class="absolute top-1/2 left-1/2 -z-10 h-[64rem] w-[64rem] -translate-x-1/2"
+      viewBox="0 0 1024 1024"
+    >
+      <circle
+        cx="512"
+        cy="512"
+        fill="url(#759c1415-0410-454c-8f7c-9a820de03641)"
+        fill-opacity="0.7"
+        r="512"
+      />
+      <defs>
+        <radialGradient
+          id="759c1415-0410-454c-8f7c-9a820de03641"
+          cx="0"
+          cy="0"
+          gradientTransform="translate(512 512) rotate(90) scale(512)"
+          gradientUnits="userSpaceOnUse"
+          r="1"
+        >
+          <stop stop-color="#7775D6" />
+          <stop
+            offset="1"
+            stop-color="#E935C1"
+            stop-opacity="0"
+          />
+        </radialGradient>
+      </defs>
+    </svg>
+  </div>
+</template>

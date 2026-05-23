@@ -70,8 +70,8 @@ function areQueriesEqualWithoutPage(
 }
 
 function areQueryValuesEqual(
-  toValue: RouteLocationNormalized['query'][string],
-  fromValue: RouteLocationNormalized['query'][string]
+  toValue: RouteLocationNormalized['query'][string] | undefined,
+  fromValue: RouteLocationNormalized['query'][string] | undefined
 ) {
   if (Array.isArray(toValue) || Array.isArray(fromValue)) {
     if (!Array.isArray(toValue) || !Array.isArray(fromValue)) {

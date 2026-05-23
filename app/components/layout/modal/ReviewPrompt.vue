@@ -1,0 +1,66 @@
+<script lang="ts" setup>
+  import { FaceSmileIcon } from '@heroicons/vue/24/outline'
+  import { project } from '~~/config/project'
+
+  defineProps<{
+    close: () => void
+  }>()
+</script>
+
+<template>
+  <!-- Header -->
+  <div>
+    <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-600">
+      <FaceSmileIcon
+        aria-hidden="true"
+        class="h-6 w-6 text-green-50"
+      />
+    </div>
+
+    <div class="mt-3 text-center sm:mt-5">
+      <HeadlessDialogTitle
+        as="h3"
+        class="text-base leading-6 font-semibold text-base-content-highlight"
+      >
+        {{ $t('modals.review.title', { name: project.shortName }) }}
+      </HeadlessDialogTitle>
+
+      <div class="mt-2">
+        <p class="text-sm text-pretty">{{ $t('modals.review.description') }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="mt-10 pb-10">
+    <NuxtLink
+      class="mx-auto flex w-full max-w-fit justify-center border border-[#00b67a] px-4 py-2 text-center text-base-content-highlight focus-visible:focus-outline-util"
+      :to="`https://www.trustpilot.com/evaluate/${project.urls.production.hostname}`"
+      rel="nofollow noopener noreferrer"
+      target="_blank"
+    >
+      {{ $t('modals.review.reviewUs') }} &nbsp;
+
+      <img
+        :alt="$t('modals.review.trustpilotAlt')"
+        class="mr-0.5 h-6 w-6"
+        :src="useFaviconUrl('trustpilot.com')"
+        height="24"
+        width="24"
+      />
+
+      Trustpilot
+    </NuxtLink>
+  </div>
+
+  <!-- Actions -->
+  <div class="mt-5 sm:mt-6">
+    <button
+      class="inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-xs ring-1 ring-base-0/20 ring-inset hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+      type="button"
+      @click="close()"
+    >
+      {{ $t('common.close') }}
+    </button>
+  </div>
+</template>
