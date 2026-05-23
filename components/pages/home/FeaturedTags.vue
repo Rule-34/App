@@ -25,6 +25,9 @@
   const localePath = useLocalePath()
 
   const { isPremium } = useUserData()
+  const featuredTagsRef = ref<HTMLOListElement | null>(null)
+
+  useDesktopHorizontalScroll(featuredTagsRef)
 
   const tagsWithMedia = computed(() => props.tags.filter((tag) => tag.media.length > 0))
   const tagsKey = computed(
@@ -55,7 +58,10 @@
 </script>
 
 <template>
-  <ol class="scrollbar-hide grid grid-flow-col gap-4 overflow-x-auto">
+  <ol
+    ref="featuredTagsRef"
+    class="scrollbar-hide grid grid-flow-col gap-4 overflow-x-auto"
+  >
     <template
       v-for="(tag, index) in preselectedTags"
       :key="tag.name"
