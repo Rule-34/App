@@ -65,8 +65,10 @@
     link: lcpVideoPosterPreloadLinks.value
   }))
 
-  const triedToLoadWithProxy = shallowRef(false)
-  const triedToLoadPosterWithProxy = shallowRef(false)
+  const maxProxyRetryAttempts = 3
+  const mediaProxyRetryAttempts = shallowRef(0)
+  const posterProxyRetryAttempts = shallowRef(0)
+  const proxyRetryNonce = shallowRef(0)
 
   let videoPlayer: FluidPlayerInstance | undefined
   let videoPlayerInitPromise: Promise<void> | null = null
@@ -344,6 +346,15 @@
     }
   }
 
+  function buildProxyRetryUrl(url: string) {
+    const proxiedUrl = new URL(proxyUrl(url))
+
+    proxyRetryNonce.value++
+    proxiedUrl.searchParams.set('retry', proxyRetryNonce.value.toString())
+
+    return proxiedUrl.toString()
+  }
+
   function startPlayingAnimatedMedia() {
     isAnimatedMediaLoading.value = true
     isAnimatedMediaPlaying.value = true
@@ -365,13 +376,13 @@
       isVideo.value &&
       isPremium.value &&
       //
-      !triedToLoadWithProxy.value
+      mediaProxyRetryAttempts.value < maxProxyRetryAttempts
     ) {
-      localSrc.value = proxyUrl(props.mediaSrc)
+      mediaProxyRetryAttempts.value++
+      localSrc.value = buildProxyRetryUrl(props.mediaSrc)
 
       reloadVideoPlayer(true)
 
-      triedToLoadWithProxy.value = true
       return
     }
 
@@ -389,11 +400,11 @@
         !isAnimatedMediaPlaying.value &&
         target.src === localPosterSrc.value &&
         //
-        !triedToLoadPosterWithProxy.value
+        posterProxyRetryAttempts.value < maxProxyRetryAttempts
       ) {
-        localPosterSrc.value = proxyUrl(props.mediaPosterSrc)
+        posterProxyRetryAttempts.value++
+        localPosterSrc.value = buildProxyRetryUrl(props.mediaPosterSrc)
 
-        triedToLoadPosterWithProxy.value = true
         return
       }
 
@@ -401,11 +412,11 @@
       if (
         isAnimatedMediaPlaying.value &&
         //
-        !triedToLoadWithProxy.value
+        mediaProxyRetryAttempts.value < maxProxyRetryAttempts
       ) {
-        localSrc.value = proxyUrl(props.mediaSrc)
+        mediaProxyRetryAttempts.value++
+        localSrc.value = buildProxyRetryUrl(props.mediaSrc)
 
-        triedToLoadWithProxy.value = true
         return
       }
     }
@@ -415,8 +426,8 @@
 
   function manuallyReloadMedia() {
     // Reset state
-    triedToLoadWithProxy.value = false
-    triedToLoadPosterWithProxy.value = false
+    mediaProxyRetryAttempts.value = 0
+    posterProxyRetryAttempts.value = 0
     error.value = null
 
     // Reload media
