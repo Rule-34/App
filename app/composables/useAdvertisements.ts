@@ -33,7 +33,7 @@ export default function () {
      */
     {
       id: 'https://ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
-      weight: 0.35
+      weight: 0.3
     },
     /**
      * Clickadu
@@ -42,7 +42,7 @@ export default function () {
      */
     {
       id: '/js/popunder2.js?v=10',
-      weight: 0.15
+      weight: 0.1
     },
     /**
      * AdMaven
@@ -70,16 +70,16 @@ export default function () {
     {
       id: 'https://je.deuxseethe.com/r1onMblLYR8e/rwnnn',
       weight: 0.5
-    }
+    },
     /**
      * AdsTerra
      * Pros:
      * Cons:
      */
-    // {
-    //   id: 'https://laughedentrust.com/a2/bb/43/a2bb432972963284b6754dd20c826521.js',
-    //   weight: 1
-    // }
+    {
+      id: 'https://laughedentrust.com/a2/bb/43/a2bb432972963284b6754dd20c826521.js',
+      weight: 0.1
+    }
   ]
 
   /**
@@ -138,7 +138,16 @@ export default function () {
      */
     {
       id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255040',
-      weight: 0.5
+      weight: 0.25
+    },
+    /**
+     * AdsTerra
+     * Pros: 
+     * Cons: 
+     */
+    {
+      id: 'https://laughedentrust.com/42/22/90/4222908c1f4cbb803a92284f2608eed3.js',
+      weight: 0.25
     }
   ]
 
