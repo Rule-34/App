@@ -62,6 +62,17 @@
   const { isPremium } = useUserData()
 
   const areTagsOpen = ref(false)
+  const isCollapsed = ref(false)
+
+  function toggleCollapsedState() {
+    isCollapsed.value = !isCollapsed.value
+
+    if (!isCollapsed.value) {
+      return
+    }
+
+    areTagsOpen.value = false
+  }
 
   function createTag(name: string, type: PostTagType) {
     return new Tag(Object.assign(new TagDTO(), { name, type }))
@@ -149,19 +160,42 @@
 
     return mediaFile.value.file
   })
+
+  const collapsedSummary = computed(() => {
+    const mediaLabel = props.post.media_type === 'animated' ? 'animation' : props.post.media_type
+
+    return `${mediaLabel} #${props.post.id} hidden`
+  })
 </script>
 
 <template>
   <figure class="border-base-0/20 rounded-md border">
-    <PostMedia
-      :mediaAlt="mediaFile.alt"
-      :mediaPosterSrc="mediaFile.posterFile"
-      :mediaSrc="mediaFile.file"
-      :mediaSrcHeight="mediaFile.height"
-      :mediaSrcWidth="mediaFile.width"
-      :mediaType="post.media_type"
-      :postIndex="props.postIndex"
-    />
+    <div
+      v-if="!isCollapsed"
+      :title="`Double-click to hide post #${post.id}`"
+      @dblclick="toggleCollapsedState"
+    >
+      <PostMedia
+        :mediaAlt="mediaFile.alt"
+        :mediaPosterSrc="mediaFile.posterFile"
+        :mediaSrc="mediaFile.file"
+        :mediaSrcHeight="mediaFile.height"
+        :mediaSrcWidth="mediaFile.width"
+        :mediaType="post.media_type"
+        :postIndex="props.postIndex"
+      />
+    </div>
+
+    <button
+      v-else
+      :aria-label="`Show post #${post.id}`"
+      class="hover:hover-bg-util focus-visible:focus-outline-util text-base-content flex min-h-28 w-full flex-col items-center justify-center gap-2 rounded-t-md px-4 py-4 text-center"
+      type="button"
+      @click="toggleCollapsedState"
+    >
+      <span class="text-base-content-highlight text-sm font-semibold">{{ collapsedSummary }}</span>
+      <span class="text-base-content/80 text-xs">Click to show it again</span>
+    </button>
 
     <figcaption>
       <!-- Post description -->
