@@ -73,6 +73,10 @@ typings/
 # Nuxt generate
 dist
 
+# Submodules and third-party browser scripts
+assets/lib/rule-34-shared-resources
+app/assets/lib/rule-34-shared-resources
+
 # vuepress build output
 .vuepress/dist
 

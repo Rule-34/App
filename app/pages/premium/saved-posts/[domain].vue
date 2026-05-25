@@ -5,7 +5,7 @@
   import type { QueryFunctionContext } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
   import { throttle } from 'es-toolkit'
-  import type { Ref } from 'vue'
+  import type { ComponentPublicInstance, Ref } from 'vue'
   import type { Domain } from '~/assets/js/domain'
   import Post from '~/assets/js/post.dto'
   import Tag from '~/assets/js/tag.dto'
@@ -565,9 +565,9 @@
   })
 
   // FIX: Remove when this issue is fixed - https://github.com/TanStack/virtual/issues/619#issuecomment-1969516091
-  const measureElement = (el: Element | null) => {
+  const measureElement = (el: Element | ComponentPublicInstance | null) => {
     nextTick(() => {
-      if (!el) {
+      if (!(el instanceof Element)) {
         return
       }
 
@@ -821,7 +821,7 @@
           >
             <li
               v-for="virtualRow in virtualRows"
-              :key="virtualRow.key"
+              :key="String(virtualRow.key)"
               :ref="measureElement"
               :data-index="virtualRow.index"
             >

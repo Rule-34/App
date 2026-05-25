@@ -1,4 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
+import * as nuxtLegacy from '@teages/nuxt-legacy'
+import type { PluginOption } from 'vite'
 import { project } from './config/project'
 import { locales, defaultLocale, prefixedLocaleCodes } from './config/i18n'
 
@@ -38,6 +40,11 @@ const resourceHints = [
       ]
     : [])
 ]
+
+const legacyUrlPolyfills = ['web.url.parse', 'web.url.can-parse']
+const legacyUrlPolyfillImports = legacyUrlPolyfills.map((polyfill) => `core-js/modules/${polyfill}.js`)
+const legacyCspHashes = (nuxtLegacy as unknown as { cspHashes: string[] }).cspHashes
+const legacyCspHashSources = [...new Set(legacyCspHashes.map((hash) => `'sha256-${hash}'`))]
 
 const shouldUploadSentrySourceMaps =
   process.env.SENTRY_UPLOAD_SOURCE_MAPS === 'true' &&
@@ -197,7 +204,7 @@ export default defineNuxtConfig({
   },
 
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss() as unknown as PluginOption],
 
     ssr: {
       // Keep TanStack Vue packages inside Vite's SSR module graph so their Vue scope APIs
@@ -229,6 +236,7 @@ export default defineNuxtConfig({
    */
   modules: [
     '@nuxt/eslint',
+    '@teages/nuxt-legacy',
     '@sentry/nuxt/module',
     'nuxt-headlessui',
     '@nuxt/image',
@@ -290,6 +298,15 @@ export default defineNuxtConfig({
 
     unstable_sentryBundlerPluginOptions: {
       applicationKey: project.sentry.applicationKey
+    }
+  },
+
+  legacy: {
+    vite: {
+      // Usage-based floor that keeps the meaningful old-browser tail without carrying an AbortController polyfill.
+      targets: ['> 0.2% and supports abortcontroller', 'not dead', 'not IE 11'],
+      modernPolyfills: legacyUrlPolyfills,
+      additionalLegacyPolyfills: legacyUrlPolyfillImports
     }
   },
 
@@ -443,7 +460,15 @@ export default defineNuxtConfig({
         // Fix: enable fluid player fullscreen eval
         // @see https://nuxt-security.vercel.app/documentation/advanced/faq#cloudflare
         // @see https://nuxt-security.vercel.app/documentation/getting-started/configuration#defaults
-        'script-src': ["'self'", 'https:', "'unsafe-inline'", "'strict-dynamic'", "'nonce-{{nonce}}'", "'unsafe-eval'"],
+        'script-src': [
+          "'self'",
+          'https:',
+          "'unsafe-inline'",
+          "'strict-dynamic'",
+          "'nonce-{{nonce}}'",
+          "'unsafe-eval'",
+          ...legacyCspHashSources
+        ],
 
         // Fix: enable inline execution
         'script-src-attr': ["'unsafe-inline'"],

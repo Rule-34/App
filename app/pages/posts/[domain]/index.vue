@@ -1173,7 +1173,7 @@
           >
             <li
               v-for="virtualRow in virtualRows"
-              :key="virtualRow.key"
+              :key="String(virtualRow.key)"
               :ref="measureElement"
               :data-index="virtualRow.index"
               :data-testid="
