@@ -96,6 +96,9 @@
     "verifyNotBot": "Verificar que não sou um bot",
     "noBlockedTagsToExport": "Nenhuma tag bloqueada para exportar",
     "blockListExported": "Blocklist exportada",
+    "cloudSyncFailed": "Falha ao sincronizar dados na nuvem: {error}",
+    "cloudDataDeleted": "Dados na nuvem excluídos com sucesso",
+    "accountDeletionCancelled": "Exclusão da conta cancelada",
     "tagAddedToBlocklistDescription": "Para ver o efeito, recarregue o site ou faça uma nova busca",
     "emailSentDescription": "Se o seu e-mail existir, você receberá uma mensagem com sua licença atual. Se não receber, verifique a pasta de spam",
     "postSourceDescription": "Ir para a fonte (artista), se existir, ou encontrá-la com busca reversa de imagem",
@@ -197,7 +200,14 @@
         "feedbackTitle": "Feedback",
         "feedbackText": "Tem uma sugestão ou encontrou um bug? Me avise! Seu feedback ajuda a melhorar o app para todo mundo.",
         "contactSupport": "Falar com o suporte",
-        "manageSubscription": "Gerenciar assinatura"
+        "manageSubscription": "Gerenciar assinatura",
+        "dataAccountTitle": "Dados e conta",
+        "dataAccountDescription": "Exclua seus dados Premium sincronizados ou remova permanentemente esta conta do app.",
+        "deleteCloudData": "Excluir dados na nuvem",
+        "deleteCloudDataConfirm": "Excluir da nuvem posts salvos, coleções de tags sincronizadas, Boorus personalizados e dados da blocklist personalizada?",
+        "deleteAccount": "Excluir conta",
+        "deleteAccountConfirm": "Isso exclui permanentemente sua conta do app e seus dados na nuvem. Digite \"{value}\" para confirmar.",
+        "deleteAccountBillingNote": "Excluir esta conta não cancela assinaturas gerenciadas por plataformas de pagamento externas."
       },
       "backupPage": {
         "seoTitle": "Backup",

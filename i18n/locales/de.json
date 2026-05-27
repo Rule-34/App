@@ -96,6 +96,9 @@
     "verifyNotBot": "Bestätige, dass ich kein Bot bin",
     "noBlockedTagsToExport": "Keine blockierten Tags zum Exportieren",
     "blockListExported": "Blockliste exportiert",
+    "cloudSyncFailed": "Cloud-Daten konnten nicht synchronisiert werden: {error}",
+    "cloudDataDeleted": "Cloud-Daten erfolgreich gelöscht",
+    "accountDeletionCancelled": "Kontolöschung abgebrochen",
     "tagAddedToBlocklistDescription": "Um die Änderung zu sehen, lade die Website neu oder starte eine neue Suche",
     "emailSentDescription": "Falls deine E-Mail existiert, erhältst du eine E-Mail mit deiner aktuellen Lizenz. Wenn keine E-Mail kommt, prüfe deinen Spam-Ordner",
     "postSourceDescription": "Zur Quelle (Künstler) gehen, falls vorhanden, oder per Rückwärtssuche finden",
@@ -197,7 +200,14 @@
         "feedbackTitle": "Feedback",
         "feedbackText": "Du hast einen Vorschlag oder einen Bug gefunden? Sag mir Bescheid! Dein Feedback hilft, die App für alle besser zu machen.",
         "contactSupport": "Support kontaktieren",
-        "manageSubscription": "Abo verwalten"
+        "manageSubscription": "Abo verwalten",
+        "dataAccountTitle": "Daten & Konto",
+        "dataAccountDescription": "Lösche deine synchronisierten Premium-Daten oder entferne dieses App-Konto dauerhaft.",
+        "deleteCloudData": "Cloud-Daten löschen",
+        "deleteCloudDataConfirm": "Gespeicherte Beiträge, synchronisierte Tag-Sammlungen, benutzerdefinierte Boorus und die benutzerdefinierte Blockliste aus der Cloud löschen?",
+        "deleteAccount": "Konto löschen",
+        "deleteAccountConfirm": "Dadurch werden dein App-Konto und deine Cloud-Daten dauerhaft gelöscht. Gib \"{value}\" zur Bestätigung ein.",
+        "deleteAccountBillingNote": "Das Löschen dieses Kontos kündigt keine Abos, die über externe Zahlungsplattformen verwaltet werden."
       },
       "backupPage": {
         "seoTitle": "Backup",

@@ -10,7 +10,12 @@
   const { t } = useI18n()
   const { toast } = useLazyToast()
   const localePath = useLocalePath()
-  const { userBooruList, resetUserBooruList } = useBooruList()
+  const { userBooruList } = useBooruList()
+  const { initializeInBackground, setUserBooruList, resetUserBooruListCloud } = usePremiumCloudSync()
+
+  onNuxtReady(() => {
+    void initializeInBackground()
+  })
 
   const sortableElement = shallowRef<HTMLElement | null>(null)
 
@@ -30,9 +35,9 @@
         return
       }
 
-      nextTick(() => {
-        moveArrayElement(userBooruList.value, oldIndex, newIndex)
-      })
+      const nextBooruList = [...userBooruList.value]
+      moveArrayElement(nextBooruList, oldIndex, newIndex)
+      void setUserBooruList(nextBooruList)
     }
   })
 
@@ -77,12 +82,12 @@
     type: undefined
   })
 
-  function resetUserBooruListToDefault() {
+  async function resetUserBooruListToDefault() {
     if (!confirm(t('common.confirmResetBoorus'))) {
       return
     }
 
-    resetUserBooruList()
+    await resetUserBooruListCloud()
   }
 
   function openCreateBooruDialog() {
@@ -111,15 +116,15 @@
     dialogOpen.value = true
   }
 
-  function onFormSubmit() {
+  async function onFormSubmit() {
     if (dialogMode.value === 'create') {
-      createBooru()
+      await createBooru()
     } else {
-      editBooru()
+      await editBooru()
     }
   }
 
-  function createBooru() {
+  async function createBooru() {
     // Validations
     if (!currentBooru.value.domain || !currentBooru.value.type) {
       toast.error(t('toasts.fillOutAllFields'))
@@ -141,20 +146,25 @@
     }
 
     // TODO: Validate with Domain object
-    userBooruList.value.push({
-      domain: currentBooru.value.domain,
-      type: booruType,
+    const nextBooruList = [
+      ...userBooruList.value,
+      {
+        domain: currentBooru.value.domain,
+        type: booruType,
 
-      config: null,
+        config: null,
 
-      isPremium: true,
-      isCustom: true
-    })
+        isPremium: true,
+        isCustom: true
+      }
+    ]
 
-    dialogOpen.value = false
+    if (await setUserBooruList(nextBooruList)) {
+      dialogOpen.value = false
+    }
   }
 
-  function editBooru() {
+  async function editBooru() {
     // Validations
     if (!currentBooru.value.domain || !currentBooru.value.type) {
       toast.error(t('toasts.fillOutAllFields'))
@@ -168,8 +178,10 @@
       return
     }
 
+    const nextBooruList = [...userBooruList.value]
+
     // TODO: Validate with Domain object
-    userBooruList.value[dialogEditIndex.value!] = {
+    nextBooruList[dialogEditIndex.value!] = {
       domain: currentBooru.value.domain,
       type: booruType,
 
@@ -179,13 +191,17 @@
       isCustom: true
     }
 
-    dialogOpen.value = false
+    if (await setUserBooruList(nextBooruList)) {
+      dialogOpen.value = false
+    }
   }
 
-  function deleteBooru() {
-    userBooruList.value.splice(dialogEditIndex.value!, 1)
+  async function deleteBooru() {
+    const nextBooruList = userBooruList.value.filter((_, index) => index !== dialogEditIndex.value)
 
-    dialogOpen.value = false
+    if (await setUserBooruList(nextBooruList)) {
+      dialogOpen.value = false
+    }
   }
 
   useSeoMeta({

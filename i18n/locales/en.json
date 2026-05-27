@@ -96,6 +96,9 @@
     "verifyNotBot": "Verify I am not a Bot",
     "noBlockedTagsToExport": "No blocked tags to export",
     "blockListExported": "Block list exported",
+    "cloudSyncFailed": "Failed to sync cloud data: {error}",
+    "cloudDataDeleted": "Cloud data deleted successfully",
+    "accountDeletionCancelled": "Account deletion cancelled",
     "tagAddedToBlocklistDescription": "To see the effect, reload the website or make a new search",
     "emailSentDescription": "If your email exists, you will receive an email with your current license. If you do not receive an email, check your spam folder",
     "postSourceDescription": "Go to the source (artist) if it exists, or find it with reverse image search",
@@ -197,7 +200,14 @@
         "feedbackTitle": "Feedback",
         "feedbackText": "Have a suggestion or found a bug? Let me know! Your feedback helps improve the app for everyone.",
         "contactSupport": "Contact Support",
-        "manageSubscription": "Manage Subscription"
+        "manageSubscription": "Manage Subscription",
+        "dataAccountTitle": "Data & account",
+        "dataAccountDescription": "Delete your synced Premium data or permanently remove this app account.",
+        "deleteCloudData": "Delete cloud data",
+        "deleteCloudDataConfirm": "Delete saved posts, synced tag collections, custom boorus, and custom blocklist data from the cloud?",
+        "deleteAccount": "Delete account",
+        "deleteAccountConfirm": "This permanently deletes your app account and cloud data. Type \"{value}\" to confirm.",
+        "deleteAccountBillingNote": "Deleting this account does not cancel subscriptions managed by external payment platforms."
       },
       "backupPage": {
         "seoTitle": "Backup",

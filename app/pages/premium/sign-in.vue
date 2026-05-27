@@ -32,10 +32,7 @@
       return
     }
 
-    await navigateTo({
-      path: localePath('/premium/dashboard'),
-      query: { initialLogin: 'true' }
-    })
+    window.location.href = localePath({ path: '/premium/dashboard', query: { initialLogin: 'true' } })
   }
 
   onNuxtReady(() => {

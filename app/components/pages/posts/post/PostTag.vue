@@ -26,6 +26,7 @@
 
   const { isPremium } = useUserData()
   const { customBlockList, selectedList } = useBlockLists()
+  const { setCustomBlockList } = usePremiumCloudSync()
   const { copy } = useClipboard()
   const { t } = useI18n()
   const { toast } = useLazyToast()
@@ -61,14 +62,15 @@
     }
 
     if (isTagBlocked(tag)) {
-      customBlockList.value = customBlockList.value.filter((blockedTag) => blockedTag !== tag.name)
+      await setCustomBlockList(customBlockList.value.filter((blockedTag) => blockedTag !== tag.name))
     } else {
-      customBlockList.value = [...customBlockList.value, tag.name]
+      const saved = await setCustomBlockList([...customBlockList.value, tag.name])
 
-      // Automatically enable custom blocklist when adding a tag
-      if (selectedList.value !== blockListOptions.Custom) {
-        selectedList.value = blockListOptions.Custom
+      if (!saved) {
+        return
       }
+
+      selectedList.value = blockListOptions.Custom
 
       toast.info(t('toasts.tagAddedToBlocklist'), {
         description: t('toasts.tagAddedToBlocklistDescription'),

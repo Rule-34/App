@@ -96,6 +96,9 @@
     "verifyNotBot": "Vérifier que je ne suis pas un bot",
     "noBlockedTagsToExport": "Aucun tag bloqué à exporter",
     "blockListExported": "Blocklist exportée",
+    "cloudSyncFailed": "Échec de la synchronisation des données cloud : {error}",
+    "cloudDataDeleted": "Données cloud supprimées avec succès",
+    "accountDeletionCancelled": "Suppression du compte annulée",
     "tagAddedToBlocklistDescription": "Pour voir l'effet, recharge le site ou fais une nouvelle recherche",
     "emailSentDescription": "Si ton e-mail existe, tu recevras un e-mail avec ta licence actuelle. Si tu ne reçois rien, vérifie ton dossier spam",
     "postSourceDescription": "Va à la source (artiste) si elle existe, ou trouve-la avec la recherche d'image inversée",
@@ -197,7 +200,14 @@
         "feedbackTitle": "Feedback",
         "feedbackText": "Une suggestion ou un bug ? Dis-le-moi ! Ton feedback aide à améliorer l'app pour tout le monde.",
         "contactSupport": "Contacter le support",
-        "manageSubscription": "Gérer l'abonnement"
+        "manageSubscription": "Gérer l'abonnement",
+        "dataAccountTitle": "Données et compte",
+        "dataAccountDescription": "Supprime tes données Premium synchronisées ou retire définitivement ce compte de l'app.",
+        "deleteCloudData": "Supprimer les données cloud",
+        "deleteCloudDataConfirm": "Supprimer du cloud les posts enregistrés, les collections de tags synchronisées, les Boorus personnalisés et la blocklist personnalisée ?",
+        "deleteAccount": "Supprimer le compte",
+        "deleteAccountConfirm": "Cette action supprime définitivement ton compte dans l'app et tes données cloud. Saisis \"{value}\" pour confirmer.",
+        "deleteAccountBillingNote": "La suppression de ce compte n'annule pas les abonnements gérés par des plateformes de paiement externes."
       },
       "backupPage": {
         "seoTitle": "Sauvegarde",

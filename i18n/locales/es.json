@@ -96,6 +96,9 @@
     "verifyNotBot": "Verificar que no soy un bot",
     "noBlockedTagsToExport": "No hay etiquetas bloqueadas para exportar",
     "blockListExported": "Lista de bloqueo exportada",
+    "cloudSyncFailed": "Error al sincronizar los datos en la nube: {error}",
+    "cloudDataDeleted": "Datos en la nube eliminados correctamente",
+    "accountDeletionCancelled": "Eliminación de cuenta cancelada",
     "tagAddedToBlocklistDescription": "Para ver el efecto, recarga el sitio o realiza una nueva búsqueda",
     "emailSentDescription": "Si tu correo electrónico existe, recibirás un correo con tu licencia actual. Si no recibes el correo, revisa tu carpeta de spam",
     "postSourceDescription": "Ve a la fuente (artista) si existe, o búscala con búsqueda inversa de imágenes",
@@ -197,7 +200,14 @@
         "feedbackTitle": "Comentarios",
         "feedbackText": "¿Tienes una sugerencia o encontraste un error? ¡Avísame! Tus comentarios ayudan a mejorar la app para todos.",
         "contactSupport": "Contactar soporte",
-        "manageSubscription": "Gestionar suscripción"
+        "manageSubscription": "Gestionar suscripción",
+        "dataAccountTitle": "Datos y cuenta",
+        "dataAccountDescription": "Elimina tus datos Premium sincronizados o borra permanentemente esta cuenta de la app.",
+        "deleteCloudData": "Borrar datos en la nube",
+        "deleteCloudDataConfirm": "¿Borrar de la nube las publicaciones guardadas, colecciones de etiquetas sincronizadas, Boorus personalizados y la lista de bloqueo personalizada?",
+        "deleteAccount": "Borrar cuenta",
+        "deleteAccountConfirm": "Esto borra permanentemente tu cuenta de la app y tus datos en la nube. Escribe \"{value}\" para confirmar.",
+        "deleteAccountBillingNote": "Borrar esta cuenta no cancela las suscripciones gestionadas por plataformas de pago externas."
       },
       "backupPage": {
         "seoTitle": "Copia de seguridad",

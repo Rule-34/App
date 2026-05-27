@@ -7,6 +7,7 @@
     ExclamationTriangleIcon,
     GlobeAltIcon,
     HeartIcon,
+    TrashIcon,
     TagIcon
   } from '@heroicons/vue/24/solid'
   import type { Platform } from '~/types/enums/Platform'
@@ -20,6 +21,7 @@
   const { toast } = useLazyToast()
 
   const { email, license, isPremium } = useUserData()
+  const { deleteCloudData, deleteAccount } = usePremiumCloudSync()
 
   const discordOauthUrl = computed(() => {
     const { clientId, redirectUri } = project.discordOauth
@@ -94,6 +96,36 @@
     window.open(PLATFORM_URLS[platformOfPurchase.value], '_blank', 'noopener,noreferrer')
 
     getMatomoQueue()?.push(['trackEvent', 'Premium', 'Click "Manage subscription"', platformOfPurchase.value])
+  }
+
+  async function onDeleteCloudDataClick() {
+    if (!confirm(t('pages.premium.dashboard.deleteCloudDataConfirm'))) {
+      return
+    }
+
+    if (await deleteCloudData()) {
+      toast.success(t('toasts.cloudDataDeleted'))
+      window.location.reload()
+    }
+  }
+
+  async function onDeleteAccountClick() {
+    const confirmationValue = email.value || license.value
+
+    if (!confirmationValue) {
+      return
+    }
+
+    const confirmedValue = prompt(t('pages.premium.dashboard.deleteAccountConfirm', { value: confirmationValue }))
+
+    if (confirmedValue !== confirmationValue) {
+      toast.error(t('toasts.accountDeletionCancelled'))
+      return
+    }
+
+    if (await deleteAccount()) {
+      window.location.href = localePath('/premium')
+    }
   }
 
   onNuxtReady(() => {
@@ -314,6 +346,49 @@
         >
           <span class="text-sm font-medium">{{ $t('pages.premium.dashboard.manageSubscription') }}</span>
         </button>
+      </div>
+    </section>
+
+    <!-- Data & Account -->
+    <section class="mt-4 mb-8 border-t border-base-0/10 pt-6">
+      <div class="rounded-md border border-red-400/30 p-4">
+        <div class="mb-4 flex items-center gap-2">
+          <ExclamationTriangleIcon
+            aria-hidden="true"
+            class="h-6 w-6 text-red-400"
+          />
+          <h2 class="text-lg font-bold tracking-tight text-base-content-highlight">
+            {{ $t('pages.premium.dashboard.dataAccountTitle') }}
+          </h2>
+        </div>
+
+        <p class="text-sm text-base-content">
+          {{ $t('pages.premium.dashboard.dataAccountDescription') }}
+        </p>
+
+        <div class="mt-4 flex flex-col gap-3 sm:flex-row">
+          <button
+            class="inline-flex items-center justify-center gap-2 rounded-md border border-red-400/30 px-4 py-2 text-sm font-medium text-red-300 transition-all duration-200 hover:bg-red-400/10 focus-visible:focus-outline-util"
+            type="button"
+            @click="onDeleteCloudDataClick"
+          >
+            <TrashIcon class="h-5 w-5" />
+            {{ $t('pages.premium.dashboard.deleteCloudData') }}
+          </button>
+
+          <button
+            class="inline-flex items-center justify-center gap-2 rounded-md border border-red-400/50 bg-red-400/10 px-4 py-2 text-sm font-medium text-red-200 transition-all duration-200 hover:bg-red-400/20 focus-visible:focus-outline-util"
+            type="button"
+            @click="onDeleteAccountClick"
+          >
+            <TrashIcon class="h-5 w-5" />
+            {{ $t('pages.premium.dashboard.deleteAccount') }}
+          </button>
+        </div>
+
+        <p class="mt-3 text-xs text-base-content">
+          {{ $t('pages.premium.dashboard.deleteAccountBillingNote') }}
+        </p>
       </div>
     </section>
   </main>
