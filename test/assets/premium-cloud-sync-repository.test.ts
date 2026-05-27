@@ -56,7 +56,12 @@ describe('PremiumCloudSyncRepository', () => {
 
     const state = await repository.loadCriticalState()
 
-    expect(state.shouldSubscribe).toBe(false)
+    expect(state).toEqual({
+      tagCollections: [],
+      boorus: [],
+      blockList: [],
+      shouldSubscribe: false
+    })
     expect(calls.map((call) => call.method)).toEqual(['getFullList', 'getFullList', 'getFullList'])
   })
 

@@ -10,11 +10,7 @@
   const { toast } = useLazyToast()
   const localePath = useLocalePath()
   const { tagCollections } = useTagCollections()
-  const { initializeInBackground, setTagCollections, resetTagCollectionsCloud } = usePremiumCloudSync()
-
-  onNuxtReady(() => {
-    void initializeInBackground()
-  })
+  const { setTagCollections, resetTagCollectionsCloud } = usePremiumCloudSync()
 
   const sortableElement = shallowRef<HTMLElement | null>(null)
 

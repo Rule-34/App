@@ -3,65 +3,21 @@ import {
   booruPayloadsFromState,
   cloudDataCollectionNames,
   customBlockListPayloadFromState,
-  resolveCloudRefreshFeatureState,
-  resolveInitialFeatureState,
   tagCollectionPayloadsFromState,
   tagCollectionsFromCloudRecords
 } from '../../app/assets/js/PremiumCloudSync'
 
 describe('Premium cloud sync policy', () => {
-  it('keeps local state and skips subscriptions when cloud is empty', () => {
-    const localState = [{ name: 'Animated', tags: ['animated'] }]
-
-    const result = resolveInitialFeatureState([], localState, () => [{ name: 'Cloud', tags: ['cloud'] }])
-
-    expect(result).toEqual({
-      source: 'local',
-      state: localState,
-      shouldSubscribe: false
-    })
-  })
-
-  it('uses cloud state and enables subscriptions when cloud records exist', () => {
-    const result = resolveInitialFeatureState(
-      [
+  it('sorts tag collection records from cloud by position', () => {
+    expect(
+      tagCollectionsFromCloudRecords([
         { id: 'second', user_id: 'user', name: 'Second', tags: ['two'], position: 2 },
         { id: 'first', user_id: 'user', name: 'First', tags: ['one'], position: 1 }
-      ],
-      [{ name: 'Local', tags: ['local'] }],
-      tagCollectionsFromCloudRecords
-    )
-
-    expect(result).toEqual({
-      source: 'cloud',
-      state: [
-        { name: 'First', tags: ['one'] },
-        { name: 'Second', tags: ['two'] }
-      ],
-      shouldSubscribe: true
-    })
-  })
-
-  it('applies an empty refresh only after that feature was previously cloud-backed', () => {
-    expect(
-      resolveCloudRefreshFeatureState({ source: 'local', state: [], shouldSubscribe: false }, true, [
-        { name: 'Local default', tags: ['local'] }
       ])
-    ).toEqual({
-      shouldApply: true,
-      cloudBacked: false,
-      state: [{ name: 'Local default', tags: ['local'] }]
-    })
-
-    expect(
-      resolveCloudRefreshFeatureState({ source: 'local', state: [], shouldSubscribe: false }, false, [
-        { name: 'Local default', tags: ['local'] }
-      ])
-    ).toEqual({
-      shouldApply: false,
-      cloudBacked: false,
-      state: [{ name: 'Local default', tags: ['local'] }]
-    })
+    ).toEqual([
+      { name: 'First', tags: ['one'] },
+      { name: 'Second', tags: ['two'] }
+    ])
   })
 })
 

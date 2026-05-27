@@ -14,12 +14,6 @@ export const cloudDataCollectionNames = [
   premiumCloudCollections.blocklists
 ] as const
 
-export type InitialFeatureState<TState> = {
-  source: 'local' | 'cloud'
-  state: TState
-  shouldSubscribe: boolean
-}
-
 export type PremiumTagCollectionRecord = {
   id: string
   user_id: string
@@ -64,16 +58,10 @@ export type PremiumBlockListPayload = {
 }
 
 export type PremiumCriticalCloudState = {
-  tagCollections: InitialFeatureState<ITagCollection[]>
-  boorus: InitialFeatureState<PremiumBooruRecord[]>
-  blockList: InitialFeatureState<PremiumBlockListRecord[]>
+  tagCollections: ITagCollection[]
+  boorus: PremiumBooruRecord[]
+  blockList: PremiumBlockListRecord[]
   shouldSubscribe: boolean
-}
-
-export type CloudRefreshFeatureState<TState> = {
-  shouldApply: boolean
-  cloudBacked: boolean
-  state: TState
 }
 
 type PremiumCloudCollectionClient = {
@@ -106,15 +94,11 @@ export class PremiumCloudSyncRepository {
       this.listBlockLists()
     ])
 
-    const tagCollections = resolveInitialFeatureState(tagCollectionRecords, [], tagCollectionsFromCloudRecords)
-    const boorus = resolveInitialFeatureState(booruRecords, [], (records) => [...records])
-    const blockList = resolveInitialFeatureState(blockListRecords, [], (records) => [...records])
-
     return {
-      tagCollections,
-      boorus,
-      blockList,
-      shouldSubscribe: tagCollections.shouldSubscribe || boorus.shouldSubscribe || blockList.shouldSubscribe
+      tagCollections: tagCollectionsFromCloudRecords(tagCollectionRecords),
+      boorus: [...booruRecords],
+      blockList: [...blockListRecords],
+      shouldSubscribe: Boolean(tagCollectionRecords.length || booruRecords.length || blockListRecords.length)
     }
   }
 
@@ -158,10 +142,6 @@ export class PremiumCloudSyncRepository {
 
   async clearBoorus() {
     await this.deleteCollectionRecords(premiumCloudCollections.boorus)
-  }
-
-  async clearBlockList() {
-    await this.deleteCollectionRecords(premiumCloudCollections.blocklists)
   }
 
   async deleteAccount() {
@@ -271,46 +251,6 @@ export class PremiumCloudSyncRepository {
     for (const record of records) {
       await collection.delete(record.id)
     }
-  }
-}
-
-export function resolveInitialFeatureState<TRecord, TState>(
-  cloudRecords: readonly TRecord[],
-  localState: TState,
-  fromCloudRecords: (records: readonly TRecord[]) => TState
-): InitialFeatureState<TState> {
-  if (!cloudRecords.length) {
-    return {
-      source: 'local',
-      state: localState,
-      shouldSubscribe: false
-    }
-  }
-
-  return {
-    source: 'cloud',
-    state: fromCloudRecords(cloudRecords),
-    shouldSubscribe: true
-  }
-}
-
-export function resolveCloudRefreshFeatureState<TState>(
-  featureState: InitialFeatureState<TState>,
-  wasCloudBacked: boolean,
-  clearedState: TState
-): CloudRefreshFeatureState<TState> {
-  if (featureState.source === 'cloud') {
-    return {
-      shouldApply: true,
-      cloudBacked: true,
-      state: featureState.state
-    }
-  }
-
-  return {
-    shouldApply: wasCloudBacked,
-    cloudBacked: false,
-    state: clearedState
   }
 }
 

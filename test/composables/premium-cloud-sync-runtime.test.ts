@@ -39,10 +39,13 @@ describe('premium cloud sync runtime', () => {
 
     for (const helper of writeHelpers) {
       const body = functionBody(source, helper)
-      const beforeFirstTry = body.slice(0, body.indexOf('try {'))
+      const failureHandler = body.indexOf('withCloudSyncFailureToast')
 
-      expect(beforeFirstTry).not.toContain('canWriteToCloud()')
+      expect(failureHandler).toBeGreaterThanOrEqual(0)
+      expect(body.indexOf('canWriteToCloud()')).toBeGreaterThan(failureHandler)
     }
+
+    expect(functionBody(source, 'withCloudSyncFailureToast')).toContain('} catch (error) {')
   })
 
   it('updates reorderable local lists before awaiting cloud persistence', () => {
@@ -71,19 +74,18 @@ describe('premium cloud sync runtime', () => {
     }
   })
 
-  it('uses a non-throwing initializer for fire-and-forget startup calls', () => {
-    const sourcePaths = [
-      'plugins/050.premium-cloud-sync.client.ts',
-      'pages/premium/tag-collections.vue',
-      'pages/premium/additional-boorus.vue',
-      'pages/settings.vue'
-    ]
+  it('keeps fire-and-forget startup initialization in the client plugin only', () => {
+    const pluginSource = readAppFile('plugins/050.premium-cloud-sync.client.ts')
+    const pagePaths = ['pages/premium/tag-collections.vue', 'pages/premium/additional-boorus.vue', 'pages/settings.vue']
 
-    for (const path of sourcePaths) {
+    expect(pluginSource).not.toContain('void initialize()')
+    expect(pluginSource).toContain('void initializeInBackground()')
+
+    for (const path of pagePaths) {
       const source = readAppFile(path)
 
       expect(source).not.toContain('void initialize()')
-      expect(source).toContain('void initializeInBackground()')
+      expect(source).not.toContain('initializeInBackground')
     }
 
     expect(functionBody(readAppFile('composables/usePremiumCloudSync.ts'), 'initializeInBackground')).toContain(

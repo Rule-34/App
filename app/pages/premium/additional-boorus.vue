@@ -11,11 +11,7 @@
   const { toast } = useLazyToast()
   const localePath = useLocalePath()
   const { userBooruList } = useBooruList()
-  const { initializeInBackground, setUserBooruList, resetUserBooruListCloud } = usePremiumCloudSync()
-
-  onNuxtReady(() => {
-    void initializeInBackground()
-  })
+  const { setUserBooruList, resetUserBooruListCloud } = usePremiumCloudSync()
 
   const sortableElement = shallowRef<HTMLElement | null>(null)
 

@@ -43,11 +43,7 @@
   const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia, blockAiGeneratedImages } = useUserSettings()
   const { isPremium } = useUserData()
   const { selectedList, selectedBlockList, defaultBlockList, customBlockList } = useBlockLists()
-  const { initializeInBackground, setCustomBlockList } = usePremiumCloudSync()
-
-  onNuxtReady(() => {
-    void initializeInBackground()
-  })
+  const { setCustomBlockList } = usePremiumCloudSync()
 
   const blockListOptionsList = computed(() => [
     { value: blockListOptions.Default, label: t('pages.settings.blockListDefault') },
