@@ -6,13 +6,13 @@ function readAppFile(path: string) {
 }
 
 function functionBody(source: string, name: string) {
-  const start = source.indexOf(`async function ${name}`)
+  const start = source.search(new RegExp(`(?:async )?function ${name}\\b`))
 
   expect(start).toBeGreaterThanOrEqual(0)
 
-  const nextFunction = source.indexOf('\n  async function ', start + 1)
+  const nextFunction = source.slice(start + 1).search(/\n {2}(?:async )?function /)
 
-  return source.slice(start, nextFunction === -1 ? undefined : nextFunction)
+  return source.slice(start, nextFunction === -1 ? undefined : start + 1 + nextFunction)
 }
 
 describe('premium cloud sync runtime', () => {
@@ -91,5 +91,38 @@ describe('premium cloud sync runtime', () => {
     expect(functionBody(readAppFile('composables/usePremiumCloudSync.ts'), 'initializeInBackground')).toContain(
       '} catch (error) {'
     )
+  })
+
+  it('subscribes after initialization even when the first cloud snapshot is empty', () => {
+    const source = readAppFile('composables/usePremiumCloudSync.ts')
+    const initializeSyncBody = functionBody(source, 'initializeSync')
+
+    expect(source).not.toContain('shouldSubscribe')
+    expect(initializeSyncBody).toContain('await tryEnsureRealtimeSubscription()')
+  })
+
+  it('does not fail cloud writes when realtime subscription setup fails', () => {
+    const source = readAppFile('composables/usePremiumCloudSync.ts')
+    const subscriptionBody = functionBody(source, 'tryEnsureRealtimeSubscription')
+
+    expect(subscriptionBody).toContain('} catch (error) {')
+
+    for (const helper of ['setTagCollections', 'setUserBooruList', 'setCustomBlockList']) {
+      const body = functionBody(source, helper)
+
+      expect(body).toContain('await tryEnsureRealtimeSubscription()')
+      expect(body).not.toContain('await ensureRealtimeSubscription()')
+    }
+  })
+
+  it('coalesces realtime cloud refresh bursts', () => {
+    const source = readAppFile('composables/usePremiumCloudSync.ts')
+    const queueBody = functionBody(source, 'queueRefreshFromCloud')
+    const subscriptionBody = functionBody(source, 'ensureRealtimeSubscription')
+
+    expect(subscriptionBody).toContain('subscribeToCriticalChanges(queueRefreshFromCloud)')
+    expect(subscriptionBody).not.toContain('subscribeToCriticalChanges(refreshFromCloud)')
+    expect(queueBody).toContain('setTimeout')
+    expect(queueBody).toContain('return')
   })
 })

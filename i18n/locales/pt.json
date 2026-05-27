@@ -86,7 +86,6 @@
     "emailSent": "E-mail enviado",
     "failedToSendEmail": "Falha ao enviar e-mail: {message}",
     "noFileSelected": "Nenhum arquivo selecionado",
-    "failedToRestoreBackup": "Falha ao restaurar backup: {error}",
     "invalidBooruType": "Tipo de Booru inválido",
     "booruAlreadyExists": "O Booru já existe",
     "cantFindPlatform": "Não foi possível encontrar a plataforma onde você comprou sua assinatura",
@@ -103,7 +102,6 @@
     "emailSentDescription": "Se o seu e-mail existir, você receberá uma mensagem com sua licença atual. Se não receber, verifique a pasta de spam",
     "postSourceDescription": "Ir para a fonte (artista), se existir, ou encontrá-la com busca reversa de imagem",
     "domainSwitcherDescription": "Troque entre sites Booru: cada um tem conteúdo único, encontre o que você mais gosta!",
-    "backupRestored": "Backup restaurado com sucesso!",
     "authFailed": "Falha ao autenticar. Faça login novamente."
   },
   "pages": {
@@ -163,7 +161,6 @@
     "premium": {
       "tagCollections": "Coleções de tags",
       "additionalBoorus": "Boorus adicionais",
-      "backup": "Backup",
       "addMoreBoorus": "Adicionar mais Boorus",
       "signIn": {
         "seoTitle": "Entrar",
@@ -193,8 +190,6 @@
         "tagCollectionsDescription": "Crie listas de tags para pesquisar ou filtrar posts rapidamente",
         "additionalBoorusName": "Boorus adicionais",
         "additionalBoorusDescription": "Navegue por posts de sites adicionais",
-        "backupName": "Backup e restauração",
-        "backupDescription": "Faça backup das suas coleções de tags e configurações",
         "discordRoleName": "Resgatar cargo no Discord",
         "discordRoleDescription": "Conecte o Discord para receber o cargo Premium",
         "feedbackTitle": "Feedback",
@@ -208,14 +203,6 @@
         "deleteAccount": "Excluir conta",
         "deleteAccountConfirm": "Isso exclui permanentemente sua conta do app e seus dados na nuvem. Digite \"{value}\" para confirmar.",
         "deleteAccountBillingNote": "Excluir esta conta não cancela assinaturas gerenciadas por plataformas de pagamento externas."
-      },
-      "backupPage": {
-        "seoTitle": "Backup",
-        "pageTitle": "Backup e restauração",
-        "pageDescription": "Faça backup das suas coleções de tags e configurações",
-        "manualNote": "Este é um processo manual. Lembre-se de fazer backup dos seus dados regularmente",
-        "backupButton": "Backup",
-        "restoreButton": "Restaurar"
       },
       "tagCollectionsPage": {
         "seoTitle": "Coleções de tags",
@@ -385,7 +372,6 @@
     "retry": "Tentar novamente",
     "mediaLoadError": "Erro ao carregar mídia",
     "tagInBlockList": "Uma das tags selecionadas está na blocklist",
-    "backupVersionNotSupported": "Versão de backup não suportada",
     "unauthorized": "Não autorizado, faça login para ver esta página"
   },
   "posts": {
@@ -510,7 +496,12 @@
       "cta": "Assinar Premium"
     }
   },
-  "time": { "days": "d", "hours": "h", "minutes": "m", "seconds": "s" },
+  "time": {
+    "days": "d",
+    "hours": "h",
+    "minutes": "m",
+    "seconds": "s"
+  },
   "news": {
     "feedbackWebsiteTitle": "Site de feedback",
     "feedbackWebsiteText": "Agora você pode votar, discutir e compartilhar ideias 💡 para melhorar o {name}",
@@ -545,5 +536,7 @@
     "howToFindH3": "Como encontrar os melhores vídeos hentai e gifs pornôs de {tags} em {domain}",
     "howToFindP": "Procurando as artes de paródia hentai e Rule 34 de {tags} com maior qualidade? Use nossas opções avançadas de busca e filtro para encontrar exatamente o que você quer. Ordene imagens adultas e vídeos XXX por classificação, data ou popularidade para encontrar os uploads mais novos e melhor avaliados. Nosso sistema completo de tags Rule 34 permite buscas precisas, garantindo que você encontre exatamente as ilustrações safadas, gifs pornôs e vídeos explícitos que procura, no momento em que são enviados para {domain} e outras fontes adultas populares."
   },
-  "seoHelper": { "without": "sem" }
+  "seoHelper": {
+    "without": "sem"
+  }
 }

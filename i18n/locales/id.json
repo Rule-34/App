@@ -86,7 +86,6 @@
     "emailSent": "Email terkirim",
     "failedToSendEmail": "Gagal mengirim email: {message}",
     "noFileSelected": "Tidak ada berkas yang dipilih",
-    "failedToRestoreBackup": "Gagal memulihkan cadangan: {error}",
     "invalidBooruType": "Jenis Booru tidak valid",
     "booruAlreadyExists": "Booru sudah ada",
     "cantFindPlatform": "Tidak dapat menemukan platform tempat Anda membeli langganan",
@@ -103,7 +102,6 @@
     "emailSentDescription": "Jika email Anda ada, Anda akan menerima email dengan lisensi Anda saat ini. Jika Anda tidak menerima email, periksa folder spam Anda",
     "postSourceDescription": "Kunjungi sumbernya (artis) jika ada, atau temukan dengan pencarian gambar terbalik",
     "domainSwitcherDescription": "Beralih di antara situs web Booru: masing-masing memiliki konten unik, temukan yang paling Anda sukai!",
-    "backupRestored": "Cadangan berhasil dipulihkan!",
     "authFailed": "Gagal mengautentikasi. Silakan masuk lagi."
   },
   "pages": {
@@ -163,7 +161,6 @@
     "premium": {
       "tagCollections": "Koleksi Tag",
       "additionalBoorus": "Tambahan Boorus",
-      "backup": "Cadangan",
       "addMoreBoorus": "Tambahkan lebih banyak Boorus",
       "signIn": {
         "seoTitle": "Masuk",
@@ -193,8 +190,6 @@
         "tagCollectionsDescription": "Buat daftar tag untuk mencari atau memfilter postingan dengan cepat",
         "additionalBoorusName": "Tambahan Boorus",
         "additionalBoorusDescription": "Jelajahi postingan dari situs web tambahan",
-        "backupName": "Cadangkan & Pulihkan",
-        "backupDescription": "Cadangkan koleksi dan pengaturan tag Anda",
         "discordRoleName": "Klaim peran Discord",
         "discordRoleDescription": "Hubungkan Discord untuk mendapatkan peran Premium",
         "feedbackTitle": "Umpan balik",
@@ -208,14 +203,6 @@
         "deleteAccount": "Hapus akun",
         "deleteAccountConfirm": "Tindakan ini akan menghapus akun aplikasi dan data cloud Anda secara permanen. Ketik \"{value}\" untuk mengonfirmasi.",
         "deleteAccountBillingNote": "Menghapus akun ini tidak membatalkan langganan yang dikelola oleh platform pembayaran eksternal."
-      },
-      "backupPage": {
-        "seoTitle": "Cadangan",
-        "pageTitle": "Cadangkan & Pulihkan",
-        "pageDescription": "Cadangkan koleksi dan pengaturan tag Anda",
-        "manualNote": "Ini adalah proses manual. Ingatlah untuk membuat cadangan data Anda secara teratur",
-        "backupButton": "Cadangan",
-        "restoreButton": "Pulihkan"
       },
       "tagCollectionsPage": {
         "seoTitle": "Koleksi tanda",
@@ -385,7 +372,6 @@
     "retry": "Coba lagi",
     "mediaLoadError": "Terjadi kesalahan saat memuat media",
     "tagInBlockList": "Salah satu tag pilihan Anda ada dalam daftar blokir",
-    "backupVersionNotSupported": "Versi cadangan tidak didukung",
     "unauthorized": "Tidak sah, silakan masuk untuk melihat halaman ini"
   },
   "posts": {

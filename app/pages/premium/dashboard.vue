@@ -1,6 +1,5 @@
 <script lang="ts" setup>
   import {
-    ArchiveBoxIcon,
     ArrowLeftOnRectangleIcon,
     BookmarkIcon,
     ChatBubbleBottomCenterTextIcon,
@@ -60,12 +59,6 @@
       description: t('pages.premium.dashboard.additionalBoorusDescription'),
       href: localePath('/premium/additional-boorus'),
       icon: GlobeAltIcon
-    },
-    {
-      name: t('pages.premium.dashboard.backupName'),
-      description: t('pages.premium.dashboard.backupDescription'),
-      href: localePath('/premium/backup'),
-      icon: ArchiveBoxIcon
     }
   ])
 
@@ -129,12 +122,6 @@
   }
 
   onNuxtReady(() => {
-    const route = useRoute()
-
-    if (route.query.restoreSuccess) {
-      toast.success(t('toasts.backupRestored'))
-    }
-
     // --- Event Tracking: user subscribed --- >
     if (!import.meta.client || !isInitialLogin.value) {
       return

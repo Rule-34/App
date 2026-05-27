@@ -86,7 +86,6 @@
     "emailSent": "E-posta gönderildi",
     "failedToSendEmail": "E-posta gönderilemedi: {message}",
     "noFileSelected": "Hiçbir dosya seçilmedi",
-    "failedToRestoreBackup": "Yedekleme geri yüklenemedi: {error}",
     "invalidBooruType": "Geçersiz Booru türü",
     "booruAlreadyExists": "Booru zaten mevcut",
     "cantFindPlatform": "Aboneliğinizi satın aldığınız platformu bulamıyorsunuz",
@@ -103,7 +102,6 @@
     "emailSentDescription": "E-posta adresiniz mevcutsa mevcut lisansınızı içeren bir e-posta alacaksınız. E-posta almazsanız spam klasörünüzü kontrol edin",
     "postSourceDescription": "Varsa kaynağa (sanatçıya) gidin veya tersine görsel aramayla bulun",
     "domainSwitcherDescription": "Booru web siteleri arasında geçiş yapın: her birinin benzersiz içeriği vardır, en çok beğendiğinizi bulun!",
-    "backupRestored": "Yedekleme başarıyla geri yüklendi!",
     "authFailed": "Kimlik doğrulaması başarısız oldu. Lütfen tekrar oturum açın."
   },
   "pages": {
@@ -163,7 +161,6 @@
     "premium": {
       "tagCollections": "Etiket Koleksiyonları",
       "additionalBoorus": "Ek Boorus",
-      "backup": "Yedekleme",
       "addMoreBoorus": "Daha fazlasını ekle Boorus",
       "signIn": {
         "seoTitle": "Oturum aç",
@@ -193,8 +190,6 @@
         "tagCollectionsDescription": "Gönderileri hızla aramak veya filtrelemek için etiket listeleri oluşturun",
         "additionalBoorusName": "Ek Boorus",
         "additionalBoorusDescription": "Ek web sitelerindeki yayınlara göz atın",
-        "backupName": "Yedekleme ve Geri Yükleme",
-        "backupDescription": "Etiket koleksiyonlarınızı ve ayarlarınızı yedekleyin",
         "discordRoleName": "Discord rolünü talep et",
         "discordRoleDescription": "Premium rolünü almak için Discord'u bağlayın",
         "feedbackTitle": "Geribildirim",
@@ -208,14 +203,6 @@
         "deleteAccount": "Hesabı sil",
         "deleteAccountConfirm": "Bu, uygulama hesabınızı ve bulut verilerinizi kalıcı olarak siler. Onaylamak için \"{value}\" yazın.",
         "deleteAccountBillingNote": "Bu hesabın silinmesi, harici ödeme platformları tarafından yönetilen aboneliklerin iptal edilmesine neden olmaz."
-      },
-      "backupPage": {
-        "seoTitle": "Yedekleme",
-        "pageTitle": "Yedekleme ve Geri Yükleme",
-        "pageDescription": "Etiket koleksiyonlarınızı ve ayarlarınızı yedekleyin",
-        "manualNote": "Bu manuel bir işlemdir. Verilerinizi düzenli aralıklarla yedeklemeyi unutmayın",
-        "backupButton": "Yedekleme",
-        "restoreButton": "Geri yükle"
       },
       "tagCollectionsPage": {
         "seoTitle": "Koleksiyonları etiketleyin",
@@ -385,7 +372,6 @@
     "retry": "Yeniden dene",
     "mediaLoadError": "Medya yüklenirken hata oluştu",
     "tagInBlockList": "Seçtiğiniz etiketlerden biri engellenenler listesinde",
-    "backupVersionNotSupported": "Yedekleme sürümü desteklenmiyor",
     "unauthorized": "Yetkisiz, lütfen bu sayfayı görüntülemek için oturum açın"
   },
   "posts": {

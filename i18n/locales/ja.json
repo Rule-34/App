@@ -86,7 +86,6 @@
     "emailSent": "メールを送信しました",
     "failedToSendEmail": "メールの送信に失敗しました：{message}",
     "noFileSelected": "ファイルが選択されていません",
-    "failedToRestoreBackup": "バックアップの復元に失敗しました：{error}",
     "invalidBooruType": "無効なBooruタイプです",
     "booruAlreadyExists": "このBooruはすでに追加されています",
     "cantFindPlatform": "ご購入いただいたプラットフォームを特定できません",
@@ -103,7 +102,6 @@
     "emailSentDescription": "メールアドレスが存在する場合、現在のライセンスが記載されたメールが届きます。メールが届かない場合は、スパムフォルダを確認してください",
     "postSourceDescription": "ソース（アーティスト）があればそちらへ、なければ逆画像検索で探してください",
     "domainSwitcherDescription": "Booruサイト間を切り替えましょう：それぞれユニークなコンテンツがあります。お気に入りを見つけてください！",
-    "backupRestored": "バックアップが正常に復元されました！",
     "authFailed": "認証に失敗しました。再度サインインしてください。"
   },
   "pages": {
@@ -163,7 +161,6 @@
     "premium": {
       "tagCollections": "タグコレクション",
       "additionalBoorus": "追加Booru",
-      "backup": "バックアップ",
       "addMoreBoorus": "Booruを追加",
       "signIn": {
         "seoTitle": "サインイン",
@@ -193,8 +190,6 @@
         "tagCollectionsDescription": "投稿をすばやく検索またはフィルタリングするためのタグリストを作成",
         "additionalBoorusName": "追加Booru",
         "additionalBoorusDescription": "追加ウェブサイトの投稿を閲覧",
-        "backupName": "バックアップと復元",
-        "backupDescription": "タグコレクションと設定をバックアップ",
         "discordRoleName": "Discordロールを取得",
         "discordRoleDescription": "DiscordでPremiumロールを取得するために接続",
         "feedbackTitle": "フィードバック",
@@ -208,14 +203,6 @@
         "deleteAccount": "アカウントを削除",
         "deleteAccountConfirm": "この操作により、アプリのアカウントとクラウドデータが完全に削除されます。確認するには「{value}」と入力してください。",
         "deleteAccountBillingNote": "このアカウントを削除しても、外部決済プラットフォームで管理されているサブスクリプションは解約されません。"
-      },
-      "backupPage": {
-        "seoTitle": "バックアップ",
-        "pageTitle": "バックアップと復元",
-        "pageDescription": "タグコレクションと設定をバックアップ",
-        "manualNote": "これは手動プロセスです。定期的にデータをバックアップすることをお忘れなく",
-        "backupButton": "バックアップ",
-        "restoreButton": "復元"
       },
       "tagCollectionsPage": {
         "seoTitle": "タグコレクション",
@@ -385,7 +372,6 @@
     "retry": "再試行",
     "mediaLoadError": "メディアの読み込みエラー",
     "tagInBlockList": "選択したタグのいずれかがブロックリストに含まれています",
-    "backupVersionNotSupported": "バックアップのバージョンがサポートされていません",
     "unauthorized": "未認証です。このページを閲覧するにはサインインしてください"
   },
   "posts": {

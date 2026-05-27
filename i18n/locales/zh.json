@@ -86,7 +86,6 @@
     "emailSent": "电子邮件已发送",
     "failedToSendEmail": "发送电子邮件失败：{message}",
     "noFileSelected": "未选择文件",
-    "failedToRestoreBackup": "无法恢复备份：{error}",
     "invalidBooruType": "Booru 类型无效",
     "booruAlreadyExists": "Booru 已经存在",
     "cantFindPlatform": "找不到您购买订阅的平台",
@@ -103,7 +102,6 @@
     "emailSentDescription": "如果您的电子邮件存在，您将收到一封包含您当前许可证的电子邮件。如果您没有收到电子邮件，请检查您的垃圾邮件文件夹",
     "postSourceDescription": "如果存在，请转到来源（艺术家），或通过反向图像搜索找到它",
     "domainSwitcherDescription": "在Booru网站之间切换：每个网站都有独特的内容，找到您最喜欢的！",
-    "backupRestored": "备份恢复成功！",
     "authFailed": "身份验证失败。请重新登录。"
   },
   "pages": {
@@ -163,7 +161,6 @@
     "premium": {
       "tagCollections": "标签集合",
       "additionalBoorus": "附加 Boorus",
-      "backup": "备份",
       "addMoreBoorus": "添加更多 Boorus",
       "signIn": {
         "seoTitle": "登录",
@@ -193,8 +190,6 @@
         "tagCollectionsDescription": "创建标签列表以快速搜索或过滤帖子",
         "additionalBoorusName": "附加 Boorus",
         "additionalBoorusDescription": "浏览其他网站的帖子",
-        "backupName": "备份与恢复",
-        "backupDescription": "备份您的标签集合和设置",
         "discordRoleName": "领取Discord角色",
         "discordRoleDescription": "连接 Discord 以获得高级角色",
         "feedbackTitle": "反馈意见",
@@ -208,14 +203,6 @@
         "deleteAccount": "删除账户",
         "deleteAccountConfirm": "这将永久删除您的应用帐户和云数据。输入“{value}”进行确认。",
         "deleteAccountBillingNote": "删除此帐户不会取消外部支付平台管理的订阅。"
-      },
-      "backupPage": {
-        "seoTitle": "备份",
-        "pageTitle": "备份与恢复",
-        "pageDescription": "备份您的标签集合和设置",
-        "manualNote": "这是一个手动过程。请记住定期备份您的数据",
-        "backupButton": "备份",
-        "restoreButton": "恢复"
       },
       "tagCollectionsPage": {
         "seoTitle": "标签集合",
@@ -385,7 +372,6 @@
     "retry": "重试",
     "mediaLoadError": "加载媒体时出错",
     "tagInBlockList": "您选择的标签之一位于阻止列表中",
-    "backupVersionNotSupported": "不支持备份版本",
     "unauthorized": "未经授权，请登录查看此页面"
   },
   "posts": {
@@ -511,10 +497,10 @@
     }
   },
   "time": {
-    "days": "d",
+    "days": "天",
     "hours": "小时",
-    "minutes": "米",
-    "seconds": "s"
+    "minutes": "分钟",
+    "seconds": "秒"
   },
   "news": {
     "feedbackWebsiteTitle": "反馈网站",

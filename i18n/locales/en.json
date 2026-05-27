@@ -86,7 +86,6 @@
     "emailSent": "Email sent",
     "failedToSendEmail": "Failed to send email: {message}",
     "noFileSelected": "No file selected",
-    "failedToRestoreBackup": "Failed to restore backup: {error}",
     "invalidBooruType": "Invalid Booru type",
     "booruAlreadyExists": "Booru already exists",
     "cantFindPlatform": "Can't find the platform where you purchased your subscription",
@@ -103,7 +102,6 @@
     "emailSentDescription": "If your email exists, you will receive an email with your current license. If you do not receive an email, check your spam folder",
     "postSourceDescription": "Go to the source (artist) if it exists, or find it with reverse image search",
     "domainSwitcherDescription": "Switch between Booru websites: each one has unique content, find the one you like the most!",
-    "backupRestored": "Backup restored successfully!",
     "authFailed": "Failed to authenticate. Please sign in again."
   },
   "pages": {
@@ -163,7 +161,6 @@
     "premium": {
       "tagCollections": "Tag Collections",
       "additionalBoorus": "Additional Boorus",
-      "backup": "Backup",
       "addMoreBoorus": "Add more Boorus",
       "signIn": {
         "seoTitle": "Sign in",
@@ -193,8 +190,6 @@
         "tagCollectionsDescription": "Create lists of tags to quickly search or filter posts",
         "additionalBoorusName": "Additional Boorus",
         "additionalBoorusDescription": "Browse posts from additional websites",
-        "backupName": "Backup & Restore",
-        "backupDescription": "Backup your tag collections and settings",
         "discordRoleName": "Claim Discord role",
         "discordRoleDescription": "Connect Discord to get the Premium role",
         "feedbackTitle": "Feedback",
@@ -208,14 +203,6 @@
         "deleteAccount": "Delete account",
         "deleteAccountConfirm": "This permanently deletes your app account and cloud data. Type \"{value}\" to confirm.",
         "deleteAccountBillingNote": "Deleting this account does not cancel subscriptions managed by external payment platforms."
-      },
-      "backupPage": {
-        "seoTitle": "Backup",
-        "pageTitle": "Backup & Restore",
-        "pageDescription": "Backup your tag collections and settings",
-        "manualNote": "This is a manual process. Remember to backup your data regularly",
-        "backupButton": "Backup",
-        "restoreButton": "Restore"
       },
       "tagCollectionsPage": {
         "seoTitle": "Tag collections",
@@ -385,7 +372,6 @@
     "retry": "Retry",
     "mediaLoadError": "Error loading media",
     "tagInBlockList": "One of your selected tags is in the block list",
-    "backupVersionNotSupported": "Backup version not supported",
     "unauthorized": "Unauthorized, please sign in to view this page"
   },
   "posts": {
@@ -510,7 +496,12 @@
       "cta": "Get Premium"
     }
   },
-  "time": { "days": "d", "hours": "h", "minutes": "m", "seconds": "s" },
+  "time": {
+    "days": "d",
+    "hours": "h",
+    "minutes": "m",
+    "seconds": "s"
+  },
   "news": {
     "feedbackWebsiteTitle": "Feedback website",
     "feedbackWebsiteText": "Now you can vote, discuss and share ideas 💡 to improve {name}",
@@ -545,5 +536,7 @@
     "howToFindH3": "How to find the best {tags} hentai videos and porn gifs on {domain}",
     "howToFindP": "Looking for the highest quality {tags} hentai and Rule 34 parody artwork? Use our advanced search and filtering options to discover exactly what you want. Sort adult images and XXX videos by rating, date, or popularity to find the newest and best-rated uploads. Our comprehensive Rule 34 tagging system allows for precise searches, ensuring you find exactly the lewd illustrations, porn gifs, and explicit videos you're looking for, the moment they're uploaded to {domain} and other popular adult sources."
   },
-  "seoHelper": { "without": "without" }
+  "seoHelper": {
+    "without": "without"
+  }
 }

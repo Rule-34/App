@@ -86,7 +86,6 @@
     "emailSent": "E-mail inviata",
     "failedToSendEmail": "Impossibile inviare l'e-mail: {message}",
     "noFileSelected": "Nessun file selezionato",
-    "failedToRestoreBackup": "Impossibile ripristinare il backup: {error}",
     "invalidBooruType": "Tipo Booru non valido",
     "booruAlreadyExists": "Booru esiste già",
     "cantFindPlatform": "Non riesco a trovare la piattaforma su cui hai acquistato l'abbonamento",
@@ -103,7 +102,6 @@
     "emailSentDescription": "Se la tua email esiste, riceverai un'email con la tua licenza attuale. Se non ricevi un'e-mail, controlla la cartella spam",
     "postSourceDescription": "Vai alla fonte (artista) se esiste o trovala con la ricerca inversa delle immagini",
     "domainSwitcherDescription": "Passa da un sito web Booru: ognuno ha contenuti unici, trova quello che ti piace di più!",
-    "backupRestored": "Backup ripristinato con successo!",
     "authFailed": "Impossibile autenticarsi. Per favore accedi di nuovo."
   },
   "pages": {
@@ -163,7 +161,6 @@
     "premium": {
       "tagCollections": "Collezioni di tag",
       "additionalBoorus": "Ulteriori Boorus",
-      "backup": "Backup",
       "addMoreBoorus": "Aggiungi altro Boorus",
       "signIn": {
         "seoTitle": "Accedi",
@@ -193,8 +190,6 @@
         "tagCollectionsDescription": "Crea elenchi di tag per cercare o filtrare rapidamente i post",
         "additionalBoorusName": "Ulteriori Boorus",
         "additionalBoorusDescription": "Sfoglia i post di altri siti web",
-        "backupName": "Backup e ripristino",
-        "backupDescription": "Esegui il backup delle raccolte e delle impostazioni dei tag",
         "discordRoleName": "Rivendica il ruolo Discord",
         "discordRoleDescription": "Connetti Discord per ottenere il ruolo Premium",
         "feedbackTitle": "Feedback",
@@ -208,14 +203,6 @@
         "deleteAccount": "Elimina account",
         "deleteAccountConfirm": "Questa operazione eliminerà definitivamente l'account dell'app e i dati cloud. Digita \"{value}\" per confermare.",
         "deleteAccountBillingNote": "L'eliminazione di questo account non annulla gli abbonamenti gestiti da piattaforme di pagamento esterne."
-      },
-      "backupPage": {
-        "seoTitle": "Backup",
-        "pageTitle": "Backup e ripristino",
-        "pageDescription": "Esegui il backup delle raccolte e delle impostazioni dei tag",
-        "manualNote": "Questo è un processo manuale. Ricordati di eseguire regolarmente il backup dei tuoi dati",
-        "backupButton": "Backup",
-        "restoreButton": "Ripristina"
       },
       "tagCollectionsPage": {
         "seoTitle": "Tagga le raccolte",
@@ -385,7 +372,6 @@
     "retry": "Riprova",
     "mediaLoadError": "Errore durante il caricamento del supporto",
     "tagInBlockList": "Uno dei tag selezionati è nell'elenco dei blocchi",
-    "backupVersionNotSupported": "Versione di backup non supportata",
     "unauthorized": "Non autorizzato, accedi per visualizzare questa pagina"
   },
   "posts": {

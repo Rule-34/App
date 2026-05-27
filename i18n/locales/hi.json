@@ -86,7 +86,6 @@
     "emailSent": "ईमेल भेजा गया",
     "failedToSendEmail": "ईमेल भेजने में विफल: {message}",
     "noFileSelected": "कोई फ़ाइल चयनित नहीं",
-    "failedToRestoreBackup": "बैकअप पुनर्स्थापित करने में विफल: {error}",
     "invalidBooruType": "अमान्य Booru प्रकार",
     "booruAlreadyExists": "Booru पहले से मौजूद है",
     "cantFindPlatform": "वह प्लेटफ़ॉर्म नहीं मिल रहा जहाँ आपने अपनी सदस्यता खरीदी थी",
@@ -103,7 +102,6 @@
     "emailSentDescription": "यदि आपका ईमेल मौजूद है, तो आपको अपने वर्तमान लाइसेंस के साथ एक ईमेल प्राप्त होगा। यदि आपको कोई ईमेल प्राप्त नहीं होता है, तो अपना स्पैम फ़ोल्डर जांचें",
     "postSourceDescription": "यदि वह मौजूद है तो स्रोत (कलाकार) पर जाएं, या रिवर्स इमेज सर्च से उसे ढूंढें",
     "domainSwitcherDescription": "Booru वेबसाइटों के बीच स्विच करें: प्रत्येक में अद्वितीय सामग्री है, जो आपको सबसे अधिक पसंद है उसे ढूंढें!",
-    "backupRestored": "बैकअप सफलतापूर्वक बहाल हो गया!",
     "authFailed": "प्रमाणित करने में विफल. कृपया पुनः साइन इन करें."
   },
   "pages": {
@@ -163,7 +161,6 @@
     "premium": {
       "tagCollections": "टैग संग्रह",
       "additionalBoorus": "अतिरिक्त Boorus",
-      "backup": "बैकअप",
       "addMoreBoorus": "और जोड़ें Boorus",
       "signIn": {
         "seoTitle": "साइन इन करें",
@@ -193,8 +190,6 @@
         "tagCollectionsDescription": "पोस्ट को त्वरित रूप से खोजने या फ़िल्टर करने के लिए टैग की सूची बनाएं",
         "additionalBoorusName": "अतिरिक्त Boorus",
         "additionalBoorusDescription": "अतिरिक्त वेबसाइटों से पोस्ट ब्राउज़ करें",
-        "backupName": "बैकअप और पुनर्स्थापना",
-        "backupDescription": "अपने टैग संग्रह और सेटिंग्स का बैकअप लें",
         "discordRoleName": "दावा कलह भूमिका",
         "discordRoleDescription": "प्रीमियम भूमिका पाने के लिए डिस्कॉर्ड को कनेक्ट करें",
         "feedbackTitle": "प्रतिक्रिया",
@@ -208,14 +203,6 @@
         "deleteAccount": "खाता हटाएँ",
         "deleteAccountConfirm": "यह आपके ऐप खाते और क्लाउड डेटा को स्थायी रूप से हटा देता है। पुष्टि करने के लिए \"{value}\" टाइप करें।",
         "deleteAccountBillingNote": "इस खाते को हटाने से बाहरी भुगतान प्लेटफ़ॉर्म द्वारा प्रबंधित सदस्यताएँ रद्द नहीं होती हैं।"
-      },
-      "backupPage": {
-        "seoTitle": "बैकअप",
-        "pageTitle": "बैकअप और पुनर्स्थापना",
-        "pageDescription": "अपने टैग संग्रह और सेटिंग्स का बैकअप लें",
-        "manualNote": "यह एक मैन्युअल प्रक्रिया है. अपने डेटा का नियमित रूप से बैकअप लेना याद रखें",
-        "backupButton": "बैकअप",
-        "restoreButton": "पुनर्स्थापित करें"
       },
       "tagCollectionsPage": {
         "seoTitle": "टैग संग्रह",
@@ -385,7 +372,6 @@
     "retry": "पुनः प्रयास करें",
     "mediaLoadError": "मीडिया लोड करने में त्रुटि",
     "tagInBlockList": "आपके द्वारा चयनित टैगों में से एक ब्लॉक सूची में है",
-    "backupVersionNotSupported": "बैकअप संस्करण समर्थित नहीं है",
     "unauthorized": "अनधिकृत, कृपया इस पृष्ठ को देखने के लिए साइन इन करें"
   },
   "posts": {

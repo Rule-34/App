@@ -57,4 +57,17 @@ describe('audience locale expansion', () => {
       }
     }
   })
+
+  it('uses valid time units in new audience locales', () => {
+    expect(readLocale('zh').time).toEqual({
+      days: '天',
+      hours: '小时',
+      minutes: '分钟',
+      seconds: '秒'
+    })
+
+    expect(readLocale('vi').time).toMatchObject({
+      minutes: 'ph'
+    })
+  })
 })

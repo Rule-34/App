@@ -86,7 +86,6 @@
     "emailSent": "Ipinadala ang email",
     "failedToSendEmail": "Nabigong magpadala ng email: {message}",
     "noFileSelected": "Walang napiling file",
-    "failedToRestoreBackup": "Nabigong ibalik ang backup: {error}",
     "invalidBooruType": "Di-wastong Booru uri",
     "booruAlreadyExists": "Umiiral na ang Booru",
     "cantFindPlatform": "Hindi mahanap ang platform kung saan mo binili ang iyong subscription",
@@ -103,7 +102,6 @@
     "emailSentDescription": "Kung umiiral ang iyong email, makakatanggap ka ng isang email na kasama ang iyong kasalukuyang lisensya. Kung hindi ka nakatanggap ng email, tingnan ang iyong spam folder",
     "postSourceDescription": "Pumunta sa pinagmulan (artist) kung mayroon ito, o hanapin ito gamit ang reverse image search",
     "domainSwitcherDescription": "Lumipat sa pagitan ng Booru na mga website: bawat isa ay may natatanging nilalaman, hanapin ang isa na pinakagusto mo!",
-    "backupRestored": "Matagumpay na naibalik ang backup!",
     "authFailed": "Nabigong patotohanan. Mangyaring mag-sign in muli."
   },
   "pages": {
@@ -163,7 +161,6 @@
     "premium": {
       "tagCollections": "Mga Koleksyon ng Tag",
       "additionalBoorus": "Karagdagang Boorus",
-      "backup": "Backup",
       "addMoreBoorus": "Magdagdag pa Boorus",
       "signIn": {
         "seoTitle": "Mag-sign in",
@@ -193,8 +190,6 @@
         "tagCollectionsDescription": "Gumawa ng mga listahan ng mga tag upang mabilis na maghanap o mag-filter ng mga post",
         "additionalBoorusName": "Karagdagang Boorus",
         "additionalBoorusDescription": "Mag-browse ng mga post mula sa mga karagdagang website",
-        "backupName": "I-backup at I-restore",
-        "backupDescription": "I-backup ang iyong mga koleksyon at setting ng tag",
         "discordRoleName": "I-claim ang tungkulin ng Discord",
         "discordRoleDescription": "Ikonekta ang Discord para makuha ang Premium na tungkulin",
         "feedbackTitle": "Feedback",
@@ -208,14 +203,6 @@
         "deleteAccount": "Tanggalin ang account",
         "deleteAccountConfirm": "Permanente nitong dine-delete ang iyong app account at cloud data. I-type ang \"{value}\" para kumpirmahin.",
         "deleteAccountBillingNote": "Ang pagtanggal sa account na ito ay hindi makakansela ng mga subscription na pinamamahalaan ng mga external na platform ng pagbabayad."
-      },
-      "backupPage": {
-        "seoTitle": "Backup",
-        "pageTitle": "I-backup at I-restore",
-        "pageDescription": "I-backup ang iyong mga koleksyon at setting ng tag",
-        "manualNote": "Ito ay isang manu-manong proseso. Tandaan na regular na i-backup ang iyong data",
-        "backupButton": "Backup",
-        "restoreButton": "Ibalik"
       },
       "tagCollectionsPage": {
         "seoTitle": "Mga koleksyon ng tag",
@@ -385,7 +372,6 @@
     "retry": "Subukan muli",
     "mediaLoadError": "Error sa paglo-load ng media",
     "tagInBlockList": "Ang isa sa iyong mga napiling tag ay nasa listahan ng harang",
-    "backupVersionNotSupported": "Hindi suportado ang backup na bersyon",
     "unauthorized": "Hindi awtorisado, mangyaring mag-sign in upang tingnan ang pahinang ito"
   },
   "posts": {

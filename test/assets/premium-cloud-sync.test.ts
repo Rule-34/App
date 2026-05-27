@@ -29,8 +29,8 @@ describe('Premium cloud sync payloads', () => {
         { name: 'Favorites', tags: ['1girl', '-ai_generated'] }
       ])
     ).toEqual([
-      { user_id: 'user-1', name: 'Animated', tags: ['animated'], position: 0 },
-      { user_id: 'user-1', name: 'Favorites', tags: ['1girl', '-ai_generated'], position: 1 }
+      { user_id: 'user-1', name: 'Animated', tags: ['animated'], position: 1 },
+      { user_id: 'user-1', name: 'Favorites', tags: ['1girl', '-ai_generated'], position: 2 }
     ])
   })
 
@@ -51,7 +51,7 @@ describe('Premium cloud sync payloads', () => {
         domain: 'custom.example',
         type: 'gelbooru',
         config: { options: { HTTPScheme: 'https' } },
-        position: 0
+        position: 1
       }
     ])
   })

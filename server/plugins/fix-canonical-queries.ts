@@ -27,11 +27,14 @@ function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
-const localePrefixPattern = prefixedLocaleCodes.map(escapeRegExp).join('|')
-const postsIndexPathPattern = localePrefixPattern
-  ? `^(?:/(${localePrefixPattern}))?/posts/([^/]+)$`
-  : '^/posts/([^/]+)$'
-const postsIndexPathRe = new RegExp(postsIndexPathPattern)
+const postsIndexPathRe = createPostsIndexPathRe(prefixedLocaleCodes)
+
+export function createPostsIndexPathRe(localeCodes: readonly string[]): RegExp {
+  const prefixPattern = localeCodes.map(escapeRegExp).join('|')
+  const optionalLocalePrefixPattern = prefixPattern ? `(?:/(${prefixPattern}))?` : '()'
+
+  return new RegExp(`^${optionalLocalePrefixPattern}/posts/([^/]+)$`)
+}
 
 function withTagsQuery(href: string, tags: string): string {
   const parsed = new URL(href, 'https://example.com')

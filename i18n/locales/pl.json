@@ -86,7 +86,6 @@
     "emailSent": "E-mail wysłany",
     "failedToSendEmail": "Nie udało się wysłać e-maila: {message}",
     "noFileSelected": "Nie wybrano pliku",
-    "failedToRestoreBackup": "Nie udało się przywrócić kopii zapasowej: {error}",
     "invalidBooruType": "Nieprawidłowy typ Booru",
     "booruAlreadyExists": "Booru już istnieje",
     "cantFindPlatform": "Nie można znaleźć platformy, na której zakupiono subskrypcję",
@@ -103,7 +102,6 @@
     "emailSentDescription": "Jeśli Twój adres e-mail istnieje, otrzymasz wiadomość e-mail z aktualną licencją. Jeśli nie otrzymasz wiadomości e-mail, sprawdź folder ze spamem",
     "postSourceDescription": "Przejdź do źródła (artysty), jeśli istnieje, lub znajdź je za pomocą wyszukiwania wstecznego obrazu",
     "domainSwitcherDescription": "Przełączaj się między stronami Booru: każda z nich ma unikalną treść, znajdź tę, która najbardziej Ci się podoba!",
-    "backupRestored": "Kopia zapasowa została przywrócona pomyślnie!",
     "authFailed": "Nie udało się uwierzytelnić. Zaloguj się ponownie."
   },
   "pages": {
@@ -163,7 +161,6 @@
     "premium": {
       "tagCollections": "Kolekcje tagów",
       "additionalBoorus": "Dodatkowe Boorus",
-      "backup": "Kopia zapasowa",
       "addMoreBoorus": "Dodaj więcej Boorus",
       "signIn": {
         "seoTitle": "Zaloguj się",
@@ -193,8 +190,6 @@
         "tagCollectionsDescription": "Twórz listy tagów, aby szybko wyszukiwać lub filtrować posty",
         "additionalBoorusName": "Dodatkowe Boorus",
         "additionalBoorusDescription": "Przeglądaj posty z dodatkowych witryn",
-        "backupName": "Kopia zapasowa i przywracanie",
-        "backupDescription": "Utwórz kopię zapasową kolekcji tagów i ustawień",
         "discordRoleName": "Zdobądź rolę na Discordzie",
         "discordRoleDescription": "Połącz Discord, aby uzyskać rolę Premium",
         "feedbackTitle": "Informacje zwrotne",
@@ -208,14 +203,6 @@
         "deleteAccount": "Usuń konto",
         "deleteAccountConfirm": "Spowoduje to trwałe usunięcie Twojego konta aplikacji i danych w chmurze. Wpisz „{value}”, aby potwierdzić.",
         "deleteAccountBillingNote": "Usunięcie tego konta nie powoduje anulowania subskrypcji zarządzanych przez zewnętrzne platformy płatnicze."
-      },
-      "backupPage": {
-        "seoTitle": "Kopia zapasowa",
-        "pageTitle": "Kopia zapasowa i przywracanie",
-        "pageDescription": "Utwórz kopię zapasową kolekcji tagów i ustawień",
-        "manualNote": "Jest to proces ręczny. Pamiętaj o regularnym tworzeniu kopii zapasowych danych",
-        "backupButton": "Kopia zapasowa",
-        "restoreButton": "Przywróć"
       },
       "tagCollectionsPage": {
         "seoTitle": "Kolekcje tagów",
@@ -385,7 +372,6 @@
     "retry": "Spróbuj ponownie",
     "mediaLoadError": "Błąd podczas ładowania multimediów",
     "tagInBlockList": "Jeden z wybranych tagów znajduje się na liście zablokowanych",
-    "backupVersionNotSupported": "Wersja kopii zapasowej nie jest obsługiwana",
     "unauthorized": "Brak autoryzacji. Zaloguj się, aby wyświetlić tę stronę"
   },
   "posts": {

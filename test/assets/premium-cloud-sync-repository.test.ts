@@ -59,8 +59,7 @@ describe('PremiumCloudSyncRepository', () => {
     expect(state).toEqual({
       tagCollections: [],
       boorus: [],
-      blockList: [],
-      shouldSubscribe: false
+      blockList: []
     })
     expect(calls.map((call) => call.method)).toEqual(['getFullList', 'getFullList', 'getFullList'])
   })
@@ -92,7 +91,48 @@ describe('PremiumCloudSyncRepository', () => {
       {
         collection: 'tag_collections',
         method: 'update',
-        args: ['collection', { user_id: 'user-1', name: 'New', tags: ['new'], position: 0 }]
+        args: ['collection', { user_id: 'user-1', name: 'New', tags: ['new'], position: 1 }]
+      }
+    ])
+  })
+
+  it('does not update unchanged tag collection records', async () => {
+    const { client, calls } = createFakePocketBase({
+      tag_collections: [{ id: 'collection', user_id: 'user-1', name: 'Animated', tags: ['animated'], position: 1 }]
+    })
+    const repository = new PremiumCloudSyncRepository(client)
+
+    await repository.saveTagCollections([{ name: 'Animated', tags: ['animated'] }])
+
+    expect(calls.filter((call) => call.method !== 'getFullList')).toEqual([])
+  })
+
+  it('updates only records whose positions changed during reorder', async () => {
+    const { client, calls } = createFakePocketBase({
+      tag_collections: [
+        { id: 'animated', user_id: 'user-1', name: 'Animated', tags: ['animated'], position: 1 },
+        { id: 'cat', user_id: 'user-1', name: 'Cat', tags: ['cat'], position: 2 },
+        { id: 'dog', user_id: 'user-1', name: 'Dog', tags: ['dog'], position: 3 }
+      ]
+    })
+    const repository = new PremiumCloudSyncRepository(client)
+
+    await repository.saveTagCollections([
+      { name: 'Animated', tags: ['animated'] },
+      { name: 'Dog', tags: ['dog'] },
+      { name: 'Cat', tags: ['cat'] }
+    ])
+
+    expect(calls.filter((call) => call.method !== 'getFullList')).toEqual([
+      {
+        collection: 'tag_collections',
+        method: 'update',
+        args: ['dog', { user_id: 'user-1', name: 'Dog', tags: ['dog'], position: 2 }]
+      },
+      {
+        collection: 'tag_collections',
+        method: 'update',
+        args: ['cat', { user_id: 'user-1', name: 'Cat', tags: ['cat'], position: 3 }]
       }
     ])
   })

@@ -86,7 +86,6 @@
     "emailSent": "E-Mail gesendet",
     "failedToSendEmail": "E-Mail konnte nicht gesendet werden: {message}",
     "noFileSelected": "Keine Datei ausgewählt",
-    "failedToRestoreBackup": "Backup konnte nicht wiederhergestellt werden: {error}",
     "invalidBooruType": "Ungültiger Booru-Typ",
     "booruAlreadyExists": "Booru existiert bereits",
     "cantFindPlatform": "Die Plattform, auf der du dein Abo gekauft hast, konnte nicht gefunden werden",
@@ -103,7 +102,6 @@
     "emailSentDescription": "Falls deine E-Mail existiert, erhältst du eine E-Mail mit deiner aktuellen Lizenz. Wenn keine E-Mail kommt, prüfe deinen Spam-Ordner",
     "postSourceDescription": "Zur Quelle (Künstler) gehen, falls vorhanden, oder per Rückwärtssuche finden",
     "domainSwitcherDescription": "Wechsle zwischen Booru-Websites: Jede hat einzigartige Inhalte, finde die, die dir am besten gefällt!",
-    "backupRestored": "Backup erfolgreich wiederhergestellt!",
     "authFailed": "Authentifizierung fehlgeschlagen. Bitte melde dich erneut an."
   },
   "pages": {
@@ -163,7 +161,6 @@
     "premium": {
       "tagCollections": "Tag-Sammlungen",
       "additionalBoorus": "Zusätzliche Boorus",
-      "backup": "Backup",
       "addMoreBoorus": "Mehr Boorus hinzufügen",
       "signIn": {
         "seoTitle": "Anmelden",
@@ -193,8 +190,6 @@
         "tagCollectionsDescription": "Erstelle Listen mit Tags, um Beiträge schnell zu suchen oder zu filtern",
         "additionalBoorusName": "Zusätzliche Boorus",
         "additionalBoorusDescription": "Durchsuche Beiträge von zusätzlichen Websites",
-        "backupName": "Backup & Wiederherstellung",
-        "backupDescription": "Sichere deine Tag-Sammlungen und Einstellungen",
         "discordRoleName": "Discord-Rolle anfordern",
         "discordRoleDescription": "Verbinde Discord, um die Premium-Rolle zu erhalten",
         "feedbackTitle": "Feedback",
@@ -208,14 +203,6 @@
         "deleteAccount": "Konto löschen",
         "deleteAccountConfirm": "Dadurch werden dein App-Konto und deine Cloud-Daten dauerhaft gelöscht. Gib \"{value}\" zur Bestätigung ein.",
         "deleteAccountBillingNote": "Das Löschen dieses Kontos kündigt keine Abos, die über externe Zahlungsplattformen verwaltet werden."
-      },
-      "backupPage": {
-        "seoTitle": "Backup",
-        "pageTitle": "Backup & Wiederherstellung",
-        "pageDescription": "Sichere deine Tag-Sammlungen und Einstellungen",
-        "manualNote": "Das ist ein manueller Prozess. Denk daran, deine Daten regelmäßig zu sichern",
-        "backupButton": "Backup",
-        "restoreButton": "Wiederherstellen"
       },
       "tagCollectionsPage": {
         "seoTitle": "Tag-Sammlungen",
@@ -385,7 +372,6 @@
     "retry": "Erneut versuchen",
     "mediaLoadError": "Fehler beim Laden von Medien",
     "tagInBlockList": "Einer deiner ausgewählten Tags ist in der Blockliste",
-    "backupVersionNotSupported": "Backup-Version wird nicht unterstützt",
     "unauthorized": "Nicht autorisiert, bitte melde dich an, um diese Seite zu sehen"
   },
   "posts": {
@@ -510,7 +496,12 @@
       "cta": "Premium holen"
     }
   },
-  "time": { "days": "T", "hours": "Std", "minutes": "Min", "seconds": "Sek" },
+  "time": {
+    "days": "T",
+    "hours": "Std",
+    "minutes": "Min",
+    "seconds": "Sek"
+  },
   "news": {
     "feedbackWebsiteTitle": "Feedback-Website",
     "feedbackWebsiteText": "Jetzt kannst du abstimmen, diskutieren und Ideen teilen 💡, um {name} zu verbessern",
@@ -545,5 +536,7 @@
     "howToFindH3": "So findest du die besten {tags} Hentai-Videos und Porno-GIFs auf {domain}",
     "howToFindP": "Du suchst nach den hochwertigsten {tags} Hentai- und Rule-34-Parodie-Artworks? Nutze unsere erweiterten Such- und Filteroptionen, um genau das zu finden, was du willst. Sortiere Adult-Bilder und XXX-Videos nach Bewertung, Datum oder Beliebtheit, um die neuesten und bestbewerteten Uploads zu entdecken. Unser umfassendes Rule-34-Tagging-System ermöglicht präzise Suchen, damit du genau die versauten Illustrationen, Porno-GIFs und expliziten Videos findest, die du suchst – genau dann, wenn sie auf {domain} und anderen beliebten Adult-Quellen hochgeladen werden."
   },
-  "seoHelper": { "without": "ohne" }
+  "seoHelper": {
+    "without": "ohne"
+  }
 }

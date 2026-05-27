@@ -86,7 +86,6 @@
     "emailSent": "이메일이 전송되었습니다",
     "failedToSendEmail": "이메일 전송 실패: {message}",
     "noFileSelected": "선택한 파일이 없습니다.",
-    "failedToRestoreBackup": "백업 복원 실패: {error}",
     "invalidBooruType": "잘못된 Booru 유형",
     "booruAlreadyExists": "Booru이 이미 존재합니다.",
     "cantFindPlatform": "구독을 구매한 플랫폼을 찾을 수 없습니다",
@@ -103,7 +102,6 @@
     "emailSentDescription": "귀하의 이메일이 존재하는 경우 현재 라이센스가 포함된 이메일을 받게 됩니다. 이메일을 받지 못한 경우 스팸 폴더를 확인하세요.",
     "postSourceDescription": "출처(아티스트)가 있으면 그 곳으로 가거나, 역이미지 검색으로 찾아보세요",
     "domainSwitcherDescription": "Booru 웹사이트 간 전환: 각 웹사이트에는 고유한 콘텐츠가 있으므로 가장 좋아하는 웹사이트를 찾으세요!",
-    "backupRestored": "백업이 성공적으로 복원되었습니다!",
     "authFailed": "인증에 실패했습니다. 다시 로그인해 주세요."
   },
   "pages": {
@@ -163,7 +161,6 @@
     "premium": {
       "tagCollections": "태그 컬렉션",
       "additionalBoorus": "추가 Boorus",
-      "backup": "백업",
       "addMoreBoorus": "Boorus을 더 추가하세요",
       "signIn": {
         "seoTitle": "로그인",
@@ -193,8 +190,6 @@
         "tagCollectionsDescription": "게시물을 빠르게 검색하거나 필터링하려면 태그 목록을 만드세요.",
         "additionalBoorusName": "추가 Boorus",
         "additionalBoorusDescription": "추가 웹사이트의 게시물 찾아보기",
-        "backupName": "백업 및 복원",
-        "backupDescription": "태그 컬렉션 및 설정을 백업하세요.",
         "discordRoleName": "클레임 불일치 역할",
         "discordRoleDescription": "Discord를 연결하여 프리미엄 역할을 받으세요",
         "feedbackTitle": "피드백",
@@ -208,14 +203,6 @@
         "deleteAccount": "계정 삭제",
         "deleteAccountConfirm": "이렇게 하면 앱 계정과 클라우드 데이터가 영구적으로 삭제됩니다. 확인하려면 \"{value}\"을 입력하세요.",
         "deleteAccountBillingNote": "이 계정을 삭제해도 외부 결제 플랫폼에서 관리하는 구독은 취소되지 않습니다."
-      },
-      "backupPage": {
-        "seoTitle": "백업",
-        "pageTitle": "백업 및 복원",
-        "pageDescription": "태그 컬렉션 및 설정을 백업하세요.",
-        "manualNote": "이는 수동 프로세스입니다. 정기적으로 데이터를 백업하는 것을 잊지 마세요",
-        "backupButton": "백업",
-        "restoreButton": "복원"
       },
       "tagCollectionsPage": {
         "seoTitle": "태그 컬렉션",
@@ -385,7 +372,6 @@
     "retry": "재시도",
     "mediaLoadError": "미디어를 로드하는 중에 오류가 발생했습니다.",
     "tagInBlockList": "선택한 태그 중 하나가 차단 목록에 있습니다.",
-    "backupVersionNotSupported": "백업 버전이 지원되지 않습니다",
     "unauthorized": "승인되지 않았습니다. 이 페이지를 보려면 로그인하세요."
   },
   "posts": {

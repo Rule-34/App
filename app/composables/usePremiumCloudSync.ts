@@ -30,6 +30,8 @@ const defaultRuntime = (): PremiumCloudSyncRuntime => ({
   }
 })
 
+let refreshFromCloudTimeout: ReturnType<typeof setTimeout> | null = null
+
 export default function () {
   const nuxtApp = useNuxtApp()
   const $i18n = nuxtApp.$i18n as Composer
@@ -98,10 +100,7 @@ export default function () {
     }
 
     runtime.value.initialized = true
-
-    if (cloudState.shouldSubscribe) {
-      await ensureRealtimeSubscription()
-    }
+    await tryEnsureRealtimeSubscription()
   }
 
   async function refreshFromCloud() {
@@ -148,7 +147,7 @@ export default function () {
 
       await repository.value.saveTagCollections(nextTagCollections)
       runtime.value.cloudBacked.tagCollections = true
-      await ensureRealtimeSubscription()
+      await tryEnsureRealtimeSubscription()
       return true
     })
   }
@@ -177,7 +176,7 @@ export default function () {
 
       await repository.value.saveBoorus(nextBoorus)
       runtime.value.cloudBacked.boorus = true
-      await ensureRealtimeSubscription()
+      await tryEnsureRealtimeSubscription()
       return true
     })
   }
@@ -206,7 +205,7 @@ export default function () {
       await repository.value.saveCustomBlockList(nextTags)
       customBlockList.value = nextTags
       runtime.value.cloudBacked.blockList = true
-      await ensureRealtimeSubscription()
+      await tryEnsureRealtimeSubscription()
       return true
     })
   }
@@ -252,8 +251,29 @@ export default function () {
       return
     }
 
-    await repository.value.subscribeToCriticalChanges(refreshFromCloud)
+    await repository.value.subscribeToCriticalChanges(queueRefreshFromCloud)
     runtime.value.subscribed = true
+  }
+
+  function queueRefreshFromCloud() {
+    if (refreshFromCloudTimeout) {
+      return
+    }
+
+    refreshFromCloudTimeout = setTimeout(() => {
+      refreshFromCloudTimeout = null
+      void refreshFromCloud().catch((error) => {
+        console.error('Failed to refresh premium cloud sync state', error)
+      })
+    }, 100)
+  }
+
+  async function tryEnsureRealtimeSubscription() {
+    try {
+      await ensureRealtimeSubscription()
+    } catch (error) {
+      console.error('Failed to subscribe to premium cloud sync updates', error)
+    }
   }
 
   function clearSyncedLocalState() {

@@ -61,7 +61,6 @@ export type PremiumCriticalCloudState = {
   tagCollections: ITagCollection[]
   boorus: PremiumBooruRecord[]
   blockList: PremiumBlockListRecord[]
-  shouldSubscribe: boolean
 }
 
 type PremiumCloudCollectionClient = {
@@ -97,8 +96,7 @@ export class PremiumCloudSyncRepository {
     return {
       tagCollections: tagCollectionsFromCloudRecords(tagCollectionRecords),
       boorus: [...booruRecords],
-      blockList: [...blockListRecords],
-      shouldSubscribe: Boolean(tagCollectionRecords.length || booruRecords.length || blockListRecords.length)
+      blockList: [...blockListRecords]
     }
   }
 
@@ -205,7 +203,9 @@ export class PremiumCloudSyncRepository {
 
       if (record && !matchedRecords.has(record)) {
         matchedRecords.add(record)
-        updates.push({ record, payload })
+        if (!recordMatchesPayload(record as Record<string, unknown>, payload)) {
+          updates.push({ record, payload })
+        }
       } else {
         creates.push(payload)
       }
@@ -269,7 +269,7 @@ export function tagCollectionPayloadsFromState(
     user_id: userId,
     name: tagCollection.name,
     tags: [...tagCollection.tags],
-    position
+    position: position + 1
   }))
 }
 
@@ -279,7 +279,7 @@ export function booruPayloadsFromState(userId: string, boorus: readonly Domain[]
     domain: booru.domain,
     type: booru.type.type,
     config: booru.config,
-    position
+    position: position + 1
   }))
 }
 
@@ -292,4 +292,34 @@ export function customBlockListPayloadFromState(userId: string, tags: readonly s
 
 function sortByPosition<T extends { position: number }>(records: readonly T[]): T[] {
   return [...records].sort((a, b) => a.position - b.position)
+}
+
+function recordMatchesPayload(record: Record<string, unknown>, payload: Record<string, unknown>) {
+  return Object.entries(payload).every(([key, value]) => cloudValuesEqual(record[key], value))
+}
+
+function cloudValuesEqual(left: unknown, right: unknown): boolean {
+  if (Object.is(left, right)) {
+    return true
+  }
+
+  if (Array.isArray(left) && Array.isArray(right)) {
+    return left.length === right.length && left.every((value, index) => cloudValuesEqual(value, right[index]))
+  }
+
+  if (isPlainRecord(left) && isPlainRecord(right)) {
+    const leftKeys = Object.keys(left).sort()
+    const rightKeys = Object.keys(right).sort()
+
+    return (
+      leftKeys.length === rightKeys.length &&
+      leftKeys.every((key, index) => key === rightKeys[index] && cloudValuesEqual(left[key], right[key]))
+    )
+  }
+
+  return false
+}
+
+function isPlainRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value)
 }

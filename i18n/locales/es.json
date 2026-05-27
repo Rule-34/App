@@ -86,7 +86,6 @@
     "emailSent": "Correo enviado",
     "failedToSendEmail": "Error al enviar el correo: {message}",
     "noFileSelected": "No se seleccionó ningún archivo",
-    "failedToRestoreBackup": "Error al restaurar la copia de seguridad: {error}",
     "invalidBooruType": "Tipo de Booru no válido",
     "booruAlreadyExists": "Este Booru ya existe",
     "cantFindPlatform": "No se pudo encontrar la plataforma donde compraste tu suscripción",
@@ -103,7 +102,6 @@
     "emailSentDescription": "Si tu correo electrónico existe, recibirás un correo con tu licencia actual. Si no recibes el correo, revisa tu carpeta de spam",
     "postSourceDescription": "Ve a la fuente (artista) si existe, o búscala con búsqueda inversa de imágenes",
     "domainSwitcherDescription": "Cambia entre sitios Booru: cada uno tiene contenido único, ¡encuentra el que más te guste!",
-    "backupRestored": "¡Copia de seguridad restaurada exitosamente!",
     "authFailed": "Error de autenticación. Por favor, inicia sesión de nuevo."
   },
   "pages": {
@@ -163,7 +161,6 @@
     "premium": {
       "tagCollections": "Colecciones de etiquetas",
       "additionalBoorus": "Boorus adicionales",
-      "backup": "Copia de seguridad",
       "addMoreBoorus": "Añadir más Boorus",
       "signIn": {
         "seoTitle": "Iniciar sesión",
@@ -193,8 +190,6 @@
         "tagCollectionsDescription": "Crea listas de etiquetas para buscar o filtrar publicaciones rápidamente",
         "additionalBoorusName": "Boorus adicionales",
         "additionalBoorusDescription": "Explora publicaciones de sitios web adicionales",
-        "backupName": "Copia de seguridad y restauración",
-        "backupDescription": "Haz copias de seguridad de tus colecciones de etiquetas y configuraciones",
         "discordRoleName": "Obtener rol de Discord",
         "discordRoleDescription": "Conecta Discord para obtener el rol Premium",
         "feedbackTitle": "Comentarios",
@@ -208,14 +203,6 @@
         "deleteAccount": "Borrar cuenta",
         "deleteAccountConfirm": "Esto borra permanentemente tu cuenta de la app y tus datos en la nube. Escribe \"{value}\" para confirmar.",
         "deleteAccountBillingNote": "Borrar esta cuenta no cancela las suscripciones gestionadas por plataformas de pago externas."
-      },
-      "backupPage": {
-        "seoTitle": "Copia de seguridad",
-        "pageTitle": "Copia de seguridad y restauración",
-        "pageDescription": "Haz copias de seguridad de tus colecciones de etiquetas y configuraciones",
-        "manualNote": "Este es un proceso manual. Recuerda hacer copias de seguridad de tus datos regularmente",
-        "backupButton": "Copia de seguridad",
-        "restoreButton": "Restaurar"
       },
       "tagCollectionsPage": {
         "seoTitle": "Colecciones de etiquetas",
@@ -385,7 +372,6 @@
     "retry": "Reintentar",
     "mediaLoadError": "Error al cargar el medio",
     "tagInBlockList": "Una de las etiquetas seleccionadas está en la lista de bloqueo",
-    "backupVersionNotSupported": "Versión de copia de seguridad no compatible",
     "unauthorized": "No autorizado, por favor inicia sesión para ver esta página"
   },
   "posts": {
