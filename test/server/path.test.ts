@@ -1,7 +1,25 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest'
 
 vi.mock('~~/config/i18n', () => ({
-  localeCodes: new Set(['en', 'ru', 'es', 'ja', 'pt', 'de', 'fr'])
+  localeCodes: new Set([
+    'en',
+    'ru',
+    'es',
+    'ja',
+    'pt',
+    'de',
+    'fr',
+    'zh',
+    'ko',
+    'id',
+    'hi',
+    'tr',
+    'it',
+    'pl',
+    'th',
+    'vi',
+    'fil'
+  ])
 }))
 
 let stripLocaleFromPath: typeof import('../../server/utils/path').stripLocaleFromPath
@@ -13,6 +31,8 @@ beforeAll(async () => {
 describe('stripLocaleFromPath', () => {
   it('removes a locale prefix from public posts paths', () => {
     expect(stripLocaleFromPath('/es/posts/e621.net')).toBe('/posts/e621.net')
+    expect(stripLocaleFromPath('/zh/posts/e621.net')).toBe('/posts/e621.net')
+    expect(stripLocaleFromPath('/fil/posts/e621.net')).toBe('/posts/e621.net')
   })
 
   it('preserves query strings and hashes when removing the locale prefix', () => {

@@ -21,6 +21,17 @@
  * Track upstream: https://github.com/nuxt-modules/i18n
  */
 import { generatePostTagLandingPath, getSinglePositiveTagQueryValue } from '../../app/assets/js/RouterHelper'
+import { prefixedLocaleCodes } from '../../config/i18n'
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+const localePrefixPattern = prefixedLocaleCodes.map(escapeRegExp).join('|')
+const postsIndexPathPattern = localePrefixPattern
+  ? `^(?:/(${localePrefixPattern}))?/posts/([^/]+)$`
+  : '^/posts/([^/]+)$'
+const postsIndexPathRe = new RegExp(postsIndexPathPattern)
 
 function withTagsQuery(href: string, tags: string): string {
   const parsed = new URL(href, 'https://example.com')
@@ -39,13 +50,13 @@ function withTagCanonicalHref(href: string, tags: string, preferLandingPath: boo
   }
 
   const parsed = new URL(href, 'https://example.com')
-  const match = parsed.pathname.match(/^(\/[a-z]{2})?\/posts\/([^/]+)$/)
+  const match = parsed.pathname.match(postsIndexPathRe)
 
   if (!match) {
     return withTagsQuery(href, tags)
   }
 
-  const localePrefix = match[1] ?? ''
+  const localePrefix = match[1] ? `/${match[1]}` : ''
   const domain = match[2]
 
   if (!domain) {
@@ -90,7 +101,7 @@ export default defineNitroPlugin((nitroApp) => {
     if (!tags) return
 
     // Only patch canonicals on posts index pages; tag landing pages keep clean self-canonicals.
-    const isPostsIndexPath = /^(\/[a-z]{2})?\/posts\/[^/]+$/.test(url.pathname)
+    const isPostsIndexPath = postsIndexPathRe.test(url.pathname)
     if (!isPostsIndexPath) return
 
     const tagLandingTag = getSinglePositiveTagQueryValue(tags)
