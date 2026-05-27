@@ -42,7 +42,7 @@ export default function () {
      */
     {
       id: '/js/popunder2.js?v=10',
-      weight: 0.1
+      weight: 0.15
     },
     /**
      * AdMaven
@@ -77,8 +77,8 @@ export default function () {
      * Cons:
      */
     {
-      id: 'https://laughedentrust.com/a2/bb/43/a2bb432972963284b6754dd20c826521.js',
-      weight: 0.2
+      id: 'https://laughedentrust.com/gOEgecu/kAi41dXqVy9f-/APTn2mopi0EK/ZYuxzOlInL9/23jslU_6yYUKuVVn_v9j/va82rI/dw-xJW2djcqgC5mfF7/4gbSUwOzf/rEAE3_4f5WEdqc3rM/VfHINUDVV3EC',
+      weight: 0.15
     }
   ]
 
