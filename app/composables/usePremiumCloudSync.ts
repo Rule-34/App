@@ -4,6 +4,7 @@ import {
   type PremiumBooruRecord,
   type PremiumCloudPocketBaseClient
 } from '~/assets/js/PremiumCloudSync'
+import { createLatestAsyncQueue } from '~/assets/js/AsyncSaveQueue'
 import type { Domain } from '~/assets/js/domain'
 import type { ITagCollection } from '~/assets/js/tagCollection.dto'
 import type { Composer } from 'vue-i18n'
@@ -31,6 +32,8 @@ const defaultRuntime = (): PremiumCloudSyncRuntime => ({
 })
 
 let refreshFromCloudTimeout: ReturnType<typeof setTimeout> | null = null
+const saveTagCollectionsToCloud = createLatestAsyncQueue((save: () => Promise<void>) => save())
+const saveBoorusToCloud = createLatestAsyncQueue((save: () => Promise<void>) => save())
 
 export default function () {
   const nuxtApp = useNuxtApp()
@@ -145,9 +148,11 @@ export default function () {
         return true
       }
 
-      await repository.value.saveTagCollections(nextTagCollections)
-      runtime.value.cloudBacked.tagCollections = true
-      await tryEnsureRealtimeSubscription()
+      await saveTagCollectionsToCloud(async () => {
+        await repository.value.saveTagCollections(nextTagCollections)
+        runtime.value.cloudBacked.tagCollections = true
+        await tryEnsureRealtimeSubscription()
+      })
       return true
     })
   }
@@ -174,9 +179,11 @@ export default function () {
         return true
       }
 
-      await repository.value.saveBoorus(nextBoorus)
-      runtime.value.cloudBacked.boorus = true
-      await tryEnsureRealtimeSubscription()
+      await saveBoorusToCloud(async () => {
+        await repository.value.saveBoorus(nextBoorus)
+        runtime.value.cloudBacked.boorus = true
+        await tryEnsureRealtimeSubscription()
+      })
       return true
     })
   }

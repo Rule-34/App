@@ -192,6 +192,7 @@ export class PremiumCloudSyncRepository {
     const collection = this.client.collection(collectionName)
     const recordsByKey = new Map(records.map((record) => [keyFromRecord(record), record]))
     const matchedRecords = new Set<TRecord>()
+    const matchedRecordIds = new Set<string>()
     const updates: Array<{ record: TRecord; payload: TPayload }> = []
     const creates: TPayload[] = []
 
@@ -203,17 +204,12 @@ export class PremiumCloudSyncRepository {
 
       if (record && !matchedRecords.has(record)) {
         matchedRecords.add(record)
+        matchedRecordIds.add(record.id)
         if (!recordMatchesPayload(record as Record<string, unknown>, payload)) {
           updates.push({ record, payload })
         }
       } else {
         creates.push(payload)
-      }
-    }
-
-    for (const record of records) {
-      if (!matchedRecords.has(record)) {
-        await collection.delete(record.id)
       }
     }
 
@@ -223,6 +219,12 @@ export class PremiumCloudSyncRepository {
 
     for (const payload of creates) {
       await collection.create(payload)
+    }
+
+    for (const record of records) {
+      if (!matchedRecordIds.has(record.id)) {
+        await collection.delete(record.id)
+      }
     }
   }
 

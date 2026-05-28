@@ -2,7 +2,9 @@
   import { ArrowUturnLeftIcon, Bars2Icon, PencilIcon, PlusIcon } from '@heroicons/vue/20/solid'
   import { ExclamationCircleIcon } from '@heroicons/vue/24/solid'
   import { vAutoAnimate } from '@formkit/auto-animate/vue'
-  import { moveArrayElement, useSortable } from '@vueuse/integrations/useSortable'
+  import { useSortable } from '@vueuse/integrations/useSortable'
+  import { hasDuplicateBooruDomain } from '~/assets/js/BooruList'
+  import { moveArrayItem } from '~/assets/js/AsyncSaveQueue'
   import type { Ref } from 'vue'
   import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
   import Slideover from '~/components/layout/Slideover.vue'
@@ -31,8 +33,7 @@
         return
       }
 
-      const nextBooruList = [...userBooruList.value]
-      moveArrayElement(nextBooruList, oldIndex, newIndex)
+      const nextBooruList = moveArrayItem(userBooruList.value, oldIndex, newIndex)
       void setUserBooruList(nextBooruList)
     }
   })
@@ -136,7 +137,7 @@
 
     // TODO: Validate with Domain object
 
-    if (userBooruList.value.find((booruFromList) => booruFromList.domain === currentBooru.value.domain)) {
+    if (hasDuplicateBooruDomain(userBooruList.value, currentBooru.value.domain)) {
       toast.error(t('toasts.booruAlreadyExists'))
       return
     }
@@ -171,6 +172,11 @@
 
     if (!booruType) {
       toast.error(t('toasts.invalidBooruType'))
+      return
+    }
+
+    if (hasDuplicateBooruDomain(userBooruList.value, currentBooru.value.domain, dialogEditIndex.value)) {
+      toast.error(t('toasts.booruAlreadyExists'))
       return
     }
 

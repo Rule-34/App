@@ -31,6 +31,11 @@ function createFakePocketBase(initialRecords: Record<string, FakeRecord[]>) {
           update: vi.fn(async (id: string, payload: Record<string, unknown>) => {
             calls.push({ collection: name, method: 'update', args: [id, payload] })
             const index = records[name].findIndex((record) => record.id === id)
+
+            if (index === -1) {
+              throw new Error(`Record not found: ${id}`)
+            }
+
             records[name][index] = { ...records[name][index], ...payload }
             return records[name][index]
           }),
@@ -77,6 +82,23 @@ describe('PremiumCloudSyncRepository', () => {
       method: 'create',
       args: [{ user_id: 'user-1', tags: ['loli'] }]
     })
+  })
+
+  it('updates an existing custom blocklist record instead of creating another one', async () => {
+    const { client, calls } = createFakePocketBase({
+      tag_blocklists: [{ id: 'blocklist', user_id: 'user-1', tags: ['old'] }]
+    })
+    const repository = new PremiumCloudSyncRepository(client)
+
+    await repository.saveCustomBlockList(['loli'])
+
+    expect(calls.filter((call) => call.method !== 'getFullList')).toEqual([
+      {
+        collection: 'tag_blocklists',
+        method: 'update',
+        args: ['blocklist', { user_id: 'user-1', tags: ['loli'] }]
+      }
+    ])
   })
 
   it('updates existing positioned tag collection records when names change', async () => {
@@ -134,6 +156,27 @@ describe('PremiumCloudSyncRepository', () => {
         method: 'update',
         args: ['cat', { user_id: 'user-1', name: 'Cat', tags: ['cat'], position: 3 }]
       }
+    ])
+  })
+
+  it('applies updates before deleting unmatched records', async () => {
+    const { client, calls } = createFakePocketBase({
+      tag_collections: [
+        { id: 'animated', user_id: 'user-1', name: 'Animated', tags: ['animated'], position: 1 },
+        { id: 'old', user_id: 'user-1', name: 'Old', tags: ['old'], position: 2 }
+      ]
+    })
+    const repository = new PremiumCloudSyncRepository(client)
+
+    await repository.saveTagCollections([{ name: 'Animated', tags: ['animated', 'gif'] }])
+
+    expect(calls.filter((call) => call.method !== 'getFullList')).toEqual([
+      {
+        collection: 'tag_collections',
+        method: 'update',
+        args: ['animated', { user_id: 'user-1', name: 'Animated', tags: ['animated', 'gif'], position: 1 }]
+      },
+      { collection: 'tag_collections', method: 'delete', args: ['old'] }
     ])
   })
 

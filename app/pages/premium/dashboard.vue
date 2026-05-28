@@ -2,12 +2,13 @@
   import {
     ArrowLeftOnRectangleIcon,
     BookmarkIcon,
-    ChatBubbleBottomCenterTextIcon,
+    EllipsisVerticalIcon,
     ExclamationTriangleIcon,
     GlobeAltIcon,
     HeartIcon,
     TrashIcon,
-    TagIcon
+    TagIcon,
+    XMarkIcon
   } from '@heroicons/vue/24/solid'
   import type { Platform } from '~/types/enums/Platform'
   import { detectPlatform, PLATFORM_URLS } from '~/types/enums/Platform'
@@ -21,6 +22,7 @@
 
   const { email, license, isPremium } = useUserData()
   const { deleteCloudData, deleteAccount } = usePremiumCloudSync()
+  const isDataAccountDialogOpen = ref(false)
 
   const discordOauthUrl = computed(() => {
     const { clientId, redirectUri } = project.discordOauth
@@ -70,6 +72,17 @@
   }
 
   const platformOfPurchase = computed<Platform | undefined>(() => detectPlatform(license.value))
+  const cancellationSupportEmailHref = computed(() => {
+    const params = new URLSearchParams({
+      subject: t('pages.premium.dashboard.cancellationSupportEmailSubject'),
+      body: t('pages.premium.dashboard.cancellationSupportEmailBody', {
+        email: email.value || '?',
+        license: license.value || '?'
+      })
+    })
+
+    return `mailto:${project.email}?${params.toString()}`
+  })
 
   type MatomoWindow = Window & { _paq?: { push: (event: unknown[]) => void } }
 
@@ -82,13 +95,14 @@
     window.formbricks?.track('cancel_subscription_click_on_dashboard')
 
     if (!platformOfPurchase.value) {
-      toast.error(t('toasts.cantFindPlatform'))
+      window.location.href = cancellationSupportEmailHref.value
+      getMatomoQueue()?.push(['trackEvent', 'Premium', 'Click "Subscription support fallback"'])
       return
     }
 
     window.open(PLATFORM_URLS[platformOfPurchase.value], '_blank', 'noopener,noreferrer')
 
-    getMatomoQueue()?.push(['trackEvent', 'Premium', 'Click "Manage subscription"', platformOfPurchase.value])
+    getMatomoQueue()?.push(['trackEvent', 'Premium', 'Click "Cancel or manage subscription"', platformOfPurchase.value])
   }
 
   async function onDeleteCloudDataClick() {
@@ -98,6 +112,7 @@
 
     if (await deleteCloudData()) {
       toast.success(t('toasts.cloudDataDeleted'))
+      isDataAccountDialogOpen.value = false
       window.location.reload()
     }
   }
@@ -168,9 +183,47 @@
 </script>
 
 <template>
-  <!-- Sign out -->
+  <!-- Account actions -->
   <ClientOnly>
     <Teleport to="#navbar-actions">
+      <HeadlessMenu
+        as="div"
+        class="relative"
+      >
+        <HeadlessMenuButton
+          :aria-label="t('pages.premium.dashboard.moreAccountActions')"
+          class="relative rounded-md p-2 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+          type="button"
+        >
+          <EllipsisVerticalIcon class="h-6 w-6 text-base-content-highlight" />
+        </HeadlessMenuButton>
+
+        <Transition
+          enter-active-class="transition ease-out duration-100"
+          enter-from-class="scale-95 opacity-0"
+          enter-to-class="scale-100 opacity-100"
+          leave-active-class="transition ease-in duration-75"
+          leave-from-class="scale-100 opacity-100"
+          leave-to-class="scale-95 opacity-0"
+        >
+          <HeadlessMenuItems
+            class="absolute right-0 z-50 mt-2 w-56 origin-top-right rounded-md bg-base-1000 py-1 shadow-lg ring-1 ring-base-0/20 focus:outline-hidden"
+          >
+            <HeadlessMenuItem v-slot="{ active }">
+              <button
+                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                class="flex w-full items-center gap-2 px-4 py-2 text-left text-sm"
+                type="button"
+                @click="isDataAccountDialogOpen = true"
+              >
+                <TrashIcon class="h-4 w-4 text-red-300" />
+                {{ t('pages.premium.dashboard.deleteDataOrAccount') }}
+              </button>
+            </HeadlessMenuItem>
+          </HeadlessMenuItems>
+        </Transition>
+      </HeadlessMenu>
+
       <button
         :aria-label="t('pages.premium.dashboard.signOutLabel')"
         class="relative rounded-md p-2 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
@@ -294,89 +347,127 @@
       </div>
     </section>
 
-    <!-- Feedback -->
-    <section class="mt-8">
-      <NuxtLink
-        class="flex items-start rounded-md border border-base-0/20 bg-base-0/5 p-4 transition-all duration-200 hover:hover-bg-util hover:shadow-md focus-visible:focus-outline-util"
-        :href="`https://feedback.${project.urls.production.hostname}`"
-        rel="nofollow noopener noreferrer"
-        target="_blank"
-      >
-        <ChatBubbleBottomCenterTextIcon class="mt-1 mr-3 h-6 w-6 flex-shrink-0 text-primary-400" />
-        <div>
-          <h2 class="text-lg font-bold tracking-tight text-base-content-highlight">
-            {{ $t('pages.premium.dashboard.feedbackTitle') }}
-          </h2>
-          <p class="text-sm">
-            {{ $t('pages.premium.dashboard.feedbackText') }}
-          </p>
-        </div>
-      </NuxtLink>
-    </section>
-
     <!-- Support & Subscription Management -->
-    <section class="mt-4 mb-3 border-t border-base-0/10 pt-6">
-      <div class="flex flex-row items-center justify-center gap-4">
+    <section class="mt-8 mb-8 border-t border-base-0/10 pt-6">
+      <div class="mb-4">
+        <h2 class="text-xl font-bold text-base-content-highlight">
+          {{ $t('pages.premium.dashboard.billingTitle') }}
+        </h2>
+        <p class="mt-1 text-sm text-base-content">
+          {{ $t('pages.premium.dashboard.billingDescription') }}
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <button
+          class="inline-flex items-center justify-center rounded-md border border-base-0/20 px-4 py-2 text-sm font-medium transition-all duration-200 hover:hover-bg-util focus-visible:focus-outline-util"
+          type="button"
+          @click="onManageSubscriptionClick"
+        >
+          {{ $t('pages.premium.dashboard.cancelOrManageSubscription') }}
+        </button>
+
         <NuxtLink
-          class="flex items-center gap-2 rounded-md border border-base-0/20 px-4 py-2 transition-all duration-200 hover:hover-bg-util focus-visible:focus-outline-util"
+          class="inline-flex items-center justify-center rounded-md border border-base-0/20 px-4 py-2 text-sm font-medium transition-all duration-200 hover:hover-bg-util focus-visible:focus-outline-util"
           :href="`mailto:${project.email}`"
           rel="nofollow noopener noreferrer"
           target="_blank"
         >
-          <span class="text-sm font-medium">{{ $t('pages.premium.dashboard.contactSupport') }}</span>
+          {{ $t('pages.premium.dashboard.contactSupport') }}
         </NuxtLink>
-
-        <button
-          class="flex items-center gap-2 rounded-md border border-base-0/20 px-4 py-2 transition-all duration-200 hover:hover-bg-util focus-visible:focus-outline-util"
-          type="button"
-          @click="onManageSubscriptionClick"
-        >
-          <span class="text-sm font-medium">{{ $t('pages.premium.dashboard.manageSubscription') }}</span>
-        </button>
-      </div>
-    </section>
-
-    <!-- Data & Account -->
-    <section class="mt-4 mb-8 border-t border-base-0/10 pt-6">
-      <div class="rounded-md border border-red-400/30 p-4">
-        <div class="mb-4 flex items-center gap-2">
-          <ExclamationTriangleIcon
-            aria-hidden="true"
-            class="h-6 w-6 text-red-400"
-          />
-          <h2 class="text-lg font-bold tracking-tight text-base-content-highlight">
-            {{ $t('pages.premium.dashboard.dataAccountTitle') }}
-          </h2>
-        </div>
-
-        <p class="text-sm text-base-content">
-          {{ $t('pages.premium.dashboard.dataAccountDescription') }}
-        </p>
-
-        <div class="mt-4 flex flex-col gap-3 sm:flex-row">
-          <button
-            class="inline-flex items-center justify-center gap-2 rounded-md border border-red-400/30 px-4 py-2 text-sm font-medium text-red-300 transition-all duration-200 hover:bg-red-400/10 focus-visible:focus-outline-util"
-            type="button"
-            @click="onDeleteCloudDataClick"
-          >
-            <TrashIcon class="h-5 w-5" />
-            {{ $t('pages.premium.dashboard.deleteCloudData') }}
-          </button>
-
-          <button
-            class="inline-flex items-center justify-center gap-2 rounded-md border border-red-400/50 bg-red-400/10 px-4 py-2 text-sm font-medium text-red-200 transition-all duration-200 hover:bg-red-400/20 focus-visible:focus-outline-util"
-            type="button"
-            @click="onDeleteAccountClick"
-          >
-            <TrashIcon class="h-5 w-5" />
-            {{ $t('pages.premium.dashboard.deleteAccount') }}
-          </button>
-        </div>
-
-        <p class="mt-3 text-xs text-base-content">
-          {{ $t('pages.premium.dashboard.deleteAccountBillingNote') }}
-        </p>
       </div>
     </section>
   </main>
+
+  <!-- Data & Account Dialog -->
+  <HeadlessTransitionRoot
+    :show="isDataAccountDialogOpen"
+    as="template"
+  >
+    <HeadlessDialog
+      as="div"
+      class="relative z-50"
+      @close="isDataAccountDialogOpen = false"
+    >
+      <HeadlessTransitionChild
+        as="template"
+        enter="ease-out duration-300"
+        enter-from="opacity-0"
+        enter-to="opacity-100"
+        leave="ease-in duration-200"
+        leave-from="opacity-100"
+        leave-to="opacity-0"
+      >
+        <div class="fixed inset-0 bg-base-1000/80 backdrop-blur-sm transition-opacity" />
+      </HeadlessTransitionChild>
+
+      <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <HeadlessTransitionChild
+            as="template"
+            enter="ease-out duration-300"
+            enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            enter-to="opacity-100 translate-y-0 sm:scale-100"
+            leave="ease-in duration-200"
+            leave-from="opacity-100 translate-y-0 sm:scale-100"
+            leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          >
+            <HeadlessDialogPanel
+              class="relative w-full transform overflow-hidden rounded-lg bg-base-1000 px-4 pt-5 pb-4 text-left shadow-xl ring-1 ring-base-0/10 transition-all sm:my-8 sm:max-w-lg sm:p-6"
+            >
+              <button
+                :aria-label="$t('common.closeDialog')"
+                class="absolute top-3 right-3 rounded-md p-2 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                type="button"
+                @click="isDataAccountDialogOpen = false"
+              >
+                <XMarkIcon class="h-5 w-5" />
+              </button>
+
+              <div class="mb-4 flex items-center gap-3 pr-8">
+                <ExclamationTriangleIcon
+                  aria-hidden="true"
+                  class="h-6 w-6 shrink-0 text-red-400"
+                />
+                <HeadlessDialogTitle
+                  as="h2"
+                  class="text-lg font-bold tracking-tight text-base-content-highlight"
+                >
+                  {{ $t('pages.premium.dashboard.deleteDataOrAccount') }}
+                </HeadlessDialogTitle>
+              </div>
+
+              <p class="text-sm text-base-content">
+                {{ $t('pages.premium.dashboard.dataAccountDescription') }}
+              </p>
+
+              <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+                <button
+                  class="inline-flex items-center justify-center gap-2 rounded-md border border-red-400/30 px-4 py-2 text-sm font-medium text-red-300 transition-all duration-200 hover:bg-red-400/10 focus-visible:focus-outline-util"
+                  type="button"
+                  @click="onDeleteCloudDataClick"
+                >
+                  <TrashIcon class="h-5 w-5" />
+                  {{ $t('pages.premium.dashboard.deleteCloudData') }}
+                </button>
+
+                <button
+                  class="inline-flex items-center justify-center gap-2 rounded-md border border-red-400/50 bg-red-400/10 px-4 py-2 text-sm font-medium text-red-200 transition-all duration-200 hover:bg-red-400/20 focus-visible:focus-outline-util"
+                  type="button"
+                  @click="onDeleteAccountClick"
+                >
+                  <TrashIcon class="h-5 w-5" />
+                  {{ $t('pages.premium.dashboard.deleteAccount') }}
+                </button>
+              </div>
+
+              <p class="mt-3 text-xs text-base-content">
+                {{ $t('pages.premium.dashboard.deleteAccountBillingNote') }}
+              </p>
+            </HeadlessDialogPanel>
+          </HeadlessTransitionChild>
+        </div>
+      </div>
+    </HeadlessDialog>
+  </HeadlessTransitionRoot>
 </template>

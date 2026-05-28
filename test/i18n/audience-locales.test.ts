@@ -27,6 +27,20 @@ function placeholders(value: string) {
   return Array.from(value.matchAll(/\{[^}]+}/g), ([placeholder]) => placeholder).sort()
 }
 
+function getValue(locale: LocaleJson, path: string) {
+  return path.split('.').reduce<unknown>((value, key) => {
+    if (!value || typeof value !== 'object') {
+      return undefined
+    }
+
+    return (value as Record<string, unknown>)[key]
+  }, locale)
+}
+
+function linkedKeys(value: string) {
+  return Array.from(value.matchAll(/@:\s*([^\s.]+(?:\.[^\s.]+)*)/g), ([, key]) => key)
+}
+
 describe('audience locale expansion', () => {
   it('registers the strongest additional locales for the app audience', () => {
     const localeCodes = locales.map((locale) => locale.code)
@@ -69,5 +83,18 @@ describe('audience locale expansion', () => {
     expect(readLocale('vi').time).toMatchObject({
       minutes: 'ph'
     })
+  })
+
+  it('keeps linked translation keys resolvable in new audience locales', () => {
+    for (const locale of expectedAudienceLocales) {
+      const messages = readLocale(locale)
+      const translated = flatten(messages)
+
+      for (const value of Object.values(translated)) {
+        for (const linkedKey of linkedKeys(value)) {
+          expect(getValue(messages, linkedKey), `${locale}: ${linkedKey}`).not.toBeUndefined()
+        }
+      }
+    }
   })
 })
