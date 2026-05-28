@@ -1,10 +1,10 @@
 import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 import {
+  createLatestAsyncQueue,
   PremiumCloudSyncRepository,
   type PremiumBooruRecord,
   type PremiumCloudPocketBaseClient
 } from '~/assets/js/PremiumCloudSync'
-import { createLatestAsyncQueue } from '~/assets/js/AsyncSaveQueue'
 import type { Domain } from '~/assets/js/domain'
 import type { ITagCollection } from '~/assets/js/tagCollection.dto'
 import type { Composer } from 'vue-i18n'

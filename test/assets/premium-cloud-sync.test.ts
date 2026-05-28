@@ -2,10 +2,22 @@ import { describe, expect, it } from 'vitest'
 import {
   booruPayloadsFromState,
   cloudDataCollectionNames,
+  createLatestAsyncQueue,
   customBlockListPayloadFromState,
   tagCollectionPayloadsFromState,
   tagCollectionsFromCloudRecords
 } from '../../app/assets/js/PremiumCloudSync'
+
+function deferred() {
+  let resolve!: () => void
+  let reject!: (error: unknown) => void
+  const promise = new Promise<void>((done, fail) => {
+    resolve = done
+    reject = fail
+  })
+
+  return { promise, resolve, reject }
+}
 
 describe('Premium cloud sync policy', () => {
   it('sorts tag collection records from cloud by position', () => {
@@ -65,5 +77,32 @@ describe('Premium cloud sync payloads', () => {
 
   it('targets saved posts plus all critical sync collections for cloud data deletion', () => {
     expect(cloudDataCollectionNames).toEqual(['posts', 'tag_collections', 'boorus', 'tag_blocklists'])
+  })
+})
+
+describe('Premium cloud sync save queue', () => {
+  it('flushes the latest queued payload after an older save fails', async () => {
+    const firstSave = deferred()
+    const savedPayloads: string[] = []
+    const queue = createLatestAsyncQueue(async (payload: string) => {
+      savedPayloads.push(payload)
+
+      if (payload === 'first') {
+        await firstSave.promise
+      }
+    })
+
+    const first = queue('first')
+    const second = queue('second')
+    const third = queue('third')
+
+    await Promise.resolve()
+
+    expect(savedPayloads).toEqual(['first'])
+
+    firstSave.reject(new Error('Network failed'))
+    await expect(Promise.all([first, second, third])).rejects.toThrow('Network failed')
+
+    expect(savedPayloads).toEqual(['first', 'third'])
   })
 })

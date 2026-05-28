@@ -192,19 +192,17 @@
         "discordRoleName": "Discord-Rolle anfordern",
         "discordRoleDescription": "Verbinde Discord, um die Premium-Rolle zu erhalten",
         "contactSupport": "Support kontaktieren",
-        "dataAccountDescription": "Lösche deine synchronisierten Premium-Daten oder entferne dieses App-Konto dauerhaft.",
         "deleteCloudData": "Cloud-Daten löschen",
         "deleteCloudDataConfirm": "Gespeicherte Beiträge, synchronisierte Tag-Sammlungen, benutzerdefinierte Boorus und die benutzerdefinierte Blockliste aus der Cloud löschen?",
         "deleteAccount": "Konto löschen",
         "deleteAccountConfirm": "Dadurch werden dein App-Konto und deine Cloud-Daten dauerhaft gelöscht. Gib \"{value}\" zur Bestätigung ein.",
         "deleteAccountBillingNote": "Das Löschen dieses Kontos kündigt keine Abos, die über externe Zahlungsplattformen verwaltet werden.",
         "moreAccountActions": "Weitere Kontoaktionen",
-        "deleteDataOrAccount": "Daten oder Konto loeschen",
         "billingTitle": "Abrechnung & Support",
-        "billingDescription": "Moechtest du kuendigen, die Zahlung aktualisieren oder deinen Kauf finden? Oeffne die Plattform, auf der du Premium gekauft hast.",
-        "cancelOrManageSubscription": "Abo kuendigen oder verwalten",
-        "cancellationSupportEmailSubject": "Hilfe beim Kuendigen meines Premium-Abos",
-        "cancellationSupportEmailBody": "Hallo, ich brauche Hilfe beim Kuendigen oder Verwalten meines Premium-Abos.\n\nKonto-E-Mail: {email}\nLizenz: {license}"
+        "billingDescription": "Möchtest du kündigen, die Zahlung aktualisieren oder deinen Kauf finden? Öffne die Plattform, auf der du Premium gekauft hast.",
+        "cancelOrManageSubscription": "Abo kündigen oder verwalten",
+        "cancellationSupportEmailSubject": "Hilfe beim Kündigen meines Premium-Abos",
+        "cancellationSupportEmailBody": "Hallo, ich brauche Hilfe beim Kündigen oder Verwalten meines Premium-Abos.\n\nKonto-E-Mail: {email}\nLizenz: {license}"
       },
       "tagCollectionsPage": {
         "seoTitle": "Tag-Sammlungen",

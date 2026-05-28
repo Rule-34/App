@@ -63,6 +63,42 @@ export type PremiumCriticalCloudState = {
   blockList: PremiumBlockListRecord[]
 }
 
+export function createLatestAsyncQueue<T>(save: (payload: T) => Promise<void>) {
+  let active: Promise<void> | null = null
+  let latestPayload: T | undefined
+  let hasLatestPayload = false
+
+  async function flush() {
+    let error: unknown
+
+    while (hasLatestPayload) {
+      const payload = latestPayload as T
+      latestPayload = undefined
+      hasLatestPayload = false
+
+      try {
+        await save(payload)
+      } catch (caughtError) {
+        error ??= caughtError
+      }
+    }
+
+    if (error) {
+      throw error
+    }
+  }
+
+  return (payload: T) => {
+    latestPayload = payload
+    hasLatestPayload = true
+    active ??= flush().finally(() => {
+      active = null
+    })
+
+    return active
+  }
+}
+
 type PremiumCloudCollectionClient = {
   getFullList<T>(options?: unknown): Promise<T[]>
   create<T>(payload: Record<string, unknown>): Promise<T>
@@ -104,14 +140,20 @@ export class PremiumCloudSyncRepository {
     const records = await this.listTagCollections()
     const payloads = tagCollectionPayloadsFromState(this.userId, tagCollections)
 
-    await this.replaceRecords(premiumCloudCollections.tagCollections, records, payloads, (record) => record.name)
+    await this.replaceRecords(
+      premiumCloudCollections.tagCollections,
+      records,
+      payloads,
+      'name',
+      (record) => record.name
+    )
   }
 
   async saveBoorus(boorus: readonly Domain[]) {
     const records = await this.listBoorus()
     const payloads = booruPayloadsFromState(this.userId, boorus)
 
-    await this.replaceRecords(premiumCloudCollections.boorus, records, payloads, (record) => record.domain)
+    await this.replaceRecords(premiumCloudCollections.boorus, records, payloads, 'domain', (record) => record.domain)
   }
 
   async saveCustomBlockList(tags: readonly string[]) {
@@ -187,29 +229,29 @@ export class PremiumCloudSyncRepository {
     collectionName: string,
     records: readonly TRecord[],
     payloads: readonly TPayload[],
+    payloadKey: keyof TPayload,
     keyFromRecord: (record: TRecord) => string
   ) {
     const collection = this.client.collection(collectionName)
     const recordsByKey = new Map(records.map((record) => [keyFromRecord(record), record]))
-    const matchedRecords = new Set<TRecord>()
-    const matchedRecordIds = new Set<string>()
+    const usedRecordIds = new Set<string>()
     const updates: Array<{ record: TRecord; payload: TPayload }> = []
     const creates: TPayload[] = []
 
     for (const [position, payload] of payloads.entries()) {
-      const payloadKey = String(payload[this.keyField(collectionName)])
-      const recordByKey = recordsByKey.get(payloadKey)
+      const recordByKey = recordsByKey.get(String(payload[payloadKey]))
       const recordByPosition = records[position]
-      const record = recordByKey && !matchedRecords.has(recordByKey) ? recordByKey : recordByPosition
+      const record = recordByKey && !usedRecordIds.has(recordByKey.id) ? recordByKey : recordByPosition
 
-      if (record && !matchedRecords.has(record)) {
-        matchedRecords.add(record)
-        matchedRecordIds.add(record.id)
-        if (!recordMatchesPayload(record as Record<string, unknown>, payload)) {
-          updates.push({ record, payload })
-        }
-      } else {
+      if (!record || usedRecordIds.has(record.id)) {
         creates.push(payload)
+        continue
+      }
+
+      usedRecordIds.add(record.id)
+
+      if (!recordMatchesPayload(record as Record<string, unknown>, payload)) {
+        updates.push({ record, payload })
       }
     }
 
@@ -222,18 +264,10 @@ export class PremiumCloudSyncRepository {
     }
 
     for (const record of records) {
-      if (!matchedRecordIds.has(record.id)) {
+      if (!usedRecordIds.has(record.id)) {
         await collection.delete(record.id)
       }
     }
-  }
-
-  private keyField(collectionName: string) {
-    if (collectionName === premiumCloudCollections.boorus) {
-      return 'domain'
-    }
-
-    return 'name'
   }
 
   private async subscribeToCollection(collectionName: string, onChange: () => unknown | Promise<unknown>) {

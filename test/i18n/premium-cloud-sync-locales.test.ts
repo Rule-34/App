@@ -8,8 +8,6 @@ const paths = [
   'toasts.cloudDataDeleted',
   'toasts.accountDeletionCancelled',
   'pages.premium.dashboard.moreAccountActions',
-  'pages.premium.dashboard.deleteDataOrAccount',
-  'pages.premium.dashboard.dataAccountDescription',
   'pages.premium.dashboard.billingTitle',
   'pages.premium.dashboard.billingDescription',
   'pages.premium.dashboard.cancelOrManageSubscription',

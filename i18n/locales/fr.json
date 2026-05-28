@@ -192,19 +192,17 @@
         "discordRoleName": "Récupérer le rôle Discord",
         "discordRoleDescription": "Connecte Discord pour obtenir le rôle Premium",
         "contactSupport": "Contacter le support",
-        "dataAccountDescription": "Supprime tes données Premium synchronisées ou retire définitivement ce compte de l'app.",
         "deleteCloudData": "Supprimer les données cloud",
         "deleteCloudDataConfirm": "Supprimer du cloud les posts enregistrés, les collections de tags synchronisées, les Boorus personnalisés et la blocklist personnalisée ?",
         "deleteAccount": "Supprimer le compte",
         "deleteAccountConfirm": "Cette action supprime définitivement ton compte dans l'app et tes données cloud. Saisis \"{value}\" pour confirmer.",
         "deleteAccountBillingNote": "La suppression de ce compte n'annule pas les abonnements gérés par des plateformes de paiement externes.",
         "moreAccountActions": "Autres actions de compte",
-        "deleteDataOrAccount": "Supprimer les donnees ou le compte",
         "billingTitle": "Facturation et support",
-        "billingDescription": "Besoin d annuler, de mettre a jour le paiement ou de retrouver votre achat ? Ouvrez la plateforme ou vous avez achete Premium.",
-        "cancelOrManageSubscription": "Annuler ou gerer l abonnement",
+        "billingDescription": "Besoin d'annuler, de mettre à jour le paiement ou de retrouver votre achat ? Ouvrez la plateforme où vous avez acheté Premium.",
+        "cancelOrManageSubscription": "Annuler ou gérer l'abonnement",
         "cancellationSupportEmailSubject": "Aide pour annuler mon abonnement Premium",
-        "cancellationSupportEmailBody": "Bonjour, j ai besoin d aide pour annuler ou gerer mon abonnement Premium.\n\nEmail du compte : {email}\nLicence : {license}"
+        "cancellationSupportEmailBody": "Bonjour, j'ai besoin d'aide pour annuler ou gérer mon abonnement Premium.\n\nE-mail du compte : {email}\nLicence : {license}"
       },
       "tagCollectionsPage": {
         "seoTitle": "Collections de tags",

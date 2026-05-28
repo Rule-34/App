@@ -7,8 +7,7 @@
     GlobeAltIcon,
     HeartIcon,
     TrashIcon,
-    TagIcon,
-    XMarkIcon
+    TagIcon
   } from '@heroicons/vue/24/solid'
   import type { Platform } from '~/types/enums/Platform'
   import { detectPlatform, PLATFORM_URLS } from '~/types/enums/Platform'
@@ -22,7 +21,6 @@
 
   const { email, license, isPremium } = useUserData()
   const { deleteCloudData, deleteAccount } = usePremiumCloudSync()
-  const isDataAccountDialogOpen = ref(false)
 
   const discordOauthUrl = computed(() => {
     const { clientId, redirectUri } = project.discordOauth
@@ -112,7 +110,6 @@
 
     if (await deleteCloudData()) {
       toast.success(t('toasts.cloudDataDeleted'))
-      isDataAccountDialogOpen.value = false
       window.location.reload()
     }
   }
@@ -124,7 +121,9 @@
       return
     }
 
-    const confirmedValue = prompt(t('pages.premium.dashboard.deleteAccountConfirm', { value: confirmationValue }))
+    const confirmedValue = prompt(
+      `${t('pages.premium.dashboard.deleteAccountConfirm', { value: confirmationValue })}\n\n${t('pages.premium.dashboard.deleteAccountBillingNote')}`
+    )
 
     if (confirmedValue !== confirmationValue) {
       toast.error(t('toasts.accountDeletionCancelled'))
@@ -214,10 +213,22 @@
                 :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
                 class="flex w-full items-center gap-2 px-4 py-2 text-left text-sm"
                 type="button"
-                @click="isDataAccountDialogOpen = true"
+                @click="onDeleteCloudDataClick"
               >
                 <TrashIcon class="h-4 w-4 text-red-300" />
-                {{ t('pages.premium.dashboard.deleteDataOrAccount') }}
+                {{ t('pages.premium.dashboard.deleteCloudData') }}
+              </button>
+            </HeadlessMenuItem>
+
+            <HeadlessMenuItem v-slot="{ active }">
+              <button
+                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                class="flex w-full items-center gap-2 px-4 py-2 text-left text-sm"
+                type="button"
+                @click="onDeleteAccountClick"
+              >
+                <TrashIcon class="h-4 w-4 text-red-300" />
+                {{ t('pages.premium.dashboard.deleteAccount') }}
               </button>
             </HeadlessMenuItem>
           </HeadlessMenuItems>
@@ -378,96 +389,4 @@
       </div>
     </section>
   </main>
-
-  <!-- Data & Account Dialog -->
-  <HeadlessTransitionRoot
-    :show="isDataAccountDialogOpen"
-    as="template"
-  >
-    <HeadlessDialog
-      as="div"
-      class="relative z-50"
-      @close="isDataAccountDialogOpen = false"
-    >
-      <HeadlessTransitionChild
-        as="template"
-        enter="ease-out duration-300"
-        enter-from="opacity-0"
-        enter-to="opacity-100"
-        leave="ease-in duration-200"
-        leave-from="opacity-100"
-        leave-to="opacity-0"
-      >
-        <div class="fixed inset-0 bg-base-1000/80 backdrop-blur-sm transition-opacity" />
-      </HeadlessTransitionChild>
-
-      <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-          <HeadlessTransitionChild
-            as="template"
-            enter="ease-out duration-300"
-            enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            enter-to="opacity-100 translate-y-0 sm:scale-100"
-            leave="ease-in duration-200"
-            leave-from="opacity-100 translate-y-0 sm:scale-100"
-            leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-          >
-            <HeadlessDialogPanel
-              class="relative w-full transform overflow-hidden rounded-lg bg-base-1000 px-4 pt-5 pb-4 text-left shadow-xl ring-1 ring-base-0/10 transition-all sm:my-8 sm:max-w-lg sm:p-6"
-            >
-              <button
-                :aria-label="$t('common.closeDialog')"
-                class="absolute top-3 right-3 rounded-md p-2 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
-                type="button"
-                @click="isDataAccountDialogOpen = false"
-              >
-                <XMarkIcon class="h-5 w-5" />
-              </button>
-
-              <div class="mb-4 flex items-center gap-3 pr-8">
-                <ExclamationTriangleIcon
-                  aria-hidden="true"
-                  class="h-6 w-6 shrink-0 text-red-400"
-                />
-                <HeadlessDialogTitle
-                  as="h2"
-                  class="text-lg font-bold tracking-tight text-base-content-highlight"
-                >
-                  {{ $t('pages.premium.dashboard.deleteDataOrAccount') }}
-                </HeadlessDialogTitle>
-              </div>
-
-              <p class="text-sm text-base-content">
-                {{ $t('pages.premium.dashboard.dataAccountDescription') }}
-              </p>
-
-              <div class="mt-6 flex flex-col gap-3 sm:flex-row">
-                <button
-                  class="inline-flex items-center justify-center gap-2 rounded-md border border-red-400/30 px-4 py-2 text-sm font-medium text-red-300 transition-all duration-200 hover:bg-red-400/10 focus-visible:focus-outline-util"
-                  type="button"
-                  @click="onDeleteCloudDataClick"
-                >
-                  <TrashIcon class="h-5 w-5" />
-                  {{ $t('pages.premium.dashboard.deleteCloudData') }}
-                </button>
-
-                <button
-                  class="inline-flex items-center justify-center gap-2 rounded-md border border-red-400/50 bg-red-400/10 px-4 py-2 text-sm font-medium text-red-200 transition-all duration-200 hover:bg-red-400/20 focus-visible:focus-outline-util"
-                  type="button"
-                  @click="onDeleteAccountClick"
-                >
-                  <TrashIcon class="h-5 w-5" />
-                  {{ $t('pages.premium.dashboard.deleteAccount') }}
-                </button>
-              </div>
-
-              <p class="mt-3 text-xs text-base-content">
-                {{ $t('pages.premium.dashboard.deleteAccountBillingNote') }}
-              </p>
-            </HeadlessDialogPanel>
-          </HeadlessTransitionChild>
-        </div>
-      </div>
-    </HeadlessDialog>
-  </HeadlessTransitionRoot>
 </template>
