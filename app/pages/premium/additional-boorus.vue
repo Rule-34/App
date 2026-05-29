@@ -2,7 +2,7 @@
   import { ArrowUturnLeftIcon, Bars2Icon, PencilIcon, PlusIcon } from '@heroicons/vue/20/solid'
   import { ExclamationCircleIcon } from '@heroicons/vue/24/solid'
   import { vAutoAnimate } from '@formkit/auto-animate/vue'
-  import { moveArrayElement, useSortable } from '@vueuse/integrations/useSortable'
+  import { useSortable } from '@vueuse/integrations/useSortable'
   import type { Ref } from 'vue'
   import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
   import Slideover from '~/components/layout/Slideover.vue'
@@ -32,7 +32,13 @@
       }
 
       const nextBooruList = [...userBooruList.value]
-      moveArrayElement(nextBooruList, oldIndex, newIndex)
+      const [booru] = nextBooruList.splice(oldIndex, 1)
+
+      if (!booru) {
+        return
+      }
+
+      nextBooruList.splice(newIndex, 0, booru)
 
       void setUserBooruList(nextBooruList)
     }

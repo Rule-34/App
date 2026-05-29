@@ -45,6 +45,27 @@ function createFakePocketBase(initialRecords: Record<string, FakeRecord[]>) {
             return true
           })
         }
+      },
+      createBatch() {
+        return {
+          collection(name: string) {
+            return {
+              create(payload: Record<string, unknown>) {
+                calls.push({ collection: name, method: 'batch.create', args: [payload] })
+              },
+              update(id: string, payload: Record<string, unknown>) {
+                calls.push({ collection: name, method: 'batch.update', args: [id, payload] })
+              },
+              delete(id: string) {
+                calls.push({ collection: name, method: 'batch.delete', args: [id] })
+              }
+            }
+          },
+          send: vi.fn(async () => {
+            calls.push({ collection: '__batch__', method: 'send', args: [] })
+            return []
+          })
+        }
       }
     }
   }
@@ -129,7 +150,7 @@ describe('PremiumCloudSyncRepository', () => {
     expect(calls.filter((call) => call.method !== 'getFullList')).toEqual([])
   })
 
-  it('updates only records whose positions changed during reorder', async () => {
+  it('sends multi-record reorder mutations in one PocketBase batch request', async () => {
     const { client, calls } = createFakePocketBase({
       tag_collections: [
         { id: 'animated', user_id: 'user-1', name: 'Animated', tags: ['animated'], position: 1 },
@@ -148,13 +169,18 @@ describe('PremiumCloudSyncRepository', () => {
     expect(calls.filter((call) => call.method !== 'getFullList')).toEqual([
       {
         collection: 'tag_collections',
-        method: 'update',
+        method: 'batch.update',
         args: ['dog', { user_id: 'user-1', name: 'Dog', tags: ['dog'], position: 2 }]
       },
       {
         collection: 'tag_collections',
-        method: 'update',
+        method: 'batch.update',
         args: ['cat', { user_id: 'user-1', name: 'Cat', tags: ['cat'], position: 3 }]
+      },
+      {
+        collection: '__batch__',
+        method: 'send',
+        args: []
       }
     ])
   })
@@ -173,10 +199,11 @@ describe('PremiumCloudSyncRepository', () => {
     expect(calls.filter((call) => call.method !== 'getFullList')).toEqual([
       {
         collection: 'tag_collections',
-        method: 'update',
+        method: 'batch.update',
         args: ['animated', { user_id: 'user-1', name: 'Animated', tags: ['animated', 'gif'], position: 1 }]
       },
-      { collection: 'tag_collections', method: 'delete', args: ['old'] }
+      { collection: 'tag_collections', method: 'batch.delete', args: ['old'] },
+      { collection: '__batch__', method: 'send', args: [] }
     ])
   })
 

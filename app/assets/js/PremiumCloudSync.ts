@@ -111,12 +111,24 @@ type PremiumCloudCollectionClient = {
   ): Promise<(() => unknown | Promise<unknown>) | undefined>
 }
 
+type PremiumCloudBatchCollectionClient = {
+  create(payload: Record<string, unknown>): void
+  update(id: string, payload: Record<string, unknown>): void
+  delete(id: string): void
+}
+
+type PremiumCloudBatchClient = {
+  collection(name: string): PremiumCloudBatchCollectionClient
+  send(): Promise<unknown>
+}
+
 export type PremiumCloudPocketBaseClient = {
   authStore: {
     isValid: boolean
     record: { id: string } | null
   }
   collection(name: string): PremiumCloudCollectionClient
+  createBatch?(): PremiumCloudBatchClient
 }
 
 export class PremiumCloudSyncRepository {
@@ -237,6 +249,7 @@ export class PremiumCloudSyncRepository {
     const usedRecordIds = new Set<string>()
     const updates: Array<{ record: TRecord; payload: TPayload }> = []
     const creates: TPayload[] = []
+    const deletes: TRecord[] = []
 
     for (const [position, payload] of payloads.entries()) {
       const recordByKey = recordsByKey.get(String(payload[payloadKey]))
@@ -255,6 +268,16 @@ export class PremiumCloudSyncRepository {
       }
     }
 
+    for (const record of records) {
+      if (!usedRecordIds.has(record.id)) {
+        deletes.push(record)
+      }
+    }
+
+    if (await this.tryBatchMutations(collectionName, updates, creates, deletes)) {
+      return
+    }
+
     for (const { record, payload } of updates) {
       await collection.update(record.id, payload)
     }
@@ -263,11 +286,40 @@ export class PremiumCloudSyncRepository {
       await collection.create(payload)
     }
 
-    for (const record of records) {
-      if (!usedRecordIds.has(record.id)) {
-        await collection.delete(record.id)
-      }
+    for (const record of deletes) {
+      await collection.delete(record.id)
     }
+  }
+
+  private async tryBatchMutations<TRecord extends { id: string }, TPayload extends Record<string, unknown>>(
+    collectionName: string,
+    updates: ReadonlyArray<{ record: TRecord; payload: TPayload }>,
+    creates: readonly TPayload[],
+    deletes: readonly TRecord[]
+  ) {
+    const mutationCount = updates.length + creates.length + deletes.length
+
+    if (mutationCount < 2 || !this.client.createBatch) {
+      return false
+    }
+
+    const batch = this.client.createBatch()
+    const collection = batch.collection(collectionName)
+
+    for (const { record, payload } of updates) {
+      collection.update(record.id, payload)
+    }
+
+    for (const payload of creates) {
+      collection.create(payload)
+    }
+
+    for (const record of deletes) {
+      collection.delete(record.id)
+    }
+
+    await batch.send()
+    return true
   }
 
   private async subscribeToCollection(collectionName: string, onChange: () => unknown | Promise<unknown>) {

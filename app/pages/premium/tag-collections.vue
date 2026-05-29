@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ArrowUturnLeftIcon, Bars2Icon, PencilIcon, PlusIcon } from '@heroicons/vue/20/solid'
   import { vAutoAnimate } from '@formkit/auto-animate/vue'
-  import { moveArrayElement, useSortable } from '@vueuse/integrations/useSortable'
+  import { useSortable } from '@vueuse/integrations/useSortable'
   import type { ComputedRef, Ref } from 'vue'
   import { TagCollection } from '~/assets/js/tagCollection.dto'
   import Slideover from '~/components/layout/Slideover.vue'
@@ -31,7 +31,13 @@
       }
 
       const nextTagCollections = [...tagCollections.value]
-      moveArrayElement(nextTagCollections, oldIndex, newIndex)
+      const [tagCollection] = nextTagCollections.splice(oldIndex, 1)
+
+      if (!tagCollection) {
+        return
+      }
+
+      nextTagCollections.splice(newIndex, 0, tagCollection)
 
       void setTagCollections(nextTagCollections)
     }
