@@ -131,6 +131,7 @@ describe('premium cloud sync runtime', () => {
     expect(queueBody).toContain('setTimeout')
     expect(queueBody).toContain('return')
     expect(savedPostsRealtimeBody).not.toContain('refreshFromCloud')
+    expect(savedPostsRealtimeBody).not.toContain('refreshSavedPostsFromCloud')
     expect(savedPostsRealtimeBody).not.toContain('loadPremiumCloudState')
   })
 

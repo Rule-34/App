@@ -59,7 +59,6 @@ export default function () {
   const { savedPostList } = usePocketbase()
 
   const runtime = useState<PremiumCloudSyncRuntime>('premium-cloud-sync-runtime', defaultRuntime)
-  runtime.value.cloudBacked ??= defaultRuntime().cloudBacked
 
   const repository = computed(
     () => new PremiumCloudSyncRepository($pocketBase as unknown as PremiumCloudPocketBaseClient)
@@ -111,16 +110,6 @@ export default function () {
 
     runtime.value.initialized = true
     await tryEnsureRealtimeSubscription()
-  }
-
-  async function refreshSavedPostsFromCloud() {
-    const savedPosts = await loadForCurrentAuthenticatedUser(() => repository.value.loadSavedPosts())
-
-    if (!savedPosts) {
-      return
-    }
-
-    applySavedPostsFromCloud(savedPosts)
   }
 
   async function refreshTagCollectionsFromCloud() {
@@ -422,10 +411,6 @@ export default function () {
   }
 
   function applySavedPostsFromCloud(savedPosts: ISimplePocketbasePost[]) {
-    if (savedPostSummariesEqual(savedPostList.value, savedPosts)) {
-      return
-    }
-
     savedPostList.value = savedPosts
   }
 
@@ -433,7 +418,6 @@ export default function () {
     const savedPostEvent = savedPostRealtimeEvent(event)
 
     if (!savedPostEvent) {
-      void refreshSavedPostsFromCloud()
       return
     }
 
@@ -538,27 +522,6 @@ export default function () {
     deleteCloudData,
     deleteAccount
   }
-}
-
-function savedPostSummariesEqual(left: readonly ISimplePocketbasePost[], right: readonly ISimplePocketbasePost[]) {
-  if (left.length !== right.length) {
-    return false
-  }
-
-  const rightById = new Map(right.map((savedPost) => [savedPost.id, savedPost]))
-
-  return left.every((savedPost) => {
-    const otherSavedPost = rightById.get(savedPost.id)
-
-    if (!otherSavedPost) {
-      return false
-    }
-
-    return (
-      savedPost.original_id === otherSavedPost.original_id &&
-      savedPost.original_domain === otherSavedPost.original_domain
-    )
-  })
 }
 
 function savedPostRealtimeEvent(event: unknown) {
