@@ -71,15 +71,13 @@
 
   const platformOfPurchase = computed<Platform | undefined>(() => detectPlatform(license.value))
   const cancellationSupportEmailHref = computed(() => {
-    const params = new URLSearchParams({
-      subject: t('pages.premium.dashboard.cancellationSupportEmailSubject'),
-      body: t('pages.premium.dashboard.cancellationSupportEmailBody', {
-        email: email.value || '?',
-        license: license.value || '?'
-      })
+    const subject = t('pages.premium.dashboard.cancellationSupportEmailSubject')
+    const body = t('pages.premium.dashboard.cancellationSupportEmailBody', {
+      email: email.value || '?',
+      license: license.value || '?'
     })
 
-    return `mailto:${project.email}?${params.toString()}`
+    return `mailto:${project.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
   })
 
   type MatomoWindow = Window & { _paq?: { push: (event: unknown[]) => void } }

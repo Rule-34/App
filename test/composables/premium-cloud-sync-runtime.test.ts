@@ -119,10 +119,38 @@ describe('premium cloud sync runtime', () => {
     const source = readAppFile('composables/usePremiumCloudSync.ts')
     const queueBody = functionBody(source, 'queueRefreshFromCloud')
     const subscriptionBody = functionBody(source, 'ensureRealtimeSubscription')
+    const savedPostsRealtimeBody = functionBody(source, 'handleSavedPostsRealtimeChange')
 
-    expect(subscriptionBody).toContain('subscribeToCriticalChanges(queueRefreshFromCloud)')
-    expect(subscriptionBody).not.toContain('subscribeToCriticalChanges(refreshFromCloud)')
+    expect(subscriptionBody).toContain('savedPosts: handleSavedPostsRealtimeChange')
+    expect(subscriptionBody).toContain(
+      "tagCollections: () => queueRefreshFromCloud('tagCollections', refreshTagCollectionsFromCloud)"
+    )
+    expect(subscriptionBody).toContain("boorus: () => queueRefreshFromCloud('boorus', refreshBoorusFromCloud)")
+    expect(subscriptionBody).toContain("blockList: () => queueRefreshFromCloud('blockList', refreshBlockListFromCloud)")
+    expect(subscriptionBody).not.toContain('subscribeToPremiumCloudChanges(queueRefreshFromCloud)')
     expect(queueBody).toContain('setTimeout')
     expect(queueBody).toContain('return')
+    expect(savedPostsRealtimeBody).not.toContain('refreshFromCloud')
+    expect(savedPostsRealtimeBody).not.toContain('loadPremiumCloudState')
+  })
+
+  it('clears queued realtime refreshes when auth-bound sync state is cleared', () => {
+    const source = readAppFile('composables/usePremiumCloudSync.ts')
+    const clearBody = functionBody(source, 'clearAuthBoundRuntimeState')
+
+    expect(clearBody).toContain('clearQueuedCloudRefreshes()')
+  })
+
+  it('does not reset the saved-posts viewer when saved post state changes', () => {
+    const source = readAppFile('pages/premium/saved-posts/[domain].vue')
+    const queryStart = source.indexOf('useInfiniteQuery({')
+    const queryEnd = source.indexOf('queryFn: fetchPosts', queryStart)
+    const preQuerySource = source.slice(0, queryStart)
+    const queryKeySource = source.slice(queryStart, queryEnd)
+
+    expect(queryStart).toBeGreaterThanOrEqual(0)
+    expect(queryEnd).toBeGreaterThan(queryStart)
+    expect(preQuerySource).not.toContain('watch(savedPostsRevision')
+    expect(queryKeySource).not.toContain('savedPostsRevision')
   })
 })

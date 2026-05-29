@@ -2,11 +2,15 @@ import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/Bo
 import {
   createLatestAsyncQueue,
   PremiumCloudSyncRepository,
+  type PremiumBlockListRecord,
   type PremiumBooruRecord,
   type PremiumCloudPocketBaseClient
 } from '~/assets/js/PremiumCloudSync'
 import type { Domain } from '~/assets/js/domain'
+import type { IPost } from '~/assets/js/post.dto'
+import type { ISimplePocketbasePost } from '~/assets/js/pocketbase.dto'
 import type { ITagCollection } from '~/assets/js/tagCollection.dto'
+import { nextTick } from 'vue'
 import type { Composer } from 'vue-i18n'
 
 type PremiumCloudSyncRuntime = {
@@ -20,6 +24,8 @@ type PremiumCloudSyncRuntime = {
   }
 }
 
+type PremiumCloudRefreshKey = 'tagCollections' | 'boorus' | 'blockList'
+
 const defaultRuntime = (): PremiumCloudSyncRuntime => ({
   initializing: null,
   initialized: false,
@@ -31,7 +37,14 @@ const defaultRuntime = (): PremiumCloudSyncRuntime => ({
   }
 })
 
-let refreshFromCloudTimeout: ReturnType<typeof setTimeout> | null = null
+const refreshFromCloudTimeouts: Record<PremiumCloudRefreshKey, ReturnType<typeof setTimeout> | null> = {
+  tagCollections: null,
+  boorus: null,
+  blockList: null
+}
+let realtimeUnsubscribe: (() => unknown | Promise<unknown>) | null = null
+let authChangeUnsubscribe: (() => unknown) | null = null
+let lastAuthenticatedUserId: string | null = null
 const saveTagCollectionsToCloud = createLatestAsyncQueue((save: () => Promise<void>) => save())
 const saveBoorusToCloud = createLatestAsyncQueue((save: () => Promise<void>) => save())
 
@@ -51,6 +64,8 @@ export default function () {
   const repository = computed(
     () => new PremiumCloudSyncRepository($pocketBase as unknown as PremiumCloudPocketBaseClient)
   )
+
+  setupAuthChangeCleanup()
 
   async function initialize() {
     if (import.meta.server || !$pocketBase.authStore.isValid) {
@@ -83,61 +98,71 @@ export default function () {
   }
 
   async function initializeSync() {
-    const cloudState = await repository.value.loadCriticalState()
+    const cloudState = await loadForCurrentAuthenticatedUser(() => repository.value.loadPremiumCloudState())
 
-    if (cloudState.tagCollections.length) {
-      tagCollections.value = cloudState.tagCollections
-      runtime.value.cloudBacked.tagCollections = true
+    if (!cloudState) {
+      return
     }
 
-    if (cloudState.boorus.length) {
-      userBooruList.value = booruRecordsToDomains(cloudState.boorus)
-      runtime.value.cloudBacked.boorus = true
-    }
-
-    const [blockListRecord] = cloudState.blockList
-
-    if (blockListRecord) {
-      customBlockList.value = [...blockListRecord.tags]
-      runtime.value.cloudBacked.blockList = true
-    }
+    applySavedPostsFromCloud(cloudState.savedPosts)
+    applyTagCollectionsFromCloud(cloudState.tagCollections, false)
+    applyBoorusFromCloud(cloudState.boorus, false)
+    applyBlockListFromCloud(cloudState.blockList, false)
 
     runtime.value.initialized = true
     await tryEnsureRealtimeSubscription()
   }
 
-  async function refreshFromCloud() {
-    if (import.meta.server || !$pocketBase.authStore.isValid) {
+  async function refreshSavedPostsFromCloud() {
+    const savedPosts = await loadForCurrentAuthenticatedUser(() => repository.value.loadSavedPosts())
+
+    if (!savedPosts) {
       return
     }
 
-    const cloudState = await repository.value.loadCriticalState()
+    applySavedPostsFromCloud(savedPosts)
+  }
 
-    if (cloudState.tagCollections.length) {
-      tagCollections.value = cloudState.tagCollections
-      runtime.value.cloudBacked.tagCollections = true
-    } else if (runtime.value.cloudBacked.tagCollections) {
-      resetTagCollections()
-      runtime.value.cloudBacked.tagCollections = false
+  async function refreshTagCollectionsFromCloud() {
+    const nextTagCollections = await loadForCurrentAuthenticatedUser(() => repository.value.loadTagCollections())
+
+    if (!nextTagCollections) {
+      return
     }
 
-    if (cloudState.boorus.length) {
-      userBooruList.value = booruRecordsToDomains(cloudState.boorus)
-      runtime.value.cloudBacked.boorus = true
-    } else if (runtime.value.cloudBacked.boorus) {
-      userBooruList.value = []
-      runtime.value.cloudBacked.boorus = false
+    applyTagCollectionsFromCloud(nextTagCollections, true)
+  }
+
+  async function refreshBoorusFromCloud() {
+    const boorus = await loadForCurrentAuthenticatedUser(() => repository.value.loadBoorus())
+
+    if (!boorus) {
+      return
     }
 
-    const [blockListRecord] = cloudState.blockList
+    applyBoorusFromCloud(boorus, true)
+  }
 
-    if (blockListRecord) {
-      customBlockList.value = [...blockListRecord.tags]
-      runtime.value.cloudBacked.blockList = true
-    } else if (runtime.value.cloudBacked.blockList) {
-      customBlockList.value = []
-      runtime.value.cloudBacked.blockList = false
+  async function refreshBlockListFromCloud() {
+    const blockList = await loadForCurrentAuthenticatedUser(() => repository.value.loadBlockList())
+
+    if (!blockList) {
+      return
     }
+
+    applyBlockListFromCloud(blockList, true)
+  }
+
+  async function loadForCurrentAuthenticatedUser<T>(load: () => Promise<T>) {
+    const userId = currentAuthenticatedUserId()
+
+    if (import.meta.server || !userId) {
+      return null
+    }
+
+    const value = await load()
+
+    return currentAuthenticatedUserId() === userId ? value : null
   }
 
   async function setTagCollections(nextTagCollections: ITagCollection[]) {
@@ -202,6 +227,32 @@ export default function () {
     })
   }
 
+  async function savePost(post: IPost) {
+    return withCloudSyncFailureToast(async () => {
+      if (!(await canWriteToCloud())) {
+        return false
+      }
+
+      const savedPost = await repository.value.savePost(post)
+      upsertSavedPost(savedPost)
+      await tryEnsureRealtimeSubscription()
+      return true
+    })
+  }
+
+  async function deleteSavedPost(id: string) {
+    return withCloudSyncFailureToast(async () => {
+      if (!(await canWriteToCloud())) {
+        return false
+      }
+
+      await repository.value.deleteSavedPost(id)
+      removeSavedPost(id)
+      await tryEnsureRealtimeSubscription()
+      return true
+    })
+  }
+
   async function setCustomBlockList(nextTags: string[]) {
     return withCloudSyncFailureToast(async () => {
       if (!(await canWriteToCloud())) {
@@ -254,22 +305,33 @@ export default function () {
   }
 
   async function ensureRealtimeSubscription() {
-    if (runtime.value.subscribed || !$pocketBase.authStore.isValid) {
+    if (!$pocketBase.authStore.isValid) {
+      await clearRealtimeSubscription()
       return
     }
 
-    await repository.value.subscribeToCriticalChanges(queueRefreshFromCloud)
+    if (runtime.value.subscribed && realtimeUnsubscribe) {
+      return
+    }
+
+    await clearRealtimeSubscription()
+    realtimeUnsubscribe = await repository.value.subscribeToPremiumCloudChanges({
+      savedPosts: handleSavedPostsRealtimeChange,
+      tagCollections: () => queueRefreshFromCloud('tagCollections', refreshTagCollectionsFromCloud),
+      boorus: () => queueRefreshFromCloud('boorus', refreshBoorusFromCloud),
+      blockList: () => queueRefreshFromCloud('blockList', refreshBlockListFromCloud)
+    })
     runtime.value.subscribed = true
   }
 
-  function queueRefreshFromCloud() {
-    if (refreshFromCloudTimeout) {
+  function queueRefreshFromCloud(key: PremiumCloudRefreshKey, refresh: () => Promise<void>) {
+    if (refreshFromCloudTimeouts[key]) {
       return
     }
 
-    refreshFromCloudTimeout = setTimeout(() => {
-      refreshFromCloudTimeout = null
-      void refreshFromCloud().catch((error) => {
+    refreshFromCloudTimeouts[key] = setTimeout(() => {
+      refreshFromCloudTimeouts[key] = null
+      void refresh().catch((error) => {
         console.error('Failed to refresh premium cloud sync state', error)
       })
     }, 100)
@@ -284,12 +346,157 @@ export default function () {
   }
 
   function clearSyncedLocalState() {
-    savedPostList.value = []
+    clearAuthBoundRuntimeState()
     resetTagCollections()
     resetUserBooruList()
     selectedList.value = 'none' as typeof selectedList.value
     customBlockList.value = []
-    runtime.value.cloudBacked = defaultRuntime().cloudBacked
+  }
+
+  function setupAuthChangeCleanup() {
+    if (import.meta.server || authChangeUnsubscribe) {
+      return
+    }
+
+    lastAuthenticatedUserId = currentAuthenticatedUserId()
+
+    authChangeUnsubscribe = $pocketBase.authStore.onChange(() => {
+      const nextUserId = currentAuthenticatedUserId()
+
+      if (lastAuthenticatedUserId && nextUserId !== lastAuthenticatedUserId) {
+        clearAuthBoundRuntimeState(lastAuthenticatedUserId)
+      }
+
+      lastAuthenticatedUserId = nextUserId
+    })
+  }
+
+  function clearAuthBoundRuntimeState(userId = currentAuthenticatedUserId() ?? lastAuthenticatedUserId) {
+    clearQueuedCloudRefreshes()
+    void clearRealtimeSubscription()
+    savedPostList.value = []
+    runtime.value = defaultRuntime()
+
+    if (import.meta.client && userId) {
+      void nextTick(() => {
+        localStorage.removeItem(`pocketbase-savedPostList-${userId}`)
+      })
+    }
+  }
+
+  function clearQueuedCloudRefreshes() {
+    for (const key of Object.keys(refreshFromCloudTimeouts) as PremiumCloudRefreshKey[]) {
+      const timeout = refreshFromCloudTimeouts[key]
+
+      if (timeout) {
+        clearTimeout(timeout)
+        refreshFromCloudTimeouts[key] = null
+      }
+    }
+  }
+
+  async function clearRealtimeSubscription() {
+    const unsubscribe = realtimeUnsubscribe
+    realtimeUnsubscribe = null
+    runtime.value.subscribed = false
+
+    if (!unsubscribe) {
+      return
+    }
+
+    try {
+      await unsubscribe()
+    } catch (error) {
+      console.error('Failed to unsubscribe from premium cloud sync updates', error)
+    }
+  }
+
+  function currentAuthenticatedUserId() {
+    const id = $pocketBase.authStore.record?.id
+
+    if (!$pocketBase.authStore.isValid || !id) {
+      return null
+    }
+
+    return id
+  }
+
+  function applySavedPostsFromCloud(savedPosts: ISimplePocketbasePost[]) {
+    if (savedPostSummariesEqual(savedPostList.value, savedPosts)) {
+      return
+    }
+
+    savedPostList.value = savedPosts
+  }
+
+  function handleSavedPostsRealtimeChange(event: unknown) {
+    const savedPostEvent = savedPostRealtimeEvent(event)
+
+    if (!savedPostEvent) {
+      void refreshSavedPostsFromCloud()
+      return
+    }
+
+    if (savedPostEvent.action === 'delete') {
+      removeSavedPost(savedPostEvent.savedPost.id)
+      return
+    }
+
+    upsertSavedPost(savedPostEvent.savedPost)
+  }
+
+  function applyTagCollectionsFromCloud(nextTagCollections: ITagCollection[], clearWhenEmpty: boolean) {
+    if (nextTagCollections.length) {
+      tagCollections.value = nextTagCollections
+      runtime.value.cloudBacked.tagCollections = true
+    } else if (clearWhenEmpty && runtime.value.cloudBacked.tagCollections) {
+      resetTagCollections()
+      runtime.value.cloudBacked.tagCollections = false
+    }
+  }
+
+  function applyBoorusFromCloud(records: PremiumBooruRecord[], clearWhenEmpty: boolean) {
+    if (records.length) {
+      userBooruList.value = booruRecordsToDomains(records)
+      runtime.value.cloudBacked.boorus = true
+    } else if (clearWhenEmpty && runtime.value.cloudBacked.boorus) {
+      userBooruList.value = []
+      runtime.value.cloudBacked.boorus = false
+    }
+  }
+
+  function applyBlockListFromCloud(records: PremiumBlockListRecord[], clearWhenEmpty: boolean) {
+    const [blockListRecord] = records
+
+    if (blockListRecord) {
+      customBlockList.value = [...blockListRecord.tags]
+      runtime.value.cloudBacked.blockList = true
+    } else if (clearWhenEmpty && runtime.value.cloudBacked.blockList) {
+      customBlockList.value = []
+      runtime.value.cloudBacked.blockList = false
+    }
+  }
+
+  function upsertSavedPost(savedPost: ISimplePocketbasePost) {
+    const index = savedPostList.value.findIndex((existingSavedPost) => existingSavedPost.id === savedPost.id)
+
+    if (index === -1) {
+      savedPostList.value = savedPostList.value.concat(savedPost)
+    } else {
+      savedPostList.value = savedPostList.value.map((existingSavedPost, savedPostIndex) =>
+        savedPostIndex === index ? savedPost : existingSavedPost
+      )
+    }
+  }
+
+  function removeSavedPost(id: string) {
+    const nextSavedPosts = savedPostList.value.filter((savedPost) => savedPost.id !== id)
+
+    if (nextSavedPosts.length === savedPostList.value.length) {
+      return
+    }
+
+    savedPostList.value = nextSavedPosts
   }
 
   function booruRecordsToDomains(records: readonly PremiumBooruRecord[]): Domain[] {
@@ -321,7 +528,8 @@ export default function () {
   return {
     initialize,
     initializeInBackground,
-    refreshFromCloud,
+    savePost,
+    deleteSavedPost,
     setTagCollections,
     resetTagCollectionsCloud,
     setUserBooruList,
@@ -329,5 +537,57 @@ export default function () {
     setCustomBlockList,
     deleteCloudData,
     deleteAccount
+  }
+}
+
+function savedPostSummariesEqual(left: readonly ISimplePocketbasePost[], right: readonly ISimplePocketbasePost[]) {
+  if (left.length !== right.length) {
+    return false
+  }
+
+  const rightById = new Map(right.map((savedPost) => [savedPost.id, savedPost]))
+
+  return left.every((savedPost) => {
+    const otherSavedPost = rightById.get(savedPost.id)
+
+    if (!otherSavedPost) {
+      return false
+    }
+
+    return (
+      savedPost.original_id === otherSavedPost.original_id &&
+      savedPost.original_domain === otherSavedPost.original_domain
+    )
+  })
+}
+
+function savedPostRealtimeEvent(event: unknown) {
+  if (!event || typeof event !== 'object') {
+    return null
+  }
+
+  const { action, record } = event as { action?: unknown; record?: unknown }
+
+  if (action !== 'create' && action !== 'update' && action !== 'delete') {
+    return null
+  }
+
+  if (!record || typeof record !== 'object') {
+    return null
+  }
+
+  const { id, original_id, original_domain } = record as Partial<ISimplePocketbasePost>
+
+  if (typeof id !== 'string' || typeof original_id !== 'number' || typeof original_domain !== 'string') {
+    return null
+  }
+
+  return {
+    action,
+    savedPost: {
+      id,
+      original_id,
+      original_domain
+    }
   }
 }

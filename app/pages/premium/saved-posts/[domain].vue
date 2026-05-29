@@ -38,8 +38,6 @@
   const { postsPerPage } = useUserSettings()
   const { toggle: toggleSearchMenu } = useSearchMenu()
 
-  const { savedPostList } = usePocketbase()
-
   useHead({
     link: [
       { key: 'imgproxy-preconnect', rel: 'preconnect', href: project.imgproxy.baseUrl },
@@ -50,7 +48,17 @@
   /**
    * URL
    */
-  const domainsFromPocketbase = await $pocketBase.collection('distinct_original_domain_from_posts').getFullList()
+  type SavedPostDomainRecord = {
+    original_domain: string
+  }
+
+  async function loadSavedPostDomains() {
+    return $pocketBase.collection('distinct_original_domain_from_posts').getFullList<SavedPostDomainRecord>({
+      $autoCancel: false
+    })
+  }
+
+  const domainsFromPocketbase = ref(await loadSavedPostDomains())
 
   const booruList = computed(() => {
     const _booruList: Domain[] = [
@@ -64,7 +72,7 @@
       }
     ]
 
-    const booruNamesInDb: string[] = domainsFromPocketbase.map((domain) => domain.original_domain)
+    const booruNamesInDb: string[] = domainsFromPocketbase.value.map((domain) => domain.original_domain)
 
     booruNamesInDb.forEach((booruNameInDb) => {
       _booruList.push({
@@ -387,7 +395,8 @@
     const pocketBasePostsResponse = await $pocketBase.collection('posts').getList<IPocketbasePost>(page, PAGE_SIZE, {
       sort: pocketbaseRequestSort,
       filter: pocketbaseRequestFilter,
-      skipTotal: true
+      skipTotal: true,
+      $autoCancel: false
     })
 
     const posts = pocketBasePostsResponse.items.map((item) => {
@@ -433,9 +442,7 @@
       //
       selectedPage.value,
       //
-      postsPerPage.value,
-      //
-      savedPostList.value.length
+      postsPerPage.value
     ],
 
     queryFn: fetchPosts,
@@ -653,7 +660,7 @@
       itemListElement: [
         { name: t('nav.home'), item: localePath('/') },
         { name: t('pages.premium.landingPage.seoTitle'), item: localePath('/premium') },
-        { name: t('pages.premium.savedPostsPage.title'), item: route.path }
+        { name: t('common.savedPosts'), item: route.path }
       ]
     })
   ])

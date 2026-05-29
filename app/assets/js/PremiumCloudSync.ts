@@ -1,14 +1,17 @@
 import type { Domain, DomainConfig } from './domain'
+import { PocketbasePost, type ISimplePocketbasePost } from './pocketbase.dto'
+import type { IPost } from './post.dto'
 import type { ITagCollection } from './tagCollection.dto'
 
 export const premiumCloudCollections = {
+  posts: 'posts',
   tagCollections: 'tag_collections',
   boorus: 'boorus',
   blocklists: 'tag_blocklists'
 } as const
 
 export const cloudDataCollectionNames = [
-  'posts',
+  premiumCloudCollections.posts,
   premiumCloudCollections.tagCollections,
   premiumCloudCollections.boorus,
   premiumCloudCollections.blocklists
@@ -57,10 +60,18 @@ export type PremiumBlockListPayload = {
   tags: string[]
 }
 
-export type PremiumCriticalCloudState = {
+export type PremiumCloudState = {
+  savedPosts: ISimplePocketbasePost[]
   tagCollections: ITagCollection[]
   boorus: PremiumBooruRecord[]
   blockList: PremiumBlockListRecord[]
+}
+
+export type PremiumCloudRealtimeHandlers = {
+  savedPosts: (event: unknown) => unknown | Promise<unknown>
+  tagCollections: (event: unknown) => unknown | Promise<unknown>
+  boorus: (event: unknown) => unknown | Promise<unknown>
+  blockList: (event: unknown) => unknown | Promise<unknown>
 }
 
 export function createLatestAsyncQueue<T>(save: (payload: T) => Promise<void>) {
@@ -128,24 +139,68 @@ export type PremiumCloudPocketBaseClient = {
     record: { id: string } | null
   }
   collection(name: string): PremiumCloudCollectionClient
-  createBatch?(): PremiumCloudBatchClient
+  createBatch(): PremiumCloudBatchClient
 }
 
 export class PremiumCloudSyncRepository {
   constructor(private readonly client: PremiumCloudPocketBaseClient) {}
 
-  async loadCriticalState(): Promise<PremiumCriticalCloudState> {
-    const [tagCollectionRecords, booruRecords, blockListRecords] = await Promise.all([
-      this.listTagCollections(),
-      this.listBoorus(),
-      this.listBlockLists()
+  async loadPremiumCloudState(): Promise<PremiumCloudState> {
+    const [savedPosts, tagCollections, boorus, blockList] = await Promise.all([
+      this.loadSavedPosts(),
+      this.loadTagCollections(),
+      this.loadBoorus(),
+      this.loadBlockList()
     ])
 
     return {
-      tagCollections: tagCollectionsFromCloudRecords(tagCollectionRecords),
-      boorus: [...booruRecords],
-      blockList: [...blockListRecords]
+      savedPosts,
+      tagCollections,
+      boorus,
+      blockList
     }
+  }
+
+  loadSavedPosts() {
+    return this.client
+      .collection(premiumCloudCollections.posts)
+      .getFullList<ISimplePocketbasePost>({
+        fields: 'id, original_id, original_domain',
+        filter: this.userFilter
+      })
+      .then((records) => records.map(savedPostSummaryFromRecord))
+  }
+
+  loadTagCollections() {
+    return this.client
+      .collection(premiumCloudCollections.tagCollections)
+      .getFullList<PremiumTagCollectionRecord>({ filter: this.userFilter, sort: 'position' })
+      .then(tagCollectionsFromCloudRecords)
+  }
+
+  loadBoorus() {
+    return this.client
+      .collection(premiumCloudCollections.boorus)
+      .getFullList<PremiumBooruRecord>({ filter: this.userFilter, sort: 'position' })
+      .then((records) => [...records])
+  }
+
+  loadBlockList() {
+    return this.client
+      .collection(premiumCloudCollections.blocklists)
+      .getFullList<PremiumBlockListRecord>({ filter: this.userFilter })
+      .then((records) => [...records])
+  }
+
+  async savePost(post: IPost) {
+    const { id: _id, ...payload } = PocketbasePost.fromPost(post, this.userId)
+    const record = await this.client.collection(premiumCloudCollections.posts).create<ISimplePocketbasePost>(payload)
+
+    return savedPostSummaryFromRecord(record)
+  }
+
+  async deleteSavedPost(id: string) {
+    await this.client.collection(premiumCloudCollections.posts).delete(id)
   }
 
   async saveTagCollections(tagCollections: readonly ITagCollection[]) {
@@ -201,11 +256,12 @@ export class PremiumCloudSyncRepository {
     await this.client.collection('users').delete(this.userId)
   }
 
-  async subscribeToCriticalChanges(onChange: () => unknown | Promise<unknown>) {
+  async subscribeToPremiumCloudChanges(handlers: PremiumCloudRealtimeHandlers) {
     const unsubscriptions = await Promise.all([
-      this.subscribeToCollection(premiumCloudCollections.tagCollections, onChange),
-      this.subscribeToCollection(premiumCloudCollections.boorus, onChange),
-      this.subscribeToCollection(premiumCloudCollections.blocklists, onChange)
+      this.subscribeToCollection(premiumCloudCollections.posts, handlers.savedPosts),
+      this.subscribeToCollection(premiumCloudCollections.tagCollections, handlers.tagCollections),
+      this.subscribeToCollection(premiumCloudCollections.boorus, handlers.boorus),
+      this.subscribeToCollection(premiumCloudCollections.blocklists, handlers.blockList)
     ])
 
     return async () => {
@@ -223,18 +279,26 @@ export class PremiumCloudSyncRepository {
     return id
   }
 
+  private get userFilter() {
+    return `user_id = "${this.userId}"`
+  }
+
   private listTagCollections() {
     return this.client
       .collection(premiumCloudCollections.tagCollections)
-      .getFullList<PremiumTagCollectionRecord>({ sort: 'position' })
+      .getFullList<PremiumTagCollectionRecord>({ filter: this.userFilter, sort: 'position' })
   }
 
   private listBoorus() {
-    return this.client.collection(premiumCloudCollections.boorus).getFullList<PremiumBooruRecord>({ sort: 'position' })
+    return this.client
+      .collection(premiumCloudCollections.boorus)
+      .getFullList<PremiumBooruRecord>({ filter: this.userFilter, sort: 'position' })
   }
 
   private listBlockLists() {
-    return this.client.collection(premiumCloudCollections.blocklists).getFullList<PremiumBlockListRecord>()
+    return this.client
+      .collection(premiumCloudCollections.blocklists)
+      .getFullList<PremiumBlockListRecord>({ filter: this.userFilter })
   }
 
   private async replaceRecords<TRecord extends { id: string }, TPayload extends Record<string, unknown>>(
@@ -274,7 +338,8 @@ export class PremiumCloudSyncRepository {
       }
     }
 
-    if (await this.tryBatchMutations(collectionName, updates, creates, deletes)) {
+    if (updates.length + creates.length + deletes.length >= 2) {
+      await this.sendBatchMutations(collectionName, updates, creates, deletes)
       return
     }
 
@@ -291,18 +356,12 @@ export class PremiumCloudSyncRepository {
     }
   }
 
-  private async tryBatchMutations<TRecord extends { id: string }, TPayload extends Record<string, unknown>>(
+  private async sendBatchMutations<TRecord extends { id: string }, TPayload extends Record<string, unknown>>(
     collectionName: string,
     updates: ReadonlyArray<{ record: TRecord; payload: TPayload }>,
     creates: readonly TPayload[],
     deletes: readonly TRecord[]
   ) {
-    const mutationCount = updates.length + creates.length + deletes.length
-
-    if (mutationCount < 2 || !this.client.createBatch) {
-      return false
-    }
-
     const batch = this.client.createBatch()
     const collection = batch.collection(collectionName)
 
@@ -319,10 +378,12 @@ export class PremiumCloudSyncRepository {
     }
 
     await batch.send()
-    return true
   }
 
-  private async subscribeToCollection(collectionName: string, onChange: () => unknown | Promise<unknown>) {
+  private async subscribeToCollection(
+    collectionName: string,
+    onChange: (event: unknown) => unknown | Promise<unknown>
+  ) {
     const collection = this.client.collection(collectionName)
 
     if (!collection.subscribe) {
@@ -334,11 +395,19 @@ export class PremiumCloudSyncRepository {
 
   private async deleteCollectionRecords(collectionName: string) {
     const collection = this.client.collection(collectionName)
-    const records = await collection.getFullList<{ id: string }>({ fields: 'id' })
+    const records = await collection.getFullList<{ id: string }>({ fields: 'id', filter: this.userFilter })
 
     for (const record of records) {
       await collection.delete(record.id)
     }
+  }
+}
+
+function savedPostSummaryFromRecord(record: ISimplePocketbasePost): ISimplePocketbasePost {
+  return {
+    id: record.id,
+    original_id: record.original_id,
+    original_domain: record.original_domain
   }
 }
 

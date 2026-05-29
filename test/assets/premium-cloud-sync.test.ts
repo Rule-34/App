@@ -75,7 +75,7 @@ describe('Premium cloud sync payloads', () => {
     })
   })
 
-  it('targets saved posts plus all critical sync collections for cloud data deletion', () => {
+  it('targets saved posts plus all premium sync collections for cloud data deletion', () => {
     expect(cloudDataCollectionNames).toEqual(['posts', 'tag_collections', 'boorus', 'tag_blocklists'])
   })
 })

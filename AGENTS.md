@@ -150,6 +150,23 @@ the `@headlessui/tailwindcss` plugin.
   test server.
 - Sentry is fully disabled in tests via `$test.sentry.enabled: false` in `nuxt.config.ts`.
 - Debug mode: import `debugBrowserOptions` from `test/helper.ts` for headful playback with slowMo.
+- For premium and PocketBase flows, use a real authenticated browser session for final investigation when possible.
+  Unit tests can prove payload and repository behavior, but real-browser traces catch request bursts, realtime echo
+  refreshes, auth redirects, and UI state changes that are easy to miss in isolated tests.
+
+### Premium Cloud Sync
+
+- Empty cloud state means "no user-authored cloud override"; do not seed PocketBase from local defaults during initial
+  load. Only write premium cloud records after explicit user edits.
+- PocketBase realtime subscriptions echo local writes. When debugging sync performance, inspect real network traces and
+  separate write requests from realtime-triggered refreshes.
+- Saved posts use the same premium cloud realtime runtime as tag collections, custom boorus, and the custom blocklist.
+  Empty saved-post cloud state means there are no saved posts, unlike empty user-authored sync collections where local
+  defaults can still apply.
+- Use PocketBase batch writes for multi-record replacement/reorder operations. Reordering positioned records should not
+  emit one HTTP write per changed row when the SDK batch API is available.
+- VueUse `moveArrayElement()` applies the array move on `nextTick`. For state that is immediately persisted, build the
+  reordered array synchronously instead of reading it before VueUse has applied the move.
 
 ### Docker production build
 
