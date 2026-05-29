@@ -165,8 +165,7 @@ export class PremiumCloudSyncRepository {
     return this.client
       .collection(premiumCloudCollections.posts)
       .getFullList<ISimplePocketbasePost>({
-        fields: 'id, original_id, original_domain',
-        filter: this.userFilter
+        fields: 'id, original_id, original_domain'
       })
       .then((records) => records.map(savedPostSummaryFromRecord))
   }
@@ -174,21 +173,21 @@ export class PremiumCloudSyncRepository {
   loadTagCollections() {
     return this.client
       .collection(premiumCloudCollections.tagCollections)
-      .getFullList<PremiumTagCollectionRecord>({ filter: this.userFilter, sort: 'position' })
+      .getFullList<PremiumTagCollectionRecord>({ sort: 'position' })
       .then(tagCollectionsFromCloudRecords)
   }
 
   loadBoorus() {
     return this.client
       .collection(premiumCloudCollections.boorus)
-      .getFullList<PremiumBooruRecord>({ filter: this.userFilter, sort: 'position' })
+      .getFullList<PremiumBooruRecord>({ sort: 'position' })
       .then((records) => [...records])
   }
 
   loadBlockList() {
     return this.client
       .collection(premiumCloudCollections.blocklists)
-      .getFullList<PremiumBlockListRecord>({ filter: this.userFilter })
+      .getFullList<PremiumBlockListRecord>()
       .then((records) => [...records])
   }
 
@@ -238,6 +237,8 @@ export class PremiumCloudSyncRepository {
   }
 
   async deleteCloudData() {
+    this.assertAuthenticated()
+
     for (const collectionName of cloudDataCollectionNames) {
       await this.deleteCollectionRecords(collectionName)
     }
@@ -279,26 +280,18 @@ export class PremiumCloudSyncRepository {
     return id
   }
 
-  private get userFilter() {
-    return `user_id = "${this.userId}"`
-  }
-
   private listTagCollections() {
     return this.client
       .collection(premiumCloudCollections.tagCollections)
-      .getFullList<PremiumTagCollectionRecord>({ filter: this.userFilter, sort: 'position' })
+      .getFullList<PremiumTagCollectionRecord>({ sort: 'position' })
   }
 
   private listBoorus() {
-    return this.client
-      .collection(premiumCloudCollections.boorus)
-      .getFullList<PremiumBooruRecord>({ filter: this.userFilter, sort: 'position' })
+    return this.client.collection(premiumCloudCollections.boorus).getFullList<PremiumBooruRecord>({ sort: 'position' })
   }
 
   private listBlockLists() {
-    return this.client
-      .collection(premiumCloudCollections.blocklists)
-      .getFullList<PremiumBlockListRecord>({ filter: this.userFilter })
+    return this.client.collection(premiumCloudCollections.blocklists).getFullList<PremiumBlockListRecord>()
   }
 
   private async replaceRecords<TRecord extends { id: string }, TPayload extends Record<string, unknown>>(
@@ -395,11 +388,15 @@ export class PremiumCloudSyncRepository {
 
   private async deleteCollectionRecords(collectionName: string) {
     const collection = this.client.collection(collectionName)
-    const records = await collection.getFullList<{ id: string }>({ fields: 'id', filter: this.userFilter })
+    const records = await collection.getFullList<{ id: string }>({ fields: 'id' })
 
     for (const record of records) {
       await collection.delete(record.id)
     }
+  }
+
+  private assertAuthenticated() {
+    return this.userId
   }
 }
 

@@ -104,27 +104,27 @@ describe('PremiumCloudSyncRepository', () => {
       {
         collection: 'posts',
         method: 'getFullList',
-        args: [{ fields: 'id, original_id, original_domain', filter: 'user_id = "user-1"' }]
+        args: [{ fields: 'id, original_id, original_domain' }]
       },
       {
         collection: 'tag_collections',
         method: 'getFullList',
-        args: [{ filter: 'user_id = "user-1"', sort: 'position' }]
+        args: [{ sort: 'position' }]
       },
       {
         collection: 'boorus',
         method: 'getFullList',
-        args: [{ filter: 'user_id = "user-1"', sort: 'position' }]
+        args: [{ sort: 'position' }]
       },
       {
         collection: 'tag_blocklists',
         method: 'getFullList',
-        args: [{ filter: 'user_id = "user-1"' }]
+        args: []
       }
     ])
   })
 
-  it('loads saved post summaries from the user-scoped posts collection', async () => {
+  it('loads saved post summaries from the posts collection', async () => {
     const { client, calls } = createFakePocketBase({
       posts: [
         { id: 'saved-post-1', user_id: 'user-1', original_id: 34, original_domain: 'rule34.xxx' },
@@ -145,7 +145,7 @@ describe('PremiumCloudSyncRepository', () => {
     expect(calls[0]).toEqual({
       collection: 'posts',
       method: 'getFullList',
-      args: [{ fields: 'id, original_id, original_domain', filter: 'user_id = "user-1"' }]
+      args: [{ fields: 'id, original_id, original_domain' }]
     })
   })
 
@@ -327,17 +327,17 @@ describe('PremiumCloudSyncRepository', () => {
     await repository.deleteCloudData()
 
     expect(calls.filter((call) => call.method === 'getFullList')).toEqual([
-      { collection: 'posts', method: 'getFullList', args: [{ fields: 'id', filter: 'user_id = "user-1"' }] },
+      { collection: 'posts', method: 'getFullList', args: [{ fields: 'id' }] },
       {
         collection: 'tag_collections',
         method: 'getFullList',
-        args: [{ fields: 'id', filter: 'user_id = "user-1"' }]
+        args: [{ fields: 'id' }]
       },
-      { collection: 'boorus', method: 'getFullList', args: [{ fields: 'id', filter: 'user_id = "user-1"' }] },
+      { collection: 'boorus', method: 'getFullList', args: [{ fields: 'id' }] },
       {
         collection: 'tag_blocklists',
         method: 'getFullList',
-        args: [{ fields: 'id', filter: 'user_id = "user-1"' }]
+        args: [{ fields: 'id' }]
       }
     ])
     expect(calls.filter((call) => call.method === 'delete')).toEqual([
