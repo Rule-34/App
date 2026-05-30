@@ -142,6 +142,19 @@ describe('premium cloud sync runtime', () => {
     expect(clearBody).toContain('clearQueuedCloudRefreshes()')
   })
 
+  it('clears all synced local state when the authenticated user changes', () => {
+    const source = readAppFile('composables/usePremiumCloudSync.ts')
+    const authCleanupBody = functionBody(source, 'setupAuthChangeCleanup')
+    const clearSyncedLocalStateBody = functionBody(source, 'clearSyncedLocalState')
+
+    expect(authCleanupBody).toContain('clearSyncedLocalState(lastAuthenticatedUserId)')
+    expect(clearSyncedLocalStateBody).toContain('clearAuthBoundRuntimeState(userId)')
+    expect(clearSyncedLocalStateBody).toContain('resetTagCollections()')
+    expect(clearSyncedLocalStateBody).toContain('resetUserBooruList()')
+    expect(clearSyncedLocalStateBody).toContain("selectedList.value = 'none'")
+    expect(clearSyncedLocalStateBody).toContain('customBlockList.value = []')
+  })
+
   it('does not reset the saved-posts viewer when saved post state changes', () => {
     const source = readAppFile('pages/premium/saved-posts/[domain].vue')
     const queryStart = source.indexOf('useInfiniteQuery({')
@@ -154,4 +167,25 @@ describe('premium cloud sync runtime', () => {
     expect(preQuerySource).not.toContain('watch(savedPostsRevision')
     expect(queryKeySource).not.toContain('savedPostsRevision')
   })
+
+  it('clears inactive saved-posts query cache after new saves without pruning deletes', () => {
+    const source = readAppFile('composables/usePremiumCloudSync.ts')
+    const savePostBody = functionBody(source, 'savePost')
+    const deleteSavedPostBody = functionBody(source, 'deleteSavedPost')
+    const savedPostsRealtimeBody = functionBody(source, 'handleSavedPostsRealtimeChange')
+    const clearBody = functionBody(source, 'clearInactiveSavedPostsQueries')
+
+    expect(source).toContain('useQueryClient()')
+    expect(savePostBody).toContain('upsertSavedPost(savedPost)')
+    expect(savePostBody).toContain('clearInactiveSavedPostsQueries()')
+    expect(savedPostsRealtimeBody).toContain('clearInactiveSavedPostsQueries()')
+    expect(clearBody).toContain('queryClient.removeQueries')
+    expect(clearBody).toContain("queryKey: ['saved-posts']")
+    expect(clearBody).toContain("type: 'inactive'")
+    expect(deleteSavedPostBody).not.toContain('clearInactiveSavedPostsQueries')
+    expect(deleteSavedPostBody).not.toContain('refetchQueries')
+    expect(deleteSavedPostBody).not.toContain('invalidateQueries')
+    expect(deleteSavedPostBody).not.toContain('removeQueries')
+  })
+
 })

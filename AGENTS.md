@@ -177,6 +177,9 @@ the `@headlessui/tailwindcss` plugin.
 - Saved posts use the same premium cloud realtime runtime as tag collections, custom boorus, and the custom blocklist.
   Empty saved-post cloud state means there are no saved posts, unlike empty user-authored sync collections where local
   defaults can still apply.
+- In `/premium/saved-posts`, unsaving a post intentionally should not remove the row or prune cached infinite-query data.
+  Keep the viewer stable so users do not lose scroll/progress; the save button can update immediately and the row can
+  disappear on a later reload/refetch.
 - Use PocketBase batch writes for multi-record replacement/reorder operations. Reordering positioned records should not
   emit one HTTP write per changed row when the SDK batch API is available.
 - VueUse `moveArrayElement()` applies the array move on `nextTick`. For state that is immediately persisted, build the

@@ -17,6 +17,7 @@
   const { toast } = useLazyToast()
 
   const { tagCollections } = useTagCollections()
+  const { setTagCollections } = usePremiumCloudSync()
   const { open: promptPremium, currentIndex } = usePremiumDialog()
 
   function setTagCollectionAsSelected(tagCollection: TagCollection) {
@@ -31,7 +32,7 @@
     emit('updateSelectedTags', selectedTags)
   }
 
-  function createTagCollectionFromSelectedTags() {
+  async function createTagCollectionFromSelectedTags() {
     const selectedTags = props.selectedTags
 
     if (selectedTags.length === 0) {
@@ -56,7 +57,7 @@
       tags: selectedTags.map((tag) => tag.name)
     })
 
-    tagCollections.value.push(tagCollection)
+    await setTagCollections([...tagCollections.value, tagCollection])
   }
 </script>
 

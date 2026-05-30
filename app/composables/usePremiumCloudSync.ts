@@ -337,8 +337,8 @@ export default function () {
     }
   }
 
-  function clearSyncedLocalState() {
-    clearAuthBoundRuntimeState()
+  function clearSyncedLocalState(userId = currentAuthenticatedUserId() ?? lastAuthenticatedUserId) {
+    clearAuthBoundRuntimeState(userId)
     resetTagCollections()
     resetUserBooruList()
     selectedList.value = 'none' as typeof selectedList.value
@@ -524,13 +524,18 @@ export default function () {
   return {
     initialize,
     initializeInBackground,
+
     savePost,
     deleteSavedPost,
+
     setTagCollections,
     resetTagCollectionsCloud,
+
     setUserBooruList,
     resetUserBooruListCloud,
+
     setCustomBlockList,
+
     deleteCloudData,
     deleteAccount
   }
