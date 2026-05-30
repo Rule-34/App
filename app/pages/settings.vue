@@ -43,6 +43,7 @@
   const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia, blockAiGeneratedImages } = useUserSettings()
   const { isPremium } = useUserData()
   const { selectedList, selectedBlockList, defaultBlockList, customBlockList } = useBlockLists()
+  const { setCustomBlockList } = usePremiumCloudSync()
 
   const blockListOptionsList = computed(() => [
     { value: blockListOptions.Default, label: t('pages.settings.blockListDefault') },
@@ -56,7 +57,7 @@
     () => blockListOptionsList.value.find((o) => o.value === selectedList.value)?.label ?? selectedList.value
   )
 
-  function onSelectedListChange(label: string) {
+  async function onSelectedListChange(label: string) {
     const option = blockListOptionsList.value.find((o) => o.label === label)
 
     if (!option) {
@@ -71,7 +72,7 @@
     selectedList.value = option.value
   }
 
-  function onBlockListFormSubmit(event: Event) {
+  async function onBlockListFormSubmit(event: Event) {
     if (!(event.currentTarget instanceof HTMLFormElement)) {
       return
     }
@@ -95,9 +96,9 @@
         })
     }
 
-    customBlockList.value = tags
-
-    toast.success(t('toasts.customBlockListSaved'))
+    if (await setCustomBlockList(tags)) {
+      toast.success(t('toasts.customBlockListSaved'))
+    }
   }
 
   function exportBlockList() {

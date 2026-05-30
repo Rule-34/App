@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import { BookmarkIcon } from '@heroicons/vue/24/outline'
   import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/vue/24/solid'
-  import { PocketbasePost } from '~/assets/js/pocketbase.dto'
   import type { IPost } from '~/assets/js/post.dto'
 
   // TODO: Load this component in <suspense>
@@ -10,9 +9,8 @@
     post: IPost
   }>()
 
-  const { $pocketBase } = useNuxtApp()
-
   const { savedPostList } = usePocketbase()
+  const { savePost, deleteSavedPost } = usePremiumCloudSync()
   const { isPremium } = useUserData()
 
   const postInSavedList = computed(() => {
@@ -35,43 +33,26 @@
     }
 
     if (isPostSaved.value) {
-      await deletePost()
+      await deleteCurrentSavedPost()
     }
     //
     else {
-      await savePost()
+      await saveCurrentPost()
     }
   }
 
-  async function savePost() {
-    const authModel = $pocketBase.authStore.model
-
-    if (!authModel) {
-      return
-    }
-
-    const response = await $pocketBase.collection('posts').create(PocketbasePost.fromPost(props.post, authModel.id))
-
-    savedPostList.value = savedPostList.value.concat({
-      id: response.id,
-
-      original_domain: response.original_domain,
-      original_id: response.original_id
-    })
+  async function saveCurrentPost() {
+    await savePost(props.post)
   }
 
-  async function deletePost() {
+  async function deleteCurrentSavedPost() {
     const currentSavedPost = postInSavedList.value
 
     if (!currentSavedPost) {
       return
     }
 
-    const response = await $pocketBase.collection('posts').delete(currentSavedPost.id)
-
-    if (response === true) {
-      savedPostList.value = savedPostList.value.filter((savedPost) => savedPost.id !== currentSavedPost.id)
-    }
+    await deleteSavedPost(currentSavedPost.id)
   }
 </script>
 

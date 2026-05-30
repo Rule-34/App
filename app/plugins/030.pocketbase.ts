@@ -8,6 +8,7 @@ type PocketBaseAuthCookie = {
 
 // https://github.com/pocketbase/js-sdk#ssr-integration
 export default defineNuxtPlugin<{ pocketBase: PocketBase }>({
+  name: 'pocketbase',
   parallel: true,
   async setup() {
     const pb = new PocketBase('https://pocketbase.r34.app')

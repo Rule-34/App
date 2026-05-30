@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ArrowUturnLeftIcon, Bars2Icon, PencilIcon, PlusIcon } from '@heroicons/vue/20/solid'
   import { vAutoAnimate } from '@formkit/auto-animate/vue'
-  import { moveArrayElement, useSortable } from '@vueuse/integrations/useSortable'
+  import { useSortable } from '@vueuse/integrations/useSortable'
   import type { ComputedRef, Ref } from 'vue'
   import { TagCollection } from '~/assets/js/tagCollection.dto'
   import Slideover from '~/components/layout/Slideover.vue'
@@ -9,7 +9,8 @@
   const { t } = useI18n()
   const { toast } = useLazyToast()
   const localePath = useLocalePath()
-  const { tagCollections, resetTagCollections } = useTagCollections()
+  const { tagCollections } = useTagCollections()
+  const { setTagCollections, resetTagCollectionsCloud } = usePremiumCloudSync()
 
   const sortableElement = shallowRef<HTMLElement | null>(null)
 
@@ -29,9 +30,16 @@
         return
       }
 
-      nextTick(() => {
-        moveArrayElement(tagCollections.value, oldIndex, newIndex)
-      })
+      const nextTagCollections = [...tagCollections.value]
+      const [tagCollection] = nextTagCollections.splice(oldIndex, 1)
+
+      if (!tagCollection) {
+        return
+      }
+
+      nextTagCollections.splice(newIndex, 0, tagCollection)
+
+      void setTagCollections(nextTagCollections)
     }
   })
 
@@ -58,12 +66,12 @@
     tags: ''
   })
 
-  function resetTagCollectionsToDefault() {
+  async function resetTagCollectionsToDefault() {
     if (!confirm(t('common.confirmResetTagCollections'))) {
       return
     }
 
-    resetTagCollections()
+    await resetTagCollectionsCloud()
   }
 
   function openCreateDialog() {
@@ -93,15 +101,15 @@
     dialogOpen.value = true
   }
 
-  function onFormSubmit() {
+  async function onFormSubmit() {
     if (dialogMode.value === 'create') {
-      createItem()
+      await createItem()
     } else {
-      editItem()
+      await editItem()
     }
   }
 
-  function createItem() {
+  async function createItem() {
     // Validations
     if (!currentItem.value.name || !currentItem.value.tags.length) {
       toast.error(t('toasts.fillOutAllFields'))
@@ -114,17 +122,20 @@
     }
 
     // TODO: Design a better way to encode and decode tags
-    tagCollections.value.push(
+    const nextTagCollections = [
+      ...tagCollections.value,
       new TagCollection({
         name: currentItem.value.name,
         tags: tagsStringToArray(currentItem.value.tags)
       })
-    )
+    ]
 
-    dialogOpen.value = false
+    if (await setTagCollections(nextTagCollections)) {
+      dialogOpen.value = false
+    }
   }
 
-  function editItem() {
+  async function editItem() {
     // Validations
     if (!currentItem.value.name || !currentItem.value.tags.length) {
       toast.error(t('toasts.fillOutAllFields'))
@@ -141,12 +152,15 @@
     }
 
     // TODO: Design a better way to encode and decode tags
-    tagCollections.value[dialogEditIndex.value!] = new TagCollection({
+    const nextTagCollections = [...tagCollections.value]
+    nextTagCollections[dialogEditIndex.value!] = new TagCollection({
       name: currentItem.value.name,
       tags: tagsStringToArray(currentItem.value.tags)
     })
 
-    dialogOpen.value = false
+    if (await setTagCollections(nextTagCollections)) {
+      dialogOpen.value = false
+    }
   }
 
   function tagsStringToArray(tagsString: string) {
@@ -161,10 +175,12 @@
     return tagsArray
   }
 
-  function deleteItem() {
-    tagCollections.value.splice(dialogEditIndex.value!, 1)
+  async function deleteItem() {
+    const nextTagCollections = tagCollections.value.filter((_, index) => index !== dialogEditIndex.value)
 
-    dialogOpen.value = false
+    if (await setTagCollections(nextTagCollections)) {
+      dialogOpen.value = false
+    }
   }
 
   useSeoMeta({

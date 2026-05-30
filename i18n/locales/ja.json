@@ -86,21 +86,21 @@
     "emailSent": "メールを送信しました",
     "failedToSendEmail": "メールの送信に失敗しました：{message}",
     "noFileSelected": "ファイルが選択されていません",
-    "failedToRestoreBackup": "バックアップの復元に失敗しました：{error}",
     "invalidBooruType": "無効なBooruタイプです",
     "booruAlreadyExists": "このBooruはすでに追加されています",
-    "cantFindPlatform": "ご購入いただいたプラットフォームを特定できません",
     "autocompleteNotImplemented": "オートコンプリートはまだ実装されていません",
     "notImplemented": "まだ実装されていません",
     "rateLimitDescription": "短時間にリクエストを送りすぎました",
     "verifyNotBot": "ボットでないことを確認",
     "noBlockedTagsToExport": "エクスポートするブロック済みタグがありません",
     "blockListExported": "ブロックリストをエクスポートしました",
+    "cloudSyncFailed": "クラウドデータの同期に失敗しました：{error}",
+    "cloudDataDeleted": "クラウドデータを正常に削除しました",
+    "accountDeletionCancelled": "アカウント削除をキャンセルしました",
     "tagAddedToBlocklistDescription": "効果を確認するには、サイトをリロードするか新しい検索を行ってください",
     "emailSentDescription": "メールアドレスが存在する場合、現在のライセンスが記載されたメールが届きます。メールが届かない場合は、スパムフォルダを確認してください",
     "postSourceDescription": "ソース（アーティスト）があればそちらへ、なければ逆画像検索で探してください",
     "domainSwitcherDescription": "Booruサイト間を切り替えましょう：それぞれユニークなコンテンツがあります。お気に入りを見つけてください！",
-    "backupRestored": "バックアップが正常に復元されました！",
     "authFailed": "認証に失敗しました。再度サインインしてください。"
   },
   "pages": {
@@ -160,7 +160,6 @@
     "premium": {
       "tagCollections": "タグコレクション",
       "additionalBoorus": "追加Booru",
-      "backup": "バックアップ",
       "addMoreBoorus": "Booruを追加",
       "signIn": {
         "seoTitle": "サインイン",
@@ -190,22 +189,20 @@
         "tagCollectionsDescription": "投稿をすばやく検索またはフィルタリングするためのタグリストを作成",
         "additionalBoorusName": "追加Booru",
         "additionalBoorusDescription": "追加ウェブサイトの投稿を閲覧",
-        "backupName": "バックアップと復元",
-        "backupDescription": "タグコレクションと設定をバックアップ",
         "discordRoleName": "Discordロールを取得",
         "discordRoleDescription": "DiscordでPremiumロールを取得するために接続",
-        "feedbackTitle": "フィードバック",
-        "feedbackText": "ご提案やバグを発見しましたか？お知らせください！あなたのフィードバックはアプリをみんなのために改善します。",
         "contactSupport": "サポートに連絡",
-        "manageSubscription": "サブスクリプションの管理"
-      },
-      "backupPage": {
-        "seoTitle": "バックアップ",
-        "pageTitle": "バックアップと復元",
-        "pageDescription": "タグコレクションと設定をバックアップ",
-        "manualNote": "これは手動プロセスです。定期的にデータをバックアップすることをお忘れなく",
-        "backupButton": "バックアップ",
-        "restoreButton": "復元"
+        "deleteCloudData": "クラウドデータを削除",
+        "deleteCloudDataConfirm": "保存済み投稿、同期済みタグコレクション、カスタムBooru、カスタムブロックリストのデータをクラウドから削除しますか？",
+        "deleteAccount": "アカウントを削除",
+        "deleteAccountConfirm": "この操作により、アプリのアカウントとクラウドデータが完全に削除されます。確認するには「{value}」と入力してください。",
+        "deleteAccountBillingNote": "このアカウントを削除しても、外部決済プラットフォームで管理されているサブスクリプションは解約されません。",
+        "moreAccountActions": "その他のアカウント操作",
+        "billingTitle": "請求とサポート",
+        "billingDescription": "解約、支払いの更新、購入情報の確認が必要ですか？Premiumを購入したプラットフォームを開いてください。",
+        "cancelOrManageSubscription": "サブスクリプションを解約または管理",
+        "cancellationSupportEmailSubject": "Premiumサブスクリプション解約のサポート依頼",
+        "cancellationSupportEmailBody": "こんにちは。Premiumサブスクリプションの解約または管理についてサポートが必要です。\n\nアカウントメール: {email}\nライセンス: {license}"
       },
       "tagCollectionsPage": {
         "seoTitle": "タグコレクション",
@@ -375,7 +372,6 @@
     "retry": "再試行",
     "mediaLoadError": "メディアの読み込みエラー",
     "tagInBlockList": "選択したタグのいずれかがブロックリストに含まれています",
-    "backupVersionNotSupported": "バックアップのバージョンがサポートされていません",
     "unauthorized": "未認証です。このページを閲覧するにはサインインしてください"
   },
   "posts": {

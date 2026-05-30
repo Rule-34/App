@@ -1,12 +1,12 @@
 <script lang="ts" setup>
   import {
-    ArchiveBoxIcon,
     ArrowLeftOnRectangleIcon,
     BookmarkIcon,
-    ChatBubbleBottomCenterTextIcon,
+    EllipsisVerticalIcon,
     ExclamationTriangleIcon,
     GlobeAltIcon,
     HeartIcon,
+    TrashIcon,
     TagIcon
   } from '@heroicons/vue/24/solid'
   import type { Platform } from '~/types/enums/Platform'
@@ -20,6 +20,7 @@
   const { toast } = useLazyToast()
 
   const { email, license, isPremium } = useUserData()
+  const { deleteCloudData, deleteAccount } = usePremiumCloudSync()
 
   const discordOauthUrl = computed(() => {
     const { clientId, redirectUri } = project.discordOauth
@@ -58,12 +59,6 @@
       description: t('pages.premium.dashboard.additionalBoorusDescription'),
       href: localePath('/premium/additional-boorus'),
       icon: GlobeAltIcon
-    },
-    {
-      name: t('pages.premium.dashboard.backupName'),
-      description: t('pages.premium.dashboard.backupDescription'),
-      href: localePath('/premium/backup'),
-      icon: ArchiveBoxIcon
     }
   ])
 
@@ -75,6 +70,15 @@
   }
 
   const platformOfPurchase = computed<Platform | undefined>(() => detectPlatform(license.value))
+  const cancellationSupportEmailHref = computed(() => {
+    const subject = t('pages.premium.dashboard.cancellationSupportEmailSubject')
+    const body = t('pages.premium.dashboard.cancellationSupportEmailBody', {
+      email: email.value || '?',
+      license: license.value || '?'
+    })
+
+    return `mailto:${project.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+  })
 
   type MatomoWindow = Window & { _paq?: { push: (event: unknown[]) => void } }
 
@@ -87,22 +91,49 @@
     window.formbricks?.track('cancel_subscription_click_on_dashboard')
 
     if (!platformOfPurchase.value) {
-      toast.error(t('toasts.cantFindPlatform'))
+      window.location.href = cancellationSupportEmailHref.value
+      getMatomoQueue()?.push(['trackEvent', 'Premium', 'Click "Subscription support fallback"'])
       return
     }
 
     window.open(PLATFORM_URLS[platformOfPurchase.value], '_blank', 'noopener,noreferrer')
 
-    getMatomoQueue()?.push(['trackEvent', 'Premium', 'Click "Manage subscription"', platformOfPurchase.value])
+    getMatomoQueue()?.push(['trackEvent', 'Premium', 'Click "Cancel or manage subscription"', platformOfPurchase.value])
+  }
+
+  async function onDeleteCloudDataClick() {
+    if (!confirm(t('pages.premium.dashboard.deleteCloudDataConfirm'))) {
+      return
+    }
+
+    if (await deleteCloudData()) {
+      toast.success(t('toasts.cloudDataDeleted'))
+      window.location.reload()
+    }
+  }
+
+  async function onDeleteAccountClick() {
+    const confirmationValue = email.value || license.value
+
+    if (!confirmationValue) {
+      return
+    }
+
+    const confirmedValue = prompt(
+      `${t('pages.premium.dashboard.deleteAccountConfirm', { value: confirmationValue })}\n\n${t('pages.premium.dashboard.deleteAccountBillingNote')}`
+    )
+
+    if (confirmedValue !== confirmationValue) {
+      toast.error(t('toasts.accountDeletionCancelled'))
+      return
+    }
+
+    if (await deleteAccount()) {
+      window.location.href = localePath('/premium')
+    }
   }
 
   onNuxtReady(() => {
-    const route = useRoute()
-
-    if (route.query.restoreSuccess) {
-      toast.success(t('toasts.backupRestored'))
-    }
-
     // --- Event Tracking: user subscribed --- >
     if (!import.meta.client || !isInitialLogin.value) {
       return
@@ -149,9 +180,59 @@
 </script>
 
 <template>
-  <!-- Sign out -->
+  <!-- Account actions -->
   <ClientOnly>
     <Teleport to="#navbar-actions">
+      <HeadlessMenu
+        as="div"
+        class="relative"
+      >
+        <HeadlessMenuButton
+          :aria-label="t('pages.premium.dashboard.moreAccountActions')"
+          class="relative rounded-md p-2 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+          type="button"
+        >
+          <EllipsisVerticalIcon class="h-6 w-6 text-base-content-highlight" />
+        </HeadlessMenuButton>
+
+        <Transition
+          enter-active-class="transition ease-out duration-100"
+          enter-from-class="scale-95 opacity-0"
+          enter-to-class="scale-100 opacity-100"
+          leave-active-class="transition ease-in duration-75"
+          leave-from-class="scale-100 opacity-100"
+          leave-to-class="scale-95 opacity-0"
+        >
+          <HeadlessMenuItems
+            class="absolute right-0 z-50 mt-2 w-56 origin-top-right rounded-md bg-base-1000 py-1 shadow-lg ring-1 ring-base-0/20 focus:outline-hidden"
+          >
+            <HeadlessMenuItem v-slot="{ active }">
+              <button
+                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                class="flex w-full items-center gap-2 px-4 py-2 text-left text-sm"
+                type="button"
+                @click="onDeleteCloudDataClick"
+              >
+                <TrashIcon class="h-4 w-4 text-red-300" />
+                {{ t('pages.premium.dashboard.deleteCloudData') }}
+              </button>
+            </HeadlessMenuItem>
+
+            <HeadlessMenuItem v-slot="{ active }">
+              <button
+                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                class="flex w-full items-center gap-2 px-4 py-2 text-left text-sm"
+                type="button"
+                @click="onDeleteAccountClick"
+              >
+                <TrashIcon class="h-4 w-4 text-red-300" />
+                {{ t('pages.premium.dashboard.deleteAccount') }}
+              </button>
+            </HeadlessMenuItem>
+          </HeadlessMenuItems>
+        </Transition>
+      </HeadlessMenu>
+
       <button
         :aria-label="t('pages.premium.dashboard.signOutLabel')"
         class="relative rounded-md p-2 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
@@ -275,45 +356,34 @@
       </div>
     </section>
 
-    <!-- Feedback -->
-    <section class="mt-8">
-      <NuxtLink
-        class="flex items-start rounded-md border border-base-0/20 bg-base-0/5 p-4 transition-all duration-200 hover:hover-bg-util hover:shadow-md focus-visible:focus-outline-util"
-        :href="`https://feedback.${project.urls.production.hostname}`"
-        rel="nofollow noopener noreferrer"
-        target="_blank"
-      >
-        <ChatBubbleBottomCenterTextIcon class="mt-1 mr-3 h-6 w-6 flex-shrink-0 text-primary-400" />
-        <div>
-          <h2 class="text-lg font-bold tracking-tight text-base-content-highlight">
-            {{ $t('pages.premium.dashboard.feedbackTitle') }}
-          </h2>
-          <p class="text-sm">
-            {{ $t('pages.premium.dashboard.feedbackText') }}
-          </p>
-        </div>
-      </NuxtLink>
-    </section>
-
     <!-- Support & Subscription Management -->
-    <section class="mt-4 mb-3 border-t border-base-0/10 pt-6">
-      <div class="flex flex-row items-center justify-center gap-4">
+    <section class="mt-8 mb-8 border-t border-base-0/10 pt-6">
+      <div class="mb-4">
+        <h2 class="text-xl font-bold text-base-content-highlight">
+          {{ $t('pages.premium.dashboard.billingTitle') }}
+        </h2>
+        <p class="mt-1 text-sm text-base-content">
+          {{ $t('pages.premium.dashboard.billingDescription') }}
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <button
+          class="inline-flex items-center justify-center rounded-md border border-base-0/20 px-4 py-2 text-sm font-medium transition-all duration-200 hover:hover-bg-util focus-visible:focus-outline-util"
+          type="button"
+          @click="onManageSubscriptionClick"
+        >
+          {{ $t('pages.premium.dashboard.cancelOrManageSubscription') }}
+        </button>
+
         <NuxtLink
-          class="flex items-center gap-2 rounded-md border border-base-0/20 px-4 py-2 transition-all duration-200 hover:hover-bg-util focus-visible:focus-outline-util"
+          class="inline-flex items-center justify-center rounded-md border border-base-0/20 px-4 py-2 text-sm font-medium transition-all duration-200 hover:hover-bg-util focus-visible:focus-outline-util"
           :href="`mailto:${project.email}`"
           rel="nofollow noopener noreferrer"
           target="_blank"
         >
-          <span class="text-sm font-medium">{{ $t('pages.premium.dashboard.contactSupport') }}</span>
+          {{ $t('pages.premium.dashboard.contactSupport') }}
         </NuxtLink>
-
-        <button
-          class="flex items-center gap-2 rounded-md border border-base-0/20 px-4 py-2 transition-all duration-200 hover:hover-bg-util focus-visible:focus-outline-util"
-          type="button"
-          @click="onManageSubscriptionClick"
-        >
-          <span class="text-sm font-medium">{{ $t('pages.premium.dashboard.manageSubscription') }}</span>
-        </button>
       </div>
     </section>
   </main>

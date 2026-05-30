@@ -86,21 +86,21 @@
     "emailSent": "E-mail envoyé",
     "failedToSendEmail": "Échec de l'envoi de l'e-mail : {message}",
     "noFileSelected": "Aucun fichier sélectionné",
-    "failedToRestoreBackup": "Échec de la restauration de la sauvegarde : {error}",
     "invalidBooruType": "Type de Booru invalide",
     "booruAlreadyExists": "Ce Booru existe déjà",
-    "cantFindPlatform": "Impossible de trouver la plateforme où tu as acheté ton abonnement",
     "autocompleteNotImplemented": "Autocomplétion non implémentée",
     "notImplemented": "Non implémenté",
     "rateLimitDescription": "Tu as envoyé trop de requêtes en peu de temps",
     "verifyNotBot": "Vérifier que je ne suis pas un bot",
     "noBlockedTagsToExport": "Aucun tag bloqué à exporter",
     "blockListExported": "Blocklist exportée",
+    "cloudSyncFailed": "Échec de la synchronisation des données cloud : {error}",
+    "cloudDataDeleted": "Données cloud supprimées avec succès",
+    "accountDeletionCancelled": "Suppression du compte annulée",
     "tagAddedToBlocklistDescription": "Pour voir l'effet, recharge le site ou fais une nouvelle recherche",
     "emailSentDescription": "Si ton e-mail existe, tu recevras un e-mail avec ta licence actuelle. Si tu ne reçois rien, vérifie ton dossier spam",
     "postSourceDescription": "Va à la source (artiste) si elle existe, ou trouve-la avec la recherche d'image inversée",
     "domainSwitcherDescription": "Passe d'un site Booru à l'autre : chacun a du contenu unique, trouve celui que tu préfères !",
-    "backupRestored": "Sauvegarde restaurée avec succès !",
     "authFailed": "Échec de l'authentification. Merci de te reconnecter."
   },
   "pages": {
@@ -160,7 +160,6 @@
     "premium": {
       "tagCollections": "Collections de tags",
       "additionalBoorus": "Boorus supplémentaires",
-      "backup": "Sauvegarde",
       "addMoreBoorus": "Ajouter plus de Boorus",
       "signIn": {
         "seoTitle": "Connexion",
@@ -190,22 +189,20 @@
         "tagCollectionsDescription": "Crée des listes de tags pour rechercher ou filtrer rapidement les posts",
         "additionalBoorusName": "Boorus supplémentaires",
         "additionalBoorusDescription": "Parcours des posts depuis des sites supplémentaires",
-        "backupName": "Sauvegarde et restauration",
-        "backupDescription": "Sauvegarde tes collections de tags et paramètres",
         "discordRoleName": "Récupérer le rôle Discord",
         "discordRoleDescription": "Connecte Discord pour obtenir le rôle Premium",
-        "feedbackTitle": "Feedback",
-        "feedbackText": "Une suggestion ou un bug ? Dis-le-moi ! Ton feedback aide à améliorer l'app pour tout le monde.",
         "contactSupport": "Contacter le support",
-        "manageSubscription": "Gérer l'abonnement"
-      },
-      "backupPage": {
-        "seoTitle": "Sauvegarde",
-        "pageTitle": "Sauvegarde et restauration",
-        "pageDescription": "Sauvegarde tes collections de tags et paramètres",
-        "manualNote": "C'est un processus manuel. Pense à sauvegarder tes données régulièrement",
-        "backupButton": "Sauvegarder",
-        "restoreButton": "Restaurer"
+        "deleteCloudData": "Supprimer les données cloud",
+        "deleteCloudDataConfirm": "Supprimer du cloud les posts enregistrés, les collections de tags synchronisées, les Boorus personnalisés et la blocklist personnalisée ?",
+        "deleteAccount": "Supprimer le compte",
+        "deleteAccountConfirm": "Cette action supprime définitivement ton compte dans l'app et tes données cloud. Saisis \"{value}\" pour confirmer.",
+        "deleteAccountBillingNote": "La suppression de ce compte n'annule pas les abonnements gérés par des plateformes de paiement externes.",
+        "moreAccountActions": "Autres actions de compte",
+        "billingTitle": "Facturation et support",
+        "billingDescription": "Besoin d'annuler, de mettre à jour le paiement ou de retrouver votre achat ? Ouvrez la plateforme où vous avez acheté Premium.",
+        "cancelOrManageSubscription": "Annuler ou gérer l'abonnement",
+        "cancellationSupportEmailSubject": "Aide pour annuler mon abonnement Premium",
+        "cancellationSupportEmailBody": "Bonjour, j'ai besoin d'aide pour annuler ou gérer mon abonnement Premium.\n\nE-mail du compte : {email}\nLicence : {license}"
       },
       "tagCollectionsPage": {
         "seoTitle": "Collections de tags",
@@ -375,7 +372,6 @@
     "retry": "Réessayer",
     "mediaLoadError": "Erreur de chargement du média",
     "tagInBlockList": "Un de tes tags sélectionnés est dans la blocklist",
-    "backupVersionNotSupported": "Version de sauvegarde non prise en charge",
     "unauthorized": "Non autorisé, merci de te connecter pour voir cette page"
   },
   "posts": {
@@ -500,7 +496,12 @@
       "cta": "Passer Premium"
     }
   },
-  "time": { "days": "j", "hours": "h", "minutes": "m", "seconds": "s" },
+  "time": {
+    "days": "j",
+    "hours": "h",
+    "minutes": "m",
+    "seconds": "s"
+  },
   "news": {
     "feedbackWebsiteTitle": "Site de feedback",
     "feedbackWebsiteText": "Maintenant tu peux voter, discuter et partager des idées 💡 pour améliorer {name}",
@@ -535,5 +536,7 @@
     "howToFindH3": "Comment trouver les meilleures vidéos hentai {tags} et gifs porno sur {domain}",
     "howToFindP": "Tu cherches les meilleurs artworks de parodie hentai {tags} et Rule 34 ? Utilise nos options avancées de recherche et de filtrage pour trouver exactement ce que tu veux. Trie les images adultes et vidéos XXX par note, date ou popularité pour trouver les uploads les plus récents et les mieux notés. Notre système complet de tags Rule 34 permet des recherches précises, pour que tu trouves exactement les illustrations sexy, gifs porno et vidéos explicites que tu recherches, au moment même où ils sont uploadés sur {domain} et d'autres sources adultes populaires."
   },
-  "seoHelper": { "without": "sans" }
+  "seoHelper": {
+    "without": "sans"
+  }
 }

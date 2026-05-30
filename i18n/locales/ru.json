@@ -86,21 +86,21 @@
     "emailSent": "Письмо отправлено",
     "failedToSendEmail": "Не удалось отправить письмо: {message}",
     "noFileSelected": "Файл не выбран",
-    "failedToRestoreBackup": "Не удалось восстановить резервную копию: {error}",
     "invalidBooruType": "Недопустимый тип Booru",
     "booruAlreadyExists": "Такой Booru уже есть",
-    "cantFindPlatform": "Не удалось определить платформу, где вы оформили подписку",
     "autocompleteNotImplemented": "Автодополнение пока не реализовано",
     "notImplemented": "Пока не реализовано",
     "rateLimitDescription": "Вы отправили слишком много запросов за короткое время",
     "verifyNotBot": "Подтвердить, что я не бот",
     "noBlockedTagsToExport": "Нет заблокированных тегов для экспорта",
     "blockListExported": "Список блокировки экспортирован",
+    "cloudSyncFailed": "Не удалось синхронизировать облачные данные: {error}",
+    "cloudDataDeleted": "Облачные данные успешно удалены",
+    "accountDeletionCancelled": "Удаление аккаунта отменено",
     "tagAddedToBlocklistDescription": "Чтобы увидеть эффект, перезагрузите сайт или выполните новый поиск",
     "emailSentDescription": "Если ваш email существует, вы получите письмо с текущей лицензией. Если письмо не пришло, проверьте папку со спамом",
     "postSourceDescription": "Перейдите к источнику (художнику), если он существует, или найдите его с помощью обратного поиска изображений",
     "domainSwitcherDescription": "Переключайтесь между Booru-сайтами: у каждого уникальный контент, найдите тот, что вам нравится!",
-    "backupRestored": "Резервная копия успешно восстановлена!",
     "authFailed": "Ошибка аутентификации. Пожалуйста, войдите снова."
   },
   "pages": {
@@ -160,7 +160,6 @@
     "premium": {
       "tagCollections": "Коллекции тегов",
       "additionalBoorus": "Дополнительные Booru",
-      "backup": "Резервная копия",
       "addMoreBoorus": "Добавить Booru",
       "signIn": {
         "seoTitle": "Войти",
@@ -190,22 +189,20 @@
         "tagCollectionsDescription": "Создавайте списки тегов для быстрого поиска или фильтрации публикаций",
         "additionalBoorusName": "Дополнительные Booru",
         "additionalBoorusDescription": "Просматривайте публикации с дополнительных сайтов",
-        "backupName": "Резервное копирование и восстановление",
-        "backupDescription": "Делайте резервные копии коллекций тегов и настроек",
         "discordRoleName": "Получить роль Discord",
         "discordRoleDescription": "Подключите Discord, чтобы получить роль Premium",
-        "feedbackTitle": "Отзывы",
-        "feedbackText": "Есть предложение или нашли ошибку? Сообщите мне! Ваш отзыв помогает улучшить приложение для всех.",
         "contactSupport": "Связаться с поддержкой",
-        "manageSubscription": "Управление подпиской"
-      },
-      "backupPage": {
-        "seoTitle": "Резервное копирование",
-        "pageTitle": "Резервное копирование и восстановление",
-        "pageDescription": "Делайте резервные копии коллекций тегов и настроек",
-        "manualNote": "Это ручной процесс. Не забывайте регулярно создавать резервные копии данных",
-        "backupButton": "Создать копию",
-        "restoreButton": "Восстановить"
+        "deleteCloudData": "Удалить облачные данные",
+        "deleteCloudDataConfirm": "Удалить из облака сохранённые посты, синхронизированные коллекции тегов, пользовательские Booru и пользовательский список блокировки?",
+        "deleteAccount": "Удалить аккаунт",
+        "deleteAccountConfirm": "Это навсегда удалит ваш аккаунт приложения и облачные данные. Введите «{value}» для подтверждения.",
+        "deleteAccountBillingNote": "Удаление этого аккаунта не отменяет подписки, управляемые внешними платёжными платформами.",
+        "moreAccountActions": "Другие действия аккаунта",
+        "billingTitle": "Оплата и поддержка",
+        "billingDescription": "Нужно отменить, обновить оплату или найти покупку? Откройте платформу, где вы купили Premium.",
+        "cancelOrManageSubscription": "Отменить или управлять подпиской",
+        "cancellationSupportEmailSubject": "Помощь с отменой подписки Premium",
+        "cancellationSupportEmailBody": "Здравствуйте, мне нужна помощь с отменой или управлением подпиской Premium.\n\nEmail аккаунта: {email}\nЛицензия: {license}"
       },
       "tagCollectionsPage": {
         "seoTitle": "Коллекции тегов",
@@ -375,7 +372,6 @@
     "retry": "Повторить",
     "mediaLoadError": "Ошибка загрузки медиафайла",
     "tagInBlockList": "Один из выбранных тегов находится в списке блокировки",
-    "backupVersionNotSupported": "Версия резервной копии не поддерживается",
     "unauthorized": "Не авторизован, пожалуйста, войдите в систему для просмотра этой страницы"
   },
   "posts": {
