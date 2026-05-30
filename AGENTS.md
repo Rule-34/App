@@ -114,6 +114,12 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
 - Do not add `provideHeadlessUseId` in `app/app.vue` while the project uses Vue 3.5+ and `@headlessui/vue` 1.7.23+; those
   versions use Vue's native `useId` and the Nuxt Headless UI workaround is only for older versions.
 
+### Toasts
+
+- `useLazyToast()` lazy-loads `vue-sonner` and renders `ClientToaster` on first use. The first toast must wait for
+  `ClientToaster` to mount before calling `toast.*`; a plain `nextTick()` can fire before `<LazyClientToaster>` has
+  finished loading and silently drop the toast.
+
 ### Performance
 
 - Prefer high-impact, measurable optimizations over small rewrites. Keep battle-tested dependencies unless replacing one
