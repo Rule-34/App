@@ -432,6 +432,11 @@
     isError,
     isFetchNextPageError
   } = useInfiniteQuery({
+    // Keep saved-posts viewer progress stable. Do not include savedPostList
+    // or a saved-posts revision in this query key, and do not prune cached
+    // rows when a post is unsaved from this page. The button state can update
+    // immediately, but the row should remain until a normal reload/refetch so
+    // users do not lose their place while reviewing saved posts.
     queryKey: [
       //
       'saved-posts',
