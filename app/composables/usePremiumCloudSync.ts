@@ -1,4 +1,5 @@
 import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+import { useQueryClient } from '@tanstack/vue-query'
 import {
   createLatestAsyncQueue,
   PremiumCloudSyncRepository,
@@ -52,6 +53,7 @@ export default function () {
   const nuxtApp = useNuxtApp()
   const $i18n = nuxtApp.$i18n as Composer
   const { $pocketBase } = nuxtApp
+  const queryClient = useQueryClient()
   const { toast } = useLazyToast()
   const { tagCollections, resetTagCollections } = useTagCollections()
   const { userBooruList, resetUserBooruList } = useBooruList()
@@ -224,6 +226,7 @@ export default function () {
 
       const savedPost = await repository.value.savePost(post)
       upsertSavedPost(savedPost)
+      clearInactiveSavedPostsQueries()
       await tryEnsureRealtimeSubscription()
       return true
     })
@@ -353,7 +356,7 @@ export default function () {
       const nextUserId = currentAuthenticatedUserId()
 
       if (lastAuthenticatedUserId && nextUserId !== lastAuthenticatedUserId) {
-        clearAuthBoundRuntimeState(lastAuthenticatedUserId)
+        clearSyncedLocalState(lastAuthenticatedUserId)
       }
 
       lastAuthenticatedUserId = nextUserId
@@ -427,6 +430,7 @@ export default function () {
     }
 
     upsertSavedPost(savedPostEvent.savedPost)
+    clearInactiveSavedPostsQueries()
   }
 
   function applyTagCollectionsFromCloud(nextTagCollections: ITagCollection[], clearWhenEmpty: boolean) {
@@ -481,6 +485,14 @@ export default function () {
     }
 
     savedPostList.value = nextSavedPosts
+  }
+
+  function clearInactiveSavedPostsQueries() {
+    // If a user visited saved posts while empty, then saves from /posts, the old
+    // empty infinite-query cache would otherwise be reused on the next visit.
+    // Only clear inactive queries so unsaving inside the saved-posts viewer does
+    // not reset the active list or lose scroll/progress.
+    queryClient.removeQueries({ queryKey: ['saved-posts'], type: 'inactive' })
   }
 
   function booruRecordsToDomains(records: readonly PremiumBooruRecord[]): Domain[] {
