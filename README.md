@@ -98,6 +98,10 @@ The shared resources submodule lives at `app/assets/lib/rule-34-shared-resources
 cp .example.env .env
 ```
 
+The default `.example.env` binds the Nuxt dev server to `127.0.0.1`. Keep that value unless you need to test from
+another device; it avoids macOS/Chrome resolving `localhost` to Nuxt's IPv6 listener and showing a plain
+`Upgrade Required` response.
+
 #### NodeJS
 
 ```bash

@@ -24,7 +24,7 @@ pnpm install            # triggers nuxt prepare via postinstall
 
 | Command           | What it does                                                                   |
 | ----------------- | ------------------------------------------------------------------------------ |
-| `pnpm dev`        | Dev server at `localhost:8080`                                                 |
+| `pnpm dev`        | Dev server at `localhost:8080` via `HOST=127.0.0.1`                            |
 | `pnpm build`      | Production build into `.output/`                                               |
 | `pnpm generate`   | Static generation                                                              |
 | `pnpm format`     | Prettier write                                                                 |
@@ -58,6 +58,14 @@ Single Nuxt app. Key directories:
 
 Components are registered **without path prefix** (`nuxt.config.ts` → `components: [{ pathPrefix: false }]`). Import
 them as `<DomainSelector>` not `<Input/DomainSelector>`.
+
+### Local dev host
+
+- Keep `HOST=127.0.0.1` in local `.env`/`.example.env` for `pnpm dev`. On macOS, `localhost` can resolve to `::1`
+  first; Nuxt/Vite can then answer normal browser requests with a plain `426 Upgrade Required` from the IPv6 listener.
+- If Chrome shows only `Upgrade Required`, verify with `curl -I http://localhost:8080/...`,
+  `curl -I http://127.0.0.1:8080/...`, and `lsof -nP -iTCP:8080 -sTCP:LISTEN`, then restart the dev server with the
+  IPv4 host binding.
 
 ### i18n
 
