@@ -33,7 +33,7 @@ export default function () {
      */
     {
       id: 'https://ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
-      weight: 0.2
+      weight: 0.35
     },
     /**
      * Clickadu
@@ -42,7 +42,7 @@ export default function () {
      */
     {
       id: '/js/popunder2.js?v=10',
-      weight: 0.15
+      weight: 0.05
     },
     /**
      * AdMaven
@@ -69,7 +69,7 @@ export default function () {
      */
     {
       id: 'https://je.deuxseethe.com/r1onMblLYR8e/rwnnn',
-      weight: 0.5
+      weight: 0.45
     },
     /**
      * AdsTerra
