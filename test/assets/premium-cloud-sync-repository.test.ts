@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { PremiumCloudSyncRepository } from '../../app/assets/js/PremiumCloudSync'
+import { PremiumCloudSyncRepository } from '../../app/repositories/PremiumCloudRepository'
 
 type FakeRecord = { id: string; [key: string]: unknown }
 
@@ -23,6 +23,17 @@ function createFakePocketBase(initialRecords: Record<string, FakeRecord[]>) {
           getFullList: vi.fn(async (...args: unknown[]) => {
             calls.push({ collection: name, method: 'getFullList', args })
             return records[name]
+          }),
+          getList: vi.fn(async (page = 1, perPage = 30, ...args: unknown[]) => {
+            calls.push({ collection: name, method: 'getList', args: [page, perPage, ...args] })
+
+            return {
+              page,
+              perPage,
+              totalItems: records[name].length,
+              totalPages: records[name].length ? Math.ceil(records[name].length / perPage) : 0,
+              items: records[name]
+            }
           }),
           create: vi.fn(async (payload: Record<string, unknown>) => {
             calls.push({ collection: name, method: 'create', args: [payload] })

@@ -6,6 +6,24 @@ type PocketBaseAuthCookie = {
   model?: AuthStoreModel
 }
 
+function parsePocketBaseAuthCookie(
+  cookie: PocketBaseAuthCookie | string | null | undefined
+): PocketBaseAuthCookie | null {
+  if (!cookie) {
+    return null
+  }
+
+  if (typeof cookie !== 'string') {
+    return cookie
+  }
+
+  try {
+    return JSON.parse(decodeURIComponent(cookie)) as PocketBaseAuthCookie
+  } catch {
+    return null
+  }
+}
+
 // https://github.com/pocketbase/js-sdk#ssr-integration
 export default defineNuxtPlugin<{ pocketBase: PocketBase }>({
   name: 'pocketbase',
@@ -26,8 +44,10 @@ export default defineNuxtPlugin<{ pocketBase: PocketBase }>({
     })
 
     // load the store data from the cookie value
-    if (cookie.value?.token) {
-      pb.authStore.save(cookie.value.token, cookie.value.model)
+    const authCookie = parsePocketBaseAuthCookie(cookie.value)
+
+    if (authCookie?.token) {
+      pb.authStore.save(authCookie.token, authCookie.model)
     }
 
     // send back the default 'pb_auth' cookie to the client with the latest store state

@@ -9,18 +9,19 @@
     post: IPost
   }>()
 
-  const { savedPostList } = usePocketbase()
-  const { savePost, deleteSavedPost } = usePremiumCloudSync()
+  const { getSavedPost, initialize, savePost, deleteSavedPost } = usePremiumCloudSync()
   const { isPremium } = useUserData()
 
   const postInSavedList = computed(() => {
-    return savedPostList.value.find(
-      (savedPost) => savedPost.original_id === props.post.id && savedPost.original_domain === props.post.domain
-    )
+    return getSavedPost(props.post)
   })
 
   const isPostSaved = computed(() => {
     return !!postInSavedList.value
+  })
+
+  onMounted(() => {
+    void initialize()
   })
 
   async function onClick() {

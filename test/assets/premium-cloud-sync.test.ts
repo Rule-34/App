@@ -6,7 +6,7 @@ import {
   customBlockListPayloadFromState,
   tagCollectionPayloadsFromState,
   tagCollectionsFromCloudRecords
-} from '../../app/assets/js/PremiumCloudSync'
+} from '../../app/repositories/PremiumCloudRepository'
 
 function deferred() {
   let resolve!: () => void

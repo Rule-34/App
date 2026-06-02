@@ -164,6 +164,8 @@ the `@headlessui/tailwindcss` plugin.
   test server.
 - Sentry is fully disabled in tests via `$test.sentry.enabled: false` in `nuxt.config.ts`.
 - Debug mode: import `debugBrowserOptions` from `test/helper.ts` for headful playback with slowMo.
+- Plain Vitest suites that import app modules directly do not get Nuxt's runtime alias resolution; keep repository/pure
+  modules importable through relative paths or import them directly from their app path in those suites.
 - For premium and PocketBase flows, use a real authenticated browser session for final investigation when possible.
   Unit tests can prove payload and repository behavior, but real-browser traces catch request bursts, realtime echo
   refreshes, auth redirects, and UI state changes that are easy to miss in isolated tests.
