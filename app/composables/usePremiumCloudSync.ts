@@ -57,18 +57,27 @@ export default function () {
   const { tagCollections, resetTagCollections } = useTagCollections()
   const { userBooruList, resetUserBooruList } = useBooruList()
   const { customBlockList } = useBlockLists()
+  const savedPostListOwnerId = useState<string | null>('premium-saved-post-list-owner-id', () => null)
   const savedPostList = useState<ISimplePocketbasePost[]>('premium-saved-post-list', () => [])
 
   const runtime = useState<PremiumCloudSyncRuntime>('premium-cloud-sync-runtime', defaultRuntime)
+  const isInitialized = computed(() => runtime.value.initialized)
+  const isInitializing = computed(() => !!runtime.value.initializing)
 
   const repository = computed(() => new PremiumCloudRepository($pocketBase as unknown as PremiumCloudPocketBaseClient))
 
+  ensureSavedPostListOwner()
   setupAuthChangeCleanup()
 
   async function initialize() {
-    if (import.meta.server || !$pocketBase.authStore.isValid) {
+    const userId = currentAuthenticatedUserId()
+
+    if (import.meta.server || !userId) {
+      ensureSavedPostListOwner(null)
       return
     }
+
+    ensureSavedPostListOwner(userId)
 
     if (runtime.value.initialized) {
       return
@@ -358,6 +367,7 @@ export default function () {
     clearQueuedCloudRefreshes()
     void clearRealtimeSubscription()
     savedPostList.value = []
+    savedPostListOwnerId.value = currentAuthenticatedUserId()
     runtime.value = defaultRuntime()
   }
 
@@ -398,7 +408,20 @@ export default function () {
     return id
   }
 
+  function ensureSavedPostListOwner(userId = currentAuthenticatedUserId()) {
+    if (savedPostListOwnerId.value === userId) {
+      return
+    }
+
+    clearQueuedCloudRefreshes()
+    void clearRealtimeSubscription()
+    savedPostList.value = []
+    savedPostListOwnerId.value = userId
+    runtime.value = defaultRuntime()
+  }
+
   function applySavedPostsFromCloud(savedPosts: ISimplePocketbasePost[]) {
+    ensureSavedPostListOwner()
     savedPostList.value = savedPosts
   }
 
@@ -481,6 +504,10 @@ export default function () {
   }
 
   function getSavedPost(post: IPost) {
+    if (!runtime.value.initialized) {
+      return undefined
+    }
+
     return savedPostList.value.find(
       (savedPost) => savedPost.original_id === post.id && savedPost.original_domain === post.domain
     )
@@ -515,6 +542,8 @@ export default function () {
   return {
     initialize,
     initializeInBackground,
+    isInitialized,
+    isInitializing,
 
     savedPostList,
     getSavedPost,

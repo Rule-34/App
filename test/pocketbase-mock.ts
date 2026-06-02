@@ -47,6 +47,7 @@ export type PocketBaseMockState = {
   tagCollectionRecords: PocketBaseRecord[]
   booruRecords: PocketBaseRecord[]
   blockListRecords: PocketBaseRecord[]
+  delaySavedPostSummariesMs: number
 }
 
 export function createPocketBaseMockState(overrides: Partial<PocketBaseMockState> = {}): PocketBaseMockState {
@@ -57,6 +58,7 @@ export function createPocketBaseMockState(overrides: Partial<PocketBaseMockState
     tagCollectionRecords: [],
     booruRecords: [],
     blockListRecords: [],
+    delaySavedPostSummariesMs: 0,
     ...overrides
   }
 }
@@ -99,8 +101,13 @@ export async function mockPocketBase(page: Page, state: PocketBaseMockState) {
 
     if (request.method() === 'GET') {
       const perPage = Number(requestUrl.searchParams.get('perPage')) || undefined
+      const records = recordsForCollection(collectionName, requestUrl, state)
 
-      await fulfillJson(route, pageResponse(recordsForCollection(collectionName, requestUrl, state), perPage))
+      if (collectionName === 'posts' && isSavedPostSummaryRequest(requestUrl) && state.delaySavedPostSummariesMs) {
+        await new Promise((resolve) => setTimeout(resolve, state.delaySavedPostSummariesMs))
+      }
+
+      await fulfillJson(route, pageResponse(records, perPage))
       return
     }
 
@@ -137,9 +144,7 @@ export async function mockPocketBase(page: Page, state: PocketBaseMockState) {
 function recordsForCollection(collectionName: string, requestUrl: URL, state: PocketBaseMockState) {
   switch (collectionName) {
     case 'posts':
-      return requestUrl.searchParams.get('fields')?.includes('original_id')
-        ? state.savedPostSummaries
-        : state.savedPostRecords
+      return isSavedPostSummaryRequest(requestUrl) ? state.savedPostSummaries : state.savedPostRecords
 
     case 'tag_collections':
       return state.tagCollectionRecords
@@ -153,6 +158,10 @@ function recordsForCollection(collectionName: string, requestUrl: URL, state: Po
     default:
       return []
   }
+}
+
+function isSavedPostSummaryRequest(requestUrl: URL) {
+  return requestUrl.searchParams.get('fields')?.includes('original_id')
 }
 
 function pageResponse<T>(items: T[], requestedPerPage?: number) {

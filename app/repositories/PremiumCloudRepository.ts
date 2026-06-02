@@ -242,7 +242,6 @@ export class PremiumCloudRepository {
       .getList<IPocketbasePost>(page, perPage, {
         sort: filters.sort ?? '-created',
         filter: requestFilters.join(' && '),
-        skipTotal: true,
         $autoCancel: false
       })
 
@@ -296,6 +295,13 @@ export class PremiumCloudRepository {
     const [record] = records
 
     if (record) {
+      const deletes = records.slice(1)
+
+      if (deletes.length) {
+        await this.sendBatchMutations(premiumCloudCollections.blocklists, [{ record, payload }], [], deletes)
+        return
+      }
+
       await collection.update(record.id, payload)
       return
     }
@@ -325,15 +331,29 @@ export class PremiumCloudRepository {
   }
 
   async subscribeToPremiumCloudChanges(handlers: PremiumCloudRealtimeHandlers) {
-    const unsubscriptions = await Promise.all([
-      this.subscribeToCollection(premiumCloudCollections.posts, handlers.savedPosts),
-      this.subscribeToCollection(premiumCloudCollections.tagCollections, handlers.tagCollections),
-      this.subscribeToCollection(premiumCloudCollections.boorus, handlers.boorus),
-      this.subscribeToCollection(premiumCloudCollections.blocklists, handlers.blockList)
-    ])
+    const subscriptions = [
+      [premiumCloudCollections.posts, handlers.savedPosts],
+      [premiumCloudCollections.tagCollections, handlers.tagCollections],
+      [premiumCloudCollections.boorus, handlers.boorus],
+      [premiumCloudCollections.blocklists, handlers.blockList]
+    ] as const
+    const unsubscriptions: Array<() => unknown | Promise<unknown>> = []
+
+    try {
+      for (const [collectionName, handler] of subscriptions) {
+        const unsubscribe = await this.subscribeToCollection(collectionName, handler)
+
+        if (unsubscribe) {
+          unsubscriptions.push(unsubscribe)
+        }
+      }
+    } catch (error) {
+      await Promise.allSettled(unsubscriptions.map((unsubscribe) => unsubscribe()))
+      throw error
+    }
 
     return async () => {
-      await Promise.all(unsubscriptions.map((unsubscribe) => unsubscribe?.()))
+      await Promise.allSettled(unsubscriptions.map((unsubscribe) => unsubscribe()))
     }
   }
 
@@ -456,6 +476,11 @@ export class PremiumCloudRepository {
   private async deleteCollectionRecords(collectionName: string) {
     const collection = this.client.collection(collectionName)
     const records = await collection.getFullList<{ id: string }>({ fields: 'id' })
+
+    if (records.length >= 2) {
+      await this.sendBatchMutations(collectionName, [], [], records)
+      return
+    }
 
     for (const record of records) {
       await collection.delete(record.id)

@@ -179,6 +179,8 @@ the `@headlessui/tailwindcss` plugin.
 - Saved posts use the same premium cloud realtime runtime as tag collections, custom boorus, and the custom blocklist.
   Empty saved-post cloud state means there are no saved posts, unlike empty user-authored sync collections where local
   defaults can still apply.
+- Auth-bound premium `useState` caches must be explicitly scoped or owner-guarded by PocketBase user id. Do not let a
+  global Nuxt state key expose one account's saved posts or sync state during auth switches.
 - In `/premium/saved-posts`, unsaving a post intentionally should not remove the row or prune cached infinite-query data.
   Keep the viewer stable so users do not lose scroll/progress; the save button can update immediately and the row can
   disappear on a later reload/refetch.

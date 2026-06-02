@@ -21,6 +21,7 @@
   }
 
   const savedPostBooruType = booruTypeList[0]
+  const savedPostsDomain = project.urls.production.hostname
 
   if (!savedPostBooruType) {
     throw new Error('Expected at least one configured booru type')
@@ -38,6 +39,21 @@
   const { postsPerPage } = useUserSettings()
   const { toggle: toggleSearchMenu } = useSearchMenu()
 
+  function currentRouteDomain() {
+    const domain = route.params.domain
+
+    return Array.isArray(domain) ? domain[0] : domain
+  }
+
+  const routeDomain = currentRouteDomain()
+
+  if (routeDomain && routeDomain !== savedPostsDomain) {
+    await navigateTo(
+      { path: localePath(`/premium/saved-posts/${savedPostsDomain}`), query: route.query },
+      { replace: true }
+    )
+  }
+
   useHead({
     link: [
       { key: 'imgproxy-preconnect', rel: 'preconnect', href: project.imgproxy.baseUrl },
@@ -51,7 +67,7 @@
   const booruList = computed(() => {
     return [
       {
-        domain: project.urls.production.hostname,
+        domain: savedPostsDomain,
         type: savedPostBooruType,
         config: null,
         isCustom: false,
@@ -61,24 +77,10 @@
   })
 
   const selectedBooru = computed(() => {
-    let domain = route.params.domain
-
-    // Fallback to first booru
-    if (!domain) {
-      const fallback = booruList.value[0]
-
-      if (!fallback) {
-        throw new Error('Expected at least one saved-post booru')
-      }
-
-      domain = fallback.domain
-    }
-
-    const booru = booruList.value.find((booru) => booru.domain === domain)
+    const booru = booruList.value[0]
 
     if (!booru) {
-      toast.error(t('toasts.booruNotFound', { domain }))
-      throw new Error(`Booru "${domain}" not found`)
+      throw new Error('Expected at least one saved-post booru')
     }
 
     return booru
@@ -327,7 +329,7 @@
       page,
       perPage: postsPerPage.value,
       domain: selectedBooru.value.domain,
-      allPostsDomain: project.urls.production.hostname,
+      allPostsDomain: savedPostsDomain,
       filters: {
         type: selectedFilters.value.type,
         rating: selectedFilters.value.rating,

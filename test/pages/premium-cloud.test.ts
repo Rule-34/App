@@ -75,6 +75,35 @@ describe('Premium cloud flows', async () => {
     expect(premiumLocalStorageKeys).toEqual([])
   }, 20000)
 
+  it('keeps saved-post actions disabled until cloud saved state loads', async () => {
+    const page = await createTrackedPage()
+    const pocketBase = createPocketBaseMockState({
+      savedPostSummaries: [firstSavedPostSummary],
+      savedPostRecords: [firstSavedPostRecord],
+      delaySavedPostSummariesMs: 1500
+    })
+
+    await mockPocketBase(page, pocketBase)
+    await addPocketBaseAuthCookie(page, url('/'))
+    await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+
+    const firstPost = page.getByTestId(`safebooru.org-${firstMockPost.id}`).first()
+    const firstSaveButton = firstPost
+      .locator(
+        'button[aria-label="Save post"]:not([tabindex="-1"]), button[aria-label="Unsave post"]:not([tabindex="-1"])'
+      )
+      .first()
+
+    await firstPost.waitFor({ state: 'visible', timeout: 10000 })
+    await firstSaveButton.waitFor({ state: 'visible', timeout: 10000 })
+    expect(await firstSaveButton.evaluate((button) => (button as HTMLButtonElement).disabled)).toBe(true)
+
+    await firstSaveButton.evaluate((button) => (button as HTMLButtonElement).click())
+    await expect.poll(() => firstSaveButton.getAttribute('aria-label'), { timeout: 10000 }).toBe('Unsave post')
+
+    expect(pocketBase.requests.filter((request) => request === 'POST /api/collections/posts/records')).toEqual([])
+  }, 20000)
+
   it('loads all saved posts from the hardcoded saved-posts domain without domain discovery', async () => {
     const page = await createTrackedPage()
     const pocketBase = createPocketBaseMockState({
@@ -86,6 +115,30 @@ describe('Premium cloud flows', async () => {
     await addPocketBaseAuthCookie(page, url('/'))
     await page.goto(url('/premium/saved-posts/r34.app'), { waitUntil: 'domcontentloaded' })
 
+    await page.locator('figure').first().waitFor({ state: 'visible', timeout: 10000 })
+
+    expect(pocketBase.requests.some((request) => request.includes('distinct_original_domain_from_posts'))).toBe(false)
+  }, 20000)
+
+  it('redirects old saved-post domain URLs to the all-posts domain while preserving filters', async () => {
+    const page = await createTrackedPage()
+    const pocketBase = createPocketBaseMockState({
+      savedPostSummaries: [firstSavedPostSummary],
+      savedPostRecords: [firstSavedPostRecord]
+    })
+
+    await mockPocketBase(page, pocketBase)
+    await addPocketBaseAuthCookie(page, url('/'))
+    await page.goto(url('/premium/saved-posts/safebooru.org?filter%5Bsort%5D=-score'), {
+      waitUntil: 'domcontentloaded'
+    })
+
+    await page.waitForURL(
+      (currentUrl) =>
+        currentUrl.pathname === '/premium/saved-posts/r34.app' &&
+        currentUrl.searchParams.get('filter[sort]') === '-score',
+      { timeout: 10000 }
+    )
     await page.locator('figure').first().waitFor({ state: 'visible', timeout: 10000 })
 
     expect(pocketBase.requests.some((request) => request.includes('distinct_original_domain_from_posts'))).toBe(false)

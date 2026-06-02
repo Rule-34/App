@@ -9,10 +9,15 @@
     post: IPost
   }>()
 
-  const { getSavedPost, initialize, savePost, deleteSavedPost } = usePremiumCloudSync()
+  const { getSavedPost, initializeInBackground, isInitialized, savePost, deleteSavedPost } = usePremiumCloudSync()
   const { isPremium } = useUserData()
+  const canUseSavedPosts = computed(() => !isPremium.value || isInitialized.value)
 
   const postInSavedList = computed(() => {
+    if (!canUseSavedPosts.value) {
+      return undefined
+    }
+
     return getSavedPost(props.post)
   })
 
@@ -21,7 +26,7 @@
   })
 
   onMounted(() => {
-    void initialize()
+    void initializeInBackground()
   })
 
   async function onClick() {
@@ -30,6 +35,10 @@
 
       currentIndex.value = 2
       promptPremium.value = true
+      return
+    }
+
+    if (!canUseSavedPosts.value) {
       return
     }
 
@@ -60,7 +69,8 @@
 <template>
   <button
     :aria-label="isPostSaved ? $t('common.unsavePost') : $t('common.savePost')"
-    class="group rounded-md px-1.5 py-1 hover:hover-bg-util focus-visible:focus-outline-util"
+    :disabled="!canUseSavedPosts"
+    class="group rounded-md px-1.5 py-1 hover:hover-bg-util focus-visible:focus-outline-util disabled:cursor-wait disabled:opacity-60"
     type="button"
     @click="onClick"
   >

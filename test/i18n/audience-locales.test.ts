@@ -1,8 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { defaultLocale, locales } from '../../config/i18n'
+import { defaultLocale, locales, prefixedLocaleCodes } from '../../config/i18n'
 
-const nonDefaultLocales = locales.filter((locale) => locale.code !== defaultLocale).map((locale) => locale.code)
+const nonDefaultLocales = prefixedLocaleCodes
 
 type LocaleJson = Record<string, unknown>
 
