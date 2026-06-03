@@ -81,7 +81,7 @@ describe('Premium cloud sync payloads', () => {
 })
 
 describe('Premium cloud sync save queue', () => {
-  it('flushes the latest queued payload after an older save fails', async () => {
+  it('resolves when the latest queued payload succeeds after an older save fails', async () => {
     const firstSave = deferred()
     const savedPayloads: string[] = []
     const queue = createLatestAsyncQueue(async (payload: string) => {
@@ -101,8 +101,35 @@ describe('Premium cloud sync save queue', () => {
     expect(savedPayloads).toEqual(['first'])
 
     firstSave.reject(new Error('Network failed'))
-    await expect(Promise.all([first, second, third])).rejects.toThrow('Network failed')
+    await expect(Promise.all([first, second, third])).resolves.toEqual([undefined, undefined, undefined])
 
     expect(savedPayloads).toEqual(['first', 'third'])
+  })
+
+  it('lets callers invalidate stale in-flight mutations before they update local state', async () => {
+    const firstSave = deferred()
+    const localState: string[] = []
+    const queue = createLatestAsyncQueue<string>(async (payload, isCurrent) => {
+      if (!isCurrent()) {
+        return
+      }
+
+      await firstSave.promise
+
+      if (!isCurrent()) {
+        return
+      }
+
+      localState.push(payload)
+    })
+
+    const first = queue('first')
+
+    await Promise.resolve()
+    queue.invalidate()
+    firstSave.resolve()
+    await first
+
+    expect(localState).toEqual([])
   })
 })

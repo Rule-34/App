@@ -74,23 +74,34 @@ export type PremiumCloudRealtimeHandlers = {
   blockList: (event: unknown) => unknown | Promise<unknown>
 }
 
-export function createLatestAsyncQueue<T>(save: (payload: T) => Promise<void>) {
+export type LatestAsyncQueue<T> = ((payload: T) => Promise<void>) & {
+  invalidate: () => void
+}
+
+export function createLatestAsyncQueue<T>(
+  save: (payload: T, isCurrent: () => boolean) => Promise<void>
+): LatestAsyncQueue<T> {
   let active: Promise<void> | null = null
-  let latestPayload: T | undefined
+  let latestPayload: { payload: T; generation: number } | undefined
   let hasLatestPayload = false
+  let generation = 0
 
   async function flush() {
     let error: unknown
 
     while (hasLatestPayload) {
-      const payload = latestPayload as T
+      const { payload, generation: payloadGeneration } = latestPayload as { payload: T; generation: number }
+      const isCurrent = () => generation === payloadGeneration
       latestPayload = undefined
       hasLatestPayload = false
 
       try {
-        await save(payload)
+        await save(payload, isCurrent)
+        error = undefined
       } catch (caughtError) {
-        error ??= caughtError
+        if (isCurrent()) {
+          error = caughtError
+        }
       }
     }
 
@@ -99,15 +110,23 @@ export function createLatestAsyncQueue<T>(save: (payload: T) => Promise<void>) {
     }
   }
 
-  return (payload: T) => {
-    latestPayload = payload
+  const queue = ((payload: T) => {
+    latestPayload = { payload, generation }
     hasLatestPayload = true
     active ??= flush().finally(() => {
       active = null
     })
 
     return active
+  }) as LatestAsyncQueue<T>
+
+  queue.invalidate = () => {
+    generation += 1
+    latestPayload = undefined
+    hasLatestPayload = false
   }
+
+  return queue
 }
 
 type PremiumCloudCollectionClient = {

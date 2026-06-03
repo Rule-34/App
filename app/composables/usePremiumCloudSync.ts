@@ -43,8 +43,12 @@ const refreshFromCloudTimeouts: Record<PremiumCloudRefreshKey, ReturnType<typeof
   blockList: null
 }
 let realtimeUnsubscribe: (() => unknown | Promise<unknown>) | null = null
-const saveTagCollectionsToCloud = createLatestAsyncQueue((save: () => Promise<void>) => save())
-const saveBoorusToCloud = createLatestAsyncQueue((save: () => Promise<void>) => save())
+const saveTagCollectionsToCloud = createLatestAsyncQueue(
+  (save: (isCurrent: () => boolean) => Promise<void>, isCurrent) => save(isCurrent)
+)
+const saveBoorusToCloud = createLatestAsyncQueue((save: (isCurrent: () => boolean) => Promise<void>, isCurrent) =>
+  save(isCurrent)
+)
 
 export default function () {
   const nuxtApp = useNuxtApp()
@@ -122,8 +126,17 @@ export default function () {
         return false
       }
 
-      await saveTagCollectionsToCloud(async () => {
+      await saveTagCollectionsToCloud(async (isCurrent) => {
+        if (!isCurrent()) {
+          return
+        }
+
         await repository.value.saveTagCollections(nextTagCollections)
+
+        if (!isCurrent()) {
+          return
+        }
+
         tagCollections.value = nextTagCollections
         runtime.value.cloudBacked.tagCollections = true
         await tryEnsureRealtimeSubscription()
@@ -151,8 +164,17 @@ export default function () {
         return false
       }
 
-      await saveBoorusToCloud(async () => {
+      await saveBoorusToCloud(async (isCurrent) => {
+        if (!isCurrent()) {
+          return
+        }
+
         await repository.value.saveBoorus(nextBoorus)
+
+        if (!isCurrent()) {
+          return
+        }
+
         userBooruList.value = nextBoorus
         runtime.value.cloudBacked.boorus = true
         await tryEnsureRealtimeSubscription()
@@ -293,6 +315,8 @@ export default function () {
   }
 
   function clearSyncedLocalState() {
+    saveTagCollectionsToCloud.invalidate()
+    saveBoorusToCloud.invalidate()
     clearQueuedCloudRefreshes()
     void clearRealtimeSubscription()
     savedPostList.value = []
