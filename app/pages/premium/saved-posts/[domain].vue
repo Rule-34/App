@@ -39,13 +39,16 @@
   const { postsPerPage } = useUserSettings()
   const { toggle: toggleSearchMenu } = useSearchMenu()
 
-  function currentRouteDomain() {
-    const domain = route.params.domain
+  const savedPostsBooru = {
+    domain: savedPostsDomain,
+    type: savedPostBooruType,
+    config: null,
+    isCustom: false,
+    isPremium: false
+  } satisfies Domain
+  const booruList = [savedPostsBooru] satisfies Domain[]
 
-    return Array.isArray(domain) ? domain[0] : domain
-  }
-
-  const routeDomain = currentRouteDomain()
+  const routeDomain = Array.isArray(route.params.domain) ? route.params.domain[0] : route.params.domain
 
   if (routeDomain && routeDomain !== savedPostsDomain) {
     await navigateTo(
@@ -59,31 +62,6 @@
       { key: 'imgproxy-preconnect', rel: 'preconnect', href: project.imgproxy.baseUrl },
       { key: 'imgproxy-dns-prefetch', rel: 'dns-prefetch', href: project.imgproxy.baseUrl }
     ]
-  })
-
-  /**
-   * URL
-   */
-  const booruList = computed(() => {
-    return [
-      {
-        domain: savedPostsDomain,
-        type: savedPostBooruType,
-        config: null,
-        isCustom: false,
-        isPremium: false
-      }
-    ] satisfies Domain[]
-  })
-
-  const selectedBooru = computed(() => {
-    const booru = booruList.value[0]
-
-    if (!booru) {
-      throw new Error('Expected at least one saved-post booru')
-    }
-
-    return booru
   })
 
   const selectedTags = computed(() => {
@@ -211,11 +189,11 @@
     replace?: boolean
   }) {
     if (domain === undefined) {
-      domain = selectedBooru.value.domain
+      domain = savedPostsBooru.domain
     }
 
     if (page === undefined) {
-      page = selectedBooru.value.type.initialPageID
+      page = savedPostsBooru.type.initialPageID
     }
 
     if (tags === undefined) {
@@ -328,8 +306,6 @@
     return repository.value.loadSavedPostsPage({
       page,
       perPage: postsPerPage.value,
-      domain: selectedBooru.value.domain,
-      allPostsDomain: savedPostsDomain,
       filters: {
         type: selectedFilters.value.type,
         rating: selectedFilters.value.rating,
@@ -365,7 +341,7 @@
       //
       'saved-posts',
       //
-      selectedBooru,
+      savedPostsDomain,
       selectedTags,
       selectedFilters,
       //
@@ -425,7 +401,7 @@
 
           // Custom meta data
           // Domain comes from the API
-          // domain: selectedBooru.value.domain,
+          // domain: savedPostsBooru.domain,
 
           current_page: page.meta.current_page,
           isFirstPost: index === 0
@@ -531,7 +507,7 @@
    */
   const shortTitle = computed(() => {
     const hasTags = selectedTags.value.length > 0
-    const hasPaging = selectedPage.value !== selectedBooru.value.type.initialPageID
+    const hasPaging = selectedPage.value !== savedPostsBooru.type.initialPageID
 
     let title = hasPaging ? t('posts.seo.pageOf', { page: selectedPage.value }) : ''
 
@@ -548,7 +524,7 @@
       if (selectedFilters.value.score) filterParts.push(t('posts.seo.scoreOf', { score: selectedFilters.value.score }))
       if (filterParts.length) title += ', ' + filterParts.join(', ')
 
-      title += t('posts.seo.fromDomain', { domain: selectedBooru.value.domain })
+      title += t('posts.seo.fromDomain', { domain: savedPostsBooru.domain })
     }
 
     return title.trim()
@@ -663,7 +639,7 @@
     <section class="mb-4">
       <DomainSelector
         :boorus="booruList"
-        :model-value="selectedBooru"
+        :model-value="savedPostsBooru"
         @update:model-value="onDomainChange"
       />
 

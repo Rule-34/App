@@ -43,8 +43,6 @@ const refreshFromCloudTimeouts: Record<PremiumCloudRefreshKey, ReturnType<typeof
   blockList: null
 }
 let realtimeUnsubscribe: (() => unknown | Promise<unknown>) | null = null
-let authChangeUnsubscribe: (() => unknown) | null = null
-let lastAuthenticatedUserId: string | null = null
 const saveTagCollectionsToCloud = createLatestAsyncQueue((save: () => Promise<void>) => save())
 const saveBoorusToCloud = createLatestAsyncQueue((save: () => Promise<void>) => save())
 
@@ -57,27 +55,17 @@ export default function () {
   const { tagCollections, resetTagCollections } = useTagCollections()
   const { userBooruList, resetUserBooruList } = useBooruList()
   const { customBlockList } = useBlockLists()
-  const savedPostListOwnerId = useState<string | null>('premium-saved-post-list-owner-id', () => null)
   const savedPostList = useState<ISimplePocketbasePost[]>('premium-saved-post-list', () => [])
 
   const runtime = useState<PremiumCloudSyncRuntime>('premium-cloud-sync-runtime', defaultRuntime)
   const isInitialized = computed(() => runtime.value.initialized)
-  const isInitializing = computed(() => !!runtime.value.initializing)
 
   const repository = computed(() => new PremiumCloudRepository($pocketBase as unknown as PremiumCloudPocketBaseClient))
 
-  ensureSavedPostListOwner()
-  setupAuthChangeCleanup()
-
   async function initialize() {
-    const userId = currentAuthenticatedUserId()
-
-    if (import.meta.server || !userId) {
-      ensureSavedPostListOwner(null)
+    if (import.meta.server || !$pocketBase.authStore.isValid) {
       return
     }
-
-    ensureSavedPostListOwner(userId)
 
     if (runtime.value.initialized) {
       return
@@ -105,11 +93,7 @@ export default function () {
   }
 
   async function initializeSync() {
-    const cloudState = await loadForCurrentAuthenticatedUser(() => repository.value.loadPremiumCloudState())
-
-    if (!cloudState) {
-      return
-    }
+    const cloudState = await repository.value.loadPremiumCloudState()
 
     applySavedPostsFromCloud(cloudState.savedPosts)
     applyTagCollectionsFromCloud(cloudState.tagCollections, false)
@@ -121,45 +105,15 @@ export default function () {
   }
 
   async function refreshTagCollectionsFromCloud() {
-    const nextTagCollections = await loadForCurrentAuthenticatedUser(() => repository.value.loadTagCollections())
-
-    if (!nextTagCollections) {
-      return
-    }
-
-    applyTagCollectionsFromCloud(nextTagCollections, true)
+    applyTagCollectionsFromCloud(await repository.value.loadTagCollections(), true)
   }
 
   async function refreshBoorusFromCloud() {
-    const boorus = await loadForCurrentAuthenticatedUser(() => repository.value.loadBoorus())
-
-    if (!boorus) {
-      return
-    }
-
-    applyBoorusFromCloud(boorus, true)
+    applyBoorusFromCloud(await repository.value.loadBoorus(), true)
   }
 
   async function refreshBlockListFromCloud() {
-    const blockList = await loadForCurrentAuthenticatedUser(() => repository.value.loadBlockList())
-
-    if (!blockList) {
-      return
-    }
-
-    applyBlockListFromCloud(blockList, true)
-  }
-
-  async function loadForCurrentAuthenticatedUser<T>(load: () => Promise<T>) {
-    const userId = currentAuthenticatedUserId()
-
-    if (import.meta.server || !userId) {
-      return null
-    }
-
-    const value = await load()
-
-    return currentAuthenticatedUserId() === userId ? value : null
+    applyBlockListFromCloud(await repository.value.loadBlockList(), true)
   }
 
   async function setTagCollections(nextTagCollections: ITagCollection[]) {
@@ -339,36 +293,13 @@ export default function () {
   }
 
   function clearSyncedLocalState() {
-    clearAuthBoundRuntimeState()
-    resetTagCollections()
-    resetUserBooruList()
-    customBlockList.value = []
-  }
-
-  function setupAuthChangeCleanup() {
-    if (import.meta.server || authChangeUnsubscribe) {
-      return
-    }
-
-    lastAuthenticatedUserId = currentAuthenticatedUserId()
-
-    authChangeUnsubscribe = $pocketBase.authStore.onChange(() => {
-      const nextUserId = currentAuthenticatedUserId()
-
-      if (lastAuthenticatedUserId && nextUserId !== lastAuthenticatedUserId) {
-        clearSyncedLocalState()
-      }
-
-      lastAuthenticatedUserId = nextUserId
-    })
-  }
-
-  function clearAuthBoundRuntimeState() {
     clearQueuedCloudRefreshes()
     void clearRealtimeSubscription()
     savedPostList.value = []
-    savedPostListOwnerId.value = currentAuthenticatedUserId()
     runtime.value = defaultRuntime()
+    resetTagCollections()
+    resetUserBooruList()
+    customBlockList.value = []
   }
 
   function clearQueuedCloudRefreshes() {
@@ -398,30 +329,7 @@ export default function () {
     }
   }
 
-  function currentAuthenticatedUserId() {
-    const id = $pocketBase.authStore.record?.id
-
-    if (!$pocketBase.authStore.isValid || !id) {
-      return null
-    }
-
-    return id
-  }
-
-  function ensureSavedPostListOwner(userId = currentAuthenticatedUserId()) {
-    if (savedPostListOwnerId.value === userId) {
-      return
-    }
-
-    clearQueuedCloudRefreshes()
-    void clearRealtimeSubscription()
-    savedPostList.value = []
-    savedPostListOwnerId.value = userId
-    runtime.value = defaultRuntime()
-  }
-
   function applySavedPostsFromCloud(savedPosts: ISimplePocketbasePost[]) {
-    ensureSavedPostListOwner()
     savedPostList.value = savedPosts
   }
 
@@ -543,7 +451,6 @@ export default function () {
     initialize,
     initializeInBackground,
     isInitialized,
-    isInitializing,
 
     savedPostList,
     getSavedPost,

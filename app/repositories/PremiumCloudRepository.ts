@@ -164,8 +164,6 @@ export type PremiumSavedPostsFilters = {
 export type LoadSavedPostsPageOptions = {
   page: number
   perPage: number
-  domain: string
-  allPostsDomain: string
   filters: PremiumSavedPostsFilters
 }
 
@@ -218,12 +216,8 @@ export class PremiumCloudRepository {
       .then((records) => [...records])
   }
 
-  async loadSavedPostsPage({ page, perPage, domain, allPostsDomain, filters }: LoadSavedPostsPageOptions) {
+  async loadSavedPostsPage({ page, perPage, filters }: LoadSavedPostsPageOptions) {
     const requestFilters: string[] = []
-
-    if (domain !== allPostsDomain) {
-      requestFilters.push(this.clientFilter('original_domain = {:original_domain}', { original_domain: domain }))
-    }
 
     if (filters.type) {
       requestFilters.push(this.clientFilter('media_type = {:type}', { type: filters.type }))
@@ -477,13 +471,8 @@ export class PremiumCloudRepository {
     const collection = this.client.collection(collectionName)
     const records = await collection.getFullList<{ id: string }>({ fields: 'id' })
 
-    if (records.length >= 2) {
+    if (records.length) {
       await this.sendBatchMutations(collectionName, [], [], records)
-      return
-    }
-
-    for (const record of records) {
-      await collection.delete(record.id)
     }
   }
 

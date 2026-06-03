@@ -242,8 +242,6 @@ describe('PremiumCloudSyncRepository', () => {
     const page = await repository.loadSavedPostsPage({
       page: 1,
       perPage: 30,
-      domain: 'r34.app',
-      allPostsDomain: 'r34.app',
       filters: {}
     })
 
@@ -433,11 +431,15 @@ describe('PremiumCloudSyncRepository', () => {
         args: [{ fields: 'id' }]
       }
     ])
-    expect(calls.filter((call) => call.method === 'delete')).toEqual([
-      { collection: 'posts', method: 'delete', args: ['saved-post'] },
-      { collection: 'tag_collections', method: 'delete', args: ['collection'] },
-      { collection: 'boorus', method: 'delete', args: ['booru'] },
-      { collection: 'tag_blocklists', method: 'delete', args: ['blocklist'] }
+    expect(calls.filter((call) => call.method !== 'getFullList')).toEqual([
+      { collection: 'posts', method: 'batch.delete', args: ['saved-post'] },
+      { collection: '__batch__', method: 'send', args: [] },
+      { collection: 'tag_collections', method: 'batch.delete', args: ['collection'] },
+      { collection: '__batch__', method: 'send', args: [] },
+      { collection: 'boorus', method: 'batch.delete', args: ['booru'] },
+      { collection: '__batch__', method: 'send', args: [] },
+      { collection: 'tag_blocklists', method: 'batch.delete', args: ['blocklist'] },
+      { collection: '__batch__', method: 'send', args: [] }
     ])
   })
 
