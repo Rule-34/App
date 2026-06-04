@@ -24,15 +24,11 @@ export enum blockListOptions {
 export default function () {
   const { blockAiGeneratedImages } = useUserSettings()
 
-  let customBlockList = ref<string[]>([])
+  const customBlockList = useState<string[]>('premium-custom-block-list', () => [])
 
   let selectedList = ref<blockListOptions>(blockListOptions.None)
 
   if (import.meta.client) {
-    customBlockList = useLocalStorage('user-customBlocklist', [], {
-      writeDefaults: false
-    })
-
     selectedList = useLocalStorage<blockListOptions>('user-selectedList', blockListOptions.None, {
       writeDefaults: false
     })

@@ -1,4 +1,3 @@
-import { useLocalStorage } from '@vueuse/core'
 import { cloneDeep } from 'es-toolkit'
 import type { TagCollection } from '~/assets/js/tagCollection.dto'
 import type { Composer } from 'vue-i18n'
@@ -21,13 +20,7 @@ export default function () {
     }
   ]
 
-  let tagCollections = ref<TagCollection[]>(cloneDeep(defaultTagCollections))
-
-  if (import.meta.client) {
-    tagCollections = useLocalStorage('user-tagCollections', cloneDeep(defaultTagCollections), {
-      writeDefaults: false
-    })
-  }
+  const tagCollections = useState<TagCollection[]>('premium-tag-collections', () => cloneDeep(defaultTagCollections))
 
   return {
     tagCollections,

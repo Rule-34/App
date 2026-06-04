@@ -1,5 +1,4 @@
 import { booruTypeList, completeBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-import { useLocalStorage } from '@vueuse/core'
 import type { Domain } from '~/assets/js/domain'
 
 const defaultBooruList: Domain[] = completeBooruList
@@ -34,13 +33,7 @@ const defaultBooruList: Domain[] = completeBooruList
   })
 
 export default function () {
-  let userBooruList = ref<Domain[]>([])
-
-  if (import.meta.client) {
-    userBooruList = useLocalStorage<Domain[]>('user-booruList-2', [], {
-      writeDefaults: false
-    })
-  }
+  const userBooruList = useState<Domain[]>('premium-user-booru-list', () => [])
 
   return {
     booruList: computed(() => {

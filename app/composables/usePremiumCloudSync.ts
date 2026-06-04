@@ -2,16 +2,15 @@ import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/Bo
 import { useQueryClient } from '@tanstack/vue-query'
 import {
   createLatestAsyncQueue,
-  PremiumCloudSyncRepository,
+  PremiumCloudRepository,
   type PremiumBlockListRecord,
   type PremiumBooruRecord,
   type PremiumCloudPocketBaseClient
-} from '~/assets/js/PremiumCloudSync'
+} from '~/repositories/PremiumCloudRepository'
 import type { Domain } from '~/assets/js/domain'
 import type { IPost } from '~/assets/js/post.dto'
 import type { ISimplePocketbasePost } from '~/assets/js/pocketbase.dto'
 import type { ITagCollection } from '~/assets/js/tagCollection.dto'
-import { nextTick } from 'vue'
 import type { Composer } from 'vue-i18n'
 
 type PremiumCloudSyncRuntime = {
@@ -44,10 +43,12 @@ const refreshFromCloudTimeouts: Record<PremiumCloudRefreshKey, ReturnType<typeof
   blockList: null
 }
 let realtimeUnsubscribe: (() => unknown | Promise<unknown>) | null = null
-let authChangeUnsubscribe: (() => unknown) | null = null
-let lastAuthenticatedUserId: string | null = null
-const saveTagCollectionsToCloud = createLatestAsyncQueue((save: () => Promise<void>) => save())
-const saveBoorusToCloud = createLatestAsyncQueue((save: () => Promise<void>) => save())
+const saveTagCollectionsToCloud = createLatestAsyncQueue(
+  (save: (isCurrent: () => boolean) => Promise<void>, isCurrent) => save(isCurrent)
+)
+const saveBoorusToCloud = createLatestAsyncQueue((save: (isCurrent: () => boolean) => Promise<void>, isCurrent) =>
+  save(isCurrent)
+)
 
 export default function () {
   const nuxtApp = useNuxtApp()
@@ -57,16 +58,13 @@ export default function () {
   const { toast } = useLazyToast()
   const { tagCollections, resetTagCollections } = useTagCollections()
   const { userBooruList, resetUserBooruList } = useBooruList()
-  const { customBlockList, selectedList } = useBlockLists()
-  const { savedPostList } = usePocketbase()
+  const { customBlockList } = useBlockLists()
+  const savedPostList = useState<ISimplePocketbasePost[]>('premium-saved-post-list', () => [])
 
   const runtime = useState<PremiumCloudSyncRuntime>('premium-cloud-sync-runtime', defaultRuntime)
+  const isInitialized = computed(() => runtime.value.initialized)
 
-  const repository = computed(
-    () => new PremiumCloudSyncRepository($pocketBase as unknown as PremiumCloudPocketBaseClient)
-  )
-
-  setupAuthChangeCleanup()
+  const repository = computed(() => new PremiumCloudRepository($pocketBase as unknown as PremiumCloudPocketBaseClient))
 
   async function initialize() {
     if (import.meta.server || !$pocketBase.authStore.isValid) {
@@ -99,11 +97,7 @@ export default function () {
   }
 
   async function initializeSync() {
-    const cloudState = await loadForCurrentAuthenticatedUser(() => repository.value.loadPremiumCloudState())
-
-    if (!cloudState) {
-      return
-    }
+    const cloudState = await repository.value.loadPremiumCloudState()
 
     applySavedPostsFromCloud(cloudState.savedPosts)
     applyTagCollectionsFromCloud(cloudState.tagCollections, false)
@@ -115,57 +109,35 @@ export default function () {
   }
 
   async function refreshTagCollectionsFromCloud() {
-    const nextTagCollections = await loadForCurrentAuthenticatedUser(() => repository.value.loadTagCollections())
-
-    if (!nextTagCollections) {
-      return
-    }
-
-    applyTagCollectionsFromCloud(nextTagCollections, true)
+    applyTagCollectionsFromCloud(await repository.value.loadTagCollections(), true)
   }
 
   async function refreshBoorusFromCloud() {
-    const boorus = await loadForCurrentAuthenticatedUser(() => repository.value.loadBoorus())
-
-    if (!boorus) {
-      return
-    }
-
-    applyBoorusFromCloud(boorus, true)
+    applyBoorusFromCloud(await repository.value.loadBoorus(), true)
   }
 
   async function refreshBlockListFromCloud() {
-    const blockList = await loadForCurrentAuthenticatedUser(() => repository.value.loadBlockList())
-
-    if (!blockList) {
-      return
-    }
-
-    applyBlockListFromCloud(blockList, true)
-  }
-
-  async function loadForCurrentAuthenticatedUser<T>(load: () => Promise<T>) {
-    const userId = currentAuthenticatedUserId()
-
-    if (import.meta.server || !userId) {
-      return null
-    }
-
-    const value = await load()
-
-    return currentAuthenticatedUserId() === userId ? value : null
+    applyBlockListFromCloud(await repository.value.loadBlockList(), true)
   }
 
   async function setTagCollections(nextTagCollections: ITagCollection[]) {
-    tagCollections.value = nextTagCollections
-
     return withCloudSyncFailureToast(async () => {
       if (!(await canWriteToCloud())) {
-        return true
+        return false
       }
 
-      await saveTagCollectionsToCloud(async () => {
+      await saveTagCollectionsToCloud(async (isCurrent) => {
+        if (!isCurrent()) {
+          return
+        }
+
         await repository.value.saveTagCollections(nextTagCollections)
+
+        if (!isCurrent()) {
+          return
+        }
+
+        tagCollections.value = nextTagCollections
         runtime.value.cloudBacked.tagCollections = true
         await tryEnsureRealtimeSubscription()
       })
@@ -176,8 +148,7 @@ export default function () {
   async function resetTagCollectionsCloud() {
     return withCloudSyncFailureToast(async () => {
       if (!(await canWriteToCloud())) {
-        resetTagCollections()
-        return true
+        return false
       }
 
       await repository.value.clearTagCollections()
@@ -188,15 +159,23 @@ export default function () {
   }
 
   async function setUserBooruList(nextBoorus: Domain[]) {
-    userBooruList.value = nextBoorus
-
     return withCloudSyncFailureToast(async () => {
       if (!(await canWriteToCloud())) {
-        return true
+        return false
       }
 
-      await saveBoorusToCloud(async () => {
+      await saveBoorusToCloud(async (isCurrent) => {
+        if (!isCurrent()) {
+          return
+        }
+
         await repository.value.saveBoorus(nextBoorus)
+
+        if (!isCurrent()) {
+          return
+        }
+
+        userBooruList.value = nextBoorus
         runtime.value.cloudBacked.boorus = true
         await tryEnsureRealtimeSubscription()
       })
@@ -207,8 +186,7 @@ export default function () {
   async function resetUserBooruListCloud() {
     return withCloudSyncFailureToast(async () => {
       if (!(await canWriteToCloud())) {
-        resetUserBooruList()
-        return true
+        return false
       }
 
       await repository.value.clearBoorus()
@@ -248,8 +226,7 @@ export default function () {
   async function setCustomBlockList(nextTags: string[]) {
     return withCloudSyncFailureToast(async () => {
       if (!(await canWriteToCloud())) {
-        customBlockList.value = nextTags
-        return true
+        return false
       }
 
       await repository.value.saveCustomBlockList(nextTags)
@@ -337,43 +314,16 @@ export default function () {
     }
   }
 
-  function clearSyncedLocalState(userId = currentAuthenticatedUserId() ?? lastAuthenticatedUserId) {
-    clearAuthBoundRuntimeState(userId)
-    resetTagCollections()
-    resetUserBooruList()
-    selectedList.value = 'none' as typeof selectedList.value
-    customBlockList.value = []
-  }
-
-  function setupAuthChangeCleanup() {
-    if (import.meta.server || authChangeUnsubscribe) {
-      return
-    }
-
-    lastAuthenticatedUserId = currentAuthenticatedUserId()
-
-    authChangeUnsubscribe = $pocketBase.authStore.onChange(() => {
-      const nextUserId = currentAuthenticatedUserId()
-
-      if (lastAuthenticatedUserId && nextUserId !== lastAuthenticatedUserId) {
-        clearSyncedLocalState(lastAuthenticatedUserId)
-      }
-
-      lastAuthenticatedUserId = nextUserId
-    })
-  }
-
-  function clearAuthBoundRuntimeState(userId = currentAuthenticatedUserId() ?? lastAuthenticatedUserId) {
+  function clearSyncedLocalState() {
+    saveTagCollectionsToCloud.invalidate()
+    saveBoorusToCloud.invalidate()
     clearQueuedCloudRefreshes()
     void clearRealtimeSubscription()
     savedPostList.value = []
     runtime.value = defaultRuntime()
-
-    if (import.meta.client && userId) {
-      void nextTick(() => {
-        localStorage.removeItem(`pocketbase-savedPostList-${userId}`)
-      })
-    }
+    resetTagCollections()
+    resetUserBooruList()
+    customBlockList.value = []
   }
 
   function clearQueuedCloudRefreshes() {
@@ -401,16 +351,6 @@ export default function () {
     } catch (error) {
       console.error('Failed to unsubscribe from premium cloud sync updates', error)
     }
-  }
-
-  function currentAuthenticatedUserId() {
-    const id = $pocketBase.authStore.record?.id
-
-    if (!$pocketBase.authStore.isValid || !id) {
-      return null
-    }
-
-    return id
   }
 
   function applySavedPostsFromCloud(savedPosts: ISimplePocketbasePost[]) {
@@ -495,6 +435,16 @@ export default function () {
     queryClient.removeQueries({ queryKey: ['saved-posts'], type: 'inactive' })
   }
 
+  function getSavedPost(post: IPost) {
+    if (!runtime.value.initialized) {
+      return undefined
+    }
+
+    return savedPostList.value.find(
+      (savedPost) => savedPost.original_id === post.id && savedPost.original_domain === post.domain
+    )
+  }
+
   function booruRecordsToDomains(records: readonly PremiumBooruRecord[]): Domain[] {
     return records.flatMap((record) => {
       const type = booruTypeList.find((booruType) => booruType.type === record.type)
@@ -524,6 +474,10 @@ export default function () {
   return {
     initialize,
     initializeInBackground,
+    isInitialized,
+
+    savedPostList,
+    getSavedPost,
 
     savePost,
     deleteSavedPost,

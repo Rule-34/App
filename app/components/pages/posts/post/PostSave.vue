@@ -9,18 +9,16 @@
     post: IPost
   }>()
 
-  const { savedPostList } = usePocketbase()
-  const { savePost, deleteSavedPost } = usePremiumCloudSync()
+  const { getSavedPost, initializeInBackground, isInitialized, savePost, deleteSavedPost } = usePremiumCloudSync()
   const { isPremium } = useUserData()
-
-  const postInSavedList = computed(() => {
-    return savedPostList.value.find(
-      (savedPost) => savedPost.original_id === props.post.id && savedPost.original_domain === props.post.domain
-    )
-  })
+  const saveButtonDisabled = computed(() => isPremium.value && !isInitialized.value)
 
   const isPostSaved = computed(() => {
-    return !!postInSavedList.value
+    return !!getSavedPost(props.post)
+  })
+
+  onMounted(() => {
+    void initializeInBackground()
   })
 
   async function onClick() {
@@ -46,7 +44,7 @@
   }
 
   async function deleteCurrentSavedPost() {
-    const currentSavedPost = postInSavedList.value
+    const currentSavedPost = getSavedPost(props.post)
 
     if (!currentSavedPost) {
       return
@@ -59,7 +57,8 @@
 <template>
   <button
     :aria-label="isPostSaved ? $t('common.unsavePost') : $t('common.savePost')"
-    class="group rounded-md px-1.5 py-1 hover:hover-bg-util focus-visible:focus-outline-util"
+    :disabled="saveButtonDisabled"
+    class="group rounded-md px-1.5 py-1 hover:hover-bg-util focus-visible:focus-outline-util disabled:cursor-wait disabled:opacity-60"
     type="button"
     @click="onClick"
   >

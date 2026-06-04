@@ -7,13 +7,12 @@
   import { throttle } from 'es-toolkit'
   import type { ComponentPublicInstance, Ref } from 'vue'
   import type { Domain } from '~/assets/js/domain'
-  import Post from '~/assets/js/post.dto'
   import Tag from '~/assets/js/tag.dto'
   import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
   import type { IPost, IPostPage } from '~/assets/js/post.dto'
   import { generatePostsRoute, getFilterQueryValue, getSingleQueryValue } from '~/assets/js/RouterHelper'
   import { useTagTitle } from '~/composables/useTagTitle'
-  import type { IPocketbasePost } from '~/assets/js/pocketbase.dto'
+  import { PremiumCloudRepository, type PremiumCloudPocketBaseClient } from '~/repositories/PremiumCloudRepository'
   import { project } from '~~/config/project'
 
   type PostRow = IPost & {
@@ -22,6 +21,7 @@
   }
 
   const savedPostBooruType = booruTypeList[0]
+  const savedPostsDomain = project.urls.production.hostname
 
   if (!savedPostBooruType) {
     throw new Error('Expected at least one configured booru type')
@@ -34,81 +34,34 @@
   const buildTagTitle = useTagTitle()
 
   const { $pocketBase } = useNuxtApp()
+  const repository = computed(() => new PremiumCloudRepository($pocketBase as unknown as PremiumCloudPocketBaseClient))
 
   const { postsPerPage } = useUserSettings()
   const { toggle: toggleSearchMenu } = useSearchMenu()
+
+  const savedPostsBooru = {
+    domain: savedPostsDomain,
+    type: savedPostBooruType,
+    config: null,
+    isCustom: false,
+    isPremium: false
+  } satisfies Domain
+  const booruList = [savedPostsBooru] satisfies Domain[]
+
+  const routeDomain = Array.isArray(route.params.domain) ? route.params.domain[0] : route.params.domain
+
+  if (routeDomain && routeDomain !== savedPostsDomain) {
+    await navigateTo(
+      { path: localePath(`/premium/saved-posts/${savedPostsDomain}`), query: route.query },
+      { replace: true }
+    )
+  }
 
   useHead({
     link: [
       { key: 'imgproxy-preconnect', rel: 'preconnect', href: project.imgproxy.baseUrl },
       { key: 'imgproxy-dns-prefetch', rel: 'dns-prefetch', href: project.imgproxy.baseUrl }
     ]
-  })
-
-  /**
-   * URL
-   */
-  type SavedPostDomainRecord = {
-    original_domain: string
-  }
-
-  async function loadSavedPostDomains() {
-    return $pocketBase.collection('distinct_original_domain_from_posts').getFullList<SavedPostDomainRecord>({
-      $autoCancel: false
-    })
-  }
-
-  const domainsFromPocketbase = ref(await loadSavedPostDomains())
-
-  const booruList = computed(() => {
-    const _booruList: Domain[] = [
-      // r34.app
-      {
-        domain: project.urls.production.hostname,
-        type: savedPostBooruType,
-        config: null,
-        isCustom: false,
-        isPremium: false
-      }
-    ]
-
-    const booruNamesInDb: string[] = domainsFromPocketbase.value.map((domain) => domain.original_domain)
-
-    booruNamesInDb.forEach((booruNameInDb) => {
-      _booruList.push({
-        domain: booruNameInDb,
-        type: savedPostBooruType,
-        config: null,
-        isCustom: false,
-        isPremium: false
-      })
-    })
-
-    return _booruList
-  })
-
-  const selectedBooru = computed(() => {
-    let domain = route.params.domain
-
-    // Fallback to first booru
-    if (!domain) {
-      const fallback = booruList.value[0]
-
-      if (!fallback) {
-        throw new Error('Expected at least one saved-post booru')
-      }
-
-      domain = fallback.domain
-    }
-
-    const booru = booruList.value.find((booru) => booru.domain === domain)
-
-    if (!booru) {
-      toast.error(t('toasts.booruNotFound', { domain }))
-      throw new Error(`Booru "${domain}" not found`)
-    }
-
-    return booru
   })
 
   const selectedTags = computed(() => {
@@ -236,11 +189,11 @@
     replace?: boolean
   }) {
     if (domain === undefined) {
-      domain = selectedBooru.value.domain
+      domain = savedPostsBooru.domain
     }
 
     if (page === undefined) {
-      page = selectedBooru.value.type.initialPageID
+      page = savedPostsBooru.type.initialPageID
     }
 
     if (tags === undefined) {
@@ -346,73 +299,20 @@
   }: QueryFunctionContext<readonly unknown[], number>): Promise<IPostPageFromPocketBase> {
     const page = pageParam
 
-    const PAGE_SIZE = postsPerPage.value
-
-    let pocketbaseRequestFilter = ''
-
-    if (selectedBooru.value.domain !== project.urls.production.hostname) {
-      pocketbaseRequestFilter += $pocketBase.filter('original_domain = {:original_domain}', {
-        original_domain: selectedBooru.value.domain
-      })
-    }
-
-    if (selectedFilters.value.type) {
-      if (pocketbaseRequestFilter !== '') {
-        pocketbaseRequestFilter += ' && '
-      }
-
-      pocketbaseRequestFilter += $pocketBase.filter('media_type = {:type}', {
-        type: selectedFilters.value.type
-      })
-    }
-
-    const pocketbaseRequestSort = selectedFilters.value.sort ?? '-created'
-
-    if (selectedFilters.value.rating) {
-      if (pocketbaseRequestFilter !== '') {
-        pocketbaseRequestFilter += ' && '
-      }
-
-      pocketbaseRequestFilter += $pocketBase.filter('rating = {:rating}', {
-        rating: selectedFilters.value.rating
-      })
-    }
-
     // TODO
     // if (selectedTags.value.length > 0) {
     // }
 
-    if (selectedFilters.value.score) {
-      if (pocketbaseRequestFilter !== '') {
-        pocketbaseRequestFilter += ' && '
+    return repository.value.loadSavedPostsPage({
+      page,
+      perPage: postsPerPage.value,
+      filters: {
+        type: selectedFilters.value.type,
+        rating: selectedFilters.value.rating,
+        score: selectedFilters.value.score,
+        sort: selectedFilters.value.sort
       }
-
-      pocketbaseRequestFilter += $pocketBase.filter('score >= {:score}', {
-        score: selectedFilters.value.score
-      })
-    }
-
-    const pocketBasePostsResponse = await $pocketBase.collection('posts').getList<IPocketbasePost>(page, PAGE_SIZE, {
-      sort: pocketbaseRequestSort,
-      filter: pocketbaseRequestFilter,
-      skipTotal: true,
-      $autoCancel: false
     })
-
-    const posts = pocketBasePostsResponse.items.map((item) => {
-      return Post.fromPocketbasePost(item)
-    })
-
-    return {
-      data: posts,
-      meta: {
-        items_count: pocketBasePostsResponse.items.length,
-        total_items: pocketBasePostsResponse.totalItems,
-        current_page: pocketBasePostsResponse.page,
-        total_pages: pocketBasePostsResponse.totalPages,
-        items_per_page: pocketBasePostsResponse.perPage
-      }
-    }
   }
 
   const {
@@ -441,7 +341,7 @@
       //
       'saved-posts',
       //
-      selectedBooru,
+      savedPostsDomain,
       selectedTags,
       selectedFilters,
       //
@@ -501,7 +401,7 @@
 
           // Custom meta data
           // Domain comes from the API
-          // domain: selectedBooru.value.domain,
+          // domain: savedPostsBooru.domain,
 
           current_page: page.meta.current_page,
           isFirstPost: index === 0
@@ -607,7 +507,7 @@
    */
   const shortTitle = computed(() => {
     const hasTags = selectedTags.value.length > 0
-    const hasPaging = selectedPage.value !== selectedBooru.value.type.initialPageID
+    const hasPaging = selectedPage.value !== savedPostsBooru.type.initialPageID
 
     let title = hasPaging ? t('posts.seo.pageOf', { page: selectedPage.value }) : ''
 
@@ -624,7 +524,7 @@
       if (selectedFilters.value.score) filterParts.push(t('posts.seo.scoreOf', { score: selectedFilters.value.score }))
       if (filterParts.length) title += ', ' + filterParts.join(', ')
 
-      title += t('posts.seo.fromDomain', { domain: selectedBooru.value.domain })
+      title += t('posts.seo.fromDomain', { domain: savedPostsBooru.domain })
     }
 
     return title.trim()
@@ -739,7 +639,7 @@
     <section class="mb-4">
       <DomainSelector
         :boorus="booruList"
-        :model-value="selectedBooru"
+        :model-value="savedPostsBooru"
         @update:model-value="onDomainChange"
       />
 

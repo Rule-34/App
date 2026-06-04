@@ -1,9 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
-import { PremiumCloudSyncRepository } from '../../app/assets/js/PremiumCloudSync'
+import { PremiumCloudSyncRepository } from '../../app/repositories/PremiumCloudRepository'
 
 type FakeRecord = { id: string; [key: string]: unknown }
 
-function createFakePocketBase(initialRecords: Record<string, FakeRecord[]>) {
+function createFakePocketBase(
+  initialRecords: Record<string, FakeRecord[]>,
+  options: { failSubscribeCollections?: readonly string[] } = {}
+) {
   const records = structuredClone(initialRecords)
   const calls: Array<{ collection: string; method: string; args: unknown[] }> = []
   const subscribers: Record<string, Array<(event?: unknown) => unknown>> = {}
@@ -23,6 +26,17 @@ function createFakePocketBase(initialRecords: Record<string, FakeRecord[]>) {
           getFullList: vi.fn(async (...args: unknown[]) => {
             calls.push({ collection: name, method: 'getFullList', args })
             return records[name]
+          }),
+          getList: vi.fn(async (page = 1, perPage = 30, ...args: unknown[]) => {
+            calls.push({ collection: name, method: 'getList', args: [page, perPage, ...args] })
+
+            return {
+              page,
+              perPage,
+              totalItems: records[name].length,
+              totalPages: records[name].length ? Math.ceil(records[name].length / perPage) : 0,
+              items: records[name]
+            }
           }),
           create: vi.fn(async (payload: Record<string, unknown>) => {
             calls.push({ collection: name, method: 'create', args: [payload] })
@@ -47,6 +61,10 @@ function createFakePocketBase(initialRecords: Record<string, FakeRecord[]>) {
             return true
           }),
           subscribe: vi.fn(async (topic: string, callback: (event?: unknown) => unknown) => {
+            if (options.failSubscribeCollections?.includes(name)) {
+              throw new Error(`Failed to subscribe to ${name}`)
+            }
+
             calls.push({ collection: name, method: 'subscribe', args: [topic] })
             subscribers[name] ??= []
             subscribers[name].push(callback)
@@ -198,6 +216,57 @@ describe('PremiumCloudSyncRepository', () => {
     expect(calls).toContainEqual({ collection: 'posts', method: 'delete', args: ['saved-post-1'] })
   })
 
+  it('loads saved post pages with real total metadata', async () => {
+    const { client, calls } = createFakePocketBase({
+      posts: [
+        {
+          id: 'saved-post-1',
+          user_id: 'user-1',
+          original_id: 34,
+          original_domain: 'rule34.xxx',
+          high_res_file: 'https://img.example/high.jpg',
+          preview_file: 'https://img.example/preview.jpg',
+          tags_artist: [],
+          tags_character: [],
+          tags_copyright: [],
+          tags_general: ['tag'],
+          tags_meta: [],
+          sources: [],
+          rating: 'explicit',
+          media_type: 'image'
+        }
+      ]
+    })
+    const repository = new PremiumCloudSyncRepository(client)
+
+    const page = await repository.loadSavedPostsPage({
+      page: 1,
+      perPage: 30,
+      filters: {}
+    })
+
+    expect(page.meta).toEqual({
+      items_count: 1,
+      total_items: 1,
+      current_page: 1,
+      total_pages: 1,
+      items_per_page: 30
+    })
+    expect(calls).toContainEqual({
+      collection: 'posts',
+      method: 'getList',
+      args: [
+        1,
+        30,
+        {
+          sort: '-created',
+          filter: '',
+          $autoCancel: false
+        }
+      ]
+    })
+  })
+
   it('creates a custom blocklist record only when explicitly saved', async () => {
     const { client, calls } = createFakePocketBase({
       tag_blocklists: []
@@ -227,6 +296,28 @@ describe('PremiumCloudSyncRepository', () => {
         method: 'update',
         args: ['blocklist', { user_id: 'user-1', tags: ['loli'] }]
       }
+    ])
+  })
+
+  it('removes duplicate custom blocklist records when saving', async () => {
+    const { client, calls } = createFakePocketBase({
+      tag_blocklists: [
+        { id: 'blocklist', user_id: 'user-1', tags: ['old'] },
+        { id: 'duplicate-blocklist', user_id: 'user-1', tags: ['stale'] }
+      ]
+    })
+    const repository = new PremiumCloudSyncRepository(client)
+
+    await repository.saveCustomBlockList(['loli'])
+
+    expect(calls.filter((call) => call.method !== 'getFullList')).toEqual([
+      {
+        collection: 'tag_blocklists',
+        method: 'batch.update',
+        args: ['blocklist', { user_id: 'user-1', tags: ['loli'] }]
+      },
+      { collection: 'tag_blocklists', method: 'batch.delete', args: ['duplicate-blocklist'] },
+      { collection: '__batch__', method: 'send', args: [] }
     ])
   })
 
@@ -340,11 +431,30 @@ describe('PremiumCloudSyncRepository', () => {
         args: [{ fields: 'id' }]
       }
     ])
-    expect(calls.filter((call) => call.method === 'delete')).toEqual([
-      { collection: 'posts', method: 'delete', args: ['saved-post'] },
-      { collection: 'tag_collections', method: 'delete', args: ['collection'] },
-      { collection: 'boorus', method: 'delete', args: ['booru'] },
-      { collection: 'tag_blocklists', method: 'delete', args: ['blocklist'] }
+    expect(calls.filter((call) => call.method !== 'getFullList')).toEqual([
+      { collection: 'posts', method: 'batch.delete', args: ['saved-post'] },
+      { collection: '__batch__', method: 'send', args: [] },
+      { collection: 'tag_collections', method: 'batch.delete', args: ['collection'] },
+      { collection: '__batch__', method: 'send', args: [] },
+      { collection: 'boorus', method: 'batch.delete', args: ['booru'] },
+      { collection: '__batch__', method: 'send', args: [] },
+      { collection: 'tag_blocklists', method: 'batch.delete', args: ['blocklist'] },
+      { collection: '__batch__', method: 'send', args: [] }
+    ])
+  })
+
+  it('batch deletes multiple records when clearing a collection', async () => {
+    const { client, calls } = createFakePocketBase({
+      tag_collections: [{ id: 'collection-1' }, { id: 'collection-2' }]
+    })
+    const repository = new PremiumCloudSyncRepository(client)
+
+    await repository.clearTagCollections()
+
+    expect(calls.filter((call) => call.method !== 'getFullList')).toEqual([
+      { collection: 'tag_collections', method: 'batch.delete', args: ['collection-1'] },
+      { collection: 'tag_collections', method: 'batch.delete', args: ['collection-2'] },
+      { collection: '__batch__', method: 'send', args: [] }
     ])
   })
 
@@ -370,6 +480,31 @@ describe('PremiumCloudSyncRepository', () => {
       { collection: 'boorus', method: 'subscribe', args: ['*'] },
       { collection: 'tag_blocklists', method: 'subscribe', args: ['*'] }
     ])
+  })
+
+  it('cleans up successful realtime subscriptions when a later subscription fails', async () => {
+    const { client, calls } = createFakePocketBase(
+      {
+        posts: [],
+        tag_collections: [],
+        boorus: [],
+        tag_blocklists: []
+      },
+      { failSubscribeCollections: ['tag_collections'] }
+    )
+    const repository = new PremiumCloudSyncRepository(client)
+
+    await expect(
+      repository.subscribeToPremiumCloudChanges({
+        savedPosts: () => undefined,
+        tagCollections: () => undefined,
+        boorus: () => undefined,
+        blockList: () => undefined
+      })
+    ).rejects.toThrow('Failed to subscribe to tag_collections')
+
+    expect(calls).toContainEqual({ collection: 'posts', method: 'subscribe', args: ['*'] })
+    expect(calls).toContainEqual({ collection: 'posts', method: 'unsubscribe', args: ['*'] })
   })
 
   it('routes saved post realtime events without notifying critical sync handlers', async () => {

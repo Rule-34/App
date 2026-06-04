@@ -164,6 +164,8 @@ the `@headlessui/tailwindcss` plugin.
   test server.
 - Sentry is fully disabled in tests via `$test.sentry.enabled: false` in `nuxt.config.ts`.
 - Debug mode: import `debugBrowserOptions` from `test/helper.ts` for headful playback with slowMo.
+- Plain Vitest suites that import app modules directly do not get Nuxt's runtime alias resolution; keep repository/pure
+  modules importable through relative paths or import them directly from their app path in those suites.
 - For premium and PocketBase flows, use a real authenticated browser session for final investigation when possible.
   Unit tests can prove payload and repository behavior, but real-browser traces catch request bursts, realtime echo
   refreshes, auth redirects, and UI state changes that are easy to miss in isolated tests.
@@ -177,6 +179,9 @@ the `@headlessui/tailwindcss` plugin.
 - Saved posts use the same premium cloud realtime runtime as tag collections, custom boorus, and the custom blocklist.
   Empty saved-post cloud state means there are no saved posts, unlike empty user-authored sync collections where local
   defaults can still apply.
+- Premium auth transitions are reload-backed in the dashboard/sign-in flow, so premium sync state does not need
+  per-user owner scoping in `useState`; rely on the page reload to clear memory state instead of tracking PocketBase
+  user ids.
 - In `/premium/saved-posts`, unsaving a post intentionally should not remove the row or prune cached infinite-query data.
   Keep the viewer stable so users do not lose scroll/progress; the save button can update immediately and the row can
   disappear on a later reload/refetch.
