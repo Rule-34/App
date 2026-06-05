@@ -104,6 +104,34 @@ describe('Premium cloud flows', async () => {
     expect(pocketBase.requests.filter((request) => request === 'POST /api/collections/posts/records')).toEqual([])
   }, 20000)
 
+  it('disables saved-post actions while the cloud write is pending', async () => {
+    const page = await createTrackedPage()
+    const pocketBase = createPocketBaseMockState({
+      delaySavedPostMutationMs: 500
+    })
+
+    await mockPocketBase(page, pocketBase)
+    await addPocketBaseAuthCookie(page, url('/'))
+    await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+
+    const firstPost = page.getByTestId(`safebooru.org-${firstMockPost.id}`).first()
+    const firstSaveButton = firstPost
+      .locator(
+        'button[aria-label="Save post"]:not([tabindex="-1"]), button[aria-label="Unsave post"]:not([tabindex="-1"])'
+      )
+      .first()
+
+    await firstPost.waitFor({ state: 'visible', timeout: 10000 })
+    await firstSaveButton.waitFor({ state: 'visible', timeout: 10000 })
+    await expect.poll(() => firstSaveButton.evaluate((button) => (button as HTMLButtonElement).disabled)).toBe(false)
+
+    await firstSaveButton.click()
+    await expect.poll(() => firstSaveButton.evaluate((button) => (button as HTMLButtonElement).disabled)).toBe(true)
+    await expect.poll(() => firstSaveButton.getAttribute('aria-label'), { timeout: 10000 }).toBe('Unsave post')
+
+    expect(pocketBase.requests.filter((request) => request === 'POST /api/collections/posts/records')).toHaveLength(1)
+  }, 20000)
+
   it('loads all saved posts from the hardcoded saved-posts domain without domain discovery', async () => {
     const page = await createTrackedPage()
     const pocketBase = createPocketBaseMockState({

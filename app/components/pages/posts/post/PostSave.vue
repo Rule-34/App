@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+  import { useAsyncState } from '@vueuse/core'
   import { BookmarkIcon } from '@heroicons/vue/24/outline'
   import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/vue/24/solid'
   import type { IPost } from '~/assets/js/post.dto'
@@ -11,7 +12,11 @@
 
   const { getSavedPost, initializeInBackground, isInitialized, savePost, deleteSavedPost } = usePremiumCloudSync()
   const { isPremium } = useUserData()
-  const saveButtonDisabled = computed(() => isPremium.value && !isInitialized.value)
+  const { isLoading: isUpdating, execute: updateSavedPost } = useAsyncState(updateSavedPostState, undefined, {
+    immediate: false,
+    throwError: true
+  })
+  const saveButtonDisabled = computed(() => (isPremium.value && !isInitialized.value) || isUpdating.value)
 
   const isPostSaved = computed(() => {
     return !!getSavedPost(props.post)
@@ -30,6 +35,10 @@
       return
     }
 
+    await updateSavedPost()
+  }
+
+  async function updateSavedPostState() {
     if (isPostSaved.value) {
       await deleteCurrentSavedPost()
     }

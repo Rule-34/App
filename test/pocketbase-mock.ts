@@ -48,6 +48,7 @@ export type PocketBaseMockState = {
   booruRecords: PocketBaseRecord[]
   blockListRecords: PocketBaseRecord[]
   delaySavedPostSummariesMs: number
+  delaySavedPostMutationMs: number
 }
 
 export function createPocketBaseMockState(overrides: Partial<PocketBaseMockState> = {}): PocketBaseMockState {
@@ -59,6 +60,7 @@ export function createPocketBaseMockState(overrides: Partial<PocketBaseMockState
     booruRecords: [],
     blockListRecords: [],
     delaySavedPostSummariesMs: 0,
+    delaySavedPostMutationMs: 0,
     ...overrides
   }
 }
@@ -116,6 +118,10 @@ export async function mockPocketBase(page: Page, state: PocketBaseMockState) {
       const record: IPocketbasePost = {
         id: `saved-post-${state.savedPostRecords.length + 1}`,
         ...payload
+      }
+
+      if (state.delaySavedPostMutationMs) {
+        await new Promise((resolve) => setTimeout(resolve, state.delaySavedPostMutationMs))
       }
 
       state.savedPostRecords.push(record)
