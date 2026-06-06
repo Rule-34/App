@@ -101,11 +101,6 @@ export async function mockPocketBase(page: Page, state: PocketBaseMockState) {
       }
 
       for (const batchRequest of batchPayload.requests ?? []) {
-        if (!URL.canParse(batchRequest.url, requestUrl.origin)) {
-          await fulfillJson(route, { message: `Invalid PocketBase batch URL: ${batchRequest.url}` }, 400)
-          return
-        }
-
         const batchRequestUrl = URL.parse(batchRequest.url, requestUrl.origin)
 
         if (!batchRequestUrl) {

@@ -65,6 +65,12 @@
   const isTagCollectionPickerOpen = ref(false)
   const activeTagForCollection = shallowRef<string | null>(null)
 
+  watch(isTagCollectionPickerOpen, (isOpen) => {
+    if (!isOpen) {
+      activeTagForCollection.value = null
+    }
+  })
+
   function createTag(name: string, type: PostTagType) {
     return new Tag(Object.assign(new TagDTO(), { name, type }))
   }
