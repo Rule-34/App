@@ -36,6 +36,7 @@
       return
     }
 
+    let wasAdded = false
     const nextTagCollections = tagCollections.value.map((tagCollection) => {
       if (tagCollection.name !== tagCollectionName) {
         return tagCollection
@@ -45,11 +46,17 @@
         return tagCollection
       }
 
+      wasAdded = true
       return new TagCollection({
         name: tagCollection.name,
         tags: [...tagCollection.tags, props.tagName]
       })
     })
+
+    if (!wasAdded) {
+      emit('close')
+      return
+    }
 
     if (await setTagCollections(nextTagCollections)) {
       showCollectionSavedToast()

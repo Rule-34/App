@@ -47,6 +47,48 @@ describe('Post tag collections', async () => {
     await expect.poll(() => pocketBase.tagCollectionRecords[0]?.tags, { timeout: 10000 }).toEqual(['animated', '1girl'])
   }, 60000)
 
+  it('does not show added feedback when the clicked tag is already in the collection', async () => {
+    const page = await createTrackedPage()
+    const pocketBase = createPocketBaseMockState({
+      tagCollectionRecords: [
+        {
+          id: 'collection-1',
+          user_id: 'test-user',
+          name: 'Favorites',
+          tags: ['1girl'],
+          position: 1
+        }
+      ]
+    })
+
+    await mockPocketBase(page, pocketBase)
+    await addPocketBaseAuthCookie(page, url('/'))
+    await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+
+    const firstPost = page.getByTestId(`safebooru.org-${firstMockPost.id}`).first()
+    await firstPost.waitFor({ state: 'visible', timeout: 10000 })
+    await firstPost.getByRole('button', { name: /tags/i }).click()
+
+    const clickedTag = page.getByRole('button', { name: /1girl/i }).first()
+    await clickedTag.click()
+
+    const addToCollectionButton = page.locator('button').filter({ hasText: /Add to collection/i })
+    await addToCollectionButton.waitFor({ state: 'visible', timeout: 10000 })
+    await addToCollectionButton.click()
+    const batchWrite = page
+      .waitForRequest((request) => request.method() === 'POST' && URL.parse(request.url())?.pathname === '/api/batch', {
+        timeout: 1000
+      })
+      .then(() => true)
+      .catch(() => false)
+
+    await page.getByRole('button', { name: /favorites/i }).click()
+
+    await expect(batchWrite).resolves.toBe(false)
+    await expect.poll(() => page.getByText('Tag added to collection').first().isVisible()).toBe(false)
+    await expect.poll(() => pocketBase.tagCollectionRecords[0]?.tags, { timeout: 10000 }).toEqual(['1girl'])
+  }, 60000)
+
   it('creates a new collection from the clicked tag', async () => {
     const page = await createTrackedPage()
     const pocketBase = createPocketBaseMockState({
