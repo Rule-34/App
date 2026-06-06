@@ -45,6 +45,8 @@ describe('Post tag collections', async () => {
       .poll(() => page.getByText('Tag added to collection').first().isVisible(), { timeout: 10000 })
       .toBe(true)
 
+    await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(1)
+    await expect.poll(() => page.getByRole('dialog').getByText('General').isVisible(), { timeout: 10000 }).toBe(true)
     await expect.poll(() => pocketBase.tagCollectionRecords[0]?.tags, { timeout: 10000 }).toEqual(['animated', '1girl'])
   }, 60000)
 
@@ -150,5 +152,9 @@ describe('Post tag collections', async () => {
     const premiumPrompt = page.getByRole('dialog').first()
     await premiumPrompt.waitFor({ state: 'attached', timeout: 10000 })
     await expect(premiumPrompt.getAttribute('data-headlessui-state')).resolves.toBe('open')
+    await premiumPrompt.getByRole('button', { name: /close/i }).click()
+
+    await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(1)
+    await expect.poll(() => page.getByRole('dialog').getByText('General').isVisible(), { timeout: 10000 }).toBe(true)
   }, 60000)
 })

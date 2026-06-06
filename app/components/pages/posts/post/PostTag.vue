@@ -89,12 +89,6 @@
   }
 
   function addToCollection(tag: Tag) {
-    if (!isPremium.value) {
-      currentIndex.value = premiumPromotionIndices.tagCollections
-      promptPremium.value = true
-      return
-    }
-
     emit('addToCollection', tag.name)
   }
 </script>
