@@ -3,6 +3,7 @@
   import { generatePostTagLandingPath } from '~/assets/js/RouterHelper'
   import type { IPost } from '~/assets/js/post.dto'
   import Tag, { TagDTO } from '~/assets/js/tag.dto'
+  import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
   import { project } from '~~/config/project'
 
   const props = defineProps<{
@@ -60,16 +61,34 @@
 
   const { postFullSizeImages } = useUserSettings()
   const { isPremium } = useUserData()
+  const { open: promptPremium, currentIndex } = usePremiumDialog()
 
   const areTagsOpen = ref(false)
   const isTagCollectionPickerOpen = ref(false)
   const activeTagForCollection = shallowRef<string | null>(null)
+  const shouldRestoreTagsOpen = ref(false)
 
   watch(isTagCollectionPickerOpen, (isOpen) => {
     if (!isOpen) {
       activeTagForCollection.value = null
+      restoreTagsSheet()
     }
   })
+
+  watch(promptPremium, (isOpen) => {
+    if (!isOpen) {
+      restoreTagsSheet()
+    }
+  })
+
+  function restoreTagsSheet() {
+    if (!shouldRestoreTagsOpen.value) {
+      return
+    }
+
+    shouldRestoreTagsOpen.value = false
+    areTagsOpen.value = true
+  }
 
   function createTag(name: string, type: PostTagType) {
     return new Tag(Object.assign(new TagDTO(), { name, type }))
@@ -77,6 +96,14 @@
 
   function onAddTagToCollection(tag: string) {
     areTagsOpen.value = false
+    shouldRestoreTagsOpen.value = true
+
+    if (!isPremium.value) {
+      currentIndex.value = premiumPromotionIndices.tagCollections
+      promptPremium.value = true
+      return
+    }
+
     activeTagForCollection.value = tag
     isTagCollectionPickerOpen.value = true
   }
