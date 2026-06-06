@@ -130,7 +130,7 @@ export default defineNuxtConfig({
 
     ...pageRouteRules,
 
-    // Locale-prefixed variants (ru, es, ja, pt, de, fr) — with prefix_except_default,
+    // Locale-prefixed variants (all non-default locales from config/i18n) — with prefix_except_default,
     // /ru/posts/** etc. don't inherit unprefixed rules.
     ...mirroredRouteRules(pageRouteRules),
 

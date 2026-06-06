@@ -48,7 +48,7 @@ Single Nuxt app. Key directories:
 | `server/plugins/`    | Nitro plugins                                                                                                                        |
 | `app/assets/js/`     | Shared app JS utilities, DTOs, custom providers                                                                                      |
 | `app/assets/lib/`    | Git submodule for shared resources                                                                                                   |
-| `i18n/locales/`      | i18n JSON files (en, ru, es, ja, pt, de, fr)                                                                                         |
+| `i18n/locales/`      | i18n JSON files (en, ru, es, ja, pt, de, fr, zh, ko, id, tr, it, vi)                                                              |
 | `app/components/`    | Vue components — **auto-imported flat** (`pathPrefix: false`, no folder prefix)                                                      |
 | `test/`              | Page tests, server tests, mocks                                                                                                      |
 
@@ -69,13 +69,31 @@ them as `<DomainSelector>` not `<Input/DomainSelector>`.
 
 ### i18n
 
-- Locales are defined in `config/i18n.ts` (single source of truth).
-- Non-default locales (ru, es, ja) get URL prefixes. Route rules in `nuxt.config` are mirrored via the
+- Locales are defined in `config/i18n.ts` (single source of truth). Retired prefixes (`hi`, `fil`, `pl`, `th`)
+  live in `removedLocaleCodes` and 301 to English via Nitro middleware (`server/middleware/redirect-removed-locales.ts`)
+  and global route middleware (`app/middleware/redirect-removed-locales.global.ts`), both using
+  `app/assets/js/removed-locale-redirect.ts`.
+- Non-default locales get URL prefixes (`prefix_except_default`). Route rules in `nuxt.config` are mirrored via the
   `mirroredRouteRules()` helper so prefixed paths get the same caching/SSR rules.
 - **Known bug**: `canonicalQueries` in the i18n module config is a no-op in v10. A two-part workaround is required:
   1. SSR: `server/plugins/fix-canonical-queries.ts` patches the canonical `<link>` in rendered HTML.
   2. CSR: `app/pages/posts/[domain]/index.vue` uses `useHead` to re-apply the canonical after i18n overwrites it on hydration.
      See the removal checklist in `fix-canonical-queries.ts` for when upstream fixes this.
+- **Locale usage analytics (Matomo vs GSC)** — do not conflate them when deciding whether to keep or retire a locale:
+  - **Matomo** (`app/plugins/040.matomo.client.ts` tracks `to.fullPath`): all visits to `/{locale}/…` regardless of
+    channel (organic, direct, in-app language switch). Bucket `Actions.getPageUrls` by URL prefix for share-of-traffic.
+  - **GSC Performance**: organic search clicks/impressions only, attributed to the URL shown in the SERP.
+  - A market can have heavy GSC traffic (e.g. Russia) while most clicks land on **unprefixed English** URLs; Matomo
+    can still show high `/ru/` share from UX navigation after arrival. Both can be true.
+- **GSC locale filters (domain property `sc-domain:r34.app`)** — easy to get false zeros:
+  - **Use** Performance → Add filter → Page → **URLs containing** `/ru/` (no trailing `*`).
+  - **Do not use** `+/ru/*` or URL params like `page=*%2Fru%2F*` — on this property they report **0** even when
+    `Page: +/ru/` shows real traffic (e.g. `/ru/` ~21k clicks / 90d vs `/ru/*` falsely 0).
+  - **Country → Pages** is the right cross-check: filter by country (e.g. Russia), open Pages tab, scan for
+    `/{locale}/` URLs in the top list.
+  - **Insights/blog paths** can overlap locale filters (e.g. `/insights/it/…` vs `/it/posts/…`). Retired-locale 301s in
+    `app/assets/js/removed-locale-redirect.ts` (Nitro + global route middleware) only match root prefixes
+    `^/(code)(/|$)`, so `/insights/{code}/` is unaffected.
 
 ### SEO & Head Management
 

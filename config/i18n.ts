@@ -13,14 +13,13 @@ export const locales = [
   { code: 'zh', language: 'zh-CN', name: '简体中文', file: 'zh.json', flag: '🇨🇳' },
   { code: 'ko', language: 'ko-KR', name: '한국어', file: 'ko.json', flag: '🇰🇷' },
   { code: 'id', language: 'id-ID', name: 'Bahasa Indonesia', file: 'id.json', flag: '🇮🇩' },
-  { code: 'hi', language: 'hi-IN', name: 'हिन्दी', file: 'hi.json', flag: '🇮🇳' },
   { code: 'tr', language: 'tr-TR', name: 'Türkçe', file: 'tr.json', flag: '🇹🇷' },
   { code: 'it', language: 'it-IT', name: 'Italiano', file: 'it.json', flag: '🇮🇹' },
-  { code: 'pl', language: 'pl-PL', name: 'Polski', file: 'pl.json', flag: '🇵🇱' },
-  { code: 'th', language: 'th-TH', name: 'ไทย', file: 'th.json', flag: '🇹🇭' },
-  { code: 'vi', language: 'vi-VN', name: 'Tiếng Việt', file: 'vi.json', flag: '🇻🇳' },
-  { code: 'fil', language: 'fil-PH', name: 'Filipino', file: 'fil.json', flag: '🇵🇭' }
+  { code: 'vi', language: 'vi-VN', name: 'Tiếng Việt', file: 'vi.json', flag: '🇻🇳' }
 ] as const
+
+/** Retired locale URL prefixes — kept for permanent 301 redirects (SEO). */
+export const removedLocaleCodes = ['hi', 'fil', 'pl', 'th'] as const
 
 export const defaultLocale = 'en' as const
 
