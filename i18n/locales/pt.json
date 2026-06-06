@@ -101,7 +101,9 @@
     "emailSentDescription": "Se o seu e-mail existir, você receberá uma mensagem com sua licença atual. Se não receber, verifique a pasta de spam",
     "postSourceDescription": "Ir para a fonte (artista), se existir, ou encontrá-la com busca reversa de imagem",
     "domainSwitcherDescription": "Troque entre sites Booru: cada um tem conteúdo único, encontre o que você mais gosta!",
-    "authFailed": "Falha ao autenticar. Faça login novamente."
+    "authFailed": "Falha ao autenticar. Faça login novamente.",
+    "tagAddedToCollection": "Tag adicionada à coleção",
+    "tagAddedToCollectionDescription": "Coleção salva com sucesso"
   },
   "pages": {
     "settings": {
@@ -352,6 +354,7 @@
     "addTag": "Adicionar tag",
     "excludeTag": "Excluir tag",
     "setTag": "Definir tag",
+    "addToCollection": "Adicionar à coleção",
     "copyTag": "Copiar tag",
     "addToBlocklist": "Adicionar à blocklist",
     "removeFromBlocklist": "Remover da blocklist",

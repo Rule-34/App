@@ -101,7 +101,9 @@
     "emailSentDescription": "Kung umiiral ang iyong email, makakatanggap ka ng isang email na kasama ang iyong kasalukuyang lisensya. Kung hindi ka nakatanggap ng email, tingnan ang iyong spam folder",
     "postSourceDescription": "Pumunta sa pinagmulan (artist) kung mayroon ito, o hanapin ito gamit ang reverse image search",
     "domainSwitcherDescription": "Lumipat sa pagitan ng Booru na mga website: bawat isa ay may natatanging nilalaman, hanapin ang isa na pinakagusto mo!",
-    "authFailed": "Nabigong patotohanan. Mangyaring mag-sign in muli."
+    "authFailed": "Nabigong patotohanan. Mangyaring mag-sign in muli.",
+    "tagAddedToCollection": "Idinagdag ang tag sa koleksyon",
+    "tagAddedToCollectionDescription": "Matagumpay na na-save ang koleksyon"
   },
   "pages": {
     "settings": {
@@ -352,6 +354,7 @@
     "addTag": "Magdagdag ng tag",
     "excludeTag": "Ibukod ang tag",
     "setTag": "Itakda ang tag",
+    "addToCollection": "Idagdag sa koleksyon",
     "copyTag": "Kopyahin ang tag",
     "addToBlocklist": "Idagdag sa blocklist",
     "removeFromBlocklist": "Alisin sa blocklist",

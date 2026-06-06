@@ -5,6 +5,7 @@
     MagnifyingGlassIcon,
     MinusIcon,
     NoSymbolIcon,
+    FolderPlusIcon,
     PlusIcon,
     ShieldExclamationIcon
   } from '@heroicons/vue/24/outline'
@@ -12,6 +13,7 @@
   import { flip, offset, shift, useFloating } from '@floating-ui/vue'
   import type Tag from '~/assets/js/tag.dto'
   import { blockListOptions } from '~/composables/useBlockLists'
+  import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
   const props = defineProps<{
     tag: Tag
@@ -20,6 +22,7 @@
 
   const emit = defineEmits<{
     addTag: [tag: string]
+    addToCollection: [tag: string]
     setTag: [tag: string]
     openTagInNewTab: [tag: string]
   }>()
@@ -30,6 +33,7 @@
   const { copy } = useClipboard()
   const { t } = useI18n()
   const { toast } = useLazyToast()
+  const { open: promptPremium, currentIndex } = usePremiumDialog()
 
   const referenceEl = ref<HTMLElement>()
   const floatingEl = ref<HTMLElement>()
@@ -55,28 +59,43 @@
 
   async function toggleBlockedTag(tag: Tag) {
     if (!isPremium.value) {
-      const { open: promptPremium, currentIndex } = usePremiumDialog()
-      currentIndex.value = 6
+      currentIndex.value = premiumPromotionIndices.blocklist
       promptPremium.value = true
       return
     }
 
     if (isTagBlocked(tag)) {
-      await setCustomBlockList(customBlockList.value.filter((blockedTag) => blockedTag !== tag.name))
-    } else {
-      const saved = await setCustomBlockList([...customBlockList.value, tag.name])
+      const saved = await setCustomBlockList(customBlockList.value.filter((blockedTag) => blockedTag !== tag.name))
 
       if (!saved) {
         return
       }
 
-      selectedList.value = blockListOptions.Custom
-
-      toast.info(t('toasts.tagAddedToBlocklist'), {
-        description: t('toasts.tagAddedToBlocklistDescription'),
-        duration: 10000 // 10 seconds
-      })
+      return
     }
+
+    const saved = await setCustomBlockList([...customBlockList.value, tag.name])
+
+    if (!saved) {
+      return
+    }
+
+    selectedList.value = blockListOptions.Custom
+
+    toast.info(t('toasts.tagAddedToBlocklist'), {
+      description: t('toasts.tagAddedToBlocklistDescription'),
+      duration: 10000 // 10 seconds
+    })
+  }
+
+  function addToCollection(tag: Tag) {
+    if (!isPremium.value) {
+      currentIndex.value = premiumPromotionIndices.tagCollections
+      promptPremium.value = true
+      return
+    }
+
+    emit('addToCollection', tag.name)
   }
 </script>
 
@@ -187,6 +206,25 @@
                 />
 
                 {{ $t('tags.copyTag') }}
+              </button>
+            </HeadlessMenuItem>
+          </div>
+
+          <!-- Add to collection -->
+          <div class="py-1">
+            <HeadlessMenuItem v-slot="{ active }">
+              <button
+                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                class="group flex w-full items-center px-2.5 py-1 text-sm"
+                type="button"
+                @click="addToCollection(tag)"
+              >
+                <FolderPlusIcon
+                  aria-hidden="true"
+                  class="mr-3 h-4 w-4 shrink-0 rounded-sm"
+                />
+
+                {{ $t('tags.addToCollection') }}
               </button>
             </HeadlessMenuItem>
           </div>

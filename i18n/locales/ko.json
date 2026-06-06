@@ -101,7 +101,9 @@
     "emailSentDescription": "귀하의 이메일이 존재하는 경우 현재 라이센스가 포함된 이메일을 받게 됩니다. 이메일을 받지 못한 경우 스팸 폴더를 확인하세요.",
     "postSourceDescription": "출처(아티스트)가 있으면 그 곳으로 가거나, 역이미지 검색으로 찾아보세요",
     "domainSwitcherDescription": "Booru 웹사이트 간 전환: 각 웹사이트에는 고유한 콘텐츠가 있으므로 가장 좋아하는 웹사이트를 찾으세요!",
-    "authFailed": "인증에 실패했습니다. 다시 로그인해 주세요."
+    "authFailed": "인증에 실패했습니다. 다시 로그인해 주세요.",
+    "tagAddedToCollection": "태그가 컬렉션에 추가되었습니다.",
+    "tagAddedToCollectionDescription": "컬렉션이 저장되었습니다."
   },
   "pages": {
     "settings": {
@@ -352,6 +354,7 @@
     "addTag": "태그 추가",
     "excludeTag": "태그 제외",
     "setTag": "태그 설정",
+    "addToCollection": "컬렉션에 추가",
     "copyTag": "태그 복사",
     "addToBlocklist": "차단 목록에 추가",
     "removeFromBlocklist": "차단 목록에서 제거",

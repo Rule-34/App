@@ -101,7 +101,9 @@
     "emailSentDescription": "Jeśli Twój adres e-mail istnieje, otrzymasz wiadomość e-mail z aktualną licencją. Jeśli nie otrzymasz wiadomości e-mail, sprawdź folder ze spamem",
     "postSourceDescription": "Przejdź do źródła (artysty), jeśli istnieje, lub znajdź je za pomocą wyszukiwania wstecznego obrazu",
     "domainSwitcherDescription": "Przełączaj się między stronami Booru: każda z nich ma unikalną treść, znajdź tę, która najbardziej Ci się podoba!",
-    "authFailed": "Nie udało się uwierzytelnić. Zaloguj się ponownie."
+    "authFailed": "Nie udało się uwierzytelnić. Zaloguj się ponownie.",
+    "tagAddedToCollection": "Tag dodany do kolekcji",
+    "tagAddedToCollectionDescription": "Kolekcja została zapisana"
   },
   "pages": {
     "settings": {
@@ -352,6 +354,7 @@
     "addTag": "Dodaj tag",
     "excludeTag": "Wyklucz tag",
     "setTag": "Ustaw znacznik",
+    "addToCollection": "Dodaj do kolekcji",
     "copyTag": "Skopiuj znacznik",
     "addToBlocklist": "Dodaj do listy zablokowanych",
     "removeFromBlocklist": "Usuń z listy zablokowanych",
