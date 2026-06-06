@@ -76,6 +76,7 @@
   }
 
   function onAddTagToCollection(tag: string) {
+    areTagsOpen.value = false
     activeTagForCollection.value = tag
     isTagCollectionPickerOpen.value = true
   }

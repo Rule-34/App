@@ -39,6 +39,7 @@ describe('Post tag collections', async () => {
     const addToCollectionButton = page.locator('button').filter({ hasText: /Add to collection/i })
     await addToCollectionButton.waitFor({ state: 'visible', timeout: 10000 })
     await addToCollectionButton.click()
+    await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(1)
     await page.getByRole('button', { name: /favorites/i }).click()
     await expect
       .poll(() => page.getByText('Tag added to collection').first().isVisible(), { timeout: 10000 })
