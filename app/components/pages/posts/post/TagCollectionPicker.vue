@@ -16,32 +16,11 @@
   const { tagCollections } = useTagCollections()
   const { setTagCollections } = usePremiumCloudSync()
   const { open: promptPremium, currentIndex } = usePremiumDialog()
-  const isCreatingCollection = ref(false)
-  const newCollectionName = ref('')
-  const collectionNameInput = ref<HTMLInputElement | null>(null)
 
   // Keep naming, duplicate validation, and list presentation aligned with the search TagCollections component.
   function openPremiumPrompt() {
     currentIndex.value = premiumPromotionIndices.tagCollections
     promptPremium.value = true
-  }
-
-  async function startCreateCollection() {
-    if (!isPremium.value) {
-      openPremiumPrompt()
-      return
-    }
-
-    isCreatingCollection.value = true
-    newCollectionName.value = ''
-
-    await nextTick()
-    collectionNameInput.value?.focus()
-  }
-
-  function cancelCreateCollection() {
-    isCreatingCollection.value = false
-    newCollectionName.value = ''
   }
 
   function showCollectionSavedToast() {
@@ -84,7 +63,8 @@
       return
     }
 
-    const trimmedName = newCollectionName.value.trim()
+    const name = prompt(t('common.promptTagCollectionName'))
+    const trimmedName = name?.trim()
 
     if (!trimmedName) {
       return
@@ -105,7 +85,6 @@
 
     if (await setTagCollections(nextTagCollections)) {
       showCollectionSavedToast()
-      cancelCreateCollection()
       emit('close')
     }
   }
@@ -141,55 +120,14 @@
       </button>
     </section>
 
-    <div class="space-y-2 pt-2">
-      <template v-if="isCreatingCollection">
-        <label
-          class="block text-sm font-medium text-base-content-highlight"
-          for="tag-collection-name"
-        >
-          {{ $t('common.promptTagCollectionName') }}
-        </label>
-
-        <input
-          id="tag-collection-name"
-          ref="collectionNameInput"
-          v-model="newCollectionName"
-          :placeholder="$t('common.promptTagCollectionName')"
-          class="block w-full rounded-md bg-base-900 px-3 py-2 text-base text-base-content ring-1 ring-base-0/20 placeholder:text-base-content/50 focus-visible:focus-outline-util"
-          type="text"
-          @keydown.enter.prevent="createTagCollectionFromTag"
-          @keydown.esc.prevent="cancelCreateCollection"
-        />
-
-        <div class="flex gap-2">
-          <button
-            class="inline-flex flex-1 items-center justify-center rounded-md px-3 py-2 text-sm font-medium ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
-            type="button"
-            @click="cancelCreateCollection"
-          >
-            {{ $t('common.close') }}
-          </button>
-
-          <button
-            class="inline-flex flex-1 items-center justify-center rounded-md px-3 py-2 text-sm font-medium ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
-            type="button"
-            @click="createTagCollectionFromTag"
-          >
-            {{ $t('pages.premium.tagCollectionsPage.createButton') }}
-          </button>
-        </div>
-      </template>
-
-      <button
-        v-else
-        class="inline-flex w-full items-center justify-between rounded-md px-3 py-2 text-left ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
-        type="button"
-        @click="startCreateCollection"
-      >
-        <span>
-          {{ $t('pages.premium.tagCollectionsPage.createCollection') }}
-        </span>
-      </button>
-    </div>
+    <button
+      class="inline-flex w-full items-center justify-between rounded-md px-3 py-2 text-left ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+      type="button"
+      @click="createTagCollectionFromTag"
+    >
+      <span>
+        {{ $t('pages.premium.tagCollectionsPage.createCollection') }}
+      </span>
+    </button>
   </nav>
 </template>

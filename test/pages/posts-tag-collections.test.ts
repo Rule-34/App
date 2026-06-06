@@ -68,9 +68,11 @@ describe('Post tag collections', async () => {
     await addToCollectionButton.waitFor({ state: 'visible', timeout: 10000 })
     await addToCollectionButton.click()
 
+    page.once('dialog', async (dialog) => {
+      await dialog.accept('Favorites')
+    })
+
     await page.getByRole('button', { name: /create collection/i }).click()
-    await page.getByLabel('Enter a name for the new tag collection').fill('Favorites')
-    await page.getByRole('button', { name: /^create$/i }).click()
 
     await expect
       .poll(() => pocketBase.tagCollectionRecords.find((record) => record.name === 'Favorites')?.tags, {
