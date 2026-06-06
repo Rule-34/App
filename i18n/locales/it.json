@@ -101,7 +101,9 @@
     "emailSentDescription": "Se la tua email esiste, riceverai un'email con la tua licenza attuale. Se non ricevi un'e-mail, controlla la cartella spam",
     "postSourceDescription": "Vai alla fonte (artista) se esiste o trovala con la ricerca inversa delle immagini",
     "domainSwitcherDescription": "Passa da un sito web Booru: ognuno ha contenuti unici, trova quello che ti piace di più!",
-    "authFailed": "Impossibile autenticarsi. Per favore accedi di nuovo."
+    "authFailed": "Impossibile autenticarsi. Per favore accedi di nuovo.",
+    "tagAddedToCollection": "Tag aggiunto alla raccolta",
+    "tagAddedToCollectionDescription": "Collezione salvata correttamente"
   },
   "pages": {
     "settings": {
@@ -350,6 +352,7 @@
   "tags": {
     "removeTag": "Rimuovi l'etichetta",
     "addTag": "Aggiungi etichetta",
+    "addToCollection": "Aggiungi alla raccolta",
     "excludeTag": "Escludi etichetta",
     "setTag": "Imposta etichetta",
     "copyTag": "Copia etichetta",

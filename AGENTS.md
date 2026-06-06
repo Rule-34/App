@@ -124,6 +124,9 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
 
 - Prefer high-impact, measurable optimizations over small rewrites. Keep battle-tested dependencies unless replacing one
   has a clear, measured payoff.
+- Preserve interaction-gated loading for post UI features: components, composables, and heavy dependencies that are only
+  needed after a user opens a menu/sheet/dialog should stay behind Nuxt `Lazy*` components, dynamic imports, or similarly
+  deferred boundaries instead of entering the first-load route chunk.
 - After substantial performance changes, verify with a production build, relevant tests, request traces, and Lighthouse
   against the built app before deciding the change is worth keeping.
 - Production is behind Cloudflare, which Brotli-compresses HTML responses. Do not add app-level HTML compression unless

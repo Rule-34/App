@@ -62,9 +62,16 @@
   const { isPremium } = useUserData()
 
   const areTagsOpen = ref(false)
+  const isTagCollectionPickerOpen = ref(false)
+  const activeTagForCollection = shallowRef<string | null>(null)
 
   function createTag(name: string, type: PostTagType) {
     return new Tag(Object.assign(new TagDTO(), { name, type }))
+  }
+
+  function onAddTagToCollection(tag: string) {
+    activeTagForCollection.value = tag
+    isTagCollectionPickerOpen.value = true
   }
 
   function buildMediaDescriptionTags(post: IPost): string {
@@ -255,6 +262,7 @@
                       :selected-tags="selectedTags"
                       :tag="createTag(tag, tagType)"
                       @add-tag="emit('addTag', $event)"
+                      @add-to-collection="onAddTagToCollection"
                       @open-tag-in-new-tab="emit('openTagInNewTab', $event)"
                       @set-tag="emit('setTag', $event)"
                     />
@@ -263,6 +271,14 @@
               </div>
             </template>
           </div>
+        </LazyBottomSheetWrapper>
+
+        <LazyBottomSheetWrapper v-model="isTagCollectionPickerOpen">
+          <LazyTagCollectionPicker
+            v-if="activeTagForCollection"
+            :tag-name="activeTagForCollection"
+            @close="isTagCollectionPickerOpen = false"
+          />
         </LazyBottomSheetWrapper>
 
         <template #fallback>

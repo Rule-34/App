@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { XMarkIcon } from '@heroicons/vue/20/solid'
   import { project } from '~~/config/project'
+  import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
   const localePath = useLocalePath()
   const { t, locale } = useI18n()
@@ -97,7 +98,7 @@
     if (!isPremium.value) {
       const { open: promptPremium, currentIndex } = usePremiumDialog()
 
-      currentIndex.value = 3
+      currentIndex.value = premiumPromotionIndices.history
       promptPremium.value = true
       return
     }
