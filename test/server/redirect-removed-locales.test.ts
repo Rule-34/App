@@ -22,6 +22,13 @@ describe('redirect removed locales middleware', async () => {
     expect(response.headers.get('location')).toBe('/posts/e621.net?tags=1girl')
   })
 
+  it('omits hash fragments from redirect targets', async () => {
+    const response = await fetch('/th/posts/e621.net?tags=1girl#media', { redirect: 'manual' })
+
+    expect(response.status).toBe(301)
+    expect(response.headers.get('location')).toBe('/posts/e621.net?tags=1girl')
+  })
+
   it('redirects retired locale home prefixes to /', async () => {
     const response = await fetch('/hi/', { redirect: 'manual' })
 

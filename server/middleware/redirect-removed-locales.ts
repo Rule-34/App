@@ -5,6 +5,7 @@ const removedLocalePrefixRe = new RegExp(`^/(${removedLocaleCodes.join('|')})(?:
 /**
  * Permanent 301 redirects for retired locale URL prefixes.
  * Preserves path tail and query string so indexed /pl/posts/... URLs keep SEO equity on English routes.
+ * Hash fragments are omitted — browsers never send them on HTTP requests, so Nitro cannot read or redirect them.
  */
 export default defineEventHandler(async (event) => {
   const url = getRequestURL(event)
