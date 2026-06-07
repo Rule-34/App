@@ -21,6 +21,7 @@
   import type { IPost, IPostPage } from '~/assets/js/post.dto'
   import Tag, { type ITag } from '~/assets/js/tag.dto'
   import { project } from '~~/config/project'
+  import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
   type FilterValue = string | number | boolean | null | undefined
   type SearchSubmitPayload = {
@@ -58,8 +59,6 @@
       { key: 'imgproxy-dns-prefetch', rel: 'dns-prefetch', href: project.imgproxy.baseUrl }
     ]
   })
-
-  const additionalBoorusPremiumSlideIndex = 4
 
   /**
    * Show ads for non-premium users
@@ -116,7 +115,7 @@
 
     const { open: promptPremium, currentIndex } = usePremiumDialog()
 
-    currentIndex.value = additionalBoorusPremiumSlideIndex
+    currentIndex.value = premiumPromotionIndices.additionalBoorus
     promptPremium.value = true
   })
 

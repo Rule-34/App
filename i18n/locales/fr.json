@@ -101,7 +101,9 @@
     "emailSentDescription": "Si ton e-mail existe, tu recevras un e-mail avec ta licence actuelle. Si tu ne reçois rien, vérifie ton dossier spam",
     "postSourceDescription": "Va à la source (artiste) si elle existe, ou trouve-la avec la recherche d'image inversée",
     "domainSwitcherDescription": "Passe d'un site Booru à l'autre : chacun a du contenu unique, trouve celui que tu préfères !",
-    "authFailed": "Échec de l'authentification. Merci de te reconnecter."
+    "authFailed": "Échec de l'authentification. Merci de te reconnecter.",
+    "tagAddedToCollection": "Tag ajouté à la collection",
+    "tagAddedToCollectionDescription": "Collection enregistrée avec succès"
   },
   "pages": {
     "settings": {
@@ -352,6 +354,7 @@
     "addTag": "Ajouter le tag",
     "excludeTag": "Exclure le tag",
     "setTag": "Définir le tag",
+    "addToCollection": "Ajouter à la collection",
     "copyTag": "Copier le tag",
     "addToBlocklist": "Ajouter à la blocklist",
     "removeFromBlocklist": "Retirer de la blocklist",

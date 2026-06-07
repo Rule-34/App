@@ -101,7 +101,9 @@
     "emailSentDescription": "If your email exists, you will receive an email with your current license. If you do not receive an email, check your spam folder",
     "postSourceDescription": "Go to the source (artist) if it exists, or find it with reverse image search",
     "domainSwitcherDescription": "Switch between Booru websites: each one has unique content, find the one you like the most!",
-    "authFailed": "Failed to authenticate. Please sign in again."
+    "authFailed": "Failed to authenticate. Please sign in again.",
+    "tagAddedToCollection": "Tag added to collection",
+    "tagAddedToCollectionDescription": "Collection saved successfully"
   },
   "pages": {
     "settings": {
@@ -352,6 +354,7 @@
     "addTag": "Add tag",
     "excludeTag": "Exclude tag",
     "setTag": "Set tag",
+    "addToCollection": "Add to collection",
     "copyTag": "Copy tag",
     "addToBlocklist": "Add to blocklist",
     "removeFromBlocklist": "Remove from blocklist",
