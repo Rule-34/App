@@ -48,7 +48,7 @@ Single Nuxt app. Key directories:
 | `server/plugins/`    | Nitro plugins                                                                                                                        |
 | `app/assets/js/`     | Shared app JS utilities, DTOs, custom providers                                                                                      |
 | `app/assets/lib/`    | Git submodule for shared resources                                                                                                   |
-| `i18n/locales/`      | i18n JSON files (en, ru, es, ja, pt, de, fr)                                                                                         |
+| `i18n/locales/`      | i18n JSON files (en, ru, es, ja, pt, de, fr, zh, ko, id, tr, it, vi)                                                              |
 | `app/components/`    | Vue components — **auto-imported flat** (`pathPrefix: false`, no folder prefix)                                                      |
 | `test/`              | Page tests, server tests, mocks                                                                                                      |
 
@@ -69,13 +69,48 @@ them as `<DomainSelector>` not `<Input/DomainSelector>`.
 
 ### i18n
 
-- Locales are defined in `config/i18n.ts` (single source of truth).
-- Non-default locales (ru, es, ja) get URL prefixes. Route rules in `nuxt.config` are mirrored via the
+- Locales are defined in `config/i18n.ts` (single source of truth). Retired prefixes (`hi`, `fil`, `pl`, `th`)
+  live in `removedLocaleCodes` and 301 to English via `server/middleware/redirect-removed-locales.ts` (server-only).
+- Non-default locales get URL prefixes (`prefix_except_default`). Route rules in `nuxt.config` are mirrored via the
   `mirroredRouteRules()` helper so prefixed paths get the same caching/SSR rules.
 - **Known bug**: `canonicalQueries` in the i18n module config is a no-op in v10. A two-part workaround is required:
   1. SSR: `server/plugins/fix-canonical-queries.ts` patches the canonical `<link>` in rendered HTML.
   2. CSR: `app/pages/posts/[domain]/index.vue` uses `useHead` to re-apply the canonical after i18n overwrites it on hydration.
      See the removal checklist in `fix-canonical-queries.ts` for when upstream fixes this.
+- **Locale usage analytics (Matomo vs GSC)** — do not conflate them when deciding whether to keep or retire a locale:
+  - **Matomo** (`app/plugins/040.matomo.client.ts` tracks `to.fullPath`): all visits to `/{locale}/…` regardless of
+    channel (organic, direct, in-app language switch). Bucket `Actions.getPageUrls` by URL prefix for share-of-traffic.
+  - **GSC Performance**: organic search clicks/impressions only, attributed to the URL shown in the SERP.
+  - A market can have heavy GSC traffic (e.g. Russia) while most clicks land on **unprefixed English** URLs; Matomo
+    can still show high `/ru/` share from UX navigation after arrival. Both can be true.
+- **GSC locale filters (domain property `sc-domain:r34.app`)** — easy to get false zeros:
+  - **Use** Performance → Add filter → Page → **URLs containing** `/ru/` (no trailing `*`).
+  - **Do not use** `+/ru/*` or URL params like `page=*%2Fru%2F*` — on this property they report **0** even when
+    `Page: +/ru/` shows real traffic (e.g. `/ru/` ~21k clicks / 90d vs `/ru/*` falsely 0).
+  - **Country → Pages** is the right cross-check: filter by country (e.g. Russia), open Pages tab, scan for
+    `/{locale}/` URLs in the top list.
+  - **Insights/blog paths** can overlap locale filters (e.g. `/insights/it/…` vs `/it/posts/…`). Retired-locale 301s in
+    `server/middleware/redirect-removed-locales.ts` only match root prefixes `^/(code)(/|$)`, so `/insights/{code}/` is
+    unaffected.
+- **Locale portfolio discipline** — each active locale is ongoing translation, QA, and SEO surface area. Do not expand
+  the locale list without GSC evidence of organic demand. Retire prefixes with negligible prefixed-URL GSC traffic via
+  `removedLocaleCodes` + permanent 301 (e.g. `hi`/`fil`/`pl`/`th` were <100 GSC clicks each per 90d while `es`/`ru`
+  are ~40k/27k). Keep `it` when blog paths (`/insights/it/…`) carry most of the signal even if `/it/posts/` is small.
+
+### Server-first defaults
+
+Prefer Nitro/server for URL, SEO, and redirect behavior unless the feature genuinely needs client interactivity.
+Crawlers, bookmarks, and cold loads should get the correct response on the first HTTP round-trip — not after Vue Router
+or client middleware runs.
+
+- **Permanent redirects are server-only** — use Nitro middleware + `sendRedirect(..., 301)`. Do not duplicate the same
+  redirect in `app/middleware/*.global.ts`; that ships client logic crawlers never need and can disagree after hydration.
+- **Do not add client middleware “for parity”** when the server already handles the case. Retired-locale redirects are
+  the reference pattern: one file, `server/middleware/redirect-removed-locales.ts`, inlined and config-driven.
+- **Head/meta without a hydration bug** should run on the server (`import.meta.server` in `app/app.vue`, Nitro plugins,
+  SSR `useSeoMeta` in pages). Client re-application is only for known i18n overwrite cases (canonical workaround).
+- **SEO equity lives on the wire** — canonicals, 301 targets, and production `link rel="canonical"` must be correct in
+  SSR HTML. Client-only fixes are invisible to many crawlers and waste first-load JS.
 
 ### SEO & Head Management
 
@@ -122,6 +157,9 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
 
 ### Performance
 
+- **Server over client when equivalent** — every global route middleware, duplicated redirect helper, and client-only SEO
+  shim is bundle + hydration cost on routes that never needed it. Default to Nitro middleware, server plugins, and SSR
+  head tags; reach for `app/middleware` only when SPA navigation truly requires client-side routing behavior.
 - Prefer high-impact, measurable optimizations over small rewrites. Keep battle-tested dependencies unless replacing one
   has a clear, measured payoff.
 - Preserve interaction-gated loading for post UI features: components, composables, and heavy dependencies that are only
@@ -169,6 +207,11 @@ the `@headlessui/tailwindcss` plugin.
 - Debug mode: import `debugBrowserOptions` from `test/helper.ts` for headful playback with slowMo.
 - Plain Vitest suites that import app modules directly do not get Nuxt's runtime alias resolution; keep repository/pure
   modules importable through relative paths or import them directly from their app path in those suites.
+- **`@nuxt/test-utils` `$fetch` has no `.raw`** — it is a path-resolving wrapper around `ofetch`. For redirect status
+  and `Location` headers, use `fetch` from `@nuxt/test-utils` with `{ redirect: 'manual' }` (see
+  `test/server/redirect-removed-locales.test.ts`).
+- Locale-related tests should import `localeCodes`, `prefixedLocaleCodes`, and `removedLocaleCodes` from `config/i18n`
+  (or `vi.mock('~~/config/i18n', () => import('../../config/i18n'))`) instead of hardcoding locale lists.
 - For premium and PocketBase flows, use a real authenticated browser session for final investigation when possible.
   Unit tests can prove payload and repository behavior, but real-browser traces catch request bursts, realtime echo
   refreshes, auth redirects, and UI state changes that are easy to miss in isolated tests.
