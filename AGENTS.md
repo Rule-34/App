@@ -70,9 +70,7 @@ them as `<DomainSelector>` not `<Input/DomainSelector>`.
 ### i18n
 
 - Locales are defined in `config/i18n.ts` (single source of truth). Retired prefixes (`hi`, `fil`, `pl`, `th`)
-  live in `removedLocaleCodes` and 301 to English via Nitro middleware (`server/middleware/redirect-removed-locales.ts`)
-  and global route middleware (`app/middleware/redirect-removed-locales.global.ts`), both using
-  `app/assets/js/removed-locale-redirect.ts`.
+  live in `removedLocaleCodes` and 301 to English via `server/middleware/redirect-removed-locales.ts` (server-only).
 - Non-default locales get URL prefixes (`prefix_except_default`). Route rules in `nuxt.config` are mirrored via the
   `mirroredRouteRules()` helper so prefixed paths get the same caching/SSR rules.
 - **Known bug**: `canonicalQueries` in the i18n module config is a no-op in v10. A two-part workaround is required:
@@ -92,8 +90,8 @@ them as `<DomainSelector>` not `<Input/DomainSelector>`.
   - **Country → Pages** is the right cross-check: filter by country (e.g. Russia), open Pages tab, scan for
     `/{locale}/` URLs in the top list.
   - **Insights/blog paths** can overlap locale filters (e.g. `/insights/it/…` vs `/it/posts/…`). Retired-locale 301s in
-    `app/assets/js/removed-locale-redirect.ts` (Nitro + global route middleware) only match root prefixes
-    `^/(code)(/|$)`, so `/insights/{code}/` is unaffected.
+    `server/middleware/redirect-removed-locales.ts` only match root prefixes `^/(code)(/|$)`, so `/insights/{code}/` is
+    unaffected.
 
 ### SEO & Head Management
 

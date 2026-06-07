@@ -1,4 +1,6 @@
-import { buildRemovedLocaleRedirectTarget } from '../../app/assets/js/removed-locale-redirect'
+import { removedLocaleCodes } from '~~/config/i18n'
+
+const removedLocalePrefixRe = new RegExp(`^/(${removedLocaleCodes.join('|')})(?:/|$)`)
 
 /**
  * Permanent 301 redirects for retired locale URL prefixes.
@@ -7,15 +9,12 @@ import { buildRemovedLocaleRedirectTarget } from '../../app/assets/js/removed-lo
 export default defineEventHandler(async (event) => {
   const url = getRequestURL(event)
 
-  if (url.pathname === '/__nuxt_error') {
+  if (url.pathname === '/__nuxt_error' || !removedLocalePrefixRe.test(url.pathname)) {
     return
   }
 
-  const target = buildRemovedLocaleRedirectTarget(url.pathname, url.search, url.hash)
+  const strippedPath = url.pathname.replace(removedLocalePrefixRe, '/').replace(/\/{2,}/g, '/')
+  const targetPath = strippedPath === '/' ? '/' : strippedPath.replace(/\/$/, '') || '/'
 
-  if (!target) {
-    return
-  }
-
-  await sendRedirect(event, target, 301)
+  await sendRedirect(event, `${targetPath}${url.search}`, 301)
 })
