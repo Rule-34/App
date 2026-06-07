@@ -78,7 +78,6 @@
     "premiumRequiredBlocklist": "Anda harus menjadi anggota Premium untuk menggunakan daftar blokir khusus",
     "customBlockListSaved": "Daftar blokir khusus disimpan",
     "tagCopiedToClipboard": "Tag disalin ke papan klip",
-    "tagAddedToCollection": "Tag ditambahkan ke koleksi",
     "tagAddedToBlocklist": "Tag ditambahkan ke daftar blokir",
     "linkCopiedToClipboard": "Tautan disalin ke papan klip!",
     "failedToCopyLink": "Gagal menyalin tautan ke papan klip",
@@ -99,11 +98,12 @@
     "cloudDataDeleted": "Data cloud berhasil dihapus",
     "accountDeletionCancelled": "Penghapusan akun dibatalkan",
     "tagAddedToBlocklistDescription": "Untuk melihat efeknya, muat ulang situs web atau lakukan penelusuran baru",
-    "tagAddedToCollectionDescription": "Untuk melihat efeknya, muat ulang situs web atau lakukan penelusuran baru",
     "emailSentDescription": "Jika email Anda ada, Anda akan menerima email dengan lisensi Anda saat ini. Jika Anda tidak menerima email, periksa folder spam Anda",
     "postSourceDescription": "Kunjungi sumbernya (artis) jika ada, atau temukan dengan pencarian gambar terbalik",
     "domainSwitcherDescription": "Beralih di antara situs web Booru: masing-masing memiliki konten unik, temukan yang paling Anda sukai!",
-    "authFailed": "Gagal mengautentikasi. Silakan masuk lagi."
+    "authFailed": "Gagal mengautentikasi. Silakan masuk lagi.",
+    "tagAddedToCollection": "Tag ditambahkan ke koleksi",
+    "tagAddedToCollectionDescription": "Koleksi berhasil disimpan"
   },
   "pages": {
     "settings": {
@@ -354,6 +354,7 @@
     "addTag": "Tambahkan tanda",
     "excludeTag": "Kecualikan tag",
     "setTag": "Tetapkan tanda",
+    "addToCollection": "Tambahkan ke koleksi",
     "copyTag": "Salin tag",
     "addToBlocklist": "Tambahkan ke daftar blokir",
     "removeFromBlocklist": "Hapus dari daftar blokir",

@@ -78,7 +78,6 @@
     "premiumRequiredBlocklist": "Для пользовательского чёрного списка нужна подписка Premium",
     "customBlockListSaved": "Пользовательский чёрный список сохранён",
     "tagCopiedToClipboard": "Тег скопирован в буфер обмена",
-    "tagAddedToCollection": "Тег добавлен в коллекцию",
     "tagAddedToBlocklist": "Тег добавлен в чёрный список",
     "linkCopiedToClipboard": "Ссылка скопирована в буфер обмена!",
     "failedToCopyLink": "Не удалось скопировать ссылку",
@@ -99,11 +98,12 @@
     "cloudDataDeleted": "Облачные данные успешно удалены",
     "accountDeletionCancelled": "Удаление аккаунта отменено",
     "tagAddedToBlocklistDescription": "Чтобы увидеть эффект, перезагрузите сайт или выполните новый поиск",
-    "tagAddedToCollectionDescription": "Чтобы увидеть эффект, перезагрузите сайт или выполните новый поиск",
     "emailSentDescription": "Если ваш email существует, вы получите письмо с текущей лицензией. Если письмо не пришло, проверьте папку со спамом",
     "postSourceDescription": "Перейдите к источнику (художнику), если он существует, или найдите его с помощью обратного поиска изображений",
     "domainSwitcherDescription": "Переключайтесь между Booru-сайтами: у каждого уникальный контент, найдите тот, что вам нравится!",
-    "authFailed": "Ошибка аутентификации. Пожалуйста, войдите снова."
+    "authFailed": "Ошибка аутентификации. Пожалуйста, войдите снова.",
+    "tagAddedToCollection": "Тег добавлен в коллекцию",
+    "tagAddedToCollectionDescription": "Коллекция успешно сохранена"
   },
   "pages": {
     "settings": {
@@ -354,6 +354,7 @@
     "addTag": "Добавить тег",
     "excludeTag": "Исключить тег",
     "setTag": "Установить тег",
+    "addToCollection": "Добавить в коллекцию",
     "copyTag": "Копировать тег",
     "addToBlocklist": "Добавить в список блокировки",
     "removeFromBlocklist": "Убрать из списка блокировки",

@@ -78,7 +78,6 @@
     "premiumRequiredBlocklist": "Özel engellenenler listesini kullanmak için Premium üye olmanız gerekir",
     "customBlockListSaved": "Özel engelleme listesi kaydedildi",
     "tagCopiedToClipboard": "Etiket panoya kopyalandı",
-    "tagAddedToCollection": "Etiket koleksiyona eklendi",
     "tagAddedToBlocklist": "Etiket engellenenler listesine eklendi",
     "linkCopiedToClipboard": "Bağlantı panoya kopyalandı!",
     "failedToCopyLink": "Bağlantı panoya kopyalanamadı",
@@ -99,11 +98,12 @@
     "cloudDataDeleted": "Bulut verileri başarıyla silindi",
     "accountDeletionCancelled": "Hesap silme işlemi iptal edildi",
     "tagAddedToBlocklistDescription": "Efekti görmek için web sitesini yeniden yükleyin veya yeni bir arama yapın",
-    "tagAddedToCollectionDescription": "Efekti görmek için web sitesini yeniden yükleyin veya yeni bir arama yapın",
     "emailSentDescription": "E-posta adresiniz mevcutsa mevcut lisansınızı içeren bir e-posta alacaksınız. E-posta almazsanız spam klasörünüzü kontrol edin",
     "postSourceDescription": "Varsa kaynağa (sanatçıya) gidin veya tersine görsel aramayla bulun",
     "domainSwitcherDescription": "Booru web siteleri arasında geçiş yapın: her birinin benzersiz içeriği vardır, en çok beğendiğinizi bulun!",
-    "authFailed": "Kimlik doğrulaması başarısız oldu. Lütfen tekrar oturum açın."
+    "authFailed": "Kimlik doğrulaması başarısız oldu. Lütfen tekrar oturum açın.",
+    "tagAddedToCollection": "Etiket koleksiyona eklendi",
+    "tagAddedToCollectionDescription": "Koleksiyon başarıyla kaydedildi"
   },
   "pages": {
     "settings": {
@@ -354,6 +354,7 @@
     "addTag": "Etiket ekle",
     "excludeTag": "Etiketi hariç tut",
     "setTag": "Etiketi ayarla",
+    "addToCollection": "Koleksiyona ekle",
     "copyTag": "Etiketi kopyala",
     "addToBlocklist": "Engellenenler listesine ekle",
     "removeFromBlocklist": "Engellenenler listesinden kaldır",

@@ -78,7 +78,6 @@
     "premiumRequiredBlocklist": "您需要成为高级会员才能使用自定义黑名单",
     "customBlockListSaved": "已保存自定义阻止列表",
     "tagCopiedToClipboard": "标签已复制到剪贴板",
-    "tagAddedToCollection": "标签已添加到收藏",
     "tagAddedToBlocklist": "标签已添加到阻止列表",
     "linkCopiedToClipboard": "链接已复制到剪贴板！",
     "failedToCopyLink": "无法将链接复制到剪贴板",
@@ -99,11 +98,12 @@
     "cloudDataDeleted": "云数据删除成功",
     "accountDeletionCancelled": "帐户删除已取消",
     "tagAddedToBlocklistDescription": "要查看效果，请重新加载网站或进行新搜索",
-    "tagAddedToCollectionDescription": "要查看效果，请重新加载网站或进行新搜索",
     "emailSentDescription": "如果您的电子邮件存在，您将收到一封包含您当前许可证的电子邮件。如果您没有收到电子邮件，请检查您的垃圾邮件文件夹",
     "postSourceDescription": "如果存在，请转到来源（艺术家），或通过反向图像搜索找到它",
     "domainSwitcherDescription": "在Booru网站之间切换：每个网站都有独特的内容，找到您最喜欢的！",
-    "authFailed": "身份验证失败。请重新登录。"
+    "authFailed": "身份验证失败。请重新登录。",
+    "tagAddedToCollection": "标签已添加到收藏",
+    "tagAddedToCollectionDescription": "合集已成功保存"
   },
   "pages": {
     "settings": {
@@ -354,6 +354,7 @@
     "addTag": "添加标签",
     "excludeTag": "排除标签",
     "setTag": "设置标签",
+    "addToCollection": "添加到集合",
     "copyTag": "复制标签",
     "addToBlocklist": "添加到黑名单",
     "removeFromBlocklist": "从阻止列表中删除",

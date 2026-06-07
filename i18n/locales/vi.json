@@ -78,7 +78,6 @@
     "premiumRequiredBlocklist": "Bạn cần phải là thành viên Premium để sử dụng danh sách chặn tùy chỉnh",
     "customBlockListSaved": "Đã lưu danh sách chặn tùy chỉnh",
     "tagCopiedToClipboard": "Đã sao chép thẻ vào bảng nhớ tạm",
-    "tagAddedToCollection": "Đã thêm thẻ vào bộ sưu tập",
     "tagAddedToBlocklist": "Đã thêm thẻ vào danh sách chặn",
     "linkCopiedToClipboard": "Đã sao chép liên kết vào clipboard!",
     "failedToCopyLink": "Không sao chép được liên kết vào bảng nhớ tạm",
@@ -99,11 +98,12 @@
     "cloudDataDeleted": "Dữ liệu đám mây đã được xóa thành công",
     "accountDeletionCancelled": "Đã hủy xóa tài khoản",
     "tagAddedToBlocklistDescription": "Để thấy hiệu quả, hãy tải lại trang web hoặc thực hiện tìm kiếm mới",
-    "tagAddedToCollectionDescription": "Để thấy hiệu quả, hãy tải lại trang web hoặc thực hiện tìm kiếm mới",
     "emailSentDescription": "Nếu email của bạn tồn tại, bạn sẽ nhận được email có giấy phép hiện tại của bạn. Nếu bạn không nhận được email, hãy kiểm tra thư mục thư rác",
     "postSourceDescription": "Đi tới nguồn (nghệ sĩ) nếu nó tồn tại hoặc tìm nó bằng tìm kiếm hình ảnh ngược",
     "domainSwitcherDescription": "Chuyển đổi giữa các trang web Booru: mỗi trang có nội dung độc đáo, hãy tìm trang bạn thích nhất!",
-    "authFailed": "Không thể xác thực. Vui lòng đăng nhập lại."
+    "authFailed": "Không thể xác thực. Vui lòng đăng nhập lại.",
+    "tagAddedToCollection": "Đã thêm thẻ vào bộ sưu tập",
+    "tagAddedToCollectionDescription": "Bộ sưu tập đã được lưu thành công"
   },
   "pages": {
     "settings": {
@@ -354,6 +354,7 @@
     "addTag": "Thêm thẻ",
     "excludeTag": "Loại trừ thẻ",
     "setTag": "Đặt thẻ",
+    "addToCollection": "Thêm vào bộ sưu tập",
     "copyTag": "Sao chép thẻ",
     "addToBlocklist": "Thêm vào danh sách chặn",
     "removeFromBlocklist": "Xóa khỏi danh sách chặn",

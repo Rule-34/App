@@ -78,7 +78,6 @@
     "premiumRequiredBlocklist": "Du musst Premium-Mitglied sein, um die benutzerdefinierte Blockliste zu nutzen",
     "customBlockListSaved": "Benutzerdefinierte Blockliste gespeichert",
     "tagCopiedToClipboard": "Tag in die Zwischenablage kopiert",
-    "tagAddedToCollection": "Tag zur Sammlung hinzugefügt",
     "tagAddedToBlocklist": "Tag zur Blockliste hinzugefügt",
     "linkCopiedToClipboard": "Link in die Zwischenablage kopiert!",
     "failedToCopyLink": "Link konnte nicht in die Zwischenablage kopiert werden",
@@ -99,11 +98,12 @@
     "cloudDataDeleted": "Cloud-Daten erfolgreich gelöscht",
     "accountDeletionCancelled": "Kontolöschung abgebrochen",
     "tagAddedToBlocklistDescription": "Um die Änderung zu sehen, lade die Website neu oder starte eine neue Suche",
-    "tagAddedToCollectionDescription": "Um die Änderung zu sehen, lade die Website neu oder starte eine neue Suche",
     "emailSentDescription": "Falls deine E-Mail existiert, erhältst du eine E-Mail mit deiner aktuellen Lizenz. Wenn keine E-Mail kommt, prüfe deinen Spam-Ordner",
     "postSourceDescription": "Zur Quelle (Künstler) gehen, falls vorhanden, oder per Rückwärtssuche finden",
     "domainSwitcherDescription": "Wechsle zwischen Booru-Websites: Jede hat einzigartige Inhalte, finde die, die dir am besten gefällt!",
-    "authFailed": "Authentifizierung fehlgeschlagen. Bitte melde dich erneut an."
+    "authFailed": "Authentifizierung fehlgeschlagen. Bitte melde dich erneut an.",
+    "tagAddedToCollection": "Tag zur Sammlung hinzugefügt",
+    "tagAddedToCollectionDescription": "Sammlung erfolgreich gespeichert"
   },
   "pages": {
     "settings": {
@@ -354,6 +354,7 @@
     "addTag": "Tag hinzufügen",
     "excludeTag": "Tag ausschließen",
     "setTag": "Tag setzen",
+    "addToCollection": "Zur Sammlung hinzufügen",
     "copyTag": "Tag kopieren",
     "addToBlocklist": "Zur Blockliste hinzufügen",
     "removeFromBlocklist": "Aus Blockliste entfernen",

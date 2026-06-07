@@ -78,7 +78,6 @@
     "premiumRequiredBlocklist": "Necesitas Premium para usar la lista de bloqueo personalizada",
     "customBlockListSaved": "Lista de bloqueo personalizada guardada",
     "tagCopiedToClipboard": "Etiqueta copiada al portapapeles",
-    "tagAddedToCollection": "Etiqueta añadida a la colección",
     "tagAddedToBlocklist": "Etiqueta añadida a la lista de bloqueo",
     "linkCopiedToClipboard": "¡Enlace copiado al portapapeles!",
     "failedToCopyLink": "No se pudo copiar el enlace",
@@ -99,11 +98,12 @@
     "cloudDataDeleted": "Datos en la nube eliminados correctamente",
     "accountDeletionCancelled": "Eliminación de cuenta cancelada",
     "tagAddedToBlocklistDescription": "Para ver el efecto, recarga el sitio o realiza una nueva búsqueda",
-    "tagAddedToCollectionDescription": "Para ver el efecto, recarga el sitio o realiza una nueva búsqueda",
     "emailSentDescription": "Si tu correo electrónico existe, recibirás un correo con tu licencia actual. Si no recibes el correo, revisa tu carpeta de spam",
     "postSourceDescription": "Ve a la fuente (artista) si existe, o búscala con búsqueda inversa de imágenes",
     "domainSwitcherDescription": "Cambia entre sitios Booru: cada uno tiene contenido único, ¡encuentra el que más te guste!",
-    "authFailed": "Error de autenticación. Por favor, inicia sesión de nuevo."
+    "authFailed": "Error de autenticación. Por favor, inicia sesión de nuevo.",
+    "tagAddedToCollection": "Etiqueta añadida a la colección",
+    "tagAddedToCollectionDescription": "Colección guardada correctamente"
   },
   "pages": {
     "settings": {
@@ -354,6 +354,7 @@
     "addTag": "Añadir etiqueta",
     "excludeTag": "Excluir etiqueta",
     "setTag": "Establecer etiqueta",
+    "addToCollection": "Agregar a la colección",
     "copyTag": "Copiar etiqueta",
     "addToBlocklist": "Añadir a la lista de bloqueo",
     "removeFromBlocklist": "Eliminar de la lista de bloqueo",

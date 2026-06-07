@@ -78,7 +78,6 @@
     "premiumRequiredBlocklist": "カスタムブロックリストを使うにはPremium会員が必要です",
     "customBlockListSaved": "カスタムブロックリストを保存しました",
     "tagCopiedToClipboard": "タグをクリップボードにコピーしました",
-    "tagAddedToCollection": "タグをコレクションに追加しました",
     "tagAddedToBlocklist": "タグをブロックリストに追加しました",
     "linkCopiedToClipboard": "リンクをクリップボードにコピーしました！",
     "failedToCopyLink": "リンクのコピーに失敗しました",
@@ -99,11 +98,12 @@
     "cloudDataDeleted": "クラウドデータを正常に削除しました",
     "accountDeletionCancelled": "アカウント削除をキャンセルしました",
     "tagAddedToBlocklistDescription": "効果を確認するには、サイトをリロードするか新しい検索を行ってください",
-    "tagAddedToCollectionDescription": "効果を確認するには、サイトをリロードするか新しい検索を行ってください",
     "emailSentDescription": "メールアドレスが存在する場合、現在のライセンスが記載されたメールが届きます。メールが届かない場合は、スパムフォルダを確認してください",
     "postSourceDescription": "ソース（アーティスト）があればそちらへ、なければ逆画像検索で探してください",
     "domainSwitcherDescription": "Booruサイト間を切り替えましょう：それぞれユニークなコンテンツがあります。お気に入りを見つけてください！",
-    "authFailed": "認証に失敗しました。再度サインインしてください。"
+    "authFailed": "認証に失敗しました。再度サインインしてください。",
+    "tagAddedToCollection": "タグをコレクションに追加しました",
+    "tagAddedToCollectionDescription": "コレクションを保存しました"
   },
   "pages": {
     "settings": {
@@ -354,6 +354,7 @@
     "addTag": "タグを追加",
     "excludeTag": "タグを除外",
     "setTag": "タグを設定",
+    "addToCollection": "コレクションに追加",
     "copyTag": "タグをコピー",
     "addToBlocklist": "ブロックリストに追加",
     "removeFromBlocklist": "ブロックリストから削除",
