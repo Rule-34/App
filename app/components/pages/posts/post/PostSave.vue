@@ -3,6 +3,7 @@
   import { BookmarkIcon } from '@heroicons/vue/24/outline'
   import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/vue/24/solid'
   import type { IPost } from '~/assets/js/post.dto'
+  import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
   // TODO: Load this component in <suspense>
 
@@ -30,7 +31,7 @@
     if (!isPremium.value) {
       const { open: promptPremium, currentIndex } = usePremiumDialog()
 
-      currentIndex.value = 2
+      currentIndex.value = premiumPromotionIndices.savePost
       promptPremium.value = true
       return
     }

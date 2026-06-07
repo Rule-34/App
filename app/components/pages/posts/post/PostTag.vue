@@ -12,6 +12,7 @@
   import { flip, offset, shift, useFloating } from '@floating-ui/vue'
   import type Tag from '~/assets/js/tag.dto'
   import { blockListOptions } from '~/composables/useBlockLists'
+  import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
   const props = defineProps<{
     tag: Tag
@@ -56,13 +57,17 @@
   async function toggleBlockedTag(tag: Tag) {
     if (!isPremium.value) {
       const { open: promptPremium, currentIndex } = usePremiumDialog()
-      currentIndex.value = 6
+      currentIndex.value = premiumPromotionIndices.blocklist
       promptPremium.value = true
       return
     }
 
     if (isTagBlocked(tag)) {
-      await setCustomBlockList(customBlockList.value.filter((blockedTag) => blockedTag !== tag.name))
+      const saved = await setCustomBlockList(customBlockList.value.filter((blockedTag) => blockedTag !== tag.name))
+
+      if (!saved) {
+        return
+      }
     } else {
       const saved = await setCustomBlockList([...customBlockList.value, tag.name])
 

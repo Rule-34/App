@@ -2,6 +2,7 @@
   import { LinkIcon } from '@heroicons/vue/24/outline'
   import { useFloating, offset, flip, shift } from '@floating-ui/vue'
   import type { IPost } from '~/assets/js/post.dto'
+  import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
   const props = defineProps<{
     postSources: IPost['sources']
@@ -93,7 +94,7 @@
     if (!isPremium.value) {
       const { open: promptPremium, currentIndex } = usePremiumDialog()
 
-      currentIndex.value = 7
+      currentIndex.value = premiumPromotionIndices.sourceFinder
       promptPremium.value = true
       return
     }

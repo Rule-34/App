@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
   import { proxyUrl } from '~/assets/js/proxy'
+  import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
   const props = defineProps({
     mediaName: {
@@ -20,7 +21,7 @@
     if (!isPremium.value) {
       const { open: promptPremium, currentIndex } = usePremiumDialog()
 
-      currentIndex.value = 5
+      currentIndex.value = premiumPromotionIndices.downloadPost
       promptPremium.value = true
       return
     }

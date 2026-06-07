@@ -2,6 +2,7 @@
   import Tag from '~/assets/js/tag.dto'
   import { Cog6ToothIcon, PlusIcon, TagIcon } from '@heroicons/vue/24/outline'
   import { TagCollection } from '~/assets/js/tagCollection.dto'
+  import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
   const props = defineProps<{
     selectedTags: Tag[]
@@ -22,7 +23,7 @@
 
   function setTagCollectionAsSelected(tagCollection: TagCollection) {
     if (!isPremium.value) {
-      currentIndex.value = 6
+      currentIndex.value = premiumPromotionIndices.tagCollections
       promptPremium.value = true
       return
     }

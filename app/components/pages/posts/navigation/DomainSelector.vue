@@ -3,6 +3,7 @@
   import { PlusIcon } from '@heroicons/vue/24/solid'
   import { flip, offset, shift, useFloating } from '@floating-ui/vue'
   import type { Domain } from '~/assets/js/domain'
+  import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
   defineOptions({
     inheritAttrs: false
@@ -38,7 +39,7 @@
     if (domain.isPremium && !isPremium.value) {
       const { open: promptPremium, currentIndex } = usePremiumDialog()
 
-      currentIndex.value = 4
+      currentIndex.value = premiumPromotionIndices.additionalBoorus
       promptPremium.value = true
       return
     }

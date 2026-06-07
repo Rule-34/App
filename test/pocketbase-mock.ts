@@ -116,8 +116,8 @@ export async function mockPocketBase(page: Page, state: PocketBaseMockState) {
     if (request.method() === 'POST' && collectionName === 'posts') {
       const payload = request.postDataJSON() as IPocketbasePost
       const record: IPocketbasePost = {
-        id: `saved-post-${state.savedPostRecords.length + 1}`,
-        ...payload
+        ...payload,
+        id: `saved-post-${state.savedPostRecords.length + 1}`
       }
 
       if (state.delaySavedPostMutationMs) {
@@ -136,6 +136,13 @@ export async function mockPocketBase(page: Page, state: PocketBaseMockState) {
     }
 
     if (request.method() === 'DELETE' && collectionName === 'posts' && recordId) {
+      const recordExists = state.savedPostRecords.some((record) => record.id === recordId)
+
+      if (!recordExists) {
+        await fulfillJson(route, { message: `Saved post "${recordId}" not found` }, 404)
+        return
+      }
+
       state.savedPostRecords = state.savedPostRecords.filter((record) => record.id !== recordId)
       state.savedPostSummaries = state.savedPostSummaries.filter((record) => record.id !== recordId)
 
