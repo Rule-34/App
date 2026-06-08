@@ -130,7 +130,7 @@ export default defineNuxtConfig({
 
     ...pageRouteRules,
 
-    // Locale-prefixed variants (ru, es, ja, pt, de, fr) — with prefix_except_default,
+    // Locale-prefixed variants (all non-default locales from config/i18n) — with prefix_except_default,
     // /ru/posts/** etc. don't inherit unprefixed rules.
     ...mirroredRouteRules(pageRouteRules),
 
@@ -170,7 +170,7 @@ export default defineNuxtConfig({
     },
 
     '/_i18n/**': {
-      headers: assetCacheHeaders
+      headers: immutableCacheHeaders
     },
 
     '/js/**': {
@@ -276,9 +276,12 @@ export default defineNuxtConfig({
      *       Track: https://github.com/nuxt-modules/i18n
      */
     experimental: {
+      prerenderMessages: true,
+
       strictSeo: {
         canonicalQueries: ['tags'] // Non-functional — kept as intent. See server/plugins/.
       },
+      
       compactRoutes: true // TODO: Remove once default
     }
   },
