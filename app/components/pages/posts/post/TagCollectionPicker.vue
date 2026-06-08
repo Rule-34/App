@@ -1,6 +1,5 @@
 <script lang="ts" setup>
   import { TagCollection } from '~/assets/js/tagCollection.dto'
-  import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
   const props = defineProps<{
     tagName: string
@@ -8,6 +7,7 @@
 
   const emit = defineEmits<{
     close: []
+    premiumRequired: []
   }>()
 
   const { t } = useI18n()
@@ -15,12 +15,10 @@
   const { isPremium } = useUserData()
   const { tagCollections } = useTagCollections()
   const { setTagCollections } = usePremiumCloudSync()
-  const { open: promptPremium, currentIndex } = usePremiumDialog()
 
   // Keep naming, duplicate validation, and list presentation aligned with the search TagCollections component.
   function openPremiumPrompt() {
-    currentIndex.value = premiumPromotionIndices.tagCollections
-    promptPremium.value = true
+    emit('premiumRequired')
   }
 
   function showCollectionSavedToast() {

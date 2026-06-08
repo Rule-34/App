@@ -13,7 +13,6 @@
   import { flip, offset, shift, useFloating } from '@floating-ui/vue'
   import type Tag from '~/assets/js/tag.dto'
   import { blockListOptions } from '~/composables/useBlockLists'
-  import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
   const props = defineProps<{
     tag: Tag
@@ -23,6 +22,7 @@
   const emit = defineEmits<{
     addTag: [tag: string]
     addToCollection: [tag: string]
+    blocklistPremiumRequired: []
     setTag: [tag: string]
     openTagInNewTab: [tag: string]
   }>()
@@ -33,7 +33,6 @@
   const { copy } = useClipboard()
   const { t } = useI18n()
   const { toast } = useLazyToast()
-  const { open: promptPremium, currentIndex } = usePremiumDialog()
 
   const referenceEl = ref<HTMLElement>()
   const floatingEl = ref<HTMLElement>()
@@ -59,8 +58,7 @@
 
   async function toggleBlockedTag(tag: Tag) {
     if (!isPremium.value) {
-      currentIndex.value = premiumPromotionIndices.blocklist
-      promptPremium.value = true
+      emit('blocklistPremiumRequired')
       return
     }
 

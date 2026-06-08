@@ -157,4 +157,100 @@ describe('Post tag collections', async () => {
     await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(1)
     await expect.poll(() => page.getByRole('dialog').getByText('General').isVisible(), { timeout: 10000 }).toBe(true)
   }, 60000)
+
+  it('restores the tag sheet after a non-premium user closes the blocklist premium prompt', async () => {
+    const page = await createTrackedPage()
+    const pocketBase = createPocketBaseMockState()
+
+    await page.context().clearCookies()
+    await page.addInitScript(() => {
+      window.localStorage.removeItem('pocketbase_auth')
+      document.cookie = 'pb_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+    })
+    await mockPocketBase(page, pocketBase)
+    await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+
+    const firstPost = page.getByTestId(`safebooru.org-${firstMockPost.id}`).first()
+    await firstPost.waitFor({ state: 'visible', timeout: 10000 })
+    await firstPost.getByRole('button', { name: /tags/i }).click()
+
+    const clickedTag = page.getByRole('button', { name: /1girl/i }).first()
+    await clickedTag.click()
+
+    const addToBlocklistButton = page.locator('button').filter({ hasText: /Add to blocklist/i })
+    await addToBlocklistButton.waitFor({ state: 'visible', timeout: 10000 })
+    await addToBlocklistButton.click()
+
+    await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(1)
+    await expect.poll(() => page.locator('a[href*="promo-tag-collections"]').first().isVisible()).toBe(true)
+    await expect.poll(() => page.getByRole('dialog').getByText('General').isVisible()).toBe(false)
+
+    await page
+      .getByRole('dialog')
+      .filter({ has: page.locator('a[href*="promo-tag-collections"]') })
+      .getByRole('button', { name: /^close$/i })
+      .click()
+
+    await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(1)
+    await expect.poll(() => page.getByRole('dialog').getByText('General').isVisible(), { timeout: 10000 }).toBe(true)
+  }, 60000)
+
+  it('adds a tag to the custom blocklist without closing the tag sheet for a premium user', async () => {
+    const page = await createTrackedPage()
+    const pocketBase = createPocketBaseMockState({
+      blockListRecords: []
+    })
+
+    await mockPocketBase(page, pocketBase)
+    await addPocketBaseAuthCookie(page, url('/'))
+    await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+
+    const firstPost = page.getByTestId(`safebooru.org-${firstMockPost.id}`).first()
+    await firstPost.waitFor({ state: 'visible', timeout: 10000 })
+    await firstPost.getByRole('button', { name: /tags/i }).click()
+
+    const clickedTag = page.getByRole('button', { name: /1girl/i }).first()
+    await clickedTag.click()
+
+    const addToBlocklistButton = page.locator('button').filter({ hasText: /Add to blocklist/i })
+    await addToBlocklistButton.waitFor({ state: 'visible', timeout: 10000 })
+    await addToBlocklistButton.click()
+
+    await expect.poll(() => page.getByText('Tag added to blocklist').first().isVisible(), { timeout: 10000 }).toBe(true)
+    await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(1)
+    await expect.poll(() => page.getByRole('dialog').getByText('General').isVisible(), { timeout: 10000 }).toBe(true)
+    await expect.poll(() => pocketBase.blockListRecords[0]?.tags, { timeout: 10000 }).toEqual(['1girl'])
+  }, 60000)
+
+  it('restores search tag collections after a non-premium user closes the premium prompt', async () => {
+    const page = await createTrackedPage()
+    const pocketBase = createPocketBaseMockState()
+
+    await page.context().clearCookies()
+    await page.addInitScript(() => {
+      window.localStorage.removeItem('pocketbase_auth')
+      document.cookie = 'pb_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+    })
+    await mockPocketBase(page, pocketBase)
+    await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+
+    await page.getByRole('button', { name: /search posts/i }).click()
+    await page.getByRole('button', { name: /collections/i }).click()
+    await page.getByRole('button', { name: /animated/i }).click()
+
+    await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(2)
+    await expect.poll(() => page.locator('a[href*="promo-tag-collections"]').first().isVisible()).toBe(true)
+    await expect.poll(() => page.getByRole('heading', { name: 'Tag Collections' }).isVisible()).toBe(false)
+
+    await page
+      .getByRole('dialog')
+      .filter({ has: page.locator('a[href*="promo-tag-collections"]') })
+      .getByRole('button', { name: /^close$/i })
+      .click()
+
+    await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(2)
+    await expect
+      .poll(() => page.getByRole('heading', { name: 'Tag Collections' }).isVisible(), { timeout: 10000 })
+      .toBe(true)
+  }, 60000)
 })

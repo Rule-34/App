@@ -6,6 +6,7 @@
   import { cloneDeep, unionWith } from 'es-toolkit'
   import type { Component } from 'vue'
   import Tag from '~/assets/js/tag.dto'
+  import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
   import SearchSelect from './SearchSelect.vue'
 
   type FilterValue = string | number | boolean | null | undefined
@@ -37,8 +38,16 @@
   }>()
 
   const { t } = useI18n()
+  const { open: promptPremium, currentIndex } = usePremiumDialog()
 
   const isTagCollectionsActive = ref(false)
+  const shouldRestoreTagCollections = ref(false)
+
+  watch(promptPremium, (isOpen) => {
+    if (!isOpen) {
+      restoreTagCollectionsSheet()
+    }
+  })
 
   /**
    * Info: ShallowRef will only update when the entire value changes
@@ -147,10 +156,31 @@
 
   function onTagCollectionsSetSelectedTags(tags: Tag[]) {
     isTagCollectionsActive.value = false
+    shouldRestoreTagCollections.value = false
 
     const uniqueMergedTags = unionWith(selectedTags.value, tags, (tagA, tagB) => tagA.name === tagB.name)
 
     selectedTags.value = uniqueMergedTags
+  }
+
+  function onTagCollectionsPremiumRequired() {
+    isTagCollectionsActive.value = false
+    shouldRestoreTagCollections.value = true
+    currentIndex.value = premiumPromotionIndices.tagCollections
+    promptPremium.value = true
+  }
+
+  function restoreTagCollectionsSheet() {
+    if (!shouldRestoreTagCollections.value) {
+      return
+    }
+
+    if (promptPremium.value) {
+      return
+    }
+
+    shouldRestoreTagCollections.value = false
+    isTagCollectionsActive.value = true
   }
 
   function onSubmitted() {
@@ -339,6 +369,7 @@
           <div class="px-4 py-4">
             <TagCollections
               :selected-tags="selectedTags"
+              @premium-required="onTagCollectionsPremiumRequired"
               @update-selected-tags="onTagCollectionsSetSelectedTags"
             />
           </div>

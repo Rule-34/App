@@ -86,6 +86,10 @@
       return
     }
 
+    if (promptPremium.value || isTagCollectionPickerOpen.value) {
+      return
+    }
+
     shouldRestoreTagsOpen.value = false
     areTagsOpen.value = true
   }
@@ -106,6 +110,20 @@
 
     activeTagForCollection.value = tag
     isTagCollectionPickerOpen.value = true
+  }
+
+  function onBlocklistPremiumRequired() {
+    areTagsOpen.value = false
+    shouldRestoreTagsOpen.value = true
+    currentIndex.value = premiumPromotionIndices.blocklist
+    promptPremium.value = true
+  }
+
+  function onTagCollectionPickerPremiumRequired() {
+    shouldRestoreTagsOpen.value = true
+    currentIndex.value = premiumPromotionIndices.tagCollections
+    promptPremium.value = true
+    isTagCollectionPickerOpen.value = false
   }
 
   function buildMediaDescriptionTags(post: IPost): string {
@@ -297,6 +315,7 @@
                       :tag="createTag(tag, tagType)"
                       @add-tag="emit('addTag', $event)"
                       @add-to-collection="onAddTagToCollection"
+                      @blocklist-premium-required="onBlocklistPremiumRequired"
                       @open-tag-in-new-tab="emit('openTagInNewTab', $event)"
                       @set-tag="emit('setTag', $event)"
                     />
@@ -312,6 +331,7 @@
             v-if="activeTagForCollection"
             :tag-name="activeTagForCollection"
             @close="isTagCollectionPickerOpen = false"
+            @premium-required="onTagCollectionPickerPremiumRequired"
           />
         </LazyBottomSheetWrapper>
 
