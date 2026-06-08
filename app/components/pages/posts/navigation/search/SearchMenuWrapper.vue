@@ -2,6 +2,45 @@
   import { XMarkIcon } from '@heroicons/vue/24/outline'
 
   const { value: isSearchMenuActive, toggle: toggleSearchMenu } = useSearchMenu()
+  const { open: promptPremium } = usePremiumDialog()
+  const shouldIgnorePremiumClose = ref(false)
+  let clearPremiumCloseGuardTimer: ReturnType<typeof setTimeout> | undefined
+
+  watch(promptPremium, (isOpen) => {
+    if (clearPremiumCloseGuardTimer) {
+      clearTimeout(clearPremiumCloseGuardTimer)
+      clearPremiumCloseGuardTimer = undefined
+    }
+
+    if (isOpen) {
+      shouldIgnorePremiumClose.value = true
+      return
+    }
+
+    if (!shouldIgnorePremiumClose.value) {
+      return
+    }
+
+    // Keep shouldIgnorePremiumClose active through the 300ms search-menu leave transition plus a small buffer.
+    clearPremiumCloseGuardTimer = setTimeout(() => {
+      shouldIgnorePremiumClose.value = false
+      clearPremiumCloseGuardTimer = undefined
+    }, 350)
+  })
+
+  onBeforeUnmount(() => {
+    if (clearPremiumCloseGuardTimer) {
+      clearTimeout(clearPremiumCloseGuardTimer)
+    }
+  })
+
+  function closeSearchMenu() {
+    if (promptPremium.value || shouldIgnorePremiumClose.value) {
+      return
+    }
+
+    toggleSearchMenu(false)
+  }
 </script>
 
 <template>
@@ -13,7 +52,7 @@
     <HeadlessDialog
       as="div"
       class="relative z-10"
-      @close="toggleSearchMenu"
+      @close="closeSearchMenu"
     >
       <!-- Background -->
       <HeadlessTransitionChild

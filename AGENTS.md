@@ -155,6 +155,12 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
   `ClientToaster` to mount before calling `toast.*`; a plain `nextTick()` can fire before `<LazyClientToaster>` has
   finished loading and silently drop the toast.
 
+### Dialogs
+
+- When a premium prompt is triggered from inside a bottom sheet or dialog, let the sheet/dialog owner close the local UI,
+  open the premium prompt, and restore the local UI after the prompt closes. Opening the premium prompt directly from a
+  nested child can leave stacked Headless UI dialogs that require multiple close clicks.
+
 ### Performance
 
 - **Server over client when equivalent** — every global route middleware, duplicated redirect helper, and client-only SEO

@@ -2,13 +2,13 @@
   import Tag from '~/assets/js/tag.dto'
   import { Cog6ToothIcon, PlusIcon, TagIcon } from '@heroicons/vue/24/outline'
   import { TagCollection } from '~/assets/js/tagCollection.dto'
-  import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
   const props = defineProps<{
     selectedTags: Tag[]
   }>()
 
   const emit = defineEmits<{
+    premiumRequired: []
     updateSelectedTags: [selectedTags: Tag[]]
   }>()
 
@@ -19,12 +19,10 @@
 
   const { tagCollections } = useTagCollections()
   const { setTagCollections } = usePremiumCloudSync()
-  const { open: promptPremium, currentIndex } = usePremiumDialog()
 
   function setTagCollectionAsSelected(tagCollection: TagCollection) {
     if (!isPremium.value) {
-      currentIndex.value = premiumPromotionIndices.tagCollections
-      promptPremium.value = true
+      emit('premiumRequired')
       return
     }
 
