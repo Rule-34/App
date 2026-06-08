@@ -21,6 +21,7 @@
       return
     }
 
+    // Keep shouldIgnorePremiumClose active through the 300ms search-menu leave transition plus a small buffer.
     clearPremiumCloseGuardTimer = setTimeout(() => {
       shouldIgnorePremiumClose.value = false
       clearPremiumCloseGuardTimer = undefined
