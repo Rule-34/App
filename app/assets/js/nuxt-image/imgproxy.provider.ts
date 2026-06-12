@@ -55,6 +55,45 @@ const defaultModifiers = {
 interface ImgproxyProviderOptions {
   baseUrl: string
   internalProxyUrl: string
+  mediaProxyUrls?: string[]
+}
+
+const gelbooruHostSuffix = 'gelbooru.com'
+
+function isGelbooruMediaSource(sourceUrl: URL) {
+  return sourceUrl.hostname === gelbooruHostSuffix || sourceUrl.hostname.endsWith(`.${gelbooruHostSuffix}`)
+}
+
+function stableIndex(value: string, length: number) {
+  let hash = 0
+
+  for (const char of value) {
+    hash = (hash + char.charCodeAt(0)) >>> 0
+  }
+
+  return hash % length
+}
+
+function getMediaProxySourceUrl(src: string, mediaProxyUrls: string[] | undefined) {
+  if (!mediaProxyUrls?.length) {
+    return
+  }
+
+  const selectedProxyUrl = mediaProxyUrls[stableIndex(src, mediaProxyUrls.length)]
+
+  if (!selectedProxyUrl) {
+    return
+  }
+
+  const proxyUrl = URL.parse(selectedProxyUrl)
+
+  if (!proxyUrl) {
+    return
+  }
+
+  proxyUrl.searchParams.set('q', src)
+
+  return proxyUrl.toString()
 }
 
 /**
@@ -78,15 +117,18 @@ const getImage: ProviderGetImage<ImgproxyProviderOptions> = (src, options) => {
     return { url: src }
   }
 
-  const { modifiers, baseUrl, internalProxyUrl } = options
+  const { modifiers, baseUrl, internalProxyUrl, mediaProxyUrls } = options
 
   const mergeModifiers = { ...defaultModifiers, ...modifiers }
 
   // Remove dimensions from imgproxy operations so the same source reuses a common cached URL.
   const { width, height, ...modifiersWithoutSize } = mergeModifiers
 
-  // Build rewriter URL: nginx-proxy fetches the source and strips headers
-  const rewriterUrl = `${internalProxyUrl}${src}`
+  const mediaProxySourceUrl = isGelbooruMediaSource(sourceUrl) ? getMediaProxySourceUrl(src, mediaProxyUrls) : undefined
+
+  // Build rewriter URL: nginx-proxy fetches the source and strips headers.
+  // Gelbooru media is fetched through Cloudflare Workers first because Gelbooru rate-limits the VM egress IP.
+  const rewriterUrl = mediaProxySourceUrl ?? `${internalProxyUrl}${src}`
   const encodedUrl = urlSafeBase64(rewriterUrl)
 
   const path = joinURL('/insecure', operationsGenerator(modifiersWithoutSize), encodedUrl)
