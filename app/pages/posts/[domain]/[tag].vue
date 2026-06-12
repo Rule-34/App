@@ -2,7 +2,7 @@
   import { ArrowPathIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
   import { fallbackBooruDomain, generatePostsRoute, getSingleRouteParam } from '~/assets/js/RouterHelper'
   import { normalizeStringForTitle } from '~/assets/js/SeoHelper'
-  import type { IPost, IPostFile, IPostPage } from '~/assets/js/post.dto'
+  import { isRenderablePost, type IPostFile, type IPostPage, type IRenderablePost } from '~/assets/js/post.dto'
   import Tag, { TagDTO } from '~/assets/js/tag.dto'
   import { project } from '~~/config/project'
 
@@ -74,13 +74,11 @@
     }
   )
 
-  const posts = computed<IPost[]>(() =>
-    (data.value?.data ?? [])
-      .filter((post) => post.media_type)
-      .map((post) => ({
-        ...post,
-        domain: selectedBooru.value.domain
-      }))
+  const posts = computed<IRenderablePost[]>(() =>
+    (data.value?.data ?? []).filter(isRenderablePost).map((post) => ({
+      ...post,
+      domain: selectedBooru.value.domain
+    }))
   )
 
   const canonicalUrl = computed(() => new URL(route.path, project.urls.production).href)
@@ -91,13 +89,13 @@
     return firstPost.preview_file.url
   })
 
-  function getPostPreviewFile(post: IPost): IPostFile {
+  function getPostPreviewFile(post: IRenderablePost): IPostFile {
     if (post.preview_file.url) return post.preview_file
     if (post.low_res_file.url) return post.low_res_file
     return post.high_res_file
   }
 
-  function getPostPreviewAlt(post: IPost): string {
+  function getPostPreviewAlt(post: IRenderablePost): string {
     const tags = [...post.tags.character, ...post.tags.copyright, ...post.tags.artist, ...post.tags.general].filter(
       Boolean
     )
@@ -105,7 +103,7 @@
     return tags.length ? tags.slice(0, 5).join(', ') : t('media.postAlt', { id: post.id })
   }
 
-  function getPostAspectRatio(post: IPost): string {
+  function getPostAspectRatio(post: IRenderablePost): string {
     const previewFile = getPostPreviewFile(post)
 
     if (!previewFile.width || !previewFile.height) {

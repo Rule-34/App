@@ -18,7 +18,7 @@
   import { stripLocaleFromPath } from '~/composables/locale'
   import { useTagTitle } from '~/composables/useTagTitle'
   import type { Domain } from '~/assets/js/domain'
-  import type { IPost, IPostPage } from '~/assets/js/post.dto'
+  import { isRenderablePost, type IPostPage, type IRenderablePost } from '~/assets/js/post.dto'
   import Tag, { type ITag } from '~/assets/js/tag.dto'
   import { project } from '~~/config/project'
   import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
@@ -28,7 +28,7 @@
     tags: Tag[]
     filters: Record<string, FilterValue>
   }
-  type PostRow = IPost & {
+  type PostRow = IRenderablePost & {
     current_page: number
     isFirstPost: boolean
   }
@@ -549,8 +549,7 @@
       page.data = page.data.filter((post) => {
         //
 
-        // Delete all posts that have `media_type: 'unknown'`
-        if (!post.media_type || post.media_type === 'unknown') {
+        if (!isRenderablePost(post)) {
           return false
         }
 
@@ -619,7 +618,7 @@
     return data.value.pages.flatMap((page) => {
       //
 
-      return page.data.flatMap((post, index) => {
+      return page.data.filter(isRenderablePost).flatMap((post, index) => {
         //
 
         return {

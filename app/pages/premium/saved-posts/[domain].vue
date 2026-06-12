@@ -9,13 +9,13 @@
   import type { Domain } from '~/assets/js/domain'
   import Tag from '~/assets/js/tag.dto'
   import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-  import type { IPost, IPostPage } from '~/assets/js/post.dto'
+  import { isRenderablePost, type IPostPage, type IRenderablePost } from '~/assets/js/post.dto'
   import { generatePostsRoute, getFilterQueryValue, getSingleQueryValue } from '~/assets/js/RouterHelper'
   import { useTagTitle } from '~/composables/useTagTitle'
   import { PremiumCloudRepository, type PremiumCloudPocketBaseClient } from '~/repositories/PremiumCloudRepository'
   import { project } from '~~/config/project'
 
-  type PostRow = IPost & {
+  type PostRow = IRenderablePost & {
     current_page: number
     isFirstPost: boolean
   }
@@ -393,7 +393,7 @@
     return data.value.pages.flatMap((page) => {
       //
 
-      return page.data.flatMap((post, index) => {
+      return page.data.filter(isRenderablePost).flatMap((post, index) => {
         // TODO: Optimize performance
 
         return {

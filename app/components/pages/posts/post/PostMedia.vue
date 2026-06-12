@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import type { IPost } from '~/assets/js/post.dto'
+  import type { IPost, PostMediaType } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
   import { proxyUrl } from '~/assets/js/proxy'
 
@@ -18,7 +18,7 @@
     mediaSrcHeight: IPost['high_res_file']['height'] | null
     mediaSrcWidth: IPost['high_res_file']['width'] | null
     mediaPosterSrc: string | null
-    mediaType: IPost['media_type']
+    mediaType: PostMediaType
     mediaAlt: string
   }
 

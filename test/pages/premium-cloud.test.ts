@@ -148,6 +148,45 @@ describe('Premium cloud flows', async () => {
     expect(pocketBase.requests.some((request) => request.includes('distinct_original_domain_from_posts'))).toBe(false)
   }, 20000)
 
+  it('filters saved posts without a media type before rendering post media', async () => {
+    const page = await createTrackedPage()
+    const pageErrors: string[] = []
+    const savedPostRecordWithoutMediaType = {
+      ...firstSavedPostRecord,
+      media_type: undefined
+    }
+    const savedPostRecordWithUnknownMediaType = {
+      ...firstSavedPostRecord,
+      id: `${firstSavedPostRecord.id}-unknown`,
+      original_id: firstSavedPostRecord.original_id + 1,
+      media_type: 'unknown' as const
+    }
+    const pocketBase = createPocketBaseMockState({
+      savedPostSummaries: [
+        firstSavedPostSummary,
+        {
+          ...firstSavedPostSummary,
+          id: savedPostRecordWithUnknownMediaType.id!,
+          original_id: savedPostRecordWithUnknownMediaType.original_id
+        }
+      ],
+      savedPostRecords: [savedPostRecordWithoutMediaType, savedPostRecordWithUnknownMediaType]
+    })
+
+    page.on('pageerror', (error) => {
+      pageErrors.push(error.message)
+    })
+
+    await mockPocketBase(page, pocketBase)
+    await addPocketBaseAuthCookie(page, url('/'))
+    await page.goto(url('/premium/saved-posts/r34.app'), { waitUntil: 'domcontentloaded' })
+
+    await page.getByRole('heading', { name: /no results/i }).waitFor({ state: 'visible', timeout: 10000 })
+
+    expect(await page.locator('figure').count()).toBe(0)
+    expect(pageErrors.filter((message) => message.includes('Unknown media type'))).toEqual([])
+  }, 20000)
+
   it('redirects old saved-post domain URLs to the all-posts domain while preserving filters', async () => {
     const page = await createTrackedPage()
     const pocketBase = createPocketBaseMockState({
