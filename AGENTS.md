@@ -143,6 +143,9 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
   of patching rendered HTML in Nitro.
 - `PostMedia` uses imgproxy for SSR post images, including local development. Non-premium SPA navigations keep the direct
   image path; validate image delivery in an environment where imgproxy can resolve the source URL.
+- Fluid Player `onPauseRoll` ads are disabled because `fluid-player@3.58.0` can throw in `toggleOnPauseAd` when its
+  on-pause ad DOM is missing. Keep prerolls in `app/assets/js/fluid-player-ads.ts`, but do not re-enable pause rolls
+  without validating against Sentry issues `R34-APP-8KB`, `R34-APP-8K7`, and `R34-APP-8K9`.
 
 ### Headless UI
 

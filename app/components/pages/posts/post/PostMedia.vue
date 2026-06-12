@@ -2,6 +2,7 @@
   import type { IPost } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
   import { proxyUrl } from '~/assets/js/proxy'
+  import { buildFluidPlayerAdList } from '~/assets/js/fluid-player-ads'
 
   const localePath = useLocalePath()
   const { t } = useI18n()
@@ -162,7 +163,11 @@
     }
 
     const fluidPlayer = fluidPlayerModule.default
-    const adList: NonNullable<VastOptions['adList']> = []
+    const renderedVideoCount = isPremium.value ? timesVideoHasRendered.value : ++timesVideoHasRendered.value
+    const adList = buildFluidPlayerAdList({
+      isPremium: isPremium.value,
+      timesVideoHasRendered: renderedVideoCount
+    })
 
     const fluidPlayerOptions: FluidPlayerOptionsWithPlaybackRates = {
       layoutControls: {
@@ -233,66 +238,6 @@
         },
 
         adList
-      }
-    }
-
-    if (!isPremium.value) {
-      timesVideoHasRendered.value++
-
-      // Only show pause roll ads every 2 videos
-      if (timesVideoHasRendered.value % 2 === 0) {
-        adList.push(
-          // In-Video Banner
-          {
-            roll: 'onPauseRoll',
-            vastTag:
-              /**
-               * ExoClick
-               * Pros:
-               * Cons: Low revenue (7)
-               */
-              'https://s.magsrv.com/splash.php?idzone=5386214'
-          }
-        )
-      }
-      //
-
-      // Only show preroll ads after 3 videos, and every 3 videos
-      if (timesVideoHasRendered.value > 3 && timesVideoHasRendered.value % 3 === 0) {
-        adList.push(
-          // In-Stream Video
-          {
-            roll: 'preRoll',
-            vastTag:
-              /**
-               * ExoClick
-               * Pros:
-               * Cons: Low revenue (9)
-               */
-              'https://s.magsrv.com/splash.php?idzone=5386496'
-
-            /**
-             * HilltopAds
-             * Pros:
-             * Cons: Low revenue (4)
-             */
-            // 'https://ellipticaltrack.com/dCm.FXz/doGMNPv/Z-GhUX/OermX9/u-ZqUEltk/PYTgYBy/ODTZQI5oNHDDEHtdNbjLIS5eNvDhk/0uMGgu?limit=1'
-
-            /**
-             * Clickadu
-             * Pros:
-             * Cons:
-             */
-            // 'https://anewfeedliberty.com/ceef/gdt3g0/tbt/2034767/tlk.xml'
-
-            /**
-             * AdSession
-             * Pros:
-             * Cons:
-             */
-            // 'https://s.eunow4u.com/v1/vast.php?idzone=2310'
-          }
-        )
       }
     }
 
