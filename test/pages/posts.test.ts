@@ -305,6 +305,21 @@ describe('/', async () => {
         mockPostsPage1.data[0].low_res_file.url
       )
     }, 30000)
+
+    it('uses post identity for virtual row keys', async () => {
+      const page = await createTrackedPage()
+
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+      await page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`).first().waitFor({ state: 'visible' })
+
+      const firstVirtualKey = await page
+        .getByTestId('posts-list')
+        .locator('li')
+        .first()
+        .getAttribute('data-virtual-key')
+
+      expect(firstVirtualKey).toBe(`safebooru.org-${mockPostsPage0.data[0].id}`)
+    }, 30000)
   })
 
   describe('History', async () => {
