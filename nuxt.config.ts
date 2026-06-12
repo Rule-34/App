@@ -281,7 +281,7 @@ export default defineNuxtConfig({
       strictSeo: {
         canonicalQueries: ['tags'] // Non-functional — kept as intent. See server/plugins/.
       },
-      
+
       compactRoutes: true // TODO: Remove once default
     }
   },
@@ -339,7 +339,8 @@ export default defineNuxtConfig({
         provider: '~/assets/js/nuxt-image/imgproxy.provider',
         options: {
           baseUrl: project.imgproxy.baseUrl,
-          internalProxyUrl: project.imgproxy.internalProxyUrl
+          internalProxyUrl: project.imgproxy.internalProxyUrl,
+          mediaProxyUrls: project.imgproxy.mediaProxyUrls
         }
       }
     },

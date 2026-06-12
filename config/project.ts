@@ -41,6 +41,7 @@ export interface Social {
 export interface Imgproxy {
   baseUrl: string
   internalProxyUrl: string
+  mediaProxyUrls: string[]
 }
 
 export interface DiscordOauth {
@@ -99,7 +100,8 @@ export const project: ProjectConfig = {
   },
   imgproxy: {
     baseUrl: 'https://imgproxy2.r34.app',
-    internalProxyUrl: 'http://nginx-proxy/proxy?url='
+    internalProxyUrl: 'http://nginx-proxy/proxy?url=',
+    mediaProxyUrls: ['https://cors-proxy2.rule34.workers.dev/', 'https://cors-proxy.refinedsoftware00.workers.dev/']
   },
   sentry: {
     applicationKey: 'r34-app'
