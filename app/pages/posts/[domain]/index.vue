@@ -649,6 +649,12 @@
     return {
       count: hasNextPage.value ? allRows.value.length + 1 : allRows.value.length,
 
+      getItemKey: (index: number) => {
+        const post = allRows.value[index]
+
+        return post ? getPostRowKey(post) : `${selectedBooru.value.domain}-next-page`
+      },
+
       estimateSize: () => estimatedRowSize,
 
       // For SSR
@@ -676,13 +682,14 @@
 
     return Array.from({ length: rowCount }, (_, index) => {
       const start = index * (estimatedRowSize + rowGap)
+      const post = allRows.value[index]
 
       return {
         index,
         start,
         size: estimatedRowSize,
         end: start + estimatedRowSize,
-        key: index,
+        key: post ? getPostRowKey(post) : `${selectedBooru.value.domain}-next-page`,
         lane: 0
       }
     })
@@ -710,6 +717,10 @@
     }
 
     return post
+  }
+
+  function getPostRowKey(post: Pick<PostRow, 'domain' | 'id'>) {
+    return `${post.domain}-${post.id}`
   }
 
   // Next page loader
@@ -1175,6 +1186,7 @@
               :key="String(virtualRow.key)"
               :ref="measureElement"
               :data-index="virtualRow.index"
+              :data-virtual-key="String(virtualRow.key)"
               :data-testid="
                 virtualRow.index <= allRows.length - 1
                   ? `${getPostRow(virtualRow.index).domain}-${getPostRow(virtualRow.index).id}`
@@ -1221,9 +1233,8 @@
                 </button>
 
                 <!-- Post -->
-                <!-- Fix: use domain + post.id as unique key, since virtualRow.index could be the same on different Boorus/pages -->
                 <PostComponent
-                  :key="selectedBooru.domain + '-' + getPostRow(virtualRow.index).id"
+                  :key="getPostRowKey(getPostRow(virtualRow.index))"
                   :post="getPostRow(virtualRow.index)"
                   :post-index="virtualRow.index"
                   :selected-tags="selectedTags"

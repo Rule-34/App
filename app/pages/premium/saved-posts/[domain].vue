@@ -421,6 +421,12 @@
     return {
       count: hasNextPage.value ? allRows.value.length + 1 : allRows.value.length,
 
+      getItemKey: (index: number) => {
+        const post = allRows.value[index]
+
+        return post ? getPostRowKey(post) : `${savedPostsBooru.domain}-next-page`
+      },
+
       estimateSize: () => 600,
 
       // For SSR
@@ -500,6 +506,10 @@
     }
 
     return post
+  }
+
+  function getPostRowKey(post: Pick<PostRow, 'domain' | 'id'>) {
+    return `${post.domain}-${post.id}`
   }
 
   /**
@@ -736,6 +746,7 @@
               :key="String(virtualRow.key)"
               :ref="measureElement"
               :data-index="virtualRow.index"
+              :data-virtual-key="String(virtualRow.key)"
             >
               <!-- Next Pagination -->
               <div
@@ -776,9 +787,8 @@
                 </button>
 
                 <!-- Post -->
-                <!-- Fix: use domain + post.id as unique key, since virtualRow.index could be the same on different Boorus/pages -->
                 <PostComponent
-                  :key="getPostRow(virtualRow.index).domain + '-' + getPostRow(virtualRow.index).id"
+                  :key="getPostRowKey(getPostRow(virtualRow.index))"
                   :post="getPostRow(virtualRow.index)"
                   :post-index="virtualRow.index"
                   :selected-tags="selectedTags"
