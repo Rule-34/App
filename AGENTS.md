@@ -48,7 +48,7 @@ Single Nuxt app. Key directories:
 | `server/plugins/`    | Nitro plugins                                                                                                                        |
 | `app/assets/js/`     | Shared app JS utilities, DTOs, custom providers                                                                                      |
 | `app/assets/lib/`    | Git submodule for shared resources                                                                                                   |
-| `i18n/locales/`      | i18n JSON files (en, ru, es, ja, pt, de, fr, zh, ko, id, tr, it, vi)                                                              |
+| `i18n/locales/`      | i18n JSON files (en, ru, es, ja, pt, de, fr, zh, ko, id, tr, it, vi)                                                                 |
 | `app/components/`    | Vue components — **auto-imported flat** (`pathPrefix: false`, no folder prefix)                                                      |
 | `test/`              | Page tests, server tests, mocks                                                                                                      |
 
@@ -185,6 +185,9 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
   puts the runtime in the first-load entry; local `vAutoAnimate` imports on the premium CSR pages saved about 3 KB gzip.
 - For URL validation/parsing, prefer `URL.canParse()` or `URL.parse()` over constructor `try/catch`; use `URL.parse()`
   when the parsed URL object is needed, with a `URL.canParse()` fallback in browser code if compatibility matters.
+- Static `URL.parse()` / `URL.canParse()` browser support comes from `@teages/nuxt-legacy` `customPolyfills` and
+  `app/polyfills/url-static-methods.ts`. Do not re-add `@vitejs/plugin-legacy` URL polyfill config for this path; it
+  can emit extra legacy assets without loading the modern URL static-method polyfill before the app entry.
 
 ### PWA
 
