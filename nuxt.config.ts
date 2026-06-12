@@ -1,5 +1,4 @@
 import tailwindcss from '@tailwindcss/vite'
-import * as nuxtLegacy from '@teages/nuxt-legacy'
 import type { PluginOption } from 'vite'
 import { project } from './config/project'
 import { locales, defaultLocale, prefixedLocaleCodes } from './config/i18n'
@@ -40,11 +39,6 @@ const resourceHints = [
       ]
     : [])
 ]
-
-const legacyUrlPolyfills = ['web.url.parse', 'web.url.can-parse']
-const legacyUrlPolyfillImports = legacyUrlPolyfills.map((polyfill) => `core-js/modules/${polyfill}.js`)
-const legacyCspHashes = (nuxtLegacy as unknown as { cspHashes: string[] }).cspHashes
-const legacyCspHashSources = [...new Set(legacyCspHashes.map((hash) => `'sha256-${hash}'`))]
 
 const shouldUploadSentrySourceMaps =
   process.env.SENTRY_UPLOAD_SOURCE_MAPS === 'true' &&
@@ -305,11 +299,9 @@ export default defineNuxtConfig({
   },
 
   legacy: {
-    vite: {
-      // Usage-based floor that keeps the meaningful old-browser tail without carrying an AbortController polyfill.
-      targets: ['> 0.2% and supports abortcontroller', 'not dead', 'not IE 11'],
-      modernPolyfills: legacyUrlPolyfills,
-      additionalLegacyPolyfills: legacyUrlPolyfillImports
+    customPolyfills: {
+      scanDirs: [],
+      polyfills: ['./polyfills/url-static-methods.ts']
     }
   },
 
@@ -464,15 +456,7 @@ export default defineNuxtConfig({
         // Fix: enable fluid player fullscreen eval
         // @see https://nuxt-security.vercel.app/documentation/advanced/faq#cloudflare
         // @see https://nuxt-security.vercel.app/documentation/getting-started/configuration#defaults
-        'script-src': [
-          "'self'",
-          'https:',
-          "'unsafe-inline'",
-          "'strict-dynamic'",
-          "'nonce-{{nonce}}'",
-          "'unsafe-eval'",
-          ...legacyCspHashSources
-        ],
+        'script-src': ["'self'", 'https:', "'unsafe-inline'", "'strict-dynamic'", "'nonce-{{nonce}}'", "'unsafe-eval'"],
 
         // Fix: enable inline execution
         'script-src-attr': ["'unsafe-inline'"],
