@@ -143,6 +143,9 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
   of patching rendered HTML in Nitro.
 - `PostMedia` uses imgproxy for SSR post images, including local development. Non-premium SPA navigations keep the direct
   image path; validate image delivery in an environment where imgproxy can resolve the source URL.
+- Gelbooru media is routed through Cloudflare Worker media proxies before imgproxy because Gelbooru rate-limits the VM
+  egress IP. Worker fetches must use clean upstream headers instead of forwarding inbound `CF-*`, `X-Forwarded-*`,
+  `X-Real-IP`, cookies, or authorization headers; leaked caller metadata can make imgproxy fetches return `429`.
 
 ### Headless UI
 
