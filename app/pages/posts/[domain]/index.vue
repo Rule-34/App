@@ -19,6 +19,7 @@
   import { useTagTitle } from '~/composables/useTagTitle'
   import type { Domain } from '~/assets/js/domain'
   import type { IPost, IPostPage } from '~/assets/js/post.dto'
+  import { shouldReportTagSearchError } from '~/assets/js/tag-search-error'
   import Tag, { type ITag } from '~/assets/js/tag.dto'
   import { project } from '~~/config/project'
   import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
@@ -304,9 +305,11 @@
         }
       })
     } catch (error) {
-      const Sentry = await import('@sentry/nuxt')
+      if (shouldReportTagSearchError(error)) {
+        const Sentry = await import('@sentry/nuxt')
 
-      Sentry.captureException(error)
+        Sentry.captureException(error)
+      }
 
       if (error instanceof FetchError) {
         switch (error.status) {
