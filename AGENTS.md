@@ -54,6 +54,12 @@ Single Nuxt app. Key directories:
 
 ## Conventions & Gotchas
 
+### Dependencies
+
+- Do not carry local dependency patches (`pnpm patch`, `patch-package`, `patchedDependencies`) in this repo. For
+  third-party bugs, prefer an upstream release, a supported configuration/workaround, or ignoring the specific Sentry
+  issue when it is non-user-facing noise.
+
 ### Component auto-imports
 
 Components are registered **without path prefix** (`nuxt.config.ts` → `components: [{ pathPrefix: false }]`). Import
