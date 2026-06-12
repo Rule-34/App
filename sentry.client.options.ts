@@ -45,6 +45,10 @@ export function buildSentryClientInitOptions(params: {
         return null
       }
 
+      if (isSafariNativeTrackMenuError(event)) {
+        return null
+      }
+
       // The Nuxt Sentry SDK calls `beforeSend` for error events. The SDK typing
       // expects an ErrorEvent return type here, so we narrow accordingly.
       return event as Sentry.ErrorEvent
@@ -244,4 +248,11 @@ export function isInjectedCode(event: Sentry.Event | undefined): boolean {
   }
 
   return false
+}
+
+export function isSafariNativeTrackMenuError(event: Sentry.Event | undefined): boolean {
+  const frames = event?.exception?.values?.[0]?.stacktrace?.frames
+  if (!frames || frames.length === 0) return false
+
+  return frames.some((frame) => frame.function === 'sortedTrackListForMenu' && frame.filename === '[native code]')
 }
