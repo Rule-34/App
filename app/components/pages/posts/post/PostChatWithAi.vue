@@ -3,11 +3,11 @@
   import { flip, offset, shift, useFloating } from '@floating-ui/vue'
   import { useChatWithAiReferral } from '~/composables/useAdvertisements'
   import useAppStatistics from '~/composables/useAppStatistics'
-  import type { IPost } from '~/assets/js/post.dto'
+  import type { IPost, PostMediaType } from '~/assets/js/post.dto'
 
   const props = defineProps<{
     tags: IPost['tags']
-    mediaType: IPost['media_type']
+    mediaType: PostMediaType
     mediaUrl: string | null
   }>()
 

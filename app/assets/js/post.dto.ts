@@ -26,6 +26,13 @@ export interface IPost {
   media_type: 'image' | 'animated' | 'video' | 'unknown' | null
 }
 
+export type PostMediaType = Exclude<IPost['media_type'], 'unknown' | null>
+export type IRenderablePost = IPost & { media_type: PostMediaType }
+
+export function isRenderablePost(post: IPost): post is IRenderablePost {
+  return post.media_type === 'image' || post.media_type === 'animated' || post.media_type === 'video'
+}
+
 export interface IPostFile {
   url: string | null
   width: number | null

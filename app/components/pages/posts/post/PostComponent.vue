@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ChevronDownIcon } from '@heroicons/vue/24/outline'
   import { generatePostTagLandingPath } from '~/assets/js/RouterHelper'
-  import type { IPost } from '~/assets/js/post.dto'
+  import type { IPost, IRenderablePost } from '~/assets/js/post.dto'
   import Tag, { TagDTO } from '~/assets/js/tag.dto'
   import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
   import { project } from '~~/config/project'
@@ -9,7 +9,7 @@
   const props = defineProps<{
     postIndex: number
 
-    post: IPost
+    post: IRenderablePost
 
     selectedTags: Tag[]
   }>()
@@ -185,9 +185,6 @@
         data.posterFile = props.post.preview_file.url
         break
       }
-
-      default:
-        throw new Error('Unknown media type: ' + props.post.media_type)
     }
 
     data.file = stripFragment(data.file)
