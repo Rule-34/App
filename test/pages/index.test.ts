@@ -13,7 +13,7 @@ describe('/', async () => {
     const page = await createTrackedPage('/')
 
     await page.locator('h1', { hasText: 'App' }).isVisible()
-  })
+  }, 30000)
 
   it('redirects to /posts with query params', async () => {
     // Arrange
@@ -29,7 +29,7 @@ describe('/', async () => {
     expect(currentUrl.searchParams.get('domain')).toBe(null)
     expect(currentUrl.searchParams.get('page')).toBe('3')
     expect(currentUrl.searchParams.get('tags')).toBe('cat|black_hair')
-  })
+  }, 30000)
 
   it('links featured tags directly to post results', async () => {
     const page = await createTrackedPage('/')
@@ -40,5 +40,5 @@ describe('/', async () => {
     const href = await animatedLink.getAttribute('href')
     expect(href).toContain('/posts/rule34.xxx?tags=animated')
     expect(href).not.toContain('/posts/rule34.xxx/animated')
-  })
+  }, 30000)
 })

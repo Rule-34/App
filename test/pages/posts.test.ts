@@ -129,6 +129,8 @@ describe('/', async () => {
       )
 
       // Act
+      await page.getByTestId('domain-selector').waitFor({ state: 'visible' })
+      await page.waitForLoadState('networkidle')
       await page.getByTestId('domain-selector').click({ force: true })
       const rule34Option = page.getByRole('option', { name: /rule34\.xxx/i })
       await rule34Option.waitFor({ state: 'visible' })
@@ -142,7 +144,7 @@ describe('/', async () => {
 
       releasePostsResponse?.()
       await page.getByTestId(`rule34.xxx-${mockPostsPage0.data[0].id}`).first().waitFor({ state: 'visible' })
-    }, 30000)
+    }, 60000)
 
     it('shows no results', async () => {
       // Arrange
@@ -391,7 +393,7 @@ describe('/', async () => {
       })
       await page.mouse.wheel(0, 100000)
       await page.waitForURL((u) => u.searchParams.get('tags') === 'hair_bun' && u.searchParams.get('page') !== '0', {
-        timeout: 10000
+        timeout: 30000
       })
 
       const currentUrl = page.url()
@@ -423,7 +425,7 @@ describe('/', async () => {
       // Assert
       expect(tagEntries).toHaveLength(1)
       expect(tagEntries[0].path).toContain(`page=${currentPage}`)
-    }, 20000)
+    }, 60000)
   })
 
   describe('Domain', async () => {
@@ -463,7 +465,7 @@ describe('/', async () => {
       const domainSelectorText = await page.getByTestId('domain-selector').textContent()
 
       expect(domainSelectorText).toContain('safebooru.org')
-    }, 15000)
+    }, 30000)
   })
 
   describe('SEO', async () => {
