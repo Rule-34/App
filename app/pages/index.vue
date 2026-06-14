@@ -4,6 +4,7 @@
   import type { Domain } from '~/assets/js/domain'
   import { ArrowRightIcon } from '@heroicons/vue/24/solid'
   import { FetchError } from 'ofetch'
+  import { shouldReportTagSearchError } from '~/assets/js/tag-search-error'
   import { project } from '~~/config/project'
 
   type FeaturedTagMedia = {
@@ -100,8 +101,10 @@
 
       searchTagResults.value = response.data.map((tag) => new Tag(tag))
     } catch (error) {
-      const Sentry = await import('@sentry/nuxt')
-      Sentry.captureException(error)
+      if (shouldReportTagSearchError(error)) {
+        const Sentry = await import('@sentry/nuxt')
+        Sentry.captureException(error)
+      }
 
       searchTagResults.value = []
 
