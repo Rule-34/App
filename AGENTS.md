@@ -158,6 +158,13 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
 - Do not add `provideHeadlessUseId` in `app/app.vue` while the project uses Vue 3.5+ and `@headlessui/vue` 1.7.23+; those
   versions use Vue's native `useId` and the Nuxt Headless UI workaround is only for older versions.
 
+### Vue template refs
+
+- For DOM refs collected from `v-for`, prefer Vue 3.5's `useTemplateRef()` API over a hand-rolled `ref([])` or
+  `shallowRef([])`. Vue implements `useTemplateRef()` with a shallow ref internally, which is the right behavior for DOM
+  nodes that are read after render for measurement or imperative integration. Keep a null fallback at the call site
+  (`templateRef.value ?? []`) when the consumer expects an array.
+
 ### Toasts
 
 - `useLazyToast()` lazy-loads `vue-sonner` and renders `ClientToaster` on first use. The first toast must wait for
