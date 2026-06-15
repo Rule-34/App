@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isSafariNativeTrackMenuError } from '../../sentry.client.options'
+import { isRecoverableChunkLoadError, isSafariNativeTrackMenuError } from '../../sentry.client.options'
 
 describe('Sentry client options', () => {
   it('identifies Safari native track menu errors', () => {
@@ -37,6 +37,32 @@ describe('Sentry client options', () => {
                   }
                 ]
               }
+            }
+          ]
+        }
+      })
+    ).toBe(false)
+  })
+
+  it('identifies recoverable chunk load errors', () => {
+    expect(
+      isRecoverableChunkLoadError({
+        exception: {
+          values: [
+            {
+              value: 'Importing a module script failed.'
+            }
+          ]
+        }
+      })
+    ).toBe(true)
+
+    expect(
+      isRecoverableChunkLoadError({
+        exception: {
+          values: [
+            {
+              value: 'Cannot read properties of null'
             }
           ]
         }

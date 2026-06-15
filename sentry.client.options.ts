@@ -1,4 +1,5 @@
 import type * as Sentry from '@sentry/nuxt'
+import { getRecoverableChunkLoadMessageFromSentryEvent } from './app/assets/js/chunk-load-errors'
 import { project } from './config/project'
 
 type SentryNuxtInitOptions = Parameters<typeof import('@sentry/nuxt').init>[0]
@@ -49,6 +50,10 @@ export function buildSentryClientInitOptions(params: {
         return null
       }
 
+      if (isRecoverableChunkLoadError(event)) {
+        return null
+      }
+
       // The Nuxt Sentry SDK calls `beforeSend` for error events. The SDK typing
       // expects an ErrorEvent return type here, so we narrow accordingly.
       return event as Sentry.ErrorEvent
@@ -59,6 +64,10 @@ export function buildSentryClientInitOptions(params: {
   }
 
   return options
+}
+
+export function isRecoverableChunkLoadError(event: Sentry.Event): boolean {
+  return getRecoverableChunkLoadMessageFromSentryEvent(event) != null
 }
 
 const denyUrls: RegExp[] = [
