@@ -642,7 +642,7 @@
   const parentRef = ref<HTMLElement | null>(null)
   const parentOffsetRef = ref(0)
   const isClientVirtualizerReady = ref(false)
-  const virtualItemEls = shallowRef<HTMLElement[]>([])
+  const virtualItemEls = ref<HTMLElement[]>([])
 
   onMounted(() => {
     parentOffsetRef.value = parentRef.value?.offsetTop ?? 0

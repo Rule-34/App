@@ -246,7 +246,8 @@ describe('/', async () => {
       })
 
       await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
-      await page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`).first().waitFor({ state: 'visible' })
+      const firstPost = page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`).first()
+      await firstPost.waitFor({ state: 'visible' })
 
       await page.route(
         '**/booru/gelbooru/posts*pageID=1*',
@@ -354,7 +355,8 @@ describe('/', async () => {
       })
 
       await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
-      await page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`).first().waitFor({ state: 'visible' })
+      const firstPost = page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`).first()
+      await firstPost.waitFor({ state: 'visible' })
 
       await page.evaluate(async () => {
         window.scrollTo(0, document.body.scrollHeight)
@@ -363,7 +365,15 @@ describe('/', async () => {
         await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
       })
 
-      await page.goto(url('/posts/safebooru.org?tags=1girl'), { waitUntil: 'domcontentloaded' })
+      await firstPost.getByRole('button', { name: /tags/i }).click()
+      await page
+        .getByRole('button', { name: /^1girl$/ })
+        .first()
+        .click()
+      await Promise.all([
+        page.waitForURL('**/posts/safebooru.org?tags=1girl'),
+        page.getByRole('menuitem', { name: /set tag/i }).click()
+      ])
       await page.getByTestId(`safebooru.org-${mockPostsPage1.data[0].id}`).first().waitFor({ state: 'visible' })
 
       await page.evaluate(async () => {
