@@ -642,7 +642,7 @@
   const parentRef = ref<HTMLElement | null>(null)
   const parentOffsetRef = ref(0)
   const isClientVirtualizerReady = ref(false)
-  const virtualItemEls = ref<HTMLElement[]>([])
+  const virtualItemEls = useTemplateRef<HTMLElement[]>('virtualItemEls')
 
   onMounted(() => {
     parentOffsetRef.value = parentRef.value?.offsetTop ?? 0
@@ -790,7 +790,7 @@
 
   function measureVirtualRows() {
     measureVirtualItemsAfterVueUpdate({
-      elements: virtualItemEls.value,
+      elements: virtualItemEls.value ?? [],
       virtualizer: rowVirtualizer.value
     })
   }
