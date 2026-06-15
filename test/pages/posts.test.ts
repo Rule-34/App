@@ -246,7 +246,8 @@ describe('/', async () => {
       })
 
       await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
-      await page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`).first().waitFor({ state: 'visible' })
+      const firstPost = page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`).first()
+      await firstPost.waitFor({ state: 'visible' })
 
       await page.route(
         '**/booru/gelbooru/posts*pageID=1*',
@@ -321,6 +322,68 @@ describe('/', async () => {
         .getAttribute('data-virtual-key')
 
       expect(firstVirtualKey).toBe(`safebooru.org-${mockPostsPage0.data[0].id}`)
+    }, 30000)
+
+    it('does not emit Vue patch errors while virtual rows scroll and route results change', async () => {
+      const page = await createTrackedPage()
+      const errorSignatures = [
+        'emitsOptions',
+        'nextSibling',
+        "Cannot destructure property 'bum'",
+        "null is not an object (evaluating 'i.emitsOptions')"
+      ]
+      const errors: string[] = []
+
+      page.on('pageerror', (error) => {
+        const message = error.message
+
+        if (errorSignatures.some((signature) => message.includes(signature))) {
+          errors.push(message)
+        }
+      })
+
+      page.on('console', (message) => {
+        if (message.type() !== 'error') {
+          return
+        }
+
+        const text = message.text()
+
+        if (errorSignatures.some((signature) => text.includes(signature))) {
+          errors.push(text)
+        }
+      })
+
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+      const firstPost = page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`).first()
+      await firstPost.waitFor({ state: 'visible' })
+
+      await page.evaluate(async () => {
+        window.scrollTo(0, document.body.scrollHeight)
+        await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+        window.scrollTo(0, 0)
+        await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+      })
+
+      await firstPost.getByRole('button', { name: /tags/i }).click()
+      await page
+        .getByRole('button', { name: /^1girl$/ })
+        .first()
+        .click()
+      await Promise.all([
+        page.waitForURL('**/posts/safebooru.org?tags=1girl'),
+        page.getByRole('menuitem', { name: /set tag/i }).click()
+      ])
+      await page.getByTestId(`safebooru.org-${mockPostsPage1.data[0].id}`).first().waitFor({ state: 'visible' })
+
+      await page.evaluate(async () => {
+        window.scrollTo(0, document.body.scrollHeight)
+        await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+        window.scrollTo(0, 0)
+        await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+      })
+
+      expect(errors).toEqual([])
     }, 30000)
   })
 

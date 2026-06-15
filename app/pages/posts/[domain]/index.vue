@@ -6,7 +6,8 @@
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
   import { cloneDeep, throttle } from 'es-toolkit'
   import { FetchError } from 'ofetch'
-  import type { ComponentPublicInstance, Ref } from 'vue'
+  import type { Ref } from 'vue'
+  import { measureVirtualItemsAfterVueUpdate } from '~/assets/js/virtualizer-measurement'
   import {
     fallbackBooruDomain,
     generatePostsRoute,
@@ -641,6 +642,7 @@
   const parentRef = ref<HTMLElement | null>(null)
   const parentOffsetRef = ref(0)
   const isClientVirtualizerReady = ref(false)
+  const virtualItemEls = useTemplateRef<HTMLElement[]>('virtualItemEls')
 
   onMounted(() => {
     parentOffsetRef.value = parentRef.value?.offsetTop ?? 0
@@ -711,15 +713,43 @@
     isClientVirtualizerReady.value ? rowVirtualizer.value.getTotalSize() : initialTotalSize.value
   )
 
-  function getPostRow(index: number): PostRow {
-    const post = allRows.value[index]
+  type RenderVirtualItem = (typeof virtualRows.value)[number]
+  type RenderVirtualRow =
+    | {
+        kind: 'post'
+        key: string
+        virtualRow: RenderVirtualItem
+        post: PostRow
+        dataTestId: string
+      }
+    | {
+        kind: 'next-page'
+        key: string
+        virtualRow: RenderVirtualItem
+      }
 
-    if (!post) {
-      throw new Error(`Post row ${index} not found`)
-    }
+  const renderRows = computed<RenderVirtualRow[]>(() =>
+    virtualRows.value.map((virtualRow) => {
+      const post = allRows.value[virtualRow.index]
+      const key = String(virtualRow.key)
 
-    return post
-  }
+      if (!post) {
+        return {
+          kind: 'next-page',
+          key,
+          virtualRow
+        }
+      }
+
+      return {
+        kind: 'post',
+        key,
+        virtualRow,
+        post,
+        dataTestId: getPostRowKey(post)
+      }
+    })
+  )
 
   function getPostRowKey(post: Pick<PostRow, 'domain' | 'id'>) {
     return `${post.domain}-${post.id}`
@@ -758,16 +788,15 @@
     }
   })
 
-  // FIX: Remove when this issue is fixed - https://github.com/TanStack/virtual/issues/619#issuecomment-1969516091
-  const measureElement = (el: Element | ComponentPublicInstance | null) => {
-    nextTick(() => {
-      if (!(el instanceof Element)) {
-        return
-      }
-
-      rowVirtualizer.value.measureElement(el)
+  function measureVirtualRows() {
+    measureVirtualItemsAfterVueUpdate({
+      elements: virtualItemEls.value ?? [],
+      virtualizer: rowVirtualizer.value
     })
   }
+
+  onMounted(measureVirtualRows)
+  onUpdated(measureVirtualRows)
 
   /**
    * Helper to translate filter values to localized labels
@@ -1184,20 +1213,16 @@
             class="space-y-4"
           >
             <li
-              v-for="virtualRow in virtualRows"
-              :key="String(virtualRow.key)"
-              :ref="measureElement"
-              :data-index="virtualRow.index"
-              :data-virtual-key="String(virtualRow.key)"
-              :data-testid="
-                virtualRow.index <= allRows.length - 1
-                  ? `${getPostRow(virtualRow.index).domain}-${getPostRow(virtualRow.index).id}`
-                  : undefined
-              "
+              v-for="row in renderRows"
+              :key="row.key"
+              ref="virtualItemEls"
+              :data-index="row.virtualRow.index"
+              :data-virtual-key="row.key"
+              :data-testid="row.kind === 'post' ? row.dataTestId : undefined"
             >
               <!-- Next Pagination -->
               <div
-                v-if="virtualRow.index > allRows.length - 1"
+                v-if="row.kind === 'next-page'"
                 data-testid="load-next-page"
                 class="flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-base-content"
               >
@@ -1226,19 +1251,18 @@
                 <!-- Page indicator -->
                 <!-- TODO: Show individually, not attached to a post-->
                 <button
-                  v-if="virtualRow.index !== 0 && getPostRow(virtualRow.index).isFirstPost"
+                  v-if="row.virtualRow.index !== 0 && row.post.isFirstPost"
                   class="mx-auto mb-4 block rounded-md px-1.5 py-1 text-sm hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                   type="button"
                   @click="onPageIndicatorClick"
                 >
-                  &dharl; {{ $t('common.pageNumber', { page: getPostRow(virtualRow.index).current_page }) }} &dharr;
+                  &dharl; {{ $t('common.pageNumber', { page: row.post.current_page }) }} &dharr;
                 </button>
 
                 <!-- Post -->
                 <PostComponent
-                  :key="getPostRowKey(getPostRow(virtualRow.index))"
-                  :post="getPostRow(virtualRow.index)"
-                  :post-index="virtualRow.index"
+                  :post="row.post"
+                  :post-index="row.virtualRow.index"
                   :selected-tags="selectedTags"
                   @add-tag="onPostAddTag"
                   @open-tag-in-new-tab="onPostOpenTagInNewTab"
@@ -1246,7 +1270,7 @@
                 />
 
                 <!-- Promoted content -->
-                <template v-if="!isPremium && virtualRow.index !== 0 && virtualRow.index % 7 === 0">
+                <template v-if="!isPremium && row.virtualRow.index !== 0 && row.virtualRow.index % 7 === 0">
                   <LazyPromotedContent class="mt-4" />
                 </template>
               </template>
