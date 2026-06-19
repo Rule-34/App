@@ -32,7 +32,7 @@ export default function () {
      * Cons: Not fixed CPM (~2.0) | Low Revenue (70)
      */
     {
-      id: 'https://ellipticaltrack.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
+      id: 'https://yellowishgather.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
       weight: 0.35
     },
     /**
