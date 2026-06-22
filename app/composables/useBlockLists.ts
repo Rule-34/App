@@ -37,21 +37,12 @@ export default function () {
   return {
     selectedList,
     selectedBlockList: computed(() => {
-      let list: string[] = []
-
-      switch (selectedList.value) {
-        case blockListOptions.Default:
-          list = [...defaultBlockList]
-          break
-
-        case blockListOptions.Custom:
-          list = [...customBlockList.value]
-          break
-
-        default:
-          list = []
-          break
-      }
+      const list =
+        selectedList.value === blockListOptions.Default
+          ? [...defaultBlockList]
+          : selectedList.value === blockListOptions.Custom
+            ? [...customBlockList.value]
+            : []
 
       if (blockAiGeneratedImages.value) {
         list.push(...aiBlockList)

@@ -19,6 +19,41 @@ describe('SEO canonical URLs', async () => {
     return m?.[1] ?? null
   }
 
+  function getJsonLd(html: string): Array<Record<string, unknown>> {
+    return [...html.matchAll(/<script\b(?=[^>]*\btype=["']application\/ld\+json["'])[^>]*>([\s\S]*?)<\/script>/gi)].map(
+      (match) => JSON.parse(match[1] ?? '{}') as Record<string, unknown>
+    )
+  }
+
+  function getGraphNodes(jsonLd: Array<Record<string, unknown>>): Array<Record<string, unknown>> {
+    return jsonLd.flatMap((script) => {
+      const graph = script['@graph']
+      return Array.isArray(graph) ? (graph as Array<Record<string, unknown>>) : [script]
+    })
+  }
+
+  function getBreadcrumbItemUrls(breadcrumb: Record<string, unknown>): string[] {
+    const items = breadcrumb.itemListElement
+
+    if (!Array.isArray(items)) return []
+
+    return items
+      .map((item) => {
+        if (typeof item !== 'object' || item === null || !('item' in item)) return null
+
+        const itemUrl = item.item
+
+        if (typeof itemUrl === 'string') return itemUrl
+
+        if (typeof itemUrl === 'object' && itemUrl !== null && '@id' in itemUrl && typeof itemUrl['@id'] === 'string') {
+          return itemUrl['@id']
+        }
+
+        return null
+      })
+      .filter((itemUrl): itemUrl is string => itemUrl !== null)
+  }
+
   it('canonicalizes simple single-tag posts queries to tag landing pages', async () => {
     const html = await $fetch('/posts/e621.net?tags=solo')
 
@@ -115,6 +150,32 @@ describe('SEO canonical URLs', async () => {
 
       const matches = html.match(/<meta\b[^>]*\bproperty=["']og:image["']/gi)
       expect(matches?.length ?? 0).toBe(1)
+    })
+  })
+
+  describe('Schema.org', () => {
+    it('renders a single JSON-LD script on tag landing pages', async () => {
+      const html = await $fetch('/posts/e621.net/solo')
+      const jsonLd = getJsonLd(html)
+
+      expect(jsonLd).toHaveLength(1)
+      expect(getGraphNodes(jsonLd).map((node) => node['@type'])).toContain('BreadcrumbList')
+    })
+
+    it('keeps breadcrumb item URLs production-canonical and locale-aware', async () => {
+      const html = await $fetch('/es/posts/e621.net/solo')
+      const breadcrumbs = getGraphNodes(getJsonLd(html)).filter((node) => node['@type'] === 'BreadcrumbList')
+
+      expect(breadcrumbs).toHaveLength(1)
+
+      const itemUrls = getBreadcrumbItemUrls(breadcrumbs[0]!)
+
+      expect(itemUrls.length).toBeGreaterThan(0)
+      expect(itemUrls).toEqual([
+        `${project.urls.production.origin}/es`,
+        `${project.urls.production.origin}/es/posts/e621.net`,
+        `${project.urls.production.origin}/es/posts/e621.net/solo`
+      ])
     })
   })
 })

@@ -59,6 +59,8 @@ Single Nuxt app. Key directories:
 - Do not carry local dependency patches (`pnpm patch`, `patch-package`, `patchedDependencies`) in this repo. For
   third-party bugs, prefer an upstream release, a supported configuration/workaround, or ignoring the specific Sentry
   issue when it is non-user-facing noise.
+- With pnpm 11 workspace projects, put repo-level dependency resolution overrides in `pnpm-workspace.yaml`; package-level
+  overrides can be ignored during lockfile resolution.
 
 ### Component auto-imports
 
