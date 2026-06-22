@@ -97,7 +97,7 @@
     "cloudSyncFailed": "Falha ao sincronizar dados na nuvem: {error}",
     "cloudDataDeleted": "Dados na nuvem excluídos com sucesso",
     "accountDeletionCancelled": "Exclusão da conta cancelada",
-    "tagAddedToBlocklistDescription": "Para ver o efeito, recarregue o site ou faça uma nova busca",
+    "tagAddedToBlocklistDescription": "Posts correspondentes são ocultados automaticamente",
     "emailSentDescription": "Se o seu e-mail existir, você receberá uma mensagem com sua licença atual. Se não receber, verifique a pasta de spam",
     "postSourceDescription": "Ir para a fonte (artista), se existir, ou encontrá-la com busca reversa de imagem",
     "domainSwitcherDescription": "Troque entre sites Booru: cada um tem conteúdo único, encontre o que você mais gosta!",

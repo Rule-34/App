@@ -97,7 +97,7 @@
     "cloudSyncFailed": "Không thể đồng bộ hóa dữ liệu đám mây: {error}",
     "cloudDataDeleted": "Dữ liệu đám mây đã được xóa thành công",
     "accountDeletionCancelled": "Đã hủy xóa tài khoản",
-    "tagAddedToBlocklistDescription": "Để thấy hiệu quả, hãy tải lại trang web hoặc thực hiện tìm kiếm mới",
+    "tagAddedToBlocklistDescription": "Các bài đăng khớp sẽ tự động được ẩn",
     "emailSentDescription": "Nếu email của bạn tồn tại, bạn sẽ nhận được email có giấy phép hiện tại của bạn. Nếu bạn không nhận được email, hãy kiểm tra thư mục thư rác",
     "postSourceDescription": "Đi tới nguồn (nghệ sĩ) nếu nó tồn tại hoặc tìm nó bằng tìm kiếm hình ảnh ngược",
     "domainSwitcherDescription": "Chuyển đổi giữa các trang web Booru: mỗi trang có nội dung độc đáo, hãy tìm trang bạn thích nhất!",

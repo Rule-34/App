@@ -7,6 +7,7 @@
   import { throttle } from 'es-toolkit'
   import type { ComponentPublicInstance, Ref } from 'vue'
   import type { Domain } from '~/assets/js/domain'
+  import { postHasBlockedTag } from '~/assets/js/post-blocklist'
   import Tag from '~/assets/js/tag.dto'
   import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
   import { isRenderablePost, type IPostPage, type IRenderablePost } from '~/assets/js/post.dto'
@@ -37,6 +38,7 @@
   const repository = computed(() => new PremiumCloudRepository($pocketBase as unknown as PremiumCloudPocketBaseClient))
 
   const { postsPerPage } = useUserSettings()
+  const { selectedBlockList } = useBlockLists()
   const { toggle: toggleSearchMenu } = useSearchMenu()
 
   const savedPostsBooru = {
@@ -384,6 +386,8 @@
   /**
    * Virtualization
    */
+  const blockedTags = computed(() => new Set(selectedBlockList.value))
+
   const allRows = computed<PostRow[]>(() => {
     if (!data.value) {
       return []
@@ -393,20 +397,23 @@
     return data.value.pages.flatMap((page) => {
       //
 
-      return page.data.filter(isRenderablePost).flatMap((post, index) => {
-        // TODO: Optimize performance
+      return page.data
+        .filter(isRenderablePost)
+        .filter((post) => !postHasBlockedTag(post, blockedTags.value))
+        .map((post, index) => {
+          // TODO: Optimize performance
 
-        return {
-          ...post,
+          return {
+            ...post,
 
-          // Custom meta data
-          // Domain comes from the API
-          // domain: savedPostsBooru.domain,
+            // Custom meta data
+            // Domain comes from the API
+            // domain: savedPostsBooru.domain,
 
-          current_page: page.meta.current_page,
-          isFirstPost: index === 0
-        }
-      })
+            current_page: page.meta.current_page,
+            isFirstPost: index === 0
+          }
+        })
     })
   })
 

@@ -148,6 +148,26 @@ describe('Premium cloud flows', async () => {
     expect(pocketBase.requests.some((request) => request.includes('distinct_original_domain_from_posts'))).toBe(false)
   }, 20000)
 
+  it('filters saved posts with the active custom blocklist', async () => {
+    const page = await createTrackedPage()
+    const pocketBase = createPocketBaseMockState({
+      savedPostSummaries: [firstSavedPostSummary],
+      savedPostRecords: [firstSavedPostRecord],
+      blockListRecords: [{ id: 'blocklist', user_id: 'test-user', tags: ['1girl'] }]
+    })
+
+    await page.addInitScript(() => {
+      window.localStorage.setItem('user-selectedList', 'custom')
+    })
+    await mockPocketBase(page, pocketBase)
+    await addPocketBaseAuthCookie(page, url('/'))
+    await page.goto(url('/premium/saved-posts/r34.app'), { waitUntil: 'domcontentloaded' })
+
+    await page.getByRole('heading', { name: /no results/i }).waitFor({ state: 'visible', timeout: 10000 })
+
+    expect(await page.locator('figure').count()).toBe(0)
+  }, 20000)
+
   it('filters saved posts without a media type before rendering post media', async () => {
     const page = await createTrackedPage()
     const pageErrors: string[] = []

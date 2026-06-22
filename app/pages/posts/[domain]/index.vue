@@ -7,6 +7,7 @@
   import { cloneDeep, throttle } from 'es-toolkit'
   import { FetchError } from 'ofetch'
   import type { Ref } from 'vue'
+  import { postHasBlockedTag } from '~/assets/js/post-blocklist'
   import { measureVirtualItemsAfterVueUpdate } from '~/assets/js/virtualizer-measurement'
   import {
     fallbackBooruDomain,
@@ -540,48 +541,6 @@
     // Fix: Never set maxPages to avoid scroll issues
     // maxPages: 10,
 
-    select: (data) => {
-      //
-
-      // Only execute for the last page
-      const [page] = [...data.pages].reverse()
-
-      if (!page) {
-        return data
-      }
-
-      page.data = page.data.filter((post) => {
-        //
-
-        if (!isRenderablePost(post)) {
-          return false
-        }
-
-        // Delete all posts that have a blocklisted tag
-        if (selectedBlockList.value.length > 0) {
-          const postTags = post.tags.meta.concat(
-            post.tags.general,
-            post.tags.artist,
-            post.tags.character,
-            post.tags.copyright
-          )
-
-          const foundBlockedTag = selectedBlockList.value.some((blocklistTag) => postTags.includes(blocklistTag))
-
-          if (foundBlockedTag) {
-            return false
-          }
-        }
-
-        return true
-      })
-
-      return {
-        pages: data.pages,
-        pageParams: data.pageParams
-      }
-    },
-
     initialPageParam: '',
 
     getNextPageParam: (lastPage, _allPages, _lastPageParam) => {
@@ -613,6 +572,8 @@
   const estimatedRowSize = 600
   const rowGap = 16
 
+  const blockedTags = computed(() => new Set(selectedBlockList.value))
+
   const allRows = computed<PostRow[]>(() => {
     if (!data.value) {
       return []
@@ -622,20 +583,23 @@
     return data.value.pages.flatMap((page) => {
       //
 
-      return page.data.filter(isRenderablePost).flatMap((post, index) => {
-        //
+      return page.data
+        .filter(isRenderablePost)
+        .filter((post) => !postHasBlockedTag(post, blockedTags.value))
+        .map((post, index) => {
+          //
 
-        return {
-          ...post,
+          return {
+            ...post,
 
-          // Custom meta data
-          // TODO: Remove when API returns domain
-          domain: selectedBooru.value.domain,
+            // Custom meta data
+            // TODO: Remove when API returns domain
+            domain: selectedBooru.value.domain,
 
-          current_page: page.meta.current_page,
-          isFirstPost: index === 0
-        }
-      })
+            current_page: page.meta.current_page,
+            isFirstPost: index === 0
+          }
+        })
     })
   })
 
