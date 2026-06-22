@@ -221,7 +221,7 @@ function parseBatchPayload(request: { postData(): string | null; postDataJSON():
   try {
     jsonBody = request.postDataJSON()
   } catch {
-    jsonBody = null
+    // Fall back to parsing form-encoded batch payloads below.
   }
 
   const jsonPayload = tryParseBatchPayload(jsonBody)

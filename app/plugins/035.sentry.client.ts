@@ -7,7 +7,7 @@ import { useIdleTask } from '~/composables/useIdleTask'
  * NOTE: This plugin intentionally mirrors the `@sentry/nuxt/module` client runtime plugin behavior,
  * but defers loading any Sentry code until the user interacts.
  *
- * Upstream reference (Sentry v10.32.1):
+ * Upstream reference (Sentry v10.58.0):
  * - `node_modules/@sentry/nuxt/build/module/runtime/plugins/sentry.client.js`
  *   - hooks: `app:error` (with 3xx/4xx Nuxt error filtering) and `vue:error`
  *

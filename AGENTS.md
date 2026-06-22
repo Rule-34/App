@@ -59,6 +59,8 @@ Single Nuxt app. Key directories:
 - Do not carry local dependency patches (`pnpm patch`, `patch-package`, `patchedDependencies`) in this repo. For
   third-party bugs, prefer an upstream release, a supported configuration/workaround, or ignoring the specific Sentry
   issue when it is non-user-facing noise.
+- With pnpm 11 workspace projects, put repo-level dependency resolution overrides in `pnpm-workspace.yaml`; package-level
+  overrides can be ignored during lockfile resolution.
 
 ### Component auto-imports
 
@@ -127,8 +129,8 @@ or client middleware runs.
   `useRequestURL().origin` on the server only (`app/app.vue`). i18n does not touch `og:image` during hydration.
 - **Canonical URLs must point to production** (`https://r34.app/…`) even when served from clone domains. This is
   intentional for SEO — canonicals prevent duplicate content. Use `project.urls.production` for canonicals.
-- **Schema.org breadcrumb item URLs should stay local/locale-relative**. Do not convert breadcrumb items to
-  `project.urls.production`; production-absolute URLs are for canonicals.
+- **Schema.org breadcrumb source item URLs should stay local/locale-relative**. Do not convert breadcrumb items in page
+  code to `project.urls.production`; `nuxt-schema-org` resolves the rendered JSON-LD output against `site.url`.
 - **Page-specific tags** (title, description) should use `useSeoMeta` in the page component.
 
 ### Router
