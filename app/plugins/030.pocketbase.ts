@@ -50,8 +50,31 @@ export default defineNuxtPlugin<{ pocketBase: PocketBase }>({
       pb.authStore.save(authCookie.token, authCookie.model)
     }
 
+    const subscriptionExpiresAt = useState<string | null>('pocketbase-subscription_expires_at', () => null)
+    const pocketbaseEmail = useState<string | null>('pocketbase-email', () => null)
+    const pocketbaseLicense = useState<string | null>('pocketbase-license', () => null)
+
+    function syncAuthState() {
+      const authModel = pb.authStore.model
+
+      if (!pb.authStore.isValid || !authModel) {
+        subscriptionExpiresAt.value = null
+        pocketbaseEmail.value = null
+        pocketbaseLicense.value = null
+        return
+      }
+
+      subscriptionExpiresAt.value = authModel.subscription_expires_at
+      pocketbaseEmail.value = authModel.email
+      pocketbaseLicense.value = authModel.username
+    }
+
+    syncAuthState()
+
     // send back the default 'pb_auth' cookie to the client with the latest store state
     pb.authStore.onChange(() => {
+      syncAuthState()
+
       cookie.value = {
         token: pb.authStore.token,
         model: pb.authStore.model

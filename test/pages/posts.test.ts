@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { setup, url } from '@nuxt/test-utils'
-import { mockPostsPage0, mockPostsPage1, mockPostsPageWithOfflineMedia } from './posts.mock-data'
+import {
+  mockPostsPage0,
+  mockPostsPage1,
+  mockPostsPageWithOfflineMedia
+} from './posts.mock-data'
 import { defaultSetupConfig, useTrackedPageFactory } from '../helper'
 
 function decodeImgproxySourceUrl(src: string) {
@@ -193,8 +197,6 @@ describe('/', async () => {
     }, 30000)
 
     // TODO: Test that verifies if a post with 'unknown' media type is not rendered
-
-    it.todo('proxies media when media failed to load', async () => {})
 
     it('renders warning when media failed to load', async () => {
       // Arrange
