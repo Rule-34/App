@@ -97,7 +97,7 @@
     "cloudSyncFailed": "Gagal menyinkronkan data cloud: {error}",
     "cloudDataDeleted": "Data cloud berhasil dihapus",
     "accountDeletionCancelled": "Penghapusan akun dibatalkan",
-    "tagAddedToBlocklistDescription": "Untuk melihat efeknya, muat ulang situs web atau lakukan penelusuran baru",
+    "tagAddedToBlocklistDescription": "Postingan yang cocok disembunyikan secara otomatis",
     "emailSentDescription": "Jika email Anda ada, Anda akan menerima email dengan lisensi Anda saat ini. Jika Anda tidak menerima email, periksa folder spam Anda",
     "postSourceDescription": "Kunjungi sumbernya (artis) jika ada, atau temukan dengan pencarian gambar terbalik",
     "domainSwitcherDescription": "Beralih di antara situs web Booru: masing-masing memiliki konten unik, temukan yang paling Anda sukai!",

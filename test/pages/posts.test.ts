@@ -385,6 +385,21 @@ describe('/', async () => {
 
       expect(errors).toEqual([])
     }, 30000)
+
+    it('ignores non-renderable posts when building schema media entries', async () => {
+      const page = await createTrackedPage()
+      const pageErrors: string[] = []
+
+      page.on('pageerror', (error) => {
+        pageErrors.push(error.message)
+      })
+
+      await page.goto(url('/posts/safebooru.org?tags=unknown_media_test'), { waitUntil: 'domcontentloaded' })
+
+      await page.getByRole('heading', { name: /no results/i }).waitFor({ state: 'visible' })
+
+      expect(pageErrors).toEqual([])
+    }, 30000)
   })
 
   describe('History', async () => {

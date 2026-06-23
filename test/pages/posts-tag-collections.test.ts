@@ -195,10 +195,15 @@ describe('Post tag collections', async () => {
     await expect.poll(() => page.getByRole('dialog').getByText('General').isVisible(), { timeout: 10000 }).toBe(true)
   }, 60000)
 
-  it('adds a tag to the custom blocklist without closing the tag sheet for a premium user', async () => {
+  it('filters loaded posts after adding a tag to the custom blocklist', async () => {
     const page = await createTrackedPage()
+    const pageErrors: string[] = []
     const pocketBase = createPocketBaseMockState({
       blockListRecords: []
+    })
+
+    page.on('pageerror', (error) => {
+      pageErrors.push(error.message)
     })
 
     await mockPocketBase(page, pocketBase)
@@ -217,9 +222,13 @@ describe('Post tag collections', async () => {
     await addToBlocklistButton.click()
 
     await expect.poll(() => page.getByText('Tag added to blocklist').first().isVisible(), { timeout: 10000 }).toBe(true)
-    await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(1)
-    await expect.poll(() => page.getByRole('dialog').getByText('General').isVisible(), { timeout: 10000 }).toBe(true)
     await expect.poll(() => pocketBase.blockListRecords[0]?.tags, { timeout: 10000 }).toEqual(['1girl'])
+    await expect.poll(() => firstPost.isVisible(), { timeout: 10000 }).toBe(false)
+
+    await page.reload({ waitUntil: 'domcontentloaded' })
+
+    await expect.poll(() => firstPost.isVisible(), { timeout: 10000 }).toBe(false)
+    expect(pageErrors.filter((message) => message.includes('Node.insertBefore'))).toEqual([])
   }, 60000)
 
   it('restores search tag collections after a non-premium user closes the premium prompt', async () => {

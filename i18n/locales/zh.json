@@ -97,7 +97,7 @@
     "cloudSyncFailed": "同步云端数据失败：{error}",
     "cloudDataDeleted": "云数据删除成功",
     "accountDeletionCancelled": "帐户删除已取消",
-    "tagAddedToBlocklistDescription": "要查看效果，请重新加载网站或进行新搜索",
+    "tagAddedToBlocklistDescription": "匹配的帖子会自动隐藏",
     "emailSentDescription": "如果您的电子邮件存在，您将收到一封包含您当前许可证的电子邮件。如果您没有收到电子邮件，请检查您的垃圾邮件文件夹",
     "postSourceDescription": "如果存在，请转到来源（艺术家），或通过反向图像搜索找到它",
     "domainSwitcherDescription": "在Booru网站之间切换：每个网站都有独特的内容，找到您最喜欢的！",

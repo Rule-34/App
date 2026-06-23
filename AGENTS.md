@@ -251,6 +251,9 @@ the `@headlessui/tailwindcss` plugin.
 - In `/premium/saved-posts`, unsaving a post intentionally should not remove the row or prune cached infinite-query data.
   Keep the viewer stable so users do not lose scroll/progress; the save button can update immediately and the row can
   disappear on a later reload/refetch.
+- Active blocklist filtering is client-only visibility state. Keep TanStack infinite-query data raw and apply blocklist
+  hiding in page-level computed rows for both posts and saved-posts pages; do not mutate query pages in `select` with
+  `selectedBlockList`.
 - Use PocketBase batch writes for multi-record replacement/reorder operations. Reordering positioned records should not
   emit one HTTP write per changed row when the SDK batch API is available.
 - VueUse `moveArrayElement()` applies the array move on `nextTick`. For state that is immediately persisted, build the
