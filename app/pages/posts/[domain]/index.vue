@@ -910,7 +910,7 @@
   }))
 
   const firstPostsPageAsSchema = computed(() => {
-    const firstPagePosts = data.value?.pages[0]?.data ?? []
+    const firstPagePosts = (data.value?.pages[0]?.data ?? []).filter(isRenderablePost)
 
     return firstPagePosts.slice(0, 8).map((post) => {
       if (post.media_type === 'video') {
