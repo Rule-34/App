@@ -463,13 +463,18 @@
   }
 
   function onVideoPlaybackError(event: Event) {
-    if (hasError.value || !(event.target instanceof HTMLVideoElement) || !isPremium.value || triedToLoadWithProxy.value) {
+    if (hasError.value || !(event.target instanceof HTMLVideoElement)) {
       return
     }
 
-    localSrc.value = proxyUrl(props.mediaSrc ?? '')
-    reloadVideoPlayer(true)
-    triedToLoadWithProxy.value = true
+    if (isPremium.value && !triedToLoadWithProxy.value && props.mediaSrc) {
+      triedToLoadWithProxy.value = true
+      localSrc.value = proxyUrl(props.mediaSrc)
+      void reloadVideoPlayer(true)
+      return
+    }
+
+    error.value = new Error(t('errors.mediaLoadError'))
   }
 
   function manuallyReloadMedia() {
