@@ -3834,3 +3834,46 @@ export const mockPostsPageWithOfflineMedia = {
     next: 'http://192.168.1.65:8080/booru/gelbooru/posts?baseEndpoint=safebooru.org&pageID=1&limit=30'
   }
 }
+
+export const mockPostsPageWithOfflineVideo = {
+  data: [
+    {
+      id: 998,
+      score: 0,
+      high_res_file: {
+        url: 'https://example.local/videos/998/sample_998.mp4',
+        width: 1280,
+        height: 720
+      },
+      low_res_file: {
+        url: 'https://example.local/samples/998/sample_998.jpg',
+        width: 850,
+        height: 478
+      },
+      preview_file: {
+        url: 'https://example.local/thumbnails/998/thumbnail_998.jpg',
+        width: 150,
+        height: 84
+      },
+      tags: {
+        artist: [],
+        character: [],
+        copyright: [],
+        general: ['video'],
+        meta: []
+      },
+      sources: [],
+      rating: 'questionable',
+      media_type: 'video'
+    }
+  ],
+  meta: { items_count: 1, total_items: null, current_page: 0, total_pages: null, items_per_page: 30 },
+  links: {
+    self: 'http://192.168.1.65:8080/booru/gelbooru/posts?baseEndpoint=safebooru.org&pageID=0&limit=30&tags=offline_video_test',
+    first:
+      'http://192.168.1.65:8080/booru/gelbooru/posts?baseEndpoint=safebooru.org&pageID=0&limit=30&tags=offline_video_test',
+    last: null,
+    prev: null,
+    next: null
+  }
+}

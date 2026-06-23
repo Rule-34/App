@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import type { IPost, PostMediaType } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
+  import { getImgproxyUrl } from '~/assets/js/nuxt-image/get-imgproxy-url'
   import { proxyUrl } from '~/assets/js/proxy'
 
   const localePath = useLocalePath()
@@ -35,8 +36,35 @@
 
   const mediaElement = shallowRef<MediaElementRef>(null)
 
+  const shouldProxyPosterWithImgproxy = computed(() => isPremium.value || (wasCurrentPageSSR.value && props.postIndex < 8))
+
+  function resolvePosterSrc(posterSrc: string | null | undefined) {
+    if (!posterSrc) {
+      return undefined
+    }
+
+    if (shouldProxyPosterWithImgproxy.value) {
+      return getImgproxyUrl(posterSrc)
+    }
+
+    return posterSrc
+  }
+
   const localSrc = shallowRef(props.mediaSrc ?? '')
-  const localPosterSrc = shallowRef(props.mediaPosterSrc ?? undefined)
+  const localPosterSrc = shallowRef(resolvePosterSrc(props.mediaPosterSrc))
+  const triedToLoadWithProxy = shallowRef(false)
+  const triedToLoadPosterWithProxy = shallowRef(false)
+
+  watch(
+    () => [props.mediaPosterSrc, shouldProxyPosterWithImgproxy.value] as const,
+    ([posterSrc]) => {
+      if (triedToLoadPosterWithProxy.value) {
+        return
+      }
+
+      localPosterSrc.value = resolvePosterSrc(posterSrc)
+    }
+  )
 
   const error = ref<Error | null>(null)
   const hasError = computed(() => error.value !== null)
@@ -78,9 +106,6 @@
   useHead(() => ({
     link: lcpVideoPosterPreloadLinks.value
   }))
-
-  const triedToLoadWithProxy = shallowRef(false)
-  const triedToLoadPosterWithProxy = shallowRef(false)
 
   let videoPlayer: FluidPlayerInstance | undefined
   let videoPlayerInitPromise: Promise<void> | null = null
@@ -297,8 +322,6 @@
     }
 
     videoPlayer = fluidPlayer(initializedVideoElement, fluidPlayerOptions)
-
-    // TODO: Handle poster error
   }
 
   function initializeVideoPlayer() {
@@ -388,21 +411,6 @@
       return
     }
 
-    // Proxy videos
-    if (
-      isVideo.value &&
-      isPremium.value &&
-      //
-      !triedToLoadWithProxy.value
-    ) {
-      localSrc.value = proxyUrl(localSrc.value)
-
-      reloadVideoPlayer(true)
-
-      triedToLoadWithProxy.value = true
-      return
-    }
-
     // Reset loading state if there's an error with GIF
     if (isAnimatedMedia.value && isAnimatedMediaPlaying.value) {
       isAnimatedMediaLoading.value = false
@@ -445,6 +453,30 @@
     error.value = new Error(t('errors.mediaLoadError'))
   }
 
+  function onVideoPosterPreloadError() {
+    if (!isPremium.value || triedToLoadPosterWithProxy.value || !props.mediaPosterSrc) {
+      return
+    }
+
+    localPosterSrc.value = proxyUrl(props.mediaPosterSrc)
+    triedToLoadPosterWithProxy.value = true
+  }
+
+  function onVideoPlaybackError(event: Event) {
+    if (hasError.value || !(event.target instanceof HTMLVideoElement)) {
+      return
+    }
+
+    if (isPremium.value && !triedToLoadWithProxy.value && props.mediaSrc) {
+      triedToLoadWithProxy.value = true
+      localSrc.value = proxyUrl(props.mediaSrc)
+      void reloadVideoPlayer(true)
+      return
+    }
+
+    error.value = new Error(t('errors.mediaLoadError'))
+  }
+
   function manuallyReloadMedia() {
     // Reset state
     triedToLoadWithProxy.value = false
@@ -453,7 +485,7 @@
 
     // Reload media
     localSrc.value = props.mediaSrc ?? ''
-    localPosterSrc.value = props.mediaPosterSrc ?? undefined
+    localPosterSrc.value = resolvePosterSrc(props.mediaPosterSrc)
 
     if (isVideo.value) {
       nextTick(() => {
@@ -757,6 +789,16 @@
       v-else-if="isVideo"
       :key="localSrc"
     >
+      <!-- Detect poster load failures; video poster attr does not emit reliable error events. -->
+      <img
+        v-if="localPosterSrc"
+        :src="localPosterSrc"
+        alt=""
+        aria-hidden="true"
+        class="sr-only"
+        @error="onVideoPosterPreloadError"
+      />
+
       <!-- TODO: Add load animation -->
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <video
@@ -772,7 +814,7 @@
         loop
         playsinline
         preload="none"
-        @error="onMediaError"
+        @error="onVideoPlaybackError"
         @focus="initializeVideoPlayer"
         @pointerdown="initializeVideoPlayer"
         @pointerenter="initializeVideoPlayer"
