@@ -42,8 +42,10 @@
   const corsProxyRetriedForMedia = shallowRef(false)
   const corsProxyRetriedForPoster = shallowRef(false)
 
+  const isLikelyLcpMedia = computed(() => props.postIndex === 0)
+
   const shouldProxyPosterWithImgproxy = computed(
-    () => isPremium.value || (wasCurrentPageSSR.value && props.postIndex < 8)
+    () => isPremium.value || (wasCurrentPageSSR.value && isLikelyLcpMedia.value)
   )
 
   const videoPosterUrl = computed(() => {
@@ -76,7 +78,6 @@
     sm: '400px',
     md: '768px'
   }
-  const isLikelyLcpMedia = computed(() => props.postIndex === 0)
   const mediaDecoding = computed(() => (props.postIndex < 3 ? undefined : 'async'))
   const mediaFetchPriority = computed(() => (isLikelyLcpMedia.value ? 'high' : undefined))
   const mediaLoading = computed(() => (isLikelyLcpMedia.value ? 'eager' : 'lazy'))
@@ -392,28 +393,31 @@
     isAnimatedMediaPlaying.value = true
   }
 
-  function tryCorsProxyRetryForVideo(target: HTMLImageElement | HTMLVideoElement) {
-    if (!isVideo.value || !isPremium.value) {
-      return false
+  function tryCorsProxyRetryForVideoPoster(target: HTMLImageElement | HTMLVideoElement) {
+    if (!isVideo.value || !(target instanceof HTMLImageElement)) {
+      return
     }
 
-    if (target instanceof HTMLVideoElement) {
-      if (corsProxyRetriedForMedia.value || !props.mediaSrc) {
-        return false
-      }
-
-      corsProxyRetriedForMedia.value = true
-      mediaUrl.value = proxyUrl(props.mediaSrc)
-      void reloadVideoPlayer(true)
-      return true
-    }
-
-    if (corsProxyRetriedForPoster.value || !props.mediaPosterSrc) {
-      return false
+    if (!isPremium.value || corsProxyRetriedForPoster.value || !props.mediaPosterSrc) {
+      return
     }
 
     videoPosterCorsFallbackUrl.value = proxyUrl(props.mediaPosterSrc)
     corsProxyRetriedForPoster.value = true
+  }
+
+  function tryCorsProxyRetryForVideo(target: HTMLImageElement | HTMLVideoElement) {
+    if (!isVideo.value || !(target instanceof HTMLVideoElement)) {
+      return false
+    }
+
+    if (!isPremium.value || corsProxyRetriedForMedia.value || !props.mediaSrc) {
+      return false
+    }
+
+    corsProxyRetriedForMedia.value = true
+    mediaUrl.value = proxyUrl(props.mediaSrc)
+    void reloadVideoPlayer(true)
     return true
   }
 
@@ -460,6 +464,11 @@
 
     if (isAnimatedMedia.value && isAnimatedMediaPlaying.value) {
       isAnimatedMediaLoading.value = false
+    }
+
+    if (isVideo.value && target instanceof HTMLImageElement) {
+      tryCorsProxyRetryForVideoPoster(target)
+      return
     }
 
     if (tryCorsProxyRetryForVideo(target) || tryCorsProxyRetryForGif(target)) {
