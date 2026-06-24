@@ -36,15 +36,19 @@
 
   const mediaElement = shallowRef<MediaElementRef>(null)
 
-  const localSrc = shallowRef(props.mediaSrc ?? '')
-  const localPosterSrc = shallowRef(props.mediaPosterSrc ?? undefined)
-  const videoPosterProxyOverride = shallowRef<string | null>(null)
-  const triedToLoadWithProxy = shallowRef(false)
-  const triedToLoadPosterWithProxy = shallowRef(false)
+  const mediaUrl = shallowRef(props.mediaSrc ?? '')
+  const gifPosterUrl = shallowRef(props.mediaPosterSrc ?? undefined)
+  const videoPosterCorsFallbackUrl = shallowRef<string | null>(null)
+  const corsProxyRetriedForMedia = shallowRef(false)
+  const corsProxyRetriedForPoster = shallowRef(false)
 
-  const videoPosterSrc = computed(() => {
-    if (videoPosterProxyOverride.value) {
-      return videoPosterProxyOverride.value
+  const shouldProxyPosterWithImgproxy = computed(
+    () => isPremium.value || (wasCurrentPageSSR.value && props.postIndex < 8)
+  )
+
+  const videoPosterUrl = computed(() => {
+    if (videoPosterCorsFallbackUrl.value) {
+      return videoPosterCorsFallbackUrl.value
     }
 
     const poster = props.mediaPosterSrc
@@ -53,7 +57,7 @@
       return undefined
     }
 
-    if (isPremium.value || (wasCurrentPageSSR.value && props.postIndex < 8)) {
+    if (shouldProxyPosterWithImgproxy.value) {
       return getImgproxyUrl(poster)
     }
 
@@ -66,7 +70,7 @@
   const isImage = computed(() => props.mediaType === 'image')
   const isVideo = computed(() => props.mediaType === 'video')
   const isAnimatedMedia = computed(
-    () => props.mediaType === 'animated' || (props.mediaType === 'image' && localSrc.value.endsWith('.gif'))
+    () => props.mediaType === 'animated' || (props.mediaType === 'image' && mediaUrl.value.endsWith('.gif'))
   )
   const postImageSizes = {
     sm: '400px',
@@ -83,7 +87,7 @@
     props.mediaSrcWidth && props.mediaSrcHeight ? `${props.mediaSrcWidth}/${props.mediaSrcHeight}` : undefined
   )
   const lcpVideoPosterPreloadLinks = computed(() => {
-    if (!isLikelyLcpMedia.value || !isVideo.value || !videoPosterSrc.value) {
+    if (!isLikelyLcpMedia.value || !isVideo.value || !videoPosterUrl.value) {
       return []
     }
 
@@ -91,7 +95,7 @@
       {
         rel: 'preload',
         as: 'image' as const,
-        href: videoPosterSrc.value,
+        href: videoPosterUrl.value,
         fetchpriority: 'high' as const
       }
     ]
@@ -218,7 +222,7 @@
             },
             {
               label: t('media.download'),
-              href: localSrc.value
+              href: mediaUrl.value
             }
           ]
         },
@@ -246,7 +250,7 @@
               return
             }
 
-            currentVideoElement.src = localSrc.value
+            currentVideoElement.src = mediaUrl.value
             videoPlayer?.play()
           }
         },
@@ -410,11 +414,11 @@
       isAnimatedMediaLoading.value = false
     }
 
-    // Proxy videos
+    // Premium CORS-proxy retry for blocked video CDNs
     if (isVideo.value && target instanceof HTMLVideoElement) {
-      if (isPremium.value && !triedToLoadWithProxy.value && props.mediaSrc) {
-        triedToLoadWithProxy.value = true
-        localSrc.value = proxyUrl(props.mediaSrc)
+      if (isPremium.value && !corsProxyRetriedForMedia.value && props.mediaSrc) {
+        corsProxyRetriedForMedia.value = true
+        mediaUrl.value = proxyUrl(props.mediaSrc)
         void reloadVideoPlayer(true)
         return
       }
@@ -423,37 +427,37 @@
       return
     }
 
-    // Proxy video posters (hidden preload img; <video poster> does not emit reliable errors)
+    // Premium CORS-proxy retry for video posters (hidden img; <video poster> has no reliable @error)
     if (
       isVideo.value &&
       isPremium.value &&
       target instanceof HTMLImageElement &&
-      !triedToLoadPosterWithProxy.value &&
+      !corsProxyRetriedForPoster.value &&
       props.mediaPosterSrc
     ) {
-      videoPosterProxyOverride.value = proxyUrl(props.mediaPosterSrc)
-      triedToLoadPosterWithProxy.value = true
+      videoPosterCorsFallbackUrl.value = proxyUrl(props.mediaPosterSrc)
+      corsProxyRetriedForPoster.value = true
       return
     }
 
-    // Proxy GIFs
+    // Premium CORS-proxy retry for GIFs
     if (isAnimatedMedia.value && isPremium.value) {
       //
 
       // Case 1: The poster image failed to load
       if (
         !isAnimatedMediaPlaying.value &&
-        target.src === localPosterSrc.value &&
+        target.src === gifPosterUrl.value &&
         //
-        !triedToLoadPosterWithProxy.value
+        !corsProxyRetriedForPoster.value
       ) {
-        if (!localPosterSrc.value) {
+        if (!gifPosterUrl.value) {
           return
         }
 
-        localPosterSrc.value = proxyUrl(localPosterSrc.value)
+        gifPosterUrl.value = proxyUrl(gifPosterUrl.value)
 
-        triedToLoadPosterWithProxy.value = true
+        corsProxyRetriedForPoster.value = true
         return
       }
 
@@ -461,11 +465,11 @@
       if (
         isAnimatedMediaPlaying.value &&
         //
-        !triedToLoadWithProxy.value
+        !corsProxyRetriedForMedia.value
       ) {
-        localSrc.value = proxyUrl(localSrc.value)
+        mediaUrl.value = proxyUrl(mediaUrl.value)
 
-        triedToLoadWithProxy.value = true
+        corsProxyRetriedForMedia.value = true
         return
       }
     }
@@ -475,14 +479,14 @@
 
   function manuallyReloadMedia() {
     // Reset state
-    triedToLoadWithProxy.value = false
-    triedToLoadPosterWithProxy.value = false
-    videoPosterProxyOverride.value = null
+    corsProxyRetriedForMedia.value = false
+    corsProxyRetriedForPoster.value = false
+    videoPosterCorsFallbackUrl.value = null
     error.value = null
 
     // Reload media
-    localSrc.value = props.mediaSrc ?? ''
-    localPosterSrc.value = props.mediaPosterSrc ?? undefined
+    mediaUrl.value = props.mediaSrc ?? ''
+    gifPosterUrl.value = props.mediaPosterSrc ?? undefined
 
     if (isVideo.value) {
       nextTick(() => {
@@ -651,7 +655,7 @@
           :loading="mediaLoading"
           :preload="mediaPreload"
           :sizes="postImageSizes"
-          :src="localSrc"
+          :src="mediaUrl"
           :width="mediaSrcWidthAttribute"
           provider="imgproxy"
           @error="onMediaError"
@@ -678,7 +682,7 @@
           :loading="mediaLoading"
           :preload="mediaPreload"
           :sizes="postImageSizes"
-          :src="localSrc"
+          :src="mediaUrl"
           :width="mediaSrcWidthAttribute"
           provider="imgproxy"
           @error="onMediaError"
@@ -696,7 +700,7 @@
           :height="mediaSrcHeightAttribute"
           :loading="mediaLoading"
           :preload="mediaPreload"
-          :src="localSrc"
+          :src="mediaUrl"
           :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
           :width="mediaSrcWidthAttribute"
           class="h-auto w-full rounded-t-md"
@@ -719,7 +723,7 @@
         :height="mediaSrcHeightAttribute"
         :loading="mediaLoading"
         :preload="mediaPreload"
-        :src="isAnimatedMediaPlaying ? localSrc : localPosterSrc"
+        :src="isAnimatedMediaPlaying ? mediaUrl : gifPosterUrl"
         :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
         :width="mediaSrcWidthAttribute"
         class="h-auto w-full rounded-t-md"
@@ -784,12 +788,12 @@
     <!-- Video -->
     <div
       v-else-if="isVideo"
-      :key="localSrc"
+      :key="mediaUrl"
     >
       <!-- Detect poster load failures; video poster attr does not emit reliable error events. -->
       <img
-        v-if="videoPosterSrc"
-        :src="videoPosterSrc"
+        v-if="videoPosterUrl"
+        :src="videoPosterUrl"
         alt=""
         aria-hidden="true"
         class="sr-only"
@@ -802,8 +806,8 @@
         ref="mediaElement"
         v-intersection-observer="[onVideoIntersectionObserver, { rootMargin: '100px' }]"
         :height="mediaSrcHeightAttribute"
-        :poster="videoPosterSrc"
-        :src="localSrc"
+        :poster="videoPosterUrl"
+        :src="mediaUrl"
         :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
         :width="mediaSrcWidthAttribute"
         class="h-auto w-full rounded-t-md"
