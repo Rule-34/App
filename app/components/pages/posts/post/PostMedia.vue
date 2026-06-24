@@ -36,35 +36,29 @@
 
   const mediaElement = shallowRef<MediaElementRef>(null)
 
-  const shouldProxyPosterWithImgproxy = computed(() => isPremium.value || (wasCurrentPageSSR.value && props.postIndex < 8))
-
-  function resolvePosterSrc(posterSrc: string | null | undefined) {
-    if (!posterSrc) {
-      return undefined
-    }
-
-    if (shouldProxyPosterWithImgproxy.value) {
-      return getImgproxyUrl(posterSrc)
-    }
-
-    return posterSrc
-  }
-
   const localSrc = shallowRef(props.mediaSrc ?? '')
-  const localPosterSrc = shallowRef(resolvePosterSrc(props.mediaPosterSrc))
+  const localPosterSrc = shallowRef(props.mediaPosterSrc ?? undefined)
+  const videoPosterProxyOverride = shallowRef<string | null>(null)
   const triedToLoadWithProxy = shallowRef(false)
   const triedToLoadPosterWithProxy = shallowRef(false)
 
-  watch(
-    () => [props.mediaPosterSrc, shouldProxyPosterWithImgproxy.value] as const,
-    ([posterSrc]) => {
-      if (triedToLoadPosterWithProxy.value) {
-        return
-      }
-
-      localPosterSrc.value = resolvePosterSrc(posterSrc)
+  const videoPosterSrc = computed(() => {
+    if (videoPosterProxyOverride.value) {
+      return videoPosterProxyOverride.value
     }
-  )
+
+    const poster = props.mediaPosterSrc
+
+    if (!poster) {
+      return undefined
+    }
+
+    if (isPremium.value || (wasCurrentPageSSR.value && props.postIndex < 8)) {
+      return getImgproxyUrl(poster)
+    }
+
+    return poster
+  })
 
   const error = ref<Error | null>(null)
   const hasError = computed(() => error.value !== null)
@@ -89,7 +83,7 @@
     props.mediaSrcWidth && props.mediaSrcHeight ? `${props.mediaSrcWidth}/${props.mediaSrcHeight}` : undefined
   )
   const lcpVideoPosterPreloadLinks = computed(() => {
-    if (!isLikelyLcpMedia.value || !isVideo.value || !localPosterSrc.value) {
+    if (!isLikelyLcpMedia.value || !isVideo.value || !videoPosterSrc.value) {
       return []
     }
 
@@ -97,7 +91,7 @@
       {
         rel: 'preload',
         as: 'image' as const,
-        href: localPosterSrc.value,
+        href: videoPosterSrc.value,
         fetchpriority: 'high' as const
       }
     ]
@@ -416,6 +410,32 @@
       isAnimatedMediaLoading.value = false
     }
 
+    // Proxy videos
+    if (isVideo.value && target instanceof HTMLVideoElement) {
+      if (isPremium.value && !triedToLoadWithProxy.value && props.mediaSrc) {
+        triedToLoadWithProxy.value = true
+        localSrc.value = proxyUrl(props.mediaSrc)
+        void reloadVideoPlayer(true)
+        return
+      }
+
+      error.value = new Error(t('errors.mediaLoadError'))
+      return
+    }
+
+    // Proxy video posters (hidden preload img; <video poster> does not emit reliable errors)
+    if (
+      isVideo.value &&
+      isPremium.value &&
+      target instanceof HTMLImageElement &&
+      !triedToLoadPosterWithProxy.value &&
+      props.mediaPosterSrc
+    ) {
+      videoPosterProxyOverride.value = proxyUrl(props.mediaPosterSrc)
+      triedToLoadPosterWithProxy.value = true
+      return
+    }
+
     // Proxy GIFs
     if (isAnimatedMedia.value && isPremium.value) {
       //
@@ -453,39 +473,16 @@
     error.value = new Error(t('errors.mediaLoadError'))
   }
 
-  function onVideoPosterPreloadError() {
-    if (!isPremium.value || triedToLoadPosterWithProxy.value || !props.mediaPosterSrc) {
-      return
-    }
-
-    localPosterSrc.value = proxyUrl(props.mediaPosterSrc)
-    triedToLoadPosterWithProxy.value = true
-  }
-
-  function onVideoPlaybackError(event: Event) {
-    if (hasError.value || !(event.target instanceof HTMLVideoElement)) {
-      return
-    }
-
-    if (isPremium.value && !triedToLoadWithProxy.value && props.mediaSrc) {
-      triedToLoadWithProxy.value = true
-      localSrc.value = proxyUrl(props.mediaSrc)
-      void reloadVideoPlayer(true)
-      return
-    }
-
-    error.value = new Error(t('errors.mediaLoadError'))
-  }
-
   function manuallyReloadMedia() {
     // Reset state
     triedToLoadWithProxy.value = false
     triedToLoadPosterWithProxy.value = false
+    videoPosterProxyOverride.value = null
     error.value = null
 
     // Reload media
     localSrc.value = props.mediaSrc ?? ''
-    localPosterSrc.value = resolvePosterSrc(props.mediaPosterSrc)
+    localPosterSrc.value = props.mediaPosterSrc ?? undefined
 
     if (isVideo.value) {
       nextTick(() => {
@@ -791,12 +788,12 @@
     >
       <!-- Detect poster load failures; video poster attr does not emit reliable error events. -->
       <img
-        v-if="localPosterSrc"
-        :src="localPosterSrc"
+        v-if="videoPosterSrc"
+        :src="videoPosterSrc"
         alt=""
         aria-hidden="true"
         class="sr-only"
-        @error="onVideoPosterPreloadError"
+        @error="onMediaError"
       />
 
       <!-- TODO: Add load animation -->
@@ -805,7 +802,7 @@
         ref="mediaElement"
         v-intersection-observer="[onVideoIntersectionObserver, { rootMargin: '100px' }]"
         :height="mediaSrcHeightAttribute"
-        :poster="localPosterSrc"
+        :poster="videoPosterSrc"
         :src="localSrc"
         :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
         :width="mediaSrcWidthAttribute"
@@ -814,7 +811,7 @@
         loop
         playsinline
         preload="none"
-        @error="onVideoPlaybackError"
+        @error="onMediaError"
         @focus="initializeVideoPlayer"
         @pointerdown="initializeVideoPlayer"
         @pointerenter="initializeVideoPlayer"
