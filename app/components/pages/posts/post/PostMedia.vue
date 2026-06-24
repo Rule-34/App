@@ -392,6 +392,55 @@
     isAnimatedMediaPlaying.value = true
   }
 
+  function tryCorsProxyRetryForVideo(target: HTMLImageElement | HTMLVideoElement) {
+    if (!isVideo.value || !isPremium.value) {
+      return false
+    }
+
+    if (target instanceof HTMLVideoElement) {
+      if (corsProxyRetriedForMedia.value || !props.mediaSrc) {
+        return false
+      }
+
+      corsProxyRetriedForMedia.value = true
+      mediaUrl.value = proxyUrl(props.mediaSrc)
+      void reloadVideoPlayer(true)
+      return true
+    }
+
+    if (corsProxyRetriedForPoster.value || !props.mediaPosterSrc) {
+      return false
+    }
+
+    videoPosterCorsFallbackUrl.value = proxyUrl(props.mediaPosterSrc)
+    corsProxyRetriedForPoster.value = true
+    return true
+  }
+
+  function tryCorsProxyRetryForGif(target: HTMLImageElement | HTMLVideoElement) {
+    if (!isAnimatedMedia.value || !isPremium.value || !(target instanceof HTMLImageElement)) {
+      return false
+    }
+
+    if (!isAnimatedMediaPlaying.value && target.src === gifPosterUrl.value && !corsProxyRetriedForPoster.value) {
+      if (!gifPosterUrl.value) {
+        return false
+      }
+
+      gifPosterUrl.value = proxyUrl(gifPosterUrl.value)
+      corsProxyRetriedForPoster.value = true
+      return true
+    }
+
+    if (isAnimatedMediaPlaying.value && !corsProxyRetriedForMedia.value) {
+      mediaUrl.value = proxyUrl(mediaUrl.value)
+      corsProxyRetriedForMedia.value = true
+      return true
+    }
+
+    return false
+  }
+
   function onMediaError(payload: string | Event) {
     if (hasError.value) {
       return
@@ -409,69 +458,12 @@
       return
     }
 
-    // Reset loading state if there's an error with GIF
     if (isAnimatedMedia.value && isAnimatedMediaPlaying.value) {
       isAnimatedMediaLoading.value = false
     }
 
-    // Premium CORS-proxy retry for blocked video CDNs
-    if (isVideo.value && target instanceof HTMLVideoElement) {
-      if (isPremium.value && !corsProxyRetriedForMedia.value && props.mediaSrc) {
-        corsProxyRetriedForMedia.value = true
-        mediaUrl.value = proxyUrl(props.mediaSrc)
-        void reloadVideoPlayer(true)
-        return
-      }
-
-      error.value = new Error(t('errors.mediaLoadError'))
+    if (tryCorsProxyRetryForVideo(target) || tryCorsProxyRetryForGif(target)) {
       return
-    }
-
-    // Premium CORS-proxy retry for video posters (hidden img; <video poster> has no reliable @error)
-    if (
-      isVideo.value &&
-      isPremium.value &&
-      target instanceof HTMLImageElement &&
-      !corsProxyRetriedForPoster.value &&
-      props.mediaPosterSrc
-    ) {
-      videoPosterCorsFallbackUrl.value = proxyUrl(props.mediaPosterSrc)
-      corsProxyRetriedForPoster.value = true
-      return
-    }
-
-    // Premium CORS-proxy retry for GIFs
-    if (isAnimatedMedia.value && isPremium.value) {
-      //
-
-      // Case 1: The poster image failed to load
-      if (
-        !isAnimatedMediaPlaying.value &&
-        target.src === gifPosterUrl.value &&
-        //
-        !corsProxyRetriedForPoster.value
-      ) {
-        if (!gifPosterUrl.value) {
-          return
-        }
-
-        gifPosterUrl.value = proxyUrl(gifPosterUrl.value)
-
-        corsProxyRetriedForPoster.value = true
-        return
-      }
-
-      // Case 2: The actual GIF failed to load
-      if (
-        isAnimatedMediaPlaying.value &&
-        //
-        !corsProxyRetriedForMedia.value
-      ) {
-        mediaUrl.value = proxyUrl(mediaUrl.value)
-
-        corsProxyRetriedForMedia.value = true
-        return
-      }
     }
 
     error.value = new Error(t('errors.mediaLoadError'))
