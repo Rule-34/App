@@ -94,3 +94,9 @@ sw.*
 
 # Vim swap files
 *.swp
+
+# Local agent scratch
+.opencode/
+.docx/
+docs/
+token-usage-output.txt

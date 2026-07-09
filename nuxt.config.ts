@@ -435,6 +435,8 @@ export default defineNuxtConfig({
 
     sources: ['/api/_sitemap-urls'],
 
+    exclude: ['/__ad-debug/**'],
+
     experimentalWarmUp: true,
 
     credits: false
