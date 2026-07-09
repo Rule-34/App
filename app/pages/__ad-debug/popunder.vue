@@ -104,6 +104,16 @@ function getStack() {
   return new Error().stack?.split('\n').slice(2).join('\n')
 }
 
+let originalWindowOpen: typeof window.open | null = null
+let originalLocationAssign: Location['assign'] | null = null
+let originalLocationReplace: Location['replace'] | null = null
+const trackedListeners: { target: EventTarget; type: string; handler: EventListenerOrEventListenerObject; options?: boolean }[] = []
+
+function addTrackedListener(target: EventTarget, type: string, handler: EventListenerOrEventListenerObject, options?: boolean) {
+  target.addEventListener(type, handler, options)
+  trackedListeners.push({ target, type, handler, options })
+}
+
 function tryPatchLocationMethod(method: 'assign' | 'replace', eventType: 'location-assign' | 'location-replace') {
   const original = window.location[method].bind(window.location)
 
@@ -112,6 +122,12 @@ function tryPatchLocationMethod(method: 'assign' | 'replace', eventType: 'locati
       addEvent(eventType, { url: String(url), stack: getStack() })
       return original(url)
     }) as Location[typeof method]
+
+    if (method === 'assign') {
+      originalLocationAssign = original
+    } else {
+      originalLocationReplace = original
+    }
   } catch (error) {
     addEvent('instrumentation-failure', { message: `location.${method} instrumentation failed: ${String(error)}` })
   }
@@ -125,6 +141,7 @@ function installInstrumentation() {
   instrumentationInstalled.value = true
 
   const originalOpen = window.open.bind(window)
+  originalWindowOpen = originalOpen
   window.open = ((url?: string | URL, target?: string, features?: string) => {
     addEvent('window-open', { url: String(url ?? ''), target, message: features, stack: getStack() })
     return originalOpen(url, target, features)
@@ -133,7 +150,8 @@ function installInstrumentation() {
   tryPatchLocationMethod('assign', 'location-assign')
   tryPatchLocationMethod('replace', 'location-replace')
 
-  document.addEventListener(
+  addTrackedListener(
+    document,
     'click',
     (event) => {
       const anchor = event.target instanceof Element ? event.target.closest('a[target="_blank"]') : null
@@ -144,12 +162,39 @@ function installInstrumentation() {
     true
   )
 
-  document.addEventListener('visibilitychange', () => addEvent('visibilitychange', { visibilityState: document.visibilityState }))
-  window.addEventListener('pagehide', () => addEvent('pagehide'))
-  window.addEventListener('beforeunload', () => addEvent('beforeunload'))
-  window.addEventListener('error', (event) => addEvent('console-error', { message: event.message }))
-  window.addEventListener('unhandledrejection', (event) => addEvent('unhandledrejection', { message: String(event.reason) }))
+  addTrackedListener(document, 'visibilitychange', () => addEvent('visibilitychange', { visibilityState: document.visibilityState }))
+  addTrackedListener(window, 'pagehide', () => addEvent('pagehide'))
+  addTrackedListener(window, 'beforeunload', () => addEvent('beforeunload'))
+  addTrackedListener(window, 'error', (event) => addEvent('console-error', { message: (event as ErrorEvent).message }))
+  addTrackedListener(window, 'unhandledrejection', (event) =>
+    addEvent('unhandledrejection', { message: String((event as PromiseRejectionEvent).reason) })
+  )
 }
+
+function uninstallInstrumentation() {
+  if (!instrumentationInstalled.value) {
+    return
+  }
+
+  if (originalWindowOpen) {
+    window.open = originalWindowOpen
+  }
+  if (originalLocationAssign) {
+    window.location.assign = originalLocationAssign
+  }
+  if (originalLocationReplace) {
+    window.location.replace = originalLocationReplace
+  }
+
+  for (const { target, type, handler, options } of trackedListeners) {
+    target.removeEventListener(type, handler, options)
+  }
+  trackedListeners.length = 0
+
+  instrumentationInstalled.value = false
+}
+
+onUnmounted(uninstallInstrumentation)
 
 function injectAdScript(scriptUrl: string) {
   const script = document.createElement('script')
