@@ -400,10 +400,7 @@
         {
           name: t('pages.home.animatedVideo'),
           path: '/posts/e621.net?tags=animated',
-          media: [
-            { type: 'image', src: '/img/featured/e621.net/animated.jpeg' },
-            ...featuredMedia('rule34.xxx', 'video', 4)
-          ]
+          media: [{ type: 'image', src: '/img/featured/e621.net/animated.jpeg' }]
         },
         {
           name: t('pages.home.noAi'),
