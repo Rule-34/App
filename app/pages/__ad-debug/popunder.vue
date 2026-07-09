@@ -163,8 +163,11 @@ function installInstrumentation() {
   )
 
   addTrackedListener(document, 'visibilitychange', () => addEvent('visibilitychange', { visibilityState: document.visibilityState }))
-  addTrackedListener(window, 'pagehide', () => addEvent('pagehide'))
-  addTrackedListener(window, 'beforeunload', () => addEvent('beforeunload'))
+  addTrackedListener(window, 'focus', () => addEvent('focus'))
+  addTrackedListener(window, 'blur', () => addEvent('blur'))
+  addTrackedListener(window, 'pageshow', () => addEvent('pageshow'))
+  addTrackedListener(window, 'pagehide', () => addEvent('pagehide', { visibilityState: document.visibilityState }))
+  addTrackedListener(window, 'beforeunload', () => addEvent('beforeunload', { visibilityState: document.visibilityState }))
   addTrackedListener(window, 'error', (event) => addEvent('console-error', { message: (event as ErrorEvent).message }))
   addTrackedListener(window, 'unhandledrejection', (event) =>
     addEvent('unhandledrejection', { message: String((event as PromiseRejectionEvent).reason) })

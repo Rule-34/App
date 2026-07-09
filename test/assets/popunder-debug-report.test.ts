@@ -19,6 +19,7 @@ describe('createPopunderDebugVerdict', () => {
     expect(createPopunderDebugVerdict([{ type: 'test-click', elapsedMs: 1000, timestamp: '2026-07-09T00:00:01.000Z' }])).toEqual({
       allowedAttemptCount: 0,
       duplicateAttemptCount: 0,
+      destructiveRedirectEventCount: 0,
       isAbusive: false
     })
   })
@@ -33,6 +34,74 @@ describe('createPopunderDebugVerdict', () => {
     expect(verdict).toEqual({
       allowedAttemptCount: 1,
       duplicateAttemptCount: 1,
+      destructiveRedirectEventCount: 0,
+      isAbusive: true
+    })
+  })
+
+  it('treats hidden-to-visible after clicks as mobile popunder candidates', () => {
+    const verdict = createPopunderDebugVerdict([
+      { type: 'test-click', elapsedMs: 1000, timestamp: '2026-07-09T00:00:01.000Z' },
+      { type: 'visibilitychange', elapsedMs: 8000, timestamp: '2026-07-09T00:00:08.000Z', visibilityState: 'hidden' },
+      { type: 'visibilitychange', elapsedMs: 10000, timestamp: '2026-07-09T00:00:10.000Z', visibilityState: 'visible' },
+      { type: 'test-click', elapsedMs: 12000, timestamp: '2026-07-09T00:00:12.000Z' },
+      { type: 'visibilitychange', elapsedMs: 18000, timestamp: '2026-07-09T00:00:18.000Z', visibilityState: 'hidden' },
+      { type: 'visibilitychange', elapsedMs: 20000, timestamp: '2026-07-09T00:00:20.000Z', visibilityState: 'visible' }
+    ])
+
+    expect(verdict).toEqual({
+      allowedAttemptCount: 1,
+      duplicateAttemptCount: 1,
+      destructiveRedirectEventCount: 0,
+      isAbusive: true
+    })
+  })
+
+  it('treats interrupted hidden-to-visible sequences as mobile popunder candidates', () => {
+    const verdict = createPopunderDebugVerdict([
+      { type: 'test-click', elapsedMs: 1000, timestamp: '2026-07-09T00:00:01.000Z' },
+      { type: 'visibilitychange', elapsedMs: 8000, timestamp: '2026-07-09T00:00:08.000Z', visibilityState: 'hidden' },
+      { type: 'blur', elapsedMs: 8100, timestamp: '2026-07-09T00:00:08.100Z' },
+      { type: 'pagehide', elapsedMs: 8200, timestamp: '2026-07-09T00:00:08.200Z' },
+      { type: 'pageshow', elapsedMs: 9500, timestamp: '2026-07-09T00:00:09.500Z' },
+      { type: 'visibilitychange', elapsedMs: 10000, timestamp: '2026-07-09T00:00:10.000Z', visibilityState: 'visible' }
+    ])
+
+    expect(verdict).toEqual({
+      allowedAttemptCount: 1,
+      duplicateAttemptCount: 0,
+      destructiveRedirectEventCount: 0,
+      isAbusive: false
+    })
+  })
+
+  it('marks page exits after clicks without window-open as destructive redirects', () => {
+    const verdict = createPopunderDebugVerdict([
+      { type: 'test-click', elapsedMs: 1000, timestamp: '2026-07-09T00:00:01.000Z' },
+      { type: 'beforeunload', elapsedMs: 6000, timestamp: '2026-07-09T00:00:06.000Z' },
+      { type: 'pagehide', elapsedMs: 6100, timestamp: '2026-07-09T00:00:06.100Z' }
+    ])
+
+    expect(verdict).toEqual({
+      allowedAttemptCount: 0,
+      duplicateAttemptCount: 0,
+      destructiveRedirectEventCount: 2,
+      isAbusive: true
+    })
+  })
+
+  it('marks later page exits as destructive even after an earlier popunder opened', () => {
+    const verdict = createPopunderDebugVerdict([
+      { type: 'test-click', elapsedMs: 1000, timestamp: '2026-07-09T00:00:01.000Z' },
+      { type: 'window-open', elapsedMs: 2000, timestamp: '2026-07-09T00:00:02.000Z' },
+      { type: 'test-click', elapsedMs: 20000, timestamp: '2026-07-09T00:00:20.000Z' },
+      { type: 'beforeunload', elapsedMs: 26000, timestamp: '2026-07-09T00:00:26.000Z' }
+    ])
+
+    expect(verdict).toEqual({
+      allowedAttemptCount: 1,
+      duplicateAttemptCount: 0,
+      destructiveRedirectEventCount: 1,
       isAbusive: true
     })
   })
@@ -46,6 +115,7 @@ describe('createPopunderDebugVerdict', () => {
     ).toEqual({
       allowedAttemptCount: 1,
       duplicateAttemptCount: 1,
+      destructiveRedirectEventCount: 0,
       isAbusive: true
     })
   })
@@ -59,6 +129,7 @@ describe('createPopunderDebugVerdict', () => {
     expect(verdict).toEqual({
       allowedAttemptCount: 1,
       duplicateAttemptCount: 0,
+      destructiveRedirectEventCount: 0,
       isAbusive: false
     })
   })
@@ -72,6 +143,7 @@ describe('createPopunderDebugVerdict', () => {
     ).toEqual({
       allowedAttemptCount: 1,
       duplicateAttemptCount: 1,
+      destructiveRedirectEventCount: 0,
       isAbusive: true
     })
   })
@@ -86,6 +158,7 @@ describe('createPopunderDebugVerdict', () => {
     ).toEqual({
       allowedAttemptCount: 1,
       duplicateAttemptCount: 2,
+      destructiveRedirectEventCount: 0,
       isAbusive: true
     })
   })
@@ -110,7 +183,12 @@ describe('createPopunderDebugReport', () => {
     expect(report.providerMode).toBe('hilltop')
     expect(report.providerLabel).toBe('HilltopAds')
     expect(report.scriptUrl).toBe('https://example.com/pop.js')
-    expect(report.verdict).toEqual({ allowedAttemptCount: 1, duplicateAttemptCount: 0, isAbusive: false })
+    expect(report.verdict).toEqual({
+      allowedAttemptCount: 1,
+      duplicateAttemptCount: 0,
+      destructiveRedirectEventCount: 0,
+      isAbusive: false
+    })
     expect(report.events).toHaveLength(1)
   })
 })

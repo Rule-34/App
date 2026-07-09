@@ -65,7 +65,7 @@ export const popunderProviders = [
   /**
    * Profiton
    * Pros: Good CPM (2.15) | Counts visits well
-   * Cons:
+   * Cons: Observed abusive repeat popunders on mobile after nearly every click
    */
   {
     key: 'profiton',
@@ -76,7 +76,7 @@ export const popunderProviders = [
   /**
    * AdsTerra
    * Pros:
-   * Cons:
+   * Cons: Observed replacing current page instead of opening popunder, losing user results
    */
   {
     key: 'adsterra',
