@@ -1,86 +1,117 @@
 import randomWeightedChoice from 'random-weighted-choice'
 
+/**
+ * Sum of all weights must be 1.0
+ */
+export const popunderProviders = [
+  /**
+   * ExoClick
+   * Pros:
+   * Cons:
+   */
+  // {
+  //   id: '',
+  //   weight: 1,
+  // },
+  /**
+   * Adsession
+   * Pros:
+   * Cons:
+   */
+  // {
+  //   id: '/js/popunder.js?v=7',
+  //   weight: 1,
+  // },
+  /**
+   * HilltopAds
+   * Pros: Good min payout (100) | Counts + impressions w/ same traffic? (could be abuse, use of multiple ads that we didnt agree)
+   * Cons: Not fixed CPM (~2.0) | Low Revenue (70)
+   */
+  {
+    key: 'hilltop',
+    label: 'HilltopAds',
+    id: 'https://yellowishgather.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
+    weight: 0.35
+  },
+  /**
+   * Clickadu
+   * Pros: Good CPM (2.1)
+   * Cons: Low revenue (50) | Does not count visits well | Clears console
+   */
+  {
+    key: 'clickadu',
+    label: 'Clickadu',
+    id: '/js/popunder2.js?v=10',
+    weight: 0.05
+  },
+  /**
+   * AdMaven
+   * Pros: Good CPM (3.5)
+   * Cons: Low Revenue (30) | Impression count lower than everybody else (less overall revenue) | Sometimes replaces current tab instead of opening in new tab | Possible malware: ads open requests to social media login
+   */
+  // {
+  //   id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255038',
+  //   weight: 0.25
+  // },
+  /**
+   * AdsCarat
+   * Pros: Great CPM (2.5)
+   * Cons: Low Revenue (25) | Does not count visits well | Reloads website once?
+   */
+  // {
+  //   id: 'https://hp.scrannyplacebo.com/rMGqiS1acWcIq4LyI/oQRmJ',
+  //   weight: 1
+  // },
+  /**
+   * Profiton
+   * Pros: Good CPM (2.15) | Counts visits well
+   * Cons:
+   */
+  {
+    key: 'profiton',
+    label: 'Profiton',
+    id: 'https://je.deuxseethe.com/r1onMblLYR8e/rwnnn',
+    weight: 0.45
+  },
+  /**
+   * AdsTerra
+   * Pros:
+   * Cons:
+   */
+  {
+    key: 'adsterra',
+    label: 'AdsTerra',
+    id: 'https://laughedentrust.com/gOEgecu/kAi41dXqVy9f-/APTn2mopi0EK/ZYuxzOlInL9/23jslU_6yYUKuVVn_v9j/va82rI/dw-xJW2djcqgC5mfF7/4gbSUwOzf/rEAE3_4f5WEdqc3rM/VfHINUDVV3EC',
+    weight: 0.15
+  }
+] as const satisfies readonly { key: string; label: string; id: string; weight: number }[]
+
+export type PopunderProvider = (typeof popunderProviders)[number]
+export type PopunderProviderKey = PopunderProvider['key']
+
+export const popunderProviderKeys = popunderProviders.map(({ key }) => key)
+export const popunderProviderModes = ['random', ...popunderProviderKeys] as const
+export type PopunderProviderMode = (typeof popunderProviderModes)[number]
+
+export const popunderProviderChoices = popunderProviders.map(({ id, weight }) => ({ id, weight }))
+
+export function getPopunderProviderByKey(key: PopunderProviderKey): PopunderProvider {
+  return popunderProviders.find((provider) => provider.key === key) ?? popunderProviders[0]!
+}
+
+export function parsePopunderProviderMode(value: unknown): PopunderProviderMode {
+  return typeof value === 'string' && popunderProviderModes.includes(value as PopunderProviderMode)
+    ? (value as PopunderProviderMode)
+    : 'random'
+}
+
+export function selectRandomPopunderProviderScript() {
+  return randomWeightedChoice(popunderProviderChoices)
+}
+
 export default function () {
   const popunderScript = useState<string>('popunder-script', () => '')
   const pushScript = useState<string>('push-notification-script', () => '')
-
-  /**
-   * Sum of all weights must be 1.0
-   */
-  const popunderAds = [
-    /**
-     * ExoClick
-     * Pros:
-     * Cons:
-     */
-    // {
-    //   id: '',
-    //   weight: 1,
-    // },
-    /**
-     * Adsession
-     * Pros:
-     * Cons:
-     */
-    // {
-    //   id: '/js/popunder.js?v=7',
-    //   weight: 1,
-    // },
-    /**
-     * HilltopAds
-     * Pros: Good min payout (100) | Counts + impressions w/ same traffic? (could be abuse, use of multiple ads that we didnt agree)
-     * Cons: Not fixed CPM (~2.0) | Low Revenue (70)
-     */
-    {
-      id: 'https://yellowishgather.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
-      weight: 0.35
-    },
-    /**
-     * Clickadu
-     * Pros: Good CPM (2.1)
-     * Cons: Low revenue (50) | Does not count visits well | Clears console
-     */
-    {
-      id: '/js/popunder2.js?v=10',
-      weight: 0.05
-    },
-    /**
-     * AdMaven
-     * Pros: Good CPM (3.5)
-     * Cons: Low Revenue (30) | Impression count lower than everybody else (less overall revenue) | Sometimes replaces current tab instead of opening in new tab | Possible malware: ads open requests to social media login
-     */
-    // {
-    //   id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255038',
-    //   weight: 0.25
-    // },
-    /**
-     * AdsCarat
-     * Pros: Great CPM (2.5)
-     * Cons: Low Revenue (25) | Does not count visits well | Reloads website once?
-     */
-    // {
-    //   id: 'https://hp.scrannyplacebo.com/rMGqiS1acWcIq4LyI/oQRmJ',
-    //   weight: 1
-    // },
-    /**
-     * Profiton
-     * Pros: Good CPM (2.15) | Counts visits well
-     * Cons:
-     */
-    {
-      id: 'https://je.deuxseethe.com/r1onMblLYR8e/rwnnn',
-      weight: 0.45
-    },
-    /**
-     * AdsTerra
-     * Pros:
-     * Cons:
-     */
-    {
-      id: 'https://laughedentrust.com/gOEgecu/kAi41dXqVy9f-/APTn2mopi0EK/ZYuxzOlInL9/23jslU_6yYUKuVVn_v9j/va82rI/dw-xJW2djcqgC5mfF7/4gbSUwOzf/rEAE3_4f5WEdqc3rM/VfHINUDVV3EC',
-      weight: 0.15
-    }
-  ]
 
   /**
    * Sum of all weights must be 1.0
@@ -153,8 +184,7 @@ export default function () {
 
   // Load popunder ad if not already loaded
   if (!popunderScript.value) {
-    const selectedPopunder = randomWeightedChoice(popunderAds)
-    popunderScript.value = selectedPopunder
+    popunderScript.value = selectRandomPopunderProviderScript()
   }
 
   // Load push notification ad if not already loaded

@@ -39,4 +39,10 @@ describe('Sitemap', async () => {
       )
     }
   })
+
+  it('excludes ad debug routes', async () => {
+    const locs = await getSitemapLocs('/sitemap.xml')
+
+    expect(locs.some((loc) => URL.parse(loc)?.pathname.startsWith('/__ad-debug/') ?? false)).toBe(false)
+  })
 })
