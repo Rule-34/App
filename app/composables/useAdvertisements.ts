@@ -95,6 +95,36 @@ export type PopunderProviderMode = (typeof popunderProviderModes)[number]
 
 export const popunderProviderChoices = popunderProviders.map(({ id, weight }) => ({ id, weight }))
 
+export const pushAdProviders = [
+  {
+    key: 'evadav',
+    label: 'EvaDav',
+    id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
+    weight: 0.5
+  },
+  {
+    key: 'admaven',
+    label: 'AdMaven',
+    id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255040',
+    weight: 0.25
+  },
+  {
+    key: 'adsterra',
+    label: 'AdsTerra',
+    id: 'https://laughedentrust.com/42/22/90/4222908c1f4cbb803a92284f2608eed3.js',
+    weight: 0.25
+  }
+] as const satisfies readonly { key: string; label: string; id: string; weight: number }[]
+
+export type PushAdProvider = (typeof pushAdProviders)[number]
+export type PushAdProviderKey = PushAdProvider['key']
+
+export const pushAdProviderKeys = pushAdProviders.map(({ key }) => key)
+export const pushAdProviderModes = ['random', ...pushAdProviderKeys] as const
+export type PushAdProviderMode = (typeof pushAdProviderModes)[number]
+
+const pushAdProviderChoices = pushAdProviders.map(({ id, weight }) => ({ id, weight }))
+
 export function getPopunderProviderByKey(key: PopunderProviderKey): PopunderProvider {
   return popunderProviders.find((provider) => provider.key === key) ?? popunderProviders[0]!
 }
@@ -105,82 +135,25 @@ export function parsePopunderProviderMode(value: unknown): PopunderProviderMode 
     : 'random'
 }
 
+export function getPushAdProviderByKey(key: PushAdProviderKey): PushAdProvider {
+  return pushAdProviders.find((provider) => provider.key === key) ?? pushAdProviders[0]!
+}
+
+export function parsePushAdProviderMode(value: unknown): PushAdProviderMode {
+  return typeof value === 'string' && pushAdProviderModes.includes(value as PushAdProviderMode) ? (value as PushAdProviderMode) : 'random'
+}
+
 export function selectRandomPopunderProviderScript() {
   return randomWeightedChoice(popunderProviderChoices)
+}
+
+export function selectRandomPushAdProviderScript() {
+  return randomWeightedChoice(pushAdProviderChoices)
 }
 
 export default function () {
   const popunderScript = useState<string>('popunder-script', () => '')
   const pushScript = useState<string>('push-notification-script', () => '')
-
-  /**
-   * Sum of all weights must be 1.0
-   */
-  const pushAds = [
-    /**
-     * PartnersHouse
-     * Pros: Good min payout (50)
-     * Cons: Low revenue (0.4)
-     */
-    // {
-    //   id: 'https://hotbsizovu.today/process.js?id=1300335215&p1=sub1&p2=sub2&p3=sub3&p4=sub4',
-    //   weight: 0.3
-    // },
-    /**
-     * HilltopAds
-     * Pros:
-     * Cons: Very Low Revenue (1.96)
-     */
-    // {
-    //   id: '\\/\\/ellipticaltrack.com\\/b\\/XeV.sad\\/GJlb0jYvWxcR\\/HewmG9ou\\/ZWUXlukZPMTJY_yMOQTBQe5VMsjVI\\/tuNbjOIh5MNDDpkryvMSwO',
-    //   weight: 0.15,
-    // },
-    /**
-     * Clickadu
-     * Pros:
-     * Cons: Low Revenue (0.3 CPM)
-     */
-    // {
-    //   id: '/js/in_page_push_ads.js?v=1',
-    //   weight: 0.2
-    // },
-    /**
-     * AdsCarat
-     * Pros:
-     * Cons: Low revenue (0.50)
-     */
-    // {
-    //   id: '//jn.astelicbanes.com/sgC9H1j3tpX/121206',
-    //   weight: 0.15
-    // },
-    /**
-     * EvaDav
-     * Pros: Fixed weekly pay (150)
-     * Cons: Low revenue
-     */
-    {
-      id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
-      weight: 0.5
-    },
-    /**
-     * AdMaven
-     * Pros: Good CPM (4.5)
-     * Cons: Does not count visits well | Re-opens after closing
-     */
-    {
-      id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255040',
-      weight: 0.25
-    },
-    /**
-     * AdsTerra
-     * Pros:
-     * Cons:
-     */
-    {
-      id: 'https://laughedentrust.com/42/22/90/4222908c1f4cbb803a92284f2608eed3.js',
-      weight: 0.25
-    }
-  ]
 
   // Load popunder ad if not already loaded
   if (!popunderScript.value) {
@@ -189,8 +162,7 @@ export default function () {
 
   // Load push notification ad if not already loaded
   if (!pushScript.value) {
-    const selectedPush = randomWeightedChoice(pushAds)
-    pushScript.value = selectedPush
+    pushScript.value = selectRandomPushAdProviderScript()
   }
 
   // Load selected ads
