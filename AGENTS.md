@@ -35,6 +35,19 @@ pnpm install            # triggers nuxt prepare via postinstall
 | `pnpm check`      | Strict local gate: format check, lint, typecheck, test typecheck, tests, build |
 | `pnpm release`    | `commit-and-tag-version` for versioning + changelog                            |
 
+## Featured tag preview assets
+
+Homepage featured-tag cards use **400×600 JPG** previews at `public/img/featured/{domain}/`. Config lives in [`app/pages/index.vue`](app/pages/index.vue) → `featuredDomains`.
+
+**Do not** add `sharp`, TensorFlow, or preview-generation deps to this repo. Regenerate assets with the private sibling tool:
+
+```bash
+cd ../booru-ops/featured-previews
+bun run generate -- --app-dir ../App --domain rule34.xxx --tags "-ai_generated" --prefix no-ai --count 8
+```
+
+See [`../booru-ops/AGENTS.md`](../booru-ops/AGENTS.md) for batch commands, verification, and headless safety constraints. Review output via `featured-previews/manifest.json` and `featured-previews/output/` — do not open image popups in public environments.
+
 ## Architecture
 
 Single Nuxt app. Key directories:
@@ -159,6 +172,13 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
 
 - Do not add `provideHeadlessUseId` in `app/app.vue` while the project uses Vue 3.5+ and `@headlessui/vue` 1.7.23+; those
   versions use Vue's native `useId` and the Nuxt Headless UI workaround is only for older versions.
+
+### Vue template refs
+
+- For DOM refs collected from `v-for`, prefer Vue 3.5's `useTemplateRef()` API over a hand-rolled `ref([])` or
+  `shallowRef([])`. Vue implements `useTemplateRef()` with a shallow ref internally, which is the right behavior for DOM
+  nodes that are read after render for measurement or imperative integration. Keep a null fallback at the call site
+  (`templateRef.value ?? []`) when the consumer expects an array.
 
 ### Toasts
 
