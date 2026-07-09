@@ -26,6 +26,13 @@
     tags: FeaturedTag[]
   }
 
+  function featuredMedia(domain: string, prefix: string, count: number, extension = 'jpg'): FeaturedTagMedia[] {
+    return Array.from({ length: count }, (_, index) => ({
+      type: 'image',
+      src: `/img/featured/${domain}/${prefix}-${index + 1}.${extension}`
+    }))
+  }
+
   const config = useRuntimeConfig()
   const nuxtApp = useNuxtApp()
   const { t } = useI18n()
@@ -245,40 +252,16 @@
         {
           name: t('pages.home.animatedVideo'),
           path: '/posts/rule34.xxx?tags=animated',
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/animated.jpeg' }]
+          media: [
+            { type: 'image', src: '/img/featured/rule34.xxx/animated.jpeg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/animated-1.jpg' },
+            ...featuredMedia('rule34.xxx', 'video', 4)
+          ]
         },
         {
           name: t('pages.home.noAi'),
           path: '/posts/rule34.xxx?tags=-ai_generated',
-          media: [
-            { type: 'image', src: '/img/featured/rule34.xxx/animated.jpeg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/atomic_heart.jpg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/brawl_stars.jpeg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/countryhumans.jpg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/five_nights_at_freddys.jpg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/friday_night_funkin.jpg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/genshin_impact.jpg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/honkai_star_rail.jpg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/minecraft.jpg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/murder_drones.jpg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-1.jpeg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-2.jpeg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-3.jpeg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-4.jpeg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-5.jpeg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-6.jpeg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-7.jpeg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/roblox.jpg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/top-1.jpg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/top-2.jpg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/top-3.jpg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/top-4.jpg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/top-5.jpg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/top-6.jpg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/top-7.jpg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/top-8.jpeg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/undertale.jpeg' }
-          ]
+          media: featuredMedia('rule34.xxx', 'no-ai', 8)
         },
         {
           name: 'Overwatch',
@@ -293,12 +276,17 @@
         {
           name: 'Genshin Impact',
           path: '/posts/rule34.xxx?tags=genshin_impact',
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/genshin_impact.jpg' }]
+          media: featuredMedia('rule34.xxx', 'genshin_impact', 4)
         },
         {
           name: 'Brawl Stars',
           path: '/posts/rule34.xxx?tags=brawl_stars',
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/brawl_stars.jpeg' }]
+          media: featuredMedia('rule34.xxx', 'brawl_stars', 4)
+        },
+        {
+          name: 'Zenless Zone Zero',
+          path: '/posts/rule34.xxx?tags=zenless_zone_zero',
+          media: featuredMedia('rule34.xxx', 'zenless_zone_zero', 3)
         },
         {
           name: 'Friday Night Funkin',
@@ -306,19 +294,14 @@
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/friday_night_funkin.jpg' }]
         },
         {
-          name: 'Atomic Heart',
-          path: '/posts/rule34.xxx?tags=atomic_heart',
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/atomic_heart.jpg' }]
-        },
-        {
           name: 'Minecraft',
           path: '/posts/rule34.xxx?tags=minecraft',
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/minecraft.jpg' }]
+          media: featuredMedia('rule34.xxx', 'minecraft', 4)
         },
         {
           name: 'Murder Drones',
           path: '/posts/rule34.xxx?tags=murder_drones',
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/murder_drones.jpg' }]
+          media: featuredMedia('rule34.xxx', 'murder_drones', 4)
         },
         {
           name: 'CountryHumans',
@@ -331,142 +314,13 @@
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/honkai_star_rail.jpg' }]
         },
         {
-          name: "Five Nights at Freddy's",
-          path: "/posts/rule34.xxx?tags=five_nights_at_freddy's",
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/five_nights_at_freddys.jpg' }]
-        },
-        {
           name: 'Roblox',
           path: '/posts/rule34.xxx?tags=roblox',
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/roblox.jpg' }]
+          media: featuredMedia('rule34.xxx', 'roblox', 4)
         },
         {
           name: 'Undertale',
           path: '/posts/rule34.xxx?tags=undertale',
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/undertale.jpeg' }]
-        }
-      ]
-    },
-    {
-      domain: 'rule34.paheal.net',
-      path: '/posts/rule34.paheal.net',
-      isPremium: false,
-      tags: [
-        {
-          name: t('pages.home.topPosts'),
-          path: '/posts/rule34.paheal.net?filter%5Bsort%5D=score',
-          media: [
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-1.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-2.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-3.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-4.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-5.jpg' }
-          ]
-        },
-        {
-          name: t('pages.home.trendingPosts'),
-          path: '/posts/rule34.paheal.net?filter%5Bscore%5D=>%3D50',
-          media: [
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-6.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-7.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-8.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-9.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-10.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-11.jpg' }
-          ]
-        },
-        {
-          name: t('pages.home.animatedVideo'),
-          path: '/posts/rule34.paheal.net?tags=animated',
-          media: [
-            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-1.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-2.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-3.jpg' }
-          ]
-        },
-        {
-          name: t('pages.home.noAi'),
-          path: '/posts/rule34.paheal.net?tags=-ai_generated',
-          media: [
-            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-1.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-2.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-3.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-1.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-2.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-3.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-4.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-5.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-6.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-7.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-8.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-9.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-10.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-11.jpg' }
-          ]
-        },
-        {
-          name: 'Overwatch',
-          path: '/posts/rule34.paheal.net?tags=overwatch',
-          media: [
-            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-4.jpeg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-5.jpeg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-6.jpeg' },
-            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-7.jpeg' }
-          ]
-        },
-        {
-          name: 'Genshin Impact',
-          path: '/posts/rule34.paheal.net?tags=genshin_impact',
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/genshin_impact.jpg' }]
-        },
-        {
-          name: 'Brawl Stars',
-          path: '/posts/rule34.paheal.net?tags=brawl_stars',
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/brawl_stars.jpeg' }]
-        },
-        {
-          name: 'Friday Night Funkin',
-          path: '/posts/rule34.paheal.net?tags=friday_night_funkin',
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/friday_night_funkin.jpg' }]
-        },
-        {
-          name: 'Atomic Heart',
-          path: '/posts/rule34.paheal.net?tags=atomic_heart',
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/atomic_heart.jpg' }]
-        },
-        {
-          name: 'Minecraft',
-          path: '/posts/rule34.paheal.net?tags=minecraft',
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/minecraft.jpg' }]
-        },
-        {
-          name: 'Murder Drones',
-          path: '/posts/rule34.paheal.net?tags=murder_drones',
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/murder_drones.jpg' }]
-        },
-        {
-          name: 'CountryHumans',
-          path: '/posts/rule34.paheal.net?tags=countryhumans',
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/countryhumans.jpg' }]
-        },
-        {
-          name: 'Honkai: Star Rail',
-          path: '/posts/rule34.paheal.net?tags=honkai:_star_rail',
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/honkai_star_rail.jpg' }]
-        },
-        {
-          name: "Five Nights at Freddy's",
-          path: "/posts/rule34.paheal.net?tags=five_nights_at_freddy's",
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/five_nights_at_freddys.jpg' }]
-        },
-        {
-          name: 'Roblox',
-          path: '/posts/rule34.paheal.net?tags=roblox',
-          media: [{ type: 'image', src: '/img/featured/rule34.xxx/roblox.jpg' }]
-        },
-        {
-          name: 'Undertale',
-          path: '/posts/rule34.paheal.net?tags=undertale',
           media: [{ type: 'image', src: '/img/featured/rule34.xxx/undertale.jpeg' }]
         }
       ]
@@ -551,29 +405,17 @@
         {
           name: t('pages.home.noAi'),
           path: '/posts/e621.net?tags=-ai_generated',
-          media: [
-            { type: 'image', src: '/img/featured/e621.net/animated.jpeg' },
-            { type: 'image', src: '/img/featured/e621.net/gay.jpeg' },
-            { type: 'image', src: '/img/featured/e621.net/pokemon.jpeg' },
-            { type: 'image', src: '/img/featured/e621.net/top-1.jpeg' },
-            { type: 'image', src: '/img/featured/e621.net/top-2.jpeg' },
-            { type: 'image', src: '/img/featured/e621.net/top-3.jpeg' },
-            { type: 'image', src: '/img/featured/e621.net/top-4.jpeg' },
-            { type: 'image', src: '/img/featured/e621.net/top-5.jpeg' },
-            { type: 'image', src: '/img/featured/e621.net/top-6.jpeg' },
-            { type: 'image', src: '/img/featured/e621.net/top-7.jpeg' },
-            { type: 'image', src: '/img/featured/e621.net/top-8.jpeg' }
-          ]
+          media: featuredMedia('e621.net', 'no-ai', 8)
         },
         {
           name: 'Gay',
           path: '/posts/e621.net?tags=gay',
-          media: [{ type: 'image', src: '/img/featured/e621.net/gay.jpeg' }]
+          media: featuredMedia('e621.net', 'gay', 3, 'jpg')
         },
         {
           name: 'Pokemon',
           path: '/posts/e621.net?tags=pokemon',
-          media: [{ type: 'image', src: '/img/featured/e621.net/pokemon.jpeg' }]
+          media: featuredMedia('e621.net', 'pokemon', 3, 'jpg')
         }
       ]
     }
