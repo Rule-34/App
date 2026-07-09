@@ -24,19 +24,19 @@ export const popunderProviders = [
   // },
   /**
    * HilltopAds
-   * Pros: Good min payout (100) | Counts + impressions w/ same traffic? (could be abuse, use of multiple ads that we didnt agree)
-   * Cons: Not fixed CPM (~2.0) | Low Revenue (70)
+   * Pros: Good min payout (100) | Counts more impressions than others w/ same traffic?
+   * Cons: Not fixed CPM (~1.6 avg, swings a lot)
    */
   {
     key: 'hilltop',
     label: 'HilltopAds',
     id: 'https://yellowishgather.com/c.D/9v6/bW2/5aleSRW/Qj9SNojrA/zWMxTuk_zvNoiJ0S2kMgDBMux_OXTCMU3Z',
-    weight: 0.35
+    weight: 0.55
   },
   /**
    * Clickadu
-   * Pros: Good CPM (2.1)
-   * Cons: Low revenue (50) | Does not count visits well | Clears console
+   * Pros: Good CPM (~2.1)
+   * Cons: Does not count visits well | Clears console
    */
   {
     key: 'clickadu',
@@ -64,18 +64,18 @@ export const popunderProviders = [
   // },
   /**
    * Profiton
-   * Pros: Good CPM (2.15) | Counts visits well
+   * Pros: Good CPM (~2.15) | Counts visits well
    * Cons: Observed abusive repeat popunders on mobile after nearly every click
    */
   {
     key: 'profiton',
     label: 'Profiton',
     id: 'https://je.deuxseethe.com/r1onMblLYR8e/rwnnn',
-    weight: 0.45
+    weight: 0.25
   },
   /**
    * AdsTerra
-   * Pros:
+   * Pros: Good CPM (~2.5)
    * Cons: Observed replacing current page instead of opening popunder, losing user results
    */
   {
@@ -96,23 +96,82 @@ export type PopunderProviderMode = (typeof popunderProviderModes)[number]
 export const popunderProviderChoices = popunderProviders.map(({ id, weight }) => ({ id, weight }))
 
 export const pushAdProviders = [
+  /**
+   * PartnersHouse
+   * Pros: Good min payout
+   * Cons: Low CPM (~0.4)
+   */
+  // {
+  //   key: 'partnershouse',
+  //   label: 'PartnersHouse',
+  //   id: 'https://hotbsizovu.today/process.js?id=1300335215&p1=sub1&p2=sub2&p3=sub3&p4=sub4',
+  //   weight: 0.3
+  // },
+  /**
+   * HilltopAds
+   * Pros:
+   * Cons: Low CPM (~1.96)
+   */
+  // {
+  //   key: 'hilltop',
+  //   label: 'HilltopAds',
+  //   id: '\\/\\/ellipticaltrack.com\\/b\\/XeV.sad\\/GJlb0jYvWxcR\\/HewmG9ou\\/ZWUXlukZPMTJY_yMOQTBQe5VMsjVI\\/tuNbjOIh5MNDDpkryvMSwO',
+  //   weight: 0.15
+  // },
+  /**
+   * Clickadu
+   * Pros:
+   * Cons: Low CPM (~0.3)
+   */
+  // {
+  //   key: 'clickadu',
+  //   label: 'Clickadu',
+  //   id: '/js/in_page_push_ads.js?v=1',
+  //   weight: 0.2
+  // },
+  /**
+   * AdsCarat
+   * Pros:
+   * Cons: Low CPM (~0.50)
+   */
+  // {
+  //   key: 'adscarat',
+  //   label: 'AdsCarat',
+  //   id: '//jn.astelicbanes.com/sgC9H1j3tpX/121206',
+  //   weight: 0.15
+  // },
+  /**
+   * EvaDav
+   * Pros: Fixed weekly pay
+   * Cons: Low revenue
+   */
   {
     key: 'evadav',
     label: 'EvaDav',
     id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
-    weight: 0.5
+    weight: 0.45
   },
+  /**
+   * AdMaven
+   * Pros: Good CPM (~5.45)
+   * Cons: Does not count visits well | Re-opens after closing
+   */
   {
     key: 'admaven',
     label: 'AdMaven',
     id: 'https://dpjf9a2rbjbvp.cloudfront.net/?afjpd=1255040',
-    weight: 0.25
+    weight: 0.05
   },
+  /**
+   * AdsTerra
+   * Pros: Good revenue
+   * Cons: Low CPM (~0.63)
+   */
   {
     key: 'adsterra',
     label: 'AdsTerra',
     id: 'https://laughedentrust.com/42/22/90/4222908c1f4cbb803a92284f2608eed3.js',
-    weight: 0.25
+    weight: 0.5
   }
 ] as const satisfies readonly { key: string; label: string; id: string; weight: number }[]
 
@@ -140,7 +199,9 @@ export function getPushAdProviderByKey(key: PushAdProviderKey): PushAdProvider {
 }
 
 export function parsePushAdProviderMode(value: unknown): PushAdProviderMode {
-  return typeof value === 'string' && pushAdProviderModes.includes(value as PushAdProviderMode) ? (value as PushAdProviderMode) : 'random'
+  return typeof value === 'string' && pushAdProviderModes.includes(value as PushAdProviderMode)
+    ? (value as PushAdProviderMode)
+    : 'random'
 }
 
 export function selectRandomPopunderProviderScript() {
