@@ -7,21 +7,6 @@ allowBuilds:
   unrs-resolver: true
   vue-demi: true
 
-minimumReleaseAgeExclude:
-  - '@sentry/browser-utils@10.65.0'
-  - '@sentry/browser@10.65.0'
-  - '@sentry/cloudflare@10.65.0'
-  - '@sentry/core@10.65.0'
-  - '@sentry/feedback@10.65.0'
-  - '@sentry/node-core@10.65.0'
-  - '@sentry/node@10.65.0'
-  - '@sentry/nuxt@10.65.0'
-  - '@sentry/opentelemetry@10.65.0'
-  - '@sentry/replay-canvas@10.65.0'
-  - '@sentry/replay@10.65.0'
-  - '@sentry/server-utils@10.65.0'
-  - '@sentry/vue@10.65.0'
-
 # Keep optional editor/PWA peers coherent for Nuxt SEO devtools and Vite PWA.
 overrides:
   vue: ^3
