@@ -78,6 +78,8 @@ Single Nuxt app. Key directories:
   issue when it is non-user-facing noise.
 - With pnpm 11 workspace projects, put repo-level dependency resolution overrides in `pnpm-workspace.yaml`; package-level
   overrides can be ignored during lockfile resolution.
+- Do not add `minimumReleaseAgeExclude` entries for routine dependency updates. It bypasses the repo's supply-chain
+  delay. Only use it for urgent security/blocking fixes with explicit user approval, and explain why in the commit.
 
 ### Component auto-imports
 
