@@ -52,11 +52,18 @@ export type PopunderDebugReportInput = {
 
 const defaultCooldownMs = 30 * 60 * 1000
 const delayedClickWindowMs = 15 * 1000
-const candidateEventTypes = new Set<PopunderDebugEventType>(['window-open', 'location-assign', 'location-replace', 'anchor-blank-click'])
+const candidateEventTypes = new Set<PopunderDebugEventType>([
+  'window-open',
+  'location-assign',
+  'location-replace',
+  'anchor-blank-click'
+])
 const destructiveRedirectEventTypes = new Set<PopunderDebugEventType>(['beforeunload', 'pagehide'])
 
 function followsRecentClick(event: PopunderDebugEvent, clicks: readonly PopunderDebugEvent[]) {
-  return clicks.some((click) => event.elapsedMs >= click.elapsedMs && event.elapsedMs - click.elapsedMs <= delayedClickWindowMs)
+  return clicks.some(
+    (click) => event.elapsedMs >= click.elapsedMs && event.elapsedMs - click.elapsedMs <= delayedClickWindowMs
+  )
 }
 
 function getVisibilityCandidates(events: readonly PopunderDebugEvent[], clicks: readonly PopunderDebugEvent[]) {
@@ -79,7 +86,11 @@ function getVisibilityCandidates(events: readonly PopunderDebugEvent[], clicks: 
   return candidates
 }
 
-function hasCandidateSinceClick(event: PopunderDebugEvent, candidates: readonly PopunderDebugEvent[], clicks: readonly PopunderDebugEvent[]) {
+function hasCandidateSinceClick(
+  event: PopunderDebugEvent,
+  candidates: readonly PopunderDebugEvent[],
+  clicks: readonly PopunderDebugEvent[]
+) {
   return clicks.some(
     (click) =>
       event.elapsedMs >= click.elapsedMs &&
@@ -88,12 +99,19 @@ function hasCandidateSinceClick(event: PopunderDebugEvent, candidates: readonly 
   )
 }
 
-function isPartOfVisibilityCandidate(event: PopunderDebugEvent, visibilityCandidates: readonly PopunderDebugEvent[], clicks: readonly PopunderDebugEvent[]) {
+function isPartOfVisibilityCandidate(
+  event: PopunderDebugEvent,
+  visibilityCandidates: readonly PopunderDebugEvent[],
+  clicks: readonly PopunderDebugEvent[]
+) {
   return clicks.some(
     (click) =>
       event.elapsedMs >= click.elapsedMs &&
       event.elapsedMs - click.elapsedMs <= delayedClickWindowMs &&
-      visibilityCandidates.some((candidate) => candidate.elapsedMs >= event.elapsedMs && candidate.elapsedMs - click.elapsedMs <= delayedClickWindowMs)
+      visibilityCandidates.some(
+        (candidate) =>
+          candidate.elapsedMs >= event.elapsedMs && candidate.elapsedMs - click.elapsedMs <= delayedClickWindowMs
+      )
   )
 }
 
@@ -101,7 +119,9 @@ export function createPopunderDebugVerdict(events: readonly PopunderDebugEvent[]
   const clicks = events.filter((event) => event.type === 'test-click')
   const directCandidates = events.filter((event) => candidateEventTypes.has(event.type))
   const visibilityCandidates = getVisibilityCandidates(events, clicks)
-  const candidates = [...directCandidates, ...visibilityCandidates].toSorted((left, right) => left.elapsedMs - right.elapsedMs)
+  const candidates = [...directCandidates, ...visibilityCandidates].toSorted(
+    (left, right) => left.elapsedMs - right.elapsedMs
+  )
   const destructiveRedirectEventCount = events.filter(
     (event) =>
       destructiveRedirectEventTypes.has(event.type) &&
@@ -122,7 +142,10 @@ export function createPopunderDebugVerdict(events: readonly PopunderDebugEvent[]
   }
 
   const duplicateAttemptCount = candidates.filter(
-    (event) => event !== firstCandidate && event.elapsedMs >= firstCandidate.elapsedMs && event.elapsedMs - firstCandidate.elapsedMs <= cooldownMs
+    (event) =>
+      event !== firstCandidate &&
+      event.elapsedMs >= firstCandidate.elapsedMs &&
+      event.elapsedMs - firstCandidate.elapsedMs <= cooldownMs
   ).length
 
   return {

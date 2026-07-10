@@ -124,8 +124,7 @@
           localePath({ path: '/premium', query: { utm_source: 'internal', utm_medium: 'promo' }, hash: '#pricing' })
         "
         class="underline hover:hover-text-util focus-visible:focus-outline-util"
-        >{{ $t('media.getPremium')
-        }}<!----></NuxtLink
+        >{{ $t('media.getPremium') }}<!----></NuxtLink
       ><!---->: {{ $t('media.promotedDescription') }}
     </figcaption>
   </figure>

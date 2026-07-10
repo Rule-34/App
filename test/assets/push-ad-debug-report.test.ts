@@ -15,7 +15,9 @@ describe('push ad provider mode parsing', () => {
 
 describe('createPushAdDebugVerdict', () => {
   it('returns clean verdict when no signals exist', () => {
-    expect(createPushAdDebugVerdict([{ type: 'test-click', elapsedMs: 1000, timestamp: '2026-07-09T00:00:01.000Z' }])).toEqual({
+    expect(
+      createPushAdDebugVerdict([{ type: 'test-click', elapsedMs: 1000, timestamp: '2026-07-09T00:00:01.000Z' }])
+    ).toEqual({
       permissionPromptCount: 0,
       popupAttemptCount: 0,
       destructiveRedirectEventCount: 0,
@@ -29,7 +31,12 @@ describe('createPushAdDebugVerdict', () => {
   it('counts notification permission prompts as fill', () => {
     expect(
       createPushAdDebugVerdict([
-        { type: 'notification-permission-request', elapsedMs: 1000, timestamp: '2026-07-09T00:00:01.000Z', permission: 'default' }
+        {
+          type: 'notification-permission-request',
+          elapsedMs: 1000,
+          timestamp: '2026-07-09T00:00:01.000Z',
+          permission: 'default'
+        }
       ])
     ).toEqual({
       permissionPromptCount: 1,
@@ -62,7 +69,13 @@ describe('createPushAdDebugVerdict', () => {
   it('counts DOM mutations as in-page fill', () => {
     expect(
       createPushAdDebugVerdict([
-        { type: 'dom-mutation', elapsedMs: 1000, timestamp: '2026-07-09T00:00:01.000Z', label: 'iframe', message: 'added 1 iframe' }
+        {
+          type: 'dom-mutation',
+          elapsedMs: 1000,
+          timestamp: '2026-07-09T00:00:01.000Z',
+          label: 'iframe',
+          message: 'added 1 iframe'
+        }
       ])
     ).toEqual({
       permissionPromptCount: 0,

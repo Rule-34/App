@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { createPopunderDebugReport, createPopunderDebugVerdict } from '../../app/assets/js/advertising/popunder-debug-report'
+import {
+  createPopunderDebugReport,
+  createPopunderDebugVerdict
+} from '../../app/assets/js/advertising/popunder-debug-report'
 import { parsePopunderProviderMode } from '../../app/composables/useAdvertisements'
 
 describe('popunder provider mode parsing', () => {
@@ -16,7 +19,9 @@ describe('popunder provider mode parsing', () => {
 
 describe('createPopunderDebugVerdict', () => {
   it('returns clean verdict when no candidates exist', () => {
-    expect(createPopunderDebugVerdict([{ type: 'test-click', elapsedMs: 1000, timestamp: '2026-07-09T00:00:01.000Z' }])).toEqual({
+    expect(
+      createPopunderDebugVerdict([{ type: 'test-click', elapsedMs: 1000, timestamp: '2026-07-09T00:00:01.000Z' }])
+    ).toEqual({
       allowedAttemptCount: 0,
       duplicateAttemptCount: 0,
       destructiveRedirectEventCount: 0,

@@ -57,7 +57,9 @@ export type PushAdDebugReportInput = {
 const delayedClickWindowMs = 15 * 1000
 
 function followsRecentClick(event: PushAdDebugEvent, clicks: readonly PushAdDebugEvent[]) {
-  return clicks.some((click) => event.elapsedMs >= click.elapsedMs && event.elapsedMs - click.elapsedMs <= delayedClickWindowMs)
+  return clicks.some(
+    (click) => event.elapsedMs >= click.elapsedMs && event.elapsedMs - click.elapsedMs <= delayedClickWindowMs
+  )
 }
 
 export function createPushAdDebugVerdict(events: readonly PushAdDebugEvent[]): PushAdDebugVerdict {
@@ -65,10 +67,15 @@ export function createPushAdDebugVerdict(events: readonly PushAdDebugEvent[]): P
   const permissionPromptCount = events.filter((event) => event.type === 'notification-permission-request').length
   const popupAttemptCount = events.filter((event) => event.type === 'window-open').length
   const destructiveRedirectEventCount = events.filter(
-    (event) => (event.type === 'beforeunload' || event.type === 'pagehide') && followsRecentClick(event, clicks) && popupAttemptCount === 0
+    (event) =>
+      (event.type === 'beforeunload' || event.type === 'pagehide') &&
+      followsRecentClick(event, clicks) &&
+      popupAttemptCount === 0
   ).length
   const domMutationCount = events.filter((event) => event.type === 'dom-mutation').length
-  const scriptErrorCount = events.filter((event) => event.type === 'script-error' || event.type === 'console-error' || event.type === 'unhandledrejection').length
+  const scriptErrorCount = events.filter(
+    (event) => event.type === 'script-error' || event.type === 'console-error' || event.type === 'unhandledrejection'
+  ).length
 
   return {
     permissionPromptCount,
@@ -76,7 +83,8 @@ export function createPushAdDebugVerdict(events: readonly PushAdDebugEvent[]): P
     destructiveRedirectEventCount,
     domMutationCount,
     scriptErrorCount,
-    hasFill: permissionPromptCount > 0 || popupAttemptCount > 0 || destructiveRedirectEventCount > 0 || domMutationCount > 0,
+    hasFill:
+      permissionPromptCount > 0 || popupAttemptCount > 0 || destructiveRedirectEventCount > 0 || domMutationCount > 0,
     isAbusive: destructiveRedirectEventCount > 0
   }
 }
