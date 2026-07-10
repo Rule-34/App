@@ -67,6 +67,10 @@ Single Nuxt app. Key directories:
 
 ## Conventions & Gotchas
 
+### Private monetization notes
+
+- Sensitive ad revenue baselines are kept in ignored local files under `.opencode/ad-monetization/`, not committed. Check there before answering future provider-performance comparisons.
+
 ### Dependencies
 
 - Do not carry local dependency patches (`pnpm patch`, `patch-package`, `patchedDependencies`) in this repo. For
