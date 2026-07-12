@@ -84,12 +84,6 @@ describe('SEO canonical URLs', async () => {
     expect(getCanonical(html)).toBe(`${project.urls.production.origin}/`)
   })
 
-  it('does not patch tag landing page canonicals when tags query is present', async () => {
-    const html = await $fetch('/posts/e621.net/solo?tags=bar')
-
-    expect(getCanonical(html)).toBe(`${project.urls.production.origin}/posts/e621.net/solo`)
-  })
-
   it('includes alternate hreflang links for all locales', async () => {
     const html = await $fetch('/es/posts/e621.net?tags=solo')
 
@@ -107,12 +101,12 @@ describe('SEO canonical URLs', async () => {
 
     for (const locale of locales) {
       const prefix = locale.code === defaultLocale ? '' : `/${locale.code}`
-      const expectedHref = `${project.urls.production.origin}${prefix}/posts/e621.net/solo`
+      const expectedHref = `${project.urls.production.origin}${prefix}/posts/e621.net?tags=solo`
       expectedByLang.set(locale.code, expectedHref)
       expectedByLang.set(locale.language, expectedHref)
     }
 
-    expectedByLang.set('x-default', `${project.urls.production.origin}/posts/e621.net/solo`)
+    expectedByLang.set('x-default', `${project.urls.production.origin}/posts/e621.net?tags=solo`)
 
     expect([...alternatesByLang.keys()].sort()).toEqual([...expectedByLang.keys()].sort())
 

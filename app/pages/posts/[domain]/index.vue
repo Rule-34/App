@@ -885,10 +885,7 @@
     description
   })
 
-  // [TEMPORARY WORKAROUND] Override canonical for tagged post URLs.
-  // i18n v10 strips query params on client hydration, so we re-apply or replace them.
-  // Part 2 of a two-part fix — see server/plugins/fix-canonical-queries.ts
-  // for the removal checklist.
+  // Override i18n's generic `?tags` canonical: simple positive-tag searches have dedicated landing pages.
   const canonicalUrl = computed(() => {
     const base = new URL(route.path, project.urls.production).href
     const tags = getSingleQueryValue(route.query.tags)
@@ -906,7 +903,7 @@
   })
 
   useHead(() => ({
-    link: [{ rel: 'canonical', href: canonicalUrl.value }]
+    link: [{ rel: 'canonical', href: canonicalUrl.value, tagPriority: 'high' }]
   }))
 
   const firstPostsPageAsSchema = computed(() => {

@@ -33,9 +33,15 @@
     }))
   }
 
+  const route = useRoute()
   const config = useRuntimeConfig()
   const nuxtApp = useNuxtApp()
   const { t } = useI18n()
+
+  // i18n preserves `?tags` globally. `/?tags=…` has no domain, so it bypasses the posts redirect and needs a query-free canonical.
+  useHead(() => ({
+    link: [{ rel: 'canonical', href: new URL(route.path, project.urls.production).href, tagPriority: 'high' }]
+  }))
   const { toast } = useLazyToast()
   const localePath = useLocalePath()
 

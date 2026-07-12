@@ -42,7 +42,7 @@
     "@headlessui/vue": "^1.7.23",
     "@heroicons/vue": "^2.2.0",
     "@nuxt/image": "^2.0.0",
-    "@nuxtjs/i18n": "^10.4.0",
+    "@nuxtjs/i18n": "^10.4.1",
     "@nuxtjs/sitemap": "^8.2.2",
     "@sentry/nuxt": "^10.64.0",
     "@tailwindcss/vite": "^4.3.2",

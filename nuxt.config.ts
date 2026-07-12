@@ -256,24 +256,11 @@ export default defineNuxtConfig({
       fullInstall: false
     },
 
-    /**
-     * BUG: canonicalQueries is ignored by @nuxtjs/i18n v10 (up to 10.3.0).
-     * The config array is discarded at build time and never reaches the runtime.
-     *
-     * WORKAROUND (two-part fix):
-     *   1. SSR: server/plugins/fix-canonical-queries.ts patches the canonical
-     *      link into the rendered HTML before it reaches the browser.
-     *   2. CSR: app/pages/posts/[domain]/index.vue uses `useHead` to re-apply the
-     *      canonical after the i18n module overwrites it on client hydration.
-     *
-     * TODO: Remove both parts once upstream fixes canonicalQueries.
-     *       Track: https://github.com/nuxt-modules/i18n
-     */
     experimental: {
       prerenderMessages: true,
 
       strictSeo: {
-        canonicalQueries: ['tags'] // Non-functional — kept as intent. See server/plugins/.
+        canonicalQueries: ['tags']
       },
 
       compactRoutes: true // TODO: Remove once default

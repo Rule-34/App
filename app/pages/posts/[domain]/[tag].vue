@@ -81,8 +81,6 @@
     }))
   )
 
-  const canonicalUrl = computed(() => new URL(route.path, project.urls.production).href)
-
   const ogImageUrl = computed(() => {
     const firstPost = posts.value[0]
     if (!firstPost?.preview_file?.url) return undefined
@@ -122,10 +120,6 @@
     description: pageDescription,
     ogImage: ogImageUrl
   })
-
-  useHead(() => ({
-    link: [{ rel: 'canonical', href: canonicalUrl.value }]
-  }))
 
   const firstPostsAsSchema = computed(() => {
     return posts.value.slice(0, 8).map((post) => {
