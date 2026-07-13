@@ -2,6 +2,7 @@
   import type { IPost, PostMediaType } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
   import { proxyUrl } from '~/assets/js/proxy'
+  import { getVideoAdSchedule, isEligiblePauseAd, shouldLoadVideoAds } from '~/assets/js/video-ad-policy'
 
   const localePath = useLocalePath()
   const { t } = useI18n()
@@ -25,15 +26,16 @@
   const props = defineProps<PostMediaProps>()
 
   type MediaElementRef = HTMLElement | { $el?: Element } | null
-  type FluidPlayerOptionsWithPlaybackRates = Partial<FluidPlayerOptions> & {
-    layoutControls?: Partial<
-      Omit<LayoutControls, 'controlBar'> & {
-        controlBar?: Partial<LayoutControls['controlBar'] & { playbackRates: string[] }>
-      }
-    >
+  type VideoJsPlayer = ReturnType<(typeof import('video.js'))['default']>
+  type ImaPlugin = {
+    changeAdTag(adTag: string): void
+    initializeAdDisplayContainer(): void
+    requestAds(): void
   }
+  type VideoJsPlayerWithIma = VideoJsPlayer & { ima: ImaPlugin & ((options: Record<string, unknown>) => void) }
 
   const mediaElement = shallowRef<MediaElementRef>(null)
+  const videoElementGeneration = shallowRef(0)
 
   const localSrc = shallowRef(props.mediaSrc ?? '')
   const localPosterSrc = shallowRef(props.mediaPosterSrc ?? undefined)
@@ -82,11 +84,23 @@
   const triedToLoadWithProxy = shallowRef(false)
   const triedToLoadPosterWithProxy = shallowRef(false)
 
-  let videoPlayer: FluidPlayerInstance | undefined
+  const IMA_SDK_URL = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js'
+  const PRE_ROLL_AD_TAG = 'https://s.magsrv.com/splash.php?idzone=5386496'
+  const PAUSE_ROLL_AD_TAG = 'https://s.magsrv.com/splash.php?idzone=5386214'
+  const IMA_SDK_TIMEOUT = 5000
+
+  let videoPlayer: VideoJsPlayerWithIma | undefined
   let videoPlayerInitPromise: Promise<void> | null = null
   let videoPlayerIdleScheduled = false
   let videoPlayerInitTimeout: number | null = null
   let isUnmounted = false
+  let playerGeneration = 0
+  let isVideoVisible = true
+  let isProgrammaticPause = false
+  let isAdActive = false
+  let pauseAdWasRequested = false
+  let pauseAdWasShown = false
+  let imaSdkPromise: Promise<void> | null = null
 
   const isAnimatedMediaLoading = ref(false)
   const isAnimatedMediaPlaying = ref(false)
@@ -139,166 +153,163 @@
     }
   })
 
-  async function createVideoPlayer() {
-    const videoElement = getVideoElement()
-
-    if (!videoElement) {
-      throw new Error('Media element not found')
+  function loadImaSdk() {
+    if (window.google?.ima) {
+      return Promise.resolve()
     }
 
-    if (!isVideo.value) {
-      throw new Error('Media is not a video')
+    if (imaSdkPromise) {
+      return imaSdkPromise
     }
 
-    const [fluidPlayerModule] = await Promise.all([
-      import('fluid-player'),
-      import('fluid-player/src/css/fluidplayer.css')
-    ])
+    imaSdkPromise = new Promise<void>((resolve, reject) => {
+      const existingScript = document.querySelector<HTMLScriptElement>(`script[src="${IMA_SDK_URL}"]`)
+      const script = existingScript ?? document.createElement('script')
+      const timeoutId = window.setTimeout(() => finish(new Error('Google IMA SDK load timed out')), IMA_SDK_TIMEOUT)
 
-    const initializedVideoElement = getVideoElement()
+      function finish(loadError?: Error) {
+        window.clearTimeout(timeoutId)
+        script.removeEventListener('load', onLoad)
+        script.removeEventListener('error', onError)
 
-    if (isUnmounted || !initializedVideoElement) {
+        if (loadError || !window.google?.ima) {
+          imaSdkPromise = null
+          script.remove()
+          reject(loadError ?? new Error('Google IMA SDK unavailable'))
+          return
+        }
+
+        resolve()
+      }
+
+      function onLoad() {
+        finish()
+      }
+
+      function onError() {
+        finish(new Error('Google IMA SDK failed to load'))
+      }
+
+      script.addEventListener('load', onLoad, { once: true })
+      script.addEventListener('error', onError, { once: true })
+
+      if (!existingScript) {
+        script.src = IMA_SDK_URL
+        script.async = true
+        document.head.append(script)
+      }
+    })
+
+    return imaSdkPromise
+  }
+
+  async function initializeAds(
+    player: VideoJsPlayerWithIma,
+    generation: number,
+    schedule: ReturnType<typeof getVideoAdSchedule>
+  ) {
+    await loadImaSdk()
+
+    if (isUnmounted || generation !== playerGeneration || player.isDisposed()) {
       return
     }
 
-    const fluidPlayer = fluidPlayerModule.default
-    const adList: NonNullable<VastOptions['adList']> = []
+    player.ima({
+      adLabel: t('media.adText'),
+      ...(schedule.preRoll ? { adTagUrl: PRE_ROLL_AD_TAG } : {}),
+      adsRenderingSettings: { loadVideoTimeout: 3000 },
+      autoPlayAdBreaks: true,
+      contribAdsSettings: { timeout: 3500 },
+      disableAdControls: false,
+      disableCustomPlaybackForIOS10Plus: false,
+      forceNonLinearFullSlot: false,
+      numRedirects: 4,
+      preventLateAdStart: true,
+      showControlsForJSAds: false,
+      showCountdown: true,
+      vastLoadTimeout: 3000,
+      vpaidMode: window.google!.ima!.ImaSdkSettings.VpaidMode.DISABLED
+    })
 
-    const fluidPlayerOptions: FluidPlayerOptionsWithPlaybackRates = {
-      layoutControls: {
-        primaryColor: 'rgba(0, 0, 0, 0.7)',
+    player.on('ads-ad-started', () => {
+      isAdActive = true
 
-        fillToContainer: true,
-
-        preload: 'none',
-
-        loop: true,
-
-        playbackRateEnabled: true,
-
-        allowTheatre: false,
-
-        autoRotateFullScreen: true,
-
-        // Fix: Opening in fullscreen when searching something with "F"
-        keyboardControl: false,
-
-        controlBar: {
-          autoHide: true,
-
-          playbackRates: ['x2', 'x1.5', 'x1', 'x0.75', 'x0.5', 'x0.25']
-        },
-
-        contextMenu: {
-          controls: true,
-
-          links: [
-            {
-              label: t('media.removeAds'),
-              href: localePath('/premium?utm_source=internal&utm_medium=player-context-menu#pricing')
-            },
-            {
-              label: t('media.download'),
-              href: localSrc.value
-            }
-          ]
-        },
-
-        miniPlayer: {
-          enabled: false
-        }
-      },
-
-      onBeforeXMLHttpRequest(request) {
-        request.withCredentials = false
-      },
-
-      vastOptions: {
-        adText: t('media.adText'),
-
-        vastAdvanced: {
-          /**
-           * Handle empty VAST
-           */
-          vastVideoEndedCallback() {
-            const currentVideoElement = getVideoElement()
-
-            if (!currentVideoElement?.src.endsWith('/null')) {
-              return
-            }
-
-            currentVideoElement.src = localSrc.value
-            videoPlayer?.play()
-          }
-        },
-
-        adList
+      if (pauseAdWasRequested) {
+        pauseAdWasShown = true
       }
+    })
+    player.on(['adended', 'adserror', 'adtimeout'], () => {
+      isAdActive = false
+      pauseAdWasRequested = false
+    })
+    player.on('pause', () => requestPauseAd(player, schedule))
+  }
+
+  function requestPauseAd(player: VideoJsPlayerWithIma, schedule: ReturnType<typeof getVideoAdSchedule>) {
+    if (
+      !schedule.pauseRoll ||
+      !isEligiblePauseAd({
+        isAdActive,
+        isContentEnded: player.ended(),
+        isProgrammatic: isProgrammaticPause,
+        isRequestPending: pauseAdWasRequested,
+        isVisible: isVideoVisible,
+        wasShown: pauseAdWasShown
+      })
+    ) {
+      return
     }
 
-    if (!isPremium.value) {
-      timesVideoHasRendered.value++
+    pauseAdWasRequested = true
 
-      // Only show pause roll ads every 2 videos
-      if (timesVideoHasRendered.value % 2 === 0) {
-        adList.push(
-          // In-Video Banner
-          {
-            roll: 'onPauseRoll',
-            vastTag:
-              /**
-               * ExoClick
-               * Pros:
-               * Cons: Low revenue (7)
-               */
-              'https://s.magsrv.com/splash.php?idzone=5386214'
-          }
-        )
-      }
-      //
+    try {
+      player.ima.changeAdTag(PAUSE_ROLL_AD_TAG)
+      player.ima.requestAds()
+    } catch {
+      isAdActive = false
+      pauseAdWasRequested = false
+    }
+  }
 
-      // Only show preroll ads after 3 videos, and every 3 videos
-      if (timesVideoHasRendered.value > 3 && timesVideoHasRendered.value % 3 === 0) {
-        adList.push(
-          // In-Stream Video
-          {
-            roll: 'preRoll',
-            vastTag:
-              /**
-               * ExoClick
-               * Pros:
-               * Cons: Low revenue (9)
-               */
-              'https://s.magsrv.com/splash.php?idzone=5386496'
+  async function createVideoPlayer() {
+    const videoElement = getVideoElement()
 
-            /**
-             * HilltopAds
-             * Pros:
-             * Cons: Low revenue (4)
-             */
-            // 'https://ellipticaltrack.com/dCm.FXz/doGMNPv/Z-GhUX/OermX9/u-ZqUEltk/PYTgYBy/ODTZQI5oNHDDEHtdNbjLIS5eNvDhk/0uMGgu?limit=1'
-
-            /**
-             * Clickadu
-             * Pros:
-             * Cons:
-             */
-            // 'https://anewfeedliberty.com/ceef/gdt3g0/tbt/2034767/tlk.xml'
-
-            /**
-             * AdSession
-             * Pros:
-             * Cons:
-             */
-            // 'https://s.eunow4u.com/v1/vast.php?idzone=2310'
-          }
-        )
-      }
+    if (!videoElement || !isVideo.value) {
+      throw new Error('Video element not found')
     }
 
-    videoPlayer = fluidPlayer(initializedVideoElement, fluidPlayerOptions)
+    const generation = ++playerGeneration
+    const videoCount = isPremium.value ? timesVideoHasRendered.value : ++timesVideoHasRendered.value
+    const schedule = getVideoAdSchedule(videoCount)
+    const shouldLoadAds = shouldLoadVideoAds(isPremium.value, schedule)
+    const imports: Promise<unknown>[] = [import('video.js/dist/video-js.css')]
 
-    // TODO: Handle poster error
+    if (shouldLoadAds) {
+      imports.push(import('videojs-contrib-ads'), import('videojs-ima'), import('videojs-ima/dist/videojs.ima.css'))
+    }
+
+    const [{ default: videojs }] = await Promise.all([import('video.js'), Promise.all(imports)])
+
+    if (isUnmounted || generation !== playerGeneration || getVideoElement() !== videoElement) {
+      return
+    }
+
+    const player = videojs(videoElement, {
+      controls: true,
+      fluid: true,
+      loop: true,
+      playbackRates: [0.25, 0.5, 0.75, 1, 1.5, 2],
+      playsinline: true,
+      preload: 'none',
+      responsive: true,
+      sources: [{ src: localSrc.value, type: 'video/mp4' }]
+    }) as VideoJsPlayerWithIma
+
+    videoPlayer = player
+
+    if (shouldLoadAds) {
+      initializeAds(player, generation, schedule).catch(() => {})
+    }
   }
 
   function initializeVideoPlayer() {
@@ -340,12 +351,23 @@
   }
 
   function destroyVideoPlayer() {
+    playerGeneration++
+
     if (!videoPlayer) {
       return
     }
 
-    videoPlayer.destroy()
+    videoPlayer.dispose()
     videoPlayer = undefined
+    videoElementGeneration.value++
+    isAdActive = false
+    pauseAdWasRequested = false
+    pauseAdWasShown = false
+  }
+
+  function onVideoUserInteraction() {
+    videoPlayer?.ima?.initializeAdDisplayContainer?.()
+    initializeVideoPlayer()
   }
 
   async function reloadVideoPlayer(shouldPlay: boolean = false) {
@@ -477,13 +499,19 @@
       return
     }
 
+    isVideoVisible = entry.isIntersecting
+
     if (entry.isIntersecting) {
       scheduleVideoPlayerInitialization(isLikelyLcpMedia.value ? 1200 : 1600)
       return
     }
 
-    if (!entry.isIntersecting) {
-      videoPlayer?.pause()
+    if (!entry.isIntersecting && videoPlayer) {
+      isProgrammaticPause = true
+      videoPlayer.pause()
+      queueMicrotask(() => {
+        isProgrammaticPause = false
+      })
     }
   }
 
@@ -755,7 +783,7 @@
     <!-- Video -->
     <div
       v-else-if="isVideo"
-      :key="localSrc"
+      :key="`${localSrc}-${videoElementGeneration}`"
     >
       <!-- TODO: Add load animation -->
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
@@ -767,14 +795,14 @@
         :src="localSrc"
         :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
         :width="mediaSrcWidthAttribute"
-        class="h-auto w-full rounded-t-md"
+        class="video-js h-auto w-full rounded-t-md"
         controls
         loop
         playsinline
         preload="none"
         @error="onMediaError"
-        @focus="initializeVideoPlayer"
-        @pointerdown="initializeVideoPlayer"
+        @focus="onVideoUserInteraction"
+        @pointerdown="onVideoUserInteraction"
         @pointerenter="initializeVideoPlayer"
       />
     </div>

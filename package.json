@@ -56,7 +56,6 @@
     "@vueuse/rxjs": "^14.3.0",
     "core-js": "^3.49.0",
     "es-toolkit": "^1.49.0",
-    "fluid-player": "^3.59.0",
     "js-abbreviation-number": "^1.4.0",
     "nuxt-headlessui": "^1.2.2",
     "nuxt-schema-org": "^6.2.3",
@@ -67,6 +66,9 @@
     "sortablejs": "^1.15.7",
     "tailwindcss": "^4.3.2",
     "ufo": "^1.6.4",
+    "video.js": "^8.23.9",
+    "videojs-contrib-ads": "^7.5.2",
+    "videojs-ima": "^2.6.0",
     "vue-sonner": "^2.0.9"
   },
   "devDependencies": {
