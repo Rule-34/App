@@ -1,4 +1,17 @@
 export type DialogManagerDialog = 'premium' | 'installPwa' | 'feedback' | 'newsletter' | 'review'
+type AutomaticDialog = Exclude<DialogManagerDialog, 'premium'>
+
+export function resolvePendingDialog(
+  isPremiumDialogOpen: boolean,
+  automaticDialog: AutomaticDialog | undefined,
+  hasConsumedAutomaticDialog: boolean
+): DialogManagerDialog | undefined {
+  if (isPremiumDialogOpen) {
+    return 'premium'
+  }
+
+  return hasConsumedAutomaticDialog ? undefined : automaticDialog
+}
 
 export function useDialogManagerState() {
   const { timesTheAppHasBeenOpened, promptInstallPwa, promptFeedback, promptNewsletter, promptReview } =
@@ -12,11 +25,8 @@ export function useDialogManagerState() {
     })
   }
 
-  const pendingDialog = computed<DialogManagerDialog | undefined>(() => {
-    if (isPremiumDialogOpen.value) {
-      return 'premium'
-    }
-
+  const hasConsumedAutomaticDialog = useState('dialog-manager-has-consumed-automatic', () => false)
+  const automaticDialog = computed<AutomaticDialog | undefined>(() => {
     if (timesTheAppHasBeenOpened.value >= 3 && !promptInstallPwa.value && !isStandaloneDisplayMode.value) {
       return 'installPwa'
     }
@@ -33,6 +43,9 @@ export function useDialogManagerState() {
       return 'review'
     }
   })
+  const pendingDialog = computed(() =>
+    resolvePendingDialog(isPremiumDialogOpen.value, automaticDialog.value, hasConsumedAutomaticDialog.value)
+  )
 
   function closeDialog(dialog = pendingDialog.value) {
     switch (dialog) {
@@ -42,18 +55,22 @@ export function useDialogManagerState() {
 
       case 'installPwa':
         promptInstallPwa.value = true
+        hasConsumedAutomaticDialog.value = true
         break
 
       case 'feedback':
         promptFeedback.value = true
+        hasConsumedAutomaticDialog.value = true
         break
 
       case 'newsletter':
         promptNewsletter.value = true
+        hasConsumedAutomaticDialog.value = true
         break
 
       case 'review':
         promptReview.value = true
+        hasConsumedAutomaticDialog.value = true
         break
     }
   }
