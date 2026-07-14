@@ -8,6 +8,7 @@
   const { t } = useI18n()
   const { isPremium } = useUserData()
   const { autoplayAnimatedMedia } = useUserSettings()
+  const { hasInteracted } = useInteractionDetector()
   const { timesVideoHasRendered } = useEthics()
   const { wasCurrentPageSSR } = useSSRDetection()
   const { schedule: scheduleIdleTask } = useIdleTask()
@@ -100,11 +101,19 @@
   let isAdActive = false
   let pauseAdWasRequested = false
   let pauseAdWasShown = false
+  let videoAdSchedule: ReturnType<typeof getVideoAdSchedule> | null = null
+  let adsInitPromise: Promise<void> | null = null
   let imaSdkPromise: Promise<void> | null = null
 
   const isAnimatedMediaLoading = ref(false)
   const isAnimatedMediaPlaying = ref(false)
   const mediaHasLoaded = ref(false)
+
+  watch(hasInteracted, (hasInteracted) => {
+    if (hasInteracted) {
+      initializeVideoAds()?.catch(() => {})
+    }
+  })
 
   onMounted(() => {
     const resolvedMediaElement = getResolvedMediaElement()
@@ -208,7 +217,12 @@
     generation: number,
     schedule: ReturnType<typeof getVideoAdSchedule>
   ) {
-    await loadImaSdk()
+    await Promise.all([
+      loadImaSdk(),
+      import('videojs-contrib-ads'),
+      import('videojs-ima'),
+      import('videojs-ima/dist/videojs.ima.css')
+    ])
 
     if (isUnmounted || generation !== playerGeneration || player.isDisposed()) {
       return
@@ -271,6 +285,19 @@
     }
   }
 
+  function initializeVideoAds() {
+    if (adsInitPromise || !hasInteracted.value || !videoPlayer || !videoAdSchedule) {
+      return adsInitPromise
+    }
+
+    const generation = playerGeneration
+    adsInitPromise = initializeAds(videoPlayer, generation, videoAdSchedule).finally(() => {
+      adsInitPromise = null
+    })
+
+    return adsInitPromise
+  }
+
   async function createVideoPlayer() {
     const videoElement = getVideoElement()
 
@@ -282,13 +309,7 @@
     const videoCount = isPremium.value ? timesVideoHasRendered.value : ++timesVideoHasRendered.value
     const schedule = getVideoAdSchedule(videoCount)
     const shouldLoadAds = shouldLoadVideoAds(isPremium.value, schedule)
-    const imports: Promise<unknown>[] = [import('video.js/dist/video-js.css')]
-
-    if (shouldLoadAds) {
-      imports.push(import('videojs-contrib-ads'), import('videojs-ima'), import('videojs-ima/dist/videojs.ima.css'))
-    }
-
-    const [{ default: videojs }] = await Promise.all([import('video.js'), Promise.all(imports)])
+    const [{ default: videojs }] = await Promise.all([import('video.js'), import('video.js/dist/video-js.css')])
 
     if (isUnmounted || generation !== playerGeneration || getVideoElement() !== videoElement) {
       return
@@ -308,7 +329,8 @@
     videoPlayer = player
 
     if (shouldLoadAds) {
-      initializeAds(player, generation, schedule).catch(() => {})
+      videoAdSchedule = schedule
+      initializeVideoAds()?.catch(() => {})
     }
   }
 
@@ -360,6 +382,8 @@
     videoPlayer.dispose()
     videoPlayer = undefined
     videoElementGeneration.value++
+    videoAdSchedule = null
+    adsInitPromise = null
     isAdActive = false
     pauseAdWasRequested = false
     pauseAdWasShown = false
@@ -509,7 +533,7 @@
     if (!entry.isIntersecting && videoPlayer) {
       isProgrammaticPause = true
       videoPlayer.pause()
-      queueMicrotask(() => {
+      window.setTimeout(() => {
         isProgrammaticPause = false
       })
     }

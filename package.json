@@ -56,6 +56,7 @@
     "@vueuse/rxjs": "^14.3.0",
     "core-js": "^3.49.0",
     "es-toolkit": "^1.49.0",
+    "import-in-the-middle": "^3.3.1",
     "js-abbreviation-number": "^1.4.0",
     "nuxt-headlessui": "^1.2.2",
     "nuxt-schema-org": "^6.2.3",

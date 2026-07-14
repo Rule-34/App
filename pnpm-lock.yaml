@@ -111,6 +111,9 @@ importers:
       es-toolkit:
         specifier: ^1.49.0
         version: 1.49.0
+      import-in-the-middle:
+        specifier: ^3.3.1
+        version: 3.3.1
       js-abbreviation-number:
         specifier: ^1.4.0
         version: 1.4.0
