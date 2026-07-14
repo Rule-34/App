@@ -33,7 +33,10 @@
     initializeAdDisplayContainer(): void
     requestAds(): void
   }
-  type VideoJsPlayerWithIma = VideoJsPlayer & { ima: ImaPlugin & ((options: Record<string, unknown>) => void) }
+  type VideoJsPlayerWithIma = VideoJsPlayer & {
+    ads(): void
+    ima: ImaPlugin & ((options: Record<string, unknown>) => void)
+  }
 
   const mediaElement = shallowRef<MediaElementRef>(null)
   const videoElementGeneration = shallowRef(0)
@@ -88,7 +91,7 @@
   const IMA_SDK_URL = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js'
   const PRE_ROLL_AD_TAG = 'https://s.magsrv.com/splash.php?idzone=5386496'
   const PAUSE_ROLL_AD_TAG = 'https://s.magsrv.com/splash.php?idzone=5386214'
-  const IMA_SDK_TIMEOUT = 5000
+  const IMA_SDK_TIMEOUT = 15000
 
   let videoPlayer: VideoJsPlayerWithIma | undefined
   let videoPlayerInitPromise: Promise<void> | null = null
@@ -217,12 +220,8 @@
     generation: number,
     schedule: ReturnType<typeof getVideoAdSchedule>
   ) {
-    await Promise.all([
-      loadImaSdk(),
-      import('videojs-contrib-ads'),
-      import('videojs-ima'),
-      import('videojs-ima/dist/videojs.ima.css')
-    ])
+    await loadImaSdk()
+    await Promise.all([import('videojs-ima'), import('videojs-ima/dist/videojs.ima.css')])
 
     if (isUnmounted || generation !== playerGeneration || player.isDisposed()) {
       return
@@ -309,7 +308,11 @@
     const videoCount = isPremium.value ? timesVideoHasRendered.value : ++timesVideoHasRendered.value
     const schedule = getVideoAdSchedule(videoCount)
     const shouldLoadAds = shouldLoadVideoAds(isPremium.value, schedule)
-    const [{ default: videojs }] = await Promise.all([import('video.js'), import('video.js/dist/video-js.css')])
+    const [{ default: videojs }] = await Promise.all([
+      import('video.js'),
+      import('video.js/dist/video-js.css'),
+      import('videojs-contrib-ads')
+    ])
 
     if (isUnmounted || generation !== playerGeneration || getVideoElement() !== videoElement) {
       return
@@ -322,10 +325,14 @@
       playbackRates: [0.25, 0.5, 0.75, 1, 1.5, 2],
       playsinline: true,
       preload: 'none',
-      responsive: true,
-      sources: [{ src: localSrc.value, type: 'video/mp4' }]
+      responsive: true
     }) as VideoJsPlayerWithIma
 
+    if (shouldLoadAds) {
+      player.ads()
+    }
+
+    player.src({ src: localSrc.value, type: 'video/mp4' })
     videoPlayer = player
 
     if (shouldLoadAds) {
@@ -808,6 +815,7 @@
     <div
       v-else-if="isVideo"
       :key="`${localSrc}-${videoElementGeneration}`"
+      class="h-full w-full"
     >
       <!-- TODO: Add load animation -->
       <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
@@ -819,7 +827,7 @@
         :src="localSrc"
         :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
         :width="mediaSrcWidthAttribute"
-        class="video-js h-auto w-full rounded-t-md"
+        class="video-js h-full! w-full! rounded-t-md"
         controls
         loop
         playsinline
