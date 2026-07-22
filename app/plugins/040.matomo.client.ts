@@ -20,6 +20,7 @@ export default defineNuxtPlugin({
     let hasLoaded = false
 
     router.afterEach((to) => {
+      // Keep this idle boundary: afterEach runs before Nuxt finishes updating document.title.
       onNuxtReady(() => {
         const _paq = (window as MatomoWindow)._paq
 
