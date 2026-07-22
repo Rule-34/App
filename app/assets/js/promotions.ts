@@ -15,70 +15,70 @@ export const premiumPromotions = [
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-no-ads#pricing'
+    link: '/premium#pricing'
   },
   {
     media: '/img/promo/premium/Faster Image Loading.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-faster-image-loading#pricing'
+    link: '/premium#pricing'
   },
   {
     media: '/img/promo/premium/Save Posts.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-save-posts#pricing'
+    link: '/premium#pricing'
   },
   {
     media: '/img/promo/premium/History.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-history#pricing'
+    link: '/premium#pricing'
   },
   {
     media: '/img/promo/premium/Additional Boorus.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-additional-boorus#pricing'
+    link: '/premium#pricing'
   },
   {
     media: '/img/promo/premium/One-Click Downloads.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-one-click-downloads#pricing'
+    link: '/premium#pricing'
   },
   {
     media: '/img/promo/premium/Tag Collections.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-tag-collections#pricing'
+    link: '/premium#pricing'
   },
   {
     media: '/img/promo/premium/Source Finder.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-source-finder#pricing'
+    link: '/premium#pricing'
   },
   {
     media: '/img/promo/premium/Discord Role.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-discord-role#pricing'
+    link: '/premium#pricing'
   },
   {
     media: '/img/promo/premium/Support Us.jpg',
     mediaWidth: 1280,
     mediaHeight: 1280,
     mediaType: 'image',
-    link: '/premium?utm_source=internal&utm_medium=promo-support-us#pricing'
+    link: '/premium#pricing'
   }
 ] satisfies Promotion[]
 

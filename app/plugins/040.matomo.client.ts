@@ -20,21 +20,13 @@ export default defineNuxtPlugin({
     let hasLoaded = false
 
     router.afterEach((to) => {
-      onNuxtReady(async () => {
-        const _paq = (window as MatomoWindow)._paq
+      const _paq = (window as MatomoWindow)._paq
 
-        if (!_paq) {
-          return
-        }
+      if (!hasLoaded || !_paq) {
+        return
+      }
 
-        _paq.push(['setCustomUrl', to.fullPath])
-        _paq.push(['setDocumentTitle', document.title])
-
-        loadAbTesting(_paq)
-
-        _paq.push(['trackPageView'])
-        _paq.push(['enableLinkTracking'])
-      })
+      trackPageView(_paq, to.fullPath)
     })
 
     const { hasInteracted } = useInteractionDetector()
@@ -67,6 +59,9 @@ export default defineNuxtPlugin({
 
       _paq.push(['enableCrossDomainLinking'])
       _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
+      _paq.push(['enableLinkTracking'])
+
+      trackPageView(_paq, router.currentRoute.value.fullPath)
 
       const script = document.createElement('script')
       script.src = matomoUrl + 'matomo.js'
@@ -76,6 +71,15 @@ export default defineNuxtPlugin({
     }
   }
 })
+
+function trackPageView(_paq: MatomoQueue, path: string) {
+  _paq.push(['setCustomUrl', path])
+  _paq.push(['setDocumentTitle', document.title])
+
+  loadAbTesting(_paq)
+
+  _paq.push(['trackPageView'])
+}
 
 let hasAbTestingLoaded = false
 

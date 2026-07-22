@@ -44,11 +44,13 @@
   }
 
   const selectedPromotionsName = randomWeightedChoice(weightedPromotions)
-  const selectedPromotions = isPromotionPoolName(selectedPromotionsName)
-    ? promotionPools[selectedPromotionsName]
-    : premiumPromotions
+  const selectedPromotionPoolName = isPromotionPoolName(selectedPromotionsName)
+    ? selectedPromotionsName
+    : 'premiumPromotions'
+  const selectedPromotions = promotionPools[selectedPromotionPoolName]
 
-  const promo = selectedPromotions[Math.floor(Math.random() * selectedPromotions.length)]
+  const promoIndex = Math.floor(Math.random() * selectedPromotions.length)
+  const promo = selectedPromotions[promoIndex] as Promotion | undefined
 
   if (!promo) {
     throw new Error('No promotion is available')
@@ -75,6 +77,15 @@
     return isExternalHref(promo.link) ? promo.link : getInternalHref(promo.link)
   })
   const promoIsExternal = computed(() => (promo.link ? isExternalHref(promo.link) : false))
+
+  type MatomoWindow = Window & { _paq?: { push: (event: unknown[]) => void } }
+
+  const promoName = promo.media.split('/').at(-1)?.split('.')[0]?.toLowerCase().replaceAll(' ', '-') ?? promoIndex
+  const promoId = `${selectedPromotionPoolName}:${promoName}`
+
+  function trackPromotion(action: string) {
+    ;(window as MatomoWindow)._paq?.push(['trackEvent', 'Promoted Content', action, promoId])
+  }
 </script>
 
 <template>
@@ -103,6 +114,7 @@
       :href="promoHref"
       :target="promoIsExternal ? '_blank' : undefined"
       :rel="promoIsExternal ? 'nofollow noopener' : undefined"
+      @click="trackPromotion('Click')"
     >
       <!-- TODO: Temporarily hardcode post index for promoted content -->
       <PostMedia
@@ -120,10 +132,9 @@
     <!-- Body -->
     <figcaption class="px-1 py-3 text-center text-sm whitespace-normal">
       <NuxtLink
-        :href="
-          localePath({ path: '/premium', query: { utm_source: 'internal', utm_medium: 'promo' }, hash: '#pricing' })
-        "
+        :href="localePath({ path: '/premium', hash: '#pricing' })"
         class="underline hover:hover-text-util focus-visible:focus-outline-util"
+        @click="trackPromotion('Premium CTA Click')"
         >{{ $t('media.getPremium') }}<!----></NuxtLink
       ><!---->: {{ $t('media.promotedDescription') }}
     </figcaption>
