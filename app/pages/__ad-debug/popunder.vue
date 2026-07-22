@@ -20,7 +20,6 @@
   })
 
   const route = useRoute()
-  const testTarget = useTemplateRef<HTMLButtonElement>('testTarget')
 
   const providerMode = computed(() => parsePopunderProviderMode(route.query.provider))
   const selectedRandomScript = ref('')
@@ -35,7 +34,6 @@
   const armedScriptUrl = ref('')
   const clickCount = ref(0)
   const events = ref<PopunderDebugEvent[]>([])
-  const scriptedRunActive = ref(false)
 
   const selectedProvider = computed(() => {
     if (providerMode.value !== 'random') {
@@ -109,9 +107,6 @@
     return new Error().stack?.split('\n').slice(2).join('\n')
   }
 
-  let originalWindowOpen: typeof window.open | null = null
-  let originalLocationAssign: Location['assign'] | null = null
-  let originalLocationReplace: Location['replace'] | null = null
   const trackedListeners: {
     target: EventTarget
     type: string
@@ -129,41 +124,12 @@
     trackedListeners.push({ target, type, handler, options })
   }
 
-  function tryPatchLocationMethod(method: 'assign' | 'replace', eventType: 'location-assign' | 'location-replace') {
-    const original = window.location[method].bind(window.location)
-
-    try {
-      window.location[method] = ((url: string | URL) => {
-        addEvent(eventType, { url: String(url), stack: getStack() })
-        return original(url)
-      }) as Location[typeof method]
-
-      if (method === 'assign') {
-        originalLocationAssign = original
-      } else {
-        originalLocationReplace = original
-      }
-    } catch (error) {
-      addEvent('instrumentation-failure', { message: `location.${method} instrumentation failed: ${String(error)}` })
-    }
-  }
-
   function installInstrumentation() {
     if (instrumentationInstalled.value) {
       return
     }
 
     instrumentationInstalled.value = true
-
-    const originalOpen = window.open.bind(window)
-    originalWindowOpen = originalOpen
-    window.open = ((url?: string | URL, target?: string, features?: string) => {
-      addEvent('window-open', { url: String(url ?? ''), target, message: features, stack: getStack() })
-      return originalOpen(url, target, features)
-    }) as typeof window.open
-
-    tryPatchLocationMethod('assign', 'location-assign')
-    tryPatchLocationMethod('replace', 'location-replace')
 
     addTrackedListener(
       document,
@@ -198,16 +164,6 @@
   function uninstallInstrumentation() {
     if (!instrumentationInstalled.value) {
       return
-    }
-
-    if (originalWindowOpen) {
-      window.open = originalWindowOpen
-    }
-    if (originalLocationAssign) {
-      window.location.assign = originalLocationAssign
-    }
-    if (originalLocationReplace) {
-      window.location.replace = originalLocationReplace
     }
 
     for (const { target, type, handler, options } of trackedListeners) {
@@ -256,15 +212,6 @@
   function recordTestClick(label: string) {
     clickCount.value += 1
     addEvent('test-click', { label })
-  }
-
-  async function runScriptedClickTest() {
-    scriptedRunActive.value = true
-    for (let index = 1; index <= 10; index += 1) {
-      testTarget.value?.click()
-      await new Promise((resolve) => window.setTimeout(resolve, 750))
-    }
-    scriptedRunActive.value = false
   }
 
   async function copyReportJson() {
@@ -331,21 +278,15 @@
       >
         Arm ads
       </button>
-      <button
-        ref="testTarget"
-        class="min-h-28 rounded bg-sky-600 px-4 py-3 font-semibold text-white disabled:opacity-50 sm:col-span-2 lg:col-span-2"
-        :disabled="!armed"
-        @click="recordTestClick('manual target click')"
+      <a
+        v-if="armed"
+        class="flex min-h-28 items-center justify-center rounded bg-sky-600 px-4 py-3 font-semibold text-white sm:col-span-2 lg:col-span-2"
+        data-testid="click-test-target"
+        href="/posts/rule34.xxx?tags=rating%3Asafe"
+        @click="recordTestClick('manual same-origin post tag link click')"
       >
         Click test target
-      </button>
-      <button
-        class="rounded bg-violet-600 px-4 py-3 font-semibold text-white disabled:opacity-50"
-        :disabled="!armed || scriptedRunActive"
-        @click="runScriptedClickTest"
-      >
-        Run scripted click test
-      </button>
+      </a>
       <div class="grid gap-3">
         <button
           class="rounded bg-zinc-700 px-4 py-3 font-semibold text-white"
