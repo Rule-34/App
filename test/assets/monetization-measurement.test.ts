@@ -19,6 +19,7 @@ describe('monetization measurement', () => {
     expect(premium).not.toContain("'Checkout Outbound'")
     expect(matomo).toContain("['enableLinkTracking']")
     expect(matomo.match(/\['enableLinkTracking'\]/g)).toHaveLength(1)
+    expect(matomo).toContain('onNuxtReady(() =>')
     expect(matomo).toContain('trackPageView(_paq, router.currentRoute.value.fullPath)')
     expect(source('app/components/pages/home/Newsletter.vue')).not.toContain("'Newsletter', 'Submit'")
   })

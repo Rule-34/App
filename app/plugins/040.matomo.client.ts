@@ -20,13 +20,15 @@ export default defineNuxtPlugin({
     let hasLoaded = false
 
     router.afterEach((to) => {
-      const _paq = (window as MatomoWindow)._paq
+      onNuxtReady(() => {
+        const _paq = (window as MatomoWindow)._paq
 
-      if (!hasLoaded || !_paq) {
-        return
-      }
+        if (!hasLoaded || !_paq || router.currentRoute.value.fullPath !== to.fullPath) {
+          return
+        }
 
-      trackPageView(_paq, to.fullPath)
+        trackPageView(_paq, to.fullPath)
+      })
     })
 
     const { hasInteracted } = useInteractionDetector()
