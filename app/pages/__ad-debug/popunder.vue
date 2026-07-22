@@ -214,6 +214,13 @@
     addEvent('test-click', { label })
   }
 
+  function resetTestStorage() {
+    localStorage.clear()
+    sessionStorage.clear()
+    clearReport()
+    status.value = 'storage-cleared'
+  }
+
   async function copyReportJson() {
     await navigator.clipboard.writeText(reportJson.value)
     status.value = 'report-copied'
@@ -271,6 +278,14 @@
     </section>
 
     <section class="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+      <button
+        class="rounded bg-zinc-700 px-4 py-3 font-semibold text-white disabled:opacity-50"
+        data-testid="reset-test-storage"
+        :disabled="armed"
+        @click="resetTestStorage"
+      >
+        Reset test storage
+      </button>
       <button
         class="rounded bg-emerald-600 px-4 py-3 font-semibold text-white disabled:opacity-50"
         :disabled="armed"

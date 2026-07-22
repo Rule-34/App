@@ -7,6 +7,9 @@ describe('popunder debug page', () => {
   it('uses passive instrumentation and a same-origin post link', () => {
     expect(page).not.toMatch(/window\.open\s*=/)
     expect(page).not.toMatch(/window\.location\.(assign|replace)\s*=/)
+    expect(page).toContain('data-testid="reset-test-storage"')
+    expect(page).toContain('localStorage.clear()')
+    expect(page).toContain('sessionStorage.clear()')
     expect(page).toContain('data-testid="click-test-target"')
     expect(page).toContain('href="/posts/rule34.xxx?tags=rating%3Asafe"')
   })
