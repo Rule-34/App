@@ -1,9 +1,15 @@
 export type DialogManagerDialog = 'premium' | 'installPwa' | 'feedback' | 'newsletter' | 'review'
 
+export function isPremiumRoute(routeName?: string | symbol) {
+  return routeName === 'premium' || (typeof routeName === 'string' && routeName.startsWith('premium-'))
+}
+
 export function useDialogManagerState() {
   const { timesTheAppHasBeenOpened, promptInstallPwa, promptFeedback, promptNewsletter, promptReview } =
     useAppStatistics()
   const { open: isPremiumDialogOpen } = usePremiumDialog()
+  const route = useRoute()
+  const getRouteBaseName = useRouteBaseName()
   const isStandaloneDisplayMode = useState('isStandaloneDisplayMode', () => false)
 
   if (import.meta.client) {
@@ -15,6 +21,10 @@ export function useDialogManagerState() {
   const pendingDialog = computed<DialogManagerDialog | undefined>(() => {
     if (isPremiumDialogOpen.value) {
       return 'premium'
+    }
+
+    if (isPremiumRoute(getRouteBaseName(route))) {
+      return
     }
 
     if (timesTheAppHasBeenOpened.value >= 3 && !promptInstallPwa.value && !isStandaloneDisplayMode.value) {
