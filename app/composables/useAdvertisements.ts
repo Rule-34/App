@@ -149,7 +149,7 @@ export const pushAdProviders = [
     key: 'evadav',
     label: 'EvaDav',
     id: 'https://udzpel.com/pw/waWQiOjExOTMwMzUsInNpZCI6MTQwNzY1NSwid2lkIjo2ODMzODcsInNyYyI6Mn0=eyJ.js',
-    weight: 0.45
+    weight: 0.48
   },
   /**
    * AdMaven
@@ -171,7 +171,7 @@ export const pushAdProviders = [
     key: 'adsterra',
     label: 'AdsTerra',
     id: 'https://laughedentrust.com/42/22/90/4222908c1f4cbb803a92284f2608eed3.js',
-    weight: 0.5
+    weight: 0.47
   }
 ] as const satisfies readonly { key: string; label: string; id: string; weight: number }[]
 
