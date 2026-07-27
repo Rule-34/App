@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-  const props = defineProps<{ variant: 'OfferFirst' | 'YearlyFocus' }>()
-
   import { CheckIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/20/solid'
   import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
   import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
@@ -15,6 +13,8 @@
     TransitionRoot
   } from '@headlessui/vue'
   import { project } from '~~/config/project'
+
+  const props = defineProps<{ variant: 'OfferFirst' | 'YearlyFocus' }>()
 
   const { shouldShow } = useActivePromotion()
   const { t } = useI18n()
