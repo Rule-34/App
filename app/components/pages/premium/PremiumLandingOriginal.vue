@@ -18,25 +18,23 @@
   const { t } = useI18n()
   const localePath = useLocalePath()
   const customerCount = 2363
+  const trustpilotUrl = `https://www.trustpilot.com/review/${project.urls.production.hostname}`
 
   const mainFeatures = computed(() => [
-    { title: t('pages.premium.landingPage.featureNoAds'), additionalInfo: undefined },
-    { title: t('pages.premium.landingPage.featureFasterImages'), additionalInfo: '#image-proxy' },
-    {
-      title: t('pages.premium.landingPage.featureAdditionalWebsites', {
-        count: completeBooruList.length - defaultBooruList.length
-      }),
-      additionalInfo: '#additional-boorus'
-    },
-    { title: t('pages.premium.landingPage.featureSavePosts'), additionalInfo: '#save-posts' },
-    { title: t('pages.premium.landingPage.featureDownload'), additionalInfo: '#download-posts' },
-    { title: t('pages.premium.landingPage.featureFindSource'), additionalInfo: '#find-source' },
-    { title: t('pages.premium.landingPage.featureHistory'), additionalInfo: '#history' },
-    { title: t('pages.premium.landingPage.featureTagCollections'), additionalInfo: '#tag-collections' },
-    { title: t('pages.premium.landingPage.featureBlockTags'), additionalInfo: '#tag-blocklist' },
-    { title: t('pages.premium.landingPage.featureProxy'), additionalInfo: '#proxy' },
-    { title: t('pages.premium.landingPage.featureDiscordRole'), additionalInfo: undefined },
-    { title: t('pages.premium.landingPage.featureSupportDev'), additionalInfo: '#support-development' }
+    t('pages.premium.landingPage.featureNoAds'),
+    t('pages.premium.landingPage.featureFasterImages'),
+    t('pages.premium.landingPage.featureAdditionalWebsites', {
+      count: completeBooruList.length - defaultBooruList.length
+    }),
+    t('pages.premium.landingPage.featureSavePosts'),
+    t('pages.premium.landingPage.featureDownload'),
+    t('pages.premium.landingPage.featureFindSource'),
+    t('pages.premium.landingPage.featureHistory'),
+    t('pages.premium.landingPage.featureTagCollections'),
+    t('pages.premium.landingPage.featureBlockTags'),
+    t('pages.premium.landingPage.featureProxy'),
+    t('pages.premium.landingPage.featureDiscordRole'),
+    t('pages.premium.landingPage.featureSupportDev')
   ])
 
   const testimonials = computed(() => [
@@ -265,7 +263,7 @@
 
           <!-- Rating -->
           <NuxtLink
-            :href="`https://www.trustpilot.com/review/${project.urls.production.hostname}`"
+            :href="trustpilotUrl"
             class="mt-16 flex flex-col items-center justify-center gap-3 pb-4 hover:hover-text-util focus-visible:focus-outline-util"
             rel="nofollow noopener"
             target="_blank"
@@ -301,7 +299,7 @@
             </ol>
 
             <NuxtLink
-              :href="`https://www.trustpilot.com/review/${project.urls.production.hostname}`"
+              :href="trustpilotUrl"
               class="mx-auto mt-10 flex w-full max-w-fit gap-2.5 text-sm underline hover:hover-text-util focus-visible:focus-outline-util"
               rel="nofollow noopener"
               target="_blank"
@@ -385,7 +383,7 @@
                   >
                     <li
                       v-for="mainFeature in mainFeatures"
-                      :key="mainFeature.title"
+                      :key="mainFeature"
                       class="flex items-center gap-x-3 py-2"
                     >
                       <CheckIcon
@@ -394,33 +392,14 @@
                       />
 
                       <span class="flex-auto text-sm leading-6 text-base-content-highlight">
-                        {{ mainFeature.title }}
+                        {{ mainFeature }}
                       </span>
-
-                      <!-- TODO: Better linking -->
-                      <!--                      <a-->
-                      <!--                        v-if="mainFeature.additionalInfo"-->
-                      <!--                        :href="mainFeature.additionalInfo"-->
-                      <!--                        class="focus-visible:focus-outline-util hover:hover-text-util text-base-content"-->
-                      <!--                      >-->
-                      <!--                        <span class="sr-only">Learn more about this feature</span>-->
-
-                      <!--                        <QuestionMarkCircleIcon class="h-5 w-5 flex-none" />-->
-                      <!--                      </a>-->
                     </li>
                   </ol>
                 </div>
 
                 <!-- CTA -->
                 <div class="mt-10 flex flex-col gap-6 lg:flex-col lg:items-stretch">
-                  <!--                  <NuxtLink-->
-                  <!--                    aria-describedby="premium-features"-->
-                  <!--                    class="focus-visible:focus-outline-util hover:hover-text-util bg-primary-700 text-base-content-highlight hover:bg-primary-600 rounded-md px-3 py-2 text-center text-sm leading-6 font-semibold focus-visible:ring-offset-2"-->
-                  <!--                    to="#pricing"-->
-                  <!--                  >-->
-                  <!--                    Get Premium-->
-                  <!--                  </NuxtLink>-->
-
                   <p class="text-center text-xs leading-6">
                     {{ $t('pages.premium.landingPage.cancelAnytime') }}
 
@@ -431,7 +410,7 @@
                     <br />
 
                     <NuxtLink
-                      :href="`https://www.trustpilot.com/review/${project.urls.production.hostname}`"
+                      :href="trustpilotUrl"
                       class="hover:hover-text-util focus-visible:focus-outline-util"
                       rel="nofollow noopener"
                       target="_blank"
@@ -675,23 +654,6 @@
                       </span>
                     </a>
                   </div>
-
-                  <!-- Instructions (only for links that have them) -->
-                  <template
-                    v-for="link in group.links"
-                    :key="`${link.name}-instructions`"
-                  >
-                    <div v-if="'instructions' in link && link.instructions">
-                      <ul class="mt-2 list-disc space-y-2 pl-4 text-sm text-base-content">
-                        <li
-                          v-for="(instruction, index) in link.instructions"
-                          :key="index"
-                        >
-                          {{ instruction }}
-                        </li>
-                      </ul>
-                    </div>
-                  </template>
                 </div>
               </div>
 
