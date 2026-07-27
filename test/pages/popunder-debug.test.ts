@@ -10,6 +10,7 @@ describe('popunder debug page', () => {
     expect(page).toContain('data-testid="reset-test-storage"')
     expect(page).toContain('localStorage.clear()')
     expect(page).toContain('sessionStorage.clear()')
+    expect(page).toContain('ensurePopunderProviderContainer(selectedProvider.value)')
     expect(page).toContain('data-testid="click-test-target"')
     expect(page).toContain('href="/posts/rule34.xxx?tags=rating%3Asafe"')
   })

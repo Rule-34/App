@@ -1,10 +1,12 @@
 <script setup lang="ts">
   import {
+    ensurePopunderProviderContainer,
     getPopunderProviderByKey,
     parsePopunderProviderMode,
     popunderProviderModes,
     popunderProviders,
     selectRandomPopunderProviderScript,
+    type PopunderProvider,
     type PopunderProviderKey
   } from '~/composables/useAdvertisements'
   import {
@@ -176,18 +178,20 @@
 
   onUnmounted(uninstallInstrumentation)
 
-  function injectAdScript(scriptUrl: string) {
+  function injectAdScript(provider: PopunderProvider) {
     const script = document.createElement('script')
-    script.src = scriptUrl
+    script.src = provider.id
     script.defer = true
-    script.crossOrigin = 'anonymous'
+    if (!('noCrossorigin' in provider)) {
+      script.crossOrigin = 'anonymous'
+    }
     script.onload = () => {
       status.value = 'script-loaded'
-      addEvent('script-loaded', { url: scriptUrl })
+      addEvent('script-loaded', { url: provider.id })
     }
     script.onerror = () => {
       status.value = 'script-error'
-      addEvent('script-error', { url: scriptUrl })
+      addEvent('script-error', { url: provider.id })
     }
     document.head.append(script)
   }
@@ -206,7 +210,8 @@
     startedAtMs.value = performance.now()
     installInstrumentation()
     addEvent('armed', { label: armedProviderLabel.value, url: armedScriptUrl.value })
-    injectAdScript(armedScriptUrl.value)
+    ensurePopunderProviderContainer(selectedProvider.value)
+    injectAdScript(selectedProvider.value)
   }
 
   function recordTestClick(label: string) {

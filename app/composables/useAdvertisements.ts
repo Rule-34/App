@@ -71,7 +71,7 @@ export const popunderProviders = [
     key: 'profiton',
     label: 'Profiton',
     id: 'https://pb.burnetsasgmt.com/rjrr1lrmhPVU/140809',
-    weight: 0.25
+    weight: 0.15
   },
   /**
    * AdsTerra
@@ -83,8 +83,26 @@ export const popunderProviders = [
     label: 'AdsTerra',
     id: 'https://laughedentrust.com/gOEgecu/kAi41dXqVy9f-/APTn2mopi0EK/ZYuxzOlInL9/23jslU_6yYUKuVVn_v9j/va82rI/dw-xJW2djcqgC5mfF7/4gbSUwOzf/rEAE3_4f5WEdqc3rM/VfHINUDVV3EC',
     weight: 0.15
+  },
+  /**
+   * Kadam
+   */
+  {
+    key: 'kadam',
+    label: 'Kadam',
+    id: 'https://hdbtop.com/code/hneuyk427249',
+    containerClass: 'hneuyk427249',
+    noCrossorigin: true,
+    weight: 0.1
   }
-] as const satisfies readonly { key: string; label: string; id: string; weight: number }[]
+] as const satisfies readonly {
+  key: string
+  label: string
+  id: string
+  containerClass?: string
+  noCrossorigin?: true
+  weight: number
+}[]
 
 export type PopunderProvider = (typeof popunderProviders)[number]
 export type PopunderProviderKey = PopunderProvider['key']
@@ -208,6 +226,16 @@ export function selectRandomPopunderProviderScript() {
   return randomWeightedChoice(popunderProviderChoices)
 }
 
+export function ensurePopunderProviderContainer(provider: PopunderProvider) {
+  if (!('containerClass' in provider) || document.querySelector(`.${provider.containerClass}`)) {
+    return
+  }
+
+  const container = document.createElement('div')
+  container.className = provider.containerClass
+  document.body.append(container)
+}
+
 export function selectRandomPushAdProviderScript() {
   return randomWeightedChoice(pushAdProviderChoices)
 }
@@ -226,6 +254,13 @@ export default function () {
     pushScript.value = selectRandomPushAdProviderScript()
   }
 
+  const popunderProvider = popunderProviders.find(({ id }) => id === popunderScript.value)
+  if (import.meta.client && popunderProvider) {
+    ensurePopunderProviderContainer(popunderProvider)
+  }
+  const popunderCrossorigin =
+    popunderProvider && 'noCrossorigin' in popunderProvider ? undefined : ('anonymous' as const)
+
   // Load selected ads
   useHead({
     script: [
@@ -235,7 +270,7 @@ export default function () {
         defer: true,
 
         // Fix for CORS issues - https://unhead.unjs.io/usage/composables/use-script#referrerpolicy-and-crossorigin
-        crossorigin: 'anonymous'
+        crossorigin: popunderCrossorigin
       },
       {
         src: pushScript.value,
