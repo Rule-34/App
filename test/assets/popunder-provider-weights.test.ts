@@ -13,6 +13,7 @@ describe('popunder provider weights', () => {
       noCrossorigin: true,
       weight: 0.1
     })
+    expect(popunderProviders.find(({ key }) => key === 'profiton')).toMatchObject({ weight: 0.15 })
   })
 })
 
