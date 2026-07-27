@@ -1,5 +1,6 @@
 import { defineNuxtPlugin } from '#imports'
 import { useIdleTask } from '~/composables/useIdleTask'
+import type { PremiumLandingVariation } from '~/composables/useExperiments'
 
 type MatomoQueueItem = [string, ...unknown[]]
 type MatomoQueue = MatomoQueueItem[]
@@ -16,19 +17,25 @@ export default defineNuxtPlugin({
   parallel: true,
   setup() {
     const router = useRouter()
+    const { premiumLandingVariation } = useExperiments()
 
     let hasLoaded = false
 
     router.afterEach((to) => {
       // Keep this idle boundary: afterEach runs before Nuxt finishes updating document.title.
       onNuxtReady(() => {
+        if (!hasLoaded && isPremiumLanding(to.path)) {
+          ensureMatomoLoaded()
+          return
+        }
+
         const _paq = (window as MatomoWindow)._paq
 
         if (!hasLoaded || !_paq || router.currentRoute.value.fullPath !== to.fullPath) {
           return
         }
 
-        trackPageView(_paq, to.fullPath)
+        trackPageView(_paq, to.fullPath, premiumLandingVariation)
       })
     })
 
@@ -45,6 +52,12 @@ export default defineNuxtPlugin({
       },
       { flush: 'post', immediate: true }
     )
+
+    // A landing-page experiment has to assign before the visitor interacts.
+    // Every other route keeps the normal interaction-gated Matomo load.
+    if (isPremiumLanding(router.currentRoute.value.path)) {
+      ensureMatomoLoaded()
+    }
 
     function ensureMatomoLoaded() {
       if (hasLoaded) {
@@ -64,7 +77,7 @@ export default defineNuxtPlugin({
       _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
       _paq.push(['enableLinkTracking'])
 
-      trackPageView(_paq, router.currentRoute.value.fullPath)
+      trackPageView(_paq, router.currentRoute.value.fullPath, premiumLandingVariation)
 
       const script = document.createElement('script')
       script.src = matomoUrl + 'matomo.js'
@@ -75,47 +88,45 @@ export default defineNuxtPlugin({
   }
 })
 
-function trackPageView(_paq: MatomoQueue, path: string) {
+function isPremiumLanding(path: string) {
+  return /\/premium\/?$/.test(path)
+}
+
+function trackPageView(_paq: MatomoQueue, path: string, premiumLandingVariation: { value: PremiumLandingVariation }) {
   _paq.push(['setCustomUrl', path])
   _paq.push(['setDocumentTitle', document.title])
 
-  loadAbTesting(_paq)
+  // Matomo requires SPA experiments to be created before every page view.
+  _paq.push([
+    'AbTesting::create',
+    {
+      name: 'PremiumLandingV1',
+      percentage: 100,
+      includedTargets: [{ attribute: 'url', inverted: '0', type: 'any', value: '' }],
+      excludedTargets: [],
+      trigger: () => isPremiumLanding(location.pathname),
+      variations: [
+        {
+          name: 'original',
+          activate: () => {
+            premiumLandingVariation.value = 'original'
+          }
+        },
+        {
+          name: 'OfferFirst',
+          activate: () => {
+            premiumLandingVariation.value = 'OfferFirst'
+          }
+        },
+        {
+          name: 'YearlyFocus',
+          activate: () => {
+            premiumLandingVariation.value = 'YearlyFocus'
+          }
+        }
+      ]
+    }
+  ])
 
   _paq.push(['trackPageView'])
-}
-
-let hasAbTestingLoaded = false
-
-function loadAbTesting(_paq: MatomoQueue) {
-  if (hasAbTestingLoaded) {
-    return
-  }
-
-  // const { } = useExperiments()
-  //
-  // _paq.push([
-  //   'AbTesting::create',
-  //   {
-  //     name: 'PriceCurrencyV2',
-  //     percentage: 100,
-  //     includedTargets: [{ attribute: 'path', inverted: '0', type: 'equals_simple', value: '/premium' }],
-  //     excludedTargets: [],
-  //     variations: [
-  //       {
-  //         name: 'original',
-  //         activate: function (event) {
-  //           // usually nothing needs to be done here
-  //         }
-  //       },
-  //       {
-  //         name: 'euro',
-  //         activate: function (event) {
-  //           experimentPriceCurrency.value = '€'
-  //         }
-  //       }
-  //     ]
-  //   }
-  // ])
-
-  hasAbTestingLoaded = true
 }

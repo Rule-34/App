@@ -1,13 +1,9 @@
+export type PremiumLandingVariation = 'original' | 'OfferFirst' | 'YearlyFocus'
+
 export default function () {
-  // let experimentPriceCurrency = ref('$')
-  //
-  // if (import.meta.client) {
-  //   experimentPriceCurrency = useSessionStorage('experiment-price', '$', {
-  //     writeDefaults: false
-  //   })
-  // }
+  const premiumLandingVariation = useState<PremiumLandingVariation>('premium-landing-variation', () => 'original')
 
   return {
-    // experimentPriceCurrency
+    premiumLandingVariation
   }
 }
