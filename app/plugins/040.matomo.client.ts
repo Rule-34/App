@@ -24,11 +24,6 @@ export default defineNuxtPlugin({
     router.afterEach((to) => {
       // Keep this idle boundary: afterEach runs before Nuxt finishes updating document.title.
       onNuxtReady(() => {
-        if (!hasLoaded && isPremiumLanding(to.path)) {
-          ensureMatomoLoaded()
-          return
-        }
-
         const _paq = (window as MatomoWindow)._paq
 
         if (!hasLoaded || !_paq || router.currentRoute.value.fullPath !== to.fullPath) {
@@ -52,12 +47,6 @@ export default defineNuxtPlugin({
       },
       { flush: 'post', immediate: true }
     )
-
-    // A landing-page experiment has to assign before the visitor interacts.
-    // Every other route keeps the normal interaction-gated Matomo load.
-    if (isPremiumLanding(router.currentRoute.value.path)) {
-      ensureMatomoLoaded()
-    }
 
     function ensureMatomoLoaded() {
       if (hasLoaded) {
@@ -96,7 +85,12 @@ function trackPageView(_paq: MatomoQueue, path: string, premiumLandingVariation:
   _paq.push(['setCustomUrl', path])
   _paq.push(['setDocumentTitle', document.title])
 
-  // Matomo requires SPA experiments to be created before every page view.
+  loadAbTesting(_paq, premiumLandingVariation)
+
+  _paq.push(['trackPageView'])
+}
+
+function loadAbTesting(_paq: MatomoQueue, premiumLandingVariation: { value: PremiumLandingVariation }) {
   _paq.push([
     'AbTesting::create',
     {
@@ -127,6 +121,4 @@ function trackPageView(_paq: MatomoQueue, path: string, premiumLandingVariation:
       ]
     }
   ])
-
-  _paq.push(['trackPageView'])
 }
