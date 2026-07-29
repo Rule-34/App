@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { setup, url } from '@nuxt/test-utils'
 import { mockPostsPage0, mockPostsPage1, mockPostsPageWithOfflineMedia } from './posts.mock-data'
@@ -55,6 +56,35 @@ async function getPostImageSrc(page: TrackedPage, testId: string) {
 
   return page.evaluate((id) => document.querySelector(`[data-testid="${id}"] img`)?.getAttribute('src') ?? null, testId)
 }
+
+describe('PostMedia video player', () => {
+  const component = readFileSync('app/components/pages/posts/post/PostMedia.vue', 'utf8')
+
+  it('fills the reserved aspect-ratio slot before Video.js initializes', () => {
+    expect(component).toContain('class="h-full w-full"')
+    expect(component).toContain('class="video-js h-full! w-full! rounded-t-md"')
+  })
+
+  it('initializes contrib-ads before assigning the content source', () => {
+    const createPlayer = component.slice(
+      component.indexOf('async function createVideoPlayer()'),
+      component.indexOf('function initializeVideoPlayer()')
+    )
+
+    expect(createPlayer).toContain("import('videojs-contrib-ads')")
+    expect(createPlayer).toContain('player.ads()')
+    expect(createPlayer.indexOf('player.ads()')).toBeLessThan(createPlayer.indexOf('player.src('))
+    expect(createPlayer).not.toContain('sources:')
+  })
+
+  it('loads the IMA SDK before importing its Video.js plugin', () => {
+    expect(component).toMatch(/await loadImaSdk\(\)[\s\S]*import\('videojs-ima'\)/)
+  })
+
+  it('allows the hosted IMA SDK enough time to load on slower connections', () => {
+    expect(component).toContain('const IMA_SDK_TIMEOUT = 15000')
+  })
+})
 
 describe('/', async () => {
   await setup(defaultSetupConfig)
