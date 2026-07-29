@@ -233,6 +233,9 @@
         throw new Error(`Unknown filter type: ${type}`)
     }
   }
+
+  const scrollContainerRef = ref<HTMLElement | null>(null)
+  useHorizontalScroll(scrollContainerRef)
 </script>
 
 <template>
@@ -347,7 +350,7 @@
     </HeadlessCombobox>
 
     <!-- Filters -->
-    <section class="-mx-5 mt-8 scrollbar-hide flex gap-4 overflow-x-auto py-1 pr-3 before:w-1 after:w-1">
+    <section ref="scrollContainerRef" class="-mx-5 mt-8 scrollbar-hide flex gap-4 overflow-x-auto py-1 pr-3 before:w-1 after:w-1">
       <!-- -->
 
       <!-- Tag Collections Toggler -->
