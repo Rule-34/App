@@ -91,7 +91,6 @@ export const popunderProviders = [
     key: 'kadam',
     label: 'Kadam',
     id: 'https://hdbtop.com/code/hneuyk427249',
-    targetClass: 'hneuyk427249',
     noCrossorigin: true,
     weight: 0.1
   }
@@ -99,7 +98,6 @@ export const popunderProviders = [
   key: string
   label: string
   id: string
-  targetClass?: string
   noCrossorigin?: true
   weight: number
 }[]
@@ -226,10 +224,6 @@ export function selectRandomPopunderProviderScript() {
   return randomWeightedChoice(popunderProviderChoices)
 }
 
-export function getPopunderProviderTargetClass(provider: PopunderProvider) {
-  return 'targetClass' in provider ? provider.targetClass : undefined
-}
-
 export function getPopunderProviderCrossorigin(provider: PopunderProvider) {
   return 'noCrossorigin' in provider ? undefined : ('anonymous' as const)
 }
@@ -256,9 +250,6 @@ export default function () {
 
   // Load selected ads
   useHead({
-    bodyAttrs: {
-      class: popunderProvider ? getPopunderProviderTargetClass(popunderProvider) : undefined
-    },
     script: [
       {
         src: popunderScript.value,

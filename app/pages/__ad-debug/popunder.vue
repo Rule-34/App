@@ -2,7 +2,6 @@
   import {
     getPopunderProviderByKey,
     getPopunderProviderCrossorigin,
-    getPopunderProviderTargetClass,
     parsePopunderProviderMode,
     popunderProviderModes,
     popunderProviders,
@@ -79,9 +78,6 @@
   })
 
   useHead(() => ({
-    bodyAttrs: {
-      class: armedProvider.value ? getPopunderProviderTargetClass(armedProvider.value) : undefined
-    },
     script: armedProvider.value
       ? [
           {

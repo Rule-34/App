@@ -7,9 +7,8 @@ describe('popunder provider weights', () => {
     expect(total).toBeCloseTo(1, 5)
   })
 
-  it('includes the Kadam trial and its required target class', () => {
+  it('includes the Kadam trial', () => {
     expect(popunderProviders.find(({ key }) => key === 'kadam')).toMatchObject({
-      targetClass: 'hneuyk427249',
       noCrossorigin: true,
       weight: 0.1
     })
