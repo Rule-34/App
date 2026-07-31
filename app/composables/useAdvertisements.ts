@@ -91,7 +91,7 @@ export const popunderProviders = [
     key: 'kadam',
     label: 'Kadam',
     id: 'https://hdbtop.com/code/hneuyk427249',
-    containerClass: 'hneuyk427249',
+    targetClass: 'hneuyk427249',
     noCrossorigin: true,
     weight: 0.1
   }
@@ -99,7 +99,7 @@ export const popunderProviders = [
   key: string
   label: string
   id: string
-  containerClass?: string
+  targetClass?: string
   noCrossorigin?: true
   weight: number
 }[]
@@ -226,14 +226,12 @@ export function selectRandomPopunderProviderScript() {
   return randomWeightedChoice(popunderProviderChoices)
 }
 
-export function ensurePopunderProviderContainer(provider: PopunderProvider) {
-  if (!('containerClass' in provider) || document.querySelector(`.${provider.containerClass}`)) {
-    return
-  }
+export function getPopunderProviderTargetClass(provider: PopunderProvider) {
+  return 'targetClass' in provider ? provider.targetClass : undefined
+}
 
-  const container = document.createElement('div')
-  container.className = provider.containerClass
-  document.body.append(container)
+export function getPopunderProviderCrossorigin(provider: PopunderProvider) {
+  return 'noCrossorigin' in provider ? undefined : ('anonymous' as const)
 }
 
 export function selectRandomPushAdProviderScript() {
@@ -255,14 +253,12 @@ export default function () {
   }
 
   const popunderProvider = popunderProviders.find(({ id }) => id === popunderScript.value)
-  if (import.meta.client && popunderProvider) {
-    ensurePopunderProviderContainer(popunderProvider)
-  }
-  const popunderCrossorigin =
-    popunderProvider && 'noCrossorigin' in popunderProvider ? undefined : ('anonymous' as const)
 
   // Load selected ads
   useHead({
+    bodyAttrs: {
+      class: popunderProvider ? getPopunderProviderTargetClass(popunderProvider) : undefined
+    },
     script: [
       {
         src: popunderScript.value,
@@ -270,7 +266,7 @@ export default function () {
         defer: true,
 
         // Fix for CORS issues - https://unhead.unjs.io/usage/composables/use-script#referrerpolicy-and-crossorigin
-        crossorigin: popunderCrossorigin
+        crossorigin: popunderProvider ? getPopunderProviderCrossorigin(popunderProvider) : 'anonymous'
       },
       {
         src: pushScript.value,

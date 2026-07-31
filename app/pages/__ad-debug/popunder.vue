@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import {
-    ensurePopunderProviderContainer,
     getPopunderProviderByKey,
+    getPopunderProviderCrossorigin,
+    getPopunderProviderTargetClass,
     parsePopunderProviderMode,
     popunderProviderModes,
     popunderProviders,
     selectRandomPopunderProviderScript,
-    type PopunderProvider,
     type PopunderProviderKey
   } from '~/composables/useAdvertisements'
   import {
@@ -53,6 +53,9 @@
   const selectedScriptUrl = computed(() =>
     providerMode.value === 'random' ? selectedRandomScript.value : selectedProvider.value.id
   )
+  const armedProvider = computed(() =>
+    armed.value ? popunderProviders.find(({ id }) => id === armedScriptUrl.value) : undefined
+  )
   const reportProviderMode = computed(() => (armed.value ? armedProviderMode.value : providerMode.value))
   const reportProviderLabel = computed(() => (armed.value ? armedProviderLabel.value : selectedProviderLabel.value))
   const reportScriptUrl = computed(() => (armed.value ? armedScriptUrl.value : selectedScriptUrl.value))
@@ -74,6 +77,29 @@
       events: events.value
     })
   })
+
+  useHead(() => ({
+    bodyAttrs: {
+      class: armedProvider.value ? getPopunderProviderTargetClass(armedProvider.value) : undefined
+    },
+    script: armedProvider.value
+      ? [
+          {
+            src: armedProvider.value.id,
+            defer: true,
+            crossorigin: getPopunderProviderCrossorigin(armedProvider.value),
+            onload: () => {
+              status.value = 'script-loaded'
+              addEvent('script-loaded', { url: armedProvider.value?.id })
+            },
+            onerror: () => {
+              status.value = 'script-error'
+              addEvent('script-error', { url: armedProvider.value?.id })
+            }
+          }
+        ]
+      : []
+  }))
 
   onMounted(() => {
     clientMounted.value = true
@@ -178,24 +204,6 @@
 
   onUnmounted(uninstallInstrumentation)
 
-  function injectAdScript(provider: PopunderProvider) {
-    const script = document.createElement('script')
-    script.src = provider.id
-    script.defer = true
-    if (!('noCrossorigin' in provider)) {
-      script.crossOrigin = 'anonymous'
-    }
-    script.onload = () => {
-      status.value = 'script-loaded'
-      addEvent('script-loaded', { url: provider.id })
-    }
-    script.onerror = () => {
-      status.value = 'script-error'
-      addEvent('script-error', { url: provider.id })
-    }
-    document.head.append(script)
-  }
-
   function armAds() {
     if (armed.value) {
       return
@@ -210,8 +218,6 @@
     startedAtMs.value = performance.now()
     installInstrumentation()
     addEvent('armed', { label: armedProviderLabel.value, url: armedScriptUrl.value })
-    ensurePopunderProviderContainer(selectedProvider.value)
-    injectAdScript(selectedProvider.value)
   }
 
   function recordTestClick(label: string) {
