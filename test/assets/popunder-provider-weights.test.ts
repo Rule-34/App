@@ -6,6 +6,14 @@ describe('popunder provider weights', () => {
     const total = popunderProviders.reduce((sum, provider) => sum + provider.weight, 0)
     expect(total).toBeCloseTo(1, 5)
   })
+
+  it('includes the Kadam trial', () => {
+    expect(popunderProviders.find(({ key }) => key === 'kadam')).toMatchObject({
+      noCrossorigin: true,
+      weight: 0.1
+    })
+    expect(popunderProviders.find(({ key }) => key === 'profiton')).toMatchObject({ weight: 0.15 })
+  })
 })
 
 describe('push ad provider weights', () => {
