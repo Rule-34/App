@@ -157,6 +157,33 @@ describe('/', async () => {
       // Assert
       await titleElement.isVisible()
     }, 30000)
+
+    it('renders upstream rate-limit 502 error with retry button and without bot verification', async () => {
+      // Arrange
+      const page = await createTrackedPage()
+
+      // Act
+      await page.goto(url('/posts/safebooru.org?tags=rate_limited_502_test'), { waitUntil: 'domcontentloaded' })
+
+      // Assert
+      await page.getByRole('heading', { name: 'Failed to load posts' }).waitFor({ state: 'visible', timeout: 10000 })
+      await page.getByText('Upstream booru rate limited').waitFor({ state: 'visible', timeout: 10000 })
+      await page.getByRole('button', { name: 'Retry' }).waitFor({ state: 'visible', timeout: 10000 })
+      expect(await page.getByText('Verify I am not a Bot').count()).toBe(0)
+    }, 30000)
+
+    it('renders client 429 error with bot verification challenge', async () => {
+      // Arrange
+      const page = await createTrackedPage()
+
+      // Act
+      await page.goto(url('/posts/safebooru.org?tags=client_429_test'), { waitUntil: 'domcontentloaded' })
+
+      // Assert
+      await page.getByRole('heading', { name: 'Too many requests' }).waitFor({ state: 'visible', timeout: 10000 })
+      await page.getByText('Verify I am not a Bot').waitFor({ state: 'visible', timeout: 10000 })
+      await page.getByRole('button', { name: 'Retry' }).waitFor({ state: 'visible', timeout: 10000 })
+    }, 30000)
   })
 
   describe('Posts', async () => {
