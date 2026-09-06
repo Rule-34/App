@@ -331,6 +331,135 @@
         }
       ]
     },
+    {
+      domain: 'rule34.paheal.net',
+      path: '/posts/rule34.paheal.net',
+      isPremium: false,
+      tags: [
+        {
+          name: t('pages.home.topPosts'),
+          path: '/posts/rule34.paheal.net?filter%5Bsort%5D=score',
+          media: [
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-1.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-2.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-3.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-4.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-5.jpg' }
+          ]
+        },
+        {
+          name: t('pages.home.trendingPosts'),
+          path: '/posts/rule34.paheal.net?filter%5Bscore%5D=>%3D50',
+          media: [
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-6.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-7.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-8.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-9.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-10.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-11.jpg' }
+          ]
+        },
+        {
+          name: t('pages.home.animatedVideo'),
+          path: '/posts/rule34.paheal.net?tags=animated',
+          media: [
+            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-1.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-2.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-3.jpg' }
+          ]
+        },
+        {
+          name: t('pages.home.noAi'),
+          path: '/posts/rule34.paheal.net?tags=-ai_generated',
+          media: [
+            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-1.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-2.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-3.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-1.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-2.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-3.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-4.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-5.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-6.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-7.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-8.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-9.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-10.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-11.jpg' }
+          ]
+        },
+        {
+          name: 'Overwatch',
+          path: '/posts/rule34.paheal.net?tags=overwatch',
+          media: [
+            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-1.jpeg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-2.jpeg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-3.jpeg' },
+            { type: 'image', src: '/img/featured/rule34.xxx/overwatch-4.jpeg' }
+          ]
+        },
+        {
+          name: 'Genshin Impact',
+          path: '/posts/rule34.paheal.net?tags=genshin_impact',
+          media: featuredMedia('rule34.xxx', 'genshin_impact', 4)
+        },
+        {
+          name: 'Brawl Stars',
+          path: '/posts/rule34.paheal.net?tags=brawl_stars',
+          media: featuredMedia('rule34.xxx', 'brawl_stars', 4)
+        },
+        {
+          name: 'Zenless Zone Zero',
+          path: '/posts/rule34.paheal.net?tags=zenless_zone_zero',
+          media: featuredMedia('rule34.xxx', 'zenless_zone_zero', 3)
+        },
+        {
+          name: 'Friday Night Funkin',
+          path: '/posts/rule34.paheal.net?tags=friday_night_funkin',
+          media: [{ type: 'image', src: '/img/featured/rule34.xxx/friday_night_funkin.jpg' }]
+        },
+        {
+          name: 'Atomic Heart',
+          path: '/posts/rule34.paheal.net?tags=atomic_heart',
+          media: [{ type: 'image', src: '/img/featured/rule34.xxx/atomic_heart.jpg' }]
+        },
+        {
+          name: 'Minecraft',
+          path: '/posts/rule34.paheal.net?tags=minecraft',
+          media: featuredMedia('rule34.xxx', 'minecraft', 4)
+        },
+        {
+          name: 'Murder Drones',
+          path: '/posts/rule34.paheal.net?tags=murder_drones',
+          media: featuredMedia('rule34.xxx', 'murder_drones', 4)
+        },
+        {
+          name: 'CountryHumans',
+          path: '/posts/rule34.paheal.net?tags=countryhumans',
+          media: [{ type: 'image', src: '/img/featured/rule34.xxx/countryhumans.jpg' }]
+        },
+        {
+          name: 'Honkai: Star Rail',
+          path: '/posts/rule34.paheal.net?tags=honkai:_star_rail',
+          media: [{ type: 'image', src: '/img/featured/rule34.xxx/honkai_star_rail.jpg' }]
+        },
+        {
+          name: "Five Nights at Freddy's",
+          path: "/posts/rule34.paheal.net?tags=five_nights_at_freddy's",
+          media: [{ type: 'image', src: '/img/featured/rule34.xxx/five_nights_at_freddys.jpg' }]
+        },
+        {
+          name: 'Roblox',
+          path: '/posts/rule34.paheal.net?tags=roblox',
+          media: featuredMedia('rule34.xxx', 'roblox', 4)
+        },
+        {
+          name: 'Undertale',
+          path: '/posts/rule34.paheal.net?tags=undertale',
+          media: [{ type: 'image', src: '/img/featured/rule34.xxx/undertale.jpeg' }]
+        }
+      ]
+    },
     // {
     //   domain: 'gelbooru.com',
     //   path: '/posts/gelbooru.com',
