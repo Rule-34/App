@@ -152,7 +152,9 @@ describe('Post tag collections', async () => {
     const premiumPrompt = page.getByRole('dialog').first()
     await premiumPrompt.waitFor({ state: 'attached', timeout: 10000 })
     await expect(premiumPrompt.getAttribute('data-headlessui-state')).resolves.toBe('open')
-    await expect.poll(() => premiumPrompt.locator('a[href*="/premium"]').first().isVisible(), { timeout: 10000 }).toBe(true)
+    await expect
+      .poll(() => premiumPrompt.locator('a[href*="/premium"]').first().isVisible(), { timeout: 10000 })
+      .toBe(true)
     await premiumPrompt.getByRole('button', { name: /close/i }).click()
 
     await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(1)
@@ -184,12 +186,12 @@ describe('Post tag collections', async () => {
 
     await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(1)
     const blocklistPrompt = page.getByRole('dialog').first()
-    await expect.poll(() => blocklistPrompt.locator('a[href*="/premium"]').first().isVisible(), { timeout: 10000 }).toBe(true)
+    await expect
+      .poll(() => blocklistPrompt.locator('a[href*="/premium"]').first().isVisible(), { timeout: 10000 })
+      .toBe(true)
     await expect.poll(() => page.getByRole('dialog').getByText('General').isVisible()).toBe(false)
 
-    await blocklistPrompt
-      .getByRole('button', { name: /^close$/i })
-      .click()
+    await blocklistPrompt.getByRole('button', { name: /^close$/i }).click()
 
     await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(1)
     await expect.poll(() => page.getByRole('dialog').getByText('General').isVisible(), { timeout: 10000 }).toBe(true)
