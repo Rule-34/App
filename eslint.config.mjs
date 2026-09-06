@@ -10,7 +10,10 @@ export default withNuxt(
       'node_modules/**',
       'assets/lib/rule-34-shared-resources/**',
       'app/assets/lib/rule-34-shared-resources/**',
-      'public/js/**'
+      'public/js/**',
+      'API/**',
+      'R34-premium-ab-test/**',
+      'Universal-Booru-Wrapper/**'
     ]
   },
   {

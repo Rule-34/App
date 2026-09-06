@@ -152,6 +152,9 @@ describe('Post tag collections', async () => {
     const premiumPrompt = page.getByRole('dialog').first()
     await premiumPrompt.waitFor({ state: 'attached', timeout: 10000 })
     await expect(premiumPrompt.getAttribute('data-headlessui-state')).resolves.toBe('open')
+    await expect
+      .poll(() => premiumPrompt.locator('a[href*="/premium"]').first().isVisible(), { timeout: 10000 })
+      .toBe(true)
     await premiumPrompt.getByRole('button', { name: /close/i }).click()
 
     await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(1)
@@ -182,14 +185,13 @@ describe('Post tag collections', async () => {
     await addToBlocklistButton.click()
 
     await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(1)
-    await expect.poll(() => page.locator('a[href*="promo-tag-collections"]').first().isVisible()).toBe(true)
+    const blocklistPrompt = page.getByRole('dialog').first()
+    await expect
+      .poll(() => blocklistPrompt.locator('a[href*="/premium"]').first().isVisible(), { timeout: 10000 })
+      .toBe(true)
     await expect.poll(() => page.getByRole('dialog').getByText('General').isVisible()).toBe(false)
 
-    await page
-      .getByRole('dialog')
-      .filter({ has: page.locator('a[href*="promo-tag-collections"]') })
-      .getByRole('button', { name: /^close$/i })
-      .click()
+    await blocklistPrompt.getByRole('button', { name: /^close$/i }).click()
 
     await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(1)
     await expect.poll(() => page.getByRole('dialog').getByText('General').isVisible(), { timeout: 10000 }).toBe(true)
@@ -248,12 +250,12 @@ describe('Post tag collections', async () => {
     await page.getByRole('button', { name: /animated/i }).click()
 
     await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(2)
-    await expect.poll(() => page.locator('a[href*="promo-tag-collections"]').first().isVisible()).toBe(true)
+    await expect.poll(() => page.locator('a[href*="/premium"]').first().isVisible()).toBe(true)
     await expect.poll(() => page.getByRole('heading', { name: 'Tag Collections' }).isVisible()).toBe(false)
 
     await page
       .getByRole('dialog')
-      .filter({ has: page.locator('a[href*="promo-tag-collections"]') })
+      .filter({ has: page.locator('a[href*="/premium"]') })
       .getByRole('button', { name: /^close$/i })
       .click()
 

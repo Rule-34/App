@@ -100,3 +100,6 @@ sw.*
 .docx/
 docs/
 token-usage-output.txt
+API/
+R34-premium-ab-test/
+Universal-Booru-Wrapper/

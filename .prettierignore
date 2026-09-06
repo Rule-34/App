@@ -105,3 +105,8 @@ sw.*
 
 # Vim swap files
 *.swp
+
+# Nested workspace packages
+API
+R34-premium-ab-test
+Universal-Booru-Wrapper

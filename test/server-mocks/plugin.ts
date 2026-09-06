@@ -69,6 +69,32 @@ function resolveMockPostsPage(requestUrl: URL) {
     return mockPostsPageWithoutResults
   }
 
+  if (tags === 'rate_limited_502_test') {
+    throw createError({
+      statusCode: 502,
+      statusMessage: 'Bad Gateway',
+      message: 'Upstream booru rate limited',
+      data: {
+        statusCode: 502,
+        error: 'Bad Gateway',
+        message: 'Upstream booru rate limited',
+        upstreamStatusCode: 429
+      }
+    })
+  }
+
+  if (tags === 'client_429_test') {
+    throw createError({
+      statusCode: 429,
+      statusMessage: 'Too Many Requests',
+      message: 'Too Many Requests',
+      data: {
+        statusCode: 429,
+        message: 'Too Many Requests'
+      }
+    })
+  }
+
   if (tags === 'offline_test') {
     return mockPostsPageWithOfflineMedia
   }
