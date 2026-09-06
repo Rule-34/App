@@ -182,12 +182,12 @@ describe('Post tag collections', async () => {
     await addToBlocklistButton.click()
 
     await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(1)
-    await expect.poll(() => page.locator('a[href*="promo-tag-collections"]').first().isVisible()).toBe(true)
+    await expect.poll(() => page.locator('a[href*="/premium"]').first().isVisible()).toBe(true)
     await expect.poll(() => page.getByRole('dialog').getByText('General').isVisible()).toBe(false)
 
     await page
       .getByRole('dialog')
-      .filter({ has: page.locator('a[href*="promo-tag-collections"]') })
+      .filter({ has: page.locator('a[href*="/premium"]') })
       .getByRole('button', { name: /^close$/i })
       .click()
 
@@ -248,12 +248,12 @@ describe('Post tag collections', async () => {
     await page.getByRole('button', { name: /animated/i }).click()
 
     await expect.poll(() => page.getByRole('dialog').count(), { timeout: 10000 }).toBe(2)
-    await expect.poll(() => page.locator('a[href*="promo-tag-collections"]').first().isVisible()).toBe(true)
+    await expect.poll(() => page.locator('a[href*="/premium"]').first().isVisible()).toBe(true)
     await expect.poll(() => page.getByRole('heading', { name: 'Tag Collections' }).isVisible()).toBe(false)
 
     await page
       .getByRole('dialog')
-      .filter({ has: page.locator('a[href*="promo-tag-collections"]') })
+      .filter({ has: page.locator('a[href*="/premium"]') })
       .getByRole('button', { name: /^close$/i })
       .click()
 
