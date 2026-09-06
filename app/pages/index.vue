@@ -331,6 +331,65 @@
         }
       ]
     },
+    {
+      domain: 'rule34.paheal.net',
+      path: '/posts/rule34.paheal.net',
+      isPremium: false,
+      tags: [
+        {
+          name: t('pages.home.topPosts'),
+          path: '/posts/rule34.paheal.net?filter%5Bsort%5D=score',
+          media: [
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-1.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-2.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-3.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-4.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-5.jpg' }
+          ]
+        },
+        {
+          name: t('pages.home.trendingPosts'),
+          path: '/posts/rule34.paheal.net?filter%5Bscore%5D=>%3D50',
+          media: [
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-6.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-7.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-8.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-9.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-10.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-11.jpg' }
+          ]
+        },
+        {
+          name: t('pages.home.animatedVideo'),
+          path: '/posts/rule34.paheal.net?tags=animated',
+          media: [
+            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-1.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-2.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-3.jpg' }
+          ]
+        },
+        {
+          name: t('pages.home.noAi'),
+          path: '/posts/rule34.paheal.net?tags=-ai_generated',
+          media: [
+            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-1.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-2.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-3.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-1.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-2.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-3.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-4.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-5.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-6.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-7.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-8.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-9.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-10.jpg' },
+            { type: 'image', src: '/img/featured/rule34.paheal.net/top-11.jpg' }
+          ]
+        }
+      ]
+    },
     // {
     //   domain: 'gelbooru.com',
     //   path: '/posts/gelbooru.com',
