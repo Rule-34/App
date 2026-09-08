@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import type * as Sentry from '@sentry/nuxt'
 import {
   buildSentryClientInitOptions,
+  ignoreErrors,
   isChunkLoadError,
   isSafariNativeTrackMenuError,
   isUnknownOrExtensionError
@@ -64,6 +65,32 @@ describe('Sentry client options', () => {
     ).toBe(false)
   })
 
+  describe('ignoreErrors configuration', () => {
+    function matchesIgnoreErrors(message: string): boolean {
+      return ignoreErrors.some((pattern) => {
+        if (typeof pattern === 'string') {
+          return message.includes(pattern)
+        }
+        return pattern.test(message)
+      })
+    }
+
+    it('matches generic network fetch failure messages', () => {
+      expect(matchesIgnoreErrors('TypeError: Failed to fetch')).toBe(true)
+      expect(matchesIgnoreErrors('Failed to fetch')).toBe(true)
+      expect(matchesIgnoreErrors('TypeError: Load failed')).toBe(true)
+    })
+
+    it('does not match dynamic module import failures so they reach beforeSend', () => {
+      expect(
+        matchesIgnoreErrors('TypeError: Failed to fetch dynamically imported module: https://r34.app/_nuxt/entry.js')
+      ).toBe(false)
+      expect(
+        matchesIgnoreErrors('Failed to fetch dynamically imported module: https://r34.app/_nuxt/index.js')
+      ).toBe(false)
+    })
+  })
+
   describe('isUnknownOrExtensionError', () => {
     it('identifies events with no message and no exception value as unknown', () => {
       expect(isUnknownOrExtensionError({})).toBe(true)
@@ -123,6 +150,33 @@ describe('Sentry client options', () => {
         isChunkLoadError({
           exception: {
             values: [{ value: 'error loading dynamically imported module: https://r34.app/_nuxt/xyz.js' }]
+          }
+        })
+      ).toBe(true)
+    })
+
+    it('identifies dynamic chunk failures from event.message or later exception values', () => {
+      expect(
+        isChunkLoadError({
+          message: 'Failed to fetch dynamically imported module: https://r34.app/_nuxt/chunk.js'
+        })
+      ).toBe(true)
+
+      expect(
+        isChunkLoadError({
+          exception: {
+            values: [
+              { value: 'WrapperError: failed to load route', type: 'Error' },
+              { value: 'Failed to fetch dynamically imported module: https://r34.app/_nuxt/chunk.js', type: 'TypeError' }
+            ]
+          }
+        })
+      ).toBe(true)
+
+      expect(
+        isChunkLoadError({
+          exception: {
+            values: [{ value: 'Unknown', type: 'ChunkLoadError: loading chunk 42 failed' }]
           }
         })
       ).toBe(true)

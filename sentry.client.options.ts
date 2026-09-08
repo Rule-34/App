@@ -113,7 +113,7 @@ const denyUrls: RegExp[] = [
   /metrics\.itunes\.apple\.com\.edgesuite\.net\//i
 ]
 
-const ignoreErrors: (string | RegExp)[] = [
+export const ignoreErrors: (string | RegExp)[] = [
   // Build
 
   // Media
@@ -128,7 +128,7 @@ const ignoreErrors: (string | RegExp)[] = [
 
   // Network
   'Load failed',
-  'Failed to fetch',
+  /Failed to fetch(?!\s+dynamically imported module)/i,
 
   // Player / Ad-block collisions
   "Cannot set properties of undefined (setting 'display')",
@@ -292,17 +292,23 @@ export function isUnknownOrExtensionError(event: Sentry.Event | undefined): bool
 }
 
 export function isChunkLoadError(event: Sentry.Event | undefined): boolean {
-  const values = event?.exception?.values
-  if (!values || values.length === 0) {
-    const message = typeof event?.message === 'string' ? event.message : ''
-    return matchesChunkPattern(message)
+  if (!event) return false
+
+  const message = typeof event.message === 'string' ? event.message : ''
+  if (matchesChunkPattern(message)) {
+    return true
   }
 
-  const first = values[0]
-  const value = typeof first?.value === 'string' ? first.value : ''
-  const type = typeof first?.type === 'string' ? first.type : ''
+  const values = event.exception?.values
+  if (values && values.length > 0) {
+    return values.some(
+      (v) =>
+        (typeof v?.value === 'string' && matchesChunkPattern(v.value)) ||
+        (typeof v?.type === 'string' && matchesChunkPattern(v.type))
+    )
+  }
 
-  return matchesChunkPattern(value) || matchesChunkPattern(type)
+  return false
 }
 
 function matchesChunkPattern(text: string): boolean {
