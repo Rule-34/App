@@ -3,11 +3,14 @@ import { project } from './config/project'
 
 type SentryNuxtInitOptions = Parameters<typeof import('@sentry/nuxt').init>[0]
 
+export const CHUNK_ERROR_SAMPLE_RATE = 0.01
+
 export function buildSentryClientInitOptions(params: {
   dsn: string | undefined
   Sentry: typeof import('@sentry/nuxt')
+  chunkErrorSampleRate?: number
 }): SentryNuxtInitOptions {
-  const { dsn, Sentry } = params
+  const { dsn, Sentry, chunkErrorSampleRate = CHUNK_ERROR_SAMPLE_RATE } = params
 
   const options: SentryNuxtInitOptions = {
     enabled: !import.meta.dev && !!dsn,
@@ -49,6 +52,23 @@ export function buildSentryClientInitOptions(params: {
         return null
       }
 
+      if (isUnknownOrExtensionError(event)) {
+        return null
+      }
+
+      if (isChunkLoadError(event)) {
+        // Downsample chunk import failures to keep metric visibility without overwhelming Sentry
+        if (Math.random() > chunkErrorSampleRate) {
+          return null
+        }
+
+        event.tags = {
+          ...event.tags,
+          sampled_chunk_error: 'true',
+          sample_rate: String(chunkErrorSampleRate)
+        }
+      }
+
       // The Nuxt Sentry SDK calls `beforeSend` for error events. The SDK typing
       // expects an ErrorEvent return type here, so we narrow accordingly.
       return event as Sentry.ErrorEvent
@@ -66,53 +86,34 @@ const denyUrls: RegExp[] = [
    * @see https://github.com/fdev/sentry-ignores
    */
   // Specific files
-  /\/js\/popunder\.js/,
-  /\/fluid-player\//i,
+  /fluid-player/i,
 
-  // Random plugins and extensions.
-  /^resource:\/\//i,
-  /127\.0\.0\.1:4001\/isrunning/i,
-  /bestpriceninja/i,
-  /googleapis/i,
-  /googlebot/i,
-  /googlest/i,
-  /itunes\.apple\.com\//i,
-  /metrics\.itunes\.apple\.com\.edgesuite\.net\//i,
-  /re-markit/i,
-  /webappstoolbarba\.texthelp\.com\//i,
-
-  // Analytics.
-  /doubleclick\.net/i,
-  /hotjar\./i,
-  /netstats\.space/i,
-  /pagead\/js/i,
-  /posthog\.com/i,
-
-  // Chrome extensions.
-  /^chrome:\/\//i,
-  /chrome-extension:/i,
-  /extensions\//i,
-
-  // Facebook.
-  /connect\.facebook\.net\/en_US\/all\.js/i,
+  // Facebook flakiness
   /graph\.facebook\.com/i,
-
-  // Kaspersky antivirus.
-  /kaspersky/i,
-
-  // Locally saved copies
-  /file:\/\//i,
-
-  // Proxy servers.
-  /nph-proxy\./i,
-  /\.cloudfront\..+\/statistic\//i,
-
-  // Safari extensions.
-  /safari-web-extension:/i,
-  /safari-extension:/i
+  // Facebook blocked
+  /connect\.facebook\.net\/en_US\/all\.js/i,
+  // Woopra flakiness
+  /eatdifferent\.com\.woopra-ns\.com/i,
+  /static\.woopra\.com\/js\/woopra\.js/i,
+  // Chrome extensions
+  /^chrome(?:-extension)?:\/\//i,
+  /^chrome-extension:\/\//i,
+  // Criteo
+  /criteo\.net/i,
+  // Google
+  /google-analytics\.com/i,
+  /partner\.googleadservices\.com/i,
+  /pagead2\.googlesyndication\.com/i,
+  /apis\.google\.com/i,
+  /doubleclick\.net/i,
+  /googletagservices\.com/i,
+  // Other extensions
+  /127\.0\.0\.1:4001\/isrunning/i, // Cacaoweb
+  /webappstoolbarba\.texthelp\.com\//i,
+  /metrics\.itunes\.apple\.com\.edgesuite\.net\//i
 ]
 
-const ignoreErrors: string[] = [
+const ignoreErrors: (string | RegExp)[] = [
   // Build
 
   // Media
@@ -121,12 +122,20 @@ const ignoreErrors: string[] = [
   'Picture-in-Picture',
   'webkitExitFullScreen',
   'webkitExitFullscreen',
+  'webkitEnterFullscreen',
+  'InvalidStateError: The object is in an invalid state.',
   'NotSupportedError: The operation is not supported', // Safari not compatible video - https://stackoverflow.com/a/47976124
 
   // Network
+  'Load failed',
+  'Failed to fetch',
+
+  // Player / Ad-block collisions
+  "Cannot set properties of undefined (setting 'display')",
 
   // Service worker
   'Registration failed - no active Service Worker',
+  'Background Sync is disabled.',
 
   // - Misc -
   'ResizeObserver loop limit exceeded',
@@ -255,4 +264,55 @@ export function isSafariNativeTrackMenuError(event: Sentry.Event | undefined): b
   if (!frames || frames.length === 0) return false
 
   return frames.some((frame) => frame.function === 'sortedTrackListForMenu' && frame.filename === '[native code]')
+}
+
+export function isUnknownOrExtensionError(event: Sentry.Event | undefined): boolean {
+  if (!event) return true
+
+  const values = event.exception?.values
+  if (!values || values.length === 0) {
+    // Drop events with empty or generic opaque titles and no structured exception
+    const message = typeof event.message === 'string' ? event.message.trim() : ''
+    return !message || message === '<unknown>' || message === 'Script error.'
+  }
+
+  const first = values[0]
+  const value = typeof first?.value === 'string' ? first.value.trim() : ''
+  const type = typeof first?.type === 'string' ? first.type.trim() : ''
+
+  if ((!value || value === '<unknown>') && (!type || type === '<unknown>')) {
+    return true
+  }
+
+  if (value === 'Script error.' || type === 'Script error.') {
+    return true
+  }
+
+  return false
+}
+
+export function isChunkLoadError(event: Sentry.Event | undefined): boolean {
+  const values = event?.exception?.values
+  if (!values || values.length === 0) {
+    const message = typeof event?.message === 'string' ? event.message : ''
+    return matchesChunkPattern(message)
+  }
+
+  const first = values[0]
+  const value = typeof first?.value === 'string' ? first.value : ''
+  const type = typeof first?.type === 'string' ? first.type : ''
+
+  return matchesChunkPattern(value) || matchesChunkPattern(type)
+}
+
+function matchesChunkPattern(text: string): boolean {
+  if (!text) return false
+  return (
+    /dynamically imported module/i.test(text) ||
+    /importing a module script failed/i.test(text) ||
+    /error loading dynamically imported module/i.test(text) ||
+    /loading chunk \d+ failed/i.test(text) ||
+    /loading css chunk \d+ failed/i.test(text) ||
+    /unable to preload css/i.test(text)
+  )
 }
