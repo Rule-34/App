@@ -58,7 +58,7 @@ export function buildSentryClientInitOptions(params: {
 
       if (isChunkLoadError(event)) {
         // Downsample chunk import failures to keep metric visibility without overwhelming Sentry
-        if (Math.random() > chunkErrorSampleRate) {
+        if (Math.random() >= chunkErrorSampleRate) {
           return null
         }
 
