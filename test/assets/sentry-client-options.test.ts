@@ -85,9 +85,9 @@ describe('Sentry client options', () => {
       expect(
         matchesIgnoreErrors('TypeError: Failed to fetch dynamically imported module: https://r34.app/_nuxt/entry.js')
       ).toBe(false)
-      expect(
-        matchesIgnoreErrors('Failed to fetch dynamically imported module: https://r34.app/_nuxt/index.js')
-      ).toBe(false)
+      expect(matchesIgnoreErrors('Failed to fetch dynamically imported module: https://r34.app/_nuxt/index.js')).toBe(
+        false
+      )
     })
   })
 
@@ -167,7 +167,10 @@ describe('Sentry client options', () => {
           exception: {
             values: [
               { value: 'WrapperError: failed to load route', type: 'Error' },
-              { value: 'Failed to fetch dynamically imported module: https://r34.app/_nuxt/chunk.js', type: 'TypeError' }
+              {
+                value: 'Failed to fetch dynamically imported module: https://r34.app/_nuxt/chunk.js',
+                type: 'TypeError'
+              }
             ]
           }
         })
