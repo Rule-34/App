@@ -2,6 +2,7 @@
   import { LinkIcon } from '@heroicons/vue/24/outline'
   import { useFloating, offset, flip, shift } from '@floating-ui/vue'
   import type { IPost } from '~/assets/js/post.dto'
+  import { buildAnimeRelatedSourceServices, buildImageRelatedSourceServices } from '~/assets/js/post-source-services'
   import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
   const props = defineProps<{
@@ -23,52 +24,9 @@
     middleware: [offset(6), flip(), shift()]
   })
 
-  const imageAnimeRelatedServiceOptions = computed(() => [
-    {
-      serviceName: 'SauceNAO',
-      action: 'find' as const,
-      link: `https://saucenao.com/search.php?url=${encodeURIComponent(props.postFileUrl)}`
-    },
-    {
-      serviceName: 'ASCII2D',
-      action: 'find' as const,
-      link: `https://ascii2d.net/search/url/${encodeURIComponent(props.postFileUrl)}`
-    },
-    {
-      serviceName: 'IQDB',
-      action: 'find' as const,
-      link: `https://iqdb.org/?url=${encodeURIComponent(props.postFileUrl)}`
-    }
-  ])
+  const imageAnimeRelatedServiceOptions = computed(() => buildAnimeRelatedSourceServices(props.postFileUrl))
 
-  const imageRelatedServiceOptions = computed(() => [
-    {
-      serviceName: 'Google',
-      action: 'find' as const,
-      link: `https://lens.google.com/uploadbyurl?url=${encodeURIComponent(props.postFileUrl)}`
-    },
-    // TODO: Fix Yandex
-    {
-      serviceName: 'Yandex',
-      action: 'find' as const,
-      link: `https://yandex.com/images/search?url=${encodeURIComponent(props.postFileUrl)}`
-    },
-    {
-      serviceName: 'Bing',
-      action: 'find' as const,
-      link: `https://www.bing.com/images/searchbyimage?cbir=sbi&imgurl=${encodeURIComponent(props.postFileUrl)}`
-    },
-    {
-      serviceName: 'TinEye',
-      action: 'find' as const,
-      link: `https://tineye.com/search/?url=${encodeURIComponent(props.postFileUrl)}`
-    },
-    {
-      serviceName: 'ImgOps',
-      action: 'edit' as const,
-      link: `https://imgops.com/${props.postFileUrl.replace(/^https?:\/\//, '')}`
-    }
-  ])
+  const imageRelatedServiceOptions = computed(() => buildImageRelatedSourceServices(props.postFileUrl))
 
   function getServiceTitle(action: 'find' | 'edit', serviceName: string) {
     return t(action === 'edit' ? 'source.editWithService' : 'source.findWithService', {
