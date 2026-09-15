@@ -789,12 +789,11 @@
     </div>
   </main>
 
-  <footer>
+  <footer class="container mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
     <!-- Newsletter -->
-    <Newsletter />
+    <Newsletter class="mt-12" />
 
-    <!--  TODO: Footer -->
-    <!--  TODO: Footer link to legal page -->
-    <!--  TODO: Footer link to social media -->
+    <!-- Footer -->
+    <HomeFooter class="mt-10" />
   </footer>
 </template>
