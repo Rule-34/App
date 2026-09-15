@@ -258,7 +258,9 @@ describe('Premium cloud flows', async () => {
           pocketBase.requests
             .map((request) => decodeURIComponent(request))
             .some((request) =>
-              request.includes(String.raw`filter=tags ?~ "\"solo\"" && (tags !~ "\"yaoi\"" || tags = null)`)
+              request.includes(
+                String.raw`filter=tags ?~ "\"name\":\"solo\"" && (tags !~ "\"name\":\"yaoi\"" || tags = null)`
+              )
             ),
         { timeout: 10000 }
       )

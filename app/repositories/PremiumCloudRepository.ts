@@ -304,7 +304,7 @@ export class PremiumCloudRepository {
       .collection(premiumCloudCollections.posts)
       .getList<Pick<IPocketbasePost, 'tags'>>(1, savedPostTagSuggestionRecordLimit, {
         sort: '-created',
-        filter: this.clientFilter('tags ?~ {:tag}', { tag: `"${normalizedQuery}` }),
+        filter: this.clientFilter('tags ?~ {:tag}', { tag: savedPostTagNamePattern(normalizedQuery) }),
         fields: 'tags',
         $autoCancel: false
       })
@@ -562,24 +562,39 @@ const savedPostTagSuggestionRecordLimit = 50
 const savedPostTagSuggestionLimit = 20
 
 /**
- * `tags` is a JSON field holding `{ name, type }` objects and PocketBase runs its LIKE operators
- * against the serialized JSON. The tag name is therefore wrapped in quotes so the match stays
- * anchored to a whole tag name: searching for `solo` must not return posts tagged `solo_focus`,
- * and `_` inside a tag name stays literal instead of acting as a wildcard.
+ * `tags` is a JSON field holding `{ name, type }` objects and PocketBase stores it as compact JSON
+ * with its keys sorted, so the LIKE operators see text like `[{"name":"solo","type":"general"}]`.
+ *
+ * The pattern therefore targets the `name` property. Matching a bare `"solo"` would also hit every
+ * tag whose `type` is `solo`, which includes unrelated posts for an include and drops the matching
+ * ones for an exclude. The pattern ends before the closing quote so callers can anchor it for an
+ * exact match or leave it open as a prefix search.
+ */
+export function savedPostTagNamePattern(tagName: string) {
+  return `"name":"${normalizeTagQuery(tagName)}`
+}
+
+/**
+ * Turns a saved-post tag query into a PocketBase filter. A leading `-` excludes the tag instead of
+ * requiring it, and a query without a tag name is not a filter at all.
  *
  * `?~` means "any tag matches". The plain operators require every tag to match, which is what makes
  * `!~` the correct way to exclude a tag. Posts saved before the `tags` field existed have no tags at
  * all, so they are kept explicitly instead of being filtered out.
+ *
+ * The trailing quote keeps the match anchored to a whole tag name: searching for `solo` must not
+ * return posts tagged `solo_focus`, and `_` inside a tag name stays literal instead of acting as a
+ * wildcard.
  */
 export function savedPostTagFilter(tag: string): { expression: string; params: Record<string, string> } | undefined {
   const isExcluded = tag.startsWith('-')
   const name = (isExcluded ? tag.slice(1) : tag).trim()
 
-  if (!name) {
+  if (!normalizeTagQuery(name)) {
     return undefined
   }
 
-  const pattern = `"${name}"`
+  const pattern = `${savedPostTagNamePattern(name)}"`
 
   return isExcluded
     ? { expression: '(tags !~ {:tag} || tags = null)', params: { tag: pattern } }
@@ -587,7 +602,7 @@ export function savedPostTagFilter(tag: string): { expression: string; params: R
 }
 
 /**
- * Quotes and backslashes would escape the quoted LIKE pattern built by `searchSavedPostTags`
+ * Quotes and backslashes would escape the LIKE pattern built by `savedPostTagNamePattern`
  */
 export function normalizeTagQuery(query: string) {
   return query.replace(/["\\]/g, '').trim()

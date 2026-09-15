@@ -4,7 +4,8 @@ import {
   PremiumCloudSyncRepository,
   normalizeTagQuery,
   rankSavedPostTagSuggestions,
-  savedPostTagFilter
+  savedPostTagFilter,
+  savedPostTagNamePattern
 } from '../../app/repositories/PremiumCloudRepository'
 
 type FakeRecord = { id: string; [key: string]: unknown }
@@ -563,7 +564,7 @@ describe('saved post tags', () => {
         30,
         {
           sort: '-created',
-          filter: String.raw`rating = "explicit" && tags ?~ "\"solo\"" && (tags !~ "\"yaoi\"" || tags = null)`,
+          filter: String.raw`rating = "explicit" && tags ?~ "\"name\":\"solo\"" && (tags !~ "\"name\":\"yaoi\"" || tags = null)`,
           $autoCancel: false
         }
       ]
@@ -571,14 +572,27 @@ describe('saved post tags', () => {
   })
 
   it('anchors tag filters to whole tag names', () => {
-    expect(savedPostTagFilter('solo')).toEqual({ expression: 'tags ?~ {:tag}', params: { tag: '"solo"' } })
+    expect(savedPostTagFilter('solo')).toEqual({
+      expression: 'tags ?~ {:tag}',
+      params: { tag: '"name":"solo"' }
+    })
     expect(savedPostTagFilter('-solo')).toEqual({
       expression: '(tags !~ {:tag} || tags = null)',
-      params: { tag: '"solo"' }
+      params: { tag: '"name":"solo"' }
     })
 
     // A negative tag without a name is not a filter
     expect(savedPostTagFilter('-   ')).toBeUndefined()
+  })
+
+  it('targets the tag name property so tag types are not matched', () => {
+    // `tags` is stored as compact JSON, so a bare `"artist"` pattern would also match
+    // `{"name":"solo","type":"artist"}`: it would include posts that are not tagged `artist`
+    // and, for an exclusion, drop posts that are not tagged it either
+    expect(savedPostTagNamePattern('artist')).toBe('"name":"artist')
+
+    expect(savedPostTagFilter('artist')?.params.tag).toBe('"name":"artist"')
+    expect(savedPostTagFilter('-artist')?.params.tag).toBe('"name":"artist"')
   })
 
   it('drops characters that would escape the tag pattern', () => {
@@ -629,7 +643,11 @@ describe('saved post tags', () => {
     expect(calls).toContainEqual({
       collection: 'posts',
       method: 'getList',
-      args: [1, 50, { sort: '-created', filter: String.raw`tags ?~ "\"sol"`, fields: 'tags', $autoCancel: false }]
+      args: [
+        1,
+        50,
+        { sort: '-created', filter: String.raw`tags ?~ "\"name\":\"sol"`, fields: 'tags', $autoCancel: false }
+      ]
     })
     expect(suggestions).toEqual([
       { name: 'solo', type: 'general' },
