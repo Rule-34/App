@@ -20,12 +20,14 @@
 
 <template>
   <div
-    class="mt-12 border-t border-base-0/20 px-2 pt-8"
+    class="w-full border-t border-base-0/20 pt-8 pb-12"
     data-testid="home-footer"
   >
     <!-- Pages -->
     <nav>
-      <ul class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm leading-6">
+      <ul
+        class="grid grid-cols-2 gap-x-4 gap-y-0.5 text-sm sm:grid-cols-3 md:flex md:flex-wrap md:justify-center md:gap-x-6 md:gap-y-2"
+      >
         <li
           v-for="link in footerLinks"
           :key="link.id"
@@ -34,7 +36,7 @@
             :href="link.isExternal ? link.href : localePath(link.href)"
             :rel="link.isExternal ? 'noopener noreferrer' : undefined"
             :target="link.isExternal ? '_blank' : undefined"
-            class="text-base-content hover:hover-text-util focus-visible:focus-outline-util"
+            class="inline-flex min-h-11 w-full items-center justify-center px-1 text-base-content hover:hover-text-util focus-visible:focus-outline-util sm:min-h-0 sm:w-auto sm:px-0"
           >
             {{ t(link.nameKey) }}
           </NuxtLink>
@@ -43,15 +45,17 @@
     </nav>
 
     <!-- Legal -->
-    <nav class="mt-4">
-      <ul class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm leading-6">
+    <nav class="mt-1.5 sm:mt-2">
+      <ul
+        class="grid grid-cols-2 gap-x-4 gap-y-0.5 text-sm sm:flex sm:flex-wrap sm:justify-center sm:gap-x-6 sm:gap-y-2"
+      >
         <li
           v-for="link in legalLinks"
           :key="link.href"
         >
           <NuxtLink
             :href="localePath(link.href)"
-            class="text-base-content hover:hover-text-util focus-visible:focus-outline-util"
+            class="inline-flex min-h-11 w-full items-center justify-center px-1 text-base-content hover:hover-text-util focus-visible:focus-outline-util sm:min-h-0 sm:w-auto sm:px-0"
           >
             {{ t(link.nameKey) }}
           </NuxtLink>
@@ -60,12 +64,12 @@
     </nav>
 
     <!-- Social -->
-    <nav class="mt-6">
-      <ul class="flex flex-wrap justify-center gap-x-4 gap-y-2">
+    <nav class="mt-4 sm:mt-6">
+      <ul class="flex flex-wrap justify-center gap-x-1 gap-y-0.5">
         <li>
           <NuxtLink
             :href="project.social.twitter"
-            class="flex items-center gap-x-2 rounded-md p-2 text-sm font-semibold text-base-content hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+            class="inline-flex min-h-11 items-center gap-x-2 rounded-md p-2 text-sm font-semibold text-base-content hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util sm:min-h-0"
             rel="nofollow noopener noreferrer"
             target="_blank"
           >
