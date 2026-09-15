@@ -230,6 +230,42 @@ describe('Premium cloud flows', async () => {
 
     expect(pocketBase.requests.some((request) => request.includes('distinct_original_domain_from_posts'))).toBe(false)
   }, 20000)
+
+  it('sends the selected tags as cloud filters', async () => {
+    const page = await createTrackedPage()
+    const pocketBase = createPocketBaseMockState({
+      savedPostSummaries: [firstSavedPostSummary],
+      savedPostRecords: [
+        {
+          ...firstSavedPostRecord,
+          tags: [
+            { name: 'solo', type: 'general' },
+            { name: '1girl', type: 'general' }
+          ]
+        }
+      ]
+    })
+
+    await mockPocketBase(page, pocketBase)
+    await addPocketBaseAuthCookie(page, url('/'))
+    await page.goto(url('/premium/saved-posts/r34.app?tags=solo%7C-yaoi'), { waitUntil: 'domcontentloaded' })
+
+    await page.locator('figure').first().waitFor({ state: 'visible', timeout: 10000 })
+
+    await expect
+      .poll(
+        () =>
+          pocketBase.requests
+            .map((request) => decodeURIComponent(request))
+            .some((request) =>
+              request.includes(
+                String.raw`filter=tags ?~ "\"name\":\"solo\"" && (tags !~ "\"name\":\"yaoi\"" || tags = null)`
+              )
+            ),
+        { timeout: 10000 }
+      )
+      .toBe(true)
+  }, 20000)
 })
 
 function pocketBaseRecordFromPost(post: (typeof mockPostsPage0.data)[number], domain: string): IPocketbasePost {

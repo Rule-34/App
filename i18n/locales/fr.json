@@ -88,8 +88,6 @@
     "noFileSelected": "Aucun fichier sélectionné",
     "invalidBooruType": "Type de Booru invalide",
     "booruAlreadyExists": "Ce Booru existe déjà",
-    "autocompleteNotImplemented": "Autocomplétion non implémentée",
-    "notImplemented": "Non implémenté",
     "rateLimitDescription": "Tu as envoyé trop de requêtes en peu de temps",
     "verifyNotBot": "Vérifier que je ne suis pas un bot",
     "noBlockedTagsToExport": "Aucun tag bloqué à exporter",

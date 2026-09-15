@@ -88,8 +88,6 @@
     "noFileSelected": "ファイルが選択されていません",
     "invalidBooruType": "無効なBooruタイプです",
     "booruAlreadyExists": "このBooruはすでに追加されています",
-    "autocompleteNotImplemented": "オートコンプリートはまだ実装されていません",
-    "notImplemented": "まだ実装されていません",
     "rateLimitDescription": "短時間にリクエストを送りすぎました",
     "verifyNotBot": "ボットでないことを確認",
     "noBlockedTagsToExport": "エクスポートするブロック済みタグがありません",

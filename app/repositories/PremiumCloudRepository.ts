@@ -1,6 +1,7 @@
 import type { Domain, DomainConfig } from '../assets/js/domain'
 import Post, { type IPost } from '../assets/js/post.dto'
 import { PocketbasePost, type IPocketbasePost, type ISimplePocketbasePost } from '../assets/js/pocketbase.dto'
+import type { ITag } from '../assets/js/tag.dto'
 import type { ITagCollection } from '../assets/js/tagCollection.dto'
 
 export const premiumCloudCollections = {
@@ -184,6 +185,11 @@ export type LoadSavedPostsPageOptions = {
   page: number
   perPage: number
   filters: PremiumSavedPostsFilters
+
+  /**
+   * Tag names, optionally prefixed with `-` to exclude them
+   */
+  tags?: readonly string[]
 }
 
 export class PremiumCloudRepository {
@@ -235,7 +241,13 @@ export class PremiumCloudRepository {
       .then((records) => [...records])
   }
 
-  async loadSavedPostsPage({ page, perPage, filters }: LoadSavedPostsPageOptions) {
+  /**
+   * One page of the user's saved posts, newest first by default.
+   *
+   * `filters` become `&&`-joined clauses and `tags` are added on top through `savedPostTagFilter`,
+   * so a tag named with a leading `-` excludes it instead of requiring it.
+   */
+  async loadSavedPostsPage({ page, perPage, filters, tags = [] }: LoadSavedPostsPageOptions) {
     const requestFilters: string[] = []
 
     if (filters.type) {
@@ -248,6 +260,14 @@ export class PremiumCloudRepository {
 
     if (filters.score) {
       requestFilters.push(this.clientFilter('score >= {:score}', { score: filters.score }))
+    }
+
+    for (const tag of tags) {
+      const tagFilter = savedPostTagFilter(tag)
+
+      if (tagFilter) {
+        requestFilters.push(this.clientFilter(tagFilter.expression, tagFilter.params))
+      }
     }
 
     const response = await this.client
@@ -268,6 +288,31 @@ export class PremiumCloudRepository {
         items_per_page: response.perPage
       }
     }
+  }
+
+  /**
+   * Tag suggestions for the saved-posts search, taken from the tags of the user's own saved posts.
+   */
+  async searchSavedPostTags(query: string): Promise<ITag[]> {
+    const normalizedQuery = normalizeTagQuery(query)
+
+    if (!normalizedQuery) {
+      return []
+    }
+
+    const response = await this.client
+      .collection(premiumCloudCollections.posts)
+      .getList<Pick<IPocketbasePost, 'tags'>>(1, savedPostTagSuggestionRecordLimit, {
+        sort: '-created',
+        filter: this.clientFilter('tags ?~ {:tag}', { tag: savedPostTagNamePattern(normalizedQuery) }),
+        fields: 'tags',
+        $autoCancel: false
+      })
+
+    return rankSavedPostTagSuggestions(
+      response.items.flatMap((item) => item.tags ?? []),
+      normalizedQuery
+    )
   }
 
   async savePost(post: IPost) {
@@ -512,6 +557,91 @@ export class PremiumCloudRepository {
 }
 
 export { PremiumCloudRepository as PremiumCloudSyncRepository }
+
+const savedPostTagSuggestionRecordLimit = 50
+const savedPostTagSuggestionLimit = 20
+
+/**
+ * `tags` is a JSON field holding `{ name, type }` objects and PocketBase stores it as compact JSON
+ * with its keys sorted, so the LIKE operators see text like `[{"name":"solo","type":"general"}]`.
+ *
+ * The pattern therefore targets the `name` property. Matching a bare `"solo"` would also hit every
+ * tag whose `type` is `solo`, which includes unrelated posts for an include and drops the matching
+ * ones for an exclude. The pattern ends before the closing quote so callers can anchor it for an
+ * exact match or leave it open as a prefix search.
+ */
+export function savedPostTagNamePattern(tagName: string) {
+  return `"name":"${normalizeTagQuery(tagName)}`
+}
+
+/**
+ * Turns a saved-post tag query into a PocketBase filter. A leading `-` excludes the tag instead of
+ * requiring it, and a query without a tag name is not a filter at all.
+ *
+ * `?~` means "any tag matches". The plain operators require every tag to match, which is what makes
+ * `!~` the correct way to exclude a tag. Posts saved before the `tags` field existed have no tags at
+ * all, so they are kept explicitly instead of being filtered out.
+ *
+ * The trailing quote keeps the match anchored to a whole tag name: searching for `solo` must not
+ * return posts tagged `solo_focus`, and `_` inside a tag name stays literal instead of acting as a
+ * wildcard.
+ */
+export function savedPostTagFilter(tag: string): { expression: string; params: Record<string, string> } | undefined {
+  const isExcluded = tag.startsWith('-')
+  const name = (isExcluded ? tag.slice(1) : tag).trim()
+
+  if (!normalizeTagQuery(name)) {
+    return undefined
+  }
+
+  const pattern = `${savedPostTagNamePattern(name)}"`
+
+  return isExcluded
+    ? { expression: '(tags !~ {:tag} || tags = null)', params: { tag: pattern } }
+    : { expression: 'tags ?~ {:tag}', params: { tag: pattern } }
+}
+
+/**
+ * Quotes and backslashes would escape the LIKE pattern built by `savedPostTagNamePattern`
+ */
+export function normalizeTagQuery(query: string) {
+  return query.replace(/["\\]/g, '').trim()
+}
+
+/**
+ * Keeps the tags of the fetched saved posts that match the query, ranks them by how often they
+ * occur and drops duplicates.
+ */
+export function rankSavedPostTagSuggestions(
+  tags: readonly ITag[],
+  query: string,
+  limit = savedPostTagSuggestionLimit
+): ITag[] {
+  const prefix = query.toLowerCase()
+  const matches = new Map<string, { tag: ITag; count: number }>()
+
+  for (const tag of tags) {
+    const name = tag.name?.trim()
+
+    if (!name || !name.toLowerCase().startsWith(prefix)) {
+      continue
+    }
+
+    const match = matches.get(name)
+
+    if (match) {
+      match.count += 1
+      continue
+    }
+
+    matches.set(name, { tag: { name, type: tag.type }, count: 1 })
+  }
+
+  return [...matches.values()]
+    .sort((a, b) => b.count - a.count || a.tag.name.localeCompare(b.tag.name))
+    .slice(0, limit)
+    .map((match) => match.tag)
+}
 
 function savedPostSummaryFromRecord(record: ISimplePocketbasePost): ISimplePocketbasePost {
   return {
