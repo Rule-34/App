@@ -53,19 +53,25 @@ describe('/', async () => {
       .locator('a')
       .evaluateAll((anchors) => anchors.map((anchor) => anchor.getAttribute('href')))
 
-    expect(hrefs).toEqual(
-      expect.arrayContaining([
-        '/',
-        '/other-sites',
-        '/legal',
-        '/privacy-policy',
-        '/terms-of-service',
-        '/cookie-policy',
-        '/dmca',
-        project.social.twitter,
-        project.social.discord,
-        project.social.github
-      ])
-    )
+    // Every sidebar link except `settings` (install-app, faq and blog are external), then the legal
+    // pages and the social profiles. Listed explicitly so a dropped link fails this test.
+    expect(hrefs).toEqual([
+      '/',
+      '/other-sites',
+      `https://www.installpwa.com/from/${project.urls.production.hostname}`,
+      'https://rule34.app/frequently-asked-questions',
+      `${project.urls.production.toString()}blog`,
+      '/legal',
+      '/privacy-policy',
+      '/terms-of-service',
+      '/cookie-policy',
+      '/dmca',
+      project.social.twitter,
+      project.social.discord,
+      project.social.github
+    ])
+
+    // `settings` needs the current app state, so it stays in the sidebar only
+    expect(hrefs).not.toContain('/settings')
   }, 30000)
 })
