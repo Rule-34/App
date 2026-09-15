@@ -88,8 +88,6 @@
     "noFileSelected": "Tidak ada berkas yang dipilih",
     "invalidBooruType": "Jenis Booru tidak valid",
     "booruAlreadyExists": "Booru sudah ada",
-    "autocompleteNotImplemented": "Pelengkapan otomatis tidak diterapkan",
-    "notImplemented": "Tidak dilaksanakan",
     "rateLimitDescription": "Anda mengirim terlalu banyak permintaan dalam waktu singkat",
     "verifyNotBot": "Verifikasikan bahwa saya bukan Bot",
     "noBlockedTagsToExport": "Tidak ada tag yang diblokir untuk diekspor",
