@@ -241,6 +241,12 @@ export class PremiumCloudRepository {
       .then((records) => [...records])
   }
 
+  /**
+   * One page of the user's saved posts, newest first by default.
+   *
+   * `filters` become `&&`-joined clauses and `tags` are added on top through `savedPostTagFilter`,
+   * so a tag named with a leading `-` excludes it instead of requiring it.
+   */
   async loadSavedPostsPage({ page, perPage, filters, tags = [] }: LoadSavedPostsPageOptions) {
     const requestFilters: string[] = []
 
