@@ -7,6 +7,9 @@ import {
 
 const postFileUrl = 'https://static.example.org/samples/image.jpg'
 
+/**
+ * Returns the service entry with the given name, or `undefined` when the builder does not emit it.
+ */
 function findService(services: readonly PostSourceService[], serviceName: string) {
   return services.find((service) => service.serviceName === serviceName)
 }
