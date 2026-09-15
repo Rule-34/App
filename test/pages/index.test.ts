@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { setup } from '@nuxt/test-utils'
+import { project } from '../../config/project'
 import { useTrackedPageFactory } from '../helper'
 
 describe('/', async () => {
@@ -40,5 +41,31 @@ describe('/', async () => {
     const href = await animatedLink.getAttribute('href')
     expect(href).toContain('/posts/rule34.xxx?tags=animated')
     expect(href).not.toContain('/posts/rule34.xxx/animated')
+  }, 30000)
+
+  it('links the footer to the site, the legal pages and the social profiles', async () => {
+    const page = await createTrackedPage('/')
+
+    const footer = page.getByTestId('home-footer')
+    await footer.waitFor({ state: 'visible' })
+
+    const hrefs = await footer
+      .locator('a')
+      .evaluateAll((anchors) => anchors.map((anchor) => anchor.getAttribute('href')))
+
+    expect(hrefs).toEqual(
+      expect.arrayContaining([
+        '/',
+        '/other-sites',
+        '/legal',
+        '/privacy-policy',
+        '/terms-of-service',
+        '/cookie-policy',
+        '/dmca',
+        project.social.twitter,
+        project.social.discord,
+        project.social.github
+      ])
+    )
   }, 30000)
 })

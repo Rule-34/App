@@ -793,8 +793,7 @@
     <!-- Newsletter -->
     <Newsletter />
 
-    <!--  TODO: Footer -->
-    <!--  TODO: Footer link to legal page -->
-    <!--  TODO: Footer link to social media -->
+    <!-- Footer -->
+    <HomeFooter />
   </footer>
 </template>
