@@ -364,7 +364,7 @@
       "general": "일반",
       "meta": "메타"
     },
-    "searchBooru": "Booru에서 검색"
+    "searchBooru": "실시간 Booru 검색"
   },
   "errors": {
     "tooManyRequests": "요청이 너무 많습니다.",

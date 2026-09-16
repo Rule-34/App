@@ -364,7 +364,7 @@
       "general": "一般",
       "meta": "メタ"
     },
-    "searchBooru": "Booruで検索"
+    "searchBooru": "Booruでライブ検索"
   },
   "errors": {
     "tooManyRequests": "リクエストが多すぎます",

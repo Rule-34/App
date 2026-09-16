@@ -294,7 +294,7 @@ describe('Premium cloud flows', async () => {
     const tagPill = page.locator('button', { hasText: 'solo' }).first()
     if (await tagPill.isVisible()) {
       await tagPill.click()
-      await page.getByRole('menuitem', { name: /search booru/i }).waitFor({ state: 'visible', timeout: 5000 })
+      await page.getByRole('menuitem', { name: /search live booru/i }).waitFor({ state: 'visible', timeout: 5000 })
     }
   }, 20000)
 })

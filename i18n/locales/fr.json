@@ -364,7 +364,7 @@
       "general": "Général",
       "meta": "Meta"
     },
-    "searchBooru": "Rechercher sur le booru"
+    "searchBooru": "Rechercher en direct sur le Booru"
   },
   "errors": {
     "tooManyRequests": "Trop de requêtes",
