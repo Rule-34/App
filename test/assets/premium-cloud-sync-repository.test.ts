@@ -564,35 +564,33 @@ describe('saved post tags', () => {
         30,
         {
           sort: '-created',
-          filter: String.raw`rating = "explicit" && tags ?~ "\"name\":\"solo\"" && (tags !~ "\"name\":\"yaoi\"" || tags = null)`,
+          filter: String.raw`rating = "explicit" && (tags_general ?~ "\"solo\"" || tags_character ?~ "\"solo\"" || tags_artist ?~ "\"solo\"" || tags_copyright ?~ "\"solo\"" || tags_meta ?~ "\"solo\"") && ((tags_general !~ "\"yaoi\"" || tags_general = null) && (tags_character !~ "\"yaoi\"" || tags_character = null) && (tags_artist !~ "\"yaoi\"" || tags_artist = null) && (tags_copyright !~ "\"yaoi\"" || tags_copyright = null) && (tags_meta !~ "\"yaoi\"" || tags_meta = null))`,
           $autoCancel: false
         }
       ]
     })
   })
 
-  it('anchors tag filters to whole tag names', () => {
+  it('anchors tag filters to whole tag names across all tag fields', () => {
     expect(savedPostTagFilter('solo')).toEqual({
-      expression: 'tags ?~ {:tag}',
-      params: { tag: '"name":"solo"' }
+      expression:
+        '(tags_general ?~ {:tag} || tags_character ?~ {:tag} || tags_artist ?~ {:tag} || tags_copyright ?~ {:tag} || tags_meta ?~ {:tag})',
+      params: { tag: '"solo"' }
     })
     expect(savedPostTagFilter('-solo')).toEqual({
-      expression: '(tags !~ {:tag} || tags = null)',
-      params: { tag: '"name":"solo"' }
+      expression:
+        '((tags_general !~ {:tag} || tags_general = null) && (tags_character !~ {:tag} || tags_character = null) && (tags_artist !~ {:tag} || tags_artist = null) && (tags_copyright !~ {:tag} || tags_copyright = null) && (tags_meta !~ {:tag} || tags_meta = null))',
+      params: { tag: '"solo"' }
     })
 
     // A negative tag without a name is not a filter
     expect(savedPostTagFilter('-   ')).toBeUndefined()
   })
 
-  it('targets the tag name property so tag types are not matched', () => {
-    // `tags` is stored as compact JSON, so a bare `"artist"` pattern would also match
-    // `{"name":"solo","type":"artist"}`: it would include posts that are not tagged `artist`
-    // and, for an exclusion, drop posts that are not tagged it either
-    expect(savedPostTagNamePattern('artist')).toBe('"name":"artist')
-
-    expect(savedPostTagFilter('artist')?.params.tag).toBe('"name":"artist"')
-    expect(savedPostTagFilter('-artist')?.params.tag).toBe('"name":"artist"')
+  it('builds tag name patterns starting with a quote for prefix and exact matching', () => {
+    expect(savedPostTagNamePattern('artist')).toBe('"artist')
+    expect(savedPostTagFilter('artist')?.params.tag).toBe('"artist"')
+    expect(savedPostTagFilter('-artist')?.params.tag).toBe('"artist"')
   })
 
   it('drops characters that would escape the tag pattern', () => {
@@ -621,17 +619,12 @@ describe('saved post tags', () => {
       posts: [
         {
           id: 'saved-post-1',
-          tags: [
-            { name: 'solo', type: 'general' },
-            { name: 'solitude', type: 'character' }
-          ]
+          tags_general: ['solo'],
+          tags_character: ['solitude']
         },
         {
           id: 'saved-post-2',
-          tags: [
-            { name: 'solo', type: 'general' },
-            { name: '1girl', type: 'general' }
-          ]
+          tags_general: ['solo', '1girl']
         },
         { id: 'saved-post-3' }
       ]
@@ -646,7 +639,12 @@ describe('saved post tags', () => {
       args: [
         1,
         50,
-        { sort: '-created', filter: String.raw`tags ?~ "\"name\":\"sol"`, fields: 'tags', $autoCancel: false }
+        {
+          sort: '-created',
+          filter: String.raw`tags_general ?~ "\"sol" || tags_character ?~ "\"sol" || tags_artist ?~ "\"sol" || tags_copyright ?~ "\"sol" || tags_meta ?~ "\"sol"`,
+          fields: 'tags_artist,tags_character,tags_copyright,tags_general,tags_meta',
+          $autoCancel: false
+        }
       ]
     })
     expect(suggestions).toEqual([

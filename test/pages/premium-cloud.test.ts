@@ -259,7 +259,7 @@ describe('Premium cloud flows', async () => {
             .map((request) => decodeURIComponent(request))
             .some((request) =>
               request.includes(
-                String.raw`filter=tags ?~ "\"name\":\"solo\"" && (tags !~ "\"name\":\"yaoi\"" || tags = null)`
+                String.raw`filter=(tags_general ?~ "\"solo\"" || tags_character ?~ "\"solo\"" || tags_artist ?~ "\"solo\"" || tags_copyright ?~ "\"solo\"" || tags_meta ?~ "\"solo\"") && ((tags_general !~ "\"yaoi\"" || tags_general = null) && (tags_character !~ "\"yaoi\"" || tags_character = null) && (tags_artist !~ "\"yaoi\"" || tags_artist = null) && (tags_copyright !~ "\"yaoi\"" || tags_copyright = null) && (tags_meta !~ "\"yaoi\"" || tags_meta = null))`
               )
             ),
         { timeout: 10000 }

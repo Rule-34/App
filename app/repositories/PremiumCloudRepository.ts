@@ -294,7 +294,8 @@ export class PremiumCloudRepository {
    * Tag suggestions for the saved-posts search, taken from the tags of the user's own saved posts.
    */
   async searchSavedPostTags(query: string): Promise<ITag[]> {
-    const normalizedQuery = normalizeTagQuery(query)
+    const raw = query.trim().startsWith('-') ? query.trim().slice(1) : query
+    const normalizedQuery = normalizeTagQuery(raw)
 
     if (!normalizedQuery) {
       return []
@@ -302,17 +303,27 @@ export class PremiumCloudRepository {
 
     const response = await this.client
       .collection(premiumCloudCollections.posts)
-      .getList<Pick<IPocketbasePost, 'tags'>>(1, savedPostTagSuggestionRecordLimit, {
+      .getList<
+        Pick<IPocketbasePost, 'tags_artist' | 'tags_character' | 'tags_copyright' | 'tags_general' | 'tags_meta'>
+      >(1, savedPostTagSuggestionRecordLimit, {
         sort: '-created',
-        filter: this.clientFilter('tags ?~ {:tag}', { tag: savedPostTagNamePattern(normalizedQuery) }),
-        fields: 'tags',
+        filter: this.clientFilter(
+          'tags_general ?~ {:tag} || tags_character ?~ {:tag} || tags_artist ?~ {:tag} || tags_copyright ?~ {:tag} || tags_meta ?~ {:tag}',
+          { tag: savedPostTagNamePattern(normalizedQuery) }
+        ),
+        fields: 'tags_artist,tags_character,tags_copyright,tags_general,tags_meta',
         $autoCancel: false
       })
 
-    return rankSavedPostTagSuggestions(
-      response.items.flatMap((item) => item.tags ?? []),
-      normalizedQuery
-    )
+    const tags: ITag[] = response.items.flatMap((item) => [
+      ...(item.tags_artist ?? []).map((name) => ({ name, type: 'artist' as const })),
+      ...(item.tags_character ?? []).map((name) => ({ name, type: 'character' as const })),
+      ...(item.tags_copyright ?? []).map((name) => ({ name, type: 'copyright' as const })),
+      ...(item.tags_general ?? []).map((name) => ({ name, type: 'general' as const })),
+      ...(item.tags_meta ?? []).map((name) => ({ name, type: 'meta' as const }))
+    ])
+
+    return rankSavedPostTagSuggestions(tags, normalizedQuery)
   }
 
   async savePost(post: IPost) {
@@ -562,29 +573,27 @@ const savedPostTagSuggestionRecordLimit = 50
 const savedPostTagSuggestionLimit = 20
 
 /**
- * `tags` is a JSON field holding `{ name, type }` objects and PocketBase stores it as compact JSON
- * with its keys sorted, so the LIKE operators see text like `[{"name":"solo","type":"general"}]`.
+ * Tag values in PocketBase are stored across the category JSON columns (`tags_general`,
+ * `tags_character`, `tags_artist`, `tags_copyright`, `tags_meta`) as arrays of strings.
  *
- * The pattern therefore targets the `name` property. Matching a bare `"solo"` would also hit every
- * tag whose `type` is `solo`, which includes unrelated posts for an include and drops the matching
- * ones for an exclude. The pattern ends before the closing quote so callers can anchor it for an
- * exact match or leave it open as a prefix search.
+ * Matching against a serialized JSON array like `["solo","1girl"]` matches the string inside
+ * quotes. The pattern starts with a quote so callers can anchor it for an exact match or
+ * leave it open as a prefix search.
  */
 export function savedPostTagNamePattern(tagName: string) {
-  return `"name":"${normalizeTagQuery(tagName)}`
+  return `"${normalizeTagQuery(tagName)}`
 }
 
 /**
- * Turns a saved-post tag query into a PocketBase filter. A leading `-` excludes the tag instead of
- * requiring it, and a query without a tag name is not a filter at all.
+ * Turns a saved-post tag query into a PocketBase filter across all tag category columns.
+ * A leading `-` excludes the tag instead of requiring it, and a query without a tag name
+ * is not a filter at all.
  *
- * `?~` means "any tag matches". The plain operators require every tag to match, which is what makes
- * `!~` the correct way to exclude a tag. Posts saved before the `tags` field existed have no tags at
- * all, so they are kept explicitly instead of being filtered out.
+ * `?~` means "any tag in the array matches". `!~` checks exclusion. Posts saved before
+ * the tag fields existed or with null tags are kept explicitly on exclusions.
  *
- * The trailing quote keeps the match anchored to a whole tag name: searching for `solo` must not
- * return posts tagged `solo_focus`, and `_` inside a tag name stays literal instead of acting as a
- * wildcard.
+ * The trailing quote keeps the match anchored to a whole tag name: searching for `solo`
+ * must not return posts tagged `solo_focus`.
  */
 export function savedPostTagFilter(tag: string): { expression: string; params: Record<string, string> } | undefined {
   const isExcluded = tag.startsWith('-')
@@ -597,8 +606,16 @@ export function savedPostTagFilter(tag: string): { expression: string; params: R
   const pattern = `${savedPostTagNamePattern(name)}"`
 
   return isExcluded
-    ? { expression: '(tags !~ {:tag} || tags = null)', params: { tag: pattern } }
-    : { expression: 'tags ?~ {:tag}', params: { tag: pattern } }
+    ? {
+        expression:
+          '((tags_general !~ {:tag} || tags_general = null) && (tags_character !~ {:tag} || tags_character = null) && (tags_artist !~ {:tag} || tags_artist = null) && (tags_copyright !~ {:tag} || tags_copyright = null) && (tags_meta !~ {:tag} || tags_meta = null))',
+        params: { tag: pattern }
+      }
+    : {
+        expression:
+          '(tags_general ?~ {:tag} || tags_character ?~ {:tag} || tags_artist ?~ {:tag} || tags_copyright ?~ {:tag} || tags_meta ?~ {:tag})',
+        params: { tag: pattern }
+      }
 }
 
 /**
