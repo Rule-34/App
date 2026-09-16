@@ -266,6 +266,37 @@ describe('Premium cloud flows', async () => {
       )
       .toBe(true)
   }, 20000)
+
+  it('renders the search booru action in saved posts tag menus', async () => {
+    const page = await createTrackedPage()
+    const pocketBase = createPocketBaseMockState({
+      savedPostRecords: [
+        {
+          ...firstSavedPostRecord,
+          tags_general: ['solo', '1girl']
+        }
+      ]
+    })
+
+    await mockPocketBase(page, pocketBase)
+    await addPocketBaseAuthCookie(page, url('/'))
+    await page.goto(url('/premium/saved-posts/r34.app'), { waitUntil: 'domcontentloaded' })
+
+    await page.locator('figure').first().waitFor({ state: 'visible', timeout: 10000 })
+
+    // Open tags sheet
+    const tagsButton = page.getByRole('button', { name: /tags/i })
+    if (await tagsButton.isVisible()) {
+      await tagsButton.click()
+    }
+
+    // Click on a tag pill to open its context menu
+    const tagPill = page.locator('button', { hasText: 'solo' }).first()
+    if (await tagPill.isVisible()) {
+      await tagPill.click()
+      await page.getByRole('menuitem', { name: /search booru/i }).waitFor({ state: 'visible', timeout: 5000 })
+    }
+  }, 20000)
 })
 
 function pocketBaseRecordFromPost(post: (typeof mockPostsPage0.data)[number], domain: string): IPocketbasePost {

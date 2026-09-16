@@ -363,7 +363,8 @@
       "copyright": "loạt",
       "general": "chung",
       "meta": "Meta"
-    }
+    },
+    "searchBooru": "Tìm kiếm trên booru"
   },
   "errors": {
     "tooManyRequests": "Quá nhiều yêu cầu",

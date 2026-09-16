@@ -278,6 +278,23 @@
     window.open(router.resolve({ path, query: tagRoute.query }).href, '_blank', 'noopener,noreferrer')
   }
 
+  /**
+   * Opens live booru search for the tag in a new tab
+   */
+  async function onPostSearchBooru(tag: string) {
+    const tagRoute = generatePostsRoute(
+      '/posts',
+      savedPostsBooru.domain,
+      undefined,
+      [new Tag({ name: tag }).toJSON()],
+      undefined
+    )
+
+    const path = localePath(tagRoute.path)
+
+    window.open(router.resolve({ path, query: tagRoute.query }).href, '_blank', 'noopener,noreferrer')
+  }
+
   async function onLoadNextPostPage() {
     // Skip if already fetching
     if (isFetching.value || isFetchingNextPage.value) {
@@ -826,8 +843,10 @@
                   :post="getPostRow(virtualRow.index)"
                   :post-index="virtualRow.index"
                   :selected-tags="selectedTags"
+                  :show-search-booru="true"
                   @add-tag="onPostAddTag"
                   @open-tag-in-new-tab="onPostOpenTagInNewTab"
+                  @search-booru="onPostSearchBooru"
                   @set-tag="onPostSetTag"
                 />
               </template>

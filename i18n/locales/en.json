@@ -363,7 +363,8 @@
       "copyright": "Series",
       "general": "General",
       "meta": "Meta"
-    }
+    },
+    "searchBooru": "Search booru"
   },
   "errors": {
     "tooManyRequests": "Too many requests",

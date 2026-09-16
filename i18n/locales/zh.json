@@ -363,7 +363,8 @@
       "copyright": "系列",
       "general": "一般",
       "meta": "元"
-    }
+    },
+    "searchBooru": "在 booru 上搜索"
   },
   "errors": {
     "tooManyRequests": "请求太多",

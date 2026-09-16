@@ -2,6 +2,7 @@
   import {
     ArrowTopRightOnSquareIcon,
     DocumentDuplicateIcon,
+    GlobeAltIcon,
     MagnifyingGlassIcon,
     MinusIcon,
     NoSymbolIcon,
@@ -17,6 +18,7 @@
   const props = defineProps<{
     tag: Tag
     selectedTags: Tag[]
+    showSearchBooru?: boolean
   }>()
 
   const emit = defineEmits<{
@@ -25,6 +27,7 @@
     blocklistPremiumRequired: []
     setTag: [tag: string]
     openTagInNewTab: [tag: string]
+    searchBooru: [tag: string]
   }>()
 
   const { isPremium } = useUserData()
@@ -254,6 +257,28 @@
                 />
 
                 {{ $t('tags.openInNewTab') }}
+              </button>
+            </HeadlessMenuItem>
+          </div>
+
+          <!-- Search booru -->
+          <div
+            v-if="showSearchBooru"
+            class="py-1"
+          >
+            <HeadlessMenuItem v-slot="{ active }">
+              <button
+                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                class="group flex w-full items-center px-2.5 py-1 text-sm"
+                type="button"
+                @click="emit('searchBooru', props.tag.name)"
+              >
+                <GlobeAltIcon
+                  aria-hidden="true"
+                  class="mr-3 h-4 w-4 shrink-0 rounded-sm"
+                />
+
+                {{ $t('tags.searchBooru') }}
               </button>
             </HeadlessMenuItem>
           </div>

@@ -363,7 +363,8 @@
       "copyright": "Serien",
       "general": "Allgemein",
       "meta": "Meta"
-    }
+    },
+    "searchBooru": "Auf Booru suchen"
   },
   "errors": {
     "tooManyRequests": "Zu viele Anfragen",

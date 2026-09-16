@@ -363,7 +363,8 @@
       "copyright": "Seri",
       "general": "Umum",
       "meta": "Meta"
-    }
+    },
+    "searchBooru": "Cari di booru"
   },
   "errors": {
     "tooManyRequests": "Terlalu banyak permintaan",

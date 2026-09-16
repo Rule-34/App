@@ -363,7 +363,8 @@
       "copyright": "Серии",
       "general": "Общие",
       "meta": "Мета"
-    }
+    },
+    "searchBooru": "Искать на booru"
   },
   "errors": {
     "tooManyRequests": "Слишком много запросов",
