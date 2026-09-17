@@ -240,6 +240,8 @@
 
   const tagResults: Ref<Tag[]> = shallowRef([])
 
+  let tagSearchRequestId = 0
+
   /**
    * `undefined` values mean that they will be replaced by default values
    */
@@ -289,6 +291,7 @@
    * Listeners
    */
   async function onSearchTag(tag: string) {
+    const requestId = ++tagSearchRequestId
     let response: { data: ITag[] }
 
     try {
@@ -306,7 +309,15 @@
           httpScheme: selectedBooru.value.config?.options?.HTTPScheme ?? undefined
         }
       })
+
+      if (requestId !== tagSearchRequestId) {
+        return
+      }
     } catch (error) {
+      if (requestId !== tagSearchRequestId) {
+        return
+      }
+
       if (shouldReportTagSearchError(error)) {
         const Sentry = await import('@sentry/nuxt')
 
