@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import {
     getPopunderProviderByKey,
+    getPopunderProviderCrossorigin,
     parsePopunderProviderMode,
     popunderProviderModes,
     popunderProviders,
@@ -51,6 +52,9 @@
   const selectedScriptUrl = computed(() =>
     providerMode.value === 'random' ? selectedRandomScript.value : selectedProvider.value.id
   )
+  const armedProvider = computed(() =>
+    armed.value ? popunderProviders.find(({ id }) => id === armedScriptUrl.value) : undefined
+  )
   const reportProviderMode = computed(() => (armed.value ? armedProviderMode.value : providerMode.value))
   const reportProviderLabel = computed(() => (armed.value ? armedProviderLabel.value : selectedProviderLabel.value))
   const reportScriptUrl = computed(() => (armed.value ? armedScriptUrl.value : selectedScriptUrl.value))
@@ -72,6 +76,26 @@
       events: events.value
     })
   })
+
+  useHead(() => ({
+    script: armedProvider.value
+      ? [
+          {
+            src: armedProvider.value.id,
+            defer: true,
+            crossorigin: getPopunderProviderCrossorigin(armedProvider.value),
+            onload: () => {
+              status.value = 'script-loaded'
+              addEvent('script-loaded', { url: armedProvider.value?.id })
+            },
+            onerror: () => {
+              status.value = 'script-error'
+              addEvent('script-error', { url: armedProvider.value?.id })
+            }
+          }
+        ]
+      : []
+  }))
 
   onMounted(() => {
     clientMounted.value = true
@@ -176,22 +200,6 @@
 
   onUnmounted(uninstallInstrumentation)
 
-  function injectAdScript(scriptUrl: string) {
-    const script = document.createElement('script')
-    script.src = scriptUrl
-    script.defer = true
-    script.crossOrigin = 'anonymous'
-    script.onload = () => {
-      status.value = 'script-loaded'
-      addEvent('script-loaded', { url: scriptUrl })
-    }
-    script.onerror = () => {
-      status.value = 'script-error'
-      addEvent('script-error', { url: scriptUrl })
-    }
-    document.head.append(script)
-  }
-
   function armAds() {
     if (armed.value) {
       return
@@ -206,7 +214,6 @@
     startedAtMs.value = performance.now()
     installInstrumentation()
     addEvent('armed', { label: armedProviderLabel.value, url: armedScriptUrl.value })
-    injectAdScript(armedScriptUrl.value)
   }
 
   function recordTestClick(label: string) {
