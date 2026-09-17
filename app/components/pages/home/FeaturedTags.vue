@@ -66,10 +66,13 @@
     if (isExternalHref(path)) return path
     return localePath(path)
   }
+
+  const featuredTagsRef = ref<HTMLElement | null>(null)
+  useHorizontalScroll(featuredTagsRef)
 </script>
 
 <template>
-  <ol class="scrollbar-hide grid grid-flow-col gap-4 overflow-x-auto">
+  <ol ref="featuredTagsRef" class="scrollbar-hide grid grid-flow-col gap-4 overflow-x-auto">
     <template
       v-for="(tag, index) in preselectedTags"
       :key="tag.name"
