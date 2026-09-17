@@ -230,6 +230,82 @@ describe('Premium cloud flows', async () => {
 
     expect(pocketBase.requests.some((request) => request.includes('distinct_original_domain_from_posts'))).toBe(false)
   }, 20000)
+
+  it('sends the selected tags as cloud filters', async () => {
+    const page = await createTrackedPage()
+    const pocketBase = createPocketBaseMockState({
+      savedPostSummaries: [firstSavedPostSummary],
+      savedPostRecords: [
+        {
+          ...firstSavedPostRecord,
+          tags: [
+            { name: 'solo', type: 'general' },
+            { name: '1girl', type: 'general' }
+          ]
+        }
+      ]
+    })
+
+    await mockPocketBase(page, pocketBase)
+    await addPocketBaseAuthCookie(page, url('/'))
+    await page.goto(url('/premium/saved-posts/r34.app?tags=solo%7C-yaoi'), { waitUntil: 'domcontentloaded' })
+
+    await page.locator('figure').first().waitFor({ state: 'visible', timeout: 10000 })
+
+    await expect
+      .poll(
+        () =>
+          pocketBase.requests
+            .map((request) => decodeURIComponent(request))
+            .some((request) =>
+              request.includes(
+                String.raw`filter=(tags_general ?~ "\"solo\"" || tags_character ?~ "\"solo\"" || tags_artist ?~ "\"solo\"" || tags_copyright ?~ "\"solo\"" || tags_meta ?~ "\"solo\"") && ((tags_general !~ "\"yaoi\"" || tags_general = null) && (tags_character !~ "\"yaoi\"" || tags_character = null) && (tags_artist !~ "\"yaoi\"" || tags_artist = null) && (tags_copyright !~ "\"yaoi\"" || tags_copyright = null) && (tags_meta !~ "\"yaoi\"" || tags_meta = null))`
+              )
+            ),
+        { timeout: 10000 }
+      )
+      .toBe(true)
+  }, 20000)
+
+  it('searches the live Booru from a saved post tag', async () => {
+    const page = await createTrackedPage()
+    const pocketBase = createPocketBaseMockState({
+      savedPostRecords: [
+        {
+          ...firstSavedPostRecord,
+          tags_general: ['solo', '1girl']
+        }
+      ]
+    })
+
+    await mockPocketBase(page, pocketBase)
+    await addPocketBaseAuthCookie(page, url('/'))
+    await page.goto(url('/premium/saved-posts/r34.app'), { waitUntil: 'domcontentloaded' })
+
+    await page.locator('figure').first().waitFor({ state: 'visible', timeout: 10000 })
+
+    // The tag menu only exists once the post's tag sheet is open
+    await page.getByRole('button', { name: 'Tags', exact: true }).first().click()
+
+    const tagButton = page.getByRole('button', { name: 'solo', exact: true }).first()
+    await tagButton.waitFor({ state: 'visible', timeout: 10000 })
+    await tagButton.click()
+
+    const searchLiveBooru = page.getByRole('menuitem', { name: 'Search live Booru' })
+    await searchLiveBooru.waitFor({ state: 'visible', timeout: 5000 })
+
+    const popupPromise = page.waitForEvent('popup')
+
+    await searchLiveBooru.click()
+
+    const popup = await popupPromise
+    const popupUrl = new URL(popup.url())
+
+    expect(popupUrl.pathname).toContain('/posts/r34.app')
+    expect(popupUrl.searchParams.get('tags')).toBe('solo')
+
+    await popup.close()
+  }, 20000)
 })
 
 function pocketBaseRecordFromPost(post: (typeof mockPostsPage0.data)[number], domain: string): IPocketbasePost {

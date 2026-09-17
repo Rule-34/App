@@ -12,6 +12,8 @@
     post: IRenderablePost
 
     selectedTags: Tag[]
+
+    showSearchBooru?: boolean
   }>()
 
   /**
@@ -42,6 +44,7 @@
     addTag: [tag: string]
     setTag: [tag: string]
     openTagInNewTab: [tag: string]
+    searchBooru: [tag: string]
   }>()
 
   const currentUrl = useRequestURL()
@@ -309,11 +312,13 @@
                   >
                     <LazyPostTag
                       :selected-tags="selectedTags"
+                      :show-search-booru="props.showSearchBooru"
                       :tag="createTag(tag, tagType)"
                       @add-tag="emit('addTag', $event)"
                       @add-to-collection="onAddTagToCollection"
                       @blocklist-premium-required="onBlocklistPremiumRequired"
                       @open-tag-in-new-tab="emit('openTagInNewTab', $event)"
+                      @search-booru="emit('searchBooru', $event)"
                       @set-tag="emit('setTag', $event)"
                     />
                   </li>

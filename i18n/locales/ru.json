@@ -88,8 +88,6 @@
     "noFileSelected": "Файл не выбран",
     "invalidBooruType": "Недопустимый тип Booru",
     "booruAlreadyExists": "Такой Booru уже есть",
-    "autocompleteNotImplemented": "Автодополнение пока не реализовано",
-    "notImplemented": "Пока не реализовано",
     "rateLimitDescription": "Вы отправили слишком много запросов за короткое время",
     "verifyNotBot": "Подтвердить, что я не бот",
     "noBlockedTagsToExport": "Нет заблокированных тегов для экспорта",
@@ -365,7 +363,8 @@
       "copyright": "Серии",
       "general": "Общие",
       "meta": "Мета"
-    }
+    },
+    "searchBooru": "Искать на Booru в реальном времени"
   },
   "errors": {
     "tooManyRequests": "Слишком много запросов",

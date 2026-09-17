@@ -88,8 +88,6 @@
     "noFileSelected": "Hiçbir dosya seçilmedi",
     "invalidBooruType": "Geçersiz Booru türü",
     "booruAlreadyExists": "Booru zaten mevcut",
-    "autocompleteNotImplemented": "Otomatik tamamlama uygulanmadı",
-    "notImplemented": "Uygulanmadı",
     "rateLimitDescription": "Kısa sürede çok fazla istek gönderdiniz",
     "verifyNotBot": "Bot olmadığımı doğrula",
     "noBlockedTagsToExport": "Dışa aktarılacak engellenmiş etiket yok",
@@ -365,7 +363,8 @@
       "copyright": "Serisi",
       "general": "Genel",
       "meta": "meta"
-    }
+    },
+    "searchBooru": "Canlı Booru'da ara"
   },
   "errors": {
     "tooManyRequests": "Çok fazla istek",

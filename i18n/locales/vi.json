@@ -88,8 +88,6 @@
     "noFileSelected": "Không có tập tin nào được chọn",
     "invalidBooruType": "Loại Booru không hợp lệ",
     "booruAlreadyExists": "Booru đã tồn tại",
-    "autocompleteNotImplemented": "Tính năng tự động hoàn thành chưa được triển khai",
-    "notImplemented": "Chưa được triển khai",
     "rateLimitDescription": "Bạn đã gửi quá nhiều yêu cầu trong một khoảng thời gian ngắn",
     "verifyNotBot": "Xác minh tôi không phải là Bot",
     "noBlockedTagsToExport": "Không có thẻ bị chặn để xuất",
@@ -365,7 +363,8 @@
       "copyright": "loạt",
       "general": "chung",
       "meta": "Meta"
-    }
+    },
+    "searchBooru": "Tìm kiếm trực tiếp trên Booru"
   },
   "errors": {
     "tooManyRequests": "Quá nhiều yêu cầu",

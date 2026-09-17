@@ -1,7 +1,17 @@
 import { describe, expect, it, vi } from 'vitest'
-import { PremiumCloudSyncRepository } from '../../app/repositories/PremiumCloudRepository'
+import PocketBase from 'pocketbase'
+import {
+  PremiumCloudSyncRepository,
+  normalizeTagQuery,
+  rankSavedPostTagSuggestions,
+  savedPostTagFilter,
+  savedPostTagNamePattern
+} from '../../app/repositories/PremiumCloudRepository'
 
 type FakeRecord = { id: string; [key: string]: unknown }
+
+// The SDK's own helper, so the filters asserted here are the ones production sends
+const sdkClient = new PocketBase('https://pocketbase.test')
 
 function createFakePocketBase(
   initialRecords: Record<string, FakeRecord[]>,
@@ -75,6 +85,7 @@ function createFakePocketBase(
           })
         }
       },
+      filter: (expression: string, params?: Record<string, unknown>) => sdkClient.filter(expression, params),
       createBatch() {
         return {
           collection(name: string) {
@@ -530,5 +541,133 @@ describe('PremiumCloudSyncRepository', () => {
     })
 
     expect(changes).toEqual(['savedPosts'])
+  })
+})
+
+describe('saved post tags', () => {
+  it('filters saved post pages by included and excluded tags', async () => {
+    const { client, calls } = createFakePocketBase({ posts: [] })
+    const repository = new PremiumCloudSyncRepository(client)
+
+    await repository.loadSavedPostsPage({
+      page: 2,
+      perPage: 30,
+      filters: { rating: 'explicit' },
+      tags: ['solo', '-yaoi', '  ']
+    })
+
+    expect(calls).toContainEqual({
+      collection: 'posts',
+      method: 'getList',
+      args: [
+        2,
+        30,
+        {
+          sort: '-created',
+          filter: String.raw`rating = "explicit" && (tags_general ?~ "\"solo\"" || tags_character ?~ "\"solo\"" || tags_artist ?~ "\"solo\"" || tags_copyright ?~ "\"solo\"" || tags_meta ?~ "\"solo\"") && ((tags_general !~ "\"yaoi\"" || tags_general = null) && (tags_character !~ "\"yaoi\"" || tags_character = null) && (tags_artist !~ "\"yaoi\"" || tags_artist = null) && (tags_copyright !~ "\"yaoi\"" || tags_copyright = null) && (tags_meta !~ "\"yaoi\"" || tags_meta = null))`,
+          $autoCancel: false
+        }
+      ]
+    })
+  })
+
+  it('anchors tag filters to whole tag names across all tag fields', () => {
+    expect(savedPostTagFilter('solo')).toEqual({
+      expression:
+        '(tags_general ?~ {:tag} || tags_character ?~ {:tag} || tags_artist ?~ {:tag} || tags_copyright ?~ {:tag} || tags_meta ?~ {:tag})',
+      params: { tag: '"solo"' }
+    })
+    expect(savedPostTagFilter('-solo')).toEqual({
+      expression:
+        '((tags_general !~ {:tag} || tags_general = null) && (tags_character !~ {:tag} || tags_character = null) && (tags_artist !~ {:tag} || tags_artist = null) && (tags_copyright !~ {:tag} || tags_copyright = null) && (tags_meta !~ {:tag} || tags_meta = null))',
+      params: { tag: '"solo"' }
+    })
+
+    // A negative tag without a name is not a filter
+    expect(savedPostTagFilter('-   ')).toBeUndefined()
+  })
+
+  it('builds tag name patterns starting with a quote for prefix and exact matching', () => {
+    expect(savedPostTagNamePattern('artist')).toBe('"artist')
+    expect(savedPostTagFilter('artist')?.params.tag).toBe('"artist"')
+    expect(savedPostTagFilter('-artist')?.params.tag).toBe('"artist"')
+  })
+
+  it('drops characters that would escape the tag pattern', () => {
+    expect(normalizeTagQuery('  "style \\ shift  ')).toBe('style  shift')
+  })
+
+  it('escapes a literal percent so it is not read as a LIKE wildcard', () => {
+    // Verified against PocketBase 0.40.4: a bare `%` makes the filter match no rows at all,
+    // while the escaped one matches the tag holding it.
+    expect(savedPostTagNamePattern('100%real')).toBe('"100\\%real')
+    expect(savedPostTagFilter('100%real')?.params.tag).toBe('"100\\%real"')
+
+    // `_` is literal in PocketBase already, escaping it would change nothing
+    expect(savedPostTagNamePattern('solo_focus')).toBe('"solo_focus')
+  })
+
+  it('ranks tag suggestions by how often they occur and drops duplicates', () => {
+    const suggestions = rankSavedPostTagSuggestions(
+      [
+        { name: 'solo', type: 'general' },
+        { name: 'solo', type: 'general' },
+        { name: 'solitude', type: 'character' },
+        { name: '1girl', type: 'general' }
+      ],
+      'SOL'
+    )
+
+    expect(suggestions).toEqual([
+      { name: 'solo', type: 'general' },
+      { name: 'solitude', type: 'character' }
+    ])
+  })
+
+  it('suggests tags from the saved posts that match the query', async () => {
+    const { client, calls } = createFakePocketBase({
+      posts: [
+        {
+          id: 'saved-post-1',
+          tags_general: ['solo'],
+          tags_character: ['solitude']
+        },
+        {
+          id: 'saved-post-2',
+          tags_general: ['solo', '1girl']
+        },
+        { id: 'saved-post-3' }
+      ]
+    })
+    const repository = new PremiumCloudSyncRepository(client)
+
+    const suggestions = await repository.searchSavedPostTags('sol')
+
+    expect(calls).toContainEqual({
+      collection: 'posts',
+      method: 'getList',
+      args: [
+        1,
+        50,
+        {
+          sort: '-created',
+          filter: String.raw`tags_general ?~ "\"sol" || tags_character ?~ "\"sol" || tags_artist ?~ "\"sol" || tags_copyright ?~ "\"sol" || tags_meta ?~ "\"sol"`,
+          fields: 'tags_artist,tags_character,tags_copyright,tags_general,tags_meta',
+          $autoCancel: false
+        }
+      ]
+    })
+    expect(suggestions).toEqual([
+      { name: 'solo', type: 'general' },
+      { name: 'solitude', type: 'character' }
+    ])
+  })
+
+  it('does not query saved posts for an empty tag suggestion query', async () => {
+    const { client, calls } = createFakePocketBase({ posts: [] })
+    const repository = new PremiumCloudSyncRepository(client)
+
+    await expect(repository.searchSavedPostTags(' " ')).resolves.toEqual([])
+    expect(calls).toEqual([])
   })
 })

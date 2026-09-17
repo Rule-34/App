@@ -88,8 +88,6 @@
     "noFileSelected": "선택한 파일이 없습니다.",
     "invalidBooruType": "잘못된 Booru 유형",
     "booruAlreadyExists": "Booru이 이미 존재합니다.",
-    "autocompleteNotImplemented": "자동 완성이 구현되지 않았습니다.",
-    "notImplemented": "구현되지 않음",
     "rateLimitDescription": "짧은 시간 내에 너무 많은 요청을 보냈습니다.",
     "verifyNotBot": "내가 봇이 아닌지 확인하세요",
     "noBlockedTagsToExport": "내보낼 차단된 태그가 없습니다.",
@@ -365,7 +363,8 @@
       "copyright": "시리즈",
       "general": "일반",
       "meta": "메타"
-    }
+    },
+    "searchBooru": "실시간 Booru 검색"
   },
   "errors": {
     "tooManyRequests": "요청이 너무 많습니다.",

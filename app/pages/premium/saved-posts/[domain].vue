@@ -8,7 +8,7 @@
   import type { ComponentPublicInstance, Ref } from 'vue'
   import type { Domain } from '~/assets/js/domain'
   import { postHasBlockedTag } from '~/assets/js/post-blocklist'
-  import Tag from '~/assets/js/tag.dto'
+  import Tag, { toggleSelectedTag } from '~/assets/js/tag.dto'
   import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
   import { isRenderablePost, type IPostPage, type IRenderablePost } from '~/assets/js/post.dto'
   import { generatePostsRoute, getFilterQueryValue, getSingleQueryValue } from '~/assets/js/RouterHelper'
@@ -29,6 +29,7 @@
   }
 
   const route = useRoute()
+  const router = useRouter()
   const localePath = useLocalePath()
   const { t } = useI18n()
   const { toast } = useLazyToast()
@@ -166,6 +167,8 @@
    */
   const tagResults: Ref<Tag[]> = shallowRef([])
 
+  let tagSearchRequestId = 0
+
   /**
    * `undefined` values mean that they will be replaced by default values
    */
@@ -214,38 +217,82 @@
   /**
    * Listeners
    */
-  async function onSearchTag(_tag: string) {
-    toast.error(t('toasts.autocompleteNotImplemented'))
+  async function onSearchTag(tag: string) {
+    const requestId = ++tagSearchRequestId
+
+    try {
+      const tagSuggestions = await repository.value.searchSavedPostTags(tag)
+
+      if (requestId !== tagSearchRequestId) {
+        return
+      }
+
+      tagResults.value = tagSuggestions.map((tagSuggestion) => new Tag(tagSuggestion))
+    } catch (error) {
+      if (requestId !== tagSearchRequestId) {
+        return
+      }
+
+      tagResults.value = []
+
+      toast.error(t('toasts.failedToLoadTags', { message: error instanceof Error ? error.message : String(error) }))
+    }
   }
 
   async function onDomainChange(domain: Domain) {
     await reflectChangesInUrl({ domain: domain.domain, page: null, tags: null, filters: null })
   }
 
-  async function onSearchSubmit({ filters }: { tags: Tag[]; filters: Record<string, unknown> }) {
-    // TODO: Tags
-    await reflectChangesInUrl({ page: null, filters })
+  async function onSearchSubmit({ tags, filters }: { tags: Tag[]; filters: Record<string, unknown> }) {
+    await reflectChangesInUrl({ page: null, tags, filters })
   }
 
   /**
    * Adds the tag, or removes it if it already exists
    */
-  async function onPostAddTag(_tag: string) {
-    toast.error(t('toasts.notImplemented'))
+  async function onPostAddTag(tag: string) {
+    await reflectChangesInUrl({ page: null, tags: toggleSelectedTag(selectedTags.value, tag) })
   }
 
   /**
    * Sets tags to only the given tag
    */
-  async function onPostSetTag(_tag: string) {
-    toast.error(t('toasts.notImplemented'))
+  async function onPostSetTag(tag: string) {
+    await reflectChangesInUrl({ page: null, tags: [new Tag({ name: tag }).toJSON()] })
   }
 
   /**
    * Opens the tag in a new tab
    */
-  async function onPostOpenTagInNewTab(_tag: string) {
-    toast.error(t('toasts.notImplemented'))
+  async function onPostOpenTagInNewTab(tag: string) {
+    const tagRoute = generatePostsRoute(
+      '/premium/saved-posts',
+      savedPostsBooru.domain,
+      undefined,
+      [new Tag({ name: tag }).toJSON()],
+      undefined
+    )
+
+    const path = localePath(tagRoute.path)
+
+    window.open(router.resolve({ path, query: tagRoute.query }).href, '_blank', 'noopener,noreferrer')
+  }
+
+  /**
+   * Opens live booru search for the tag in a new tab
+   */
+  async function onPostSearchBooru(tag: string) {
+    const tagRoute = generatePostsRoute(
+      '/posts',
+      savedPostsBooru.domain,
+      undefined,
+      [new Tag({ name: tag }).toJSON()],
+      undefined
+    )
+
+    const path = localePath(tagRoute.path)
+
+    window.open(router.resolve({ path, query: tagRoute.query }).href, '_blank', 'noopener,noreferrer')
   }
 
   async function onLoadNextPostPage() {
@@ -301,13 +348,10 @@
   }: QueryFunctionContext<readonly unknown[], number>): Promise<IPostPageFromPocketBase> {
     const page = pageParam
 
-    // TODO
-    // if (selectedTags.value.length > 0) {
-    // }
-
     return repository.value.loadSavedPostsPage({
       page,
       perPage: postsPerPage.value,
+      tags: selectedTags.value.map((selectedTag) => selectedTag.name),
       filters: {
         type: selectedFilters.value.type,
         rating: selectedFilters.value.rating,
@@ -799,8 +843,10 @@
                   :post="getPostRow(virtualRow.index)"
                   :post-index="virtualRow.index"
                   :selected-tags="selectedTags"
+                  :show-search-booru="true"
                   @add-tag="onPostAddTag"
                   @open-tag-in-new-tab="onPostOpenTagInNewTab"
+                  @search-booru="onPostSearchBooru"
                   @set-tag="onPostSetTag"
                 />
               </template>

@@ -4,7 +4,7 @@
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import type { QueryFunctionContext } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
-  import { cloneDeep, throttle } from 'es-toolkit'
+  import { throttle } from 'es-toolkit'
   import { FetchError } from 'ofetch'
   import type { Ref } from 'vue'
   import { postHasBlockedTag } from '~/assets/js/post-blocklist'
@@ -22,7 +22,7 @@
   import type { Domain } from '~/assets/js/domain'
   import { isRenderablePost, type IPostPage, type IRenderablePost } from '~/assets/js/post.dto'
   import { shouldReportTagSearchError } from '~/assets/js/tag-search-error'
-  import Tag, { type ITag } from '~/assets/js/tag.dto'
+  import Tag, { type ITag, toggleSelectedTag } from '~/assets/js/tag.dto'
   import { project } from '~~/config/project'
   import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
@@ -240,6 +240,8 @@
 
   const tagResults: Ref<Tag[]> = shallowRef([])
 
+  let tagSearchRequestId = 0
+
   /**
    * `undefined` values mean that they will be replaced by default values
    */
@@ -289,6 +291,7 @@
    * Listeners
    */
   async function onSearchTag(tag: string) {
+    const requestId = ++tagSearchRequestId
     let response: { data: ITag[] }
 
     try {
@@ -306,7 +309,15 @@
           httpScheme: selectedBooru.value.config?.options?.HTTPScheme ?? undefined
         }
       })
+
+      if (requestId !== tagSearchRequestId) {
+        return
+      }
     } catch (error) {
+      if (requestId !== tagSearchRequestId) {
+        return
+      }
+
       if (shouldReportTagSearchError(error)) {
         const Sentry = await import('@sentry/nuxt')
 
@@ -356,31 +367,7 @@
    * Adds the tag, or removes it if it already exists
    */
   async function onPostAddTag(tag: string) {
-    const isTagNegative = tag.startsWith('-')
-
-    let newTags = cloneDeep(selectedTags.value)
-
-    // Remove tag if it already exists
-    const isTagAlreadySelected = newTags.some((selectedTag) => selectedTag.name === tag)
-
-    if (isTagAlreadySelected) {
-      newTags = newTags.filter((selectedTag) => selectedTag.name !== tag)
-
-      await reflectChangesInUrl({ page: null, tags: newTags })
-      return
-    }
-
-    if (isTagNegative) {
-      const doesTagExistInPositive = newTags.some((selectedTag) => selectedTag.name === tag.slice(1))
-
-      if (doesTagExistInPositive) {
-        newTags = newTags.filter((selectedTag) => selectedTag.name !== tag.slice(1))
-      }
-    }
-
-    newTags.push(new Tag({ name: tag }).toJSON())
-
-    await reflectChangesInUrl({ page: null, tags: newTags })
+    await reflectChangesInUrl({ page: null, tags: toggleSelectedTag(selectedTags.value, tag) })
   }
 
   /**

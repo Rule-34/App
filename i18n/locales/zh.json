@@ -88,8 +88,6 @@
     "noFileSelected": "未选择文件",
     "invalidBooruType": "Booru 类型无效",
     "booruAlreadyExists": "Booru 已经存在",
-    "autocompleteNotImplemented": "自动完成未实现",
-    "notImplemented": "未实施",
     "rateLimitDescription": "您在短时间内发送了太多请求",
     "verifyNotBot": "验证我不是机器人",
     "noBlockedTagsToExport": "没有要导出的被阻止标签",
@@ -365,7 +363,8 @@
       "copyright": "系列",
       "general": "一般",
       "meta": "元"
-    }
+    },
+    "searchBooru": "在 Booru 上实时搜索"
   },
   "errors": {
     "tooManyRequests": "请求太多",
