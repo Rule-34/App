@@ -597,6 +597,16 @@ describe('saved post tags', () => {
     expect(normalizeTagQuery('  "style \\ shift  ')).toBe('style  shift')
   })
 
+  it('escapes a literal percent so it is not read as a LIKE wildcard', () => {
+    // Verified against PocketBase 0.40.4: a bare `%` makes the filter match no rows at all,
+    // while the escaped one matches the tag holding it.
+    expect(savedPostTagNamePattern('100%real')).toBe('"100\\%real')
+    expect(savedPostTagFilter('100%real')?.params.tag).toBe('"100\\%real"')
+
+    // `_` is literal in PocketBase already, escaping it would change nothing
+    expect(savedPostTagNamePattern('solo_focus')).toBe('"solo_focus')
+  })
+
   it('ranks tag suggestions by how often they occur and drops duplicates', () => {
     const suggestions = rankSavedPostTagSuggestions(
       [

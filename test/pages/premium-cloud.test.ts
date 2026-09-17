@@ -267,7 +267,7 @@ describe('Premium cloud flows', async () => {
       .toBe(true)
   }, 20000)
 
-  it('renders the search booru action in saved posts tag menus', async () => {
+  it('searches the live Booru from a saved post tag', async () => {
     const page = await createTrackedPage()
     const pocketBase = createPocketBaseMockState({
       savedPostRecords: [
@@ -284,18 +284,27 @@ describe('Premium cloud flows', async () => {
 
     await page.locator('figure').first().waitFor({ state: 'visible', timeout: 10000 })
 
-    // Open tags sheet
-    const tagsButton = page.getByRole('button', { name: /tags/i })
-    if (await tagsButton.isVisible()) {
-      await tagsButton.click()
-    }
+    // The tag menu only exists once the post's tag sheet is open
+    await page.getByRole('button', { name: 'Tags', exact: true }).first().click()
 
-    // Click on a tag pill to open its context menu
-    const tagPill = page.locator('button', { hasText: 'solo' }).first()
-    if (await tagPill.isVisible()) {
-      await tagPill.click()
-      await page.getByRole('menuitem', { name: /search live booru/i }).waitFor({ state: 'visible', timeout: 5000 })
-    }
+    const tagButton = page.getByRole('button', { name: 'solo', exact: true }).first()
+    await tagButton.waitFor({ state: 'visible', timeout: 10000 })
+    await tagButton.click()
+
+    const searchLiveBooru = page.getByRole('menuitem', { name: 'Search live Booru' })
+    await searchLiveBooru.waitFor({ state: 'visible', timeout: 5000 })
+
+    const popupPromise = page.waitForEvent('popup')
+
+    await searchLiveBooru.click()
+
+    const popup = await popupPromise
+    const popupUrl = new URL(popup.url())
+
+    expect(popupUrl.pathname).toContain('/posts/r34.app')
+    expect(popupUrl.searchParams.get('tags')).toBe('solo')
+
+    await popup.close()
   }, 20000)
 })
 

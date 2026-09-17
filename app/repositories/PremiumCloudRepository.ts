@@ -579,9 +579,14 @@ const savedPostTagSuggestionLimit = 20
  * Matching against a serialized JSON array like `["solo","1girl"]` matches the string inside
  * quotes. The pattern starts with a quote so callers can anchor it for an exact match or
  * leave it open as a prefix search.
+ *
+ * `%` is a LIKE wildcard, so a literal one has to be escaped or the filter matches nothing
+ * (verified against PocketBase 0.40.4: `tags ?~ "\"100%real\""` returns no rows while
+ * `tags ?~ "\"100\%real\""` returns the tagged post). `_` needs no escaping, PocketBase already
+ * treats it literally, which keeps `solo` and `solo_focus` apart on their own.
  */
 export function savedPostTagNamePattern(tagName: string) {
-  return `"${normalizeTagQuery(tagName)}`
+  return `"${normalizeTagQuery(tagName).replaceAll('%', '\\%')}`
 }
 
 /**
@@ -619,7 +624,8 @@ export function savedPostTagFilter(tag: string): { expression: string; params: R
 }
 
 /**
- * Quotes and backslashes would escape the LIKE pattern built by `savedPostTagNamePattern`
+ * Quotes and backslashes would escape the LIKE pattern built by `savedPostTagNamePattern`, so they
+ * are dropped before the pattern is built. `%` is escaped there, once the input is clean.
  */
 export function normalizeTagQuery(query: string) {
   return query.replace(/["\\]/g, '').trim()
