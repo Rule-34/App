@@ -81,7 +81,7 @@ export const popunderProviders = [
   {
     key: 'adsterra',
     label: 'AdsTerra',
-    id: 'https://laughedentrust.com/gOEgecu/kAi41dXqVy9f-/APTn2mopi0EK/ZYuxzOlInL9/23jslU_6yYUKuVVn_v9j/va82rI/dw-xJW2djcqgC5mfF7/4gbSUwOzf/rEAE3_4f5WEdqc3rM/VfHINUDVV3EC',
+    id: 'https://benchform.org/1/a2bb432972963284b6754dd20c826521',
     weight: 0.15
   }
 ] as const satisfies readonly { key: string; label: string; id: string; weight: number }[]
@@ -170,7 +170,7 @@ export const pushAdProviders = [
   {
     key: 'adsterra',
     label: 'AdsTerra',
-    id: 'https://laughedentrust.com/42/22/90/4222908c1f4cbb803a92284f2608eed3.js',
+    id: 'https://biomanos.org/14/4222908c1f4cbb803a92284f2608eed3',
     weight: 0.47
   }
 ] as const satisfies readonly { key: string; label: string; id: string; weight: number }[]
