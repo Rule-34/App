@@ -913,7 +913,7 @@
     <div
       v-else-if="useIframePlayer"
       :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
-      class="relative flex h-full min-h-[220px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-base-950"
+      class="relative flex h-full min-h-[200px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-base-950"
     >
       <iframe
         :src="rawMediaSrc"
