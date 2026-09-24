@@ -2,13 +2,6 @@
   import type { IPost, PostMediaType } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
   import {
-    ArrowPathIcon,
-    ArrowTopRightOnSquareIcon,
-    ExclamationTriangleIcon,
-    PlayIcon,
-    SparklesIcon
-  } from '@heroicons/vue/20/solid'
-  import {
     getCandidateSources,
     isDomainDirectBlocked,
     onDomainHealthChange,
@@ -701,7 +694,7 @@
     <template v-if="hasError">
       <div
         :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
-        class="relative flex min-h-[220px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-base-950 p-4 text-center select-none"
+        class="relative flex min-h-[160px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-linear-to-b from-base-900/60 via-base-950 to-base-1000 p-4 text-center select-none"
       >
         <!-- Poster backdrop thumbnail if available -->
         <template v-if="localPosterSrc || props.mediaPosterSrc">
@@ -721,47 +714,12 @@
           />
         </template>
 
-        <!-- Subtle ambient radial highlight when no poster is available -->
-        <div
-          v-else
-          class="pointer-events-none absolute inset-0 bg-gradient-to-b from-base-900/60 via-base-950 to-base-1000"
-        />
-
-        <div class="relative z-10 flex w-full max-w-[280px] flex-col items-center justify-center">
-          <!-- Icon badge -->
-          <div
-            class="mb-2.5 flex h-10 w-10 items-center justify-center rounded-full bg-base-900/90 shadow-sm ring-1 ring-base-0/20 backdrop-blur-md"
-            :class="isVideo ? 'text-primary-400' : 'text-base-content'"
-          >
-            <PlayIcon
-              v-if="isVideo"
-              class="h-5 w-5 fill-current"
-              aria-hidden="true"
-            />
-            <ExclamationTriangleIcon
-              v-else
-              class="h-5 w-5 text-base-content-highlight"
-              aria-hidden="true"
-            />
-          </div>
-
-          <!-- Title -->
-          <span class="text-sm font-semibold text-base-content-highlight">
-            {{ isVideo ? t('media.playInSandbox') : error?.message }}
-          </span>
-
-          <!-- Subtext explanation -->
+        <div class="relative z-10 flex w-full max-w-[280px] flex-col items-center justify-center space-y-3">
+          <!-- Error Title (Original design badge) -->
           <span
-            v-if="isVideo"
-            class="mt-0.5 mb-3.5 line-clamp-2 text-xs text-base-content"
+            class="rounded-md bg-linear-to-l from-base-950 via-base-900 to-base-900 px-4 py-1.5 text-center text-sm font-medium text-base-content-highlight ring-1 ring-base-0/20"
           >
-            {{ t('errors.mediaLoadError') }}
-          </span>
-          <span
-            v-else
-            class="mt-0.5 mb-3.5 text-xs text-base-content"
-          >
-            {{ t('media.toBypassBlocks') }}
+            {{ error?.message || t('errors.mediaLoadError') }}
           </span>
 
           <!-- Actions -->
@@ -769,15 +727,11 @@
             <!-- Video Primary CTA: Play in Sandbox -->
             <button
               v-if="isVideo && rawMediaSrc"
-              class="inline-flex min-h-[42px] w-full items-center justify-center gap-2 rounded-md bg-primary-700 px-4 py-2 text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
+              class="inline-flex min-h-[38px] w-full items-center justify-center rounded-md bg-primary-700 px-4 py-1.5 text-sm font-semibold text-base-content-highlight transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
               type="button"
               @click="playInIframe"
             >
-              <PlayIcon
-                class="h-4 w-4 fill-current"
-                aria-hidden="true"
-              />
-              <span>{{ t('media.playInSandbox') }}</span>
+              {{ t('media.playInSandbox') }}
             </button>
 
             <!-- Video Secondary Actions Row -->
@@ -789,28 +743,20 @@
               <a
                 v-if="rawMediaSrc"
                 :href="rawMediaSrc"
-                class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md bg-base-900/90 px-3 py-1.5 text-xs font-medium text-base-content-highlight ring-1 ring-base-0/20 backdrop-blur-sm transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md px-3 py-1.5 text-sm ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <ArrowTopRightOnSquareIcon
-                  class="h-3.5 w-3.5 shrink-0 text-base-content"
-                  aria-hidden="true"
-                />
-                <span class="truncate">{{ t('tags.openInNewTab') }}</span>
+                {{ t('tags.openInNewTab') }}
               </a>
 
               <!-- Try Again -->
               <button
-                class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md bg-base-900/90 px-3 py-1.5 text-xs font-medium text-base-content ring-1 ring-base-0/20 backdrop-blur-sm transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md px-3 py-1.5 text-sm ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 type="button"
                 @click="manuallyReloadMedia"
               >
-                <ArrowPathIcon
-                  class="h-3.5 w-3.5 shrink-0"
-                  aria-hidden="true"
-                />
-                <span class="truncate">{{ t('media.tryAgain') }}</span>
+                {{ t('media.tryAgain') }}
               </button>
             </div>
 
@@ -821,52 +767,38 @@
             >
               <!-- Try Again -->
               <button
-                class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md bg-primary-700 px-3 py-1.5 text-xs font-medium text-base-content-highlight transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util"
+                class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md bg-primary-700 px-3 py-1.5 text-sm font-semibold text-base-content-highlight transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
                 type="button"
                 @click="manuallyReloadMedia"
               >
-                <ArrowPathIcon
-                  class="h-3.5 w-3.5 shrink-0"
-                  aria-hidden="true"
-                />
-                <span class="truncate">{{ t('media.tryAgain') }}</span>
+                {{ t('media.tryAgain') }}
               </button>
 
               <!-- Open in new tab -->
               <a
                 v-if="rawMediaSrc"
                 :href="rawMediaSrc"
-                class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md bg-base-900/90 px-3 py-1.5 text-xs font-medium text-base-content-highlight ring-1 ring-base-0/20 backdrop-blur-sm transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md px-3 py-1.5 text-sm ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <ArrowTopRightOnSquareIcon
-                  class="h-3.5 w-3.5 shrink-0 text-base-content"
-                  aria-hidden="true"
-                />
-                <span class="truncate">{{ t('tags.openInNewTab') }}</span>
+                {{ t('tags.openInNewTab') }}
               </a>
             </div>
           </div>
 
-          <!-- Premium promotion -->
+          <!-- Premium promotion (Original design) -->
           <div
             v-if="!isPremium"
-            class="mt-3 flex items-center justify-center gap-1 text-[11px] text-base-content"
+            class="text-xs text-base-content"
           >
-            <SparklesIcon
-              class="h-3.5 w-3.5 shrink-0 text-accent-400"
-              aria-hidden="true"
-            />
             <NuxtLink
               :href="localePath('/premium?utm_source=internal&utm_medium=media-error#pricing')"
               class="underline hover:hover-text-util focus-visible:focus-outline-util"
             >
               <!-- @formatter:off -->
               {{ t('media.getPremium') }}</NuxtLink
-            >
-
-            <span> {{ t('media.toBypassBlocks') }}</span>
+            >{{ ' ' }}<span>{{ t('media.toBypassBlocks') }}</span>
           </div>
         </div>
       </div>
@@ -876,14 +808,13 @@
     <div
       v-else-if="useIframePlayer"
       :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
-      class="relative w-full"
+      class="relative flex min-h-[160px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-base-950"
     >
       <iframe
         :src="rawMediaSrc"
         :height="mediaSrcHeightAttribute"
         :width="mediaSrcWidthAttribute"
-        :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
-        class="h-auto w-full rounded-t-md border-0"
+        class="block h-full w-full rounded-t-md border-0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
         allowfullscreen
         loading="lazy"
