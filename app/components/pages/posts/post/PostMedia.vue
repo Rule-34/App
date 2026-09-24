@@ -715,7 +715,7 @@
     <!-- Error Overlay -->
     <template v-if="hasError">
       <div
-        :class="isShortMedia ? 'px-3 py-3.5 sm:px-4 sm:py-4' : 'px-3 py-6 sm:px-4 sm:py-8'"
+        :class="isShortMedia ? 'px-4 py-4 sm:px-5 sm:py-4.5' : 'px-4 py-6 sm:px-6 sm:py-8'"
         :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
         class="relative flex h-full min-h-[200px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-linear-to-b from-base-900/60 via-base-950 to-base-1000 text-center select-none"
       >
@@ -738,8 +738,8 @@
         </template>
 
         <div
-          :class="isShortMedia ? 'gap-2.5 sm:gap-3' : 'gap-4 sm:gap-5'"
-          class="relative z-10 flex w-full max-w-[360px] flex-col items-center justify-center"
+          :class="isShortMedia ? 'gap-3 sm:gap-3.5' : 'gap-4 sm:gap-5'"
+          class="relative z-10 flex w-full max-w-sm flex-col items-center justify-center"
         >
           <!-- Error Title & Concise Context Subtitle -->
           <div class="flex flex-col items-center space-y-1 text-center">
@@ -774,7 +774,7 @@
                 :aria-label="t('tags.openInNewTab')"
                 :href="rawMediaSrc"
                 :title="t('tags.openInNewTab')"
-                class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -788,7 +788,7 @@
               <button
                 :aria-label="t('media.tryAgain')"
                 :title="t('media.tryAgain')"
-                class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 type="button"
                 @click="manuallyReloadMedia"
               >
@@ -820,7 +820,7 @@
                 <a
                   v-if="rawMediaSrc"
                   :href="rawMediaSrc"
-                  class="inline-flex min-h-[32px] flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                  class="inline-flex min-h-[32px] flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
@@ -833,7 +833,7 @@
 
                 <!-- Try Again (No icon) -->
                 <button
-                  class="inline-flex min-h-[32px] flex-1 items-center justify-center rounded-md px-3 py-1.5 text-xs text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                  class="inline-flex min-h-[32px] flex-1 items-center justify-center rounded-md px-3 py-1.5 text-xs text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                   type="button"
                   @click="manuallyReloadMedia"
                 >
@@ -862,7 +862,7 @@
                 :aria-label="t('tags.openInNewTab')"
                 :href="rawMediaSrc"
                 :title="t('tags.openInNewTab')"
-                class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -891,7 +891,7 @@
               <a
                 v-if="rawMediaSrc"
                 :href="rawMediaSrc"
-                class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -933,7 +933,8 @@
         :src="rawMediaSrc"
         :height="mediaSrcHeightAttribute"
         :width="mediaSrcWidthAttribute"
-        class="block h-full w-full rounded-t-md border-0"
+        :title="mediaAlt || 'Video Player'"
+        class="block h-full w-full rounded-t-md border-0 bg-base-1000"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
         allowfullscreen
         loading="lazy"
