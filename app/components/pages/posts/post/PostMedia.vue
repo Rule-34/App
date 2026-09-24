@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import type { IPost, PostMediaType } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
-  import { ArrowPathIcon, ArrowTopRightOnSquareIcon, SparklesIcon, XMarkIcon } from '@heroicons/vue/20/solid'
+  import { ArrowTopRightOnSquareIcon, SparklesIcon, XMarkIcon } from '@heroicons/vue/20/solid'
   import {
     getCandidateSources,
     isDomainDirectBlocked,
@@ -49,7 +49,7 @@
   const domainHealthVersion = shallowRef(0)
 
   let posterProbeToken = 0
-  let isComponentUnmounted = false
+  let isUnmounted = false
   let activeProbe: HTMLImageElement | null = null
 
   onMounted(() => {
@@ -58,7 +58,6 @@
     })
     onBeforeUnmount(() => {
       unsubscribe()
-      isComponentUnmounted = true
       if (activeProbe) {
         activeProbe.onload = null
         activeProbe.onerror = null
@@ -106,7 +105,7 @@
   const localPosterSrc = shallowRef(posterCandidates.value[initialPosterIndex] ?? props.mediaPosterSrc ?? undefined)
 
   function probeVideoPoster() {
-    if (import.meta.server || isComponentUnmounted || !isVideo.value || !posterCandidates.value.length) {
+    if (import.meta.server || isUnmounted || !isVideo.value || !posterCandidates.value.length) {
       return
     }
 
@@ -123,7 +122,7 @@
     const candidateIdx = posterCandidateIndex.value
 
     function probeCandidate(idx: number) {
-      if (isComponentUnmounted || currentToken !== posterProbeToken || idx >= posterCandidates.value.length) {
+      if (isUnmounted || currentToken !== posterProbeToken || idx >= posterCandidates.value.length) {
         return
       }
 
@@ -135,7 +134,7 @@
       probe.referrerPolicy = 'no-referrer'
 
       probe.onload = () => {
-        if (isComponentUnmounted || currentToken !== posterProbeToken) return
+        if (isUnmounted || currentToken !== posterProbeToken) return
         activeProbe = null
         posterCandidateIndex.value = idx
         localPosterSrc.value = candidateUrl
@@ -145,7 +144,7 @@
       }
 
       probe.onerror = () => {
-        if (isComponentUnmounted || currentToken !== posterProbeToken) return
+        if (isUnmounted || currentToken !== posterProbeToken) return
         activeProbe = null
         if (idx === 0 && !isPosterDirectBlocked.value && rawPosterSrc.value) {
           recordDirectFailure(rawPosterSrc.value, 'image')
@@ -186,21 +185,18 @@
     }
   })
 
-  watch(
-    () => props.mediaSrc,
-    () => {
-      const newSrcIdx = isDirectBlocked.value && srcCandidates.value.length > 1 ? 1 : 0
-      const newPosterIdx = isPosterDirectBlocked.value && posterCandidates.value.length > 1 ? 1 : 0
-      srcCandidateIndex.value = newSrcIdx
-      posterCandidateIndex.value = newPosterIdx
-      useIframePlayer.value = false
-      mediaHasLoaded.value = false
-      error.value = null
-      localSrc.value = srcCandidates.value[newSrcIdx] ?? rawMediaSrc.value
-      localPosterSrc.value = posterCandidates.value[newPosterIdx] ?? props.mediaPosterSrc ?? undefined
-      probeVideoPoster()
-    }
-  )
+  watch([() => props.mediaSrc, () => props.mediaPosterSrc], () => {
+    const newSrcIdx = isDirectBlocked.value && srcCandidates.value.length > 1 ? 1 : 0
+    const newPosterIdx = isPosterDirectBlocked.value && posterCandidates.value.length > 1 ? 1 : 0
+    srcCandidateIndex.value = newSrcIdx
+    posterCandidateIndex.value = newPosterIdx
+    useIframePlayer.value = false
+    mediaHasLoaded.value = false
+    error.value = null
+    localSrc.value = srcCandidates.value[newSrcIdx] ?? rawMediaSrc.value
+    localPosterSrc.value = posterCandidates.value[newPosterIdx] ?? props.mediaPosterSrc ?? undefined
+    probeVideoPoster()
+  })
 
   const error = ref<Error | null>(null)
   const hasError = computed(() => error.value !== null)
@@ -254,7 +250,6 @@
   let videoPlayerInitPromise: Promise<void> | null = null
   let videoPlayerIdleScheduled = false
   let videoPlayerInitTimeout: number | null = null
-  let isUnmounted = false
 
   const isAnimatedMediaLoading = ref(false)
   const isAnimatedMediaPlaying = ref(false)
@@ -563,8 +558,8 @@
 
     // Case 1: The poster image failed to load for animated media
     if (isAnimatedMedia.value && !isAnimatedMediaPlaying.value && target.src === localPosterSrc.value) {
-      if (posterCandidateIndex.value === 0 && !isDirectBlocked.value) {
-        recordDirectFailure(rawPosterSrc.value || rawMediaSrc.value, 'image')
+      if (posterCandidateIndex.value === 0 && !isPosterDirectBlocked.value && rawPosterSrc.value) {
+        recordDirectFailure(rawPosterSrc.value, 'image')
       }
 
       posterCandidateIndex.value += 1
@@ -821,20 +816,16 @@
                 />
               </a>
 
-              <!-- Try Again (icon button) -->
+              <!-- Try Again (No icon) -->
               <button
                 :aria-label="t('media.tryAgain')"
-                :title="t('media.tryAgain')"
                 :disabled="isRetrying"
                 :class="isRetrying ? 'cursor-wait opacity-60' : ''"
-                class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                class="inline-flex min-h-[38px] items-center justify-center rounded-md px-3 py-1.5 text-xs font-medium text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 type="button"
                 @click="manuallyReloadMedia"
               >
-                <ArrowPathIcon
-                  class="h-4 w-4 shrink-0 text-base-content"
-                  aria-hidden="true"
-                />
+                <span>{{ t('media.tryAgain') }}</span>
               </button>
             </div>
 
