@@ -2,6 +2,13 @@
   import type { IPost, PostMediaType } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
   import {
+    ArrowPathIcon,
+    ArrowTopRightOnSquareIcon,
+    ExclamationTriangleIcon,
+    PlayIcon,
+    SparklesIcon
+  } from '@heroicons/vue/20/solid'
+  import {
     getCandidateSources,
     isDomainDirectBlocked,
     onDomainHealthChange,
@@ -52,11 +59,17 @@
       domainHealthVersion.value += 1
     })
     onBeforeUnmount(unsubscribe)
+    probeVideoPoster()
   })
 
   const isDirectBlocked = computed(() => {
     void domainHealthVersion.value
     return isDomainDirectBlocked(rawMediaSrc.value, props.mediaType)
+  })
+
+  const isPosterDirectBlocked = computed(() => {
+    void domainHealthVersion.value
+    return isDomainDirectBlocked(rawPosterSrc.value || rawMediaSrc.value, 'image')
   })
 
   const srcCandidates = computed(() =>
@@ -76,13 +89,48 @@
   )
 
   const initialSrcIndex = isDirectBlocked.value && srcCandidates.value.length > 1 ? 1 : 0
-  const initialPosterIndex = isDirectBlocked.value && posterCandidates.value.length > 1 ? 1 : 0
+  const initialPosterIndex = isPosterDirectBlocked.value && posterCandidates.value.length > 1 ? 1 : 0
 
   const srcCandidateIndex = shallowRef(initialSrcIndex)
   const posterCandidateIndex = shallowRef(initialPosterIndex)
 
   const localSrc = shallowRef(srcCandidates.value[initialSrcIndex] ?? rawMediaSrc.value)
   const localPosterSrc = shallowRef(posterCandidates.value[initialPosterIndex] ?? props.mediaPosterSrc ?? undefined)
+
+  function probeVideoPoster() {
+    if (import.meta.server || !isVideo.value || !localPosterSrc.value) {
+      return
+    }
+    if (posterCandidateIndex.value > 0) {
+      return
+    }
+
+    const probe = new Image()
+    probe.referrerPolicy = 'no-referrer'
+    probe.onerror = () => {
+      if (posterCandidateIndex.value === 0 && !isPosterDirectBlocked.value) {
+        recordDirectFailure(rawPosterSrc.value || rawMediaSrc.value, 'image')
+      }
+      if (posterCandidateIndex.value < posterCandidates.value.length - 1) {
+        posterCandidateIndex.value += 1
+        const nextPoster = posterCandidates.value[posterCandidateIndex.value]
+        if (nextPoster) {
+          localPosterSrc.value = nextPoster
+        }
+      }
+    }
+    probe.src = localPosterSrc.value
+  }
+
+  function onPosterBackdropError() {
+    if (posterCandidateIndex.value < posterCandidates.value.length - 1) {
+      posterCandidateIndex.value += 1
+      const nextPoster = posterCandidates.value[posterCandidateIndex.value]
+      if (nextPoster) {
+        localPosterSrc.value = nextPoster
+      }
+    }
+  }
 
   const useIframePlayer = shallowRef(false)
 
@@ -93,6 +141,11 @@
         srcCandidateIndex.value = 1
         localSrc.value = srcCandidates.value[1]
       }
+    }
+  })
+
+  watch(isPosterDirectBlocked, (blocked) => {
+    if (blocked) {
       if (posterCandidateIndex.value === 0 && posterCandidates.value.length > 1 && posterCandidates.value[1]) {
         posterCandidateIndex.value = 1
         localPosterSrc.value = posterCandidates.value[1]
@@ -104,7 +157,7 @@
     () => props.mediaSrc,
     () => {
       const newSrcIdx = isDirectBlocked.value && srcCandidates.value.length > 1 ? 1 : 0
-      const newPosterIdx = isDirectBlocked.value && posterCandidates.value.length > 1 ? 1 : 0
+      const newPosterIdx = isPosterDirectBlocked.value && posterCandidates.value.length > 1 ? 1 : 0
       srcCandidateIndex.value = newSrcIdx
       posterCandidateIndex.value = newPosterIdx
       useIframePlayer.value = false
@@ -112,6 +165,7 @@
       error.value = null
       localSrc.value = srcCandidates.value[newSrcIdx] ?? rawMediaSrc.value
       localPosterSrc.value = posterCandidates.value[newPosterIdx] ?? props.mediaPosterSrc ?? undefined
+      probeVideoPoster()
     }
   )
 
@@ -501,6 +555,16 @@
       return
     }
 
+    if (
+      isVideo.value &&
+      posterCandidateIndex.value === 0 &&
+      posterCandidates.value.length > 1 &&
+      posterCandidates.value[1]
+    ) {
+      posterCandidateIndex.value = 1
+      localPosterSrc.value = posterCandidates.value[1]
+    }
+
     error.value = new Error(t('errors.mediaLoadError'))
   }
 
@@ -637,65 +701,163 @@
     <template v-if="hasError">
       <div
         :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
-        class="relative flex min-h-[160px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md p-4 text-center"
+        class="relative flex min-h-[220px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-base-950 p-4 text-center select-none"
       >
         <!-- Poster backdrop thumbnail if available -->
-        <NuxtImg
-          v-if="localPosterSrc || props.mediaPosterSrc"
-          :alt="mediaAlt"
-          :height="mediaSrcHeightAttribute"
-          :src="localPosterSrc || props.mediaPosterSrc!"
-          :width="mediaSrcWidthAttribute"
-          class="pointer-events-none absolute inset-0 h-full w-full object-cover blur-xs brightness-30"
-          loading="lazy"
-          referrerpolicy="no-referrer"
+        <template v-if="localPosterSrc || props.mediaPosterSrc">
+          <NuxtImg
+            :alt="mediaAlt"
+            :height="mediaSrcHeightAttribute"
+            :src="localPosterSrc || props.mediaPosterSrc!"
+            :width="mediaSrcWidthAttribute"
+            class="pointer-events-none absolute inset-0 h-full w-full scale-105 object-cover blur-xs brightness-[0.22] filter transition-all duration-500"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            @error="onPosterBackdropError"
+          />
+          <!-- Ambient gradient vignette on top of poster for pristine contrast -->
+          <div
+            class="pointer-events-none absolute inset-0 bg-gradient-to-t from-base-1000/95 via-base-950/75 to-base-1000/85"
+          />
+        </template>
+
+        <!-- Subtle ambient radial highlight when no poster is available -->
+        <div
+          v-else
+          class="pointer-events-none absolute inset-0 bg-gradient-to-b from-base-900/60 via-base-950 to-base-1000"
         />
 
-        <div class="relative z-10 flex flex-col items-center justify-center space-y-3">
-          <span
-            class="rounded-md bg-linear-to-l from-base-950 via-base-900 to-base-900 px-3 py-1.5 text-sm text-base-content-highlight"
+        <div class="relative z-10 flex w-full max-w-[280px] flex-col items-center justify-center">
+          <!-- Icon badge -->
+          <div
+            class="mb-2.5 flex h-10 w-10 items-center justify-center rounded-full bg-base-900/90 shadow-sm ring-1 ring-base-0/20 backdrop-blur-md"
+            :class="isVideo ? 'text-primary-400' : 'text-base-content'"
           >
-            {{ error?.message }}
+            <PlayIcon
+              v-if="isVideo"
+              class="h-5 w-5 fill-current"
+              aria-hidden="true"
+            />
+            <ExclamationTriangleIcon
+              v-else
+              class="h-5 w-5 text-base-content-highlight"
+              aria-hidden="true"
+            />
+          </div>
+
+          <!-- Title -->
+          <span class="text-sm font-semibold text-base-content-highlight">
+            {{ isVideo ? t('media.playInSandbox') : error?.message }}
           </span>
 
-          <div class="flex flex-wrap items-center justify-center gap-2">
-            <!-- Video Sandbox Option -->
+          <!-- Subtext explanation -->
+          <span
+            v-if="isVideo"
+            class="mt-0.5 mb-3.5 line-clamp-2 text-xs text-base-content"
+          >
+            {{ t('errors.mediaLoadError') }}
+          </span>
+          <span
+            v-else
+            class="mt-0.5 mb-3.5 text-xs text-base-content"
+          >
+            {{ t('media.toBypassBlocks') }}
+          </span>
+
+          <!-- Actions -->
+          <div class="flex w-full flex-col gap-2">
+            <!-- Video Primary CTA: Play in Sandbox -->
             <button
               v-if="isVideo && rawMediaSrc"
-              class="inline-flex min-h-[38px] items-center justify-center rounded-md bg-base-900 px-3 py-1.5 text-sm font-medium ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+              class="inline-flex min-h-[42px] w-full items-center justify-center gap-2 rounded-md bg-primary-700 px-4 py-2 text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
               type="button"
               @click="playInIframe"
             >
-              {{ t('media.playInSandbox') }}
+              <PlayIcon
+                class="h-4 w-4 fill-current"
+                aria-hidden="true"
+              />
+              <span>{{ t('media.playInSandbox') }}</span>
             </button>
 
-            <!-- Try Again -->
-            <button
-              class="inline-flex min-h-[38px] items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
-              type="button"
-              @click="manuallyReloadMedia"
+            <!-- Video Secondary Actions Row -->
+            <div
+              v-if="isVideo"
+              class="flex w-full items-center gap-2"
             >
-              {{ t('media.tryAgain') }}
-            </button>
+              <!-- Open in new tab -->
+              <a
+                v-if="rawMediaSrc"
+                :href="rawMediaSrc"
+                class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md bg-base-900/90 px-3 py-1.5 text-xs font-medium text-base-content-highlight ring-1 ring-base-0/20 backdrop-blur-sm transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <ArrowTopRightOnSquareIcon
+                  class="h-3.5 w-3.5 shrink-0 text-base-content"
+                  aria-hidden="true"
+                />
+                <span class="truncate">{{ t('tags.openInNewTab') }}</span>
+              </a>
 
-            <!-- Open in new tab -->
-            <a
-              v-if="rawMediaSrc"
-              :href="rawMediaSrc"
-              class="inline-flex min-h-[38px] items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
-              rel="noopener noreferrer"
-              target="_blank"
+              <!-- Try Again -->
+              <button
+                class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md bg-base-900/90 px-3 py-1.5 text-xs font-medium text-base-content ring-1 ring-base-0/20 backdrop-blur-sm transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                type="button"
+                @click="manuallyReloadMedia"
+              >
+                <ArrowPathIcon
+                  class="h-3.5 w-3.5 shrink-0"
+                  aria-hidden="true"
+                />
+                <span class="truncate">{{ t('media.tryAgain') }}</span>
+              </button>
+            </div>
+
+            <!-- Image Actions Row -->
+            <div
+              v-else
+              class="flex w-full items-center gap-2"
             >
-              {{ t('tags.openInNewTab') }}
-            </a>
+              <!-- Try Again -->
+              <button
+                class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md bg-primary-700 px-3 py-1.5 text-xs font-medium text-base-content-highlight transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util"
+                type="button"
+                @click="manuallyReloadMedia"
+              >
+                <ArrowPathIcon
+                  class="h-3.5 w-3.5 shrink-0"
+                  aria-hidden="true"
+                />
+                <span class="truncate">{{ t('media.tryAgain') }}</span>
+              </button>
+
+              <!-- Open in new tab -->
+              <a
+                v-if="rawMediaSrc"
+                :href="rawMediaSrc"
+                class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md bg-base-900/90 px-3 py-1.5 text-xs font-medium text-base-content-highlight ring-1 ring-base-0/20 backdrop-blur-sm transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <ArrowTopRightOnSquareIcon
+                  class="h-3.5 w-3.5 shrink-0 text-base-content"
+                  aria-hidden="true"
+                />
+                <span class="truncate">{{ t('tags.openInNewTab') }}</span>
+              </a>
+            </div>
           </div>
 
           <!-- Premium promotion -->
-          <!-- TODO: Improve style -->
           <div
             v-if="!isPremium"
-            class="pt-1 text-xs text-base-content"
+            class="mt-3 flex items-center justify-center gap-1 text-[11px] text-base-content"
           >
+            <SparklesIcon
+              class="h-3.5 w-3.5 shrink-0 text-accent-400"
+              aria-hidden="true"
+            />
             <NuxtLink
               :href="localePath('/premium?utm_source=internal&utm_medium=media-error#pricing')"
               class="underline hover:hover-text-util focus-visible:focus-outline-util"
