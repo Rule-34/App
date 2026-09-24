@@ -661,6 +661,11 @@
     error.value = null
   }
 
+  function closeIframePlayer() {
+    useIframePlayer.value = false
+    error.value = new Error(t('errors.mediaLoadError'))
+  }
+
   /**
    * Stops videos when they are out of the viewport
    */
@@ -974,10 +979,7 @@
         :aria-label="t('common.close') || 'Close'"
         class="absolute top-2.5 right-2.5 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-base-950/80 text-base-content ring-1 ring-base-0/20 backdrop-blur-md transition-colors hover:bg-base-900 hover:text-base-content-highlight focus-visible:focus-outline-util"
         type="button"
-        @click="
-          useIframePlayer = false
-          error = new Error(t('errors.mediaLoadError'))
-        "
+        @click="closeIframePlayer"
       >
         <XMarkIcon
           class="h-4 w-4"
