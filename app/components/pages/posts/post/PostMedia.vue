@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import type { IPost, PostMediaType } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
-  import { ArrowTopRightOnSquareIcon, SparklesIcon } from '@heroicons/vue/20/solid'
+  import { ArrowPathIcon, ArrowTopRightOnSquareIcon, SparklesIcon } from '@heroicons/vue/20/solid'
   import {
     getCandidateSources,
     isDomainDirectBlocked,
@@ -185,6 +185,13 @@
   const mediaAspectRatio = computed(() =>
     props.mediaSrcWidth && props.mediaSrcHeight ? `${props.mediaSrcWidth}/${props.mediaSrcHeight}` : undefined
   )
+  const isShortMedia = computed(() => {
+    if (!props.mediaSrcWidth || !props.mediaSrcHeight) {
+      return false
+    }
+
+    return props.mediaSrcWidth / props.mediaSrcHeight >= 1.15
+  })
   const lcpVideoPosterPreloadLinks = computed(() => {
     if (!isLikelyLcpMedia.value || !isVideo.value || !localPosterSrc.value) {
       return []
@@ -694,8 +701,9 @@
     <!-- Error Overlay -->
     <template v-if="hasError">
       <div
+        :class="isShortMedia ? 'p-3 sm:p-4' : 'p-6 sm:p-8'"
         :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
-        class="relative flex h-full min-h-[220px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-linear-to-b from-base-900/60 via-base-950 to-base-1000 p-6 text-center select-none sm:p-8"
+        class="relative flex h-full min-h-[220px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-linear-to-b from-base-900/60 via-base-950 to-base-1000 text-center select-none"
       >
         <!-- Poster backdrop thumbnail if available -->
         <template v-if="localPosterSrc || props.mediaPosterSrc">
@@ -715,60 +723,146 @@
           />
         </template>
 
-        <div class="relative z-10 flex w-full max-w-sm flex-col items-center justify-center gap-5 sm:gap-6">
+        <div
+          :class="isShortMedia ? 'max-w-[340px] gap-3 sm:gap-3.5' : 'max-w-sm gap-5 sm:gap-6'"
+          class="relative z-10 flex w-full flex-col items-center justify-center"
+        >
           <!-- Error Title & Concise Context Subtitle -->
-          <div class="flex flex-col items-center space-y-1.5 text-center">
+          <div class="flex flex-col items-center space-y-1 text-center">
             <h3 class="text-base font-semibold tracking-wide text-base-content-highlight">
               {{ error?.message || t('errors.mediaLoadError') }}
             </h3>
-            <p class="max-w-[280px] text-xs text-base-content/80">
+            <p
+              v-if="!isShortMedia"
+              class="max-w-[280px] text-xs text-base-content/80"
+            >
               {{ t('media.hostBlocksDirectAccess') }}
             </p>
           </div>
 
           <!-- Actions -->
-          <div class="flex w-full flex-col gap-2.5">
-            <!-- Video Primary CTA: Play in Sandbox -->
-            <button
-              v-if="isVideo && rawMediaSrc"
-              class="inline-flex min-h-[40px] w-full items-center justify-center rounded-md bg-primary-700 px-4 py-2 text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
-              type="button"
-              @click="playInIframe"
-            >
-              {{ t('media.playInSandbox') }}
-            </button>
-
-            <!-- Video Secondary Actions Row (subordinated, compact) -->
+          <div class="w-full">
+            <!-- Compact Video Actions (Landscape / Short Cards: Single Row) -->
             <div
-              v-if="isVideo"
-              class="flex w-full items-center gap-2.5"
+              v-if="isVideo && isShortMedia"
+              class="flex w-full items-center gap-2"
             >
-              <!-- Open in new tab -->
+              <!-- Primary CTA: Play in Sandbox -->
+              <button
+                v-if="rawMediaSrc"
+                class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md bg-primary-700 px-3 py-1.5 text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
+                type="button"
+                @click="playInIframe"
+              >
+                <span class="truncate">{{ t('media.playInSandbox') }}</span>
+              </button>
+
+              <!-- Open in new tab (icon button) -->
               <a
                 v-if="rawMediaSrc"
+                :aria-label="t('tags.openInNewTab')"
                 :href="rawMediaSrc"
-                class="inline-flex min-h-[32px] flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                :title="t('tags.openInNewTab')"
+                class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 rel="noopener noreferrer"
                 target="_blank"
               >
                 <ArrowTopRightOnSquareIcon
-                  class="h-3.5 w-3.5 shrink-0 text-base-content"
+                  class="h-4 w-4 shrink-0 text-base-content"
                   aria-hidden="true"
                 />
-                <span class="truncate">{{ t('tags.openInNewTab') }}</span>
               </a>
 
-              <!-- Try Again (No icon) -->
+              <!-- Try Again (icon button) -->
               <button
-                class="inline-flex min-h-[32px] flex-1 items-center justify-center rounded-md px-3 py-1.5 text-xs text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                :aria-label="t('media.tryAgain')"
+                :title="t('media.tryAgain')"
+                class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 type="button"
                 @click="manuallyReloadMedia"
               >
-                <span class="truncate">{{ t('media.tryAgain') }}</span>
+                <ArrowPathIcon
+                  class="h-4 w-4 shrink-0 text-base-content"
+                  aria-hidden="true"
+                />
               </button>
             </div>
 
-            <!-- Image Actions Row -->
+            <!-- Expanded Video Actions (Portrait / Tall Cards: Two Tiers) -->
+            <div
+              v-else-if="isVideo"
+              class="flex w-full flex-col gap-2.5"
+            >
+              <!-- Video Primary CTA: Play in Sandbox -->
+              <button
+                v-if="rawMediaSrc"
+                class="inline-flex min-h-[40px] w-full items-center justify-center rounded-md bg-primary-700 px-4 py-2 text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
+                type="button"
+                @click="playInIframe"
+              >
+                {{ t('media.playInSandbox') }}
+              </button>
+
+              <!-- Video Secondary Actions Row (subordinated, compact) -->
+              <div class="flex w-full items-center gap-2.5">
+                <!-- Open in new tab -->
+                <a
+                  v-if="rawMediaSrc"
+                  :href="rawMediaSrc"
+                  class="inline-flex min-h-[32px] flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <ArrowTopRightOnSquareIcon
+                    class="h-3.5 w-3.5 shrink-0 text-base-content"
+                    aria-hidden="true"
+                  />
+                  <span class="truncate">{{ t('tags.openInNewTab') }}</span>
+                </a>
+
+                <!-- Try Again (No icon) -->
+                <button
+                  class="inline-flex min-h-[32px] flex-1 items-center justify-center rounded-md px-3 py-1.5 text-xs text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                  type="button"
+                  @click="manuallyReloadMedia"
+                >
+                  <span class="truncate">{{ t('media.tryAgain') }}</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Compact Image Actions (Landscape / Short Cards: Single Row) -->
+            <div
+              v-else-if="isShortMedia"
+              class="flex w-full items-center gap-2"
+            >
+              <!-- Try Again -->
+              <button
+                class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md bg-primary-700 px-3 py-1.5 text-sm font-semibold text-base-content-highlight transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
+                type="button"
+                @click="manuallyReloadMedia"
+              >
+                <span>{{ t('media.tryAgain') }}</span>
+              </button>
+
+              <!-- Open in new tab (icon button) -->
+              <a
+                v-if="rawMediaSrc"
+                :aria-label="t('tags.openInNewTab')"
+                :href="rawMediaSrc"
+                :title="t('tags.openInNewTab')"
+                class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <ArrowTopRightOnSquareIcon
+                  class="h-4 w-4 shrink-0 text-base-content"
+                  aria-hidden="true"
+                />
+              </a>
+            </div>
+
+            <!-- Expanded Image Actions Row -->
             <div
               v-else
               class="flex w-full items-center gap-2.5"
