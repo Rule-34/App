@@ -135,16 +135,6 @@
     probeCandidate(candidateIdx)
   }
 
-  function onPosterBackdropError() {
-    if (posterCandidateIndex.value < posterCandidates.value.length - 1) {
-      posterCandidateIndex.value += 1
-      const nextPoster = posterCandidates.value[posterCandidateIndex.value]
-      if (nextPoster) {
-        localPosterSrc.value = nextPoster
-      }
-    }
-  }
-
   const useIframePlayer = shallowRef(false)
 
   // When domain breaker trips while cards are mounted, uncompleted direct requests advance to Candidate 1 (Photon)
@@ -738,24 +728,6 @@
         :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
         class="relative flex h-full min-h-[200px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-linear-to-b from-base-900/60 via-base-950 to-base-1000 text-center select-none"
       >
-        <!-- Poster backdrop thumbnail if available -->
-        <template v-if="localPosterSrc || props.mediaPosterSrc">
-          <NuxtImg
-            :alt="mediaAlt"
-            :height="mediaSrcHeightAttribute"
-            :src="localPosterSrc || props.mediaPosterSrc!"
-            :width="mediaSrcWidthAttribute"
-            class="pointer-events-none absolute inset-0 h-full w-full scale-105 object-cover blur-xs brightness-[0.22] filter transition-all duration-500"
-            loading="lazy"
-            referrerpolicy="no-referrer"
-            @error="onPosterBackdropError"
-          />
-          <!-- Ambient gradient vignette on top of poster for pristine contrast -->
-          <div
-            class="pointer-events-none absolute inset-0 bg-gradient-to-t from-base-1000/95 via-base-950/75 to-base-1000/85"
-          />
-        </template>
-
         <div
           :class="isShortMedia ? 'gap-3 sm:gap-3.5' : 'gap-4 sm:gap-5'"
           class="relative z-10 flex w-full max-w-sm flex-col items-center justify-center"
