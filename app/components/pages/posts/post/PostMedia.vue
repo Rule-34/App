@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import type { IPost, PostMediaType } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
+  import { ArrowPathIcon, ArrowTopRightOnSquareIcon, SparklesIcon } from '@heroicons/vue/20/solid'
   import {
     getCandidateSources,
     isDomainDirectBlocked,
@@ -715,9 +716,9 @@
         </template>
 
         <div class="relative z-10 flex w-full max-w-[280px] flex-col items-center justify-center space-y-3">
-          <!-- Error Title (Original design badge) -->
+          <!-- Error Title (Original design badge, no border) -->
           <span
-            class="rounded-md bg-linear-to-l from-base-950 via-base-900 to-base-900 px-4 py-1.5 text-center text-sm font-medium text-base-content-highlight ring-1 ring-base-0/20"
+            class="rounded-md bg-linear-to-l from-base-950 via-base-900 to-base-900 px-4 py-1.5 text-center text-sm font-medium text-base-content-highlight"
           >
             {{ error?.message || t('errors.mediaLoadError') }}
           </span>
@@ -727,14 +728,14 @@
             <!-- Video Primary CTA: Play in Sandbox -->
             <button
               v-if="isVideo && rawMediaSrc"
-              class="inline-flex min-h-[38px] w-full items-center justify-center rounded-md bg-primary-700 px-4 py-1.5 text-sm font-semibold text-base-content-highlight transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
+              class="inline-flex min-h-[38px] w-full items-center justify-center rounded-md bg-primary-700 px-4 py-1.5 text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
               type="button"
               @click="playInIframe"
             >
               {{ t('media.playInSandbox') }}
             </button>
 
-            <!-- Video Secondary Actions Row -->
+            <!-- Video Secondary Actions Row (compact & subordinate to main CTA) -->
             <div
               v-if="isVideo"
               class="flex w-full items-center gap-2"
@@ -743,20 +744,28 @@
               <a
                 v-if="rawMediaSrc"
                 :href="rawMediaSrc"
-                class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md px-3 py-1.5 text-sm ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                class="inline-flex min-h-[30px] flex-1 items-center justify-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                {{ t('tags.openInNewTab') }}
+                <ArrowTopRightOnSquareIcon
+                  class="h-3.5 w-3.5 shrink-0 text-base-content"
+                  aria-hidden="true"
+                />
+                <span class="truncate">{{ t('tags.openInNewTab') }}</span>
               </a>
 
               <!-- Try Again -->
               <button
-                class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md px-3 py-1.5 text-sm ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                class="inline-flex min-h-[30px] flex-1 items-center justify-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 type="button"
                 @click="manuallyReloadMedia"
               >
-                {{ t('media.tryAgain') }}
+                <ArrowPathIcon
+                  class="h-3.5 w-3.5 shrink-0 text-base-content"
+                  aria-hidden="true"
+                />
+                <span class="truncate">{{ t('media.tryAgain') }}</span>
               </button>
             </div>
 
@@ -767,31 +776,43 @@
             >
               <!-- Try Again -->
               <button
-                class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md bg-primary-700 px-3 py-1.5 text-sm font-semibold text-base-content-highlight transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
+                class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md bg-primary-700 px-3 py-1.5 text-sm font-semibold text-base-content-highlight transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
                 type="button"
                 @click="manuallyReloadMedia"
               >
-                {{ t('media.tryAgain') }}
+                <ArrowPathIcon
+                  class="h-3.5 w-3.5 shrink-0 text-base-content-highlight"
+                  aria-hidden="true"
+                />
+                <span>{{ t('media.tryAgain') }}</span>
               </button>
 
               <!-- Open in new tab -->
               <a
                 v-if="rawMediaSrc"
                 :href="rawMediaSrc"
-                class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md px-3 py-1.5 text-sm ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                {{ t('tags.openInNewTab') }}
+                <ArrowTopRightOnSquareIcon
+                  class="h-3.5 w-3.5 shrink-0 text-base-content"
+                  aria-hidden="true"
+                />
+                <span class="truncate">{{ t('tags.openInNewTab') }}</span>
               </a>
             </div>
           </div>
 
-          <!-- Premium promotion (Original design) -->
+          <!-- Premium promotion with SparklesIcon -->
           <div
             v-if="!isPremium"
-            class="text-xs text-base-content"
+            class="flex items-center justify-center gap-1 text-xs text-base-content"
           >
+            <SparklesIcon
+              class="h-3.5 w-3.5 shrink-0 text-accent-400"
+              aria-hidden="true"
+            />
             <NuxtLink
               :href="localePath('/premium?utm_source=internal&utm_medium=media-error#pricing')"
               class="underline hover:hover-text-util focus-visible:focus-outline-util"
