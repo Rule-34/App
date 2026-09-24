@@ -92,28 +92,47 @@
   const localPosterSrc = shallowRef(posterCandidates.value[initialPosterIndex] ?? props.mediaPosterSrc ?? undefined)
 
   function probeVideoPoster() {
-    if (import.meta.server || !isVideo.value || !localPosterSrc.value) {
-      return
-    }
-    if (posterCandidateIndex.value > 0) {
+    if (import.meta.server || !isVideo.value || !posterCandidates.value.length) {
       return
     }
 
-    const probe = new Image()
-    probe.referrerPolicy = 'no-referrer'
-    probe.onerror = () => {
-      if (posterCandidateIndex.value === 0 && !isPosterDirectBlocked.value) {
-        recordDirectFailure(rawPosterSrc.value || rawMediaSrc.value, 'image')
+    const candidateIdx = posterCandidateIndex.value
+
+    function probeCandidate(idx: number) {
+      if (idx >= posterCandidates.value.length) {
+        return
       }
-      if (posterCandidateIndex.value < posterCandidates.value.length - 1) {
-        posterCandidateIndex.value += 1
-        const nextPoster = posterCandidates.value[posterCandidateIndex.value]
-        if (nextPoster) {
-          localPosterSrc.value = nextPoster
+
+      const candidateUrl = posterCandidates.value[idx]
+      if (!candidateUrl) return
+
+      const probe = new Image()
+      probe.referrerPolicy = 'no-referrer'
+      probe.onload = () => {
+        posterCandidateIndex.value = idx
+        localPosterSrc.value = candidateUrl
+        if (idx === 0) {
+          recordDirectSuccess(rawPosterSrc.value || rawMediaSrc.value, 'image')
         }
       }
+      probe.onerror = () => {
+        if (idx === 0 && !isPosterDirectBlocked.value) {
+          recordDirectFailure(rawPosterSrc.value || rawMediaSrc.value, 'image')
+        }
+        const nextIdx = idx + 1
+        if (nextIdx < posterCandidates.value.length) {
+          const nextPoster = posterCandidates.value[nextIdx]
+          if (nextPoster) {
+            posterCandidateIndex.value = nextIdx
+            localPosterSrc.value = nextPoster
+            probeCandidate(nextIdx)
+          }
+        }
+      }
+      probe.src = candidateUrl
     }
-    probe.src = localPosterSrc.value
+
+    probeCandidate(candidateIdx)
   }
 
   function onPosterBackdropError() {
