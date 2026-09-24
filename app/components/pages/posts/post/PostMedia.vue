@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import type { IPost, PostMediaType } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
-  import { ArrowPathIcon, ArrowTopRightOnSquareIcon, SparklesIcon } from '@heroicons/vue/20/solid'
+  import { ArrowTopRightOnSquareIcon, SparklesIcon } from '@heroicons/vue/20/solid'
   import {
     getCandidateSources,
     isDomainDirectBlocked,
@@ -695,7 +695,7 @@
     <template v-if="hasError">
       <div
         :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
-        class="relative flex min-h-[160px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-linear-to-b from-base-900/60 via-base-950 to-base-1000 p-4 text-center select-none"
+        class="relative flex h-full min-h-[220px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-linear-to-b from-base-900/60 via-base-950 to-base-1000 p-6 text-center select-none sm:p-8"
       >
         <!-- Poster backdrop thumbnail if available -->
         <template v-if="localPosterSrc || props.mediaPosterSrc">
@@ -715,36 +715,34 @@
           />
         </template>
 
-        <div class="relative z-10 flex w-full max-w-[280px] flex-col items-center justify-center space-y-3">
-          <!-- Error Title (Original design badge, no border) -->
-          <span
-            class="rounded-md bg-linear-to-l from-base-950 via-base-900 to-base-900 px-4 py-1.5 text-center text-sm font-medium text-base-content-highlight"
-          >
+        <div class="relative z-10 flex w-full max-w-sm flex-col items-center justify-center gap-5 sm:gap-6">
+          <!-- Error Title: Clean, authentic heading without button-like pill container -->
+          <h3 class="text-base font-semibold tracking-wide text-base-content-highlight">
             {{ error?.message || t('errors.mediaLoadError') }}
-          </span>
+          </h3>
 
           <!-- Actions -->
-          <div class="flex w-full flex-col gap-2">
+          <div class="flex w-full flex-col gap-2.5">
             <!-- Video Primary CTA: Play in Sandbox -->
             <button
               v-if="isVideo && rawMediaSrc"
-              class="inline-flex min-h-[38px] w-full items-center justify-center rounded-md bg-primary-700 px-4 py-1.5 text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
+              class="inline-flex min-h-[40px] w-full items-center justify-center rounded-md bg-primary-700 px-4 py-2 text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
               type="button"
               @click="playInIframe"
             >
               {{ t('media.playInSandbox') }}
             </button>
 
-            <!-- Video Secondary Actions Row (compact & subordinate to main CTA) -->
+            <!-- Video Secondary Actions Row (subordinated, compact) -->
             <div
               v-if="isVideo"
-              class="flex w-full items-center gap-2"
+              class="flex w-full items-center gap-2.5"
             >
               <!-- Open in new tab -->
               <a
                 v-if="rawMediaSrc"
                 :href="rawMediaSrc"
-                class="inline-flex min-h-[30px] flex-1 items-center justify-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                class="inline-flex min-h-[32px] flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -755,16 +753,12 @@
                 <span class="truncate">{{ t('tags.openInNewTab') }}</span>
               </a>
 
-              <!-- Try Again -->
+              <!-- Try Again (No icon) -->
               <button
-                class="inline-flex min-h-[30px] flex-1 items-center justify-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                class="inline-flex min-h-[32px] flex-1 items-center justify-center rounded-md px-3 py-1.5 text-xs text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 type="button"
                 @click="manuallyReloadMedia"
               >
-                <ArrowPathIcon
-                  class="h-3.5 w-3.5 shrink-0 text-base-content"
-                  aria-hidden="true"
-                />
                 <span class="truncate">{{ t('media.tryAgain') }}</span>
               </button>
             </div>
@@ -772,18 +766,14 @@
             <!-- Image Actions Row -->
             <div
               v-else
-              class="flex w-full items-center gap-2"
+              class="flex w-full items-center gap-2.5"
             >
-              <!-- Try Again -->
+              <!-- Try Again (No icon) -->
               <button
-                class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md bg-primary-700 px-3 py-1.5 text-sm font-semibold text-base-content-highlight transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
+                class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md bg-primary-700 px-3 py-1.5 text-sm font-semibold text-base-content-highlight transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
                 type="button"
                 @click="manuallyReloadMedia"
               >
-                <ArrowPathIcon
-                  class="h-3.5 w-3.5 shrink-0 text-base-content-highlight"
-                  aria-hidden="true"
-                />
                 <span>{{ t('media.tryAgain') }}</span>
               </button>
 
@@ -791,7 +781,7 @@
               <a
                 v-if="rawMediaSrc"
                 :href="rawMediaSrc"
-                class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-base-content ring-1 ring-base-0/15 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -804,23 +794,21 @@
             </div>
           </div>
 
-          <!-- Premium promotion with SparklesIcon -->
-          <div
+          <!-- Premium promotion (100% inline text flow with SparklesIcon) -->
+          <p
             v-if="!isPremium"
-            class="flex items-center justify-center gap-1 text-xs text-base-content"
+            class="text-center text-xs leading-relaxed text-base-content"
           >
             <SparklesIcon
-              class="h-3.5 w-3.5 shrink-0 text-accent-400"
+              class="mr-1.5 inline-block h-3.5 w-3.5 align-[-2px] text-accent-400"
               aria-hidden="true"
             />
             <NuxtLink
               :href="localePath('/premium?utm_source=internal&utm_medium=media-error#pricing')"
-              class="underline hover:hover-text-util focus-visible:focus-outline-util"
-            >
-              <!-- @formatter:off -->
-              {{ t('media.getPremium') }}</NuxtLink
+              class="font-medium underline hover:hover-text-util focus-visible:focus-outline-util"
+              >{{ t('media.getPremium') }}</NuxtLink
             >{{ ' ' }}<span>{{ t('media.toBypassBlocks') }}</span>
-          </div>
+          </p>
         </div>
       </div>
     </template>
@@ -829,7 +817,7 @@
     <div
       v-else-if="useIframePlayer"
       :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
-      class="relative flex min-h-[160px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-base-950"
+      class="relative flex h-full min-h-[220px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-base-950"
     >
       <iframe
         :src="rawMediaSrc"
