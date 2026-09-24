@@ -436,7 +436,8 @@
     "postAlt": "게시물 #{id}",
     "postDescription": "{mediaType} #{id}({domain}의 점수, {score}, {rating} 등급, {tags} 태그 포함)",
     "shareFoundOn": "{name}에서 발견됨: {url}",
-    "sharePostTitle": "{domain}의 게시물 #{id}"
+    "sharePostTitle": "{domain}의 게시물 #{id}",
+    "playInSandbox": "샌드박스에서 재생"
   },
   "source": {
     "postSource": "게시물 출처",

@@ -1,7 +1,14 @@
 <script lang="ts" setup>
   import type { IPost, PostMediaType } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
-  import { proxyUrl } from '~/assets/js/proxy'
+  import {
+    getCandidateSources,
+    isDomainDirectBlocked,
+    onDomainHealthChange,
+    recordDirectFailure,
+    recordDirectSuccess,
+    resetDomainBreaker
+  } from '~/assets/js/media-resilience'
 
   const localePath = useLocalePath()
   const { t } = useI18n()
@@ -35,8 +42,78 @@
 
   const mediaElement = shallowRef<MediaElementRef>(null)
 
-  const localSrc = shallowRef(props.mediaSrc ?? '')
-  const localPosterSrc = shallowRef(props.mediaPosterSrc ?? undefined)
+  const rawMediaSrc = computed(() => props.mediaSrc ?? '')
+  const rawPosterSrc = computed(() => props.mediaPosterSrc ?? '')
+
+  const domainHealthVersion = shallowRef(0)
+
+  onMounted(() => {
+    const unsubscribe = onDomainHealthChange(() => {
+      domainHealthVersion.value += 1
+    })
+    onBeforeUnmount(unsubscribe)
+  })
+
+  const isDirectBlocked = computed(() => {
+    void domainHealthVersion.value
+    return isDomainDirectBlocked(rawMediaSrc.value, props.mediaType)
+  })
+
+  const srcCandidates = computed(() =>
+    getCandidateSources({
+      rawUrl: rawMediaSrc.value,
+      mediaType: props.mediaType,
+      isPremium: isPremium.value
+    })
+  )
+
+  const posterCandidates = computed(() =>
+    getCandidateSources({
+      rawUrl: rawPosterSrc.value,
+      mediaType: 'image',
+      isPremium: isPremium.value
+    })
+  )
+
+  const initialSrcIndex = isDirectBlocked.value && srcCandidates.value.length > 1 ? 1 : 0
+  const initialPosterIndex = isDirectBlocked.value && posterCandidates.value.length > 1 ? 1 : 0
+
+  const srcCandidateIndex = shallowRef(initialSrcIndex)
+  const posterCandidateIndex = shallowRef(initialPosterIndex)
+
+  const localSrc = shallowRef(srcCandidates.value[initialSrcIndex] ?? rawMediaSrc.value)
+  const localPosterSrc = shallowRef(posterCandidates.value[initialPosterIndex] ?? props.mediaPosterSrc ?? undefined)
+
+  const useIframePlayer = shallowRef(false)
+
+  // When domain breaker trips while cards are mounted, uncompleted direct requests advance to Candidate 1 (Photon)
+  watch(isDirectBlocked, (blocked) => {
+    if (blocked && !mediaHasLoaded.value && !hasError.value) {
+      if (srcCandidateIndex.value === 0 && srcCandidates.value.length > 1 && srcCandidates.value[1]) {
+        srcCandidateIndex.value = 1
+        localSrc.value = srcCandidates.value[1]
+      }
+      if (posterCandidateIndex.value === 0 && posterCandidates.value.length > 1 && posterCandidates.value[1]) {
+        posterCandidateIndex.value = 1
+        localPosterSrc.value = posterCandidates.value[1]
+      }
+    }
+  })
+
+  watch(
+    () => props.mediaSrc,
+    () => {
+      const newSrcIdx = isDirectBlocked.value && srcCandidates.value.length > 1 ? 1 : 0
+      const newPosterIdx = isDirectBlocked.value && posterCandidates.value.length > 1 ? 1 : 0
+      srcCandidateIndex.value = newSrcIdx
+      posterCandidateIndex.value = newPosterIdx
+      useIframePlayer.value = false
+      mediaHasLoaded.value = false
+      error.value = null
+      localSrc.value = srcCandidates.value[newSrcIdx] ?? rawMediaSrc.value
+      localPosterSrc.value = posterCandidates.value[newPosterIdx] ?? props.mediaPosterSrc ?? undefined
+    }
+  )
 
   const error = ref<Error | null>(null)
   const hasError = computed(() => error.value !== null)
@@ -78,9 +155,6 @@
   useHead(() => ({
     link: lcpVideoPosterPreloadLinks.value
   }))
-
-  const triedToLoadWithProxy = shallowRef(false)
-  const triedToLoadPosterWithProxy = shallowRef(false)
 
   let videoPlayer: FluidPlayerInstance | undefined
   let videoPlayerInitPromise: Promise<void> | null = null
@@ -388,78 +462,74 @@
       return
     }
 
-    // Proxy videos
-    if (
-      isVideo.value &&
-      isPremium.value &&
-      //
-      !triedToLoadWithProxy.value
-    ) {
-      localSrc.value = proxyUrl(localSrc.value)
-
-      reloadVideoPlayer(true)
-
-      triedToLoadWithProxy.value = true
-      return
-    }
-
     // Reset loading state if there's an error with GIF
     if (isAnimatedMedia.value && isAnimatedMediaPlaying.value) {
       isAnimatedMediaLoading.value = false
     }
 
-    // Proxy GIFs
-    if (isAnimatedMedia.value && isPremium.value) {
-      //
+    // Case 1: The poster image failed to load for animated media
+    if (isAnimatedMedia.value && !isAnimatedMediaPlaying.value && target.src === localPosterSrc.value) {
+      if (posterCandidateIndex.value === 0 && !isDirectBlocked.value) {
+        recordDirectFailure(rawPosterSrc.value || rawMediaSrc.value, 'image')
+      }
 
-      // Case 1: The poster image failed to load
-      if (
-        !isAnimatedMediaPlaying.value &&
-        target.src === localPosterSrc.value &&
-        //
-        !triedToLoadPosterWithProxy.value
-      ) {
-        if (!localPosterSrc.value) {
-          return
-        }
-
-        localPosterSrc.value = proxyUrl(localPosterSrc.value)
-
-        triedToLoadPosterWithProxy.value = true
+      posterCandidateIndex.value += 1
+      const nextPoster = posterCandidates.value[posterCandidateIndex.value]
+      if (nextPoster) {
+        localPosterSrc.value = nextPoster
         return
       }
 
-      // Case 2: The actual GIF failed to load
-      if (
-        isAnimatedMediaPlaying.value &&
-        //
-        !triedToLoadWithProxy.value
-      ) {
-        localSrc.value = proxyUrl(localSrc.value)
+      error.value = new Error(t('errors.mediaLoadError'))
+      return
+    }
 
-        triedToLoadWithProxy.value = true
-        return
+    // Case 2: Main media failed to load (image, gif, or video)
+    // If Candidate 0 (direct request) failed, record failure for the domain
+    if (srcCandidateIndex.value === 0 && !isDirectBlocked.value) {
+      recordDirectFailure(rawMediaSrc.value, props.mediaType)
+    }
+
+    srcCandidateIndex.value += 1
+    const nextSrc = srcCandidates.value[srcCandidateIndex.value]
+    if (nextSrc) {
+      localSrc.value = nextSrc
+
+      if (isVideo.value) {
+        reloadVideoPlayer(true)
       }
+      return
     }
 
     error.value = new Error(t('errors.mediaLoadError'))
   }
 
   function manuallyReloadMedia() {
-    // Reset state
-    triedToLoadWithProxy.value = false
-    triedToLoadPosterWithProxy.value = false
+    resetDomainBreaker(rawMediaSrc.value, props.mediaType)
+    if (rawPosterSrc.value) {
+      resetDomainBreaker(rawPosterSrc.value, 'image')
+    }
+
+    srcCandidateIndex.value = 0
+    posterCandidateIndex.value = 0
+    useIframePlayer.value = false
+    mediaHasLoaded.value = false
     error.value = null
 
-    // Reload media
-    localSrc.value = props.mediaSrc ?? ''
-    localPosterSrc.value = props.mediaPosterSrc ?? undefined
+    // Force retry direct request
+    localSrc.value = rawMediaSrc.value
+    localPosterSrc.value = rawPosterSrc.value || props.mediaPosterSrc || undefined
 
     if (isVideo.value) {
       nextTick(() => {
         reloadVideoPlayer()
       })
     }
+  }
+
+  function playInIframe() {
+    useIframePlayer.value = true
+    error.value = null
   }
 
   /**
@@ -489,6 +559,14 @@
 
   function onMediaLoad() {
     mediaHasLoaded.value = true
+
+    const isShowingPoster = isAnimatedMedia.value && !isAnimatedMediaPlaying.value
+    const activeSrc = isShowingPoster ? localPosterSrc.value : localSrc.value
+    const rawTargetSrc = isShowingPoster ? rawPosterSrc.value || props.mediaPosterSrc : rawMediaSrc.value
+
+    if (activeSrc && activeSrc === rawTargetSrc) {
+      recordDirectSuccess(rawTargetSrc, isShowingPoster ? 'image' : props.mediaType)
+    }
 
     // Clear loading state if it's a GIF
     if (isAnimatedMedia.value && isAnimatedMediaPlaying.value) {
@@ -555,43 +633,102 @@
 
 <template>
   <div :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined">
-    <!-- Error -->
+    <!-- Error Overlay -->
     <template v-if="hasError">
-      <div class="flex h-full flex-col items-center space-y-4 py-4">
-        <div class="flex flex-1 flex-col items-center justify-center gap-4">
+      <div
+        :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
+        class="relative flex min-h-[160px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md p-4 text-center"
+      >
+        <!-- Poster backdrop thumbnail if available -->
+        <NuxtImg
+          v-if="localPosterSrc || props.mediaPosterSrc"
+          :alt="mediaAlt"
+          :height="mediaSrcHeightAttribute"
+          :src="localPosterSrc || props.mediaPosterSrc!"
+          :width="mediaSrcWidthAttribute"
+          class="pointer-events-none absolute inset-0 h-full w-full object-cover blur-xs brightness-30"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+        />
+
+        <div class="relative z-10 flex flex-col items-center justify-center space-y-3">
           <span
-            class="rounded-md bg-linear-to-l from-base-950 via-base-900 to-base-900 px-4 py-1.5 text-center text-base-content-highlight"
+            class="rounded-md bg-linear-to-l from-base-950 via-base-900 to-base-900 px-3 py-1.5 text-sm text-base-content-highlight"
           >
             {{ error?.message }}
           </span>
 
-          <button
-            class="mx-auto inline-flex items-center justify-center rounded-md px-2 py-1 text-sm ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
-            type="button"
-            @click="manuallyReloadMedia"
-          >
-            {{ t('media.tryAgain') }}
-          </button>
-        </div>
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <!-- Video Sandbox Option -->
+            <button
+              v-if="isVideo && rawMediaSrc"
+              class="inline-flex min-h-[38px] items-center justify-center rounded-md bg-base-900 px-3 py-1.5 text-sm font-medium ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+              type="button"
+              @click="playInIframe"
+            >
+              {{ t('media.playInSandbox') }}
+            </button>
 
-        <!-- Premium promotion -->
-        <!-- TODO: Improve style -->
-        <div
-          v-if="!isPremium"
-          class="text-xs text-base-content"
-        >
-          <NuxtLink
-            :href="localePath('/premium?utm_source=internal&utm_medium=media-error#pricing')"
-            class="underline hover:hover-text-util focus-visible:focus-outline-util"
-          >
-            <!-- @formatter:off -->
-            {{ t('media.getPremium') }}</NuxtLink
-          >
+            <!-- Try Again -->
+            <button
+              class="inline-flex min-h-[38px] items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+              type="button"
+              @click="manuallyReloadMedia"
+            >
+              {{ t('media.tryAgain') }}
+            </button>
 
-          <span> {{ t('media.toBypassBlocks') }}</span>
+            <!-- Open in new tab -->
+            <a
+              v-if="rawMediaSrc"
+              :href="rawMediaSrc"
+              class="inline-flex min-h-[38px] items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium ring-1 ring-base-0/20 hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {{ t('tags.openInNewTab') }}
+            </a>
+          </div>
+
+          <!-- Premium promotion -->
+          <!-- TODO: Improve style -->
+          <div
+            v-if="!isPremium"
+            class="pt-1 text-xs text-base-content"
+          >
+            <NuxtLink
+              :href="localePath('/premium?utm_source=internal&utm_medium=media-error#pricing')"
+              class="underline hover:hover-text-util focus-visible:focus-outline-util"
+            >
+              <!-- @formatter:off -->
+              {{ t('media.getPremium') }}</NuxtLink
+            >
+
+            <span> {{ t('media.toBypassBlocks') }}</span>
+          </div>
         </div>
       </div>
     </template>
+
+    <!-- Iframe fallback for videos -->
+    <div
+      v-else-if="useIframePlayer"
+      :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
+      class="relative w-full"
+    >
+      <iframe
+        :src="rawMediaSrc"
+        :height="mediaSrcHeightAttribute"
+        :width="mediaSrcWidthAttribute"
+        :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
+        class="h-auto w-full rounded-t-md border-0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+        allowfullscreen
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        sandbox="allow-scripts allow-same-origin"
+      />
+    </div>
 
     <!-- Image -->
     <!-- TODO: Fix very large images not being on screen so not loaded -->
@@ -608,6 +745,7 @@
       <template v-if="isPremium">
         <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
         <NuxtPicture
+          v-if="srcCandidateIndex === 0"
           ref="mediaElement"
           :alt="mediaAlt"
           :decoding="mediaDecoding"
@@ -616,7 +754,8 @@
             {
               class: 'h-auto w-full rounded-t-md',
               style: mediaAspectRatio ? 'aspect-ratio: ' + mediaAspectRatio : undefined,
-              fetchpriority: mediaFetchPriority
+              fetchpriority: mediaFetchPriority,
+              referrerpolicy: 'no-referrer'
             } as any
           "
           :loading="mediaLoading"
@@ -628,13 +767,31 @@
           @error="onMediaError"
           @load="onMediaLoad"
         />
+
+        <NuxtImg
+          v-else
+          ref="mediaElement"
+          :alt="mediaAlt"
+          :decoding="mediaDecoding"
+          :fetchpriority="mediaFetchPriority"
+          :height="mediaSrcHeightAttribute"
+          :loading="mediaLoading"
+          :preload="mediaPreload"
+          :src="localSrc"
+          :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
+          :width="mediaSrcWidthAttribute"
+          class="h-auto w-full rounded-t-md"
+          referrerpolicy="no-referrer"
+          @error="onMediaError"
+          @load="onMediaLoad"
+        />
       </template>
 
       <!-- Regular images for non-premium users -->
       <template v-else>
         <!-- SSR + first posts: imgproxy keeps crawler/LCP images optimized. -->
         <NuxtPicture
-          v-if="wasCurrentPageSSR && postIndex < 8"
+          v-if="wasCurrentPageSSR && postIndex < 8 && srcCandidateIndex === 0"
           ref="mediaElement"
           :alt="mediaAlt"
           :decoding="mediaDecoding"
@@ -643,7 +800,8 @@
             {
               class: 'h-auto w-full rounded-t-md',
               style: mediaAspectRatio ? 'aspect-ratio: ' + mediaAspectRatio : undefined,
-              fetchpriority: mediaFetchPriority
+              fetchpriority: mediaFetchPriority,
+              referrerpolicy: 'no-referrer'
             } as any
           "
           :loading="mediaLoading"
@@ -671,6 +829,7 @@
           :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
           :width="mediaSrcWidthAttribute"
           class="h-auto w-full rounded-t-md"
+          referrerpolicy="no-referrer"
           @error="onMediaError"
           @load="onMediaLoad"
         />
@@ -694,6 +853,7 @@
         :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
         :width="mediaSrcWidthAttribute"
         class="h-auto w-full rounded-t-md"
+        referrerpolicy="no-referrer"
         @error="onMediaError"
         @load="onMediaLoad"
       />
@@ -772,6 +932,7 @@
         loop
         playsinline
         preload="none"
+        referrerpolicy="no-referrer"
         @error="onMediaError"
         @focus="initializeVideoPlayer"
         @pointerdown="initializeVideoPlayer"

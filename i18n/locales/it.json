@@ -436,7 +436,8 @@
     "postAlt": "Messaggio n.{id}",
     "postDescription": "{mediaType} #{id} da {domain} con un punteggio di {score}, valutazione {rating}, contrassegnato con {tags}",
     "shareFoundOn": "Trovato su {name}: {url}",
-    "sharePostTitle": "Messaggio n.{id} da {domain}"
+    "sharePostTitle": "Messaggio n.{id} da {domain}",
+    "playInSandbox": "Riproduci in sandbox"
   },
   "source": {
     "postSource": "Pubblica fonte",

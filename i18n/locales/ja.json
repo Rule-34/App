@@ -436,7 +436,8 @@
     "postAlt": "投稿 #{id}",
     "postDescription": "{domain}の{mediaType} #{id}、スコア{score}、{rating}レーティング、タグ：{tags}",
     "shareFoundOn": "{name}で見つけました：{url}",
-    "sharePostTitle": "{domain}の投稿 #{id}"
+    "sharePostTitle": "{domain}の投稿 #{id}",
+    "playInSandbox": "サンドボックスで再生"
   },
   "source": {
     "postSource": "投稿のソース",

@@ -436,7 +436,8 @@
     "postAlt": "Beitrag #{id}",
     "postDescription": "{mediaType} #{id} von {domain} mit einem Score von {score}, Bewertung {rating}, getaggt mit {tags}",
     "shareFoundOn": "Gefunden auf {name}: {url}",
-    "sharePostTitle": "Beitrag #{id} von {domain}"
+    "sharePostTitle": "Beitrag #{id} von {domain}",
+    "playInSandbox": "In Sandbox abspielen"
   },
   "source": {
     "postSource": "Beitragsquelle",

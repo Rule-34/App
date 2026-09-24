@@ -436,7 +436,8 @@
     "postAlt": "Gönderi #{id}",
     "postDescription": "{mediaType} #{id}, {domain}'den {score} puanıyla, {rating} derecelendirmesiyle, {tags} ile etiketlendi",
     "shareFoundOn": "{name} üzerinde bulundu: {url}",
-    "sharePostTitle": "{domain} adresinden #{id} yayınlayın"
+    "sharePostTitle": "{domain} adresinden #{id} yayınlayın",
+    "playInSandbox": "Korumalı alanda oynat"
   },
   "source": {
     "postSource": "Gönderi kaynağı",

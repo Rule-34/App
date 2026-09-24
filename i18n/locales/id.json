@@ -436,7 +436,8 @@
     "postAlt": "Pos #{id}",
     "postDescription": "{mediaType} #{id} dari {domain} dengan skor {score}, peringkat {rating}, ditandai dengan {tags}",
     "shareFoundOn": "Ditemukan di {name}: {url}",
-    "sharePostTitle": "Posting #{id} dari {domain}"
+    "sharePostTitle": "Posting #{id} dari {domain}",
+    "playInSandbox": "Putar di sandbox"
   },
   "source": {
     "postSource": "Sumber posting",

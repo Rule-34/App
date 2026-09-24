@@ -436,7 +436,8 @@
     "postAlt": "Đăng #{id}",
     "postDescription": "{mediaType} #{id} từ {domain} với số điểm {score}, xếp hạng {rating}, được gắn thẻ {tags}",
     "shareFoundOn": "Được tìm thấy trên {name}: {url}",
-    "sharePostTitle": "Bài đăng #{id} từ {domain}"
+    "sharePostTitle": "Bài đăng #{id} từ {domain}",
+    "playInSandbox": "Phát trong hộp cát"
   },
   "source": {
     "postSource": "Nguồn bài đăng",
