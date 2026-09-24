@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import type { IPost, PostMediaType } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
-  import { ArrowPathIcon, ArrowTopRightOnSquareIcon, SparklesIcon } from '@heroicons/vue/20/solid'
+  import { ArrowPathIcon, ArrowTopRightOnSquareIcon, SparklesIcon, XMarkIcon } from '@heroicons/vue/20/solid'
   import {
     getCandidateSources,
     isDomainDirectBlocked,
@@ -48,11 +48,24 @@
 
   const domainHealthVersion = shallowRef(0)
 
+  let posterProbeToken = 0
+  let isComponentUnmounted = false
+  let activeProbe: HTMLImageElement | null = null
+
   onMounted(() => {
     const unsubscribe = onDomainHealthChange(() => {
       domainHealthVersion.value += 1
     })
-    onBeforeUnmount(unsubscribe)
+    onBeforeUnmount(() => {
+      unsubscribe()
+      isComponentUnmounted = true
+      if (activeProbe) {
+        activeProbe.onload = null
+        activeProbe.onerror = null
+        activeProbe.src = ''
+        activeProbe = null
+      }
+    })
     probeVideoPoster()
   })
 
@@ -63,7 +76,8 @@
 
   const isPosterDirectBlocked = computed(() => {
     void domainHealthVersion.value
-    return isDomainDirectBlocked(rawPosterSrc.value || rawMediaSrc.value, 'image')
+    if (!rawPosterSrc.value) return false
+    return isDomainDirectBlocked(rawPosterSrc.value, 'image')
   })
 
   const srcCandidates = computed(() =>
@@ -92,14 +106,24 @@
   const localPosterSrc = shallowRef(posterCandidates.value[initialPosterIndex] ?? props.mediaPosterSrc ?? undefined)
 
   function probeVideoPoster() {
-    if (import.meta.server || !isVideo.value || !posterCandidates.value.length) {
+    if (import.meta.server || isComponentUnmounted || !isVideo.value || !posterCandidates.value.length) {
       return
+    }
+
+    posterProbeToken += 1
+    const currentToken = posterProbeToken
+
+    if (activeProbe) {
+      activeProbe.onload = null
+      activeProbe.onerror = null
+      activeProbe.src = ''
+      activeProbe = null
     }
 
     const candidateIdx = posterCandidateIndex.value
 
     function probeCandidate(idx: number) {
-      if (idx >= posterCandidates.value.length) {
+      if (isComponentUnmounted || currentToken !== posterProbeToken || idx >= posterCandidates.value.length) {
         return
       }
 
@@ -107,28 +131,31 @@
       if (!candidateUrl) return
 
       const probe = new Image()
+      activeProbe = probe
       probe.referrerPolicy = 'no-referrer'
+
       probe.onload = () => {
+        if (isComponentUnmounted || currentToken !== posterProbeToken) return
+        activeProbe = null
         posterCandidateIndex.value = idx
         localPosterSrc.value = candidateUrl
-        if (idx === 0) {
-          recordDirectSuccess(rawPosterSrc.value || rawMediaSrc.value, 'image')
+        if (idx === 0 && rawPosterSrc.value) {
+          recordDirectSuccess(rawPosterSrc.value, 'image')
         }
       }
+
       probe.onerror = () => {
-        if (idx === 0 && !isPosterDirectBlocked.value) {
-          recordDirectFailure(rawPosterSrc.value || rawMediaSrc.value, 'image')
+        if (isComponentUnmounted || currentToken !== posterProbeToken) return
+        activeProbe = null
+        if (idx === 0 && !isPosterDirectBlocked.value && rawPosterSrc.value) {
+          recordDirectFailure(rawPosterSrc.value, 'image')
         }
         const nextIdx = idx + 1
         if (nextIdx < posterCandidates.value.length) {
-          const nextPoster = posterCandidates.value[nextIdx]
-          if (nextPoster) {
-            posterCandidateIndex.value = nextIdx
-            localPosterSrc.value = nextPoster
-            probeCandidate(nextIdx)
-          }
+          probeCandidate(nextIdx)
         }
       }
+
       probe.src = candidateUrl
     }
 
@@ -143,6 +170,9 @@
       if (srcCandidateIndex.value === 0 && srcCandidates.value.length > 1 && srcCandidates.value[1]) {
         srcCandidateIndex.value = 1
         localSrc.value = srcCandidates.value[1]
+        if (isVideo.value) {
+          reloadVideoPlayer(false)
+        }
       }
     }
   })
@@ -578,7 +608,12 @@
     error.value = new Error(t('errors.mediaLoadError'))
   }
 
+  const isRetrying = shallowRef(false)
+
   function manuallyReloadMedia() {
+    if (isRetrying.value) return
+    isRetrying.value = true
+
     resetDomainBreaker(rawMediaSrc.value, props.mediaType)
 
     srcCandidateIndex.value = 0
@@ -609,10 +644,16 @@
     }
 
     if (isVideo.value) {
-      nextTick(() => {
-        reloadVideoPlayer()
+      nextTick(async () => {
+        await reloadVideoPlayer()
+        // Prompt browser to fetch media stream on retry
+        getVideoElement()?.load()
       })
     }
+
+    setTimeout(() => {
+      isRetrying.value = false
+    }, 600)
   }
 
   function playInIframe() {
@@ -779,6 +820,8 @@
               <button
                 :aria-label="t('media.tryAgain')"
                 :title="t('media.tryAgain')"
+                :disabled="isRetrying"
+                :class="isRetrying ? 'cursor-wait opacity-60' : ''"
                 class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 type="button"
                 @click="manuallyReloadMedia"
@@ -824,6 +867,8 @@
 
                 <!-- Try Again (No icon) -->
                 <button
+                  :disabled="isRetrying"
+                  :class="isRetrying ? 'cursor-wait opacity-60' : ''"
                   class="inline-flex min-h-[32px] flex-1 items-center justify-center rounded-md px-3 py-1.5 text-xs text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                   type="button"
                   @click="manuallyReloadMedia"
@@ -840,6 +885,8 @@
             >
               <!-- Try Again -->
               <button
+                :disabled="isRetrying"
+                :class="isRetrying ? 'cursor-wait opacity-60' : ''"
                 class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md bg-primary-700 px-3 py-1.5 text-sm font-semibold text-base-content-highlight transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
                 type="button"
                 @click="manuallyReloadMedia"
@@ -871,6 +918,8 @@
             >
               <!-- Try Again (No icon) -->
               <button
+                :disabled="isRetrying"
+                :class="isRetrying ? 'cursor-wait opacity-60' : ''"
                 class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md bg-primary-700 px-3 py-1.5 text-sm font-semibold text-base-content-highlight transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
                 type="button"
                 @click="manuallyReloadMedia"
@@ -918,8 +967,24 @@
     <div
       v-else-if="useIframePlayer"
       :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
-      class="relative flex h-full min-h-[200px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-base-950"
+      class="group relative flex h-full min-h-[200px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-base-950"
     >
+      <!-- Minimal close control to return to error overlay -->
+      <button
+        :aria-label="t('common.close') || 'Close'"
+        class="absolute top-2.5 right-2.5 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-base-950/80 text-base-content ring-1 ring-base-0/20 backdrop-blur-md transition-colors hover:bg-base-900 hover:text-base-content-highlight focus-visible:focus-outline-util"
+        type="button"
+        @click="
+          useIframePlayer = false
+          error = new Error(t('errors.mediaLoadError'))
+        "
+      >
+        <XMarkIcon
+          class="h-4 w-4"
+          aria-hidden="true"
+        />
+      </button>
+
       <iframe
         :src="rawMediaSrc"
         :height="mediaSrcHeightAttribute"
