@@ -701,9 +701,9 @@
     <!-- Error Overlay -->
     <template v-if="hasError">
       <div
-        :class="isShortMedia ? 'p-3 sm:p-4' : 'p-6 sm:p-8'"
+        :class="isShortMedia ? 'px-3 py-3.5 sm:px-4 sm:py-4' : 'px-3 py-6 sm:px-4 sm:py-8'"
         :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
-        class="relative flex h-full min-h-[220px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-linear-to-b from-base-900/60 via-base-950 to-base-1000 text-center select-none"
+        class="relative flex h-full min-h-[200px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-linear-to-b from-base-900/60 via-base-950 to-base-1000 text-center select-none"
       >
         <!-- Poster backdrop thumbnail if available -->
         <template v-if="localPosterSrc || props.mediaPosterSrc">
@@ -724,18 +724,15 @@
         </template>
 
         <div
-          :class="isShortMedia ? 'max-w-[340px] gap-3 sm:gap-3.5' : 'max-w-sm gap-5 sm:gap-6'"
-          class="relative z-10 flex w-full flex-col items-center justify-center"
+          :class="isShortMedia ? 'gap-2.5 sm:gap-3' : 'gap-4 sm:gap-5'"
+          class="relative z-10 flex w-full max-w-[360px] flex-col items-center justify-center"
         >
           <!-- Error Title & Concise Context Subtitle -->
           <div class="flex flex-col items-center space-y-1 text-center">
             <h3 class="text-base font-semibold tracking-wide text-base-content-highlight">
               {{ error?.message || t('errors.mediaLoadError') }}
             </h3>
-            <p
-              v-if="!isShortMedia"
-              class="max-w-[280px] text-xs text-base-content/80"
-            >
+            <p class="max-w-[300px] text-xs text-base-content/80">
               {{ t('media.hostBlocksDirectAccess') }}
             </p>
           </div>
