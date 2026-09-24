@@ -437,7 +437,8 @@
     "postDescription": "{mediaType} n°{id} de {domain} avec un score de {score}, classification {rating}, tagué avec {tags}",
     "shareFoundOn": "Trouvé sur {name} : {url}",
     "sharePostTitle": "Post n°{id} de {domain}",
-    "playInSandbox": "Lire dans le bac à sable"
+    "playInSandbox": "Lire dans le bac à sable",
+    "hostBlocksDirectAccess": "Cet hôte bloque l'accès direct en dehors de son site."
   },
   "source": {
     "postSource": "Source du post",

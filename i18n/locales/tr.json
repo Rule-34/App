@@ -437,7 +437,8 @@
     "postDescription": "{mediaType} #{id}, {domain}'den {score} puanıyla, {rating} derecelendirmesiyle, {tags} ile etiketlendi",
     "shareFoundOn": "{name} üzerinde bulundu: {url}",
     "sharePostTitle": "{domain} adresinden #{id} yayınlayın",
-    "playInSandbox": "Korumalı alanda oynat"
+    "playInSandbox": "Korumalı alanda oynat",
+    "hostBlocksDirectAccess": "Bu ana bilgisayar, web sitesi dışından doğrudan erişimi engeller."
   },
   "source": {
     "postSource": "Gönderi kaynağı",

@@ -437,7 +437,8 @@
     "postDescription": "{mediaType} #{id} de {domain} com pontuação de {score}, classificação {rating}, marcado com {tags}",
     "shareFoundOn": "Encontrado no {name}: {url}",
     "sharePostTitle": "Post #{id} de {domain}",
-    "playInSandbox": "Reproduzir no sandbox"
+    "playInSandbox": "Reproduzir no sandbox",
+    "hostBlocksDirectAccess": "Este host bloqueia o acesso direto fora do seu site."
   },
   "source": {
     "postSource": "Fonte do post",

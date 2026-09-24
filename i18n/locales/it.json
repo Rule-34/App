@@ -437,7 +437,8 @@
     "postDescription": "{mediaType} #{id} da {domain} con un punteggio di {score}, valutazione {rating}, contrassegnato con {tags}",
     "shareFoundOn": "Trovato su {name}: {url}",
     "sharePostTitle": "Messaggio n.{id} da {domain}",
-    "playInSandbox": "Riproduci in sandbox"
+    "playInSandbox": "Riproduci in sandbox",
+    "hostBlocksDirectAccess": "Questo host blocca l'accesso diretto al di fuori del proprio sito web."
   },
   "source": {
     "postSource": "Pubblica fonte",

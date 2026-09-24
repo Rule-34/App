@@ -437,7 +437,8 @@
     "postDescription": "{mediaType} #{id} 来自 {domain}，得分为 {score}，{rating} 评级，标记为 {tags}",
     "shareFoundOn": "在 {name} 上找到：{url}",
     "sharePostTitle": "来自 {domain} 的帖子 #{id}",
-    "playInSandbox": "在沙盒中播放"
+    "playInSandbox": "在沙盒中播放",
+    "hostBlocksDirectAccess": "该主机阻止了网站外部的直接访问。"
   },
   "source": {
     "postSource": "帖子来源",

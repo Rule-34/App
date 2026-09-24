@@ -437,7 +437,8 @@
     "postDescription": "{mediaType} #{id} dari {domain} dengan skor {score}, peringkat {rating}, ditandai dengan {tags}",
     "shareFoundOn": "Ditemukan di {name}: {url}",
     "sharePostTitle": "Posting #{id} dari {domain}",
-    "playInSandbox": "Putar di sandbox"
+    "playInSandbox": "Putar di sandbox",
+    "hostBlocksDirectAccess": "Host ini memblokir akses langsung di luar situs web mereka."
   },
   "source": {
     "postSource": "Sumber posting",

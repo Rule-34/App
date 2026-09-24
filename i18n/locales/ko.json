@@ -437,7 +437,8 @@
     "postDescription": "{mediaType} #{id}({domain}의 점수, {score}, {rating} 등급, {tags} 태그 포함)",
     "shareFoundOn": "{name}에서 발견됨: {url}",
     "sharePostTitle": "{domain}의 게시물 #{id}",
-    "playInSandbox": "샌드박스에서 재생"
+    "playInSandbox": "샌드박스에서 재생",
+    "hostBlocksDirectAccess": "이 호스트는 웹사이트 외부에서의 직접 액세스를 차단합니다."
   },
   "source": {
     "postSource": "게시물 출처",

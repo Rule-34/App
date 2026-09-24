@@ -437,7 +437,8 @@
     "postDescription": "{mediaType} #{id} с {domain}, оценка {score}, рейтинг {rating}, теги: {tags}",
     "shareFoundOn": "Найдено на {name}: {url}",
     "sharePostTitle": "Пост #{id} с {domain}",
-    "playInSandbox": "Воспроизвести в песочнице"
+    "playInSandbox": "Воспроизвести в песочнице",
+    "hostBlocksDirectAccess": "Этот хост блокирует прямой доступ за пределами своего сайта."
   },
   "source": {
     "postSource": "Источник поста",

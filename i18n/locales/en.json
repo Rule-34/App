@@ -437,7 +437,8 @@
     "postDescription": "{mediaType} #{id} from {domain} with a score of {score}, {rating} rating, tagged with {tags}",
     "shareFoundOn": "Found on {name}: {url}",
     "sharePostTitle": "Post #{id} from {domain}",
-    "playInSandbox": "Play in sandbox"
+    "playInSandbox": "Play in sandbox",
+    "hostBlocksDirectAccess": "This host blocks direct access outside their website."
   },
   "source": {
     "postSource": "Post source",

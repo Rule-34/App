@@ -716,10 +716,15 @@
         </template>
 
         <div class="relative z-10 flex w-full max-w-sm flex-col items-center justify-center gap-5 sm:gap-6">
-          <!-- Error Title: Clean, authentic heading without button-like pill container -->
-          <h3 class="text-base font-semibold tracking-wide text-base-content-highlight">
-            {{ error?.message || t('errors.mediaLoadError') }}
-          </h3>
+          <!-- Error Title & Concise Context Subtitle -->
+          <div class="flex flex-col items-center space-y-1.5 text-center">
+            <h3 class="text-base font-semibold tracking-wide text-base-content-highlight">
+              {{ error?.message || t('errors.mediaLoadError') }}
+            </h3>
+            <p class="max-w-[280px] text-xs text-base-content/80">
+              {{ t('media.hostBlocksDirectAccess') }}
+            </p>
+          </div>
 
           <!-- Actions -->
           <div class="flex w-full flex-col gap-2.5">
