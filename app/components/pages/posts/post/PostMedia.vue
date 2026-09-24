@@ -571,19 +571,33 @@
 
   function manuallyReloadMedia() {
     resetDomainBreaker(rawMediaSrc.value, props.mediaType)
-    if (rawPosterSrc.value) {
-      resetDomainBreaker(rawPosterSrc.value, 'image')
-    }
 
     srcCandidateIndex.value = 0
-    posterCandidateIndex.value = 0
     useIframePlayer.value = false
     mediaHasLoaded.value = false
     error.value = null
 
     // Force retry direct request
     localSrc.value = rawMediaSrc.value
-    localPosterSrc.value = rawPosterSrc.value || props.mediaPosterSrc || undefined
+
+    if (isVideo.value) {
+      if (isPosterDirectBlocked.value && posterCandidates.value.length > 1 && posterCandidates.value[1]) {
+        posterCandidateIndex.value = 1
+        localPosterSrc.value = posterCandidates.value[1]
+      } else {
+        posterCandidateIndex.value = 0
+        localPosterSrc.value = rawPosterSrc.value || props.mediaPosterSrc || undefined
+        nextTick(() => {
+          probeVideoPoster()
+        })
+      }
+    } else {
+      if (rawPosterSrc.value) {
+        resetDomainBreaker(rawPosterSrc.value, 'image')
+      }
+      posterCandidateIndex.value = 0
+      localPosterSrc.value = rawPosterSrc.value || props.mediaPosterSrc || undefined
+    }
 
     if (isVideo.value) {
       nextTick(() => {
