@@ -483,6 +483,58 @@
           media: featuredMedia('e621.net', 'pokemon', 3, 'jpg')
         }
       ]
+    },
+    {
+      domain: 'danbooru.donmai.us',
+      path: '/posts/danbooru.donmai.us',
+      isPremium: false,
+      tags: [
+        {
+          name: t('pages.home.topPosts'),
+          path: '/posts/danbooru.donmai.us?filter%5Bsort%5D=score',
+          media: [
+            { type: 'image', src: '/img/featured/danbooru.donmai.us/top-1.jpg' },
+            { type: 'image', src: '/img/featured/danbooru.donmai.us/top-2.jpg' },
+            { type: 'image', src: '/img/featured/danbooru.donmai.us/top-3.jpg' },
+            { type: 'image', src: '/img/featured/danbooru.donmai.us/top-4.jpg' }
+          ]
+        },
+        {
+          name: t('pages.home.trendingPosts'),
+          path: '/posts/danbooru.donmai.us?filter%5Bscore%5D=>%3D50',
+          media: [
+            { type: 'image', src: '/img/featured/danbooru.donmai.us/top-5.jpg' },
+            { type: 'image', src: '/img/featured/danbooru.donmai.us/top-6.jpg' },
+            { type: 'image', src: '/img/featured/danbooru.donmai.us/top-7.jpg' },
+            { type: 'image', src: '/img/featured/danbooru.donmai.us/top-8.jpg' }
+          ]
+        },
+        {
+          name: t('pages.home.animatedVideo'),
+          path: '/posts/danbooru.donmai.us?tags=animated',
+          media: [{ type: 'image', src: '/img/featured/danbooru.donmai.us/animated.jpeg' }]
+        },
+        {
+          name: t('pages.home.noAi'),
+          path: '/posts/danbooru.donmai.us?tags=-ai_generated',
+          media: featuredMedia('danbooru.donmai.us', 'no-ai', 8)
+        },
+        {
+          name: 'Genshin Impact',
+          path: '/posts/danbooru.donmai.us?tags=genshin_impact',
+          media: featuredMedia('danbooru.donmai.us', 'genshin_impact', 4)
+        },
+        {
+          name: 'Blue Archive',
+          path: '/posts/danbooru.donmai.us?tags=blue_archive',
+          media: featuredMedia('danbooru.donmai.us', 'blue_archive', 4)
+        },
+        {
+          name: 'Hololive',
+          path: '/posts/danbooru.donmai.us?tags=hololive',
+          media: featuredMedia('danbooru.donmai.us', 'hololive', 4)
+        }
+      ]
     }
     // {
     //   domain: 'realbooru.com',
