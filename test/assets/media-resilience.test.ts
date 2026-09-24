@@ -22,15 +22,15 @@ describe('media-resilience', () => {
     it('creates a safe photon url with ssl=1 for https urls', () => {
       const input = 'https://static1.e621.net/data/preview/94/91/9491498441879ff4168532af1d23ddfc.jpg'
       const output = toPhotonUrl(input)
-      expect(output).toBe(
-        'https://i0.wp.com/static1.e621.net/data/preview/94/91/9491498441879ff4168532af1d23ddfc.jpg?ssl=1'
+      expect(output).toMatch(
+        /^https:\/\/i[0-3]\.wp\.com\/static1\.e621\.net\/data\/preview\/94\/91\/9491498441879ff4168532af1d23ddfc\.jpg\?ssl=1$/
       )
     })
 
     it('preserves existing query parameters when adding ssl=1', () => {
       const input = 'https://cdn.donmai.us/original/12/34/1234.png?download=true'
       const output = toPhotonUrl(input)
-      expect(output).toContain('https://i0.wp.com/cdn.donmai.us/original/12/34/1234.png?')
+      expect(output).toMatch(/^https:\/\/i[0-3]\.wp\.com\/cdn\.donmai\.us\/original\/12\/34\/1234\.png\?/)
       expect(output).toContain('download=true')
       expect(output).toContain('ssl=1')
     })

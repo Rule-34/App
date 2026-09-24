@@ -51,8 +51,14 @@ export function toPhotonUrl(rawUrl: string): string {
       params.set('ssl', '1')
     }
 
+    let hash = 0
+    for (let i = 0; i < hostAndPath.length; i += 1) {
+      hash = (hash * 31 + hostAndPath.charCodeAt(i)) & 0xffffffff
+    }
+    const shard = Math.abs(hash) % 4
+
     const query = params.toString()
-    return `https://i0.wp.com/${hostAndPath}${query ? `?${query}` : ''}`
+    return `https://i${shard}.wp.com/${hostAndPath}${query ? `?${query}` : ''}`
   } catch {
     return rawUrl
   }
