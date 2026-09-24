@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import type { IPost, PostMediaType } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
-  import { ArrowTopRightOnSquareIcon, SparklesIcon, XMarkIcon } from '@heroicons/vue/20/solid'
+  import { ArrowPathIcon, ArrowTopRightOnSquareIcon, SparklesIcon, XMarkIcon } from '@heroicons/vue/20/solid'
   import {
     getCandidateSources,
     isDomainDirectBlocked,
@@ -816,16 +816,20 @@
                 />
               </a>
 
-              <!-- Try Again (No icon) -->
+              <!-- Try Again (icon button for compact mode) -->
               <button
                 :aria-label="t('media.tryAgain')"
+                :title="t('media.tryAgain')"
                 :disabled="isRetrying"
                 :class="isRetrying ? 'cursor-wait opacity-60' : ''"
-                class="inline-flex min-h-[38px] items-center justify-center rounded-md px-3 py-1.5 text-xs font-medium text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 type="button"
                 @click="manuallyReloadMedia"
               >
-                <span>{{ t('media.tryAgain') }}</span>
+                <ArrowPathIcon
+                  class="h-4 w-4 shrink-0 text-base-content"
+                  aria-hidden="true"
+                />
               </button>
             </div>
 
