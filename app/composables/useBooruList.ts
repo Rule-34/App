@@ -1,17 +1,11 @@
-import { booruTypeList, completeBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+import {
+  booruTypeList,
+  completeBooruList,
+  defaultBooruList as sharedDefaultBooruList
+} from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 import type { Domain } from '~/assets/js/domain'
 
-const freeDomains = [
-  'rule34.xxx',
-  'rule34.paheal.net',
-  'e621.net',
-  'e6ai.net',
-  'e926.net',
-  'safebooru.org',
-  'danbooru.donmai.us'
-]
-
-const defaultBooruList: Domain[] = completeBooruList
+export const defaultBooruList: Domain[] = completeBooruList
   // Disable specific Booru sites
   .filter((booruObj) => {
     const disabledDomains = [
@@ -36,13 +30,9 @@ const defaultBooruList: Domain[] = completeBooruList
 
       config: booruObj.config,
 
-      isPremium: !freeDomains.includes(booruObj.domain),
+      isPremium: !sharedDefaultBooruList.some((defaultObj) => defaultObj.domain === booruObj.domain),
       isCustom: false
     } as Domain
-  })
-  .sort((a, b) => {
-    if (a.isPremium === b.isPremium) return 0
-    return a.isPremium ? 1 : -1
   })
 
 export default function () {

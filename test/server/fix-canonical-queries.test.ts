@@ -60,6 +60,12 @@ describe('SEO canonical URLs', async () => {
     expect(getCanonical(html)).toBe(`${project.urls.production.origin}/posts/e621.net/solo`)
   })
 
+  it('canonicalizes danbooru posts queries to tag landing pages', async () => {
+    const html = await $fetch<string>('/posts/danbooru.donmai.us?tags=genshin_impact')
+
+    expect(getCanonical(html)).toBe(`${project.urls.production.origin}/posts/danbooru.donmai.us/genshin_impact`)
+  })
+
   it('encodes pipe characters in tags', async () => {
     const html = await $fetch('/posts/e621.net?tags=bored%7Ccum%7C-white_fur')
 
