@@ -1228,6 +1228,7 @@
         playsinline
         preload="none"
         @error="onMediaError"
+        @loadeddata="onMediaLoad"
         @focus="initializeVideoPlayer"
         @pointerdown="initializeVideoPlayer"
         @pointerenter="initializeVideoPlayer"
