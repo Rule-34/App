@@ -2,10 +2,9 @@ import { describe, expect, it } from 'vitest'
 import { $fetch, setup } from '@nuxt/test-utils'
 import { defaultLocale, locales } from '../../config/i18n'
 import { project } from '../../config/project'
-import { debugBrowserOptions } from '../helper'
 
 describe('SEO canonical URLs', async () => {
-  await setup({ browser: true, browserOptions: debugBrowserOptions })
+  await setup()
 
   /** Extract canonical href from SSR HTML. */
   function getCanonical(html: string): string | null {
