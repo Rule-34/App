@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { Bars3BottomRightIcon, EyeIcon, MagnifyingGlassIcon, PhotoIcon, StarIcon } from '@heroicons/vue/24/outline'
   import { ArrowPathIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
+  import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/20/solid'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import type { QueryFunctionContext } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
@@ -697,12 +698,26 @@
 
   <!-- Container -->
   <main class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
-    <section class="mb-4">
+    <section class="mb-4 flex flex-wrap items-center gap-2">
       <DomainSelector
         :boorus="booruList"
         :model-value="savedPostsBooru"
         @update:model-value="onDomainChange"
       />
+
+      <a
+        :href="`https://${savedPostsBooru.domain}`"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-base-content-muted inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium ring-1 ring-base-0/20 ring-inset hover:hover-bg-util hover:text-base-content-highlight focus-visible:focus-outline-util"
+        :title="$t('common.visitWebsite', { domain: savedPostsBooru.domain })"
+      >
+        <span>{{ $t('common.visitOriginalWebsite') }}</span>
+        <ArrowTopRightOnSquareIcon
+          aria-hidden="true"
+          class="h-3.5 w-3.5"
+        />
+      </a>
 
       <!-- TODO: Move filters here -->
     </section>

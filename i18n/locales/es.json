@@ -50,7 +50,9 @@
     "featurePromotion": "Promoción de función",
     "favicon": "Favicon",
     "page": "Página",
-    "pageNumber": "Página {page}"
+    "pageNumber": "Página {page}",
+    "visitWebsite": "Visitar {domain}",
+    "visitOriginalWebsite": "Visitar sitio original"
   },
   "seo": {
     "title": "Videos, GIFs e imágenes Rule 34 en R34.app",

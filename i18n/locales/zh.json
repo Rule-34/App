@@ -50,7 +50,9 @@
     "featurePromotion": "特色推广",
     "favicon": "网站图标",
     "page": "页面",
-    "pageNumber": "页{page}"
+    "pageNumber": "页{page}",
+    "visitWebsite": "访问 {domain}",
+    "visitOriginalWebsite": "访问原始网站"
   },
   "seo": {
     "title": "Rule 34 色情视频、GIF 和图片位于 R34.app",

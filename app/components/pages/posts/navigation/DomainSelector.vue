@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
+  import { ArrowTopRightOnSquareIcon, CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
   import { PlusIcon } from '@heroicons/vue/24/solid'
   import { flip, offset, shift, useFloating } from '@floating-ui/vue'
   import type { Domain } from '~/assets/js/domain'
@@ -136,7 +136,7 @@
           >
             <li
               :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-              class="relative cursor-default py-2 pr-14 pl-3 select-none"
+              class="relative cursor-default py-2 pr-16 pl-3 select-none"
             >
               <div class="flex items-center">
                 <img
@@ -160,7 +160,23 @@
                 </span>
               </div>
 
-              <div class="absolute inset-y-0 right-0 flex items-center gap-2 pr-4">
+              <div class="absolute inset-y-0 right-0 flex items-center gap-1.5 pr-3">
+                <!-- Direct external link to booru website -->
+                <a
+                  :href="`https://${booru.domain}`"
+                  :aria-label="t('common.visitWebsite', { domain: booru.domain })"
+                  :title="t('common.visitWebsite', { domain: booru.domain })"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-base-content-muted rounded p-1 hover:bg-base-0/20 hover:text-base-content-highlight focus-visible:focus-outline-util"
+                  @click.stop
+                >
+                  <ArrowTopRightOnSquareIcon
+                    aria-hidden="true"
+                    class="h-4 w-4"
+                  />
+                </a>
+
                 <!-- Checked -->
                 <span
                   v-if="selected"
@@ -174,6 +190,23 @@
               </div>
             </li>
           </HeadlessListboxOption>
+
+          <!-- Active booru external link -->
+          <a
+            :href="`https://${props.modelValue.domain}`"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group text-base-content-muted flex items-center border-t border-base-0/10 px-3 py-2 text-xs hover:hover-bg-util hover:text-base-content-highlight focus-visible:focus-outline-util"
+          >
+            <ArrowTopRightOnSquareIcon
+              aria-hidden="true"
+              class="text-base-content-muted h-4 w-4 shrink-0 group-hover:text-base-content-highlight"
+            />
+
+            <span class="ml-2 block truncate">
+              {{ t('common.visitWebsite', { domain: props.modelValue.domain }) }}
+            </span>
+          </a>
 
           <!-- Add more button -->
           <div class="group flex items-center px-3 py-2 hover:hover-bg-util hover:hover-text-util">

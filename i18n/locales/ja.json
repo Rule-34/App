@@ -50,7 +50,9 @@
     "featurePromotion": "機能プロモーション",
     "favicon": "Favicon",
     "page": "ページ",
-    "pageNumber": "{page}ページ"
+    "pageNumber": "{page}ページ",
+    "visitWebsite": "{domain}を訪問",
+    "visitOriginalWebsite": "元のサイトを訪問"
   },
   "seo": {
     "title": "Rule 34 動画・GIF・画像 - R34.app",
