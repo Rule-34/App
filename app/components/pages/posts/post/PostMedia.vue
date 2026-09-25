@@ -46,6 +46,35 @@
   const rawMediaSrc = computed(() => props.mediaSrc ?? '')
   const rawPosterSrc = computed(() => props.mediaPosterSrc ?? '')
 
+  /**
+   * Only allows valid http: and https: URLs for iframe embedding and external link navigation
+   * to protect against malicious javascript: or arbitrary URI schemes.
+   */
+  const safeRawMediaSrc = computed(() => {
+    if (!rawMediaSrc.value) return ''
+    try {
+      const parsed = new URL(rawMediaSrc.value)
+      return parsed.protocol === 'https:' || parsed.protocol === 'http:' ? parsed.href : ''
+    } catch {
+      return ''
+    }
+  })
+
+  const isImage = computed(() => props.mediaType === 'image')
+
+  /**
+   * Identifies whether Candidate index 0 is rendered via the server-side imgproxy service
+   * (used for premium users and early SSR posts) rather than directly fetching from the origin booru.
+   */
+  const isIndexZeroViaImgproxy = computed(
+    () => isImage.value && (isPremium.value || (wasCurrentPageSSR.value && props.postIndex < 8))
+  )
+
+  /**
+   * Identifies whether the active media request is an unproxied, direct fetch to the origin booru.
+   */
+  const isDirectRequest = computed(() => srcCandidateIndex.value === 0 && !isIndexZeroViaImgproxy.value)
+
   const domainHealthVersion = shallowRef(0)
 
   let posterProbeToken = 0
@@ -95,7 +124,8 @@
     })
   )
 
-  const initialSrcIndex = isDirectBlocked.value && srcCandidates.value.length > 1 ? 1 : 0
+  const initialSrcIndex =
+    !isIndexZeroViaImgproxy.value && isDirectBlocked.value && srcCandidates.value.length > 1 ? 1 : 0
   const initialPosterIndex = isPosterDirectBlocked.value && posterCandidates.value.length > 1 ? 1 : 0
 
   const srcCandidateIndex = shallowRef(initialSrcIndex)
@@ -165,7 +195,7 @@
 
   // When domain breaker trips while cards are mounted, uncompleted direct requests advance to Candidate 1 (Photon)
   watch(isDirectBlocked, (blocked) => {
-    if (blocked && !mediaHasLoaded.value && !hasError.value) {
+    if (blocked && !mediaHasLoaded.value && !hasError.value && !isIndexZeroViaImgproxy.value) {
       if (srcCandidateIndex.value === 0 && srcCandidates.value.length > 1 && srcCandidates.value[1]) {
         srcCandidateIndex.value = 1
         localSrc.value = srcCandidates.value[1]
@@ -186,7 +216,7 @@
   })
 
   watch([() => props.mediaSrc, () => props.mediaPosterSrc], () => {
-    const newSrcIdx = isDirectBlocked.value && srcCandidates.value.length > 1 ? 1 : 0
+    const newSrcIdx = !isIndexZeroViaImgproxy.value && isDirectBlocked.value && srcCandidates.value.length > 1 ? 1 : 0
     const newPosterIdx = isPosterDirectBlocked.value && posterCandidates.value.length > 1 ? 1 : 0
     srcCandidateIndex.value = newSrcIdx
     posterCandidateIndex.value = newPosterIdx
@@ -201,7 +231,6 @@
   const error = ref<Error | null>(null)
   const hasError = computed(() => error.value !== null)
 
-  const isImage = computed(() => props.mediaType === 'image')
   const isVideo = computed(() => props.mediaType === 'video')
   const isAnimatedMedia = computed(
     () => props.mediaType === 'animated' || (props.mediaType === 'image' && localSrc.value.endsWith('.gif'))
@@ -575,7 +604,7 @@
 
     // Case 2: Main media failed to load (image, gif, or video)
     // If Candidate 0 (direct request) failed, record failure for the domain
-    if (srcCandidateIndex.value === 0 && !isDirectBlocked.value) {
+    if (isDirectRequest.value && !isDirectBlocked.value) {
       recordDirectFailure(rawMediaSrc.value, props.mediaType)
     }
 
@@ -693,7 +722,7 @@
     const activeSrc = isShowingPoster ? localPosterSrc.value : localSrc.value
     const rawTargetSrc = isShowingPoster ? rawPosterSrc.value || props.mediaPosterSrc : rawMediaSrc.value
 
-    if (activeSrc && activeSrc === rawTargetSrc) {
+    if (activeSrc && activeSrc === rawTargetSrc && (isShowingPoster || isDirectRequest.value)) {
       recordDirectSuccess(rawTargetSrc, isShowingPoster ? 'image' : props.mediaType)
     }
 
@@ -792,7 +821,7 @@
             >
               <!-- Primary CTA: Play in Sandbox -->
               <button
-                v-if="rawMediaSrc"
+                v-if="safeRawMediaSrc"
                 class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md bg-primary-700 px-3 py-1.5 text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
                 type="button"
                 @click="playInIframe"
@@ -802,9 +831,9 @@
 
               <!-- Open in new tab (icon button) -->
               <a
-                v-if="rawMediaSrc"
+                v-if="safeRawMediaSrc"
                 :aria-label="t('tags.openInNewTab')"
-                :href="rawMediaSrc"
+                :href="safeRawMediaSrc"
                 :title="t('tags.openInNewTab')"
                 class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 rel="noopener noreferrer"
@@ -840,7 +869,7 @@
             >
               <!-- Video Primary CTA: Play in Sandbox -->
               <button
-                v-if="rawMediaSrc"
+                v-if="safeRawMediaSrc"
                 class="inline-flex min-h-[40px] w-full items-center justify-center rounded-md bg-primary-700 px-4 py-2 text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
                 type="button"
                 @click="playInIframe"
@@ -852,8 +881,8 @@
               <div class="flex w-full items-center gap-2.5">
                 <!-- Open in new tab -->
                 <a
-                  v-if="rawMediaSrc"
-                  :href="rawMediaSrc"
+                  v-if="safeRawMediaSrc"
+                  :href="safeRawMediaSrc"
                   class="inline-flex min-h-[32px] flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -896,9 +925,9 @@
 
               <!-- Open in new tab (icon button) -->
               <a
-                v-if="rawMediaSrc"
+                v-if="safeRawMediaSrc"
                 :aria-label="t('tags.openInNewTab')"
-                :href="rawMediaSrc"
+                :href="safeRawMediaSrc"
                 :title="t('tags.openInNewTab')"
                 class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 rel="noopener noreferrer"
@@ -929,8 +958,8 @@
 
               <!-- Open in new tab -->
               <a
-                v-if="rawMediaSrc"
-                :href="rawMediaSrc"
+                v-if="safeRawMediaSrc"
+                :href="safeRawMediaSrc"
                 class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 rel="noopener noreferrer"
                 target="_blank"
@@ -983,7 +1012,7 @@
       </button>
 
       <iframe
-        :src="rawMediaSrc"
+        :src="safeRawMediaSrc"
         :height="mediaSrcHeightAttribute"
         :width="mediaSrcWidthAttribute"
         :title="mediaAlt || 'Video Player'"
@@ -992,7 +1021,7 @@
         allowfullscreen
         loading="lazy"
         referrerpolicy="no-referrer"
-        sandbox="allow-scripts allow-same-origin"
+        sandbox="allow-same-origin"
       />
     </div>
 
@@ -1198,7 +1227,6 @@
         loop
         playsinline
         preload="none"
-        referrerpolicy="no-referrer"
         @error="onMediaError"
         @focus="initializeVideoPlayer"
         @pointerdown="initializeVideoPlayer"

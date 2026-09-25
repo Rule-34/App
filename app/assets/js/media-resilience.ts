@@ -41,11 +41,29 @@ function getDomainKey(rawUrl: string, mediaType?: PostMediaType | string): strin
   }
 }
 
+/**
+ * WordPress Photon CDN URL generator.
+ * Converts an HTTP/S image URL into a WordPress Photon cache URL.
+ * Drops non-standard ports or query parameters (as Photon does not forward them)
+ * by returning the raw URL directly so it can be skipped in fallback ladders.
+ *
+ * @param rawUrl - The image URL to convert.
+ * @returns The Photon CDN URL, or rawUrl if incompatible.
+ */
 export function toPhotonUrl(rawUrl: string): string {
   try {
     const url = new URL(rawUrl)
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      return rawUrl
+    }
+    // Photon drops non-standard ports and does not forward origin query parameters.
+    // If rawUrl has a port or query string, return rawUrl so it is skipped.
+    if (url.port || url.search) {
+      return rawUrl
+    }
+
     const hostAndPath = `${url.hostname}${url.pathname}`
-    const params = new URLSearchParams(url.search)
+    const params = new URLSearchParams()
 
     if (url.protocol === 'https:') {
       params.set('ssl', '1')
@@ -64,6 +82,12 @@ export function toPhotonUrl(rawUrl: string): string {
   }
 }
 
+/**
+ * DuckDuckGo image proxy URL generator.
+ *
+ * @param rawUrl - The image URL to convert.
+ * @returns The DuckDuckGo image proxy URL, or rawUrl if invalid.
+ */
 export function toDdgUrl(rawUrl: string): string {
   try {
     const params = new URLSearchParams({
@@ -83,6 +107,12 @@ export interface CandidateSourceOptions {
   isPremium: boolean
 }
 
+/**
+ * Returns an ordered array of candidate fallback URLs for a given media URL.
+ *
+ * @param options - Candidate source options including URL, media type, and premium status.
+ * @returns An array of candidate URLs starting with the direct URL.
+ */
 export function getCandidateSources(options: CandidateSourceOptions): string[] {
   const { rawUrl, mediaType, isPremium } = options
   if (!rawUrl) return []
@@ -102,8 +132,14 @@ export function getCandidateSources(options: CandidateSourceOptions): string[] {
   }
 
   // Images, animated GIFs, and video poster images
-  candidates.push(toPhotonUrl(rawUrl))
-  candidates.push(toDdgUrl(rawUrl))
+  const photon = toPhotonUrl(rawUrl)
+  if (photon && photon !== rawUrl) {
+    candidates.push(photon)
+  }
+  const ddg = toDdgUrl(rawUrl)
+  if (ddg && ddg !== rawUrl) {
+    candidates.push(ddg)
+  }
 
   if (isPremium) {
     try {
@@ -116,6 +152,14 @@ export function getCandidateSources(options: CandidateSourceOptions): string[] {
   return Array.from(new Set(candidates))
 }
 
+/**
+ * Checks whether direct access to the given domain and media type is currently blocked
+ * by the circuit breaker.
+ *
+ * @param rawUrl - The target media URL.
+ * @param mediaType - The media type (image, video, etc.).
+ * @returns True if direct access is blocked.
+ */
 export function isDomainDirectBlocked(rawUrl: string, mediaType?: PostMediaType | string): boolean {
   const key = getDomainKey(rawUrl, mediaType)
   if (!key) return false
@@ -130,6 +174,12 @@ export function isDomainDirectBlocked(rawUrl: string, mediaType?: PostMediaType 
   return false
 }
 
+/**
+ * Resets the circuit breaker for a domain and media type.
+ *
+ * @param rawUrl - The target media URL.
+ * @param mediaType - The media type.
+ */
 export function resetDomainBreaker(rawUrl: string, mediaType?: PostMediaType | string): void {
   const key = getDomainKey(rawUrl, mediaType)
   if (!key) return
@@ -138,6 +188,13 @@ export function resetDomainBreaker(rawUrl: string, mediaType?: PostMediaType | s
   notifyHealthChange()
 }
 
+/**
+ * Records a direct request failure for a domain and trips the circuit breaker
+ * if the failure threshold is reached.
+ *
+ * @param rawUrl - The target media URL.
+ * @param mediaType - The media type.
+ */
 export function recordDirectFailure(rawUrl: string, mediaType?: PostMediaType | string): void {
   const key = getDomainKey(rawUrl, mediaType)
   if (!key) return
@@ -153,6 +210,12 @@ export function recordDirectFailure(rawUrl: string, mediaType?: PostMediaType | 
   notifyHealthChange()
 }
 
+/**
+ * Records a successful direct request for a domain and clears any existing failure count.
+ *
+ * @param rawUrl - The target media URL.
+ * @param mediaType - The media type.
+ */
 export function recordDirectSuccess(rawUrl: string, mediaType?: PostMediaType | string): void {
   const key = getDomainKey(rawUrl, mediaType)
   if (!key) return
@@ -164,6 +227,9 @@ export function recordDirectSuccess(rawUrl: string, mediaType?: PostMediaType | 
   }
 }
 
+/**
+ * Resets all domain circuit breaker state across all domains and media types.
+ */
 export function resetDomainHealth(): void {
   domainHealthMap.clear()
   notifyHealthChange()

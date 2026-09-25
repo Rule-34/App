@@ -27,12 +27,12 @@ describe('media-resilience', () => {
       )
     })
 
-    it('preserves existing query parameters when adding ssl=1', () => {
-      const input = 'https://cdn.donmai.us/original/12/34/1234.png?download=true'
-      const output = toPhotonUrl(input)
-      expect(output).toMatch(/^https:\/\/i[0-3]\.wp\.com\/cdn\.donmai\.us\/original\/12\/34\/1234\.png\?/)
-      expect(output).toContain('download=true')
-      expect(output).toContain('ssl=1')
+    it('returns rawUrl for urls with query parameters or non-default ports', () => {
+      const queryInput = 'https://cdn.donmai.us/original/12/34/1234.png?download=true'
+      expect(toPhotonUrl(queryInput)).toBe(queryInput)
+
+      const portInput = 'https://cdn.donmai.us:8443/original/12/34/1234.png'
+      expect(toPhotonUrl(portInput)).toBe(portInput)
     })
   })
 
@@ -62,7 +62,7 @@ describe('media-resilience', () => {
 
       expect(candidates).toHaveLength(3)
       expect(candidates[0]).toBe(imgUrl)
-      expect(candidates[1]).toContain('i0.wp.com')
+      expect(candidates[1]).toBe(toPhotonUrl(imgUrl))
       expect(candidates[2]).toContain('external-content.duckduckgo.com')
     })
 
@@ -75,7 +75,7 @@ describe('media-resilience', () => {
 
       expect(candidates).toHaveLength(4)
       expect(candidates[0]).toBe(imgUrl)
-      expect(candidates[1]).toContain('i0.wp.com')
+      expect(candidates[1]).toBe(toPhotonUrl(imgUrl))
       expect(candidates[2]).toContain('external-content.duckduckgo.com')
       expect(candidates[3]).toContain('/api/cors-proxy/?')
     })
@@ -112,8 +112,21 @@ describe('media-resilience', () => {
 
       expect(candidates).toHaveLength(3)
       expect(candidates[0]).toBe(imgUrl)
-      expect(candidates[1]).toContain('i0.wp.com')
+      expect(candidates[1]).toBe(toPhotonUrl(imgUrl))
       expect(candidates[2]).toContain('external-content.duckduckgo.com')
+    })
+
+    it('skips photon candidate if url contains query parameters', () => {
+      const queryImg = 'https://cdn.donmai.us/original/12/34/1234.png?token=secret'
+      const candidates = getCandidateSources({
+        rawUrl: queryImg,
+        mediaType: 'image',
+        isPremium: false
+      })
+
+      expect(candidates.some((c) => c.includes('wp.com'))).toBe(false)
+      expect(candidates[0]).toBe(queryImg)
+      expect(candidates[1]).toContain('external-content.duckduckgo.com')
     })
   })
 
@@ -168,23 +181,25 @@ describe('media-resilience', () => {
         notifyCount += 1
       })
 
-      // Success on pristine domain should NOT notify
-      recordDirectSuccess(url, 'image')
-      expect(notifyCount).toBe(0)
+      try {
+        // Success on pristine domain should NOT notify
+        recordDirectSuccess(url, 'image')
+        expect(notifyCount).toBe(0)
 
-      // Record a failure -> notifies (1)
-      recordDirectFailure(url, 'image')
-      expect(notifyCount).toBe(1)
+        // Record a failure -> notifies (1)
+        recordDirectFailure(url, 'image')
+        expect(notifyCount).toBe(1)
 
-      // Success on domain with failure count -> notifies and resets (2)
-      recordDirectSuccess(url, 'image')
-      expect(notifyCount).toBe(2)
+        // Success on domain with failure count -> notifies and resets (2)
+        recordDirectSuccess(url, 'image')
+        expect(notifyCount).toBe(2)
 
-      // Another success on now-healthy domain -> does NOT notify
-      recordDirectSuccess(url, 'image')
-      expect(notifyCount).toBe(2)
-
-      unsubscribe()
+        // Another success on now-healthy domain -> does NOT notify
+        recordDirectSuccess(url, 'image')
+        expect(notifyCount).toBe(2)
+      } finally {
+        unsubscribe()
+      }
     })
   })
 })
