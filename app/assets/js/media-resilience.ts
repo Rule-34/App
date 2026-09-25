@@ -14,6 +14,12 @@ const domainHealthMap = new Map<string, DomainHealthEntry>()
 type HealthChangeListener = () => void
 const healthChangeListeners = new Set<HealthChangeListener>()
 
+/**
+ * Registers a listener callback invoked when any domain health status changes.
+ *
+ * @param listener - Callback function invoked on domain health change.
+ * @returns An unsubscribe function to remove the listener.
+ */
 export function onDomainHealthChange(listener: HealthChangeListener): () => void {
   healthChangeListeners.add(listener)
   return () => {
@@ -21,6 +27,9 @@ export function onDomainHealthChange(listener: HealthChangeListener): () => void
   }
 }
 
+/**
+ * Notifies all registered domain health change listeners.
+ */
 function notifyHealthChange(): void {
   for (const listener of healthChangeListeners) {
     try {
@@ -31,6 +40,13 @@ function notifyHealthChange(): void {
   }
 }
 
+/**
+ * Extracts a normalized domain key from a media URL and media category.
+ *
+ * @param rawUrl - The target media URL.
+ * @param mediaType - The media type (image, video, etc.).
+ * @returns A composite key of hostname and category, or null if invalid.
+ */
 function getDomainKey(rawUrl: string, mediaType?: PostMediaType | string): string | null {
   try {
     const parsed = new URL(rawUrl)
