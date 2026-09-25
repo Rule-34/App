@@ -45,4 +45,9 @@ describe('useBooruList', () => {
       expect(defaultBooruList.some((b) => b.domain === domain)).toBe(false)
     }
   })
+
+  it('does not include e926.net which was removed from supported boorus', () => {
+    expect(completeBooruList.some((b) => b.domain === 'e926.net')).toBe(false)
+    expect(defaultBooruList.some((b) => b.domain === 'e926.net')).toBe(false)
+  })
 })

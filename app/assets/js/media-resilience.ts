@@ -148,7 +148,19 @@ export function getCandidateSources(options: CandidateSourceOptions): string[] {
     return Array.from(new Set(candidates))
   }
 
-  // Images, animated GIFs, and video poster images
+  // Premium users get a dedicated media branch: proxied and automatically enhanced via imgproxy,
+  // falling back to the dedicated premium backend proxy — never degraded through public third-party proxies.
+  if (isPremium) {
+    try {
+      candidates.push(proxyUrl(rawUrl))
+    } catch {
+      // Ignored if invalid
+    }
+
+    return Array.from(new Set(candidates))
+  }
+
+  // Free/non-premium users: free fallback chain across public image CDNs
   const photon = toPhotonUrl(rawUrl)
   if (photon && photon !== rawUrl) {
     candidates.push(photon)
@@ -156,14 +168,6 @@ export function getCandidateSources(options: CandidateSourceOptions): string[] {
   const ddg = toDdgUrl(rawUrl)
   if (ddg && ddg !== rawUrl) {
     candidates.push(ddg)
-  }
-
-  if (isPremium) {
-    try {
-      candidates.push(proxyUrl(rawUrl))
-    } catch {
-      // Ignored if invalid
-    }
   }
 
   return Array.from(new Set(candidates))

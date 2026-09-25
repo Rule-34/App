@@ -67,18 +67,19 @@ describe('media-resilience', () => {
       expect(candidates[2]).toContain('external-content.duckduckgo.com')
     })
 
-    it('appends premium proxy to image candidates for premium users', () => {
+    it('routes premium images through direct origin and premium proxy without public CDNs', () => {
       const candidates = getCandidateSources({
         rawUrl: imgUrl,
         mediaType: 'image',
         isPremium: true
       })
 
-      expect(candidates).toHaveLength(4)
+      expect(candidates).toHaveLength(2)
       expect(candidates[0]).toBe(imgUrl)
-      expect(candidates[1]).toBe(toPhotonUrl(imgUrl))
-      expect(candidates[2]).toContain('external-content.duckduckgo.com')
-      expect(candidates[3]).toContain('/api/cors-proxy/?')
+      expect(candidates[1]).toContain('/api/cors-proxy/?')
+      // Premium users should not be degraded to public image CDNs
+      expect(candidates.some((c) => c.includes('wordpress.com'))).toBe(false)
+      expect(candidates.some((c) => c.includes('duckduckgo.com'))).toBe(false)
     })
 
     it('returns only direct for non-premium video (public proxies excluded)', () => {

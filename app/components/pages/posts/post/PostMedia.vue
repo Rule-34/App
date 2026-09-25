@@ -357,6 +357,12 @@
       return
     }
 
+    if (!initializedVideoElement.querySelector('source') && localSrc.value) {
+      const sourceElement = document.createElement('source')
+      sourceElement.src = localSrc.value
+      initializedVideoElement.appendChild(sourceElement)
+    }
+
     const fluidPlayer = fluidPlayerModule.default
     const adList: NonNullable<VastOptions['adList']> = []
 
@@ -581,6 +587,22 @@
       payload.target instanceof HTMLImageElement || payload.target instanceof HTMLVideoElement ? payload.target : null
 
     if (!target?.src) {
+      return
+    }
+
+    // Ignore bogus /null src generated when video players reset on loop/end
+    if (target instanceof HTMLVideoElement && target.src.endsWith('/null')) {
+      if (localSrc.value && !localSrc.value.endsWith('/null')) {
+        target.src = localSrc.value
+      }
+      return
+    }
+
+    // Never treat post-playback completion events on videos as media load failures
+    if (
+      target instanceof HTMLVideoElement &&
+      (target.ended || (target.duration > 0 && target.currentTime >= target.duration - 0.5))
+    ) {
       return
     }
 

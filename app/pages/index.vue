@@ -387,6 +387,56 @@
             { type: 'image', src: '/img/featured/rule34.paheal.net/top-10.jpg' },
             { type: 'image', src: '/img/featured/rule34.paheal.net/top-11.jpg' }
           ]
+        },
+        {
+          name: 'Pokémon',
+          path: '/posts/rule34.paheal.net?tags=pokemon',
+          media: featuredMedia('rule34.paheal.net', 'pokemon', 3)
+        },
+        {
+          name: 'My Little Pony',
+          path: '/posts/rule34.paheal.net?tags=my_little_pony',
+          media: featuredMedia('rule34.paheal.net', 'my_little_pony', 3)
+        },
+        {
+          name: 'Genshin Impact',
+          path: '/posts/rule34.paheal.net?tags=genshin_impact',
+          media: featuredMedia('rule34.paheal.net', 'genshin_impact', 3)
+        },
+        {
+          name: 'Sonic the Hedgehog',
+          path: '/posts/rule34.paheal.net?tags=sonic_the_hedgehog_(series)',
+          media: featuredMedia('rule34.paheal.net', 'sonic_the_hedgehog', 3)
+        },
+        {
+          name: 'Super Mario',
+          path: '/posts/rule34.paheal.net?tags=super_mario_bros.',
+          media: featuredMedia('rule34.paheal.net', 'super_mario', 3)
+        },
+        {
+          name: 'Zootopia',
+          path: '/posts/rule34.paheal.net?tags=zootopia',
+          media: featuredMedia('rule34.paheal.net', 'zootopia', 3)
+        },
+        {
+          name: 'Resident Evil',
+          path: '/posts/rule34.paheal.net?tags=resident_evil',
+          media: featuredMedia('rule34.paheal.net', 'resident_evil', 3)
+        },
+        {
+          name: 'Overwatch',
+          path: '/posts/rule34.paheal.net?tags=overwatch',
+          media: featuredMedia('rule34.paheal.net', 'overwatch', 3)
+        },
+        {
+          name: 'League of Legends',
+          path: '/posts/rule34.paheal.net?tags=league_of_legends',
+          media: featuredMedia('rule34.paheal.net', 'league_of_legends', 3)
+        },
+        {
+          name: 'World of Warcraft',
+          path: '/posts/rule34.paheal.net?tags=world_of_warcraft',
+          media: featuredMedia('rule34.paheal.net', 'world_of_warcraft', 3)
         }
       ]
     },
