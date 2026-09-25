@@ -438,53 +438,6 @@
     //   ]
     // },
     {
-      domain: 'e621.net',
-      path: '/posts/e621.net',
-      isPremium: false,
-      tags: [
-        {
-          name: t('pages.home.topPosts'),
-          path: '/posts/e621.net?filter%5Bsort%5D=score',
-          media: [
-            { type: 'image', src: '/img/featured/e621.net/top-1.jpeg' },
-            { type: 'image', src: '/img/featured/e621.net/top-2.jpeg' },
-            { type: 'image', src: '/img/featured/e621.net/top-3.jpeg' },
-            { type: 'image', src: '/img/featured/e621.net/top-4.jpeg' }
-          ]
-        },
-        {
-          name: t('pages.home.trendingPosts'),
-          path: '/posts/e621.net?filter%5Bscore%5D=>%3D50',
-          media: [
-            { type: 'image', src: '/img/featured/e621.net/top-5.jpeg' },
-            { type: 'image', src: '/img/featured/e621.net/top-6.jpeg' },
-            { type: 'image', src: '/img/featured/e621.net/top-7.jpeg' },
-            { type: 'image', src: '/img/featured/e621.net/top-8.jpeg' }
-          ]
-        },
-        {
-          name: t('pages.home.animatedVideo'),
-          path: '/posts/e621.net?tags=animated',
-          media: [{ type: 'image', src: '/img/featured/e621.net/animated.jpeg' }]
-        },
-        {
-          name: t('pages.home.noAi'),
-          path: '/posts/e621.net?tags=-ai_generated',
-          media: featuredMedia('e621.net', 'no-ai', 8)
-        },
-        {
-          name: 'Gay',
-          path: '/posts/e621.net?tags=gay',
-          media: featuredMedia('e621.net', 'gay', 3, 'jpg')
-        },
-        {
-          name: 'Pokemon',
-          path: '/posts/e621.net?tags=pokemon',
-          media: featuredMedia('e621.net', 'pokemon', 3, 'jpg')
-        }
-      ]
-    },
-    {
       domain: 'danbooru.donmai.us',
       path: '/posts/danbooru.donmai.us',
       isPremium: false,
@@ -533,6 +486,53 @@
           name: 'Hololive',
           path: '/posts/danbooru.donmai.us?tags=hololive',
           media: featuredMedia('danbooru.donmai.us', 'hololive', 4)
+        }
+      ]
+    },
+    {
+      domain: 'e621.net',
+      path: '/posts/e621.net',
+      isPremium: false,
+      tags: [
+        {
+          name: t('pages.home.topPosts'),
+          path: '/posts/e621.net?filter%5Bsort%5D=score',
+          media: [
+            { type: 'image', src: '/img/featured/e621.net/top-1.jpeg' },
+            { type: 'image', src: '/img/featured/e621.net/top-2.jpeg' },
+            { type: 'image', src: '/img/featured/e621.net/top-3.jpeg' },
+            { type: 'image', src: '/img/featured/e621.net/top-4.jpeg' }
+          ]
+        },
+        {
+          name: t('pages.home.trendingPosts'),
+          path: '/posts/e621.net?filter%5Bscore%5D=>%3D50',
+          media: [
+            { type: 'image', src: '/img/featured/e621.net/top-5.jpeg' },
+            { type: 'image', src: '/img/featured/e621.net/top-6.jpeg' },
+            { type: 'image', src: '/img/featured/e621.net/top-7.jpeg' },
+            { type: 'image', src: '/img/featured/e621.net/top-8.jpeg' }
+          ]
+        },
+        {
+          name: t('pages.home.animatedVideo'),
+          path: '/posts/e621.net?tags=animated',
+          media: [{ type: 'image', src: '/img/featured/e621.net/animated.jpeg' }]
+        },
+        {
+          name: t('pages.home.noAi'),
+          path: '/posts/e621.net?tags=-ai_generated',
+          media: featuredMedia('e621.net', 'no-ai', 8)
+        },
+        {
+          name: 'Gay',
+          path: '/posts/e621.net?tags=gay',
+          media: featuredMedia('e621.net', 'gay', 3, 'jpg')
+        },
+        {
+          name: 'Pokemon',
+          path: '/posts/e621.net?tags=pokemon',
+          media: featuredMedia('e621.net', 'pokemon', 3, 'jpg')
         }
       ]
     }
