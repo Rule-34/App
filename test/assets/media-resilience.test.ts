@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import {
+  BREAKER_COOLDOWN_MS,
   getCandidateSources,
   isDomainDirectBlocked,
   recordDirectFailure,
@@ -173,6 +174,95 @@ describe('media-resilience', () => {
 
       resetDomainBreaker(url, 'image')
       expect(isDomainDirectBlocked(url, 'image')).toBe(false)
+    })
+
+    it('handles half-open probe correctly after cooldown expires', () => {
+      vi.useFakeTimers()
+      try {
+        const testUrl = 'https://wimg.rule34.xxx/posts/123/video.mp4'
+        resetDomainBreaker(testUrl, 'video')
+
+        // 3 failures trip the breaker
+        recordDirectFailure(testUrl, 'video')
+        recordDirectFailure(testUrl, 'video')
+        recordDirectFailure(testUrl, 'video')
+        expect(isDomainDirectBlocked(testUrl, 'video')).toBe(true)
+
+        // Advance time past cooldown
+        vi.advanceTimersByTime(BREAKER_COOLDOWN_MS + 1)
+        expect(isDomainDirectBlocked(testUrl, 'video')).toBe(false)
+
+        // Probe failure after cooldown should NOT immediately re-trip the breaker (failure count was reset)
+        recordDirectFailure(testUrl, 'video')
+        expect(isDomainDirectBlocked(testUrl, 'video')).toBe(false)
+
+        // 2 more consecutive failures should re-trip the breaker
+        recordDirectFailure(testUrl, 'video')
+        expect(isDomainDirectBlocked(testUrl, 'video')).toBe(false)
+        recordDirectFailure(testUrl, 'video')
+        expect(isDomainDirectBlocked(testUrl, 'video')).toBe(true)
+      } finally {
+        resetDomainHealth()
+        vi.useRealTimers()
+      }
+    })
+
+    it('decays stale sub-threshold failures older than the cooldown window', () => {
+      vi.useFakeTimers()
+      try {
+        const testUrl = 'https://wimg.rule34.xxx/posts/123/image.jpg'
+        resetDomainBreaker(testUrl, 'image')
+
+        // 2 failures (below threshold of 3)
+        recordDirectFailure(testUrl, 'image')
+        recordDirectFailure(testUrl, 'image')
+        expect(isDomainDirectBlocked(testUrl, 'image')).toBe(false)
+
+        // Advance time past the cooldown decay window
+        vi.advanceTimersByTime(BREAKER_COOLDOWN_MS + 1)
+
+        // A single new failure should decay previous failures to 0 and not trip the breaker
+        recordDirectFailure(testUrl, 'image')
+        expect(isDomainDirectBlocked(testUrl, 'image')).toBe(false)
+
+        // Only after 2 more failures within the window should it trip
+        recordDirectFailure(testUrl, 'image')
+        expect(isDomainDirectBlocked(testUrl, 'image')).toBe(false)
+        recordDirectFailure(testUrl, 'image')
+        expect(isDomainDirectBlocked(testUrl, 'image')).toBe(true)
+      } finally {
+        resetDomainHealth()
+        vi.useRealTimers()
+      }
+    })
+
+    it('does not extend cooldown when late failures arrive while breaker is already open', () => {
+      vi.useFakeTimers()
+      try {
+        const testUrl = 'https://wimg.rule34.xxx/posts/123/video.mp4'
+        resetDomainBreaker(testUrl, 'video')
+
+        // Trip the breaker
+        recordDirectFailure(testUrl, 'video')
+        recordDirectFailure(testUrl, 'video')
+        recordDirectFailure(testUrl, 'video')
+        expect(isDomainDirectBlocked(testUrl, 'video')).toBe(true)
+
+        // Advance half-way through cooldown
+        vi.advanceTimersByTime(BREAKER_COOLDOWN_MS / 2)
+
+        // Late arriving failure should be ignored and NOT push cooldown back by another full cycle
+        recordDirectFailure(testUrl, 'video')
+
+        // Advance the remaining half + 1ms (total BREAKER_COOLDOWN_MS + 1)
+        vi.advanceTimersByTime(BREAKER_COOLDOWN_MS / 2 + 1)
+
+        // Breaker should now be closed / half-open, not still blocked
+        expect(isDomainDirectBlocked(testUrl, 'video')).toBe(false)
+      } finally {
+        resetDomainHealth()
+        vi.useRealTimers()
+      }
     })
 
     it('only notifies on recordDirectSuccess when there was an active failure or block', () => {

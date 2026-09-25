@@ -1,12 +1,13 @@
 import type { PostMediaType } from './post.dto'
 import { proxyUrl } from './proxy'
 
-const BREAKER_THRESHOLD = 3
-const BREAKER_COOLDOWN_MS = 15 * 60 * 1000 // 15 minutes
+export const BREAKER_THRESHOLD = 3
+export const BREAKER_COOLDOWN_MS = 15 * 60 * 1000 // 15 minutes
 
 interface DomainHealthEntry {
   consecutiveFailures: number
   blockedUntil: number
+  lastFailureAt?: number
 }
 
 const domainHealthMap = new Map<string, DomainHealthEntry>()
@@ -215,11 +216,29 @@ export function recordDirectFailure(rawUrl: string, mediaType?: PostMediaType | 
   const key = getDomainKey(rawUrl, mediaType)
   if (!key) return
 
+  const now = Date.now()
   const entry = domainHealthMap.get(key) ?? { consecutiveFailures: 0, blockedUntil: 0 }
+
+  // If already blocked and still within cooldown, ignore trailing failures so the cooldown isn't extended indefinitely.
+  if (entry.blockedUntil > 0 && now < entry.blockedUntil) {
+    return
+  }
+
+  // Half-open probe: if the cooldown period has elapsed, reset failure count so a single probe failure
+  // does not immediately re-trip the breaker.
+  if (entry.blockedUntil > 0 && now >= entry.blockedUntil) {
+    entry.consecutiveFailures = 0
+    entry.blockedUntil = 0
+  } else if (entry.lastFailureAt && now - entry.lastFailureAt > BREAKER_COOLDOWN_MS) {
+    // Stale sub-threshold failures older than the cooldown window decay to 0.
+    entry.consecutiveFailures = 0
+  }
+
   entry.consecutiveFailures += 1
+  entry.lastFailureAt = now
 
   if (entry.consecutiveFailures >= BREAKER_THRESHOLD) {
-    entry.blockedUntil = Date.now() + BREAKER_COOLDOWN_MS
+    entry.blockedUntil = now + BREAKER_COOLDOWN_MS
   }
 
   domainHealthMap.set(key, entry)
@@ -237,7 +256,7 @@ export function recordDirectSuccess(rawUrl: string, mediaType?: PostMediaType | 
   if (!key) return
 
   const entry = domainHealthMap.get(key)
-  if (entry && (entry.consecutiveFailures > 0 || entry.blockedUntil > 0)) {
+  if (entry && (entry.consecutiveFailures > 0 || entry.blockedUntil > 0 || entry.lastFailureAt !== undefined)) {
     domainHealthMap.set(key, { consecutiveFailures: 0, blockedUntil: 0 })
     notifyHealthChange()
   }

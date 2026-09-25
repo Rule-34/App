@@ -81,18 +81,11 @@
   let isUnmounted = false
   let activeProbe: HTMLImageElement | null = null
 
+  let unsubscribeHealthChange: (() => void) | null = null
+
   onMounted(() => {
-    const unsubscribe = onDomainHealthChange(() => {
+    unsubscribeHealthChange = onDomainHealthChange(() => {
       domainHealthVersion.value += 1
-    })
-    onBeforeUnmount(() => {
-      unsubscribe()
-      if (activeProbe) {
-        activeProbe.onload = null
-        activeProbe.onerror = null
-        activeProbe.src = ''
-        activeProbe = null
-      }
     })
     probeVideoPoster()
   })
@@ -298,6 +291,17 @@
 
   onBeforeUnmount(() => {
     isUnmounted = true
+
+    if (unsubscribeHealthChange) {
+      unsubscribeHealthChange()
+      unsubscribeHealthChange = null
+    }
+
+    if (activeProbe) {
+      activeProbe.onload = null
+      activeProbe.onerror = null
+      activeProbe = null
+    }
 
     if (videoPlayerInitTimeout !== null) {
       window.clearTimeout(videoPlayerInitTimeout)
@@ -639,6 +643,9 @@
     isRetrying.value = true
 
     resetDomainBreaker(rawMediaSrc.value, props.mediaType)
+    if (rawPosterSrc.value) {
+      resetDomainBreaker(rawPosterSrc.value, 'image')
+    }
 
     srcCandidateIndex.value = 0
     useIframePlayer.value = false
@@ -660,9 +667,6 @@
         })
       }
     } else {
-      if (rawPosterSrc.value) {
-        resetDomainBreaker(rawPosterSrc.value, 'image')
-      }
       posterCandidateIndex.value = 0
       localPosterSrc.value = rawPosterSrc.value || props.mediaPosterSrc || undefined
     }
@@ -1227,6 +1231,7 @@
         loop
         playsinline
         preload="none"
+        referrerpolicy="no-referrer"
         @error="onMediaError"
         @loadeddata="onMediaLoad"
         @focus="initializeVideoPlayer"
