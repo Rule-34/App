@@ -11,7 +11,7 @@ describe('App pages', async () => {
     it('renders', async () => {
       const page = await createTrackedPage('/')
 
-      await page.locator('h1', { hasText: 'App' }).isVisible()
+      expect(await page.locator('h1', { hasText: 'App' }).isVisible()).toBe(true)
     }, 30000)
 
     it('redirects to /posts with query params', async () => {

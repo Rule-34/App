@@ -259,8 +259,15 @@ describe('/', async () => {
       await page.waitForFunction(
         (id) => {
           const post = document.querySelector(`[data-testid="${id}"]`)
-          const src = post?.querySelector('img')?.getAttribute('src')
-          return src != null && src.includes('wp.com')
+          const img = post?.querySelector('img')
+          const src = img?.getAttribute('src')
+          return (
+            src != null &&
+            src.includes('wp.com') &&
+            img instanceof HTMLImageElement &&
+            img.complete &&
+            img.naturalWidth > 0
+          )
         },
         `safebooru.org-${mockPostsPage0.data[0].id}`,
         { timeout: 10000 }

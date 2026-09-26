@@ -173,6 +173,7 @@ describe('Server & Nitro Routes', async () => {
           (alternate): alternate is { hreflang: string; href: string } => !!alternate.hreflang && !!alternate.href
         )
 
+      expect(alternates).toHaveLength(new Set(alternates.map((alternate) => alternate.hreflang)).size)
       const alternatesByLang = new Map(alternates.map((alternate) => [alternate.hreflang, alternate.href]))
 
       const expectedByLang = new Map<string, string>()

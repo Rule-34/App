@@ -70,11 +70,7 @@ export function cleanMediaUrl(url?: string | null): string | null {
       return null
     }
 
-    try {
-      return decodeURI(parsed.pathname) + parsed.search
-    } catch {
-      return parsed.pathname + parsed.search
-    }
+    return parsed.pathname.replace(/%20/gi, ' ') + parsed.search
   }
 
   const parsed = URL.parse(stripped)
