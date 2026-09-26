@@ -50,7 +50,9 @@
     "featurePromotion": "Promoção de recurso",
     "favicon": "Favicon",
     "page": "Página",
-    "pageNumber": "Página {page}"
+    "pageNumber": "Página {page}",
+    "visitWebsite": "Visitar {domain}",
+    "visitOriginalWebsite": "Visitar site original"
   },
   "seo": {
     "title": "Vídeos pornôs, GIFs e imagens Rule 34 no R34.app",
@@ -427,7 +429,7 @@
     "download": "Baixar",
     "tryAgain": "Tentar novamente?",
     "getPremium": "Assinar Premium",
-    "toBypassBlocks": "para contornar bloqueios de sites",
+    "toBypassBlocks": "para contornar bloqueios de sites automaticamente",
     "loadingMedia": "Carregando mídia…",
     "play": "Reproduzir",
     "adText": "Apenas um anúncio por hora. Nunca mais veja anúncios com Premium!",
@@ -436,7 +438,9 @@
     "postAlt": "Post #{id}",
     "postDescription": "{mediaType} #{id} de {domain} com pontuação de {score}, classificação {rating}, marcado com {tags}",
     "shareFoundOn": "Encontrado no {name}: {url}",
-    "sharePostTitle": "Post #{id} de {domain}"
+    "sharePostTitle": "Post #{id} de {domain}",
+    "playInSandbox": "Reproduzir no sandbox",
+    "hostBlocksDirectAccess": "Este host bloqueia o acesso direto fora do seu site."
   },
   "source": {
     "postSource": "Fonte do post",

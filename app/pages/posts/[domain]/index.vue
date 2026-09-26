@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { Bars3BottomRightIcon, EyeIcon, MagnifyingGlassIcon, StarIcon } from '@heroicons/vue/24/outline'
   import { ArrowPathIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
+  import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/20/solid'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import type { QueryFunctionContext } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
@@ -20,7 +21,7 @@
   import { stripLocaleFromPath } from '~/composables/locale'
   import { useTagTitle } from '~/composables/useTagTitle'
   import type { Domain } from '~/assets/js/domain'
-  import { isRenderablePost, type IPostPage, type IRenderablePost } from '~/assets/js/post.dto'
+  import { isRenderablePost, normalizePostPage, type IPostPage, type IRenderablePost } from '~/assets/js/post.dto'
   import { shouldReportTagSearchError } from '~/assets/js/tag-search-error'
   import Tag, { type ITag, toggleSelectedTag } from '~/assets/js/tag.dto'
   import { project } from '~~/config/project'
@@ -450,16 +451,17 @@
     }
 
     if (pageParam) {
-      return $fetch<IPostPage>(pageParam, {
+      const page = await $fetch<IPostPage>(pageParam, {
         retry: false
       })
+      return normalizePostPage(page)
     }
 
     const apiUrl = `/booru/${selectedBooru.value.type.type}/posts`
 
     const tags = selectedTags.value.map((tag) => tag.name).join('|')
 
-    return $fetch<IPostPage>(apiUrl, {
+    const page = await $fetch<IPostPage>(apiUrl, {
       baseURL: config.public.apiUrl,
 
       params: {
@@ -482,6 +484,8 @@
 
       retry: false
     })
+
+    return normalizePostPage(page)
   }
 
   // TODO: Save cache from and to History API state
@@ -1060,12 +1064,26 @@
 
   <!-- Container -->
   <main class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
-    <section class="mb-4">
+    <section class="mb-4 flex flex-wrap items-center gap-2">
       <DomainSelector
         :boorus="booruList"
         :model-value="selectedBooru"
         @update:model-value="onDomainChange"
       />
+
+      <a
+        :href="`https://${selectedBooru.domain}`"
+        target="_blank"
+        rel="noopener noreferrer nofollow"
+        class="text-base-content-muted rounded-md p-1.5 hover:hover-bg-util hover:text-base-content-highlight focus-visible:focus-outline-util"
+        :aria-label="$t('common.visitWebsite', { domain: selectedBooru.domain })"
+        :title="$t('common.visitWebsite', { domain: selectedBooru.domain })"
+      >
+        <ArrowTopRightOnSquareIcon
+          aria-hidden="true"
+          class="h-4 w-4"
+        />
+      </a>
 
       <!-- TODO: Move filters here -->
     </section>

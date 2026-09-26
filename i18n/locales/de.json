@@ -50,7 +50,9 @@
     "featurePromotion": "Feature-Werbung",
     "favicon": "Favicon",
     "page": "Seite",
-    "pageNumber": "Seite {page}"
+    "pageNumber": "Seite {page}",
+    "visitWebsite": "{domain} besuchen",
+    "visitOriginalWebsite": "Originale Website besuchen"
   },
   "seo": {
     "title": "Rule 34 Pornovideos, GIFs und Bilder auf R34.app",
@@ -427,7 +429,7 @@
     "download": "Herunterladen",
     "tryAgain": "Erneut versuchen?",
     "getPremium": "Premium holen",
-    "toBypassBlocks": "um Website-Sperren zu umgehen",
+    "toBypassBlocks": "um Website-Sperren automatisch zu umgehen",
     "loadingMedia": "Medien werden geladen…",
     "play": "Abspielen",
     "adText": "Nur eine Werbung pro Stunde. Mit Premium siehst du nie wieder Werbung!",
@@ -436,7 +438,9 @@
     "postAlt": "Beitrag #{id}",
     "postDescription": "{mediaType} #{id} von {domain} mit einem Score von {score}, Bewertung {rating}, getaggt mit {tags}",
     "shareFoundOn": "Gefunden auf {name}: {url}",
-    "sharePostTitle": "Beitrag #{id} von {domain}"
+    "sharePostTitle": "Beitrag #{id} von {domain}",
+    "playInSandbox": "In Sandbox abspielen",
+    "hostBlocksDirectAccess": "Dieser Host blockiert den direkten Zugriff außerhalb seiner Website."
   },
   "source": {
     "postSource": "Beitragsquelle",

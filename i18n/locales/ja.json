@@ -50,7 +50,9 @@
     "featurePromotion": "機能プロモーション",
     "favicon": "Favicon",
     "page": "ページ",
-    "pageNumber": "{page}ページ"
+    "pageNumber": "{page}ページ",
+    "visitWebsite": "{domain}を訪問",
+    "visitOriginalWebsite": "元のサイトを訪問"
   },
   "seo": {
     "title": "Rule 34 動画・GIF・画像 - R34.app",
@@ -427,7 +429,7 @@
     "download": "ダウンロード",
     "tryAgain": "もう一度試す？",
     "getPremium": "Premiumを取得",
-    "toBypassBlocks": "サイトのブロックを回避するには",
+    "toBypassBlocks": "サイトのブロックを自動的に回避するには",
     "loadingMedia": "メディアを読み込み中…",
     "play": "再生",
     "adText": "1時間に1回の広告のみ。Premiumで広告が永遠になくなります！",
@@ -436,7 +438,9 @@
     "postAlt": "投稿 #{id}",
     "postDescription": "{domain}の{mediaType} #{id}、スコア{score}、{rating}レーティング、タグ：{tags}",
     "shareFoundOn": "{name}で見つけました：{url}",
-    "sharePostTitle": "{domain}の投稿 #{id}"
+    "sharePostTitle": "{domain}の投稿 #{id}",
+    "playInSandbox": "サンドボックスで再生",
+    "hostBlocksDirectAccess": "このホストはサイト外からの直接アクセスをブロックしています。"
   },
   "source": {
     "postSource": "投稿のソース",

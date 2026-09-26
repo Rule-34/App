@@ -50,7 +50,9 @@
     "featurePromotion": "Promosi fitur",
     "favicon": "favicon",
     "page": "Halaman",
-    "pageNumber": "Halaman {page}"
+    "pageNumber": "Halaman {page}",
+    "visitWebsite": "Kunjungi {domain}",
+    "visitOriginalWebsite": "Kunjungi situs web asli"
   },
   "seo": {
     "title": "Rule 34 video porno, GIF, dan gambar di R34.app",
@@ -427,7 +429,7 @@
     "download": "Unduh",
     "tryAgain": "Coba lagi?",
     "getPremium": "Dapatkan Premium",
-    "toBypassBlocks": "untuk melewati blok situs web",
+    "toBypassBlocks": "untuk melewati blok situs web secara otomatis",
     "loadingMedia": "Memuat media…",
     "play": "Mainkan",
     "adText": "Hanya satu iklan per jam. Jangan pernah melihat iklan lagi dengan Premium!",
@@ -436,7 +438,9 @@
     "postAlt": "Pos #{id}",
     "postDescription": "{mediaType} #{id} dari {domain} dengan skor {score}, peringkat {rating}, ditandai dengan {tags}",
     "shareFoundOn": "Ditemukan di {name}: {url}",
-    "sharePostTitle": "Posting #{id} dari {domain}"
+    "sharePostTitle": "Posting #{id} dari {domain}",
+    "playInSandbox": "Putar di sandbox",
+    "hostBlocksDirectAccess": "Host ini memblokir akses langsung di luar situs web mereka."
   },
   "source": {
     "postSource": "Sumber posting",

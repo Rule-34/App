@@ -50,7 +50,9 @@
     "featurePromotion": "기능 프로모션",
     "favicon": "파비콘",
     "page": "페이지",
-    "pageNumber": "페이지 {page}"
+    "pageNumber": "페이지 {page}",
+    "visitWebsite": "{domain} 방문",
+    "visitOriginalWebsite": "원본 웹사이트 방문"
   },
   "seo": {
     "title": "Rule 34 포르노 비디오, GIF 및 이미지(R34.app)",
@@ -427,7 +429,7 @@
     "download": "다운로드",
     "tryAgain": "다시 시도하시겠습니까?",
     "getPremium": "프리미엄 받기",
-    "toBypassBlocks": "웹사이트 차단을 우회하려면",
+    "toBypassBlocks": "웹사이트 차단을 자동으로 우회하려면",
     "loadingMedia": "미디어 로드 중…",
     "play": "플레이",
     "adText": "시간당 하나의 광고만 가능합니다. 프리미엄으로 다시는 광고를 보지 마세요!",
@@ -436,7 +438,9 @@
     "postAlt": "게시물 #{id}",
     "postDescription": "{mediaType} #{id}({domain}의 점수, {score}, {rating} 등급, {tags} 태그 포함)",
     "shareFoundOn": "{name}에서 발견됨: {url}",
-    "sharePostTitle": "{domain}의 게시물 #{id}"
+    "sharePostTitle": "{domain}의 게시물 #{id}",
+    "playInSandbox": "샌드박스에서 재생",
+    "hostBlocksDirectAccess": "이 호스트는 웹사이트 외부에서의 직접 액세스를 차단합니다."
   },
   "source": {
     "postSource": "게시물 출처",

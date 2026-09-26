@@ -138,8 +138,6 @@
   }
 
   const mediaFile = computed(() => {
-    const stripFragment = (url?: string | null) => url?.split('#')[0] ?? null
-
     const data: {
       file: IPost['high_res_file']['url']
       width: IPost['high_res_file']['width'] | null
@@ -154,44 +152,31 @@
       alt: buildMediaAlt(props.post)
     }
 
+    const highRes = props.post.high_res_file
+    const lowRes = props.post.low_res_file
+    const preview = props.post.preview_file
+
     switch (props.post.media_type) {
       case 'image': {
-        // Return full image if its setting is enabled OR if low resolution file doesn't exist
-        if (!props.post.low_res_file.url || postFullSizeImages.value) {
-          data.file = props.post.high_res_file.url
-          data.width = props.post.high_res_file.width
-          data.height = props.post.high_res_file.height
-        } else {
-          // Return low res file
-          data.file = props.post.low_res_file.url
-          data.width = props.post.low_res_file.width ?? props.post.high_res_file.width
-          data.height = props.post.low_res_file.height ?? props.post.high_res_file.height
-        }
+        const preferHighRes = postFullSizeImages.value || !lowRes?.url
+        const file = preferHighRes && highRes?.url ? highRes : lowRes?.url ? lowRes : highRes
 
+        data.file = file?.url ?? null
+        data.width = file?.width ?? highRes?.width ?? null
+        data.height = file?.height ?? highRes?.height ?? null
         break
       }
 
-      case 'animated': {
-        data.file = props.post.high_res_file.url
-        data.width = props.post.high_res_file.width
-        data.height = props.post.high_res_file.height
-
-        data.posterFile = props.post.preview_file.url
-        break
-      }
-
+      case 'animated':
       case 'video': {
-        data.file = props.post.high_res_file.url
-        data.width = props.post.high_res_file.width
-        data.height = props.post.high_res_file.height
+        data.file = highRes?.url ?? null
+        data.width = highRes?.width ?? null
+        data.height = highRes?.height ?? null
 
-        data.posterFile = props.post.preview_file.url
+        data.posterFile = preview?.url ?? null
         break
       }
     }
-
-    data.file = stripFragment(data.file)
-    data.posterFile = stripFragment(data.posterFile)
 
     return data
   })

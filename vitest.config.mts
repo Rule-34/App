@@ -1,13 +1,20 @@
+import path from 'path'
 import { configDefaults, defineConfig } from 'vitest/config'
 
 const configuredMaxWorkers = Number.parseInt(process.env.VITEST_MAX_WORKERS ?? '', 10)
-const maxWorkers = configuredMaxWorkers > 0 ? configuredMaxWorkers : 3
+const maxWorkers = configuredMaxWorkers > 0 ? configuredMaxWorkers : 2
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '~': path.resolve(__dirname, './app'),
+      '~~': path.resolve(__dirname, './')
+    }
+  },
   test: {
-    // Nuxt browser-mode suites each spin up an app. With the expanded locale route set,
-    // this machine is stable at 3 workers and starts timing out at 4.
     maxWorkers,
+    testTimeout: 60000,
+    hookTimeout: 180000,
     exclude: [...configDefaults.exclude, 'API/**', 'R34-premium-ab-test/**', 'Universal-Booru-Wrapper/**'],
     typecheck: {
       include: ['app/types/**/*.d.ts', 'test/**/*.test.ts'],
