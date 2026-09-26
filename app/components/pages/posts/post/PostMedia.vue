@@ -49,7 +49,10 @@
   const rawMediaSrc = computed(() => cleanMediaUrl(props.mediaSrc) ?? '')
   const rawPosterSrc = computed(() => cleanMediaUrl(props.mediaPosterSrc) ?? '')
 
-  const isImage = computed(() => props.mediaType === 'image')
+  const isAnimatedMedia = computed(
+    () => props.mediaType === 'animated' || (props.mediaType === 'image' && /\.gif($|[?#])/i.test(rawMediaSrc.value))
+  )
+  const isImage = computed(() => props.mediaType === 'image' && !isAnimatedMedia.value)
 
   /**
    * Identifies whether Candidate index 0 is rendered via the server-side imgproxy service
@@ -226,9 +229,6 @@
   const hasError = computed(() => error.value !== null)
 
   const isVideo = computed(() => props.mediaType === 'video')
-  const isAnimatedMedia = computed(
-    () => props.mediaType === 'animated' || (props.mediaType === 'image' && localSrc.value.endsWith('.gif'))
-  )
   const postImageSizes = {
     sm: '400px',
     md: '768px'
@@ -259,7 +259,7 @@
       {
         rel: 'preload',
         as: 'image' as const,
-        href: localPosterSrc.value,
+        href: encodeURI(localPosterSrc.value),
         fetchpriority: 'high' as const
       }
     ]
@@ -372,7 +372,12 @@
       return
     }
 
-    if (!initializedVideoElement.querySelector('source') && localSrc.value) {
+    const existingSource = initializedVideoElement.querySelector('source')
+    if (existingSource) {
+      if (localSrc.value && existingSource.src !== localSrc.value) {
+        existingSource.src = localSrc.value
+      }
+    } else if (localSrc.value) {
       const sourceElement = document.createElement('source')
       sourceElement.src = localSrc.value
       initializedVideoElement.appendChild(sourceElement)
@@ -599,9 +604,9 @@
     }
 
     const targetElement = payload.target as HTMLElement | null
-    const isImage = targetElement instanceof HTMLImageElement || targetElement?.tagName === 'IMG'
+    const isImageTag = targetElement instanceof HTMLImageElement || targetElement?.tagName === 'IMG'
     const isVideoTag = targetElement instanceof HTMLVideoElement || targetElement?.tagName === 'VIDEO'
-    const target = (isImage || isVideoTag ? targetElement : null) as HTMLImageElement | HTMLVideoElement | null
+    const target = (isImageTag || isVideoTag ? targetElement : null) as HTMLImageElement | HTMLVideoElement | null
 
     if (!target?.src) {
       return
@@ -626,7 +631,7 @@
     }
 
     // Case 1: The poster image failed to load for animated media
-    if (isAnimatedMedia.value && !isAnimatedMediaPlaying.value && target.src === localPosterSrc.value) {
+    if (isAnimatedMedia.value && !isAnimatedMediaPlaying.value) {
       if (posterCandidateIndex.value === 0 && !isPosterDirectBlocked.value && rawPosterSrc.value) {
         recordDirectFailure(rawPosterSrc.value, 'image')
       }
@@ -636,7 +641,7 @@
         return
       }
 
-      error.value = new Error(t('errors.mediaLoadError'))
+      // Poster exhausted: gracefully allow the user to click play to load the GIF
       return
     }
 
@@ -699,6 +704,11 @@
   }
 
   function playInIframe() {
+    document.querySelectorAll('video').forEach((v) => {
+      if (!v.paused) {
+        v.pause?.()
+      }
+    })
     useIframePlayer.value = true
     error.value = null
   }
@@ -706,6 +716,21 @@
   function closeIframePlayer() {
     useIframePlayer.value = false
     error.value = new Error(t('errors.mediaLoadError'))
+  }
+
+  function onIframeIntersectionObserver(entries: IntersectionObserverEntry[]) {
+    if (document.fullscreenElement) {
+      return
+    }
+
+    const entry = entries[0]
+    if (!entry) {
+      return
+    }
+
+    if (!entry.isIntersecting && useIframePlayer.value) {
+      closeIframePlayer()
+    }
   }
 
   /**
@@ -728,6 +753,12 @@
       return
     }
 
+    if (videoPlayerInitTimeout !== null) {
+      window.clearTimeout(videoPlayerInitTimeout)
+      videoPlayerInitTimeout = null
+      videoPlayerIdleScheduled = false
+    }
+
     getVideoElement()?.pause()
     try {
       videoPlayer?.pause()
@@ -740,10 +771,10 @@
     mediaHasLoaded.value = true
 
     const isShowingPoster = isAnimatedMedia.value && !isAnimatedMediaPlaying.value
-    const activeSrc = isShowingPoster ? localPosterSrc.value : localSrc.value
+    const isDirectCandidate = isShowingPoster ? posterCandidateIndex.value === 0 : isDirectRequest.value
     const rawTargetSrc = isShowingPoster ? rawPosterSrc.value || props.mediaPosterSrc : rawMediaSrc.value
 
-    if (activeSrc && activeSrc === rawTargetSrc && (isShowingPoster || isDirectRequest.value)) {
+    if (isDirectCandidate && rawTargetSrc) {
       recordDirectSuccess(rawTargetSrc, isShowingPoster ? 'image' : props.mediaType)
     }
 
@@ -1016,6 +1047,7 @@
     <!-- Iframe fallback for videos -->
     <div
       v-else-if="useIframePlayer"
+      v-intersection-observer="onIframeIntersectionObserver"
       :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
       class="group relative flex h-full min-h-[200px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-base-950"
     >

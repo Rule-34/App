@@ -118,7 +118,6 @@
     >
       <!-- TODO: Temporarily hardcode post index for promoted content -->
       <PostMedia
-        :alt-media-src="null"
         :media-alt="$t('media.promotedContent')"
         :media-poster-src="null"
         :media-src="promo.media"

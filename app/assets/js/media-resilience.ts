@@ -192,7 +192,8 @@ const SENSITIVE_QUERY_PATTERNS = [
   /pwd/i,
   /^x-amz-/i,
   /^x-goog-/i,
-  /bearer/i
+  /bearer/i,
+  /(?:hash|hmac|jwt|session|ticket|code)/i
 ]
 
 /**
@@ -374,9 +375,8 @@ export function recordDirectSuccess(rawUrl: string, mediaType?: PostMediaType | 
   const key = getDomainKey(rawUrl, mediaType)
   if (!key) return
 
-  const entry = domainHealthMap.get(key)
-  if (entry && (entry.consecutiveFailures > 0 || entry.blockedUntil > 0 || entry.lastFailureAt !== undefined)) {
-    domainHealthMap.set(key, { consecutiveFailures: 0, blockedUntil: 0 })
+  if (domainHealthMap.has(key)) {
+    domainHealthMap.delete(key)
     notifyHealthChange()
   }
 }
