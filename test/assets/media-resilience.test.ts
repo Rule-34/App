@@ -103,11 +103,13 @@ describe('media-resilience', () => {
       expect(getMediaReferrerPolicy('../assets/image.png')).toBe('strict-origin-when-cross-origin')
     })
 
-    it('returns origin for e621 and e926 CDN hosts', () => {
+    it('returns origin for e621, e926, and e6ai CDN hosts', () => {
       expect(getMediaReferrerPolicy('https://static1.e621.net/data/sample/123.jpg')).toBe('origin')
       expect(getMediaReferrerPolicy('https://e621.net/data/sample/123.jpg')).toBe('origin')
       expect(getMediaReferrerPolicy('https://static1.e926.net/data/sample/123.jpg')).toBe('origin')
       expect(getMediaReferrerPolicy('https://e926.net/data/sample/123.jpg')).toBe('origin')
+      expect(getMediaReferrerPolicy('https://static1.e6ai.net/data/sample/123.jpg')).toBe('origin')
+      expect(getMediaReferrerPolicy('https://e6ai.net/data/sample/123.jpg')).toBe('origin')
     })
 
     it('returns strict-origin-when-cross-origin for first-party, development, and tailscale hosts', () => {

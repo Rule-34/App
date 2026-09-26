@@ -106,7 +106,9 @@ export function getMediaReferrerPolicy(rawUrl?: string | null): MediaReferrerPol
       hostname === 'e621.net' ||
       hostname.endsWith('.e621.net') ||
       hostname === 'e926.net' ||
-      hostname.endsWith('.e926.net')
+      hostname.endsWith('.e926.net') ||
+      hostname === 'e6ai.net' ||
+      hostname.endsWith('.e6ai.net')
     ) {
       return 'origin'
     }
