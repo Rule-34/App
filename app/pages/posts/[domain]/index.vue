@@ -21,7 +21,7 @@
   import { stripLocaleFromPath } from '~/composables/locale'
   import { useTagTitle } from '~/composables/useTagTitle'
   import type { Domain } from '~/assets/js/domain'
-  import { isRenderablePost, type IPostPage, type IRenderablePost } from '~/assets/js/post.dto'
+  import { isRenderablePost, normalizePostPage, type IPostPage, type IRenderablePost } from '~/assets/js/post.dto'
   import { shouldReportTagSearchError } from '~/assets/js/tag-search-error'
   import Tag, { type ITag, toggleSelectedTag } from '~/assets/js/tag.dto'
   import { project } from '~~/config/project'
@@ -451,16 +451,17 @@
     }
 
     if (pageParam) {
-      return $fetch<IPostPage>(pageParam, {
+      const page = await $fetch<IPostPage>(pageParam, {
         retry: false
       })
+      return normalizePostPage(page)
     }
 
     const apiUrl = `/booru/${selectedBooru.value.type.type}/posts`
 
     const tags = selectedTags.value.map((tag) => tag.name).join('|')
 
-    return $fetch<IPostPage>(apiUrl, {
+    const page = await $fetch<IPostPage>(apiUrl, {
       baseURL: config.public.apiUrl,
 
       params: {
@@ -483,6 +484,8 @@
 
       retry: false
     })
+
+    return normalizePostPage(page)
   }
 
   // TODO: Save cache from and to History API state

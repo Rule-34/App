@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   BREAKER_COOLDOWN_MS,
+  cleanMediaUrl,
   getCandidateSources,
   isDomainDirectBlocked,
   recordDirectFailure,
@@ -17,6 +18,36 @@ vi.mock('~~/config/project', () => import('../../config/project'))
 describe('media-resilience', () => {
   beforeEach(() => {
     resetDomainHealth()
+  })
+
+  describe('cleanMediaUrl', () => {
+    it('returns null for null, undefined, empty, or whitespace-only values', () => {
+      expect(cleanMediaUrl(null)).toBeNull()
+      expect(cleanMediaUrl(undefined)).toBeNull()
+      expect(cleanMediaUrl('')).toBeNull()
+      expect(cleanMediaUrl('   ')).toBeNull()
+    })
+
+    it('returns null for non-HTTP(S) or malicious URL schemes', () => {
+      expect(cleanMediaUrl('javascript:alert(1)')).toBeNull()
+      expect(cleanMediaUrl('data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==')).toBeNull()
+      expect(cleanMediaUrl('file:///etc/passwd')).toBeNull()
+      expect(cleanMediaUrl('ftp://example.com/file.jpg')).toBeNull()
+    })
+
+    it('returns null for malformed URLs', () => {
+      expect(cleanMediaUrl('http://')).toBeNull()
+      expect(cleanMediaUrl('not-a-valid-url')).toBeNull()
+    })
+
+    it('strips URI fragments while preserving valid HTTP/HTTPS URLs', () => {
+      expect(cleanMediaUrl('https://example.com/image.jpg#section')).toBe('https://example.com/image.jpg')
+      expect(cleanMediaUrl('http://example.com/video.mp4#t=10')).toBe('http://example.com/video.mp4')
+    })
+
+    it('trims outer whitespace from valid URLs', () => {
+      expect(cleanMediaUrl('  https://example.com/image.jpg  ')).toBe('https://example.com/image.jpg')
+    })
   })
 
   describe('toPhotonUrl', () => {
@@ -53,6 +84,43 @@ describe('media-resilience', () => {
   describe('getCandidateSources', () => {
     const imgUrl = 'https://static1.e621.net/data/sample/123.jpg'
     const videoUrl = 'https://static1.e621.net/data/video/123.mp4'
+
+    it('returns empty array when rawUrl is empty, whitespace, or invalid', () => {
+      expect(
+        getCandidateSources({
+          rawUrl: '',
+          mediaType: 'image',
+          isPremium: false
+        })
+      ).toEqual([])
+
+      expect(
+        getCandidateSources({
+          rawUrl: '   ',
+          mediaType: 'image',
+          isPremium: false
+        })
+      ).toEqual([])
+
+      expect(
+        getCandidateSources({
+          rawUrl: 'javascript:alert(1)',
+          mediaType: 'image',
+          isPremium: false
+        })
+      ).toEqual([])
+    })
+
+    it('strips fragment identifiers from rawUrl when building candidates', () => {
+      const candidates = getCandidateSources({
+        rawUrl: `${imgUrl}#frag`,
+        mediaType: 'image',
+        isPremium: false
+      })
+
+      expect(candidates[0]).toBe(imgUrl)
+      expect(candidates[0]).not.toContain('#frag')
+    })
 
     it('returns direct, photon, and ddg for non-premium image', () => {
       const candidates = getCandidateSources({

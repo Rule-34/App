@@ -3,6 +3,7 @@
   import { vIntersectionObserver } from '@vueuse/components'
   import { ArrowPathIcon, ArrowTopRightOnSquareIcon, SparklesIcon, XMarkIcon } from '@heroicons/vue/20/solid'
   import {
+    cleanMediaUrl,
     getCandidateSources,
     isDomainDirectBlocked,
     onDomainHealthChange,
@@ -43,22 +44,14 @@
 
   const mediaElement = shallowRef<MediaElementRef>(null)
 
-  const rawMediaSrc = computed(() => props.mediaSrc ?? '')
-  const rawPosterSrc = computed(() => props.mediaPosterSrc ?? '')
+  const rawMediaSrc = computed(() => cleanMediaUrl(props.mediaSrc) ?? '')
+  const rawPosterSrc = computed(() => cleanMediaUrl(props.mediaPosterSrc) ?? '')
 
   /**
-   * Only allows valid http: and https: URLs for iframe embedding and external link navigation
-   * to protect against malicious javascript: or arbitrary URI schemes.
+   * Safe media URL for iframe embedding and external link navigation.
+   * Media URLs are cleaned and validated upstream (ensuring valid http/https and stripping fragments).
    */
-  const safeRawMediaSrc = computed(() => {
-    if (!rawMediaSrc.value) return ''
-    try {
-      const parsed = new URL(rawMediaSrc.value)
-      return parsed.protocol === 'https:' || parsed.protocol === 'http:' ? parsed.href : ''
-    } catch {
-      return ''
-    }
-  })
+  const safeRawMediaSrc = computed(() => rawMediaSrc.value)
 
   const isImage = computed(() => props.mediaType === 'image')
 

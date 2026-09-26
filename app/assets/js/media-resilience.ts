@@ -42,6 +42,37 @@ function notifyHealthChange(): void {
 }
 
 /**
+ * Sanitizes and validates a media URL.
+ * Trims whitespace, strips URI fragment identifiers (#...), ensures the URL can be parsed,
+ * and strictly restricts protocols to http: or https: to guard against malicious/bogus URI schemes.
+ *
+ * @param url - The raw media URL string to sanitize.
+ * @returns The canonical URL string, or null if the URL is empty, invalid, or non-HTTP(S).
+ */
+export function cleanMediaUrl(url?: string | null): string | null {
+  if (!url) {
+    return null
+  }
+
+  const trimmed = url.trim()
+  if (!trimmed) {
+    return null
+  }
+
+  const stripped = trimmed.split('#')[0]
+  if (!stripped) {
+    return null
+  }
+
+  try {
+    const parsed = new URL(stripped)
+    return parsed.protocol === 'https:' || parsed.protocol === 'http:' ? parsed.href : null
+  } catch {
+    return null
+  }
+}
+
+/**
  * Extracts a normalized domain key from a media URL and media category.
  *
  * @param rawUrl - The target media URL.
@@ -49,8 +80,13 @@ function notifyHealthChange(): void {
  * @returns A composite key of hostname and category, or null if invalid.
  */
 function getDomainKey(rawUrl: string, mediaType?: PostMediaType | string): string | null {
+  const cleanUrl = cleanMediaUrl(rawUrl)
+  if (!cleanUrl) {
+    return null
+  }
+
   try {
-    const parsed = new URL(rawUrl)
+    const parsed = new URL(cleanUrl)
     const mediaCategory = mediaType === 'video' ? 'video' : 'image'
     return `${parsed.hostname}:${mediaCategory}`
   } catch {
@@ -132,14 +168,15 @@ export interface CandidateSourceOptions {
  */
 export function getCandidateSources(options: CandidateSourceOptions): string[] {
   const { rawUrl, mediaType, isPremium } = options
-  if (!rawUrl) return []
+  const cleanUrl = cleanMediaUrl(rawUrl)
+  if (!cleanUrl) return []
 
-  const candidates: string[] = [rawUrl]
+  const candidates: string[] = [cleanUrl]
 
   if (mediaType === 'video') {
     if (isPremium) {
       try {
-        candidates.push(proxyUrl(rawUrl))
+        candidates.push(proxyUrl(cleanUrl))
       } catch {
         // Ignored if invalid
       }
@@ -152,7 +189,7 @@ export function getCandidateSources(options: CandidateSourceOptions): string[] {
   // falling back to the dedicated premium backend proxy — never degraded through public third-party proxies.
   if (isPremium) {
     try {
-      candidates.push(proxyUrl(rawUrl))
+      candidates.push(proxyUrl(cleanUrl))
     } catch {
       // Ignored if invalid
     }
@@ -161,12 +198,12 @@ export function getCandidateSources(options: CandidateSourceOptions): string[] {
   }
 
   // Free/non-premium users: free fallback chain across public image CDNs
-  const photon = toPhotonUrl(rawUrl)
-  if (photon && photon !== rawUrl) {
+  const photon = toPhotonUrl(cleanUrl)
+  if (photon && photon !== cleanUrl) {
     candidates.push(photon)
   }
-  const ddg = toDdgUrl(rawUrl)
-  if (ddg && ddg !== rawUrl) {
+  const ddg = toDdgUrl(cleanUrl)
+  if (ddg && ddg !== cleanUrl) {
     candidates.push(ddg)
   }
 
