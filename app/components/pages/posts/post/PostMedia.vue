@@ -8,8 +8,10 @@
     getMediaReferrerPolicy,
     isDomainDirectBlocked,
     onDomainHealthChange,
+    pauseVideoPlayback,
     recordDirectFailure,
     recordDirectSuccess,
+    registerVideoPlayback,
     resetDomainBreaker,
     type MediaReferrerPolicy
   } from '~/assets/js/media-resilience'
@@ -277,8 +279,32 @@
   const isAnimatedMediaLoading = ref(false)
   const isAnimatedMediaPlaying = ref(false)
   const mediaHasLoaded = ref(false)
+  let unregisterVideo: (() => void) | null = null
+
+  function updateVideoRegistration() {
+    if (unregisterVideo) {
+      unregisterVideo()
+      unregisterVideo = null
+    }
+
+    if (isVideo.value) {
+      const videoElement = getVideoElement()
+      if (videoElement) {
+        unregisterVideo = registerVideoPlayback(videoElement, () => videoPlayer)
+      }
+    }
+  }
+
+  watch(
+    () => [isVideo.value, localSrc.value],
+    () => {
+      nextTick(updateVideoRegistration)
+    }
+  )
 
   onMounted(() => {
+    updateVideoRegistration()
+
     const resolvedMediaElement = getResolvedMediaElement()
 
     if (!resolvedMediaElement) {
@@ -292,6 +318,11 @@
 
   onBeforeUnmount(() => {
     isUnmounted = true
+
+    if (unregisterVideo) {
+      unregisterVideo()
+      unregisterVideo = null
+    }
 
     if (unsubscribeHealthChange) {
       unsubscribeHealthChange()
@@ -332,6 +363,7 @@
 
     //
     else if (isVideo.value) {
+      pauseVideoPlayback(getVideoElement(), videoPlayer)
       destroyVideoPlayer()
     }
   })
@@ -715,7 +747,7 @@
     }
 
     if (!entry.isIntersecting) {
-      videoPlayer?.pause()
+      pauseVideoPlayback(getVideoElement(), videoPlayer)
     }
   }
 

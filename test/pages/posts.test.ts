@@ -4,7 +4,8 @@ import {
   mockPostsPage0,
   mockPostsPage1,
   mockPostsPageWithOfflineMedia,
-  mockPostsPageWithVideoMedia
+  mockPostsPageWithVideoMedia,
+  mockPostsPageWithMultipleVideos
 } from './posts.mock-data'
 import { defaultSetupConfig, useTrackedPageFactory } from '../helper'
 
@@ -329,6 +330,140 @@ describe('/', async () => {
       // Must not display error
       expect(await videoPost.textContent()).not.toContain('Error loading media')
       expect(await videoElement.count()).toBeGreaterThan(0)
+    }, 20000)
+
+    it('pauses other playing videos when a new video starts playing', async () => {
+      // Arrange
+      const page = await createTrackedPage()
+
+      // Act
+      await page.goto(url('/posts/safebooru.org?tags=multi_video_test'), { waitUntil: 'networkidle' })
+
+      // Assert
+      const videoPost1 = page.getByTestId(`safebooru.org-${mockPostsPageWithMultipleVideos.data[0].id}`).first()
+      const videoPost2 = page.getByTestId(`safebooru.org-${mockPostsPageWithMultipleVideos.data[1].id}`).first()
+      await videoPost1.waitFor({ state: 'visible' })
+      await videoPost2.waitFor({ state: 'visible' })
+
+      const videoElement1 = videoPost1.locator('video').first()
+      const videoElement2 = videoPost2.locator('video').first()
+      await videoElement1.waitFor({ state: 'attached' })
+      await videoElement2.waitFor({ state: 'attached' })
+
+      // Set up video 1 as playing
+      await page.evaluate(
+        ({ id1, id2 }) => {
+          const v1 = document.querySelector<HTMLVideoElement>(`[data-testid="safebooru.org-${id1}"] video`)
+          const v2 = document.querySelector<HTMLVideoElement>(`[data-testid="safebooru.org-${id2}"] video`)
+          if (!v1 || !v2) throw new Error('video elements not found')
+
+          let v1Paused = false
+          Object.defineProperty(v1, 'paused', {
+            get: () => v1Paused,
+            set: (val: boolean) => {
+              v1Paused = val
+            },
+            configurable: true
+          })
+          v1.pause = function () {
+            v1Paused = true
+            this.dispatchEvent(new Event('pause'))
+          }
+
+          let v2Paused = true
+          Object.defineProperty(v2, 'paused', {
+            get: () => v2Paused,
+            set: (val: boolean) => {
+              v2Paused = val
+            },
+            configurable: true
+          })
+          v2.pause = function () {
+            v2Paused = true
+            this.dispatchEvent(new Event('pause'))
+          }
+
+          v1.dispatchEvent(new Event('play'))
+        },
+        {
+          id1: mockPostsPageWithMultipleVideos.data[0].id,
+          id2: mockPostsPageWithMultipleVideos.data[1].id
+        }
+      )
+
+      expect(await videoElement1.evaluate((v) => (v as HTMLVideoElement).paused)).toBe(false)
+
+      // Start playing video 2
+      await page.evaluate(
+        ({ id2 }) => {
+          const v2 = document.querySelector<HTMLVideoElement>(`[data-testid="safebooru.org-${id2}"] video`)
+          if (!v2) throw new Error('video 2 not found')
+          v2.dispatchEvent(new Event('play'))
+        },
+        {
+          id2: mockPostsPageWithMultipleVideos.data[1].id
+        }
+      )
+
+      // Video 1 must now be paused by the global video coordinator
+      expect(await videoElement1.evaluate((v) => (v as HTMLVideoElement).paused)).toBe(true)
+    }, 20000)
+
+    it('pauses video playback when scrolled out of viewport', async () => {
+      // Arrange
+      const page = await createTrackedPage()
+
+      // Act
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
+
+      const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
+      await videoPost.waitFor({ state: 'visible' })
+
+      const videoElement = videoPost.locator('video').first()
+      await videoElement.waitFor({ state: 'attached' })
+
+      // Set up video as playing
+      await page.evaluate((testId) => {
+        const video = document.querySelector<HTMLVideoElement>(`[data-testid="${testId}"] video`)
+        if (!video) throw new Error('video element not found')
+
+        let isPaused = false
+        Object.defineProperty(video, 'paused', {
+          get: () => isPaused,
+          set: (val: boolean) => {
+            isPaused = val
+          },
+          configurable: true
+        })
+        video.pause = function () {
+          isPaused = true
+          this.dispatchEvent(new Event('pause'))
+        }
+      }, `safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`)
+
+      expect(await videoElement.evaluate((v) => (v as HTMLVideoElement).paused)).toBe(false)
+
+      // Add a tall spacer and scroll far down past rootMargin (100px)
+      await page.evaluate(() => {
+        const spacer = document.createElement('div')
+        spacer.id = 'test-scroll-spacer'
+        spacer.style.height = '5000px'
+        document.body.appendChild(spacer)
+        window.scrollTo(0, 4000)
+        window.dispatchEvent(new Event('scroll'))
+      })
+
+      // Wait for IntersectionObserver to detect the element out of view and trigger pause
+      await page.waitForFunction(
+        (testId) => {
+          const video = document.querySelector<HTMLVideoElement>(`[data-testid="${testId}"] video`)
+          return video?.paused === true
+        },
+        `safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`,
+        { timeout: 5000 }
+      )
+
+      expect(await videoElement.evaluate((v) => (v as HTMLVideoElement).paused)).toBe(true)
     }, 20000)
   })
 

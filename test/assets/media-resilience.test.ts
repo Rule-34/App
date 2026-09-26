@@ -11,6 +11,9 @@ import {
   resetDomainBreaker,
   resetDomainHealth,
   onDomainHealthChange,
+  pauseVideoPlayback,
+  registerVideoPlayback,
+  resetVideoCoordinator,
   toDdgUrl,
   toPhotonUrl
 } from '../../app/assets/js/media-resilience'
@@ -478,6 +481,170 @@ describe('media-resilience', () => {
       } finally {
         unsubscribe()
       }
+    })
+  })
+
+  describe('video playback coordination', () => {
+    type EventCallback = (event: unknown) => void
+    interface MockDocument {
+      addEventListener: (event: string, listener: EventCallback, useCapture?: boolean) => void
+      removeEventListener: (event: string, listener: EventCallback, useCapture?: boolean) => void
+      querySelectorAll: (selector: string) => Iterable<unknown>
+    }
+    interface GlobalWithDoc {
+      document?: MockDocument
+    }
+
+    function setupMockDocument(fallbackVideos: unknown[] = []) {
+      let playListener: EventCallback | null = null
+      const scope = globalThis as unknown as GlobalWithDoc
+      const originalDoc = scope.document
+      scope.document = {
+        addEventListener: vi.fn((event: string, listener: EventCallback) => {
+          if (event === 'play') playListener = listener
+        }),
+        removeEventListener: vi.fn(),
+        querySelectorAll: vi.fn((sel: string) => (sel === 'video' ? fallbackVideos : []))
+      }
+      return {
+        getPlayListener: () => playListener,
+        restore: () => {
+          scope.document = originalDoc
+          resetVideoCoordinator()
+        }
+      }
+    }
+
+    beforeEach(() => {
+      resetVideoCoordinator()
+    })
+
+    it('pauses other registered videos and their player wrappers when one video plays', () => {
+      const v1Pause = vi.fn()
+      const p1Pause = vi.fn()
+      const v2Pause = vi.fn()
+      const p2Pause = vi.fn()
+
+      const v1 = {
+        tagName: 'VIDEO',
+        paused: false,
+        pause: v1Pause
+      }
+      const v2 = {
+        tagName: 'VIDEO',
+        paused: false,
+        pause: v2Pause
+      }
+
+      const mockDoc = setupMockDocument()
+
+      try {
+        registerVideoPlayback(v1, () => ({ pause: p1Pause }))
+        registerVideoPlayback(v2, () => ({ pause: p2Pause }))
+
+        const playListener = mockDoc.getPlayListener()
+        expect(playListener).not.toBeNull()
+
+        // Simulate v2 emitting a 'play' event
+        playListener!({ target: v2 })
+
+        // v1 should have been paused, along with its player
+        expect(v1Pause).toHaveBeenCalledTimes(1)
+        expect(p1Pause).toHaveBeenCalledTimes(1)
+
+        // v2 (the one that started playing) must NOT be paused
+        expect(v2Pause).not.toHaveBeenCalled()
+        expect(p2Pause).not.toHaveBeenCalled()
+      } finally {
+        mockDoc.restore()
+      }
+    })
+
+    it('does not pause already paused videos or invoke player pause if paused', () => {
+      const v1Pause = vi.fn()
+      const p1Pause = vi.fn()
+
+      const v1 = {
+        tagName: 'VIDEO',
+        paused: true,
+        pause: v1Pause
+      }
+      const v2 = {
+        tagName: 'VIDEO',
+        paused: false,
+        pause: vi.fn()
+      }
+
+      const mockDoc = setupMockDocument()
+
+      try {
+        registerVideoPlayback(v1, () => ({ pause: p1Pause }))
+        registerVideoPlayback(v2)
+
+        const playListener = mockDoc.getPlayListener()
+        playListener!({ target: v2 })
+
+        expect(v1Pause).not.toHaveBeenCalled()
+        expect(p1Pause).not.toHaveBeenCalled()
+      } finally {
+        mockDoc.restore()
+      }
+    })
+
+    it('cleans up registration when unregister callback is invoked', () => {
+      const v1Pause = vi.fn()
+      const v1 = { tagName: 'VIDEO', paused: false, pause: v1Pause }
+      const v2 = { tagName: 'VIDEO', paused: false, pause: vi.fn() }
+
+      const mockDoc = setupMockDocument()
+
+      try {
+        const unregisterV1 = registerVideoPlayback(v1)
+        registerVideoPlayback(v2)
+
+        unregisterV1()
+
+        const playListener = mockDoc.getPlayListener()
+        playListener!({ target: v2 })
+
+        expect(v1Pause).not.toHaveBeenCalled()
+      } finally {
+        mockDoc.restore()
+      }
+    })
+
+    it('pauses unregistered playing video elements found via document query fallback', () => {
+      const vFallbackPause = vi.fn()
+      const fallbackVideo = { tagName: 'VIDEO', paused: false, pause: vFallbackPause }
+      const activeVideo = { tagName: 'VIDEO', paused: false, pause: vi.fn() }
+
+      const mockDoc = setupMockDocument([fallbackVideo])
+
+      try {
+        registerVideoPlayback(activeVideo)
+
+        const playListener = mockDoc.getPlayListener()
+        playListener!({ target: activeVideo })
+
+        expect(vFallbackPause).toHaveBeenCalledTimes(1)
+      } finally {
+        mockDoc.restore()
+      }
+    })
+
+    it('pauseVideoPlayback handles nulls and player pause exceptions safely', () => {
+      expect(() => pauseVideoPlayback(null, null)).not.toThrow()
+      expect(() => pauseVideoPlayback(undefined, undefined)).not.toThrow()
+
+      const throwingPlayer = {
+        pause: vi.fn(() => {
+          throw new Error('player torn down')
+        })
+      }
+      const video = { tagName: 'VIDEO', paused: false, pause: vi.fn() }
+
+      expect(() => pauseVideoPlayback(video, throwingPlayer)).not.toThrow()
+      expect(video.pause).toHaveBeenCalledTimes(1)
     })
   })
 })
