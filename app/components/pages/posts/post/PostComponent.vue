@@ -169,9 +169,9 @@
 
       case 'animated':
       case 'video': {
-        data.file = highRes?.url ?? null
-        data.width = highRes?.width ?? null
-        data.height = highRes?.height ?? null
+        data.file = highRes?.url ?? lowRes?.url ?? null
+        data.width = highRes?.width ?? lowRes?.width ?? null
+        data.height = highRes?.height ?? lowRes?.height ?? null
 
         data.posterFile = preview?.url ?? null
         break
