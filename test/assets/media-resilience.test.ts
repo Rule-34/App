@@ -50,6 +50,14 @@ describe('media-resilience', () => {
     it('trims outer whitespace from valid URLs', () => {
       expect(cleanMediaUrl('  https://example.com/image.jpg  ')).toBe('https://example.com/image.jpg')
     })
+
+    it('preserves valid root-relative paths for first-party assets while rejecting protocol-relative and malicious variants', () => {
+      expect(cleanMediaUrl('/img/promo/HentaiPorn.jpg')).toBe('/img/promo/HentaiPorn.jpg')
+      expect(cleanMediaUrl('/img/promo/premium/No Ads.jpg')).toBe('/img/promo/premium/No%20Ads.jpg')
+      expect(cleanMediaUrl('/img/promo/HentaiPorn.jpg#fragment')).toBe('/img/promo/HentaiPorn.jpg')
+      expect(cleanMediaUrl('//evil.com/image.jpg')).toBeNull()
+      expect(cleanMediaUrl('/\\evil.com/image.jpg')).toBeNull()
+    })
   })
 
   describe('toPhotonUrl', () => {
@@ -221,6 +229,24 @@ describe('media-resilience', () => {
       // Premium users should not be degraded to public image CDNs
       expect(candidates.some((c) => c.includes('wordpress.com'))).toBe(false)
       expect(candidates.some((c) => c.includes('duckduckgo.com'))).toBe(false)
+    })
+
+    it('returns only the direct candidate for root-relative internal assets without external proxy chains', () => {
+      const candidates = getCandidateSources({
+        rawUrl: '/img/promo/HentaiPorn.jpg',
+        mediaType: 'image',
+        isPremium: false
+      })
+
+      expect(candidates).toEqual(['/img/promo/HentaiPorn.jpg'])
+
+      const premiumCandidates = getCandidateSources({
+        rawUrl: '/img/promo/HentaiPorn.jpg',
+        mediaType: 'image',
+        isPremium: true
+      })
+
+      expect(premiumCandidates).toEqual(['/img/promo/HentaiPorn.jpg'])
     })
 
     it('returns only direct for non-premium video (public proxies excluded)', () => {

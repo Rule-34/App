@@ -64,6 +64,15 @@ export function cleanMediaUrl(url?: string | null): string | null {
     return null
   }
 
+  if (stripped.startsWith('/') && !stripped.startsWith('//')) {
+    const parsed = URL.parse(stripped, 'http://localhost')
+    if (!parsed || parsed.origin !== 'http://localhost') {
+      return null
+    }
+
+    return parsed.pathname + parsed.search
+  }
+
   const parsed = URL.parse(stripped)
   if (!parsed || (parsed.protocol !== 'https:' && parsed.protocol !== 'http:')) {
     return null
@@ -243,6 +252,12 @@ export function getCandidateSources(options: CandidateSourceOptions): string[] {
   if (!cleanUrl) return []
 
   const candidates: string[] = [cleanUrl]
+
+  // Relative/local assets (/img/...) are served directly by the local app server;
+  // do not proxy them through imgproxy or third-party image CDNs (Photon, DuckDuckGo).
+  if (cleanUrl.startsWith('/')) {
+    return candidates
+  }
 
   // Premium users get a dedicated media branch: proxied and automatically enhanced via imgproxy,
   // falling back to the dedicated premium backend proxy — never degraded through public third-party proxies.
