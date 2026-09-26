@@ -249,7 +249,7 @@ describe('/', async () => {
       const page = await createTrackedPage()
 
       // Act
-      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'domcontentloaded' })
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
 
       // Assert
       const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
@@ -274,12 +274,12 @@ describe('/', async () => {
       expect(await videoElement.count()).toBeGreaterThan(0)
     }, 20000)
 
-    it('does not trigger media load error on near-end video playback or loop resets', async () => {
+    it('triggers media load error on genuine mid-playback video failure when ended is false', async () => {
       // Arrange
       const page = await createTrackedPage()
 
       // Act
-      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'domcontentloaded' })
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
 
       // Assert
       const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
@@ -288,7 +288,7 @@ describe('/', async () => {
       const videoElement = videoPost.locator('video').first()
       await videoElement.waitFor({ state: 'attached' })
 
-      // Simulate near-end playback (within 0.5s of duration)
+      // Simulate genuine playback failure (ended=false)
       await page.evaluate((testId) => {
         const video = document.querySelector<HTMLVideoElement>(`[data-testid="${testId}"] video`)
         if (!video) throw new Error('video element not found')
@@ -298,7 +298,8 @@ describe('/', async () => {
         video.dispatchEvent(new Event('error'))
       }, `safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`)
 
-      expect(await videoPost.textContent()).not.toContain('Error loading media')
+      await page.waitForFunction(() => document.body.textContent?.includes('Error loading media'))
+      expect(await videoPost.textContent()).toContain('Error loading media')
     }, 20000)
 
     it('ignores bogus /null source resets on video loop/end and preserves playback', async () => {

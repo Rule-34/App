@@ -601,12 +601,7 @@
     }
 
     // Never treat post-playback completion events on videos as media load failures
-    if (
-      isVideoTag &&
-      ((target as HTMLVideoElement).ended ||
-        ((target as HTMLVideoElement).duration > 0 &&
-          (target as HTMLVideoElement).currentTime >= (target as HTMLVideoElement).duration - 0.5))
-    ) {
+    if (isVideoTag && (target as HTMLVideoElement).ended) {
       return
     }
 
