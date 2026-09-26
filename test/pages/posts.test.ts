@@ -306,7 +306,7 @@ describe('/', async () => {
       const page = await createTrackedPage()
 
       // Act
-      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'domcontentloaded' })
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
 
       // Assert
       const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
@@ -314,6 +314,7 @@ describe('/', async () => {
 
       const videoElement = videoPost.locator('video').first()
       await videoElement.waitFor({ state: 'attached' })
+      const sourceBeforeReset = await videoElement.evaluate((video) => (video as HTMLVideoElement).src)
 
       // Simulate video player resetting source to /null on loop
       await page.evaluate((testId) => {
@@ -323,6 +324,7 @@ describe('/', async () => {
         video.dispatchEvent(new Event('error'))
       }, `safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`)
 
+      expect(await videoElement.evaluate((video) => (video as HTMLVideoElement).src)).toBe(sourceBeforeReset)
       // Must not display error
       expect(await videoPost.textContent()).not.toContain('Error loading media')
       expect(await videoElement.count()).toBeGreaterThan(0)
