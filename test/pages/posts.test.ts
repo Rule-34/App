@@ -227,7 +227,125 @@ describe('/', async () => {
 
     // TODO: Test that verifies if a post with 'unknown' media type is not rendered
 
-    it.todo('proxies media when media failed to load', async () => {})
+    it('falls back to resilient proxy/CDN candidate when direct origin media fails', async () => {
+      // Arrange
+      const page = await createTrackedPage()
+
+      // Block both initial imgproxy and direct origin requests to simulate direct load failure
+      await page.route(/https:\/\/(imgproxy2\.r34\.app|safebooru\.org\/samples)\//, async (route) => {
+        await route.abort('failed')
+      })
+
+      // Fulfill fallback CDN requests with a valid image
+      await page.route(/https:\/\/(i[0-3]\.wp\.com|external-content\.duckduckgo\.com)\//, async (route) => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'image/png',
+          body: Buffer.from(
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=',
+            'base64'
+          )
+        })
+      })
+
+      // Act
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+
+      // Assert
+      const firstPost = page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`).first()
+      await firstPost.waitFor({ state: 'visible' })
+
+      // The image should failover to a fallback candidate (wp.com / photon)
+      await page.waitForFunction(
+        (id) => {
+          const post = document.querySelector(`[data-testid="${id}"]`)
+          const src = post?.querySelector('img')?.getAttribute('src')
+          return src != null && src.includes('wp.com')
+        },
+        `safebooru.org-${mockPostsPage0.data[0].id}`,
+        { timeout: 10000 }
+      )
+
+      const fallbackSrc = await firstPost.locator('img').first().getAttribute('src')
+      expect(fallbackSrc).toContain('wp.com')
+      expect(await firstPost.textContent()).not.toContain('Error loading media')
+    }, 30000)
+
+    it('applies expected referrer policy attribute on rendered media', async () => {
+      // Arrange
+      const page = await createTrackedPage()
+
+      // Act
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+
+      // Assert
+      const firstPost = page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`).first()
+      await firstPost.waitFor({ state: 'visible' })
+
+      const img = firstPost.locator('img').first()
+      await img.waitFor({ state: 'attached' })
+
+      // Third-party boorus (safebooru, etc.) must use 'no-referrer' to prevent hotlinking 403 blocks
+      await page.waitForFunction(
+        (id) => {
+          const post = document.querySelector(`[data-testid="${id}"]`)
+          return post?.querySelector('img')?.getAttribute('referrerpolicy') === 'no-referrer'
+        },
+        `safebooru.org-${mockPostsPage0.data[0].id}`,
+        { timeout: 10000 }
+      )
+      const referrerpolicy = await img.getAttribute('referrerpolicy')
+      expect(referrerpolicy).toBe('no-referrer')
+    }, 20000)
+
+    it('renders promoted content with a valid media asset and no media error', async () => {
+      // Arrange
+      const page = await createTrackedPage()
+
+      // Act
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+      const firstPost = page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`).first()
+      await firstPost.waitFor({ state: 'visible' })
+
+      // Scroll down until LazyPromotedContent (figure.-mx-1) is mounted in the virtualized list
+      const figureFound = await page.evaluate(async () => {
+        for (let i = 0; i < 30; i++) {
+          window.scrollBy(0, 800)
+          window.dispatchEvent(new Event('scroll'))
+          await new Promise((resolve) => setTimeout(resolve, 100))
+          if (document.querySelector('figure.-mx-1')) {
+            return true
+          }
+        }
+        return false
+      })
+
+      expect(figureFound).toBe(true)
+
+      // The promoted content figure should be mounted and visible
+      const promoFigure = page.locator('figure.-mx-1').first()
+      await promoFigure.waitFor({ state: 'attached', timeout: 15000 })
+      await promoFigure.scrollIntoViewIfNeeded()
+      await promoFigure.waitFor({ state: 'visible', timeout: 10000 })
+
+      // Media inside promoted content must have a valid non-empty src
+      const promoMedia = promoFigure.locator('img, iframe, video').first()
+      await promoMedia.waitFor({ state: 'attached' })
+
+      const promoSrc = await promoMedia.evaluate((el) => {
+        if (el instanceof HTMLImageElement || el instanceof HTMLVideoElement || el instanceof HTMLIFrameElement) {
+          return el.src || el.getAttribute('src')
+        }
+        return null
+      })
+
+      expect(promoSrc).toBeTruthy()
+      expect(promoSrc).not.toBe('')
+      expect(promoSrc).not.toContain('/null')
+
+      // Promoted content must not trigger a media load error
+      expect(await promoFigure.textContent()).not.toContain('Error loading media')
+    }, 30000)
 
     it('renders warning when media failed to load', async () => {
       // Arrange
@@ -798,6 +916,24 @@ describe('/', async () => {
 
       expect(domainSelectorText).toContain('safebooru.org')
     }, 30000)
+
+    it('displays upstream booru link pointing to the authoritative domain with security attributes', async () => {
+      // Arrange
+      const page = await createTrackedPage()
+
+      // Act
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+      await page.getByTestId('domain-selector').waitFor({ state: 'visible' })
+
+      const externalLink = page.getByRole('link', { name: /visit safebooru\.org/i })
+      await externalLink.waitFor({ state: 'visible' })
+
+      expect(await externalLink.getAttribute('href')).toBe('https://safebooru.org')
+      expect(await externalLink.getAttribute('target')).toBe('_blank')
+      expect(await externalLink.getAttribute('rel')).toContain('noopener')
+      expect(await externalLink.getAttribute('rel')).toContain('noreferrer')
+      expect(await externalLink.getAttribute('rel')).toContain('nofollow')
+    }, 30000)
   })
 
   describe('SEO', async () => {
@@ -930,6 +1066,40 @@ describe('/', async () => {
   })
 
   describe('Search', async () => {
-    it.todo('autocompletes tags')
+    it('autocompletes tags in the search dialog', async () => {
+      // Arrange
+      const page = await createTrackedPage()
+
+      await page.route('**/booru/*/tags*', async (route) => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            data: [
+              {
+                name: 'cat_ears',
+                type: 'general',
+                count: 42
+              }
+            ]
+          })
+        })
+      })
+
+      // Act
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+      await page.getByLabel('Search posts').click()
+
+      const dialog = page.getByRole('dialog')
+      const input = dialog.getByRole('combobox')
+      await input.waitFor({ state: 'visible', timeout: 10000 })
+      await input.click()
+      await input.pressSequentially('cat', { delay: 50 })
+
+      // Assert
+      const option = dialog.getByRole('option', { name: /cat_ears/ })
+      await option.waitFor({ state: 'visible', timeout: 10000 })
+      expect(await option.textContent()).toContain('cat_ears')
+    }, 30000)
   })
 })
