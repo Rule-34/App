@@ -3,6 +3,7 @@ import {
   BREAKER_COOLDOWN_MS,
   cleanMediaUrl,
   getCandidateSources,
+  getMediaReferrerPolicy,
   hasSensitiveCredentialsOrTokens,
   isDomainDirectBlocked,
   recordDirectFailure,
@@ -84,6 +85,49 @@ describe('media-resilience', () => {
       expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?sig=xyz')).toBe(true)
       expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?apiKey=xyz')).toBe(true)
       expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?download=true&v=1')).toBe(false)
+    })
+  })
+
+  describe('getMediaReferrerPolicy', () => {
+    it('returns no-referrer for empty, whitespace, null, or invalid URLs', () => {
+      expect(getMediaReferrerPolicy(undefined)).toBe('no-referrer')
+      expect(getMediaReferrerPolicy(null)).toBe('no-referrer')
+      expect(getMediaReferrerPolicy('')).toBe('no-referrer')
+      expect(getMediaReferrerPolicy('   ')).toBe('no-referrer')
+      expect(getMediaReferrerPolicy('not a url')).toBe('no-referrer')
+    })
+
+    it('returns strict-origin-when-cross-origin for relative paths and internal endpoints', () => {
+      expect(getMediaReferrerPolicy('/imgproxy/xyz')).toBe('strict-origin-when-cross-origin')
+      expect(getMediaReferrerPolicy('./img/featured/tag.jpg')).toBe('strict-origin-when-cross-origin')
+      expect(getMediaReferrerPolicy('../assets/image.png')).toBe('strict-origin-when-cross-origin')
+    })
+
+    it('returns origin for e621 and e926 CDN hosts', () => {
+      expect(getMediaReferrerPolicy('https://static1.e621.net/data/sample/123.jpg')).toBe('origin')
+      expect(getMediaReferrerPolicy('https://e621.net/data/sample/123.jpg')).toBe('origin')
+      expect(getMediaReferrerPolicy('https://static1.e926.net/data/sample/123.jpg')).toBe('origin')
+      expect(getMediaReferrerPolicy('https://e926.net/data/sample/123.jpg')).toBe('origin')
+    })
+
+    it('returns strict-origin-when-cross-origin for first-party, development, and tailscale hosts', () => {
+      expect(getMediaReferrerPolicy('https://r34.app/img/featured.jpg')).toBe('strict-origin-when-cross-origin')
+      expect(getMediaReferrerPolicy('https://images.r34.app/preview.webp')).toBe('strict-origin-when-cross-origin')
+      expect(getMediaReferrerPolicy('https://akbal.dev/test.png')).toBe('strict-origin-when-cross-origin')
+      expect(getMediaReferrerPolicy('https://cdn.akbal.dev/test.png')).toBe('strict-origin-when-cross-origin')
+      expect(getMediaReferrerPolicy('http://localhost:3000/img.jpg')).toBe('strict-origin-when-cross-origin')
+      expect(getMediaReferrerPolicy('http://127.0.0.1:3000/img.jpg')).toBe('strict-origin-when-cross-origin')
+      expect(getMediaReferrerPolicy('http://metal-mac-mini:3000/img.jpg')).toBe('strict-origin-when-cross-origin')
+      expect(getMediaReferrerPolicy('http://100.88.191.18:3000/img.jpg')).toBe('strict-origin-when-cross-origin')
+    })
+
+    it('returns no-referrer for third-party boorus and fallback proxies to avoid hotlink blocks', () => {
+      expect(getMediaReferrerPolicy('https://cdn.donmai.us/original/12/34/1234.png')).toBe('no-referrer')
+      expect(getMediaReferrerPolicy('https://img3.gelbooru.com/images/12/34/1234.jpg')).toBe('no-referrer')
+      expect(getMediaReferrerPolicy('https://rule34.paheal.net/_images/123.jpg')).toBe('no-referrer')
+      expect(getMediaReferrerPolicy('https://api-cdn.rule34.xxx/images/123.jpg')).toBe('no-referrer')
+      expect(getMediaReferrerPolicy('https://i0.wp.com/cdn.donmai.us/image.jpg')).toBe('no-referrer')
+      expect(getMediaReferrerPolicy('https://external-content.duckduckgo.com/iu/?u=xyz')).toBe('no-referrer')
     })
   })
 

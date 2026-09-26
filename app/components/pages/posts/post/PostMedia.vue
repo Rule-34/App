@@ -5,11 +5,13 @@
   import {
     cleanMediaUrl,
     getCandidateSources,
+    getMediaReferrerPolicy,
     isDomainDirectBlocked,
     onDomainHealthChange,
     recordDirectFailure,
     recordDirectSuccess,
-    resetDomainBreaker
+    resetDomainBreaker,
+    type MediaReferrerPolicy
   } from '~/assets/js/media-resilience'
 
   const localePath = useLocalePath()
@@ -120,6 +122,23 @@
   const localSrc = shallowRef(srcCandidates.value[initialSrcIndex] ?? rawMediaSrc.value)
   const localPosterSrc = shallowRef(posterCandidates.value[initialPosterIndex] ?? props.mediaPosterSrc ?? undefined)
 
+  const mediaReferrerPolicy = computed(() => getMediaReferrerPolicy(localSrc.value))
+  const posterReferrerPolicy = computed(() => getMediaReferrerPolicy(localPosterSrc.value))
+  const videoReferrerPolicy = computed<MediaReferrerPolicy>(() => {
+    const mediaPolicy = mediaReferrerPolicy.value
+    const posterPolicy = posterReferrerPolicy.value
+
+    if (mediaPolicy === 'origin' || posterPolicy === 'origin') {
+      return 'origin'
+    }
+
+    if (mediaPolicy === 'no-referrer' || posterPolicy === 'no-referrer') {
+      return 'no-referrer'
+    }
+
+    return 'strict-origin-when-cross-origin'
+  })
+
   function probeVideoPoster() {
     if (import.meta.server || isUnmounted || !isVideo.value || !posterCandidates.value.length) {
       return
@@ -147,7 +166,7 @@
 
       const probe = new Image()
       activeProbe = probe
-      probe.referrerPolicy = 'no-referrer'
+      probe.referrerPolicy = getMediaReferrerPolicy(candidateUrl)
 
       probe.onload = () => {
         if (isUnmounted || currentToken !== posterProbeToken) return
@@ -1038,7 +1057,7 @@
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
         allowfullscreen
         loading="lazy"
-        referrerpolicy="no-referrer"
+        :referrerpolicy="getMediaReferrerPolicy(safeRawMediaSrc)"
         sandbox="allow-same-origin"
       />
     </div>
@@ -1068,7 +1087,7 @@
               class: 'h-auto w-full rounded-t-md',
               style: mediaAspectRatio ? 'aspect-ratio: ' + mediaAspectRatio : undefined,
               fetchpriority: mediaFetchPriority,
-              referrerpolicy: 'no-referrer'
+              referrerpolicy: mediaReferrerPolicy
             } as any
           "
           :loading="mediaLoading"
@@ -1094,7 +1113,7 @@
           :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
           :width="mediaSrcWidthAttribute"
           class="h-auto w-full rounded-t-md"
-          referrerpolicy="no-referrer"
+          :referrerpolicy="mediaReferrerPolicy"
           @error="onMediaError"
           @load="onMediaLoad"
         />
@@ -1114,7 +1133,7 @@
               class: 'h-auto w-full rounded-t-md',
               style: mediaAspectRatio ? 'aspect-ratio: ' + mediaAspectRatio : undefined,
               fetchpriority: mediaFetchPriority,
-              referrerpolicy: 'no-referrer'
+              referrerpolicy: mediaReferrerPolicy
             } as any
           "
           :loading="mediaLoading"
@@ -1142,7 +1161,7 @@
           :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
           :width="mediaSrcWidthAttribute"
           class="h-auto w-full rounded-t-md"
-          referrerpolicy="no-referrer"
+          :referrerpolicy="mediaReferrerPolicy"
           @error="onMediaError"
           @load="onMediaLoad"
         />
@@ -1166,7 +1185,7 @@
         :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
         :width="mediaSrcWidthAttribute"
         class="h-auto w-full rounded-t-md"
-        referrerpolicy="no-referrer"
+        :referrerpolicy="isAnimatedMediaPlaying ? mediaReferrerPolicy : posterReferrerPolicy"
         @error="onMediaError"
         @load="onMediaLoad"
       />
@@ -1245,7 +1264,7 @@
         loop
         playsinline
         preload="none"
-        referrerpolicy="no-referrer"
+        :referrerpolicy="videoReferrerPolicy"
         @error="onMediaError"
         @loadeddata="onMediaLoad"
         @focus="initializeVideoPlayer"

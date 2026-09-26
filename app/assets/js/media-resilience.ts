@@ -72,6 +72,64 @@ export function cleanMediaUrl(url?: string | null): string | null {
   }
 }
 
+export type MediaReferrerPolicy = 'origin' | 'strict-origin-when-cross-origin' | 'no-referrer'
+
+/**
+ * Determines the host-aware Referrer-Policy for media loading.
+ *
+ * Rules:
+ * 1. e621 / e926 CDN (static1.e621.net, etc.): requires 'origin' per e621 CDN agreement.
+ * 2. First-party and internal endpoints (r34.app, akbal.dev, localhost, relative paths): 'strict-origin-when-cross-origin'.
+ * 3. Third-party boorus (Danbooru, Gelbooru, Paheal, etc.) and fallback proxies (Photon, DuckDuckGo):
+ *    'no-referrer' to bypass foreign referrer blocks / hotlinking 403s.
+ * 4. Empty or invalid URLs: 'no-referrer'.
+ */
+export function getMediaReferrerPolicy(rawUrl?: string | null): MediaReferrerPolicy {
+  if (!rawUrl) {
+    return 'no-referrer'
+  }
+
+  const trimmed = rawUrl.trim()
+  if (!trimmed) {
+    return 'no-referrer'
+  }
+
+  if (trimmed.startsWith('/') || trimmed.startsWith('./') || trimmed.startsWith('../')) {
+    return 'strict-origin-when-cross-origin'
+  }
+
+  try {
+    const parsed = new URL(trimmed)
+    const hostname = parsed.hostname.toLowerCase()
+
+    if (
+      hostname === 'e621.net' ||
+      hostname.endsWith('.e621.net') ||
+      hostname === 'e926.net' ||
+      hostname.endsWith('.e926.net')
+    ) {
+      return 'origin'
+    }
+
+    if (
+      hostname === 'r34.app' ||
+      hostname.endsWith('.r34.app') ||
+      hostname === 'akbal.dev' ||
+      hostname.endsWith('.akbal.dev') ||
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname === 'metal-mac-mini' ||
+      hostname.startsWith('100.')
+    ) {
+      return 'strict-origin-when-cross-origin'
+    }
+
+    return 'no-referrer'
+  } catch {
+    return 'no-referrer'
+  }
+}
+
 /**
  * Extracts a normalized domain key from a media URL and media category.
  *
