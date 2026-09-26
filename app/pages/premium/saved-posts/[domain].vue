@@ -708,14 +708,14 @@
       <a
         :href="`https://${savedPostsBooru.domain}`"
         target="_blank"
-        rel="noopener noreferrer"
-        class="text-base-content-muted inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium ring-1 ring-base-0/20 ring-inset hover:hover-bg-util hover:text-base-content-highlight focus-visible:focus-outline-util"
+        rel="noopener noreferrer nofollow"
+        class="text-base-content-muted rounded-md p-1.5 hover:hover-bg-util hover:text-base-content-highlight focus-visible:focus-outline-util"
+        :aria-label="$t('common.visitWebsite', { domain: savedPostsBooru.domain })"
         :title="$t('common.visitWebsite', { domain: savedPostsBooru.domain })"
       >
-        <span>{{ $t('common.visitOriginalWebsite') }}</span>
         <ArrowTopRightOnSquareIcon
           aria-hidden="true"
-          class="h-3.5 w-3.5"
+          class="h-4 w-4"
         />
       </a>
 

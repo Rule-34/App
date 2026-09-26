@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { setup, url } from '@nuxt/test-utils'
-import { mockPostsPage0, mockPostsPage1, mockPostsPageWithOfflineMedia } from './posts.mock-data'
+import {
+  mockPostsPage0,
+  mockPostsPage1,
+  mockPostsPageWithOfflineMedia,
+  mockPostsPageWithVideoMedia
+} from './posts.mock-data'
 import { defaultSetupConfig, useTrackedPageFactory } from '../helper'
 
 function decodeImgproxySourceUrl(src: string) {
@@ -237,6 +242,90 @@ describe('/', async () => {
       await postWithWarning.locator('img').first().dispatchEvent('error')
       await page.waitForFunction(() => document.body.textContent?.includes('Error loading media'))
       expect(await postWithWarning.textContent()).toContain('Error loading media')
+    }, 20000)
+
+    it('does not display media load error when video completes or ends normally', async () => {
+      // Arrange
+      const page = await createTrackedPage()
+
+      // Act
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'domcontentloaded' })
+
+      // Assert
+      const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
+      await videoPost.waitFor({ state: 'visible' })
+
+      const videoElement = videoPost.locator('video').first()
+      await videoElement.waitFor({ state: 'attached' })
+
+      // Simulate video playback completion (ended=true) and subsequent player events
+      await page.evaluate((testId) => {
+        const video = document.querySelector<HTMLVideoElement>(`[data-testid="${testId}"] video`)
+        if (!video) throw new Error('video element not found')
+        Object.defineProperty(video, 'duration', { value: 15, configurable: true })
+        Object.defineProperty(video, 'currentTime', { value: 15, configurable: true })
+        Object.defineProperty(video, 'ended', { value: true, configurable: true })
+        video.dispatchEvent(new Event('ended'))
+        video.dispatchEvent(new Event('error'))
+      }, `safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`)
+
+      // Video ending must not trigger an error state
+      expect(await videoPost.textContent()).not.toContain('Error loading media')
+      expect(await videoElement.count()).toBeGreaterThan(0)
+    }, 20000)
+
+    it('does not trigger media load error on near-end video playback or loop resets', async () => {
+      // Arrange
+      const page = await createTrackedPage()
+
+      // Act
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'domcontentloaded' })
+
+      // Assert
+      const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
+      await videoPost.waitFor({ state: 'visible' })
+
+      const videoElement = videoPost.locator('video').first()
+      await videoElement.waitFor({ state: 'attached' })
+
+      // Simulate near-end playback (within 0.5s of duration)
+      await page.evaluate((testId) => {
+        const video = document.querySelector<HTMLVideoElement>(`[data-testid="${testId}"] video`)
+        if (!video) throw new Error('video element not found')
+        Object.defineProperty(video, 'duration', { value: 15, configurable: true })
+        Object.defineProperty(video, 'currentTime', { value: 14.8, configurable: true })
+        Object.defineProperty(video, 'ended', { value: false, configurable: true })
+        video.dispatchEvent(new Event('error'))
+      }, `safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`)
+
+      expect(await videoPost.textContent()).not.toContain('Error loading media')
+    }, 20000)
+
+    it('ignores bogus /null source resets on video loop/end and preserves playback', async () => {
+      // Arrange
+      const page = await createTrackedPage()
+
+      // Act
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'domcontentloaded' })
+
+      // Assert
+      const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
+      await videoPost.waitFor({ state: 'visible' })
+
+      const videoElement = videoPost.locator('video').first()
+      await videoElement.waitFor({ state: 'attached' })
+
+      // Simulate video player resetting source to /null on loop
+      await page.evaluate((testId) => {
+        const video = document.querySelector<HTMLVideoElement>(`[data-testid="${testId}"] video`)
+        if (!video) throw new Error('video element not found')
+        video.src = 'https://example.local/null'
+        video.dispatchEvent(new Event('error'))
+      }, `safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`)
+
+      // Must not display error
+      expect(await videoPost.textContent()).not.toContain('Error loading media')
+      expect(await videoElement.count()).toBeGreaterThan(0)
     }, 20000)
   })
 

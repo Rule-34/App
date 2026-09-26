@@ -8,6 +8,7 @@ import {
   mockPostsPage1,
   mockPostsPageWithOfflineMedia,
   mockPostsPageWithUnknownMedia,
+  mockPostsPageWithVideoMedia,
   mockPostsPageWithoutResults
 } from '../pages/posts.mock-data'
 
@@ -97,6 +98,10 @@ function resolveMockPostsPage(requestUrl: URL) {
 
   if (tags === 'offline_test') {
     return mockPostsPageWithOfflineMedia
+  }
+
+  if (tags === 'video_test') {
+    return mockPostsPageWithVideoMedia
   }
 
   if (tags === 'unknown_media_test') {
