@@ -3,6 +3,7 @@ import {
   BREAKER_COOLDOWN_MS,
   cleanMediaUrl,
   getCandidateSources,
+  hasSensitiveCredentialsOrTokens,
   isDomainDirectBlocked,
   recordDirectFailure,
   recordDirectSuccess,
@@ -68,6 +69,21 @@ describe('media-resilience', () => {
     })
   })
 
+  describe('hasSensitiveCredentialsOrTokens', () => {
+    it('detects embedded user credentials in URL', () => {
+      expect(hasSensitiveCredentialsOrTokens('https://user:pass@cdn.example.com/image.jpg')).toBe(true)
+      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg')).toBe(false)
+    })
+
+    it('detects sensitive and signed auth parameters', () => {
+      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?token=abc')).toBe(true)
+      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?X-Amz-Signature=xyz')).toBe(true)
+      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?sig=xyz')).toBe(true)
+      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?apiKey=xyz')).toBe(true)
+      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?download=true&v=1')).toBe(false)
+    })
+  })
+
   describe('toDdgUrl', () => {
     it('creates a valid duckduckgo image proxy url with nofb=1', () => {
       const input = 'https://static1.e621.net/data/sample/123.jpg'
@@ -78,6 +94,14 @@ describe('media-resilience', () => {
       expect(parsed.searchParams.get('u')).toBe(input)
       expect(parsed.searchParams.get('f')).toBe('1')
       expect(parsed.searchParams.get('nofb')).toBe('1')
+    })
+
+    it('returns rawUrl unchanged for credential-bearing or signed URLs', () => {
+      const sensitiveToken = 'https://cdn.example.com/image.jpg?token=secret123'
+      expect(toDdgUrl(sensitiveToken)).toBe(sensitiveToken)
+
+      const sensitiveCreds = 'https://user:pass@cdn.example.com/image.jpg'
+      expect(toDdgUrl(sensitiveCreds)).toBe(sensitiveCreds)
     })
   })
 
@@ -186,8 +210,8 @@ describe('media-resilience', () => {
       expect(candidates[2]).toContain('external-content.duckduckgo.com')
     })
 
-    it('skips photon candidate if url contains query parameters', () => {
-      const queryImg = 'https://cdn.donmai.us/original/12/34/1234.png?token=secret'
+    it('skips photon candidate if url contains query parameters, but allows ddg for safe query params', () => {
+      const queryImg = 'https://cdn.donmai.us/original/12/34/1234.png?download=true'
       const candidates = getCandidateSources({
         rawUrl: queryImg,
         mediaType: 'image',
@@ -197,6 +221,18 @@ describe('media-resilience', () => {
       expect(candidates.some((c) => c.includes('wp.com'))).toBe(false)
       expect(candidates[0]).toBe(queryImg)
       expect(candidates[1]).toContain('external-content.duckduckgo.com')
+    })
+
+    it('skips public fallback proxies if url contains sensitive credentials or tokens', () => {
+      const sensitiveImg = 'https://cdn.donmai.us/original/12/34/1234.png?token=secret123'
+      const candidates = getCandidateSources({
+        rawUrl: sensitiveImg,
+        mediaType: 'image',
+        isPremium: false
+      })
+
+      // Both Photon (query) and DDG (sensitive token) must be excluded
+      expect(candidates).toEqual([sensitiveImg])
     })
   })
 

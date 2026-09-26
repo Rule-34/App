@@ -135,14 +135,56 @@ export function toPhotonUrl(rawUrl: string): string {
   }
 }
 
+const SENSITIVE_QUERY_PATTERNS = [
+  /token/i,
+  /auth/i,
+  /sig/i,
+  /key/i,
+  /secret/i,
+  /cred/i,
+  /^x-amz-/i,
+  /^x-goog-/i,
+  /bearer/i
+]
+
+/**
+ * Checks whether a URL contains embedded user credentials or sensitive/signed auth tokens.
+ *
+ * @param rawUrl - The image URL to check.
+ * @returns True if credentials or signature tokens are present.
+ */
+export function hasSensitiveCredentialsOrTokens(rawUrl: string): boolean {
+  try {
+    const url = new URL(rawUrl)
+    if (url.username || url.password) {
+      return true
+    }
+
+    for (const key of url.searchParams.keys()) {
+      if (SENSITIVE_QUERY_PATTERNS.some((pattern) => pattern.test(key))) {
+        return true
+      }
+    }
+
+    return false
+  } catch {
+    return false
+  }
+}
+
 /**
  * DuckDuckGo image proxy URL generator.
+ * Skips public proxying if the URL contains embedded credentials or sensitive signed tokens.
  *
  * @param rawUrl - The image URL to convert.
- * @returns The DuckDuckGo image proxy URL, or rawUrl if invalid.
+ * @returns The DuckDuckGo image proxy URL, or rawUrl if invalid or credential-bearing.
  */
 export function toDdgUrl(rawUrl: string): string {
   try {
+    if (hasSensitiveCredentialsOrTokens(rawUrl)) {
+      return rawUrl
+    }
+
     const params = new URLSearchParams({
       u: rawUrl,
       f: '1',
