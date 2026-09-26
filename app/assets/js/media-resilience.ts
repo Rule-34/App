@@ -142,6 +142,8 @@ const SENSITIVE_QUERY_PATTERNS = [
   /key/i,
   /secret/i,
   /cred/i,
+  /pass/i,
+  /pwd/i,
   /^x-amz-/i,
   /^x-goog-/i,
   /bearer/i

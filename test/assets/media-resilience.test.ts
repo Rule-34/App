@@ -77,6 +77,9 @@ describe('media-resilience', () => {
 
     it('detects sensitive and signed auth parameters', () => {
       expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?token=abc')).toBe(true)
+      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?password=secret')).toBe(true)
+      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?pass=secret')).toBe(true)
+      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?pwd=secret')).toBe(true)
       expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?X-Amz-Signature=xyz')).toBe(true)
       expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?sig=xyz')).toBe(true)
       expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?apiKey=xyz')).toBe(true)
@@ -233,6 +236,14 @@ describe('media-resilience', () => {
 
       // Both Photon (query) and DDG (sensitive token) must be excluded
       expect(candidates).toEqual([sensitiveImg])
+
+      const passwordImg = 'https://cdn.donmai.us/original/12/34/1234.png?password=secret'
+      const passwordCandidates = getCandidateSources({
+        rawUrl: passwordImg,
+        mediaType: 'image',
+        isPremium: false
+      })
+      expect(passwordCandidates).toEqual([passwordImg])
     })
   })
 
