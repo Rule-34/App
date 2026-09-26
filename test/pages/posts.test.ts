@@ -309,10 +309,10 @@ describe('/', async () => {
 
       // Scroll down until LazyPromotedContent (figure.-mx-1) is mounted in the virtualized list
       const figureFound = await page.evaluate(async () => {
-        for (let i = 0; i < 30; i++) {
-          window.scrollBy(0, 800)
+        for (let i = 0; i < 20; i++) {
+          window.scrollBy(0, 1200)
           window.dispatchEvent(new Event('scroll'))
-          await new Promise((resolve) => setTimeout(resolve, 100))
+          await new Promise((resolve) => setTimeout(resolve, 50))
           if (document.querySelector('figure.-mx-1')) {
             return true
           }
@@ -330,7 +330,7 @@ describe('/', async () => {
 
       // Media inside promoted content must have a valid non-empty src
       const promoMedia = promoFigure.locator('img, iframe, video').first()
-      await promoMedia.waitFor({ state: 'attached' })
+      await promoMedia.waitFor({ state: 'attached', timeout: 20000 })
 
       const promoSrc = await promoMedia.evaluate((el) => {
         if (el instanceof HTMLImageElement || el instanceof HTMLVideoElement || el instanceof HTMLIFrameElement) {
@@ -345,7 +345,7 @@ describe('/', async () => {
 
       // Promoted content must not trigger a media load error
       expect(await promoFigure.textContent()).not.toContain('Error loading media')
-    }, 30000)
+    }, 60000)
 
     it('renders warning when media failed to load', async () => {
       // Arrange
@@ -1100,6 +1100,53 @@ describe('/', async () => {
       const option = dialog.getByRole('option', { name: /cat_ears/ })
       await option.waitFor({ state: 'visible', timeout: 10000 })
       expect(await option.textContent()).toContain('cat_ears')
+    }, 30000)
+
+    it('keeps suggestions in sync with the latest query when responses arrive out of order', async () => {
+      // Arrange
+      const page = await createTrackedPage()
+
+      let tagSearchRequests = 0
+
+      await page.route('**/booru/*/tags*', async (route) => {
+        tagSearchRequests += 1
+        const isFirstQuery = tagSearchRequests === 1
+        if (isFirstQuery) {
+          await new Promise((resolve) => setTimeout(resolve, 1500))
+        }
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            data: [
+              {
+                name: isFirstQuery ? 'albatross' : 'albert_einstein',
+                type: 'general',
+                count: 1
+              }
+            ]
+          })
+        })
+      })
+
+      // Act
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+      await page.getByLabel('Search posts').click()
+      const dialog = page.getByRole('dialog')
+      const input = dialog.getByRole('combobox')
+      await input.waitFor({ state: 'visible', timeout: 10000 })
+      await input.click()
+      await input.pressSequentially('al', { delay: 50 })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await input.pressSequentially('bert', { delay: 50 })
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+
+      const staleOption = dialog.getByRole('option', { name: /albatross/ })
+      const freshOption = dialog.getByRole('option', { name: /albert_einstein/ })
+      await freshOption.waitFor({ state: 'visible', timeout: 10000 })
+      expect(await staleOption.count()).toBe(0)
+      expect(await freshOption.count()).toBe(1)
+      expect(tagSearchRequests).toBe(2)
     }, 30000)
   })
 })

@@ -53,7 +53,7 @@ describe('media-resilience', () => {
 
     it('preserves valid root-relative paths for first-party assets while rejecting protocol-relative and malicious variants', () => {
       expect(cleanMediaUrl('/img/promo/HentaiPorn.jpg')).toBe('/img/promo/HentaiPorn.jpg')
-      expect(cleanMediaUrl('/img/promo/premium/No Ads.jpg')).toBe('/img/promo/premium/No%20Ads.jpg')
+      expect(cleanMediaUrl('/img/promo/premium/No Ads.jpg')).toBe('/img/promo/premium/No Ads.jpg')
       expect(cleanMediaUrl('/img/promo/HentaiPorn.jpg#fragment')).toBe('/img/promo/HentaiPorn.jpg')
       expect(cleanMediaUrl('//evil.com/image.jpg')).toBeNull()
       expect(cleanMediaUrl('/\\evil.com/image.jpg')).toBeNull()
