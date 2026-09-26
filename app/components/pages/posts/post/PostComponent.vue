@@ -158,25 +158,12 @@
 
     switch (props.post.media_type) {
       case 'image': {
-        const hasHighRes = Boolean(highRes?.url)
-        const hasLowRes = Boolean(lowRes?.url)
+        const preferHighRes = postFullSizeImages.value || !lowRes?.url
+        const file = preferHighRes && highRes?.url ? highRes : lowRes?.url ? lowRes : highRes
 
-        // Return full image if setting is enabled (and available) or if low-res file does not exist
-        if ((postFullSizeImages.value || !hasLowRes) && hasHighRes) {
-          data.file = highRes!.url
-          data.width = highRes?.width ?? null
-          data.height = highRes?.height ?? null
-        } else if (hasLowRes) {
-          // Return low-res file (or fallback when full-size image is requested but unavailable)
-          data.file = lowRes!.url
-          data.width = lowRes?.width ?? highRes?.width ?? null
-          data.height = lowRes?.height ?? highRes?.height ?? null
-        } else {
-          data.file = null
-          data.width = highRes?.width ?? null
-          data.height = highRes?.height ?? null
-        }
-
+        data.file = file?.url ?? null
+        data.width = file?.width ?? highRes?.width ?? null
+        data.height = file?.height ?? highRes?.height ?? null
         break
       }
 

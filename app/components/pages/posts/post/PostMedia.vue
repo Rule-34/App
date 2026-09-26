@@ -49,12 +49,6 @@
   const rawMediaSrc = computed(() => cleanMediaUrl(props.mediaSrc) ?? '')
   const rawPosterSrc = computed(() => cleanMediaUrl(props.mediaPosterSrc) ?? '')
 
-  /**
-   * Safe media URL for iframe embedding and external link navigation.
-   * Media URLs are cleaned and validated upstream (ensuring valid http/https and stripping fragments).
-   */
-  const safeRawMediaSrc = computed(() => rawMediaSrc.value)
-
   const isImage = computed(() => props.mediaType === 'image')
 
   /**
@@ -112,15 +106,17 @@
     })
   )
 
-  const initialSrcIndex =
+  const getInitialSrcIndex = () =>
     !isIndexZeroViaImgproxy.value && isDirectBlocked.value && srcCandidates.value.length > 1 ? 1 : 0
-  const initialPosterIndex = isPosterDirectBlocked.value && posterCandidates.value.length > 1 ? 1 : 0
+  const getInitialPosterIndex = () => (isPosterDirectBlocked.value && posterCandidates.value.length > 1 ? 1 : 0)
 
-  const srcCandidateIndex = shallowRef(initialSrcIndex)
-  const posterCandidateIndex = shallowRef(initialPosterIndex)
+  const srcCandidateIndex = shallowRef(getInitialSrcIndex())
+  const posterCandidateIndex = shallowRef(getInitialPosterIndex())
 
-  const localSrc = shallowRef(srcCandidates.value[initialSrcIndex] ?? rawMediaSrc.value)
-  const localPosterSrc = shallowRef(posterCandidates.value[initialPosterIndex] ?? props.mediaPosterSrc ?? undefined)
+  const localSrc = computed(() => srcCandidates.value[srcCandidateIndex.value] ?? rawMediaSrc.value)
+  const localPosterSrc = computed(
+    () => posterCandidates.value[posterCandidateIndex.value] ?? (rawPosterSrc.value || undefined)
+  )
 
   const mediaReferrerPolicy = computed(() => getMediaReferrerPolicy(localSrc.value))
   const posterReferrerPolicy = computed(() => getMediaReferrerPolicy(localPosterSrc.value))
@@ -172,7 +168,6 @@
         if (isUnmounted || currentToken !== posterProbeToken) return
         activeProbe = null
         posterCandidateIndex.value = idx
-        localPosterSrc.value = candidateUrl
         if (idx === 0 && rawPosterSrc.value) {
           recordDirectSuccess(rawPosterSrc.value, 'image')
         }
@@ -201,9 +196,8 @@
   // When domain breaker trips while cards are mounted, uncompleted direct requests advance to Candidate 1 (Photon)
   watch(isDirectBlocked, (blocked) => {
     if (blocked && !mediaHasLoaded.value && !hasError.value && !isIndexZeroViaImgproxy.value) {
-      if (srcCandidateIndex.value === 0 && srcCandidates.value.length > 1 && srcCandidates.value[1]) {
+      if (srcCandidateIndex.value === 0 && srcCandidates.value.length > 1) {
         srcCandidateIndex.value = 1
-        localSrc.value = srcCandidates.value[1]
         if (isVideo.value) {
           reloadVideoPlayer(false)
         }
@@ -213,23 +207,18 @@
 
   watch(isPosterDirectBlocked, (blocked) => {
     if (blocked) {
-      if (posterCandidateIndex.value === 0 && posterCandidates.value.length > 1 && posterCandidates.value[1]) {
+      if (posterCandidateIndex.value === 0 && posterCandidates.value.length > 1) {
         posterCandidateIndex.value = 1
-        localPosterSrc.value = posterCandidates.value[1]
       }
     }
   })
 
   watch([() => props.mediaSrc, () => props.mediaPosterSrc], () => {
-    const newSrcIdx = !isIndexZeroViaImgproxy.value && isDirectBlocked.value && srcCandidates.value.length > 1 ? 1 : 0
-    const newPosterIdx = isPosterDirectBlocked.value && posterCandidates.value.length > 1 ? 1 : 0
-    srcCandidateIndex.value = newSrcIdx
-    posterCandidateIndex.value = newPosterIdx
+    srcCandidateIndex.value = getInitialSrcIndex()
+    posterCandidateIndex.value = getInitialPosterIndex()
     useIframePlayer.value = false
     mediaHasLoaded.value = false
     error.value = null
-    localSrc.value = srcCandidates.value[newSrcIdx] ?? rawMediaSrc.value
-    localPosterSrc.value = posterCandidates.value[newPosterIdx] ?? props.mediaPosterSrc ?? undefined
     probeVideoPoster()
   })
 
@@ -628,10 +617,8 @@
         recordDirectFailure(rawPosterSrc.value, 'image')
       }
 
-      posterCandidateIndex.value += 1
-      const nextPoster = posterCandidates.value[posterCandidateIndex.value]
-      if (nextPoster) {
-        localPosterSrc.value = nextPoster
+      if (posterCandidateIndex.value + 1 < posterCandidates.value.length) {
+        posterCandidateIndex.value += 1
         return
       }
 
@@ -645,25 +632,16 @@
       recordDirectFailure(rawMediaSrc.value, props.mediaType)
     }
 
-    srcCandidateIndex.value += 1
-    const nextSrc = srcCandidates.value[srcCandidateIndex.value]
-    if (nextSrc) {
-      localSrc.value = nextSrc
-
+    if (srcCandidateIndex.value + 1 < srcCandidates.value.length) {
+      srcCandidateIndex.value += 1
       if (isVideo.value) {
         reloadVideoPlayer(true)
       }
       return
     }
 
-    if (
-      isVideo.value &&
-      posterCandidateIndex.value === 0 &&
-      posterCandidates.value.length > 1 &&
-      posterCandidates.value[1]
-    ) {
+    if (isVideo.value && posterCandidateIndex.value === 0 && posterCandidates.value.length > 1) {
       posterCandidateIndex.value = 1
-      localPosterSrc.value = posterCandidates.value[1]
     }
 
     error.value = new Error(t('errors.mediaLoadError'))
@@ -685,31 +663,20 @@
     mediaHasLoaded.value = false
     error.value = null
 
-    // Force retry direct request
-    localSrc.value = rawMediaSrc.value
-
     if (isVideo.value) {
-      if (isPosterDirectBlocked.value && posterCandidates.value.length > 1 && posterCandidates.value[1]) {
-        posterCandidateIndex.value = 1
-        localPosterSrc.value = posterCandidates.value[1]
-      } else {
-        posterCandidateIndex.value = 0
-        localPosterSrc.value = rawPosterSrc.value || props.mediaPosterSrc || undefined
-        nextTick(() => {
-          probeVideoPoster()
-        })
-      }
-    } else {
-      posterCandidateIndex.value = 0
-      localPosterSrc.value = rawPosterSrc.value || props.mediaPosterSrc || undefined
-    }
+      const willBlockPoster = isPosterDirectBlocked.value && posterCandidates.value.length > 1
+      posterCandidateIndex.value = willBlockPoster ? 1 : 0
 
-    if (isVideo.value) {
       nextTick(async () => {
+        if (!willBlockPoster) {
+          probeVideoPoster()
+        }
         await reloadVideoPlayer()
         // Prompt browser to fetch media stream on retry
         getVideoElement()?.load()
       })
+    } else {
+      posterCandidateIndex.value = 0
     }
 
     setTimeout(() => {
@@ -858,7 +825,7 @@
             >
               <!-- Primary CTA: Play in Sandbox -->
               <button
-                v-if="safeRawMediaSrc"
+                v-if="rawMediaSrc"
                 class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md bg-primary-700 px-3 py-1.5 text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
                 type="button"
                 @click="playInIframe"
@@ -868,9 +835,9 @@
 
               <!-- Open in new tab (icon button) -->
               <a
-                v-if="safeRawMediaSrc"
+                v-if="rawMediaSrc"
                 :aria-label="t('tags.openInNewTab')"
-                :href="safeRawMediaSrc"
+                :href="rawMediaSrc"
                 :title="t('tags.openInNewTab')"
                 class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 rel="noopener noreferrer"
@@ -906,7 +873,7 @@
             >
               <!-- Video Primary CTA: Play in Sandbox -->
               <button
-                v-if="safeRawMediaSrc"
+                v-if="rawMediaSrc"
                 class="inline-flex min-h-[40px] w-full items-center justify-center rounded-md bg-primary-700 px-4 py-2 text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
                 type="button"
                 @click="playInIframe"
@@ -918,8 +885,8 @@
               <div class="flex w-full items-center gap-2.5">
                 <!-- Open in new tab -->
                 <a
-                  v-if="safeRawMediaSrc"
-                  :href="safeRawMediaSrc"
+                  v-if="rawMediaSrc"
+                  :href="rawMediaSrc"
                   class="inline-flex min-h-[32px] flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -962,9 +929,9 @@
 
               <!-- Open in new tab (icon button) -->
               <a
-                v-if="safeRawMediaSrc"
+                v-if="rawMediaSrc"
                 :aria-label="t('tags.openInNewTab')"
-                :href="safeRawMediaSrc"
+                :href="rawMediaSrc"
                 :title="t('tags.openInNewTab')"
                 class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 rel="noopener noreferrer"
@@ -995,8 +962,8 @@
 
               <!-- Open in new tab -->
               <a
-                v-if="safeRawMediaSrc"
-                :href="safeRawMediaSrc"
+                v-if="rawMediaSrc"
+                :href="rawMediaSrc"
                 class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 rel="noopener noreferrer"
                 target="_blank"
@@ -1049,7 +1016,7 @@
       </button>
 
       <iframe
-        :src="safeRawMediaSrc"
+        :src="rawMediaSrc"
         :height="mediaSrcHeightAttribute"
         :width="mediaSrcWidthAttribute"
         :title="mediaAlt || 'Video Player'"
@@ -1057,7 +1024,7 @@
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
         allowfullscreen
         loading="lazy"
-        :referrerpolicy="getMediaReferrerPolicy(safeRawMediaSrc)"
+        :referrerpolicy="getMediaReferrerPolicy(rawMediaSrc)"
         sandbox="allow-same-origin"
       />
     </div>
@@ -1073,99 +1040,48 @@
         ]
       "
     >
-      <!-- Optimized + Proxied images for Premium users -->
-      <template v-if="isPremium">
-        <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
-        <NuxtPicture
-          v-if="srcCandidateIndex === 0"
-          ref="mediaElement"
-          :alt="mediaAlt"
-          :decoding="mediaDecoding"
-          :height="mediaSrcHeightAttribute"
-          :img-attrs="
-            {
-              class: 'h-auto w-full rounded-t-md',
-              style: mediaAspectRatio ? 'aspect-ratio: ' + mediaAspectRatio : undefined,
-              fetchpriority: mediaFetchPriority,
-              referrerpolicy: mediaReferrerPolicy
-            } as any
-          "
-          :loading="mediaLoading"
-          :preload="mediaPreload"
-          :sizes="postImageSizes"
-          :src="localSrc"
-          :width="mediaSrcWidthAttribute"
-          provider="imgproxy"
-          @error="onMediaError"
-          @load="onMediaLoad"
-        />
+      <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
+      <NuxtPicture
+        v-if="isIndexZeroViaImgproxy && srcCandidateIndex === 0"
+        ref="mediaElement"
+        :alt="mediaAlt"
+        :decoding="mediaDecoding"
+        :height="mediaSrcHeightAttribute"
+        :img-attrs="
+          {
+            class: 'h-auto w-full rounded-t-md',
+            style: mediaAspectRatio ? 'aspect-ratio: ' + mediaAspectRatio : undefined,
+            fetchpriority: mediaFetchPriority,
+            referrerpolicy: mediaReferrerPolicy
+          } as any
+        "
+        :loading="mediaLoading"
+        :preload="mediaPreload"
+        :sizes="postImageSizes"
+        :src="localSrc"
+        :width="mediaSrcWidthAttribute"
+        provider="imgproxy"
+        @error="onMediaError"
+        @load="onMediaLoad"
+      />
 
-        <NuxtImg
-          v-else
-          ref="mediaElement"
-          :alt="mediaAlt"
-          :decoding="mediaDecoding"
-          :fetchpriority="mediaFetchPriority"
-          :height="mediaSrcHeightAttribute"
-          :loading="mediaLoading"
-          :preload="mediaPreload"
-          :src="localSrc"
-          :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
-          :width="mediaSrcWidthAttribute"
-          class="h-auto w-full rounded-t-md"
-          :referrerpolicy="mediaReferrerPolicy"
-          @error="onMediaError"
-          @load="onMediaLoad"
-        />
-      </template>
-
-      <!-- Regular images for non-premium users -->
-      <template v-else>
-        <!-- SSR + first posts: imgproxy keeps crawler/LCP images optimized. -->
-        <NuxtPicture
-          v-if="wasCurrentPageSSR && postIndex < 8 && srcCandidateIndex === 0"
-          ref="mediaElement"
-          :alt="mediaAlt"
-          :decoding="mediaDecoding"
-          :height="mediaSrcHeightAttribute"
-          :img-attrs="
-            {
-              class: 'h-auto w-full rounded-t-md',
-              style: mediaAspectRatio ? 'aspect-ratio: ' + mediaAspectRatio : undefined,
-              fetchpriority: mediaFetchPriority,
-              referrerpolicy: mediaReferrerPolicy
-            } as any
-          "
-          :loading="mediaLoading"
-          :preload="mediaPreload"
-          :sizes="postImageSizes"
-          :src="localSrc"
-          :width="mediaSrcWidthAttribute"
-          provider="imgproxy"
-          @error="onMediaError"
-          @load="onMediaLoad"
-        />
-
-        <!-- Non-SSR / SPA navigation keeps the direct image path. -->
-        <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
-        <NuxtImg
-          v-else
-          ref="mediaElement"
-          :alt="mediaAlt"
-          :decoding="mediaDecoding"
-          :fetchpriority="mediaFetchPriority"
-          :height="mediaSrcHeightAttribute"
-          :loading="mediaLoading"
-          :preload="mediaPreload"
-          :src="localSrc"
-          :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
-          :width="mediaSrcWidthAttribute"
-          class="h-auto w-full rounded-t-md"
-          :referrerpolicy="mediaReferrerPolicy"
-          @error="onMediaError"
-          @load="onMediaLoad"
-        />
-      </template>
+      <NuxtImg
+        v-else
+        ref="mediaElement"
+        :alt="mediaAlt"
+        :decoding="mediaDecoding"
+        :fetchpriority="mediaFetchPriority"
+        :height="mediaSrcHeightAttribute"
+        :loading="mediaLoading"
+        :preload="mediaPreload"
+        :src="localSrc"
+        :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
+        :width="mediaSrcWidthAttribute"
+        class="h-auto w-full rounded-t-md"
+        :referrerpolicy="mediaReferrerPolicy"
+        @error="onMediaError"
+        @load="onMediaLoad"
+      />
     </div>
 
     <!-- Animated (GIF) -->

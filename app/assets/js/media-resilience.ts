@@ -64,12 +64,12 @@ export function cleanMediaUrl(url?: string | null): string | null {
     return null
   }
 
-  try {
-    const parsed = new URL(stripped)
-    return parsed.protocol === 'https:' || parsed.protocol === 'http:' ? parsed.href : null
-  } catch {
+  const parsed = URL.parse(stripped)
+  if (!parsed || (parsed.protocol !== 'https:' && parsed.protocol !== 'http:')) {
     return null
   }
+
+  return parsed.href
 }
 
 export type MediaReferrerPolicy = 'origin' | 'strict-origin-when-cross-origin' | 'no-referrer'
@@ -78,7 +78,7 @@ export type MediaReferrerPolicy = 'origin' | 'strict-origin-when-cross-origin' |
  * Determines the host-aware Referrer-Policy for media loading.
  *
  * Rules:
- * 1. e621 / e926 CDN (static1.e621.net, etc.): requires 'origin' per e621 CDN agreement.
+ * 1. e621 / e926 / e6ai CDN (static1.e621.net, etc.): requires 'origin' per e621 CDN agreement.
  * 2. First-party and internal endpoints (r34.app, akbal.dev, localhost, relative paths): 'strict-origin-when-cross-origin'.
  * 3. Third-party boorus (Danbooru, Gelbooru, Paheal, etc.) and fallback proxies (Photon, DuckDuckGo):
  *    'no-referrer' to bypass foreign referrer blocks / hotlinking 403s.
@@ -98,38 +98,28 @@ export function getMediaReferrerPolicy(rawUrl?: string | null): MediaReferrerPol
     return 'strict-origin-when-cross-origin'
   }
 
-  try {
-    const parsed = new URL(trimmed)
-    const hostname = parsed.hostname.toLowerCase()
-
-    if (
-      hostname === 'e621.net' ||
-      hostname.endsWith('.e621.net') ||
-      hostname === 'e926.net' ||
-      hostname.endsWith('.e926.net') ||
-      hostname === 'e6ai.net' ||
-      hostname.endsWith('.e6ai.net')
-    ) {
-      return 'origin'
-    }
-
-    if (
-      hostname === 'r34.app' ||
-      hostname.endsWith('.r34.app') ||
-      hostname === 'akbal.dev' ||
-      hostname.endsWith('.akbal.dev') ||
-      hostname === 'localhost' ||
-      hostname === '127.0.0.1' ||
-      hostname === 'metal-mac-mini' ||
-      hostname.startsWith('100.')
-    ) {
-      return 'strict-origin-when-cross-origin'
-    }
-
-    return 'no-referrer'
-  } catch {
+  const parsed = URL.parse(trimmed)
+  if (!parsed) {
     return 'no-referrer'
   }
+
+  const hostname = parsed.hostname.toLowerCase()
+
+  if (/(^|\.)(e621|e926|e6ai)\.net$/.test(hostname)) {
+    return 'origin'
+  }
+
+  if (
+    /(^|\.)(r34\.app|akbal\.dev)$/.test(hostname) ||
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    hostname === 'metal-mac-mini' ||
+    hostname.startsWith('100.')
+  ) {
+    return 'strict-origin-when-cross-origin'
+  }
+
+  return 'no-referrer'
 }
 
 /**
@@ -140,18 +130,20 @@ export function getMediaReferrerPolicy(rawUrl?: string | null): MediaReferrerPol
  * @returns A composite key of hostname and category, or null if invalid.
  */
 function getDomainKey(rawUrl: string, mediaType?: PostMediaType | string): string | null {
-  const cleanUrl = cleanMediaUrl(rawUrl)
-  if (!cleanUrl) {
+  if (!rawUrl) return null
+  const trimmed = rawUrl.trim()
+  if (!trimmed) return null
+
+  const stripped = trimmed.split('#')[0]
+  if (!stripped) return null
+
+  const parsed = URL.parse(stripped)
+  if (!parsed || (parsed.protocol !== 'https:' && parsed.protocol !== 'http:')) {
     return null
   }
 
-  try {
-    const parsed = new URL(cleanUrl)
-    const mediaCategory = mediaType === 'video' ? 'video' : 'image'
-    return `${parsed.hostname}:${mediaCategory}`
-  } catch {
-    return null
-  }
+  const mediaCategory = mediaType === 'video' ? 'video' : 'image'
+  return `${parsed.hostname}:${mediaCategory}`
 }
 
 /**
@@ -164,35 +156,20 @@ function getDomainKey(rawUrl: string, mediaType?: PostMediaType | string): strin
  * @returns The Photon CDN URL, or rawUrl if incompatible.
  */
 export function toPhotonUrl(rawUrl: string): string {
-  try {
-    const url = new URL(rawUrl)
-    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
-      return rawUrl
-    }
-    // Photon drops non-standard ports and does not forward origin query parameters.
-    // If rawUrl has a port or query string, return rawUrl so it is skipped.
-    if (url.port || url.search) {
-      return rawUrl
-    }
-
-    const hostAndPath = `${url.hostname}${url.pathname}`
-    const params = new URLSearchParams()
-
-    if (url.protocol === 'https:') {
-      params.set('ssl', '1')
-    }
-
-    let hash = 0
-    for (let i = 0; i < hostAndPath.length; i += 1) {
-      hash = (hash * 31 + hostAndPath.charCodeAt(i)) & 0xffffffff
-    }
-    const shard = Math.abs(hash) % 4
-
-    const query = params.toString()
-    return `https://i${shard}.wp.com/${hostAndPath}${query ? `?${query}` : ''}`
-  } catch {
+  const url = URL.parse(rawUrl)
+  if (!url || (url.protocol !== 'http:' && url.protocol !== 'https:') || url.port || url.search) {
     return rawUrl
   }
+
+  const hostAndPath = `${url.hostname}${url.pathname}`
+  let hash = 0
+  for (let i = 0; i < hostAndPath.length; i += 1) {
+    hash = (hash * 31 + hostAndPath.charCodeAt(i)) & 0xffffffff
+  }
+  const shard = Math.abs(hash) % 4
+  const sslParam = url.protocol === 'https:' ? '?ssl=1' : ''
+
+  return `https://i${shard}.wp.com/${hostAndPath}${sslParam}`
 }
 
 const SENSITIVE_QUERY_PATTERNS = [
@@ -216,22 +193,21 @@ const SENSITIVE_QUERY_PATTERNS = [
  * @returns True if credentials or signature tokens are present.
  */
 export function hasSensitiveCredentialsOrTokens(rawUrl: string): boolean {
-  try {
-    const url = new URL(rawUrl)
-    if (url.username || url.password) {
-      return true
-    }
-
-    for (const key of url.searchParams.keys()) {
-      if (SENSITIVE_QUERY_PATTERNS.some((pattern) => pattern.test(key))) {
-        return true
-      }
-    }
-
-    return false
-  } catch {
+  const url = URL.parse(rawUrl)
+  if (!url) {
     return false
   }
+  if (url.username || url.password) {
+    return true
+  }
+
+  for (const key of url.searchParams.keys()) {
+    if (SENSITIVE_QUERY_PATTERNS.some((pattern) => pattern.test(key))) {
+      return true
+    }
+  }
+
+  return false
 }
 
 /**
@@ -242,20 +218,11 @@ export function hasSensitiveCredentialsOrTokens(rawUrl: string): boolean {
  * @returns The DuckDuckGo image proxy URL, or rawUrl if invalid or credential-bearing.
  */
 export function toDdgUrl(rawUrl: string): string {
-  try {
-    if (hasSensitiveCredentialsOrTokens(rawUrl)) {
-      return rawUrl
-    }
-
-    const params = new URLSearchParams({
-      u: rawUrl,
-      f: '1',
-      nofb: '1'
-    })
-    return `https://external-content.duckduckgo.com/iu/?${params.toString()}`
-  } catch {
+  if (hasSensitiveCredentialsOrTokens(rawUrl)) {
     return rawUrl
   }
+
+  return `https://external-content.duckduckgo.com/iu/?u=${encodeURIComponent(rawUrl)}&f=1&nofb=1`
 }
 
 export interface CandidateSourceOptions {
@@ -277,18 +244,6 @@ export function getCandidateSources(options: CandidateSourceOptions): string[] {
 
   const candidates: string[] = [cleanUrl]
 
-  if (mediaType === 'video') {
-    if (isPremium) {
-      try {
-        candidates.push(proxyUrl(cleanUrl))
-      } catch {
-        // Ignored if invalid
-      }
-    }
-
-    return Array.from(new Set(candidates))
-  }
-
   // Premium users get a dedicated media branch: proxied and automatically enhanced via imgproxy,
   // falling back to the dedicated premium backend proxy — never degraded through public third-party proxies.
   if (isPremium) {
@@ -299,6 +254,10 @@ export function getCandidateSources(options: CandidateSourceOptions): string[] {
     }
 
     return Array.from(new Set(candidates))
+  }
+
+  if (mediaType === 'video') {
+    return candidates
   }
 
   // Free/non-premium users: free fallback chain across public image CDNs
