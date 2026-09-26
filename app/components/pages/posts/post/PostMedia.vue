@@ -8,10 +8,8 @@
     getMediaReferrerPolicy,
     isDomainDirectBlocked,
     onDomainHealthChange,
-    pauseVideoPlayback,
     recordDirectFailure,
     recordDirectSuccess,
-    registerVideoPlayback,
     resetDomainBreaker,
     type MediaReferrerPolicy
   } from '~/assets/js/media-resilience'
@@ -279,32 +277,8 @@
   const isAnimatedMediaLoading = ref(false)
   const isAnimatedMediaPlaying = ref(false)
   const mediaHasLoaded = ref(false)
-  let unregisterVideo: (() => void) | null = null
-
-  function updateVideoRegistration() {
-    if (unregisterVideo) {
-      unregisterVideo()
-      unregisterVideo = null
-    }
-
-    if (isVideo.value) {
-      const videoElement = getVideoElement()
-      if (videoElement) {
-        unregisterVideo = registerVideoPlayback(videoElement, () => videoPlayer)
-      }
-    }
-  }
-
-  watch(
-    () => [isVideo.value, localSrc.value],
-    () => {
-      nextTick(updateVideoRegistration)
-    }
-  )
 
   onMounted(() => {
-    updateVideoRegistration()
-
     const resolvedMediaElement = getResolvedMediaElement()
 
     if (!resolvedMediaElement) {
@@ -318,11 +292,6 @@
 
   onBeforeUnmount(() => {
     isUnmounted = true
-
-    if (unregisterVideo) {
-      unregisterVideo()
-      unregisterVideo = null
-    }
 
     if (unsubscribeHealthChange) {
       unsubscribeHealthChange()
@@ -363,10 +332,23 @@
 
     //
     else if (isVideo.value) {
-      pauseVideoPlayback(getVideoElement(), videoPlayer)
+      getVideoElement()?.pause()
       destroyVideoPlayer()
     }
   })
+
+  function onVideoPlay(event: Event) {
+    const current = (event.currentTarget || event.target) as HTMLVideoElement | null
+    if (!current) {
+      return
+    }
+
+    document.querySelectorAll('video').forEach((v) => {
+      if (v !== current && !v.paused) {
+        v.pause?.()
+      }
+    })
+  }
 
   async function createVideoPlayer() {
     const videoElement = getVideoElement()
@@ -746,8 +728,11 @@
       return
     }
 
-    if (!entry.isIntersecting) {
-      pauseVideoPlayback(getVideoElement(), videoPlayer)
+    getVideoElement()?.pause()
+    try {
+      videoPlayer?.pause()
+    } catch {
+      // Ignore if player is torn down
     }
   }
 
@@ -1213,6 +1198,7 @@
         playsinline
         preload="none"
         :referrerpolicy="videoReferrerPolicy"
+        @play="onVideoPlay"
         @error="onMediaError"
         @loadeddata="onMediaLoad"
         @focus="initializeVideoPlayer"
