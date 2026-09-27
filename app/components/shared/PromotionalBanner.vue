@@ -1,13 +1,13 @@
 <script lang="ts" setup>
   import { CheckIcon, DocumentDuplicateIcon, XMarkIcon } from '@heroicons/vue/20/solid'
-  import { useClipboard, useNow } from '@vueuse/core'
+  import { useClipboard, useIntervalFn, useNow } from '@vueuse/core'
 
   const { activePromotion, shouldShow, dismiss } = useActivePromotion()
   const localePath = useLocalePath()
   const { t } = useI18n()
 
   // Use VueUse's reactive current time (updates every second)
-  const now = useNow({ interval: 1000 })
+  const now = useNow({ scheduler: (cb) => useIntervalFn(cb, 1000) })
 
   /**
    * Convert MonthDay to full Date object for the current year
