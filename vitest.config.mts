@@ -17,7 +17,7 @@ export default defineConfig({
     hookTimeout: 180000,
     exclude: [...configDefaults.exclude, 'API/**', 'R34-premium-ab-test/**', 'Universal-Booru-Wrapper/**'],
     typecheck: {
-      include: ['app/types/**/*.d.ts', 'test/**/*.test.ts'],
+      include: ['test/**/*.test.ts'],
       tsconfig: './.nuxt/tsconfig.json'
     }
   }
