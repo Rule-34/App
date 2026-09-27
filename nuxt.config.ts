@@ -116,12 +116,6 @@ export default defineNuxtConfig({
    * @see https://nuxt.com/docs/guide/concepts/rendering#route-rules
    */
   routeRules: {
-    // Redirect public disabled Boorus to / to not lose SEO
-    // @see useBooruList.ts
-    // '/posts/gelbooru.com': {
-    //   redirect: '/posts/rule34.xxx'
-    // },
-
     ...pageRouteRules,
 
     // Locale-prefixed variants (all non-default locales from config/i18n) — with prefix_except_default,

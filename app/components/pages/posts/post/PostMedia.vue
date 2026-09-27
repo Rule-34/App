@@ -22,7 +22,7 @@
   const { wasCurrentPageSSR } = useSSRDetection()
   const { schedule: scheduleIdleTask } = useIdleTask()
 
-  export interface PostMediaProps {
+  interface PostMediaProps {
     postIndex: number
 
     mediaSrc: IPost['high_res_file']['url']

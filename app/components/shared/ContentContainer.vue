@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { isExternalHref } from '~/composables/locale'
 
-  export interface PageTextProps {
+  interface PageTextProps {
     as?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span'
 
     title: string

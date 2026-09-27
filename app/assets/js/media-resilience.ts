@@ -1,7 +1,7 @@
 import type { PostMediaType } from './post.dto'
 import { proxyUrl } from './proxy'
 
-export const BREAKER_THRESHOLD = 3
+const BREAKER_THRESHOLD = 3
 export const BREAKER_COOLDOWN_MS = 15 * 60 * 1000 // 15 minutes
 
 interface DomainHealthEntry {
@@ -235,7 +235,7 @@ export function toDdgUrl(rawUrl: string): string {
   return `https://external-content.duckduckgo.com/iu/?u=${encodeURIComponent(rawUrl)}&f=1&nofb=1`
 }
 
-export interface CandidateSourceOptions {
+interface CandidateSourceOptions {
   rawUrl: string
   mediaType: PostMediaType
   isPremium: boolean

@@ -50,37 +50,37 @@ export interface ISimplePocketbasePost {
   original_id: number
 }
 
-export class PocketbasePostDTO implements IPocketbasePost {
-  id: IPocketbasePost['id'] = undefined
-  user_id: IPocketbasePost['user_id'] = ''
-  created: IPocketbasePost['created'] = undefined
-  updated: IPocketbasePost['updated'] = undefined
-  original_id: IPocketbasePost['original_id'] = 0
-  original_domain: IPocketbasePost['original_domain'] = ''
-  high_res_file: IPocketbasePost['high_res_file'] = ''
-  high_res_file_width: IPocketbasePost['high_res_file_width'] = undefined
-  high_res_file_height: IPocketbasePost['high_res_file_height'] = undefined
-  low_res_file: IPocketbasePost['low_res_file'] = undefined
-  low_res_file_width: IPocketbasePost['low_res_file_width'] = undefined
-  low_res_file_height: IPocketbasePost['low_res_file_height'] = undefined
-  preview_file: IPocketbasePost['preview_file'] = ''
-  preview_file_width: IPocketbasePost['preview_file_width'] = undefined
-  preview_file_height: IPocketbasePost['preview_file_height'] = undefined
-  tags_artist: IPocketbasePost['tags_artist'] = []
-  tags_character: IPocketbasePost['tags_character'] = []
-  tags_copyright: IPocketbasePost['tags_copyright'] = []
-  tags_general: IPocketbasePost['tags_general'] = []
-  tags_meta: IPocketbasePost['tags_meta'] = []
-  tags: IPocketbasePost['tags'] = []
-  score: IPocketbasePost['score'] = undefined
-  sources: IPocketbasePost['sources'] = []
-  rating: IPocketbasePost['rating'] = undefined
-  media_type: IPocketbasePost['media_type'] = undefined
-}
+export class PocketbasePost implements IPocketbasePost {
+  id?: string = undefined
+  user_id: string = ''
+  created?: string = undefined
+  updated?: string = undefined
+  original_id: number = 0
+  original_domain: string = ''
+  high_res_file: string = ''
+  high_res_file_width?: number = undefined
+  high_res_file_height?: number = undefined
+  low_res_file?: string = undefined
+  low_res_file_width?: number = undefined
+  low_res_file_height?: number = undefined
+  preview_file: string = ''
+  preview_file_width?: number = undefined
+  preview_file_height?: number = undefined
+  tags_artist?: string[] = []
+  tags_character?: string[] = []
+  tags_copyright?: string[] = []
+  tags_general?: string[] = []
+  tags_meta?: string[] = []
+  tags?: {
+    name: string
+    type: 'artist' | 'character' | 'copyright' | 'general' | 'meta'
+  }[] = []
+  score?: number = undefined
+  sources: string[] = []
+  rating?: string = undefined
+  media_type?: 'image' | 'animated' | 'video' | 'unknown' = undefined
 
-export class PocketbasePost extends PocketbasePostDTO {
   constructor(dto: IPocketbasePost) {
-    super()
     Object.assign(this, dto)
   }
 

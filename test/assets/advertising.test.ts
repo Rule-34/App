@@ -1,9 +1,56 @@
+import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import {
   createPopunderDebugReport,
   createPopunderDebugVerdict
 } from '../../app/assets/js/advertising/popunder-debug-report'
-import { parsePopunderProviderMode } from '../../app/composables/useAdvertisements'
+import { createPushAdDebugReport, createPushAdDebugVerdict } from '../../app/assets/js/advertising/push-ad-debug-report'
+import {
+  parsePopunderProviderMode,
+  parsePushAdProviderMode,
+  popunderProviders,
+  pushAdProviders
+} from '../../app/composables/useAdvertisements'
+
+const source = (path: string) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8')
+
+describe('monetization measurement', () => {
+  it('tracks revenue actions without high-volume or acquisition-overwriting signals', () => {
+    const promotedContent = source('app/components/pages/posts/PromotedContent.vue')
+    const aiReferral = source('app/components/pages/posts/post/PostChatWithAi.vue')
+    const premium = source('app/pages/premium/index.vue')
+    const premiumOriginal = source('app/components/pages/premium/PremiumLandingOriginal.vue')
+    const premiumOffer = source('app/components/pages/premium/PremiumOfferLanding.vue')
+    const experiments = source('app/composables/useExperiments.ts')
+    const matomo = source('app/plugins/040.matomo.client.ts')
+
+    expect(source('app/assets/js/promotions.ts')).not.toContain('utm_source=internal')
+    expect(promotedContent).toContain("'Promoted Content'")
+    expect(promotedContent).not.toContain('sessionStorage')
+    expect(promotedContent).not.toContain('vIntersectionObserver')
+    expect(promotedContent).not.toContain("'Impression'")
+    expect(aiReferral).not.toContain('trackEvent')
+    expect(premiumOriginal).not.toContain("'Checkout Outbound'")
+    expect(premiumOriginal).toContain("['trackEvent', 'Premium', 'Plan Click', interval.key]")
+    expect(premiumOffer).toContain("['trackEvent', 'Premium', 'Plan Click', interval.key]")
+    expect(premiumOriginal).toContain('id="pricing"')
+    expect(premium).toContain('<LazyPremiumLandingOriginal')
+    expect(premium).toContain('<LazyPremiumOfferLanding')
+    expect(premiumOffer).toContain('checkoutPrice: 59.64')
+    expect(premiumOffer).toContain('selectedPaymentInterval.checkoutPrice')
+    expect(experiments).not.toContain('sessionStorage')
+    expect(experiments).toContain("'original' | 'OfferFirst' | 'YearlyFocus'")
+    expect(matomo).toContain("['enableLinkTracking']")
+    expect(matomo.match(/\['enableLinkTracking'\]/g)).toHaveLength(1)
+    expect(matomo).toContain('onNuxtReady(() =>')
+    expect(matomo).toContain('trackPageView(_paq, router.currentRoute.value.fullPath, premiumLandingVariation)')
+    expect(matomo).toContain("'AbTesting::create'")
+    expect(matomo.indexOf('loadAbTesting(_paq, premiumLandingVariation)')).toBeLessThan(
+      matomo.indexOf("['trackPageView']")
+    )
+    expect(source('app/components/pages/home/Newsletter.vue')).not.toContain("'Newsletter', 'Submit'")
+  })
+})
 
 describe('popunder provider mode parsing', () => {
   it('accepts supported providers and falls back to random', () => {
@@ -192,6 +239,139 @@ describe('createPopunderDebugReport', () => {
       allowedAttemptCount: 1,
       duplicateAttemptCount: 0,
       destructiveRedirectEventCount: 0,
+      isAbusive: false
+    })
+    expect(report.events).toHaveLength(1)
+  })
+})
+
+describe('popunder provider weights', () => {
+  it('sums to 1.0', () => {
+    const total = popunderProviders.reduce((sum, provider) => sum + provider.weight, 0)
+    expect(total).toBeCloseTo(1, 5)
+  })
+})
+
+describe('push ad provider weights', () => {
+  it('sums to 1.0', () => {
+    const total = pushAdProviders.reduce((sum, provider) => sum + provider.weight, 0)
+    expect(total).toBeCloseTo(1, 5)
+  })
+})
+
+describe('push ad provider mode parsing', () => {
+  it('accepts supported providers and falls back to random', () => {
+    expect(parsePushAdProviderMode('evadav')).toBe('evadav')
+    expect(parsePushAdProviderMode('admaven')).toBe('admaven')
+    expect(parsePushAdProviderMode('adsterra')).toBe('adsterra')
+    expect(parsePushAdProviderMode('random')).toBe('random')
+    expect(parsePushAdProviderMode('unknown')).toBe('random')
+    expect(parsePushAdProviderMode(['evadav'])).toBe('random')
+  })
+})
+
+describe('createPushAdDebugVerdict', () => {
+  it('returns clean verdict when no signals exist', () => {
+    expect(
+      createPushAdDebugVerdict([{ type: 'test-click', elapsedMs: 1000, timestamp: '2026-07-09T00:00:01.000Z' }])
+    ).toEqual({
+      permissionPromptCount: 0,
+      popupAttemptCount: 0,
+      destructiveRedirectEventCount: 0,
+      domMutationCount: 0,
+      scriptErrorCount: 0,
+      hasFill: false,
+      isAbusive: false
+    })
+  })
+
+  it('counts notification permission prompts as fill', () => {
+    expect(
+      createPushAdDebugVerdict([
+        {
+          type: 'notification-permission-request',
+          elapsedMs: 1000,
+          timestamp: '2026-07-09T00:00:01.000Z',
+          permission: 'default'
+        }
+      ])
+    ).toEqual({
+      permissionPromptCount: 1,
+      popupAttemptCount: 0,
+      destructiveRedirectEventCount: 0,
+      domMutationCount: 0,
+      scriptErrorCount: 0,
+      hasFill: true,
+      isAbusive: false
+    })
+  })
+
+  it('marks page exits after clicks without popup as abusive destructive redirects', () => {
+    expect(
+      createPushAdDebugVerdict([
+        { type: 'test-click', elapsedMs: 1000, timestamp: '2026-07-09T00:00:01.000Z' },
+        { type: 'beforeunload', elapsedMs: 6000, timestamp: '2026-07-09T00:00:06.000Z' }
+      ])
+    ).toEqual({
+      permissionPromptCount: 0,
+      popupAttemptCount: 0,
+      destructiveRedirectEventCount: 1,
+      domMutationCount: 0,
+      scriptErrorCount: 0,
+      hasFill: true,
+      isAbusive: true
+    })
+  })
+
+  it('counts DOM mutations as in-page fill', () => {
+    expect(
+      createPushAdDebugVerdict([
+        {
+          type: 'dom-mutation',
+          elapsedMs: 1000,
+          timestamp: '2026-07-09T00:00:01.000Z',
+          label: 'iframe',
+          message: 'added 1 iframe'
+        }
+      ])
+    ).toEqual({
+      permissionPromptCount: 0,
+      popupAttemptCount: 0,
+      destructiveRedirectEventCount: 0,
+      domMutationCount: 1,
+      scriptErrorCount: 0,
+      hasFill: true,
+      isAbusive: false
+    })
+  })
+})
+
+describe('createPushAdDebugReport', () => {
+  it('returns formatted JSON with provider, script, and verdict metadata', () => {
+    const report = JSON.parse(
+      createPushAdDebugReport({
+        providerMode: 'evadav',
+        providerLabel: 'EvaDav',
+        scriptUrl: 'https://example.com/push.js',
+        status: 'armed',
+        startedAt: '2026-07-09T00:00:00.000Z',
+        currentUrl: 'https://r34.app/__ad-debug/push?provider=evadav',
+        referrer: '',
+        clickCount: 1,
+        events: [{ type: 'script-loaded', elapsedMs: 1000, timestamp: '2026-07-09T00:00:01.000Z' }]
+      })
+    )
+
+    expect(report.providerMode).toBe('evadav')
+    expect(report.providerLabel).toBe('EvaDav')
+    expect(report.scriptUrl).toBe('https://example.com/push.js')
+    expect(report.verdict).toEqual({
+      permissionPromptCount: 0,
+      popupAttemptCount: 0,
+      destructiveRedirectEventCount: 0,
+      domMutationCount: 0,
+      scriptErrorCount: 0,
+      hasFill: false,
       isAbusive: false
     })
     expect(report.events).toHaveLength(1)
