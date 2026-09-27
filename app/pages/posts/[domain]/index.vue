@@ -951,7 +951,21 @@
       ]
     })
   ])
-  useSchemaOrg(firstPostsPageAsSchema)
+  /**
+   * The first posts page is resolved through TanStack Vue Query's suspense, so on the server it
+   * is still empty while setup runs and `useSchemaOrg` would register an empty node list.
+   * Server: register the resolved nodes from the prefetch hook. Client: keep passing the
+   * reactive nodes, which unhead resolves lazily.
+   */
+  if (import.meta.server) {
+    onServerPrefetch(async () => {
+      await suspense()
+
+      nuxtApp.runWithContext(() => useSchemaOrg(firstPostsPageAsSchema.value))
+    })
+  } else {
+    useSchemaOrg(firstPostsPageAsSchema)
+  }
 
   definePageMeta({
     middleware: [
