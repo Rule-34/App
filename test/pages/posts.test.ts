@@ -81,7 +81,7 @@ describe('/', async () => {
       const headerElement = page.getByRole('heading', { name: 'Posts', exact: true })
 
       // Assert
-      await headerElement.isVisible()
+      expect(await headerElement.isVisible()).toBe(true)
     }, 30000)
 
     it('does not emit post page hydration or effect-scope warnings', async () => {
@@ -161,7 +161,7 @@ describe('/', async () => {
       const titleElement = page.getByRole('heading', { name: /no results/i })
 
       // Assert
-      await titleElement.isVisible()
+      expect(await titleElement.isVisible()).toBe(true)
     }, 30000)
 
     it('renders upstream rate-limit 502 error with retry button and without bot verification', async () => {
