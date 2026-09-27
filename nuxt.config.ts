@@ -263,8 +263,6 @@ export default defineNuxtConfig({
 
   /** @type {import('@sentry/nuxt/module').ModuleOptions} */
   sentry: {
-    // Ensure server-side Sentry is actually preloaded without requiring `node --import ...`
-    autoInjectServerSentry: 'experimental_dynamic-import',
     org: process.env.SENTRY_ORG,
     project: process.env.SENTRY_PROJECT,
     authToken: process.env.SENTRY_AUTH_TOKEN,
