@@ -13,13 +13,12 @@ type SchemaOrgNode = {
 }
 
 function extractSchemaOrgGraph(html: string): SchemaOrgNode[] {
-  const scriptMatch = html.match(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)
+  const scripts = [...html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)]
 
-  if (!scriptMatch?.[1]) {
-    throw new Error('No schema.org graph script found in the server-rendered response')
-  }
+  // All nodes must merge into a single graph; a second ld+json block means conflicting registrations.
+  expect(scripts).toHaveLength(1)
 
-  const parsed = JSON.parse(scriptMatch[1]) as { '@graph'?: SchemaOrgNode[] }
+  const parsed = JSON.parse(scripts[0]?.[1] ?? '') as { '@graph'?: SchemaOrgNode[] }
 
   return parsed['@graph'] ?? []
 }

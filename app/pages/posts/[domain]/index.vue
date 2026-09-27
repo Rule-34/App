@@ -954,8 +954,8 @@
   /**
    * The first posts page is resolved through TanStack Vue Query's suspense, so on the server it
    * is still empty while setup runs and `useSchemaOrg` would register an empty node list.
-   * Server: register the resolved nodes from the prefetch hook. Client: keep passing the
-   * reactive nodes, which unhead resolves lazily.
+   * Server: register the resolved nodes from the prefetch hook. Client: nuxt-schema-org is
+   * server-only in production SSR builds, so this registration only takes effect in dev.
    */
   if (import.meta.server) {
     onServerPrefetch(async () => {

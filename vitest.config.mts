@@ -17,6 +17,7 @@ export default defineConfig({
     hookTimeout: 180000,
     exclude: [...configDefaults.exclude, 'API/**', 'R34-premium-ab-test/**', 'Universal-Booru-Wrapper/**'],
     typecheck: {
+      // Vitest 5 treats every included file as a test suite; app types are covered by `nuxt typecheck`.
       include: ['test/**/*.test.ts'],
       tsconfig: './.nuxt/tsconfig.json'
     }
