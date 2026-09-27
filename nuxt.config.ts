@@ -34,8 +34,8 @@ const externalApiOrigin = getExternalOrigin(process.env.NUXT_PUBLIC_API_URL)
 const resourceHints = [
   ...(externalApiOrigin
     ? [
-        { rel: 'preconnect', href: externalApiOrigin },
-        { rel: 'dns-prefetch', href: externalApiOrigin }
+        { rel: 'preconnect' as const, href: externalApiOrigin },
+        { rel: 'dns-prefetch' as const, href: externalApiOrigin }
       ]
     : [])
 ]

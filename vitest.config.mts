@@ -7,8 +7,8 @@ const maxWorkers = configuredMaxWorkers > 0 ? configuredMaxWorkers : 2
 export default defineConfig({
   resolve: {
     alias: {
-      '~': path.resolve(__dirname, './app'),
-      '~~': path.resolve(__dirname, './')
+      '~': path.resolve(import.meta.dirname, './app'),
+      '~~': path.resolve(import.meta.dirname, './')
     }
   },
   test: {
