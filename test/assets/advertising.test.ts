@@ -45,9 +45,12 @@ describe('monetization measurement', () => {
     expect(matomo).toContain('onNuxtReady(() =>')
     expect(matomo).toContain('trackPageView(_paq, router.currentRoute.value.fullPath, premiumLandingVariation)')
     expect(matomo).toContain("'AbTesting::create'")
-    expect(matomo.indexOf('loadAbTesting(_paq, premiumLandingVariation)')).toBeLessThan(
-      matomo.indexOf("['trackPageView']")
-    )
+    const loadAbTestingIndex = matomo.indexOf('loadAbTesting(_paq, premiumLandingVariation)')
+    const trackPageViewIndex = matomo.indexOf("['trackPageView']")
+
+    expect(loadAbTestingIndex).toBeGreaterThan(-1)
+    expect(trackPageViewIndex).toBeGreaterThan(-1)
+    expect(loadAbTestingIndex).toBeLessThan(trackPageViewIndex)
     expect(source('app/components/pages/home/Newsletter.vue')).not.toContain("'Newsletter', 'Submit'")
   })
 })
