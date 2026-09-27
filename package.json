@@ -44,7 +44,7 @@
     "@nuxt/image": "^2.1.0",
     "@nuxtjs/i18n": "^10.6.0",
     "@nuxtjs/sitemap": "^8.5.1",
-    "@sentry/nuxt": "^10.64.0",
+    "@sentry/nuxt": "^11.0.0",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/vue-query": "^5.104.0",
     "@tanstack/vue-virtual": "^3.13.39",

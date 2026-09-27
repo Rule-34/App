@@ -265,17 +265,13 @@ export default defineNuxtConfig({
   sentry: {
     // Ensure server-side Sentry is actually preloaded without requiring `node --import ...`
     autoInjectServerSentry: 'experimental_dynamic-import',
-    sourceMapsUploadOptions: {
-      enabled: shouldUploadSentrySourceMaps,
-      org: process.env.SENTRY_ORG,
-      project: process.env.SENTRY_PROJECT,
-      authToken: process.env.SENTRY_AUTH_TOKEN,
-
-      telemetry: false
-    },
-
-    unstable_sentryBundlerPluginOptions: {
-      applicationKey: project.sentry.applicationKey
+    org: process.env.SENTRY_ORG,
+    project: process.env.SENTRY_PROJECT,
+    authToken: process.env.SENTRY_AUTH_TOKEN,
+    telemetry: false,
+    applicationKey: project.sentry.applicationKey,
+    sourcemaps: {
+      disable: !shouldUploadSentrySourceMaps
     }
   },
 
