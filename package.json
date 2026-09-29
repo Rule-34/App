@@ -67,6 +67,7 @@
     "sortablejs": "^1.15.7",
     "tailwindcss": "^4.3.3",
     "ufo": "^1.6.4",
+    "undici": "7.29.1",
     "vue-sonner": "^2.0.9"
   },
   "devDependencies": {
