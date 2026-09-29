@@ -257,7 +257,7 @@
 
     return [
       {
-        rel: 'preload',
+        rel: 'preload' as const,
         as: 'image' as const,
         href: encodeURI(localPosterSrc.value),
         fetchpriority: 'high' as const

@@ -34,8 +34,8 @@ const externalApiOrigin = getExternalOrigin(process.env.NUXT_PUBLIC_API_URL)
 const resourceHints = [
   ...(externalApiOrigin
     ? [
-        { rel: 'preconnect', href: externalApiOrigin },
-        { rel: 'dns-prefetch', href: externalApiOrigin }
+        { rel: 'preconnect' as const, href: externalApiOrigin },
+        { rel: 'dns-prefetch' as const, href: externalApiOrigin }
       ]
     : [])
 ]
@@ -263,19 +263,13 @@ export default defineNuxtConfig({
 
   /** @type {import('@sentry/nuxt/module').ModuleOptions} */
   sentry: {
-    // Ensure server-side Sentry is actually preloaded without requiring `node --import ...`
-    autoInjectServerSentry: 'experimental_dynamic-import',
-    sourceMapsUploadOptions: {
-      enabled: shouldUploadSentrySourceMaps,
-      org: process.env.SENTRY_ORG,
-      project: process.env.SENTRY_PROJECT,
-      authToken: process.env.SENTRY_AUTH_TOKEN,
-
-      telemetry: false
-    },
-
-    unstable_sentryBundlerPluginOptions: {
-      applicationKey: project.sentry.applicationKey
+    org: process.env.SENTRY_ORG,
+    project: process.env.SENTRY_PROJECT,
+    authToken: process.env.SENTRY_AUTH_TOKEN,
+    telemetry: false,
+    applicationKey: project.sentry.applicationKey,
+    sourcemaps: {
+      disable: !shouldUploadSentrySourceMaps
     }
   },
 
