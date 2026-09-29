@@ -50,7 +50,9 @@
     "featurePromotion": "Özellik tanıtımı",
     "favicon": "Site simgesi",
     "page": "Sayfa",
-    "pageNumber": "Sayfa {page}"
+    "pageNumber": "Sayfa {page}",
+    "visitWebsite": "{domain} sitesini ziyaret et",
+    "visitOriginalWebsite": "Orijinal siteyi ziyaret et"
   },
   "seo": {
     "title": "Rule 34 porno videoları, GIF'ler ve resimler R34.app adresinde",
@@ -427,7 +429,7 @@
     "download": "İndir",
     "tryAgain": "Tekrar deneyelim mi?",
     "getPremium": "Premium'u Alın",
-    "toBypassBlocks": "web sitesi engellemelerini aşmak için",
+    "toBypassBlocks": "web sitesi engellemelerini otomatik olarak aşmak için",
     "loadingMedia": "Medya yükleniyor…",
     "play": "Oyna",
     "adText": "Saatte yalnızca bir reklam. Premium ile bir daha asla reklam görmeyin!",
@@ -436,7 +438,9 @@
     "postAlt": "Gönderi #{id}",
     "postDescription": "{mediaType} #{id}, {domain}'den {score} puanıyla, {rating} derecelendirmesiyle, {tags} ile etiketlendi",
     "shareFoundOn": "{name} üzerinde bulundu: {url}",
-    "sharePostTitle": "{domain} adresinden #{id} yayınlayın"
+    "sharePostTitle": "{domain} adresinden #{id} yayınlayın",
+    "playInSandbox": "Korumalı alanda oynat",
+    "hostBlocksDirectAccess": "Bu ana bilgisayar, web sitesi dışından doğrudan erişimi engeller."
   },
   "source": {
     "postSource": "Gönderi kaynağı",

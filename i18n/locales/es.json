@@ -50,7 +50,9 @@
     "featurePromotion": "Promoción de función",
     "favicon": "Favicon",
     "page": "Página",
-    "pageNumber": "Página {page}"
+    "pageNumber": "Página {page}",
+    "visitWebsite": "Visitar {domain}",
+    "visitOriginalWebsite": "Visitar sitio original"
   },
   "seo": {
     "title": "Videos, GIFs e imágenes Rule 34 en R34.app",
@@ -427,7 +429,7 @@
     "download": "Descargar",
     "tryAgain": "¿Intentar de nuevo?",
     "getPremium": "Obtener Premium",
-    "toBypassBlocks": "para evitar bloqueos del sitio",
+    "toBypassBlocks": "para evitar bloqueos del sitio automáticamente",
     "loadingMedia": "Cargando medios…",
     "play": "Reproducir",
     "adText": "Solo un anuncio por hora. ¡Nunca más veas anuncios con Premium!",
@@ -436,7 +438,9 @@
     "postAlt": "Publicación #{id}",
     "postDescription": "{mediaType} #{id} de {domain} con una puntuación de {score}, clasificación {rating}, etiquetado con {tags}",
     "shareFoundOn": "Encontrado en {name}: {url}",
-    "sharePostTitle": "Publicación #{id} de {domain}"
+    "sharePostTitle": "Publicación #{id} de {domain}",
+    "playInSandbox": "Reproducir en sandbox",
+    "hostBlocksDirectAccess": "Este sitio bloquea el acceso directo fuera de su web."
   },
   "source": {
     "postSource": "Fuente de la publicación",

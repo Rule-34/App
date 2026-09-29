@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { Bars3BottomRightIcon, EyeIcon, MagnifyingGlassIcon, PhotoIcon, StarIcon } from '@heroicons/vue/24/outline'
   import { ArrowPathIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
+  import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/20/solid'
   import { useInfiniteQuery } from '@tanstack/vue-query'
   import type { QueryFunctionContext } from '@tanstack/vue-query'
   import { useWindowVirtualizer } from '@tanstack/vue-virtual'
@@ -10,7 +11,7 @@
   import { postHasBlockedTag } from '~/assets/js/post-blocklist'
   import Tag, { toggleSelectedTag } from '~/assets/js/tag.dto'
   import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-  import { isRenderablePost, type IPostPage, type IRenderablePost } from '~/assets/js/post.dto'
+  import { isRenderablePost, normalizePostPage, type IPostPage, type IRenderablePost } from '~/assets/js/post.dto'
   import { generatePostsRoute, getFilterQueryValue, getSingleQueryValue } from '~/assets/js/RouterHelper'
   import { useTagTitle } from '~/composables/useTagTitle'
   import { PremiumCloudRepository, type PremiumCloudPocketBaseClient } from '~/repositories/PremiumCloudRepository'
@@ -348,7 +349,7 @@
   }: QueryFunctionContext<readonly unknown[], number>): Promise<IPostPageFromPocketBase> {
     const page = pageParam
 
-    return repository.value.loadSavedPostsPage({
+    const pageData = await repository.value.loadSavedPostsPage({
       page,
       perPage: postsPerPage.value,
       tags: selectedTags.value.map((selectedTag) => selectedTag.name),
@@ -359,6 +360,8 @@
         sort: selectedFilters.value.sort
       }
     })
+
+    return normalizePostPage(pageData)
   }
 
   const {
@@ -697,12 +700,26 @@
 
   <!-- Container -->
   <main class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
-    <section class="mb-4">
+    <section class="mb-4 flex flex-wrap items-center gap-2">
       <DomainSelector
         :boorus="booruList"
         :model-value="savedPostsBooru"
         @update:model-value="onDomainChange"
       />
+
+      <a
+        :href="`https://${savedPostsBooru.domain}`"
+        target="_blank"
+        rel="noopener noreferrer nofollow"
+        class="text-base-content-muted rounded-md p-1.5 hover:hover-bg-util hover:text-base-content-highlight focus-visible:focus-outline-util"
+        :aria-label="$t('common.visitWebsite', { domain: savedPostsBooru.domain })"
+        :title="$t('common.visitWebsite', { domain: savedPostsBooru.domain })"
+      >
+        <ArrowTopRightOnSquareIcon
+          aria-hidden="true"
+          class="h-4 w-4"
+        />
+      </a>
 
       <!-- TODO: Move filters here -->
     </section>

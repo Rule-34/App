@@ -33,9 +33,21 @@ export const debugBrowserOptions: TestOptions['browserOptions'] = {
   }
 }
 
-export const defaultSetupConfig: TestOptions = {
+export const defaultSetupConfig: Partial<TestOptions> = {
   browser: true,
   browserOptions: defaultBrowserOptions,
+  setupTimeout: 180000,
+  serverStartTimeout: 120000,
+  env: {
+    NUXT_PUBLIC_API_URL: ''
+  }
+}
+
+export const serverSetupConfig: Partial<TestOptions> = {
+  server: true,
+  browser: false,
+  setupTimeout: 180000,
+  serverStartTimeout: 120000,
   env: {
     NUXT_PUBLIC_API_URL: ''
   }

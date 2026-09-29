@@ -81,7 +81,7 @@ export const project: ProjectConfig = {
   shortName: 'R34 App',
   description:
     'Stream and download Rule 34 porn videos, GIFs, and images from multiple Boorus in a mobile-first web app',
-  version: '3.2.0',
+  version: '3.3.0',
   email: 'contact@r34.app',
   urls: {
     production: new URL('https://r34.app'),

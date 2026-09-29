@@ -50,7 +50,9 @@
     "featurePromotion": "Khuyến mãi tính năng",
     "favicon": "Biểu tượng yêu thích",
     "page": "Trang",
-    "pageNumber": "Trang {page}"
+    "pageNumber": "Trang {page}",
+    "visitWebsite": "Truy cập {domain}",
+    "visitOriginalWebsite": "Truy cập trang web gốc"
   },
   "seo": {
     "title": "Rule 34 video, ảnh GIF và hình ảnh khiêu dâm tại R34.app",
@@ -427,7 +429,7 @@
     "download": "Tải xuống",
     "tryAgain": "Hãy thử lại?",
     "getPremium": "Nhận phí bảo hiểm",
-    "toBypassBlocks": "để vượt qua việc chặn trang web",
+    "toBypassBlocks": "để tự động vượt qua việc chặn trang web",
     "loadingMedia": "Đang tải phương tiện…",
     "play": "Chơi",
     "adText": "Chỉ có một quảng cáo mỗi giờ. Không bao giờ thấy quảng cáo nữa với Premium!",
@@ -436,7 +438,9 @@
     "postAlt": "Đăng #{id}",
     "postDescription": "{mediaType} #{id} từ {domain} với số điểm {score}, xếp hạng {rating}, được gắn thẻ {tags}",
     "shareFoundOn": "Được tìm thấy trên {name}: {url}",
-    "sharePostTitle": "Bài đăng #{id} từ {domain}"
+    "sharePostTitle": "Bài đăng #{id} từ {domain}",
+    "playInSandbox": "Phát trong hộp cát",
+    "hostBlocksDirectAccess": "Máy chủ này chặn quyền truy cập trực tiếp bên ngoài trang web của họ."
   },
   "source": {
     "postSource": "Nguồn bài đăng",
