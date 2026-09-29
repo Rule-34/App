@@ -5,19 +5,10 @@ import {
 } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 import type { Domain } from '~/assets/js/domain'
 
-export const defaultBooruList: Domain[] = completeBooruList
-  // Disable specific Booru sites
-  .filter((booruObj) => {
-    const disabledDomains = [
-      //
-      'realbooru.com',
-      'konachan.com',
-      'booru.allthefallen.moe',
-      'sakugabooru.com'
-    ]
+const disabledDomains = new Set(['realbooru.com', 'konachan.com', 'booru.allthefallen.moe', 'sakugabooru.com'])
 
-    return !disabledDomains.includes(booruObj.domain)
-  })
+export const defaultBooruList: Domain[] = completeBooruList
+  .filter((booruObj) => !disabledDomains.has(booruObj.domain))
   .map((booruObj) => {
     const booruType = booruTypeList.find((booruTypeObj) => booruTypeObj.type === booruObj.type)
 

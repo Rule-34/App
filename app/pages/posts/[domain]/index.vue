@@ -899,30 +899,39 @@
 
   const firstPostsPageAsSchema = computed(() => {
     const firstPagePosts = (data.value?.pages[0]?.data ?? []).filter(isRenderablePost)
+    const schemaNodes: Array<ReturnType<typeof defineVideo> | ReturnType<typeof defineImage>> = []
 
-    return firstPagePosts.slice(0, 8).map((post) => {
+    for (const post of firstPagePosts.slice(0, 8)) {
+      const url = post.high_res_file.url
+      if (!url) continue
+
       if (post.media_type === 'video') {
-        return defineVideo({
-          url: post.high_res_file.url,
-          thumbnailUrl: post.preview_file.url,
-          height: post.high_res_file.height,
-          width: post.high_res_file.width,
-          isFamilyFriendly: false
-        })
+        schemaNodes.push(
+          defineVideo({
+            url,
+            thumbnailUrl: post.preview_file.url ?? undefined,
+            height: post.high_res_file.height ?? undefined,
+            width: post.high_res_file.width ?? undefined,
+            isFamilyFriendly: false
+          })
+        )
+      } else {
+        schemaNodes.push(
+          defineImage({
+            url,
+            height: post.high_res_file.height ?? undefined,
+            width: post.high_res_file.width ?? undefined,
+            caption: [...post.tags.character, ...post.tags.copyright].join(', '),
+            author: post.tags.artist.length ? post.tags.artist.join(', ') : undefined,
+            isFamilyFriendly: false
+          })
+        )
       }
-
-      return defineImage({
-        url: post.high_res_file.url,
-        height: post.high_res_file.height,
-        width: post.high_res_file.width,
-        caption: [...post.tags.character, ...post.tags.copyright].join(', '),
-        author: post.tags.artist.length ? post.tags.artist.join(', ') : undefined,
-        isFamilyFriendly: false
-      })
-    })
+    }
+    return schemaNodes
   })
 
-  useSchemaOrg(() => [
+  useSchemaOrg([
     defineWebPage({
       // @see https://unhead.unjs.io/schema-org/recipes/site-search#define-your-search-results-page
       '@type': ['CollectionPage', 'SearchResultsPage']
@@ -940,10 +949,23 @@
           item: route.path
         }
       ]
-    }),
-
-    ...firstPostsPageAsSchema.value
+    })
   ])
+  /**
+   * The first posts page is resolved through TanStack Vue Query's suspense, so on the server it
+   * is still empty while setup runs and `useSchemaOrg` would register an empty node list.
+   * Server: register the resolved nodes from the prefetch hook. Client: nuxt-schema-org is
+   * server-only in production SSR builds, so this registration only takes effect in dev.
+   */
+  if (import.meta.server) {
+    onServerPrefetch(async () => {
+      await suspense()
+
+      nuxtApp.runWithContext(() => useSchemaOrg(firstPostsPageAsSchema.value))
+    })
+  } else {
+    useSchemaOrg(firstPostsPageAsSchema)
+  }
 
   definePageMeta({
     middleware: [

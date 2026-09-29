@@ -22,7 +22,7 @@
   const { wasCurrentPageSSR } = useSSRDetection()
   const { schedule: scheduleIdleTask } = useIdleTask()
 
-  export interface PostMediaProps {
+  interface PostMediaProps {
     postIndex: number
 
     mediaSrc: IPost['high_res_file']['url']
@@ -257,7 +257,7 @@
 
     return [
       {
-        rel: 'preload',
+        rel: 'preload' as const,
         as: 'image' as const,
         href: encodeURI(localPosterSrc.value),
         fetchpriority: 'high' as const

@@ -66,12 +66,7 @@
     }
 
     if (isTagBlocked(tag)) {
-      const saved = await setCustomBlockList(customBlockList.value.filter((blockedTag) => blockedTag !== tag.name))
-
-      if (!saved) {
-        return
-      }
-
+      await setCustomBlockList(customBlockList.value.filter((blockedTag) => blockedTag !== tag.name))
       return
     }
 
