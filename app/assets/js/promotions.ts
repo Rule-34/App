@@ -94,6 +94,14 @@ export const otherPromotions = [
 ] satisfies Promotion[]
 
 export const referralPromotions = [
+  // Codex Everywhere — GPT API reseller, 97% off OpenAI pricing
+  {
+    media: '/img/promo/referrals/Codex-Everywhere-1280x1280.jpg',
+    mediaWidth: 1280,
+    mediaHeight: 1280,
+    mediaType: 'image',
+    link: 'https://codex-everywhere.com/home?aff=Q3HSJTAUMUGM'
+  },
   // candy.ai
   {
     media: '/img/promo/referrals/AI-Girlfriend-300x600.jpg',
