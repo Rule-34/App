@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { $fetch, setup } from '@nuxt/test-utils'
 import { prefixedLocaleCodes } from '../../config/i18n'
-import { debugBrowserOptions } from '../helper'
 
 describe('Sitemap', async () => {
-  await setup({ browser: true, browserOptions: debugBrowserOptions })
+  await setup()
 
   function getLocs(xml: string): string[] {
     return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1] ?? '')
