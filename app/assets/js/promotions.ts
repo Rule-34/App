@@ -101,22 +101,22 @@ export const referralPromotions = [
     mediaHeight: 1280,
     mediaType: 'image',
     link: 'https://codex-everywhere.com/home?aff=Q3HSJTAUMUGM'
-  },
-  // candy.ai
-  {
-    media: '/img/promo/referrals/AI-Girlfriend-300x600.jpg',
-    mediaWidth: 300,
-    mediaHeight: 600,
-    mediaType: 'image',
-    link: 'https://candy.ai?via=rule-3496'
-  },
-  {
-    media: '/img/promo/referrals/AI-sexting-1200x1200.jpg',
-    mediaWidth: 1200,
-    mediaHeight: 1200,
-    mediaType: 'image',
-    link: 'https://candy.ai?via=rule-3496'
   }
+  // candy.ai (disabled to prioritize Codex Everywhere)
+  // {
+  //   media: '/img/promo/referrals/AI-Girlfriend-300x600.jpg',
+  //   mediaWidth: 300,
+  //   mediaHeight: 600,
+  //   mediaType: 'image',
+  //   link: 'https://candy.ai?via=rule-3496'
+  // },
+  // {
+  //   media: '/img/promo/referrals/AI-sexting-1200x1200.jpg',
+  //   mediaWidth: 1200,
+  //   mediaHeight: 1200,
+  //   mediaType: 'image',
+  //   link: 'https://candy.ai?via=rule-3496'
+  // }
 ] satisfies Promotion[]
 
 export const advertisementPromotions = [
