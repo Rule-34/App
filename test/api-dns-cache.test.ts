@@ -28,6 +28,11 @@ describe('API DNS cache plugin', () => {
     expect(dispatcher).not.toBe(originalDispatcher)
     expect(closeHook).toBeTypeOf('function')
 
+    const source = await import('node:fs/promises').then(({ readFile }) =>
+      readFile(new URL('../server/plugins/api-dns-cache.ts', import.meta.url), 'utf8')
+    )
+    expect(source).toContain('dualStack: false')
+
     await closeHook?.()
   })
 })
