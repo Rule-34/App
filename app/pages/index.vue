@@ -5,6 +5,7 @@
   import { ArrowRightIcon } from '@heroicons/vue/24/solid'
   import { FetchError } from 'ofetch'
   import { shouldReportTagSearchError } from '~/assets/js/tag-search-error'
+  import { resolveBooruApiEndpoint } from '~/assets/js/BooruEndpointHelper'
   import { project } from '~~/config/project'
 
   type FeaturedTagMedia = {
@@ -101,7 +102,7 @@
         baseURL: config.public.apiUrl,
 
         query: {
-          baseEndpoint: selectedBooru.value.domain,
+          baseEndpoint: resolveBooruApiEndpoint(selectedBooru.value.domain),
 
           tag,
           order: 'count',
