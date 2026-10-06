@@ -14,18 +14,18 @@
   const weightedPromotions = [
     {
       id: 'premiumPromotions',
-      weight: 2
+      weight: 3
     },
     {
       id: 'otherPromotions',
-      weight: 0.5
+      weight: 1.5
     },
+    // {
+    //   weight: 1,
+    //   id: 'referralPromotions'
+    // },
     {
-      weight: 5,
-      id: 'referralPromotions'
-    },
-    {
-      weight: 0.5,
+      weight: 1,
       id: 'advertisementPromotions'
     }
   ]
