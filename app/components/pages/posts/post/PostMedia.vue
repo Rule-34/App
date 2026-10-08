@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import type { IPost, PostMediaType } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
-  import { ArrowTopRightOnSquareIcon, SparklesIcon, XMarkIcon } from '@heroicons/vue/20/solid'
+  import { ArrowTopRightOnSquareIcon, CubeTransparentIcon, XMarkIcon } from '@heroicons/vue/20/solid'
   import {
     cleanMediaUrl,
     getCandidateSources,
@@ -765,15 +765,12 @@
   // a tripped breaker, or a direct failure that a fallback proxy then loaded successfully.
   const showHostBlockHint = computed(() => isVideo.value || isDirectBlocked.value || hostBlockConfirmed.value)
 
-  const isRetrying = shallowRef(false)
   const manualRetryCount = shallowRef(0)
 
   // A retry repeats the same requests, so offer it once, and never when the host block is already known.
   const showTryAgain = computed(() => manualRetryCount.value < 1 && !isDirectBlocked.value && !hostBlockConfirmed.value)
 
   function manuallyReloadMedia() {
-    if (isRetrying.value) return
-    isRetrying.value = true
     manualRetryCount.value += 1
 
     resetDomainBreaker(rawMediaSrc.value, props.mediaType)
@@ -802,10 +799,6 @@
     } else {
       posterCandidateIndex.value = 0
     }
-
-    setTimeout(() => {
-      isRetrying.value = false
-    }, 600)
   }
 
   function playInIframe() {
@@ -989,12 +982,8 @@
             <NuxtLink
               v-if="!isPremium"
               :href="localePath('/premium?utm_source=internal&utm_medium=media-error#pricing')"
-              class="inline-flex min-h-[40px] w-full items-center justify-center gap-1.5 rounded-md bg-primary-700 px-4 py-2 text-center text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
+              class="inline-flex min-h-[40px] w-full items-center justify-center rounded-md bg-primary-700 px-4 py-2 text-center text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
             >
-              <SparklesIcon
-                class="h-4 w-4 shrink-0 text-accent-400"
-                aria-hidden="true"
-              />
               <span>{{ t('media.getPremium') }} {{ t('media.toBypassBlocks') }}</span>
             </NuxtLink>
 
@@ -1008,10 +997,15 @@
                     : 'text-base-content ring-1 ring-base-0/20 hover:hover-bg-util'
                 "
                 class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md px-3 py-1.5 text-sm transition-colors hover:hover-text-util focus-visible:focus-outline-util"
+                :title="t('media.viewInSandboxHint')"
                 type="button"
                 @click="playInIframe"
               >
-                <span class="truncate">{{ t('media.viewHere') }}</span>
+                <CubeTransparentIcon
+                  class="mr-1.5 h-4 w-4 shrink-0"
+                  aria-hidden="true"
+                />
+                <span class="truncate">{{ t('media.viewInSandbox') }}</span>
               </button>
 
               <a
@@ -1025,15 +1019,13 @@
                   class="h-3.5 w-3.5 shrink-0 text-base-content"
                   aria-hidden="true"
                 />
-                <span class="truncate">{{ t('tags.openInNewTab') }}</span>
+                <span class="truncate">{{ t('media.openNewTab') }}</span>
               </a>
             </div>
 
             <!-- Only useful for transient failures, so it is demoted to a link and hidden once it cannot help -->
             <button
               v-if="showTryAgain"
-              :disabled="isRetrying"
-              :class="isRetrying ? 'cursor-wait opacity-60' : ''"
               class="self-center text-xs text-base-content underline hover:hover-text-util focus-visible:focus-outline-util"
               type="button"
               @click="manuallyReloadMedia"

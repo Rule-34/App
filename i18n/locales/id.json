@@ -440,7 +440,9 @@
     "shareFoundOn": "Ditemukan di {name}: {url}",
     "sharePostTitle": "Posting #{id} dari {domain}",
     "hostBlocksDirectAccess": "Host ini memblokir akses langsung di luar situs web mereka.",
-    "viewHere": "Lihat di sini"
+    "viewInSandbox": "Lihat di sandbox",
+    "viewInSandboxHint": "Solusi sementara: memuat file dalam bingkai terbatas, tanpa pemutar",
+    "openNewTab": "Buka tab baru"
   },
   "source": {
     "postSource": "Sumber posting",

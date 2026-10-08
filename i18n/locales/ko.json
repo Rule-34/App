@@ -440,7 +440,9 @@
     "shareFoundOn": "{name}에서 발견됨: {url}",
     "sharePostTitle": "{domain}의 게시물 #{id}",
     "hostBlocksDirectAccess": "이 호스트는 웹사이트 외부에서의 직접 액세스를 차단합니다.",
-    "viewHere": "여기서 보기"
+    "viewInSandbox": "샌드박스에서 보기",
+    "viewInSandboxHint": "임시 방법: 플레이어 없이 제한된 프레임에서 파일을 불러옵니다",
+    "openNewTab": "새 탭 열기"
   },
   "source": {
     "postSource": "게시물 출처",

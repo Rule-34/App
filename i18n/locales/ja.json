@@ -440,7 +440,9 @@
     "shareFoundOn": "{name}で見つけました：{url}",
     "sharePostTitle": "{domain}の投稿 #{id}",
     "hostBlocksDirectAccess": "このホストはサイト外からの直接アクセスをブロックしています。",
-    "viewHere": "ここで見る"
+    "viewInSandbox": "サンドボックスで表示",
+    "viewInSandboxHint": "回避策：プレーヤーを使わず、制限されたフレームでファイルを読み込みます",
+    "openNewTab": "新しいタブで開く"
   },
   "source": {
     "postSource": "投稿のソース",
