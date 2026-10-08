@@ -273,6 +273,7 @@
   let videoPlayerInitPromise: Promise<void> | null = null
   let videoPlayerIdleScheduled = false
   let videoPlayerInitTimeout: number | null = null
+  let isVideoInViewport = false
 
   const isAnimatedMediaLoading = ref(false)
   const isAnimatedMediaPlaying = ref(false)
@@ -552,7 +553,14 @@
       scheduleIdleTask(() => {
         videoPlayerIdleScheduled = false
 
-        if (isUnmounted || videoPlayer || videoPlayerInitPromise || !getVideoElement() || !isVideo.value) {
+        if (
+          isUnmounted ||
+          !isVideoInViewport ||
+          videoPlayer ||
+          videoPlayerInitPromise ||
+          !getVideoElement() ||
+          !isVideo.value
+        ) {
           return
         }
 
@@ -747,6 +755,8 @@
     if (!entry) {
       return
     }
+
+    isVideoInViewport = entry.isIntersecting
 
     if (entry.isIntersecting) {
       scheduleVideoPlayerInitialization(isLikelyLcpMedia.value ? 1200 : 1600)

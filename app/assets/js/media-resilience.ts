@@ -193,7 +193,8 @@ const SENSITIVE_QUERY_PATTERNS = [
   /^x-amz-/i,
   /^x-goog-/i,
   /bearer/i,
-  /(?:hash|hmac|jwt|session|ticket|code)/i
+  /(?:hash|hmac|jwt|session|ticket)/i,
+  /(?:^|[_-])code$/i
 ]
 
 /**

@@ -1,6 +1,7 @@
 import tailwindcss from '@tailwindcss/vite'
 import type { PluginOption } from 'vite'
 import { project } from './config/project'
+import { shouldUpgradeInsecureRequests } from './config/csp'
 import { locales, defaultLocale, prefixedLocaleCodes } from './config/i18n'
 
 const cacheHeaders = {
@@ -437,8 +438,10 @@ export default defineNuxtConfig({
     headers: {
       contentSecurityPolicy: {
         // Fix: disable HTTPS upgrade on development, otherwise Safari will fail to load the page
-        'upgrade-insecure-requests':
-          process.env.NODE_ENV === 'production' && process.env.DISABLE_UPGRADE_INSECURE_REQUESTS !== 'true',
+        'upgrade-insecure-requests': shouldUpgradeInsecureRequests(
+          process.env.NODE_ENV,
+          process.env.DISABLE_UPGRADE_INSECURE_REQUESTS
+        ),
 
         // Fix: enable any origin for images
         'img-src': ["'self'", 'http:', 'https:', 'data:', 'blob:'],
