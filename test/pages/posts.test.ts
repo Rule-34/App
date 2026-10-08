@@ -417,19 +417,24 @@ describe('/', async () => {
       // Assert: the host is never blamed for a file that no proxy could load
       expect(await page.locator('body').textContent()).not.toContain('This host blocks direct access')
 
-      // Assert: the breaker never tripped, so every post tried its direct URL before any proxy
-      const samplePath = (requestUrl: string) => /\/samples\/[^?]*?([^/?]+\.jpg)/.exec(requestUrl)?.[1]
-      const firstAttemptByFile = new Map<string, string>()
-      for (const requestUrl of requested) {
-        const file = samplePath(requestUrl)
-        if (file && !firstAttemptByFile.has(file)) {
-          firstAttemptByFile.set(file, requestUrl)
-        }
-      }
+      // Assert: the breaker never tripped, so every failed post tried its own direct URL before any proxy
+      const failedPostIds = await page.evaluate(() =>
+        Array.from(document.querySelectorAll('[data-testid^="safebooru.org-"]'))
+          .filter((post) => post.textContent?.includes('Error loading media'))
+          .map((post) => post.getAttribute('data-testid')?.replace('safebooru.org-', ''))
+      )
+      const failedFiles = mockPostsPage0.data
+        .filter((post) => failedPostIds.includes(String(post.id)))
+        .map((post) => post.low_res_file.url.split('/').pop())
 
-      expect(firstAttemptByFile.size).toBeGreaterThanOrEqual(4)
-      for (const firstUrl of firstAttemptByFile.values()) {
-        expect(firstUrl).toMatch(/imgproxy2\.r34\.app|safebooru\.org\/samples/)
+      expect(failedFiles.length).toBeGreaterThanOrEqual(5)
+
+      for (const file of failedFiles) {
+        const firstAttempt = requested.find(
+          (requestUrl) => requestUrl.includes(`/samples/`) && requestUrl.includes(file!)
+        )
+        expect(firstAttempt, `no request recorded for ${file}`).toBeDefined()
+        expect(firstAttempt, `first request for ${file} skipped the direct source`).toMatch(/safebooru\.org\/samples/)
       }
     }, 45000)
 
