@@ -496,7 +496,7 @@ describe('/', async () => {
       }
     }, 30000)
 
-    it('shows the image error card with the sandbox action and demotes Try again after one retry', async () => {
+    it('shows the image error card with the sandbox action and keeps Try again available after retries', async () => {
       // Arrange
       const page = await createTrackedPage()
       await page.route(/(imgproxy2\.r34\.app|safebooru\.org\/samples|\.wp\.com|duckduckgo\.com)/, (route) =>
@@ -516,11 +516,12 @@ describe('/', async () => {
       await firstPost.getByRole('button', { name: 'View in sandbox' }).click()
       await firstPost.locator('iframe[sandbox]').waitFor({ state: 'attached' })
 
-      // Assert: closing returns to the card, and one failed retry removes Try again
+      // Assert: closing returns to the card, and Try again stays available after a failed retry
       await firstPost.getByRole('button', { name: 'Close' }).click()
       await firstPost.getByRole('button', { name: 'Try again?' }).click()
       await firstPost.getByText('Error loading media').waitFor({ state: 'visible', timeout: 15000 })
-      expect(await firstPost.getByRole('button', { name: 'Try again?' }).count()).toBe(0)
+      expect(await firstPost.getByRole('button', { name: 'Try again?' }).count()).toBe(1)
+      expect(await firstPost.getByRole('button', { name: 'Try again?' }).isEnabled()).toBe(true)
     }, 45000)
 
     it('does not hide a playable video behind an error card when only its poster fails', async () => {
@@ -539,6 +540,27 @@ describe('/', async () => {
       await videoPost.waitFor({ state: 'visible' })
       await page.waitForTimeout(1500)
       expect(await videoPost.locator('video').count()).toBeGreaterThan(0)
+    }, 30000)
+
+    it('upgrades the native video to Fluid Player without initialization errors', async () => {
+      // Arrange
+      const page = await createTrackedPage()
+      await mockReachableVideoPosters(page)
+
+      const pageErrors: string[] = []
+      page.on('pageerror', (pageError) => pageErrors.push(pageError.message))
+      page.on('console', (message) => {
+        if (message.type() === 'error') pageErrors.push(message.text())
+      })
+
+      // Act
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
+      const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
+      await videoPost.locator('video').first().hover()
+
+      // Assert: the custom player wraps the video, and nothing was swallowed on the way
+      await videoPost.locator('.fluid_video_wrapper').waitFor({ state: 'attached', timeout: 15000 })
+      expect(pageErrors.filter((message) => /Fluid Player|toLowerCase/.test(message))).toEqual([])
     }, 30000)
 
     it('does not display media load error when video completes or ends normally', async () => {
