@@ -59,6 +59,38 @@ function createSilentWav(samples = 800) {
   return Buffer.concat([header, Buffer.alloc(samples, 128)])
 }
 
+/** Signs a fake premium user in: the SDK only decodes the JWT expiry, and auth-refresh is answered locally. */
+async function signInAsPremiumUser(page: TrackedPage) {
+  const encode = (value: object) => Buffer.from(JSON.stringify(value)).toString('base64url')
+  const token = `${encode({ alg: 'HS256', typ: 'JWT' })}.${encode({ exp: Math.floor(Date.now() / 1000) + 86400 })}.sig`
+  const record = {
+    id: 'premium-test-user',
+    collectionName: 'users',
+    email: 'premium@example.test',
+    subscription_expires_at: new Date(Date.now() + 86400_000).toISOString()
+  }
+
+  await page.route(/pocketbase\.r34\.app/, (route) => {
+    if (route.request().url().includes('auth-refresh')) {
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ token, record }) })
+    }
+
+    return route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ items: [], totalItems: 0 })
+    })
+  })
+
+  await page.context().addCookies([
+    {
+      name: 'pb_auth',
+      value: encodeURIComponent(JSON.stringify({ token, model: record })),
+      url: url('/')
+    }
+  ])
+}
+
 /** Video mocks point at unreachable hosts; a reachable poster keeps them looking healthy until played. */
 async function mockReachableVideoPosters(page: TrackedPage) {
   await page.route(/example\.local\/thumbnails\//, (route) =>
@@ -563,6 +595,29 @@ describe('/', async () => {
       await videoPost.locator('.fluid_video_wrapper').waitFor({ state: 'attached', timeout: 15000 })
       expect(pageErrors.filter((message) => /Fluid Player|toLowerCase/.test(message))).toEqual([])
     }, 30000)
+
+    it('falls back to the premium proxy for a video whose direct source and poster are blocked', async () => {
+      // Arrange: a premium user, direct poster and video blocked, only the proxy answers
+      const page = await createTrackedPage()
+      await signInAsPremiumUser(page)
+      await page.route(/example\.local/, (route) => route.abort('failed'))
+      await page.route(/api\/cors-proxy/, (route) =>
+        route.fulfill({ status: 200, contentType: 'audio/wav', body: createSilentWav() })
+      )
+
+      // Act
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
+      const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
+      await videoPost.waitFor({ state: 'visible' })
+
+      // Assert: the video moves to the proxy candidate instead of showing the error card
+      await page.waitForFunction(
+        (id) => document.querySelector(`[data-testid="${id}"] video`)?.getAttribute('src')?.includes('cors-proxy'),
+        `safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`,
+        { timeout: 15000 }
+      )
+      expect(await videoPost.textContent()).not.toContain('Error loading media')
+    }, 45000)
 
     it('does not display media load error when video completes or ends normally', async () => {
       // Arrange
