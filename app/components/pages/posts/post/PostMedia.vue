@@ -257,16 +257,34 @@
     probe.preload = 'metadata'
 
     probe.onloadedmetadata = () => {
-      if (activeVideoProbe === probe) stopVideoProbe()
+      if (activeVideoProbe !== probe) return
+      stopVideoProbe()
+
+      if (srcCandidateIndex.value > 0) {
+        confirmPendingMediaFailure()
+      }
     }
 
     probe.onerror = () => {
       const isStale = isUnmounted || token !== posterProbeToken || activeVideoProbe !== probe
       stopVideoProbe()
 
-      if (!isStale && !mediaHasLoaded.value && !hasError.value) {
-        error.value = new Error(t('errors.mediaLoadError'))
+      if (isStale || mediaHasLoaded.value || hasError.value) {
+        return
       }
+
+      if (srcCandidateIndex.value === 0 && isDirectRequest.value && !isDirectBlocked.value) {
+        pendingMediaDirectFailure = true
+      }
+
+      // Try the next candidate (e.g. the premium proxy) before giving up
+      if (srcCandidateIndex.value + 1 < srcCandidates.value.length) {
+        srcCandidateIndex.value += 1
+        nextTick(() => probeVideoSource(token))
+        return
+      }
+
+      error.value = new Error(t('errors.mediaLoadError'))
     }
 
     probe.src = src
