@@ -556,7 +556,8 @@ describe('/', async () => {
       // Act
       await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
       const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
-      await videoPost.locator('video').first().hover()
+      // No hover or click: the player must mount on its own once the video is in view
+      await videoPost.locator('video').first().scrollIntoViewIfNeeded()
 
       // Assert: the custom player wraps the video, and nothing was swallowed on the way
       await videoPost.locator('.fluid_video_wrapper').waitFor({ state: 'attached', timeout: 15000 })
