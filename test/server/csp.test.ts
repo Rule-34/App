@@ -1,10 +1,7 @@
 import { describe, expect, it } from 'vitest'
+import { shouldUpgradeInsecureRequests } from '../../config/csp'
 
 describe('Nuxt CSP upgrade-insecure-requests policy', () => {
-  function shouldUpgradeInsecureRequests(nodeEnv: string, disableUpgradeEnv?: string): boolean {
-    return nodeEnv === 'production' && disableUpgradeEnv !== 'true'
-  }
-
   it('enables upgrade-insecure-requests by default in production', () => {
     expect(shouldUpgradeInsecureRequests('production', undefined)).toBe(true)
     expect(shouldUpgradeInsecureRequests('production', '')).toBe(true)

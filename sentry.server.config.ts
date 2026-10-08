@@ -7,6 +7,7 @@ if (dsn) {
   Sentry.init({
     enabled: process.env.NODE_ENV === 'production',
     dsn,
-    tracesSampleRate: 0.2
+    tracesSampleRate: 0.2,
+    transportOptions: { keepAlive: true }
   })
 }

@@ -368,7 +368,77 @@ describe('/', async () => {
       await postWithWarning.locator('img').first().dispatchEvent('error')
       await page.waitForFunction(() => document.body.textContent?.includes('Error loading media'))
       expect(await postWithWarning.textContent()).toContain('Error loading media')
+      // A failed image with no successful fallback is most likely a dead link, not a host block
+      expect(await postWithWarning.textContent()).not.toContain('This host blocks direct access')
     }, 20000)
+
+    it('does not trip the host breaker or blame the host when direct and proxy loads both fail', async () => {
+      // Arrange: every image candidate fails, as for a deleted file
+      const page = await createTrackedPage()
+
+      const requested: string[] = []
+      await page.route(
+        /https:\/\/(imgproxy2\.r34\.app|safebooru\.org\/samples|i[0-3]\.wp\.com|external-content\.duckduckgo\.com)\//,
+        async (route) => {
+          requested.push(route.request().url())
+          await route.abort('failed')
+        }
+      )
+
+      // Act
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+      await page.waitForFunction(() => document.body.textContent?.includes('Error loading media'), undefined, {
+        timeout: 15000
+      })
+      // Scroll in stages so later posts render after earlier ones have already failed (breaker threshold is 3)
+      const failedPostCount = () =>
+        page.evaluate(
+          () =>
+            Array.from(document.querySelectorAll('[data-testid^="safebooru.org-"]')).filter((post) =>
+              post.textContent?.includes('Error loading media')
+            ).length
+        )
+
+      for (let step = 0; step < 12; step += 1) {
+        await page.waitForTimeout(500)
+        await page.evaluate(() => window.scrollBy(0, 900))
+      }
+
+      await page.waitForFunction(
+        () =>
+          Array.from(document.querySelectorAll('[data-testid^="safebooru.org-"]')).filter((post) =>
+            post.textContent?.includes('Error loading media')
+          ).length >= 5,
+        undefined,
+        { timeout: 20000 }
+      )
+      expect(await failedPostCount()).toBeGreaterThanOrEqual(5)
+
+      // Assert: the host is never blamed for a file that no proxy could load
+      expect(await page.locator('body').textContent()).not.toContain('This host blocks direct access')
+
+      // Assert: the breaker never tripped, so every failed post tried its own direct URL before any proxy
+      const failedPostIds = await page.evaluate(() =>
+        Array.from(document.querySelectorAll('[data-testid^="safebooru.org-"]'))
+          .filter((post) => post.textContent?.includes('Error loading media'))
+          .map((post) => post.getAttribute('data-testid')?.replace('safebooru.org-', ''))
+      )
+      const failedFiles = mockPostsPage0.data
+        .filter((post) => failedPostIds.includes(String(post.id)))
+        .map((post) => post.low_res_file.url.split('/').pop())
+
+      expect(failedFiles.length).toBeGreaterThanOrEqual(5)
+
+      for (const file of failedFiles) {
+        const firstAttempt = requested.find(
+          (requestUrl) => requestUrl.includes(`/samples/`) && requestUrl.includes(file!)
+        )
+        expect(firstAttempt, `no request recorded for ${file}`).toBeDefined()
+        expect(new URL(firstAttempt!).hostname, `first request for ${file} skipped the direct source`).toBe(
+          'safebooru.org'
+        )
+      }
+    }, 45000)
 
     it('does not display media load error when video completes or ends normally', async () => {
       // Arrange

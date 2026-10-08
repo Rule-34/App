@@ -81,6 +81,9 @@ export function cleanMediaUrl(url?: string | null): string | null {
   return parsed.href
 }
 
+/** Tailscale CGNAT range 100.64.0.0/10 */
+const TAILSCALE_CGNAT_HOST = /^100\.(?:6[4-9]|[7-9]\d|1[01]\d|12[0-7])\.\d{1,3}\.\d{1,3}$/
+
 export type MediaReferrerPolicy = 'origin' | 'strict-origin-when-cross-origin' | 'no-referrer'
 
 /**
@@ -103,7 +106,8 @@ export function getMediaReferrerPolicy(rawUrl?: string | null): MediaReferrerPol
     return 'no-referrer'
   }
 
-  if (trimmed.startsWith('/') || trimmed.startsWith('./') || trimmed.startsWith('../')) {
+  // Protocol-relative (//host) URLs are cross-origin, so they must not take the first-party branch
+  if ((trimmed.startsWith('/') && !trimmed.startsWith('//')) || trimmed.startsWith('./') || trimmed.startsWith('../')) {
     return 'strict-origin-when-cross-origin'
   }
 
@@ -122,8 +126,8 @@ export function getMediaReferrerPolicy(rawUrl?: string | null): MediaReferrerPol
     /(^|\.)(r34\.app|akbal\.dev)$/.test(hostname) ||
     hostname === 'localhost' ||
     hostname === '127.0.0.1' ||
-    hostname === 'metal-mac-mini' ||
-    hostname.startsWith('100.')
+    TAILSCALE_CGNAT_HOST.test(hostname) ||
+    hostname.endsWith('.ts.net')
   ) {
     return 'strict-origin-when-cross-origin'
   }
@@ -193,7 +197,8 @@ const SENSITIVE_QUERY_PATTERNS = [
   /^x-amz-/i,
   /^x-goog-/i,
   /bearer/i,
-  /(?:hash|hmac|jwt|session|ticket|code)/i
+  /(?:hash|hmac|jwt|session|ticket)/i,
+  /(?:^|[_-])code$/i
 ]
 
 /**

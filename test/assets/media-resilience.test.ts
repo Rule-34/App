@@ -88,6 +88,9 @@ describe('media-resilience', () => {
     it('detects sensitive and signed auth parameters', () => {
       expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?token=abc')).toBe(true)
       expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?password=secret')).toBe(true)
+      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?auth_code=abc')).toBe(true)
+      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?code=abc')).toBe(true)
+      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?codec=av1')).toBe(false)
       expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?pass=secret')).toBe(true)
       expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?pwd=secret')).toBe(true)
       expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?X-Amz-Signature=xyz')).toBe(true)
@@ -131,7 +134,11 @@ describe('media-resilience', () => {
       expect(getMediaReferrerPolicy('https://cdn.akbal.dev/test.png')).toBe('strict-origin-when-cross-origin')
       expect(getMediaReferrerPolicy('http://localhost:3000/img.jpg')).toBe('strict-origin-when-cross-origin')
       expect(getMediaReferrerPolicy('http://127.0.0.1:3000/img.jpg')).toBe('strict-origin-when-cross-origin')
-      expect(getMediaReferrerPolicy('http://metal-mac-mini:3000/img.jpg')).toBe('strict-origin-when-cross-origin')
+      expect(getMediaReferrerPolicy('http://100.101.102.103:3000/img.jpg')).toBe('strict-origin-when-cross-origin')
+      expect(getMediaReferrerPolicy('http://mac-mini.tail1234.ts.net/img.jpg')).toBe('strict-origin-when-cross-origin')
+      expect(getMediaReferrerPolicy('https://100.com/img.jpg')).toBe('no-referrer')
+      expect(getMediaReferrerPolicy('http://100.128.0.1/img.jpg')).toBe('no-referrer')
+      expect(getMediaReferrerPolicy('//cdn.example.com/img.jpg')).toBe('no-referrer')
       expect(getMediaReferrerPolicy('http://100.88.191.18:3000/img.jpg')).toBe('strict-origin-when-cross-origin')
     })
 
