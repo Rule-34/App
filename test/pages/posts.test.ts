@@ -368,6 +368,8 @@ describe('/', async () => {
       await postWithWarning.locator('img').first().dispatchEvent('error')
       await page.waitForFunction(() => document.body.textContent?.includes('Error loading media'))
       expect(await postWithWarning.textContent()).toContain('Error loading media')
+      // A failed image with no successful fallback is most likely a dead link, not a host block
+      expect(await postWithWarning.textContent()).not.toContain('This host blocks direct access')
     }, 20000)
 
     it('does not display media load error when video completes or ends normally', async () => {

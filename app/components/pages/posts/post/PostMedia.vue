@@ -69,6 +69,34 @@
 
   const domainHealthVersion = shallowRef(0)
 
+  // A failed direct request only counts against the domain breaker once a fallback candidate succeeds:
+  // if the proxy fails too, the file is most likely gone (404) rather than the host blocking us.
+  let pendingMediaDirectFailure = false
+  let pendingPosterDirectFailure = false
+  const hostBlockConfirmed = shallowRef(false)
+
+  function confirmPendingMediaFailure() {
+    if (!pendingMediaDirectFailure) return
+    pendingMediaDirectFailure = false
+    hostBlockConfirmed.value = true
+    recordDirectFailure(rawMediaSrc.value, props.mediaType)
+  }
+
+  function confirmPendingPosterFailure() {
+    if (!pendingPosterDirectFailure) return
+    pendingPosterDirectFailure = false
+    hostBlockConfirmed.value = true
+    if (rawPosterSrc.value) {
+      recordDirectFailure(rawPosterSrc.value, 'image')
+    }
+  }
+
+  function clearPendingFailures() {
+    pendingMediaDirectFailure = false
+    pendingPosterDirectFailure = false
+    hostBlockConfirmed.value = false
+  }
+
   let posterProbeToken = 0
   let isUnmounted = false
   let activeProbe: HTMLImageElement | null = null
@@ -172,7 +200,10 @@
         activeProbe = null
         posterCandidateIndex.value = idx
         if (idx === 0 && rawPosterSrc.value) {
+          pendingPosterDirectFailure = false
           recordDirectSuccess(rawPosterSrc.value, 'image')
+        } else if (idx > 0) {
+          confirmPendingPosterFailure()
         }
       }
 
@@ -180,7 +211,7 @@
         if (isUnmounted || currentToken !== posterProbeToken) return
         activeProbe = null
         if (idx === 0 && !isPosterDirectBlocked.value && rawPosterSrc.value) {
-          recordDirectFailure(rawPosterSrc.value, 'image')
+          pendingPosterDirectFailure = true
         }
         const nextIdx = idx + 1
         if (nextIdx < posterCandidates.value.length) {
@@ -222,6 +253,7 @@
     useIframePlayer.value = false
     mediaHasLoaded.value = false
     error.value = null
+    clearPendingFailures()
     probeVideoPoster()
   })
 
@@ -274,6 +306,7 @@
   let videoPlayerIdleScheduled = false
   let videoPlayerInitTimeout: number | null = null
   let isVideoInViewport = false
+  let hasCountedVideoRender = false
 
   const isAnimatedMediaLoading = ref(false)
   const isAnimatedMediaPlaying = ref(false)
@@ -460,7 +493,11 @@
     }
 
     if (!isPremium.value) {
-      timesVideoHasRendered.value++
+      // Count each mounted video once, not on every fallback/retry player re-creation
+      if (!hasCountedVideoRender) {
+        hasCountedVideoRender = true
+        timesVideoHasRendered.value++
+      }
 
       // Only show pause roll ads every 2 videos
       if (timesVideoHasRendered.value % 2 === 0) {
@@ -641,7 +678,7 @@
     // Case 1: The poster image failed to load for animated media
     if (isAnimatedMedia.value && !isAnimatedMediaPlaying.value) {
       if (posterCandidateIndex.value === 0 && !isPosterDirectBlocked.value && rawPosterSrc.value) {
-        recordDirectFailure(rawPosterSrc.value, 'image')
+        pendingPosterDirectFailure = true
       }
 
       if (posterCandidateIndex.value + 1 < posterCandidates.value.length) {
@@ -656,7 +693,7 @@
     // Case 2: Main media failed to load (image, gif, or video)
     // If Candidate 0 (direct request) failed, record failure for the domain
     if (isDirectRequest.value && !isDirectBlocked.value) {
-      recordDirectFailure(rawMediaSrc.value, props.mediaType)
+      pendingMediaDirectFailure = true
     }
 
     if (srcCandidateIndex.value + 1 < srcCandidates.value.length) {
@@ -674,6 +711,10 @@
     error.value = new Error(t('errors.mediaLoadError'))
   }
 
+  // Blame the host only when it is plausible: videos (single source, hotlink blocks are the norm),
+  // a tripped breaker, or a direct failure that a fallback proxy then loaded successfully.
+  const showHostBlockHint = computed(() => isVideo.value || isDirectBlocked.value || hostBlockConfirmed.value)
+
   const isRetrying = shallowRef(false)
 
   function manuallyReloadMedia() {
@@ -689,6 +730,7 @@
     useIframePlayer.value = false
     mediaHasLoaded.value = false
     error.value = null
+    clearPendingFailures()
 
     if (isVideo.value) {
       const willBlockPoster = isPosterDirectBlocked.value && posterCandidates.value.length > 1
@@ -785,7 +827,16 @@
     const rawTargetSrc = isShowingPoster ? rawPosterSrc.value || props.mediaPosterSrc : rawMediaSrc.value
 
     if (isDirectCandidate && rawTargetSrc) {
+      if (isShowingPoster) {
+        pendingPosterDirectFailure = false
+      } else {
+        pendingMediaDirectFailure = false
+      }
       recordDirectSuccess(rawTargetSrc, isShowingPoster ? 'image' : props.mediaType)
+    } else if (isShowingPoster) {
+      confirmPendingPosterFailure()
+    } else {
+      confirmPendingMediaFailure()
     }
 
     // Clear loading state if it's a GIF
@@ -869,7 +920,10 @@
             <h3 class="text-base font-semibold tracking-wide text-base-content-highlight">
               {{ error?.message || t('errors.mediaLoadError') }}
             </h3>
-            <p class="max-w-[300px] text-xs text-base-content/80">
+            <p
+              v-if="showHostBlockHint"
+              class="max-w-[300px] text-xs text-base-content/80"
+            >
               {{ t('media.hostBlocksDirectAccess') }}
             </p>
           </div>
