@@ -372,6 +372,67 @@ describe('/', async () => {
       expect(await postWithWarning.textContent()).not.toContain('This host blocks direct access')
     }, 20000)
 
+    it('does not trip the host breaker or blame the host when direct and proxy loads both fail', async () => {
+      // Arrange: every image candidate fails, as for a deleted file
+      const page = await createTrackedPage()
+
+      const requested: string[] = []
+      await page.route(
+        /https:\/\/(imgproxy2\.r34\.app|safebooru\.org\/samples|i[0-3]\.wp\.com|external-content\.duckduckgo\.com)\//,
+        async (route) => {
+          requested.push(route.request().url())
+          await route.abort('failed')
+        }
+      )
+
+      // Act
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+      await page.waitForFunction(() => document.body.textContent?.includes('Error loading media'), undefined, {
+        timeout: 15000
+      })
+      // Scroll in stages so later posts render after earlier ones have already failed (breaker threshold is 3)
+      const failedPostCount = () =>
+        page.evaluate(
+          () =>
+            Array.from(document.querySelectorAll('[data-testid^="safebooru.org-"]')).filter((post) =>
+              post.textContent?.includes('Error loading media')
+            ).length
+        )
+
+      for (let step = 0; step < 12; step += 1) {
+        await page.waitForTimeout(500)
+        await page.evaluate(() => window.scrollBy(0, 900))
+      }
+
+      await page.waitForFunction(
+        () =>
+          Array.from(document.querySelectorAll('[data-testid^="safebooru.org-"]')).filter((post) =>
+            post.textContent?.includes('Error loading media')
+          ).length >= 5,
+        undefined,
+        { timeout: 20000 }
+      )
+      expect(await failedPostCount()).toBeGreaterThanOrEqual(5)
+
+      // Assert: the host is never blamed for a file that no proxy could load
+      expect(await page.locator('body').textContent()).not.toContain('This host blocks direct access')
+
+      // Assert: the breaker never tripped, so every post tried its direct URL before any proxy
+      const samplePath = (requestUrl: string) => /\/samples\/[^?]*?([^/?]+\.jpg)/.exec(requestUrl)?.[1]
+      const firstAttemptByFile = new Map<string, string>()
+      for (const requestUrl of requested) {
+        const file = samplePath(requestUrl)
+        if (file && !firstAttemptByFile.has(file)) {
+          firstAttemptByFile.set(file, requestUrl)
+        }
+      }
+
+      expect(firstAttemptByFile.size).toBeGreaterThanOrEqual(4)
+      for (const firstUrl of firstAttemptByFile.values()) {
+        expect(firstUrl).toMatch(/imgproxy2\.r34\.app|safebooru\.org\/samples/)
+      }
+    }, 45000)
+
     it('does not display media load error when video completes or ends normally', async () => {
       // Arrange
       const page = await createTrackedPage()
