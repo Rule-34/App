@@ -434,7 +434,9 @@ describe('/', async () => {
           (requestUrl) => requestUrl.includes(`/samples/`) && requestUrl.includes(file!)
         )
         expect(firstAttempt, `no request recorded for ${file}`).toBeDefined()
-        expect(firstAttempt, `first request for ${file} skipped the direct source`).toMatch(/safebooru\.org\/samples/)
+        expect(new URL(firstAttempt!).hostname, `first request for ${file} skipped the direct source`).toBe(
+          'safebooru.org'
+        )
       }
     }, 45000)
 
