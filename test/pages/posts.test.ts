@@ -606,6 +606,9 @@ describe('/', async () => {
       )
 
       // Act
+      const proxiedVideoResponse = page.waitForResponse(
+        (response) => response.url().includes('cors-proxy') && decodeURIComponent(response.url()).includes('/videos/')
+      )
       await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
       const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
       await videoPost.waitFor({ state: 'visible' })
@@ -616,6 +619,10 @@ describe('/', async () => {
         `safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`,
         { timeout: 15000 }
       )
+      // The src changes before the metadata probe settles, so wait for the proxied file to be served and for the
+      // probe to have had the chance to fail before asserting that the card stays away
+      await proxiedVideoResponse
+      await page.waitForTimeout(1000)
       expect(await videoPost.textContent()).not.toContain('Error loading media')
     }, 45000)
 
