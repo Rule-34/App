@@ -39,10 +39,7 @@ function findNodesByType(graph: SchemaOrgNode[], type: string): SchemaOrgNode[] 
 describe('Server-rendered schema.org media nodes', async () => {
   await setup(serverSetupConfig)
 
-  it('describes the first posts page of a domain listing', async () => {
-    const html = await $fetch<string>('/posts/safebooru.org')
-    const graph = extractSchemaOrgGraph(html)
-
+  function expectListingSchema(graph: SchemaOrgNode[]) {
     expect(findNodesByType(graph, 'CollectionPage')).toHaveLength(1)
     expect(findNodesByType(graph, 'BreadcrumbList')).toHaveLength(1)
 
@@ -56,12 +53,17 @@ describe('Server-rendered schema.org media nodes', async () => {
       expect(typeof image.width).toBe('number')
       expect(typeof image.height).toBe('number')
     }
+  }
+
+  it('describes the first posts page of a domain listing', async () => {
+    const html = await $fetch<string>('/posts/safebooru.org')
+
+    expectListingSchema(extractSchemaOrgGraph(html))
   }, 60000)
 
   it('describes the first posts page of a tag listing', async () => {
     const html = await $fetch<string>('/posts/safebooru.org/hair_bun')
-    const graph = extractSchemaOrgGraph(html)
 
-    expect(findNodesByType(graph, 'ImageObject')).toHaveLength(8)
+    expectListingSchema(extractSchemaOrgGraph(html))
   }, 60000)
 })
