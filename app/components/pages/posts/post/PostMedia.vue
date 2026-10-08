@@ -301,7 +301,6 @@
     mediaHasLoaded.value = false
     error.value = null
     clearPendingFailures()
-    manualRetryCount.value = 0
     probeVideoPoster()
   })
 
@@ -456,17 +455,6 @@
       return
     }
 
-    const existingSource = initializedVideoElement.querySelector('source')
-    if (existingSource) {
-      if (localSrc.value && existingSource.src !== localSrc.value) {
-        existingSource.src = localSrc.value
-      }
-    } else if (localSrc.value) {
-      const sourceElement = document.createElement('source')
-      sourceElement.src = localSrc.value
-      initializedVideoElement.appendChild(sourceElement)
-    }
-
     const fluidPlayer = fluidPlayerModule.default
     const adList: NonNullable<VastOptions['adList']> = []
 
@@ -617,8 +605,11 @@
     }
 
     videoPlayerInitPromise = createVideoPlayer()
-      .catch(() => {
+      .catch((initError) => {
         // Dynamic import or player initialization failed; the native video remains usable.
+        if (import.meta.dev) {
+          console.error('[PostMedia] Fluid Player failed to initialize', initError)
+        }
       })
       .finally(() => {
         videoPlayerInitPromise = null
@@ -765,14 +756,7 @@
   // a tripped breaker, or a direct failure that a fallback proxy then loaded successfully.
   const showHostBlockHint = computed(() => isVideo.value || isDirectBlocked.value || hostBlockConfirmed.value)
 
-  const manualRetryCount = shallowRef(0)
-
-  // A retry repeats the same requests, so offer it once, and never when the host block is already known.
-  const showTryAgain = computed(() => manualRetryCount.value < 1 && !isDirectBlocked.value && !hostBlockConfirmed.value)
-
   function manuallyReloadMedia() {
-    manualRetryCount.value += 1
-
     resetDomainBreaker(rawMediaSrc.value, props.mediaType)
     if (rawPosterSrc.value) {
       resetDomainBreaker(rawPosterSrc.value, 'image')
@@ -1023,9 +1007,8 @@
               </a>
             </div>
 
-            <!-- Only useful for transient failures, so it is demoted to a link and hidden once it cannot help -->
+            <!-- Demoted to a link, but always available -->
             <button
-              v-if="showTryAgain"
               class="self-center text-xs text-base-content underline hover:hover-text-util focus-visible:focus-outline-util"
               type="button"
               @click="manuallyReloadMedia"
