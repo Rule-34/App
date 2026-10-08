@@ -440,7 +440,9 @@
     "shareFoundOn": "Найдено на {name}: {url}",
     "sharePostTitle": "Пост #{id} с {domain}",
     "hostBlocksDirectAccess": "Этот хост блокирует прямой доступ за пределами своего сайта.",
-    "viewHere": "Смотреть здесь"
+    "viewInSandbox": "Смотреть в песочнице",
+    "viewInSandboxHint": "Обходной путь: загружает файл в ограниченном фрейме, без плеера",
+    "openNewTab": "Открыть новую вкладку"
   },
   "source": {
     "postSource": "Источник поста",

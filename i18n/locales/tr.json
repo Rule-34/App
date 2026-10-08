@@ -440,7 +440,9 @@
     "shareFoundOn": "{name} üzerinde bulundu: {url}",
     "sharePostTitle": "{domain} adresinden #{id} yayınlayın",
     "hostBlocksDirectAccess": "Bu ana bilgisayar, web sitesi dışından doğrudan erişimi engeller.",
-    "viewHere": "Burada görüntüle"
+    "viewInSandbox": "Sandbox'ta görüntüle",
+    "viewInSandboxHint": "Geçici çözüm: dosyayı oynatıcı olmadan kısıtlı bir çerçevede yükler",
+    "openNewTab": "Yeni sekme aç"
   },
   "source": {
     "postSource": "Gönderi kaynağı",

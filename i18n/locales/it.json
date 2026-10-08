@@ -440,7 +440,9 @@
     "shareFoundOn": "Trovato su {name}: {url}",
     "sharePostTitle": "Messaggio n.{id} da {domain}",
     "hostBlocksDirectAccess": "Questo host blocca l'accesso diretto al di fuori del proprio sito web.",
-    "viewHere": "Visualizza qui"
+    "viewInSandbox": "Visualizza nella sandbox",
+    "viewInSandboxHint": "Soluzione alternativa: carica il file in un frame limitato, senza il lettore",
+    "openNewTab": "Apri nuova scheda"
   },
   "source": {
     "postSource": "Pubblica fonte",

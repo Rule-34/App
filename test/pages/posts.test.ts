@@ -454,11 +454,13 @@ describe('/', async () => {
           .filter((post) => post.textContent?.includes('Error loading media'))
           .map((post) => post.getAttribute('data-testid')?.replace('safebooru.org-', ''))
       )
+      // The first 8 server-rendered posts load through imgproxy and fall back straight to the proxies, so only later
+      // posts prove the breaker stayed closed: a tripped breaker would send them to a proxy before any direct request.
       const failedFiles = mockPostsPage0.data
-        .filter((post) => failedPostIds.includes(String(post.id)))
+        .filter((post, index) => index >= 8 && failedPostIds.includes(String(post.id)))
         .map((post) => post.low_res_file.url.split('/').pop())
 
-      expect(failedFiles.length).toBeGreaterThanOrEqual(5)
+      expect(failedFiles.length).toBeGreaterThanOrEqual(2)
 
       for (const file of failedFiles) {
         const firstAttempt = requested.find(
@@ -488,8 +490,8 @@ describe('/', async () => {
 
       for (const post of [videoPost]) {
         expect(await post.getByRole('link', { name: /Get Premium/ }).count()).toBe(1)
-        expect(await post.getByRole('button', { name: 'View here' }).count()).toBe(1)
-        expect(await post.getByRole('link', { name: 'Open in new tab' }).count()).toBe(1)
+        expect(await post.getByRole('button', { name: 'View in sandbox' }).count()).toBe(1)
+        expect(await post.getByRole('link', { name: 'Open new tab' }).count()).toBe(1)
         expect(await post.getByRole('button', { name: 'Try again?' }).count()).toBe(1)
       }
     }, 30000)
@@ -507,11 +509,11 @@ describe('/', async () => {
       await firstPost.getByText('Error loading media').waitFor({ state: 'visible', timeout: 15000 })
 
       // Assert: images get the same actions as videos
-      expect(await firstPost.getByRole('button', { name: 'View here' }).count()).toBe(1)
-      expect(await firstPost.getByRole('link', { name: 'Open in new tab' }).count()).toBe(1)
+      expect(await firstPost.getByRole('button', { name: 'View in sandbox' }).count()).toBe(1)
+      expect(await firstPost.getByRole('link', { name: 'Open new tab' }).count()).toBe(1)
 
-      // Assert: View here opens the sandboxed frame
-      await firstPost.getByRole('button', { name: 'View here' }).click()
+      // Assert: View in sandbox opens the sandboxed frame
+      await firstPost.getByRole('button', { name: 'View in sandbox' }).click()
       await firstPost.locator('iframe[sandbox]').waitFor({ state: 'attached' })
 
       // Assert: closing returns to the card, and one failed retry removes Try again

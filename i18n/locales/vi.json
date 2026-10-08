@@ -440,7 +440,9 @@
     "shareFoundOn": "Được tìm thấy trên {name}: {url}",
     "sharePostTitle": "Bài đăng #{id} từ {domain}",
     "hostBlocksDirectAccess": "Máy chủ này chặn quyền truy cập trực tiếp bên ngoài trang web của họ.",
-    "viewHere": "Xem tại đây"
+    "viewInSandbox": "Xem trong sandbox",
+    "viewInSandboxHint": "Giải pháp tạm thời: tải tệp trong khung bị hạn chế, không dùng trình phát",
+    "openNewTab": "Mở tab mới"
   },
   "source": {
     "postSource": "Nguồn bài đăng",

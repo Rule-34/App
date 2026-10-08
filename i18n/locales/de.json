@@ -440,7 +440,9 @@
     "shareFoundOn": "Gefunden auf {name}: {url}",
     "sharePostTitle": "Beitrag #{id} von {domain}",
     "hostBlocksDirectAccess": "Dieser Host blockiert den direkten Zugriff außerhalb seiner Website.",
-    "viewHere": "Hier ansehen"
+    "viewInSandbox": "In Sandbox ansehen",
+    "viewInSandboxHint": "Notlösung: lädt die Datei in einem eingeschränkten Frame, ohne den Player",
+    "openNewTab": "Neuen Tab öffnen"
   },
   "source": {
     "postSource": "Beitragsquelle",
