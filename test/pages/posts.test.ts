@@ -35,6 +35,37 @@ function expectImageSrcToReference(src: string | null, expectedUrl: string) {
 
 type TrackedPage = Awaited<ReturnType<ReturnType<typeof useTrackedPageFactory>>>
 
+const PIXEL_PNG = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=',
+  'base64'
+)
+
+/** Minimal valid 8-bit mono WAV, enough for a media element to report loadedmetadata. */
+function createSilentWav(samples = 800) {
+  const header = Buffer.alloc(44)
+  header.write('RIFF', 0)
+  header.writeUInt32LE(36 + samples, 4)
+  header.write('WAVEfmt ', 8)
+  header.writeUInt32LE(16, 16)
+  header.writeUInt16LE(1, 20)
+  header.writeUInt16LE(1, 22)
+  header.writeUInt32LE(8000, 24)
+  header.writeUInt32LE(8000, 28)
+  header.writeUInt16LE(1, 32)
+  header.writeUInt16LE(8, 34)
+  header.write('data', 36)
+  header.writeUInt32LE(samples, 40)
+
+  return Buffer.concat([header, Buffer.alloc(samples, 128)])
+}
+
+/** Video mocks point at unreachable hosts; a reachable poster keeps them looking healthy until played. */
+async function mockReachableVideoPosters(page: TrackedPage) {
+  await page.route(/example\.local\/thumbnails\//, (route) =>
+    route.fulfill({ status: 200, contentType: 'image/png', body: PIXEL_PNG })
+  )
+}
+
 async function getPostImageSrc(page: TrackedPage, testId: string) {
   try {
     await page.waitForFunction(
@@ -440,9 +471,78 @@ describe('/', async () => {
       }
     }, 45000)
 
+    it('offers the same recovery actions for images and videos when media cannot load', async () => {
+      // Arrange: nothing reachable, so every candidate fails
+      const page = await createTrackedPage()
+      await page.route(
+        /(imgproxy2\.r34\.app|example\.local|safebooru\.org\/samples|\.wp\.com|duckduckgo\.com)/,
+        (route) => route.abort('failed')
+      )
+
+      // Act
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'domcontentloaded' })
+
+      // Assert: the video shows the card without being played, with the shared actions
+      const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
+      await videoPost.getByText('Error loading media').waitFor({ state: 'visible', timeout: 15000 })
+
+      for (const post of [videoPost]) {
+        expect(await post.getByRole('link', { name: /Get Premium/ }).count()).toBe(1)
+        expect(await post.getByRole('button', { name: 'View here' }).count()).toBe(1)
+        expect(await post.getByRole('link', { name: 'Open in new tab' }).count()).toBe(1)
+        expect(await post.getByRole('button', { name: 'Try again?' }).count()).toBe(1)
+      }
+    }, 30000)
+
+    it('shows the image error card with the sandbox action and demotes Try again after one retry', async () => {
+      // Arrange
+      const page = await createTrackedPage()
+      await page.route(/(imgproxy2\.r34\.app|safebooru\.org\/samples|\.wp\.com|duckduckgo\.com)/, (route) =>
+        route.abort('failed')
+      )
+
+      // Act
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'domcontentloaded' })
+      const firstPost = page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`).first()
+      await firstPost.getByText('Error loading media').waitFor({ state: 'visible', timeout: 15000 })
+
+      // Assert: images get the same actions as videos
+      expect(await firstPost.getByRole('button', { name: 'View here' }).count()).toBe(1)
+      expect(await firstPost.getByRole('link', { name: 'Open in new tab' }).count()).toBe(1)
+
+      // Assert: View here opens the sandboxed frame
+      await firstPost.getByRole('button', { name: 'View here' }).click()
+      await firstPost.locator('iframe[sandbox]').waitFor({ state: 'attached' })
+
+      // Assert: closing returns to the card, and one failed retry removes Try again
+      await firstPost.getByRole('button', { name: 'Close' }).click()
+      await firstPost.getByRole('button', { name: 'Try again?' }).click()
+      await firstPost.getByText('Error loading media').waitFor({ state: 'visible', timeout: 15000 })
+      expect(await firstPost.getByRole('button', { name: 'Try again?' }).count()).toBe(0)
+    }, 45000)
+
+    it('does not hide a playable video behind an error card when only its poster fails', async () => {
+      // Arrange: poster blocked, but the video itself loads (a tiny valid WAV is enough for metadata)
+      const page = await createTrackedPage()
+      await page.route(/example\.local\/thumbnails\//, (route) => route.abort('failed'))
+      await page.route(/example\.local\/videos\//, (route) =>
+        route.fulfill({ status: 200, contentType: 'audio/wav', body: createSilentWav() })
+      )
+
+      // Act
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
+
+      // Assert
+      const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
+      await videoPost.waitFor({ state: 'visible' })
+      await page.waitForTimeout(1500)
+      expect(await videoPost.locator('video').count()).toBeGreaterThan(0)
+    }, 30000)
+
     it('does not display media load error when video completes or ends normally', async () => {
       // Arrange
       const page = await createTrackedPage()
+      await mockReachableVideoPosters(page)
 
       // Act
       await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
@@ -473,6 +573,7 @@ describe('/', async () => {
     it('triggers media load error on genuine mid-playback video failure when ended is false', async () => {
       // Arrange
       const page = await createTrackedPage()
+      await mockReachableVideoPosters(page)
 
       // Act
       await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
@@ -501,6 +602,7 @@ describe('/', async () => {
     it('ignores bogus /null source resets on video loop/end and preserves playback', async () => {
       // Arrange
       const page = await createTrackedPage()
+      await mockReachableVideoPosters(page)
 
       // Act
       await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
@@ -530,6 +632,7 @@ describe('/', async () => {
     it('pauses other playing videos when a new video starts playing', async () => {
       // Arrange
       const page = await createTrackedPage()
+      await mockReachableVideoPosters(page)
 
       // Act
       await page.goto(url('/posts/safebooru.org?tags=multi_video_test'), { waitUntil: 'networkidle' })
@@ -607,6 +710,7 @@ describe('/', async () => {
     it('pauses video playback when scrolled out of viewport', async () => {
       // Arrange
       const page = await createTrackedPage()
+      await mockReachableVideoPosters(page)
 
       // Act
       await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })

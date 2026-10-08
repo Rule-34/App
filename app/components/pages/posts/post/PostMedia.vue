@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import type { IPost, PostMediaType } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
-  import { ArrowPathIcon, ArrowTopRightOnSquareIcon, SparklesIcon, XMarkIcon } from '@heroicons/vue/20/solid'
+  import { ArrowTopRightOnSquareIcon, SparklesIcon, XMarkIcon } from '@heroicons/vue/20/solid'
   import {
     cleanMediaUrl,
     getCandidateSources,
@@ -100,6 +100,7 @@
   let posterProbeToken = 0
   let isUnmounted = false
   let activeProbe: HTMLImageElement | null = null
+  let activeVideoProbe: HTMLVideoElement | null = null
 
   let unsubscribeHealthChange: (() => void) | null = null
 
@@ -216,13 +217,59 @@
         const nextIdx = idx + 1
         if (nextIdx < posterCandidates.value.length) {
           probeCandidate(nextIdx)
+          return
         }
+
+        probeVideoSource(currentToken)
       }
 
       probe.src = candidateUrl
     }
 
     probeCandidate(candidateIdx)
+  }
+
+  function stopVideoProbe() {
+    if (!activeVideoProbe) return
+    activeVideoProbe.onloadedmetadata = null
+    activeVideoProbe.onerror = null
+    activeVideoProbe.removeAttribute('src')
+    activeVideoProbe.load()
+    activeVideoProbe = null
+  }
+
+  /**
+   * Videos use preload="none", so a blocked file stays silent until played. Once every poster candidate has failed,
+   * check the video itself (metadata only) and raise the error card right away if it cannot load either.
+   * A dead poster alone must not hide a video that still plays.
+   */
+  function probeVideoSource(token: number) {
+    const src = localSrc.value
+
+    if (import.meta.server || isUnmounted || !isVideo.value || !src || mediaHasLoaded.value || hasError.value) {
+      return
+    }
+
+    stopVideoProbe()
+
+    const probe = document.createElement('video')
+    activeVideoProbe = probe
+    probe.preload = 'metadata'
+
+    probe.onloadedmetadata = () => {
+      if (activeVideoProbe === probe) stopVideoProbe()
+    }
+
+    probe.onerror = () => {
+      const isStale = isUnmounted || token !== posterProbeToken || activeVideoProbe !== probe
+      stopVideoProbe()
+
+      if (!isStale && !mediaHasLoaded.value && !hasError.value) {
+        error.value = new Error(t('errors.mediaLoadError'))
+      }
+    }
+
+    probe.src = src
   }
 
   const useIframePlayer = shallowRef(false)
@@ -254,6 +301,7 @@
     mediaHasLoaded.value = false
     error.value = null
     clearPendingFailures()
+    manualRetryCount.value = 0
     probeVideoPoster()
   })
 
@@ -337,6 +385,8 @@
       activeProbe.onerror = null
       activeProbe = null
     }
+
+    stopVideoProbe()
 
     if (videoPlayerInitTimeout !== null) {
       window.clearTimeout(videoPlayerInitTimeout)
@@ -716,10 +766,15 @@
   const showHostBlockHint = computed(() => isVideo.value || isDirectBlocked.value || hostBlockConfirmed.value)
 
   const isRetrying = shallowRef(false)
+  const manualRetryCount = shallowRef(0)
+
+  // A retry repeats the same requests, so offer it once, and never when the host block is already known.
+  const showTryAgain = computed(() => manualRetryCount.value < 1 && !isDirectBlocked.value && !hostBlockConfirmed.value)
 
   function manuallyReloadMedia() {
     if (isRetrying.value) return
     isRetrying.value = true
+    manualRetryCount.value += 1
 
     resetDomainBreaker(rawMediaSrc.value, props.mediaType)
     if (rawPosterSrc.value) {
@@ -928,155 +983,41 @@
             </p>
           </div>
 
-          <!-- Actions -->
-          <div class="w-full">
-            <!-- Compact Video Actions (Landscape / Short Cards: Single Row) -->
-            <div
-              v-if="isVideo && isShortMedia"
-              class="flex w-full items-center gap-2"
+          <!-- Actions (identical for every media type) -->
+          <div class="flex w-full flex-col gap-2.5">
+            <!-- Premium bypasses host blocks automatically, so it is the one filled action -->
+            <NuxtLink
+              v-if="!isPremium"
+              :href="localePath('/premium?utm_source=internal&utm_medium=media-error#pricing')"
+              class="inline-flex min-h-[40px] w-full items-center justify-center gap-1.5 rounded-md bg-primary-700 px-4 py-2 text-center text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
             >
-              <!-- Primary CTA: Play in Sandbox -->
+              <SparklesIcon
+                class="h-4 w-4 shrink-0 text-accent-400"
+                aria-hidden="true"
+              />
+              <span>{{ t('media.getPremium') }} {{ t('media.toBypassBlocks') }}</span>
+            </NuxtLink>
+
+            <div class="flex w-full items-center gap-2.5">
+              <!-- Workaround: load the file in a sandboxed frame (skips the player and its ads) -->
               <button
                 v-if="rawMediaSrc"
-                class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md bg-primary-700 px-3 py-1.5 text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
+                :class="
+                  isPremium
+                    ? 'bg-primary-700 text-base-content-highlight shadow-sm hover:bg-primary-600 active:bg-primary-800'
+                    : 'text-base-content ring-1 ring-base-0/20 hover:hover-bg-util'
+                "
+                class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md px-3 py-1.5 text-sm transition-colors hover:hover-text-util focus-visible:focus-outline-util"
                 type="button"
                 @click="playInIframe"
               >
-                <span class="truncate">{{ t('media.playInSandbox') }}</span>
+                <span class="truncate">{{ t('media.viewHere') }}</span>
               </button>
 
-              <!-- Open in new tab (icon button) -->
-              <a
-                v-if="rawMediaSrc"
-                :aria-label="t('tags.openInNewTab')"
-                :href="rawMediaSrc"
-                :title="t('tags.openInNewTab')"
-                class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <ArrowTopRightOnSquareIcon
-                  class="h-4 w-4 shrink-0 text-base-content"
-                  aria-hidden="true"
-                />
-              </a>
-
-              <!-- Try Again (icon button for compact mode) -->
-              <button
-                :aria-label="t('media.tryAgain')"
-                :title="t('media.tryAgain')"
-                :disabled="isRetrying"
-                :class="isRetrying ? 'cursor-wait opacity-60' : ''"
-                class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
-                type="button"
-                @click="manuallyReloadMedia"
-              >
-                <ArrowPathIcon
-                  class="h-4 w-4 shrink-0 text-base-content"
-                  aria-hidden="true"
-                />
-              </button>
-            </div>
-
-            <!-- Expanded Video Actions (Portrait / Tall Cards: Two Tiers) -->
-            <div
-              v-else-if="isVideo"
-              class="flex w-full flex-col gap-2.5"
-            >
-              <!-- Video Primary CTA: Play in Sandbox -->
-              <button
-                v-if="rawMediaSrc"
-                class="inline-flex min-h-[40px] w-full items-center justify-center rounded-md bg-primary-700 px-4 py-2 text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
-                type="button"
-                @click="playInIframe"
-              >
-                {{ t('media.playInSandbox') }}
-              </button>
-
-              <!-- Video Secondary Actions Row (subordinated, compact) -->
-              <div class="flex w-full items-center gap-2.5">
-                <!-- Open in new tab -->
-                <a
-                  v-if="rawMediaSrc"
-                  :href="rawMediaSrc"
-                  class="inline-flex min-h-[32px] flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  <ArrowTopRightOnSquareIcon
-                    class="h-3.5 w-3.5 shrink-0 text-base-content"
-                    aria-hidden="true"
-                  />
-                  <span class="truncate">{{ t('tags.openInNewTab') }}</span>
-                </a>
-
-                <!-- Try Again (No icon) -->
-                <button
-                  :disabled="isRetrying"
-                  :class="isRetrying ? 'cursor-wait opacity-60' : ''"
-                  class="inline-flex min-h-[32px] flex-1 items-center justify-center rounded-md px-3 py-1.5 text-xs text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
-                  type="button"
-                  @click="manuallyReloadMedia"
-                >
-                  <span class="truncate">{{ t('media.tryAgain') }}</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Compact Image Actions (Landscape / Short Cards: Single Row) -->
-            <div
-              v-else-if="isShortMedia"
-              class="flex w-full items-center gap-2"
-            >
-              <!-- Try Again -->
-              <button
-                :disabled="isRetrying"
-                :class="isRetrying ? 'cursor-wait opacity-60' : ''"
-                class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md bg-primary-700 px-3 py-1.5 text-sm font-semibold text-base-content-highlight transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
-                type="button"
-                @click="manuallyReloadMedia"
-              >
-                <span>{{ t('media.tryAgain') }}</span>
-              </button>
-
-              <!-- Open in new tab (icon button) -->
-              <a
-                v-if="rawMediaSrc"
-                :aria-label="t('tags.openInNewTab')"
-                :href="rawMediaSrc"
-                :title="t('tags.openInNewTab')"
-                class="inline-flex min-h-[38px] min-w-[38px] items-center justify-center rounded-md px-2.5 py-1.5 text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <ArrowTopRightOnSquareIcon
-                  class="h-4 w-4 shrink-0 text-base-content"
-                  aria-hidden="true"
-                />
-              </a>
-            </div>
-
-            <!-- Expanded Image Actions Row -->
-            <div
-              v-else
-              class="flex w-full items-center gap-2.5"
-            >
-              <!-- Try Again (No icon) -->
-              <button
-                :disabled="isRetrying"
-                :class="isRetrying ? 'cursor-wait opacity-60' : ''"
-                class="inline-flex min-h-[38px] flex-1 items-center justify-center rounded-md bg-primary-700 px-3 py-1.5 text-sm font-semibold text-base-content-highlight transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
-                type="button"
-                @click="manuallyReloadMedia"
-              >
-                <span>{{ t('media.tryAgain') }}</span>
-              </button>
-
-              <!-- Open in new tab -->
               <a
                 v-if="rawMediaSrc"
                 :href="rawMediaSrc"
-                class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
+                class="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-sm text-base-content ring-1 ring-base-0/20 transition-colors hover:hover-bg-util hover:hover-text-util focus-visible:focus-outline-util"
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -1087,23 +1028,19 @@
                 <span class="truncate">{{ t('tags.openInNewTab') }}</span>
               </a>
             </div>
-          </div>
 
-          <!-- Premium promotion (100% inline text flow with SparklesIcon) -->
-          <p
-            v-if="!isPremium"
-            class="text-center text-xs leading-relaxed text-base-content"
-          >
-            <SparklesIcon
-              class="mr-1.5 inline-block h-3.5 w-3.5 align-[-2px] text-accent-400"
-              aria-hidden="true"
-            />
-            <NuxtLink
-              :href="localePath('/premium?utm_source=internal&utm_medium=media-error#pricing')"
-              class="font-medium underline hover:hover-text-util focus-visible:focus-outline-util"
-              >{{ t('media.getPremium') }}</NuxtLink
-            >{{ ' ' }}<span>{{ t('media.toBypassBlocks') }}</span>
-          </p>
+            <!-- Only useful for transient failures, so it is demoted to a link and hidden once it cannot help -->
+            <button
+              v-if="showTryAgain"
+              :disabled="isRetrying"
+              :class="isRetrying ? 'cursor-wait opacity-60' : ''"
+              class="self-center text-xs text-base-content underline hover:hover-text-util focus-visible:focus-outline-util"
+              type="button"
+              @click="manuallyReloadMedia"
+            >
+              {{ t('media.tryAgain') }}
+            </button>
+          </div>
         </div>
       </div>
     </template>

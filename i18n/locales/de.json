@@ -439,8 +439,8 @@
     "postDescription": "{mediaType} #{id} von {domain} mit einem Score von {score}, Bewertung {rating}, getaggt mit {tags}",
     "shareFoundOn": "Gefunden auf {name}: {url}",
     "sharePostTitle": "Beitrag #{id} von {domain}",
-    "playInSandbox": "In Sandbox abspielen",
-    "hostBlocksDirectAccess": "Dieser Host blockiert den direkten Zugriff außerhalb seiner Website."
+    "hostBlocksDirectAccess": "Dieser Host blockiert den direkten Zugriff außerhalb seiner Website.",
+    "viewHere": "Hier ansehen"
   },
   "source": {
     "postSource": "Beitragsquelle",
