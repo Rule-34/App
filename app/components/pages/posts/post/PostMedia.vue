@@ -257,11 +257,17 @@
     probe.preload = 'metadata'
 
     probe.onloadedmetadata = () => {
-      if (activeVideoProbe !== probe) return
+      const isStale = isUnmounted || token !== posterProbeToken || activeVideoProbe !== probe
       stopVideoProbe()
+
+      if (isStale) return
 
       if (srcCandidateIndex.value > 0) {
         confirmPendingMediaFailure()
+      } else if (isDirectRequest.value && rawMediaSrc.value) {
+        // preload="none" never emits loadeddata, so this probe is the only direct-success signal before playback
+        pendingMediaDirectFailure = false
+        recordDirectSuccess(rawMediaSrc.value, props.mediaType)
       }
     }
 
@@ -319,6 +325,8 @@
     mediaHasLoaded.value = false
     error.value = null
     clearPendingFailures()
+    posterProbeToken += 1
+    stopVideoProbe()
     probeVideoPoster()
   })
 
