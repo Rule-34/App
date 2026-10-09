@@ -174,6 +174,10 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
   egress IP. Worker fetches must use clean upstream headers instead of forwarding inbound `CF-*`, `X-Forwarded-*`,
   `X-Real-IP`, cookies, or authorization headers; leaked caller metadata can make imgproxy fetches return `429`.
 
+- `<video>` has no `referrerpolicy` attribute, so videos follow the page policy. nuxt-security defaults it to `no-referrer`,
+  which e621's CDN rejects for video (images are fine; they set `referrerpolicy` per element). Pages that render videos
+  override it to `strict-origin-when-cross-origin` through route rules in `nuxt.config.ts`.
+
 ### Headless UI
 
 - Do not add `provideHeadlessUseId` in `app/app.vue` while the project uses Vue 3.5+ and `@headlessui/vue` 1.7.23+; those

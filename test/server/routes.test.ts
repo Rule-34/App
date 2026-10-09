@@ -304,4 +304,20 @@ describe('Server & Nitro Routes', async () => {
       expect(response.status).not.toBe(301)
     })
   })
+
+  describe('Referrer-Policy', () => {
+    it('lets pages that render videos send the origin, since <video> cannot set its own policy', async () => {
+      for (const path of ['/posts/e621.net', '/es/posts/e621.net', '/premium/saved-posts/e621.net']) {
+        const response = await fetch(path)
+
+        expect(response.headers.get('referrer-policy'), path).toBe('strict-origin-when-cross-origin')
+      }
+    })
+
+    it('keeps the strict no-referrer default everywhere else', async () => {
+      const response = await fetch('/legal')
+
+      expect(response.headers.get('referrer-policy')).toBe('no-referrer')
+    })
+  })
 })
