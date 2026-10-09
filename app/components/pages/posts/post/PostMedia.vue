@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import type { IPost, PostMediaType } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
-  import { isFluidPlayerLoaded, loadFluidPlayer, prefetchFluidPlayerWhenIdle } from '~/assets/js/fluid-player-loader'
+  import { prefetchFluidPlayerWhenIdle } from '~/assets/js/fluid-player-loader'
   import { ArrowTopRightOnSquareIcon, CubeTransparentIcon, XMarkIcon } from '@heroicons/vue/20/solid'
   import {
     cleanMediaUrl,
@@ -18,9 +18,7 @@
   const { t } = useI18n()
   const { isPremium } = useUserData()
   const { autoplayAnimatedMedia } = useUserSettings()
-  const { timesVideoHasRendered } = useEthics()
   const { wasCurrentPageSSR } = useSSRDetection()
-  const { schedule: scheduleIdleTask } = useIdleTask()
 
   interface PostMediaProps {
     postIndex: number
@@ -36,13 +34,6 @@
   const props = defineProps<PostMediaProps>()
 
   type MediaElementRef = HTMLElement | { $el?: Element } | null
-  type FluidPlayerOptionsWithPlaybackRates = Partial<FluidPlayerOptions> & {
-    layoutControls?: Partial<
-      Omit<LayoutControls, 'controlBar'> & {
-        controlBar?: Partial<LayoutControls['controlBar'] & { playbackRates: string[] }>
-      }
-    >
-  }
 
   const mediaElement = shallowRef<MediaElementRef>(null)
 
@@ -277,7 +268,7 @@
       if (srcCandidateIndex.value + 1 < srcCandidates.value.length) {
         srcCandidateIndex.value += 1
         // The keyed <video> is recreated for the new source; the fresh element upgrades through the normal path
-        destroyVideoPlayer()
+        fluid.destroy()
         nextTick(() => probeVideoSource(token))
         return
       }
@@ -296,7 +287,7 @@
       if (srcCandidateIndex.value === 0 && srcCandidates.value.length > 1) {
         srcCandidateIndex.value = 1
         if (isVideo.value) {
-          reloadVideoPlayer(false)
+          fluid.reload(false)
         }
       }
     }
@@ -322,7 +313,7 @@
     probeVideoPoster()
 
     // The keyed <video> is recreated for the new source, so drop the player bound to the old one
-    destroyVideoPlayer()
+    fluid.destroy()
   })
 
   const error = ref<Error | null>(null)
@@ -370,11 +361,7 @@
     link: lcpVideoPosterPreloadLinks.value
   }))
 
-  let videoPlayer: FluidPlayerInstance | undefined
-  let videoPlayerInitPromise: Promise<void> | null = null
-  let videoPlayerIdleScheduled = false
-  let videoPlayerInitTimeout: number | null = null
-  let hasCountedVideoRender = false
+  const fluid = useFluidVideoPlayer({ getVideoElement, getSource: () => localSrc.value })
 
   const isAnimatedMediaLoading = ref(false)
   const isAnimatedMediaPlaying = ref(false)
@@ -406,15 +393,6 @@
 
     stopPosterProbe()
     stopVideoProbe()
-
-    if (videoPlayerInitTimeout !== null) {
-      window.clearTimeout(videoPlayerInitTimeout)
-      videoPlayerInitTimeout = null
-      videoPlayerIdleScheduled = false
-    }
-
-    // The video element can already be gone (error card, sandbox), so destroy before the element check
-    destroyVideoPlayer()
 
     let finalMediaElement = getResolvedMediaElement()
 
@@ -457,261 +435,6 @@
         v.pause()
       }
     })
-  }
-
-  async function createVideoPlayer() {
-    const videoElement = getVideoElement()
-
-    if (!videoElement) {
-      throw new Error('Media element not found')
-    }
-
-    if (!isVideo.value) {
-      throw new Error('Media is not a video')
-    }
-
-    const fluidPlayerModule = await loadFluidPlayer()
-
-    const initializedVideoElement = getVideoElement()
-
-    if (isUnmounted || !initializedVideoElement) {
-      return
-    }
-
-    const fluidPlayer = fluidPlayerModule.default
-    const adList: NonNullable<VastOptions['adList']> = []
-
-    const fluidPlayerOptions: FluidPlayerOptionsWithPlaybackRates = {
-      layoutControls: {
-        primaryColor: 'rgba(0, 0, 0, 0.7)',
-
-        fillToContainer: true,
-
-        // Round only the top, like the card; Fluid applies it to its wrapper and the video.
-        // It takes any CSS border-radius shorthand at runtime, its typings only allow a number.
-        roundedCorners: '6px 6px 0 0' as unknown as number,
-
-        preload: 'none',
-
-        loop: true,
-
-        playbackRateEnabled: true,
-
-        allowTheatre: false,
-
-        autoRotateFullScreen: true,
-
-        // Fix: Opening in fullscreen when searching something with "F"
-        keyboardControl: false,
-
-        controlBar: {
-          autoHide: true,
-
-          playbackRates: ['x2', 'x1.5', 'x1', 'x0.75', 'x0.5', 'x0.25']
-        },
-
-        contextMenu: {
-          controls: true,
-
-          links: [
-            {
-              label: t('media.removeAds'),
-              href: localePath('/premium?utm_source=internal&utm_medium=player-context-menu#pricing')
-            },
-            {
-              label: t('media.download'),
-              href: localSrc.value
-            }
-          ]
-        },
-
-        miniPlayer: {
-          enabled: false
-        }
-      },
-
-      onBeforeXMLHttpRequest(request) {
-        request.withCredentials = false
-      },
-
-      vastOptions: {
-        adText: t('media.adText'),
-
-        vastAdvanced: {
-          /**
-           * Handle empty VAST
-           */
-          vastVideoEndedCallback() {
-            const currentVideoElement = getVideoElement()
-
-            if (!currentVideoElement?.src.endsWith('/null')) {
-              return
-            }
-
-            currentVideoElement.src = localSrc.value
-            videoPlayer?.play()
-          }
-        },
-
-        adList
-      }
-    }
-
-    if (!isPremium.value) {
-      // Count each mounted video once, not on every fallback/retry player re-creation
-      if (!hasCountedVideoRender) {
-        hasCountedVideoRender = true
-        timesVideoHasRendered.value++
-      }
-
-      // Only show pause roll ads every 2 videos
-      if (timesVideoHasRendered.value % 2 === 0) {
-        adList.push(
-          // In-Video Banner
-          {
-            roll: 'onPauseRoll',
-            vastTag:
-              /**
-               * ExoClick
-               * Pros:
-               * Cons: Low revenue (7)
-               */
-              'https://s.magsrv.com/splash.php?idzone=5386214'
-          }
-        )
-      }
-      //
-
-      // Only show preroll ads after 3 videos, and every 3 videos
-      if (timesVideoHasRendered.value > 3 && timesVideoHasRendered.value % 3 === 0) {
-        adList.push(
-          // In-Stream Video
-          {
-            roll: 'preRoll',
-            vastTag:
-              /**
-               * ExoClick
-               * Pros:
-               * Cons: Low revenue (9)
-               */
-              'https://s.magsrv.com/splash.php?idzone=5386496'
-
-            /**
-             * HilltopAds
-             * Pros:
-             * Cons: Low revenue (4)
-             */
-            // 'https://ellipticaltrack.com/dCm.FXz/doGMNPv/Z-GhUX/OermX9/u-ZqUEltk/PYTgYBy/ODTZQI5oNHDDEHtdNbjLIS5eNvDhk/0uMGgu?limit=1'
-
-            /**
-             * Clickadu
-             * Pros:
-             * Cons:
-             */
-            // 'https://anewfeedliberty.com/ceef/gdt3g0/tbt/2034767/tlk.xml'
-
-            /**
-             * AdSession
-             * Pros:
-             * Cons:
-             */
-            // 'https://s.eunow4u.com/v1/vast.php?idzone=2310'
-          }
-        )
-      }
-    }
-
-    videoPlayer = fluidPlayer(initializedVideoElement, fluidPlayerOptions)
-
-    // Fluid clips its wrapper (overflow: hidden), which cuts off the right-click menu near the edges. Without the clip
-    // the inline-block wrapper sits on the text baseline and leaves a gap under the video, so align it to the top.
-    const wrapper = initializedVideoElement.closest<HTMLElement>('.fluid_video_wrapper')
-    wrapper?.style.setProperty('overflow', 'visible')
-    wrapper?.style.setProperty('vertical-align', 'top')
-
-    // TODO: Handle poster error
-  }
-
-  function initializeVideoPlayer() {
-    if (videoPlayer || videoPlayerInitPromise) {
-      return videoPlayerInitPromise
-    }
-
-    videoPlayerInitPromise = createVideoPlayer()
-      .catch((initError) => {
-        // Dynamic import or player initialization failed; the native video remains usable.
-        if (import.meta.dev) {
-          console.error('[PostMedia] Fluid Player failed to initialize', initError)
-        }
-      })
-      .finally(() => {
-        videoPlayerInitPromise = null
-      })
-
-    return videoPlayerInitPromise
-  }
-
-  function scheduleVideoPlayerInitialization(delay = 1200, timeout = 4000) {
-    if (videoPlayer || videoPlayerInitPromise) {
-      return
-    }
-
-    // The deferral below only protects the cold page load. Once Fluid Player is in memory, upgrade right away
-    // so videos scrolled into view never show the native player first, even if an idle upgrade is still queued
-    // (its callback re-checks the player state, so it cannot initialize twice).
-    if (isFluidPlayerLoaded()) {
-      initializeVideoPlayer()
-      return
-    }
-
-    if (videoPlayerIdleScheduled) {
-      return
-    }
-
-    videoPlayerIdleScheduled = true
-
-    videoPlayerInitTimeout = window.setTimeout(() => {
-      videoPlayerInitTimeout = null
-
-      scheduleIdleTask(() => {
-        videoPlayerIdleScheduled = false
-
-        // No viewport check on purpose: once queued, upgrade even if scrolled away, so the player never
-        // visibly swaps in over the native one while the user scrolls past.
-        if (isUnmounted || videoPlayer || videoPlayerInitPromise || !getVideoElement() || !isVideo.value) {
-          return
-        }
-
-        initializeVideoPlayer()
-      }, timeout)
-    }, delay)
-  }
-
-  function destroyVideoPlayer() {
-    if (!videoPlayer) {
-      return
-    }
-
-    videoPlayer.destroy()
-    videoPlayer = undefined
-  }
-
-  async function reloadVideoPlayer(shouldPlay: boolean = false) {
-    await nextTick()
-    destroyVideoPlayer()
-
-    await nextTick()
-    try {
-      await initializeVideoPlayer()
-    } catch {
-      // Player re-creation failed
-      return
-    }
-
-    if (shouldPlay) {
-      await nextTick()
-      videoPlayer?.play()
-    }
   }
 
   function startPlayingAnimatedMedia() {
@@ -782,7 +505,7 @@
     if (srcCandidateIndex.value + 1 < srcCandidates.value.length) {
       srcCandidateIndex.value += 1
       if (isVideo.value) {
-        reloadVideoPlayer(true)
+        fluid.reload(true)
       }
       return
     }
@@ -815,7 +538,7 @@
 
       nextTick(async () => {
         probeVideoPoster()
-        await reloadVideoPlayer()
+        await fluid.reload()
         // Prompt browser to fetch media stream on retry
         getVideoElement()?.load()
       })
@@ -866,22 +589,13 @@
     }
 
     if (entry.isIntersecting) {
-      scheduleVideoPlayerInitialization(isLikelyLcpMedia.value ? 1200 : 1600)
+      fluid.scheduleUpgrade(isLikelyLcpMedia.value ? 1200 : 1600)
       return
     }
 
-    if (videoPlayerInitTimeout !== null) {
-      window.clearTimeout(videoPlayerInitTimeout)
-      videoPlayerInitTimeout = null
-      videoPlayerIdleScheduled = false
-    }
-
+    fluid.cancelScheduledUpgrade()
     getVideoElement()?.pause()
-    try {
-      videoPlayer?.pause()
-    } catch {
-      // Ignore if player is torn down
-    }
+    fluid.pause()
   }
 
   function onMediaLoad() {
@@ -1240,9 +954,9 @@
         @play="onVideoPlay"
         @error="onMediaError"
         @loadeddata="onMediaLoad"
-        @focus="initializeVideoPlayer"
-        @pointerdown="initializeVideoPlayer"
-        @pointerenter="initializeVideoPlayer"
+        @focus="fluid.initialize()"
+        @pointerdown="fluid.initialize()"
+        @pointerenter="fluid.initialize()"
       />
     </div>
   </div>
