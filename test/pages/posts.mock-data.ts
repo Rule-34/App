@@ -3909,3 +3909,16 @@ export const mockPostsPageWithMultipleVideos = {
     next: null
   }
 }
+
+export const mockPostsPageWithE621Video = {
+  ...mockPostsPageWithVideoMedia,
+  data: [
+    {
+      ...mockPostsPageWithVideoMedia.data[0],
+      id: 8890,
+      high_res_file: { url: 'https://static1.e621.net/data/aa/bb/video.mp4', width: 1920, height: 1080 },
+      low_res_file: { url: 'https://static1.e621.net/data/aa/bb/video.mp4', width: 1280, height: 720 },
+      preview_file: { url: 'https://static1.e621.net/data/preview/aa/bb/video.jpg', width: 150, height: 92 }
+    }
+  ]
+}

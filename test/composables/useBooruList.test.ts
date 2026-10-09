@@ -3,7 +3,7 @@ import {
   completeBooruList,
   defaultBooruList as sharedDefaultBoorus
 } from '../../app/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-import { defaultBooruList } from '../../app/composables/useBooruList'
+import { appDefaultBooruList as defaultBooruList } from '../../app/composables/useBooruList'
 
 describe('useBooruList', () => {
   it('preserves the curated manual order from completeBooruList without sorting', () => {

@@ -11,8 +11,7 @@
     onDomainHealthChange,
     recordDirectFailure,
     recordDirectSuccess,
-    resetDomainBreaker,
-    type MediaReferrerPolicy
+    resetDomainBreaker
   } from '~/assets/js/media-resilience'
 
   const localePath = useLocalePath()
@@ -153,20 +152,6 @@
 
   const mediaReferrerPolicy = computed(() => getMediaReferrerPolicy(localSrc.value))
   const posterReferrerPolicy = computed(() => getMediaReferrerPolicy(localPosterSrc.value))
-  const videoReferrerPolicy = computed<MediaReferrerPolicy>(() => {
-    const mediaPolicy = mediaReferrerPolicy.value
-    const posterPolicy = posterReferrerPolicy.value
-
-    if (mediaPolicy === 'origin' || posterPolicy === 'origin') {
-      return 'origin'
-    }
-
-    if (mediaPolicy === 'no-referrer' || posterPolicy === 'no-referrer') {
-      return 'no-referrer'
-    }
-
-    return 'strict-origin-when-cross-origin'
-  })
 
   function probeVideoPoster() {
     if (import.meta.server || isUnmounted || !isVideo.value || !posterCandidates.value.length) {
@@ -287,6 +272,8 @@
       // Try the next candidate (e.g. the premium proxy) before giving up
       if (srcCandidateIndex.value + 1 < srcCandidates.value.length) {
         srcCandidateIndex.value += 1
+        // The keyed <video> is recreated for the new source; the fresh element upgrades through the normal path
+        destroyVideoPlayer()
         nextTick(() => probeVideoSource(token))
         return
       }
@@ -329,6 +316,9 @@
     posterProbeToken += 1
     stopVideoProbe()
     probeVideoPoster()
+
+    // The keyed <video> is recreated for the new source, so drop the player bound to the old one
+    destroyVideoPlayer()
   })
 
   const error = ref<Error | null>(null)
@@ -423,6 +413,9 @@
       videoPlayerIdleScheduled = false
     }
 
+    // The video element can already be gone (error card, sandbox), so destroy before the element check
+    destroyVideoPlayer()
+
     let finalMediaElement = getResolvedMediaElement()
 
     if (finalMediaElement == null) {
@@ -446,7 +439,6 @@
     //
     else if (isVideo.value) {
       getVideoElement()?.pause()
-      destroyVideoPlayer()
     }
   })
 
@@ -767,7 +759,9 @@
 
     // Case 2: Main media failed to load (image, gif, or video)
     // If Candidate 0 (direct request) failed, record failure for the domain
-    if (isDirectRequest.value && !isDirectBlocked.value) {
+    // A host that already served the video is not at fault for a later stall (a loaded animated poster says nothing
+    // about the GIF itself)
+    if (isDirectRequest.value && !isDirectBlocked.value && !(isVideo.value && mediaHasLoaded.value)) {
       pendingMediaDirectFailure = true
     }
 
@@ -803,13 +797,10 @@
     clearPendingFailures()
 
     if (isVideo.value) {
-      const willBlockPoster = isPosterDirectBlocked.value && posterCandidates.value.length > 1
-      posterCandidateIndex.value = willBlockPoster ? 1 : 0
+      posterCandidateIndex.value = 0
 
       nextTick(async () => {
-        if (!willBlockPoster) {
-          probeVideoPoster()
-        }
+        probeVideoPoster()
         await reloadVideoPlayer()
         // Prompt browser to fetch media stream on retry
         getVideoElement()?.load()
@@ -1221,9 +1212,10 @@
     <div
       v-else-if="isVideo"
       :key="localSrc"
+      class="overflow-hidden rounded-t-md"
     >
       <!-- TODO: Add load animation -->
-      <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
+      <!-- Fluid Player wraps the video in square layers (poster, overlays), so the container clips them to the card's corners -->
       <video
         ref="mediaElement"
         v-intersection-observer="[onVideoIntersectionObserver, { rootMargin: '100px' }]"
@@ -1237,7 +1229,6 @@
         loop
         playsinline
         preload="none"
-        :referrerpolicy="videoReferrerPolicy"
         @play="onVideoPlay"
         @error="onMediaError"
         @loadeddata="onMediaLoad"

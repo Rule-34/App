@@ -7,7 +7,7 @@ import type { Domain } from '~/assets/js/domain'
 
 const disabledDomains = new Set(['realbooru.com', 'konachan.com', 'booru.allthefallen.moe', 'sakugabooru.com'])
 
-export const defaultBooruList: Domain[] = completeBooruList
+export const appDefaultBooruList: Domain[] = completeBooruList
   .filter((booruObj) => !disabledDomains.has(booruObj.domain))
   .map((booruObj) => {
     const booruType = booruTypeList.find((booruTypeObj) => booruTypeObj.type === booruObj.type)
@@ -31,10 +31,10 @@ export default function () {
 
   return {
     booruList: computed(() => {
-      return [...defaultBooruList, ...userBooruList.value]
+      return [...appDefaultBooruList, ...userBooruList.value]
     }),
 
-    defaultBooruList,
+    defaultBooruList: appDefaultBooruList,
 
     userBooruList,
 

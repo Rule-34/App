@@ -103,6 +103,7 @@
         loading="lazy"
         marginheight="0"
         marginwidth="0"
+        referrerpolicy="no-referrer"
         sandbox="allow-scripts allow-same-origin"
         scrolling="no"
       />

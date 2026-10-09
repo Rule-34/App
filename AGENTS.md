@@ -174,6 +174,12 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
   egress IP. Worker fetches must use clean upstream headers instead of forwarding inbound `CF-*`, `X-Forwarded-*`,
   `X-Real-IP`, cookies, or authorization headers; leaked caller metadata can make imgproxy fetches return `429`.
 
+- `<video>` has no `referrerpolicy` attribute, so videos follow the page policy. By agreement e621 gets the origin
+  referrer and no other booru does: `useBooruReferrerPolicy` (called once in `app/app.vue`) renders a single
+  `<meta name="referrer">`, `origin` on `/posts/e621.net` routes and `no-referrer` everywhere else. A meta tag, unlike a
+  route-rule header, follows client-side navigation, and it must never be removed because removing a referrer meta does
+  not revert the policy. Images and links keep their per-element policies.
+
 ### Headless UI
 
 - Do not add `provideHeadlessUseId` in `app/app.vue` while the project uses Vue 3.5+ and `@headlessui/vue` 1.7.23+; those

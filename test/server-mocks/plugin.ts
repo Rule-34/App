@@ -8,6 +8,7 @@ import {
   mockPostsPage1,
   mockPostsPageWithOfflineMedia,
   mockPostsPageWithUnknownMedia,
+  mockPostsPageWithE621Video,
   mockPostsPageWithVideoMedia,
   mockPostsPageWithMultipleVideos,
   mockPostsPageWithoutResults
@@ -102,7 +103,9 @@ function resolveMockPostsPage(requestUrl: URL) {
   }
 
   if (tags === 'video_test') {
-    return mockPostsPageWithVideoMedia
+    return requestUrl.searchParams.get('baseEndpoint') === 'e621.net'
+      ? mockPostsPageWithE621Video
+      : mockPostsPageWithVideoMedia
   }
 
   if (tags === 'multi_video_test') {

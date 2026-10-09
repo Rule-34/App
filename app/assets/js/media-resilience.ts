@@ -90,7 +90,7 @@ export type MediaReferrerPolicy = 'origin' | 'strict-origin-when-cross-origin' |
  * Determines the host-aware Referrer-Policy for media loading.
  *
  * Rules:
- * 1. e621 / e926 / e6ai CDN (static1.e621.net, etc.): requires 'origin' per e621 CDN agreement.
+ * 1. e621 CDN (static1.e621.net, etc.): requires 'origin' per e621 CDN agreement (e926/e6ai are not covered).
  * 2. First-party and internal endpoints (r34.app, akbal.dev, localhost, relative paths): 'strict-origin-when-cross-origin'.
  * 3. Third-party boorus (Danbooru, Gelbooru, Paheal, etc.) and fallback proxies (Photon, DuckDuckGo):
  *    'no-referrer' to bypass foreign referrer blocks / hotlinking 403s.
@@ -118,7 +118,7 @@ export function getMediaReferrerPolicy(rawUrl?: string | null): MediaReferrerPol
 
   const hostname = parsed.hostname.toLowerCase()
 
-  if (/(^|\.)(e621|e926|e6ai)\.net$/.test(hostname)) {
+  if (/(^|\.)e621\.net$/.test(hostname)) {
     return 'origin'
   }
 
@@ -170,7 +170,13 @@ function getDomainKey(rawUrl: string, mediaType?: PostMediaType | string): strin
  */
 export function toPhotonUrl(rawUrl: string): string {
   const url = URL.parse(rawUrl)
-  if (!url || (url.protocol !== 'http:' && url.protocol !== 'https:') || url.port || url.search) {
+  if (
+    !url ||
+    (url.protocol !== 'http:' && url.protocol !== 'https:') ||
+    url.port ||
+    url.search ||
+    hasSensitiveCredentialsOrTokens(rawUrl)
+  ) {
     return rawUrl
   }
 

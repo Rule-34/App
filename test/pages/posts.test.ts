@@ -636,6 +636,23 @@ describe('/', async () => {
       expect(pageErrors.filter((message) => /Fluid Player|toLowerCase/.test(message))).toEqual([])
     }, 30000)
 
+    it('clips the video and its Fluid Player layers to the card corners', async () => {
+      const page = await createTrackedPage()
+      await mockReachableVideoPosters(page)
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
+      const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
+      await videoPost.locator('video').first().scrollIntoViewIfNeeded()
+      await videoPost.locator('.fluid_video_wrapper').waitFor({ state: 'attached', timeout: 15000 })
+
+      const clip = await videoPost.locator('.fluid_video_wrapper').evaluate((wrapper) => {
+        const container = wrapper.parentElement!
+        const style = getComputedStyle(container)
+        return { overflow: style.overflow, topLeft: style.borderTopLeftRadius, topRight: style.borderTopRightRadius }
+      })
+
+      expect(clip).toEqual({ overflow: 'hidden', topLeft: '6px', topRight: '6px' })
+    }, 30000)
+
     it('falls back to the premium proxy for a video whose direct source and poster are blocked', async () => {
       // Arrange: a premium user, direct poster and video blocked, only the proxy answers
       const page = await createTrackedPage()
@@ -665,6 +682,38 @@ describe('/', async () => {
       await page.waitForTimeout(1000)
       expect(await videoPost.textContent()).not.toContain('Error loading media')
     }, 45000)
+
+    it('upgrades the replacement video to Fluid Player when the metadata probe advances to the next candidate', async () => {
+      // Arrange: poster dead, direct video stalls long enough for the idle upgrade, then fails; only the proxy answers
+      const page = await createTrackedPage()
+      await signInAsPremiumUser(page)
+      await page.route(/example\.local\/thumbnails\//, (route) => route.abort('failed'))
+      await page.route(/example\.local\/.*videos\//, async (route) => {
+        await new Promise((resolve) => setTimeout(resolve, 3500))
+        await route.abort('failed').catch(() => {})
+      })
+      await page.route(/api\/cors-proxy/, (route) =>
+        route.fulfill({ status: 200, contentType: 'audio/wav', body: createSilentWav() })
+      )
+      const testId = `safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`
+      const videoPost = page.getByTestId(testId).first()
+
+      // Act
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
+
+      // Assert: the player is re-created around the proxied video instead of leaving a native one behind
+      await page.waitForFunction(
+        (id) =>
+          document
+            .querySelector(`[data-testid="${id}"] .fluid_video_wrapper video`)
+            ?.getAttribute('src')
+            ?.includes('cors-proxy'),
+        testId,
+        { timeout: 15000 }
+      )
+      // The superseded wrapper goes away with its keyed <video>, leaving exactly one player
+      await expect.poll(() => videoPost.locator('.fluid_video_wrapper').count(), { timeout: 5000 }).toBe(1)
+    }, 60000)
 
     it('keeps deferring the first Fluid Player upgrade on a cold page load', async () => {
       // Arrange: record when the custom player first appears, relative to navigation start
@@ -1265,6 +1314,156 @@ describe('/', async () => {
       // Assert
       expect(tagEntries).toHaveLength(1)
       expect(tagEntries[0].path).toContain(`page=${currentPage}`)
+    }, 60000)
+  })
+
+  describe('Referrer policy', async () => {
+    const META_ORIGIN = '<meta name="referrer" content="origin">'
+    const META_NONE = '<meta name="referrer" content="no-referrer">'
+
+    async function selectDomain(page: TrackedPage, domain: string) {
+      await page.getByTestId('domain-selector').click({ force: true })
+      const option = page.getByRole('option', { name: new RegExp(domain.replace('.', '\\.'), 'i') }).first()
+      await option.waitFor({ state: 'visible' })
+      const navigation = page.waitForURL(`**/posts/${domain}`, { waitUntil: 'commit' })
+      await option.click({ force: true })
+      await navigation
+    }
+
+    const referrerMetaContents = (page: TrackedPage) =>
+      page.evaluate(() =>
+        Array.from(document.querySelectorAll('meta[name="referrer"]')).map((meta) => meta.getAttribute('content'))
+      )
+
+    // fetch() and <video> follow the same document policy, so one probe request shows what a video would send
+    async function probeReferer(page: TrackedPage) {
+      let referer: string | undefined
+      await page.route('https://static1.e621.net/referrer-probe', (route) => {
+        referer = route.request().headers()['referer']
+        return route.fulfill({ status: 204 })
+      })
+      await page.evaluate(() => fetch('https://static1.e621.net/referrer-probe', { mode: 'no-cors' }))
+      await page.unroute('https://static1.e621.net/referrer-probe')
+      return referer
+    }
+
+    it('renders the origin referrer meta for e621 pages and no-referrer for other boorus', async () => {
+      const page = await createTrackedPage()
+      const htmlOf = async (path: string) => (await page.request.get(url(path))).text()
+
+      for (const path of ['/posts/e621.net', '/es/posts/e621.net', '/posts/e621.net/hair_bun']) {
+        expect(await htmlOf(path), path).toContain(META_ORIGIN)
+      }
+
+      for (const path of ['/posts/rule34.xxx', '/posts/safebooru.org', '/posts/safebooru.org/hair_bun']) {
+        expect(await htmlOf(path), path).toContain(META_NONE)
+      }
+    }, 45000)
+
+    it('sends the origin to e621 and nothing to other boorus', async () => {
+      const page = await createTrackedPage()
+
+      await page.goto(url('/posts/e621.net'), { waitUntil: 'networkidle' })
+      expect(await referrerMetaContents(page)).toEqual(['origin'])
+      expect(await probeReferer(page)).toBe(`${new URL(url('/')).origin}/`)
+
+      await page.goto(url('/posts/rule34.xxx'), { waitUntil: 'networkidle' })
+      expect(await referrerMetaContents(page)).toEqual(['no-referrer'])
+      expect(await probeReferer(page)).toBeUndefined()
+    }, 45000)
+
+    it('sends the origin on the real e621 <video> request, and nothing for other boorus', async () => {
+      const page = await createTrackedPage()
+      const referers: Record<string, string | undefined> = {}
+      await page.route(/(static1\.e621\.net|example\.local)\//, (route) => {
+        const requestUrl = route.request().url()
+        if (/\.(mp4|webm)$/.test(requestUrl)) {
+          referers[new URL(requestUrl).host] = route.request().headers()['referer']
+          return route.fulfill({ status: 200, contentType: 'audio/wav', body: createSilentWav() })
+        }
+        return route.fulfill({ status: 200, contentType: 'image/png', body: PIXEL_PNG })
+      })
+      const forceVideoRequest = (testIdPrefix: string) =>
+        page.evaluate((prefix) => {
+          const video = document.querySelector<HTMLVideoElement>(`[data-testid^="${prefix}"] video`)!
+          video.preload = 'metadata'
+          video.load()
+        }, testIdPrefix)
+
+      await page.goto(url('/posts/e621.net?tags=video_test'), { waitUntil: 'networkidle' })
+      await forceVideoRequest('e621.net-')
+      await expect.poll(() => referers['static1.e621.net']).toBe(`${new URL(url('/')).origin}/`)
+
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
+      await forceVideoRequest('safebooru.org-')
+      await expect.poll(() => 'example.local' in referers).toBe(true)
+      expect(referers['example.local']).toBeUndefined()
+    }, 60000)
+
+    it('keeps everything except the e621 media on no-referrer, even on an e621 page', async () => {
+      const page = await createTrackedPage()
+      const requests: Array<{ host: string; referer: string | undefined }> = []
+      page.on('request', (request) =>
+        requests.push({ host: new URL(request.url()).host, referer: request.headers()['referer'] })
+      )
+
+      await page.goto(url('/posts/e621.net'), { waitUntil: 'networkidle' })
+      await page.getByTestId('domain-selector').waitFor({ state: 'visible' })
+
+      // Cross-origin elements the page renders (favicons, iframes, scripts) must opt out of the page policy
+      const unpinned = await page.evaluate(() => {
+        const pinnable = Array.from(document.querySelectorAll<HTMLElement>('img[src], iframe[src], script[src]'))
+
+        return pinnable
+          .filter((element) => {
+            const target = new URL((element as HTMLImageElement).src, location.href)
+            return target.origin !== location.origin && !target.host.endsWith('e621.net')
+          })
+          .filter((element) => (element as HTMLImageElement).referrerPolicy !== 'no-referrer')
+          .map((element) => `${element.tagName} ${(element as HTMLImageElement).src}`)
+      })
+      expect(unpinned).toEqual([])
+
+      const favicons = requests.filter((request) => request.host.endsWith('google.com'))
+      expect(favicons.length).toBeGreaterThan(0)
+      expect(favicons.map((request) => request.referer)).toEqual(favicons.map(() => undefined))
+    }, 60000)
+
+    it('follows in-app domain switches without a reload', async () => {
+      const page = await createTrackedPage()
+      await page.goto(url('/posts/rule34.xxx'), { waitUntil: 'networkidle' })
+      await page.getByTestId('domain-selector').waitFor({ state: 'visible' })
+      expect(await probeReferer(page)).toBeUndefined()
+
+      await selectDomain(page, 'e621.net')
+      await page.waitForSelector('meta[name="referrer"][content="origin"]', { state: 'attached' })
+      expect(await referrerMetaContents(page)).toEqual(['origin'])
+      expect(await probeReferer(page)).toBe(`${new URL(url('/')).origin}/`)
+
+      await selectDomain(page, 'safebooru.org')
+      await page.waitForSelector('meta[name="referrer"][content="no-referrer"]', { state: 'attached' })
+      expect(await referrerMetaContents(page)).toEqual(['no-referrer'])
+      expect(await probeReferer(page)).toBeUndefined()
+    }, 60000)
+
+    it('falls back to no-referrer when navigating from e621 to a non-posts page without a reload', async () => {
+      const page = await createTrackedPage()
+      await page.goto(url('/posts/e621.net'), { waitUntil: 'networkidle' })
+      expect(await referrerMetaContents(page)).toEqual(['origin'])
+
+      // Client-side navigation through a layout link, so the document (and its policy) stays alive
+      await page.evaluate(() => ((window as unknown as { __noReload: boolean }).__noReload = true))
+      await page.getByRole('button', { name: /open main menu/i }).click()
+      await page
+        .getByRole('link', { name: /^premium$/i })
+        .first()
+        .click()
+      await page.waitForURL('**/premium')
+      await page.waitForSelector('meta[name="referrer"][content="no-referrer"]', { state: 'attached' })
+
+      expect(await page.evaluate(() => (window as unknown as { __noReload?: boolean }).__noReload)).toBe(true)
+      expect(await referrerMetaContents(page)).toEqual(['no-referrer'])
+      expect(await probeReferer(page)).toBeUndefined()
     }, 60000)
   })
 

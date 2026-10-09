@@ -72,6 +72,7 @@ export default defineNuxtPlugin({
       script.src = matomoUrl + 'matomo.js'
       script.async = true
       script.defer = true
+      script.referrerPolicy = 'no-referrer'
       document.head.appendChild(script)
     }
   }
