@@ -715,6 +715,34 @@ describe('/', async () => {
       })
     }, 30000)
 
+    it('shows the Fluid Player context menu in full when right-clicking near the video edge', async () => {
+      const page = await createTrackedPage()
+      await mockReachableVideoPosters(page)
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
+      const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
+      await videoPost.locator('video').first().scrollIntoViewIfNeeded()
+      const wrapper = videoPost.locator('.fluid_video_wrapper')
+      await wrapper.waitFor({ state: 'attached', timeout: 15000 })
+
+      // Act: right-click in the bottom-right corner, where the menu has to leave the video box to fit
+      const box = (await wrapper.boundingBox())!
+      await wrapper.click({ button: 'right', position: { x: box.width - 8, y: box.height - 8 } })
+
+      // Assert: the menu is visible and not clipped by the wrapper
+      const menu = videoPost.locator('.fluid_context_menu')
+      await menu.waitFor({ state: 'visible' })
+      const menuBox = (await menu.boundingBox())!
+      expect(menuBox.x + menuBox.width).toBeGreaterThan(box.x + box.width)
+
+      // Hit-testing a point of the menu that lies outside the video box fails when an ancestor clips it
+      const outsideX = box.x + box.width + (menuBox.x + menuBox.width - (box.x + box.width)) / 2
+      const hit = await page.evaluate(
+        ({ x, y }) => document.elementFromPoint(x, y)?.closest('.fluid_context_menu') != null,
+        { x: outsideX, y: menuBox.y + 4 }
+      )
+      expect(hit).toBe(true)
+    }, 45000)
+
     it('falls back to the premium proxy for a video whose direct source and poster are blocked', async () => {
       // Arrange: a premium user, direct poster and video blocked, only the proxy answers
       const page = await createTrackedPage()
@@ -832,6 +860,33 @@ describe('/', async () => {
       // Assert: previously ~1600ms (1.6s deferral + idle wait)
       expect(elapsed).toBeLessThan(500)
     }, 60000)
+
+    it('upgrades a video to Fluid Player as soon as the pointer reaches it', async () => {
+      // Arrange: no video can report being in view, so only the interaction can trigger the upgrade
+      const page = await createTrackedPage()
+      await mockReachableVideoPosters(page)
+      await page.addInitScript(() => {
+        window.IntersectionObserver = class {
+          observe() {}
+          unobserve() {}
+          disconnect() {}
+          takeRecords() {
+            return []
+          }
+        } as unknown as typeof IntersectionObserver
+      })
+      const testId = `safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`
+
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
+      expect(await page.locator('.fluid_video_wrapper').count()).toBe(0)
+
+      // Act
+      const elapsed = await timeFluidUpgrade(page, testId, 'pointerenter')
+
+      // Assert
+      expect(elapsed).toBeLessThan(2000)
+      expect(await page.locator('.fluid_video_wrapper').count()).toBe(1)
+    }, 45000)
 
     it('prefetches Fluid Player when idle, without any video asking for it', async () => {
       // Arrange: no video can ever report being in view, so only the idle prefetch can load the module
