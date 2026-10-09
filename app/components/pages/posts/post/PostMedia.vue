@@ -646,14 +646,19 @@
   }
 
   function scheduleVideoPlayerInitialization(delay = 1200, timeout = 4000) {
-    if (videoPlayer || videoPlayerInitPromise || videoPlayerIdleScheduled) {
+    if (videoPlayer || videoPlayerInitPromise) {
       return
     }
 
     // The deferral below only protects the cold page load. Once Fluid Player is in memory, upgrade right away
-    // so videos scrolled into view never show the native player first.
+    // so videos scrolled into view never show the native player first, even if an idle upgrade is still queued
+    // (its callback re-checks the player state, so it cannot initialize twice).
     if (isFluidPlayerLoaded()) {
       initializeVideoPlayer()
+      return
+    }
+
+    if (videoPlayerIdleScheduled) {
       return
     }
 

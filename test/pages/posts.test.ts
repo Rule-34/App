@@ -667,22 +667,27 @@ describe('/', async () => {
     }, 45000)
 
     it('keeps deferring the first Fluid Player upgrade on a cold page load', async () => {
-      // Arrange
+      // Arrange: record when the custom player first appears, relative to navigation start
       const page = await createTrackedPage()
       await mockReachableVideoPosters(page)
+      await page.addInitScript(() => {
+        const observer = new MutationObserver(() => {
+          if (document.querySelector('.fluid_video_wrapper')) {
+            ;(window as unknown as { __fluidFirstAt: number }).__fluidFirstAt = performance.now()
+            observer.disconnect()
+          }
+        })
 
-      // Act: the server-rendered HTML never contains the custom player
-      const html = await (await page.request.get(url('/posts/safebooru.org?tags=video_test'))).text()
+        observer.observe(document, { childList: true, subtree: true })
+      })
 
-      // Assert
-      expect(html).toContain('<video')
-      expect(html).not.toContain('fluid_video_wrapper')
-
-      // And the browser still upgrades it on its own afterwards
+      // Act
       await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'domcontentloaded' })
-      const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
-      expect(await videoPost.locator('.fluid_video_wrapper').count()).toBe(0)
-      await videoPost.locator('.fluid_video_wrapper').waitFor({ state: 'attached', timeout: 15000 })
+      await page.waitForFunction(() => '__fluidFirstAt' in window, undefined, { timeout: 15000 })
+
+      // Assert: hydration alone takes far less than this, so an eager upgrade would land well before the deferral
+      const firstAt = await page.evaluate(() => (window as unknown as { __fluidFirstAt: number }).__fluidFirstAt)
+      expect(firstAt).toBeGreaterThan(1000)
     }, 45000)
 
     it('upgrades videos scrolled into view immediately once Fluid Player is loaded', async () => {
