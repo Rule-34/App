@@ -161,12 +161,7 @@
     posterProbeToken += 1
     const currentToken = posterProbeToken
 
-    if (activeProbe) {
-      activeProbe.onload = null
-      activeProbe.onerror = null
-      activeProbe.src = ''
-      activeProbe = null
-    }
+    stopPosterProbe()
 
     const candidateIdx = posterCandidateIndex.value
 
@@ -213,6 +208,15 @@
     }
 
     probeCandidate(candidateIdx)
+  }
+
+  function stopPosterProbe() {
+    if (activeProbe) {
+      activeProbe.onload = null
+      activeProbe.onerror = null
+      activeProbe.src = ''
+      activeProbe = null
+    }
   }
 
   function stopVideoProbe() {
@@ -355,7 +359,8 @@
       {
         rel: 'preload' as const,
         as: 'image' as const,
-        href: encodeURI(localPosterSrc.value),
+        // cleanMediaUrl decodes %20 in local paths, but absolute URLs are already encoded
+        href: localPosterSrc.value.startsWith('/') ? encodeURI(localPosterSrc.value) : localPosterSrc.value,
         fetchpriority: 'high' as const
       }
     ]
@@ -399,12 +404,7 @@
       unsubscribeHealthChange = null
     }
 
-    if (activeProbe) {
-      activeProbe.onload = null
-      activeProbe.onerror = null
-      activeProbe = null
-    }
-
+    stopPosterProbe()
     stopVideoProbe()
 
     if (videoPlayerInitTimeout !== null) {
@@ -448,9 +448,13 @@
       return
     }
 
+    pauseOtherVideos(current)
+  }
+
+  function pauseOtherVideos(except?: HTMLVideoElement) {
     document.querySelectorAll('video').forEach((v) => {
-      if (v !== current && !v.paused) {
-        v.pause?.()
+      if (v !== except && !v.paused) {
+        v.pause()
       }
     })
   }
@@ -482,6 +486,10 @@
         primaryColor: 'rgba(0, 0, 0, 0.7)',
 
         fillToContainer: true,
+
+        // Round only the top, like the card; Fluid applies it to its wrapper and the video.
+        // It takes any CSS border-radius shorthand at runtime, its typings only allow a number.
+        roundedCorners: '6px 6px 0 0' as unknown as number,
 
         preload: 'none',
 
@@ -614,6 +622,12 @@
     }
 
     videoPlayer = fluidPlayer(initializedVideoElement, fluidPlayerOptions)
+
+    // Fluid clips its wrapper (overflow: hidden), which cuts off the right-click menu near the edges. Without the clip
+    // the inline-block wrapper sits on the text baseline and leaves a gap under the video, so align it to the top.
+    const wrapper = initializedVideoElement.closest<HTMLElement>('.fluid_video_wrapper')
+    wrapper?.style.setProperty('overflow', 'visible')
+    wrapper?.style.setProperty('vertical-align', 'top')
 
     // TODO: Handle poster error
   }
@@ -811,11 +825,7 @@
   }
 
   function playInIframe() {
-    document.querySelectorAll('video').forEach((v) => {
-      if (!v.paused) {
-        v.pause?.()
-      }
-    })
+    pauseOtherVideos()
     useIframePlayer.value = true
     error.value = null
   }
@@ -1212,10 +1222,8 @@
     <div
       v-else-if="isVideo"
       :key="localSrc"
-      class="overflow-hidden rounded-t-md"
     >
       <!-- TODO: Add load animation -->
-      <!-- Fluid Player wraps the video in square layers (poster, overlays), so the container clips them to the card's corners -->
       <video
         ref="mediaElement"
         v-intersection-observer="[onVideoIntersectionObserver, { rootMargin: '100px' }]"

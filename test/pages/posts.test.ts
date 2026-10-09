@@ -165,6 +165,38 @@ async function getPostImageSrc(page: TrackedPage, testId: string) {
   return page.evaluate((id) => document.querySelector(`[data-testid="${id}"] img`)?.getAttribute('src') ?? null, testId)
 }
 
+/** Collects real app problems from the console; failed loads of the mocked external hosts are not app issues. */
+function collectConsoleProblems(page: TrackedPage) {
+  const problems: string[] = []
+
+  page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`))
+  page.on('console', (message) => {
+    const text = message.text()
+    // The mocked PocketBase answers its realtime stream with JSON, which the browser rejects as an event stream
+    const isNetworkNoise = text.startsWith('Failed to load resource') || text.includes('EventSource')
+    const isVueProblem = /Vue warn|Hydration/.test(text)
+
+    if ((message.type() === 'error' && !isNetworkNoise) || isVueProblem) {
+      problems.push(`${message.type()}: ${text.slice(0, 200)}`)
+    }
+  })
+
+  return problems
+}
+
+/** Client-side navigation that keeps the document (and its referrer policy) alive. */
+function pushRoute(page: TrackedPage, path: string) {
+  return page.evaluate(
+    (target) =>
+      (
+        document.querySelector('#__nuxt') as unknown as {
+          __vue_app__: { config: { globalProperties: { $router: { push: (to: string) => Promise<unknown> } } } }
+        }
+      ).__vue_app__.config.globalProperties.$router.push(target),
+    path
+  )
+}
+
 describe('/', async () => {
   await setup(defaultSetupConfig)
 
@@ -214,6 +246,20 @@ describe('/', async () => {
 
       // Assert
       expect(warnings).toEqual([])
+    }, 30000)
+
+    it('renders the tag title in the page header without nesting a heading inside a paragraph', async () => {
+      // Arrange: a p is closed by the HTML parser before an h1, which breaks hydration (Vue's warnings are stripped
+      // from the production build these tests run against, so check the server HTML itself)
+      const page = await createTrackedPage()
+
+      // Act
+      const response = await page.request.get(url('/posts/safebooru.org?tags=video_test'))
+      const html = await response.text()
+
+      // Assert (booleans, so a failure does not dump the whole document)
+      expect(html.includes('<h1 class="text-sm">')).toBe(true)
+      expect(/<p(?:\s[^>]*)?>(?:(?!<\/p>)[\s\S])*?<h1/.test(html)).toBe(false)
     }, 30000)
 
     it('renders a loader', async () => {
@@ -636,7 +682,7 @@ describe('/', async () => {
       expect(pageErrors.filter((message) => /Fluid Player|toLowerCase/.test(message))).toEqual([])
     }, 30000)
 
-    it('clips the video and its Fluid Player layers to the card corners', async () => {
+    it('rounds the top of the Fluid Player like the card, lets its context menu leave the box and adds no height', async () => {
       const page = await createTrackedPage()
       await mockReachableVideoPosters(page)
       await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
@@ -644,13 +690,27 @@ describe('/', async () => {
       await videoPost.locator('video').first().scrollIntoViewIfNeeded()
       await videoPost.locator('.fluid_video_wrapper').waitFor({ state: 'attached', timeout: 15000 })
 
-      const clip = await videoPost.locator('.fluid_video_wrapper').evaluate((wrapper) => {
-        const container = wrapper.parentElement!
-        const style = getComputedStyle(container)
-        return { overflow: style.overflow, topLeft: style.borderTopLeftRadius, topRight: style.borderTopRightRadius }
+      const style = await videoPost.locator('.fluid_video_wrapper').evaluate((wrapper) => {
+        const computed = getComputedStyle(wrapper)
+        const video = getComputedStyle(wrapper.querySelector('video')!)
+
+        return {
+          wrapperTop: [computed.borderTopLeftRadius, computed.borderTopRightRadius],
+          wrapperBottom: [computed.borderBottomLeftRadius, computed.borderBottomRightRadius],
+          videoTop: [video.borderTopLeftRadius, video.borderTopRightRadius],
+          overflow: computed.overflow,
+          // The wrapper must fill its container, otherwise the post grows when Fluid mounts
+          gap: wrapper.parentElement!.getBoundingClientRect().height - wrapper.getBoundingClientRect().height
+        }
       })
 
-      expect(clip).toEqual({ overflow: 'hidden', topLeft: '6px', topRight: '6px' })
+      expect(style).toEqual({
+        wrapperTop: ['6px', '6px'],
+        wrapperBottom: ['0px', '0px'],
+        videoTop: ['6px', '6px'],
+        overflow: 'visible',
+        gap: 0
+      })
     }, 30000)
 
     it('falls back to the premium proxy for a video whose direct source and poster are blocked', async () => {
@@ -734,9 +794,10 @@ describe('/', async () => {
       await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'domcontentloaded' })
       await page.waitForFunction(() => '__fluidFirstAt' in window, undefined, { timeout: 15000 })
 
-      // Assert: hydration alone takes far less than this, so an eager upgrade would land well before the deferral
+      // Assert: the idle prefetch can finish Fluid early on a fast machine (~400ms), so only an upgrade during
+      // hydration itself counts as eager; the old fixed deferral was 1.6s
       const firstAt = await page.evaluate(() => (window as unknown as { __fluidFirstAt: number }).__fluidFirstAt)
-      expect(firstAt).toBeGreaterThan(1000)
+      expect(firstAt).toBeGreaterThan(250)
     }, 45000)
 
     it('upgrades videos scrolled into view immediately once Fluid Player is loaded', async () => {
@@ -1464,6 +1525,94 @@ describe('/', async () => {
       expect(await page.evaluate(() => (window as unknown as { __noReload?: boolean }).__noReload)).toBe(true)
       expect(await referrerMetaContents(page)).toEqual(['no-referrer'])
       expect(await probeReferer(page)).toBeUndefined()
+    }, 60000)
+  })
+
+  describe('Console and navigation health', async () => {
+    it('keeps the console clean on posts pages', async () => {
+      const page = await createTrackedPage()
+      await mockReachableVideoPosters(page)
+      await page.route(/static1\.e621\.net/, (route) =>
+        route.fulfill({ status: 200, contentType: 'image/png', body: PIXEL_PNG })
+      )
+      const problems = collectConsoleProblems(page)
+
+      for (const path of [
+        '/posts/rule34.xxx',
+        '/posts/safebooru.org?tags=video_test',
+        '/posts/e621.net?tags=video_test'
+      ]) {
+        await page.goto(url(path), { waitUntil: 'networkidle' })
+        await page.waitForTimeout(500)
+      }
+
+      expect(problems).toEqual([])
+    }, 60000)
+
+    it('keeps the console clean as a premium user', async () => {
+      const page = await createTrackedPage()
+      await signInAsPremiumUser(page)
+      await mockReachableVideoPosters(page)
+      const problems = collectConsoleProblems(page)
+
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
+      await page.waitForTimeout(500)
+
+      expect(problems).toEqual([])
+    }, 45000)
+
+    it('returns to a video page from Premium without errors or a reload', async () => {
+      const page = await createTrackedPage()
+      await mockReachableVideoPosters(page)
+      const problems = collectConsoleProblems(page)
+      const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
+
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
+      await videoPost.waitFor()
+      await page.evaluate(() => ((window as unknown as { __noReload: boolean }).__noReload = true))
+
+      await pushRoute(page, '/premium')
+      await page.waitForURL('**/premium')
+      await page.goBack()
+
+      // Going back refetches, so the list is rebuilt once: keep nudging the (new) video into view until it upgrades
+      await expect
+        .poll(
+          async () => {
+            await page.evaluate(() => document.querySelector('video')?.scrollIntoView({ block: 'center' }))
+            return videoPost.locator('.fluid_video_wrapper').count()
+          },
+          { timeout: 15000 }
+        )
+        .toBe(1)
+
+      expect(await page.evaluate(() => (window as unknown as { __noReload?: boolean }).__noReload)).toBe(true)
+      expect(problems).toEqual([])
+    }, 60000)
+
+    it('applies the destination referrer policy to media requested right after an in-app navigation', async () => {
+      const page = await createTrackedPage()
+      const referers = { e621: [] as Array<string | undefined>, other: [] as Array<string | undefined> }
+      await page.route(/(static1\.e621\.net|example\.local)\//, (route) => {
+        const request = route.request()
+        const isE621 = request.url().includes('e621.net')
+        ;(isE621 ? referers.e621 : referers.other).push(request.headers()['referer'])
+        return route.fulfill({ status: 200, contentType: 'image/png', body: PIXEL_PNG })
+      })
+      const origin = `${new URL(url('/')).origin}/`
+
+      // Other booru -> e621: the e621 media must already carry the origin
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
+      referers.other.length = 0
+      await pushRoute(page, '/posts/e621.net?tags=video_test')
+      await expect.poll(() => referers.e621.length).toBeGreaterThan(0)
+      expect(referers.e621).toEqual(referers.e621.map(() => origin))
+
+      // e621 -> other booru: its media must not inherit the origin
+      referers.other.length = 0
+      await pushRoute(page, '/posts/safebooru.org?tags=video_test')
+      await expect.poll(() => referers.other.length).toBeGreaterThan(0)
+      expect(referers.other).toEqual(referers.other.map(() => undefined))
     }, 60000)
   })
 
