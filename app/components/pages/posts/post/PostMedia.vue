@@ -38,10 +38,8 @@
   type MediaElementRef = HTMLElement | { $el?: Element } | null
   type FluidPlayerOptionsWithPlaybackRates = Partial<FluidPlayerOptions> & {
     layoutControls?: Partial<
-      Omit<LayoutControls, 'controlBar' | 'roundedCorners'> & {
+      Omit<LayoutControls, 'controlBar'> & {
         controlBar?: Partial<LayoutControls['controlBar'] & { playbackRates: string[] }>
-        // Fluid takes any CSS border-radius shorthand at runtime, its typings only allow a number
-        roundedCorners: number | string
       }
     >
   }
@@ -485,8 +483,9 @@
 
         fillToContainer: true,
 
-        // Round only the top, like the card; Fluid applies it to its wrapper and the video
-        roundedCorners: '6px 6px 0 0',
+        // Round only the top, like the card; Fluid applies it to its wrapper and the video.
+        // It takes any CSS border-radius shorthand at runtime, its typings only allow a number.
+        roundedCorners: '6px 6px 0 0' as unknown as number,
 
         preload: 'none',
 
