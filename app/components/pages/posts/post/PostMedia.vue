@@ -378,7 +378,6 @@
   let videoPlayerInitPromise: Promise<void> | null = null
   let videoPlayerIdleScheduled = false
   let videoPlayerInitTimeout: number | null = null
-  let isVideoInViewport = false
   let hasCountedVideoRender = false
 
   const isAnimatedMediaLoading = ref(false)
@@ -657,14 +656,9 @@
       scheduleIdleTask(() => {
         videoPlayerIdleScheduled = false
 
-        if (
-          isUnmounted ||
-          !isVideoInViewport ||
-          videoPlayer ||
-          videoPlayerInitPromise ||
-          !getVideoElement() ||
-          !isVideo.value
-        ) {
+        // No viewport check on purpose: once queued, upgrade even if scrolled away, so the player never
+        // visibly swaps in over the native one while the user scrolls past.
+        if (isUnmounted || videoPlayer || videoPlayerInitPromise || !getVideoElement() || !isVideo.value) {
           return
         }
 
@@ -855,8 +849,6 @@
     if (!entry) {
       return
     }
-
-    isVideoInViewport = entry.isIntersecting
 
     if (entry.isIntersecting) {
       scheduleVideoPlayerInitialization(isLikelyLcpMedia.value ? 1200 : 1600)
