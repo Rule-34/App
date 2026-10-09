@@ -5,7 +5,7 @@ import {
 } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
 import type { Domain } from '~/assets/js/domain'
 
-export const defaultBooruList: Domain[] = completeBooruList
+export const appDefaultBooruList: Domain[] = completeBooruList
   // Disable specific Booru sites
   .filter((booruObj) => {
     const disabledDomains = [
@@ -40,10 +40,10 @@ export default function () {
 
   return {
     booruList: computed(() => {
-      return [...defaultBooruList, ...userBooruList.value]
+      return [...appDefaultBooruList, ...userBooruList.value]
     }),
 
-    defaultBooruList,
+    defaultBooruList: appDefaultBooruList,
 
     userBooruList,
 

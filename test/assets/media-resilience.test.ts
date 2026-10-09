@@ -62,6 +62,11 @@ describe('media-resilience', () => {
   })
 
   describe('toPhotonUrl', () => {
+    it('does not hand credential-bearing urls to the public proxy', () => {
+      const input = 'https://user:secret@example.com/a.jpg'
+      expect(toPhotonUrl(input)).toBe(input)
+    })
+
     it('creates a safe photon url with ssl=1 for https urls', () => {
       const input = 'https://static1.e621.net/data/preview/94/91/9491498441879ff4168532af1d23ddfc.jpg'
       const output = toPhotonUrl(input)

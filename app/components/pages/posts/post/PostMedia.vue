@@ -759,7 +759,8 @@
 
     // Case 2: Main media failed to load (image, gif, or video)
     // If Candidate 0 (direct request) failed, record failure for the domain
-    if (isDirectRequest.value && !isDirectBlocked.value) {
+    // A host that already served the file is not at fault for a later stall
+    if (isDirectRequest.value && !isDirectBlocked.value && !mediaHasLoaded.value) {
       pendingMediaDirectFailure = true
     }
 
@@ -795,13 +796,10 @@
     clearPendingFailures()
 
     if (isVideo.value) {
-      const willBlockPoster = isPosterDirectBlocked.value && posterCandidates.value.length > 1
-      posterCandidateIndex.value = willBlockPoster ? 1 : 0
+      posterCandidateIndex.value = 0
 
       nextTick(async () => {
-        if (!willBlockPoster) {
-          probeVideoPoster()
-        }
+        probeVideoPoster()
         await reloadVideoPlayer()
         // Prompt browser to fetch media stream on retry
         getVideoElement()?.load()

@@ -170,7 +170,13 @@ function getDomainKey(rawUrl: string, mediaType?: PostMediaType | string): strin
  */
 export function toPhotonUrl(rawUrl: string): string {
   const url = URL.parse(rawUrl)
-  if (!url || (url.protocol !== 'http:' && url.protocol !== 'https:') || url.port || url.search) {
+  if (
+    !url ||
+    (url.protocol !== 'http:' && url.protocol !== 'https:') ||
+    url.port ||
+    url.search ||
+    hasSensitiveCredentialsOrTokens(rawUrl)
+  ) {
     return rawUrl
   }
 
