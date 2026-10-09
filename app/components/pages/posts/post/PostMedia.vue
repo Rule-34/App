@@ -62,29 +62,24 @@
 
   // A failed direct request only counts against the domain breaker once a fallback candidate succeeds:
   // if the proxy fails too, the file is most likely gone (404) rather than the host blocking us.
-  let pendingMediaDirectFailure = false
-  let pendingPosterDirectFailure = false
+  const pendingDirectFailure = { media: false, poster: false }
   const hostBlockConfirmed = shallowRef(false)
 
-  function confirmPendingMediaFailure() {
-    if (!pendingMediaDirectFailure) return
-    pendingMediaDirectFailure = false
+  function confirmPendingFailure(kind: keyof typeof pendingDirectFailure) {
+    if (!pendingDirectFailure[kind]) return
+    pendingDirectFailure[kind] = false
     hostBlockConfirmed.value = true
-    recordDirectFailure(rawMediaSrc.value, props.mediaType)
-  }
 
-  function confirmPendingPosterFailure() {
-    if (!pendingPosterDirectFailure) return
-    pendingPosterDirectFailure = false
-    hostBlockConfirmed.value = true
-    if (rawPosterSrc.value) {
-      recordDirectFailure(rawPosterSrc.value, 'image')
+    if (kind === 'poster') {
+      if (rawPosterSrc.value) recordDirectFailure(rawPosterSrc.value, 'image')
+    } else {
+      recordDirectFailure(rawMediaSrc.value, props.mediaType)
     }
   }
 
   function clearPendingFailures() {
-    pendingMediaDirectFailure = false
-    pendingPosterDirectFailure = false
+    pendingDirectFailure.media = false
+    pendingDirectFailure.poster = false
     hostBlockConfirmed.value = false
   }
 
@@ -173,10 +168,10 @@
         activeProbe = null
         posterCandidateIndex.value = idx
         if (idx === 0 && rawPosterSrc.value) {
-          pendingPosterDirectFailure = false
+          pendingDirectFailure.poster = false
           recordDirectSuccess(rawPosterSrc.value, 'image')
         } else if (idx > 0) {
-          confirmPendingPosterFailure()
+          confirmPendingFailure('poster')
         }
       }
 
@@ -184,7 +179,7 @@
         if (isUnmounted || currentToken !== posterProbeToken) return
         activeProbe = null
         if (idx === 0 && !isPosterDirectBlocked.value && rawPosterSrc.value) {
-          pendingPosterDirectFailure = true
+          pendingDirectFailure.poster = true
         }
         const nextIdx = idx + 1
         if (nextIdx < posterCandidates.value.length) {
@@ -244,10 +239,10 @@
       if (isStale) return
 
       if (srcCandidateIndex.value > 0) {
-        confirmPendingMediaFailure()
+        confirmPendingFailure('media')
       } else if (isDirectRequest.value && rawMediaSrc.value) {
         // preload="none" never emits loadeddata, so this probe is the only direct-success signal before playback
-        pendingMediaDirectFailure = false
+        pendingDirectFailure.media = false
         recordDirectSuccess(rawMediaSrc.value, props.mediaType)
       }
     }
@@ -261,7 +256,7 @@
       }
 
       if (srcCandidateIndex.value === 0 && isDirectRequest.value && !isDirectBlocked.value) {
-        pendingMediaDirectFailure = true
+        pendingDirectFailure.media = true
       }
 
       // Try the next candidate (e.g. the premium proxy) before giving up
@@ -333,6 +328,9 @@
   const mediaSrcWidthAttribute = computed(() => props.mediaSrcWidth ?? undefined)
   const mediaAspectRatio = computed(() =>
     props.mediaSrcWidth && props.mediaSrcHeight ? `${props.mediaSrcWidth}/${props.mediaSrcHeight}` : undefined
+  )
+  const aspectRatioStyle = computed(() =>
+    mediaAspectRatio.value ? `aspect-ratio: ${mediaAspectRatio.value};` : undefined
   )
   const isShortMedia = computed(() => {
     if (!props.mediaSrcWidth || !props.mediaSrcHeight) {
@@ -452,10 +450,9 @@
       return
     }
 
-    const targetElement = payload.target as HTMLElement | null
-    const isImageTag = targetElement instanceof HTMLImageElement || targetElement?.tagName === 'IMG'
-    const isVideoTag = targetElement instanceof HTMLVideoElement || targetElement?.tagName === 'VIDEO'
-    const target = (isImageTag || isVideoTag ? targetElement : null) as HTMLImageElement | HTMLVideoElement | null
+    const target =
+      payload.target instanceof HTMLImageElement || payload.target instanceof HTMLVideoElement ? payload.target : null
+    const isVideoTag = target instanceof HTMLVideoElement
 
     if (!target?.src) {
       return
@@ -470,7 +467,7 @@
     }
 
     // Never treat post-playback completion events on videos as media load failures
-    if (isVideoTag && (target as HTMLVideoElement).ended) {
+    if (isVideoTag && target.ended) {
       return
     }
 
@@ -482,7 +479,7 @@
     // Case 1: The poster image failed to load for animated media
     if (isAnimatedMedia.value && !isAnimatedMediaPlaying.value) {
       if (posterCandidateIndex.value === 0 && !isPosterDirectBlocked.value && rawPosterSrc.value) {
-        pendingPosterDirectFailure = true
+        pendingDirectFailure.poster = true
       }
 
       if (posterCandidateIndex.value + 1 < posterCandidates.value.length) {
@@ -499,7 +496,7 @@
     // A host that already served the video is not at fault for a later stall (a loaded animated poster says nothing
     // about the GIF itself)
     if (isDirectRequest.value && !isDirectBlocked.value && !(isVideo.value && mediaHasLoaded.value)) {
-      pendingMediaDirectFailure = true
+      pendingDirectFailure.media = true
     }
 
     if (srcCandidateIndex.value + 1 < srcCandidates.value.length) {
@@ -605,17 +602,13 @@
     const isDirectCandidate = isShowingPoster ? posterCandidateIndex.value === 0 : isDirectRequest.value
     const rawTargetSrc = isShowingPoster ? rawPosterSrc.value || props.mediaPosterSrc : rawMediaSrc.value
 
+    const failureKind = isShowingPoster ? 'poster' : 'media'
+
     if (isDirectCandidate && rawTargetSrc) {
-      if (isShowingPoster) {
-        pendingPosterDirectFailure = false
-      } else {
-        pendingMediaDirectFailure = false
-      }
+      pendingDirectFailure[failureKind] = false
       recordDirectSuccess(rawTargetSrc, isShowingPoster ? 'image' : props.mediaType)
-    } else if (isShowingPoster) {
-      confirmPendingPosterFailure()
     } else {
-      confirmPendingMediaFailure()
+      confirmPendingFailure(failureKind)
     }
 
     // Clear loading state if it's a GIF
@@ -682,12 +675,12 @@
 </script>
 
 <template>
-  <div :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined">
+  <div :style="aspectRatioStyle">
     <!-- Error Overlay -->
     <template v-if="hasError">
       <div
         :class="isShortMedia ? 'px-4 py-4 sm:px-5 sm:py-4.5' : 'px-4 py-6 sm:px-6 sm:py-8'"
-        :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
+        :style="aspectRatioStyle"
         class="relative flex h-full min-h-[200px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-linear-to-b from-base-900/60 via-base-950 to-base-1000 text-center select-none"
       >
         <div
@@ -697,7 +690,7 @@
           <!-- Error Title & Concise Context Subtitle -->
           <div class="flex flex-col items-center space-y-1 text-center">
             <h3 class="text-base font-semibold tracking-wide text-base-content-highlight">
-              {{ error?.message || t('errors.mediaLoadError') }}
+              {{ error?.message }}
             </h3>
             <p
               v-if="showHostBlockHint"
@@ -771,12 +764,12 @@
     <div
       v-else-if="useIframePlayer"
       v-intersection-observer="onIframeIntersectionObserver"
-      :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
+      :style="aspectRatioStyle"
       class="group relative flex h-full min-h-[200px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-base-950"
     >
       <!-- Minimal close control to return to error overlay -->
       <button
-        :aria-label="t('common.close') || 'Close'"
+        :aria-label="t('common.close')"
         class="absolute top-2.5 right-2.5 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-base-950/80 text-base-content ring-1 ring-base-0/20 backdrop-blur-md transition-colors hover:bg-base-900 hover:text-base-content-highlight focus-visible:focus-outline-util"
         type="button"
         @click="closeIframePlayer"
@@ -847,7 +840,7 @@
         :loading="mediaLoading"
         :preload="mediaPreload"
         :src="localSrc"
-        :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
+        :style="aspectRatioStyle"
         :width="mediaSrcWidthAttribute"
         class="h-auto w-full rounded-t-md"
         :referrerpolicy="mediaReferrerPolicy"
@@ -870,7 +863,7 @@
         :loading="mediaLoading"
         :preload="mediaPreload"
         :src="isAnimatedMediaPlaying ? localSrc : localPosterSrc"
-        :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
+        :style="aspectRatioStyle"
         :width="mediaSrcWidthAttribute"
         class="h-auto w-full rounded-t-md"
         :referrerpolicy="isAnimatedMediaPlaying ? mediaReferrerPolicy : posterReferrerPolicy"
@@ -944,7 +937,7 @@
         :height="mediaSrcHeightAttribute"
         :poster="localPosterSrc"
         :src="localSrc"
-        :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
+        :style="aspectRatioStyle"
         :width="mediaSrcWidthAttribute"
         class="h-auto w-full rounded-t-md"
         controls

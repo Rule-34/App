@@ -6,6 +6,7 @@ import {
   getFilterQueryValue,
   getSinglePositiveTagQueryValue
 } from '../../app/assets/js/RouterHelper'
+import { buildFluidPlayerOptions, getVideoAdList } from '../../app/assets/js/fluid-player-options'
 import { normalizeStringForTitle } from '../../app/assets/js/SeoHelper'
 import Tag from '../../app/assets/js/tag.dto'
 import { measureVirtualItemsAfterVueUpdate } from '../../app/assets/js/virtualizer-measurement'
@@ -489,6 +490,48 @@ describe('Sentry client options', () => {
       const result = beforeSend(event)
 
       expect(result).toBeNull()
+    })
+  })
+
+  describe('fluid-player-options', () => {
+    it('shows a pause roll every 2nd video and a pre-roll from the 6th, every 3rd', () => {
+      const rolls = (videosRendered: number) => getVideoAdList(videosRendered).map((ad) => ad.roll)
+
+      expect([1, 2, 3, 4, 5, 6, 7, 8, 9, 12].map(rolls)).toEqual([
+        [],
+        ['onPauseRoll'],
+        [],
+        ['onPauseRoll'],
+        [],
+        ['onPauseRoll', 'preRoll'],
+        [],
+        ['onPauseRoll'],
+        ['preRoll'],
+        ['onPauseRoll', 'preRoll']
+      ])
+    })
+
+    it('builds options with the context menu links and the empty-VAST hook', () => {
+      const onEmptyVast = vi.fn()
+      const adList = getVideoAdList(2)
+
+      const options = buildFluidPlayerOptions({
+        adList,
+        adText: 'Advertisement',
+        removeAdsLabel: 'Remove ads',
+        removeAdsHref: '/premium',
+        downloadLabel: 'Download',
+        downloadHref: 'https://example.local/video.mp4',
+        onEmptyVast
+      })
+
+      expect(options.layoutControls?.contextMenu?.links).toEqual([
+        { label: 'Remove ads', href: '/premium' },
+        { label: 'Download', href: 'https://example.local/video.mp4' }
+      ])
+      expect(options.vastOptions?.adList).toBe(adList)
+      options.vastOptions?.vastAdvanced?.vastVideoEndedCallback?.()
+      expect(onEmptyVast).toHaveBeenCalledOnce()
     })
   })
 })
