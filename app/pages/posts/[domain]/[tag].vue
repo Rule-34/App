@@ -131,29 +131,38 @@
   })
 
   const firstPostsAsSchema = computed(() => {
-    return posts.value.slice(0, 8).map((post) => {
-      if (post.media_type === 'video') {
-        return defineVideo({
-          url: post.high_res_file.url,
-          thumbnailUrl: post.preview_file.url,
-          height: post.high_res_file.height,
-          width: post.high_res_file.width,
-          isFamilyFriendly: false
-        })
-      }
+    const schemaNodes: Array<ReturnType<typeof defineVideo> | ReturnType<typeof defineImage>> = []
+    for (const post of posts.value.slice(0, 8)) {
+      const url = post.high_res_file.url
+      if (!url) continue
 
-      return defineImage({
-        url: post.high_res_file.url,
-        height: post.high_res_file.height,
-        width: post.high_res_file.width,
-        caption: [...post.tags.character, ...post.tags.copyright].join(', '),
-        author: post.tags.artist.length ? post.tags.artist.join(', ') : undefined,
-        isFamilyFriendly: false
-      })
-    })
+      if (post.media_type === 'video') {
+        schemaNodes.push(
+          defineVideo({
+            url,
+            thumbnailUrl: post.preview_file.url ?? undefined,
+            height: post.high_res_file.height ?? undefined,
+            width: post.high_res_file.width ?? undefined,
+            isFamilyFriendly: false
+          })
+        )
+      } else {
+        schemaNodes.push(
+          defineImage({
+            url,
+            height: post.high_res_file.height ?? undefined,
+            width: post.high_res_file.width ?? undefined,
+            caption: [...post.tags.character, ...post.tags.copyright].join(', '),
+            author: post.tags.artist.length ? post.tags.artist.join(', ') : undefined,
+            isFamilyFriendly: false
+          })
+        )
+      }
+    }
+    return schemaNodes
   })
 
-  useSchemaOrg(() => [
+  useSchemaOrg([
     defineWebPage({
       '@type': ['CollectionPage', 'SearchResultsPage'],
       about: {
@@ -172,10 +181,9 @@
         },
         { name: pageTitle.value, item: route.path }
       ]
-    }),
-
-    ...firstPostsAsSchema.value
+    })
   ])
+  useSchemaOrg(firstPostsAsSchema)
 
   definePageMeta({
     middleware: [

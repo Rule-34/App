@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import type { IPost, PostMediaType } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
-  import { isFluidPlayerLoaded, loadFluidPlayer, prefetchFluidPlayerWhenIdle } from '~/assets/js/fluid-player-loader'
+  import { prefetchFluidPlayerWhenIdle } from '~/assets/js/fluid-player-loader'
   import { ArrowTopRightOnSquareIcon, CubeTransparentIcon, XMarkIcon } from '@heroicons/vue/20/solid'
   import {
     cleanMediaUrl,
@@ -18,11 +18,9 @@
   const { t } = useI18n()
   const { isPremium } = useUserData()
   const { autoplayAnimatedMedia } = useUserSettings()
-  const { timesVideoHasRendered } = useEthics()
   const { wasCurrentPageSSR } = useSSRDetection()
-  const { schedule: scheduleIdleTask } = useIdleTask()
 
-  export interface PostMediaProps {
+  interface PostMediaProps {
     postIndex: number
 
     mediaSrc: IPost['high_res_file']['url']
@@ -36,13 +34,6 @@
   const props = defineProps<PostMediaProps>()
 
   type MediaElementRef = HTMLElement | { $el?: Element } | null
-  type FluidPlayerOptionsWithPlaybackRates = Partial<FluidPlayerOptions> & {
-    layoutControls?: Partial<
-      Omit<LayoutControls, 'controlBar'> & {
-        controlBar?: Partial<LayoutControls['controlBar'] & { playbackRates: string[] }>
-      }
-    >
-  }
 
   const mediaElement = shallowRef<MediaElementRef>(null)
 
@@ -71,29 +62,24 @@
 
   // A failed direct request only counts against the domain breaker once a fallback candidate succeeds:
   // if the proxy fails too, the file is most likely gone (404) rather than the host blocking us.
-  let pendingMediaDirectFailure = false
-  let pendingPosterDirectFailure = false
+  const pendingDirectFailure = { media: false, poster: false }
   const hostBlockConfirmed = shallowRef(false)
 
-  function confirmPendingMediaFailure() {
-    if (!pendingMediaDirectFailure) return
-    pendingMediaDirectFailure = false
+  function confirmPendingFailure(kind: keyof typeof pendingDirectFailure) {
+    if (!pendingDirectFailure[kind]) return
+    pendingDirectFailure[kind] = false
     hostBlockConfirmed.value = true
-    recordDirectFailure(rawMediaSrc.value, props.mediaType)
-  }
 
-  function confirmPendingPosterFailure() {
-    if (!pendingPosterDirectFailure) return
-    pendingPosterDirectFailure = false
-    hostBlockConfirmed.value = true
-    if (rawPosterSrc.value) {
-      recordDirectFailure(rawPosterSrc.value, 'image')
+    if (kind === 'poster') {
+      if (rawPosterSrc.value) recordDirectFailure(rawPosterSrc.value, 'image')
+    } else {
+      recordDirectFailure(rawMediaSrc.value, props.mediaType)
     }
   }
 
   function clearPendingFailures() {
-    pendingMediaDirectFailure = false
-    pendingPosterDirectFailure = false
+    pendingDirectFailure.media = false
+    pendingDirectFailure.poster = false
     hostBlockConfirmed.value = false
   }
 
@@ -182,10 +168,10 @@
         activeProbe = null
         posterCandidateIndex.value = idx
         if (idx === 0 && rawPosterSrc.value) {
-          pendingPosterDirectFailure = false
+          pendingDirectFailure.poster = false
           recordDirectSuccess(rawPosterSrc.value, 'image')
         } else if (idx > 0) {
-          confirmPendingPosterFailure()
+          confirmPendingFailure('poster')
         }
       }
 
@@ -193,7 +179,7 @@
         if (isUnmounted || currentToken !== posterProbeToken) return
         activeProbe = null
         if (idx === 0 && !isPosterDirectBlocked.value && rawPosterSrc.value) {
-          pendingPosterDirectFailure = true
+          pendingDirectFailure.poster = true
         }
         const nextIdx = idx + 1
         if (nextIdx < posterCandidates.value.length) {
@@ -253,10 +239,10 @@
       if (isStale) return
 
       if (srcCandidateIndex.value > 0) {
-        confirmPendingMediaFailure()
+        confirmPendingFailure('media')
       } else if (isDirectRequest.value && rawMediaSrc.value) {
         // preload="none" never emits loadeddata, so this probe is the only direct-success signal before playback
-        pendingMediaDirectFailure = false
+        pendingDirectFailure.media = false
         recordDirectSuccess(rawMediaSrc.value, props.mediaType)
       }
     }
@@ -270,14 +256,14 @@
       }
 
       if (srcCandidateIndex.value === 0 && isDirectRequest.value && !isDirectBlocked.value) {
-        pendingMediaDirectFailure = true
+        pendingDirectFailure.media = true
       }
 
       // Try the next candidate (e.g. the premium proxy) before giving up
       if (srcCandidateIndex.value + 1 < srcCandidates.value.length) {
         srcCandidateIndex.value += 1
         // The keyed <video> is recreated for the new source; the fresh element upgrades through the normal path
-        destroyVideoPlayer()
+        fluid.destroy()
         nextTick(() => probeVideoSource(token))
         return
       }
@@ -296,7 +282,7 @@
       if (srcCandidateIndex.value === 0 && srcCandidates.value.length > 1) {
         srcCandidateIndex.value = 1
         if (isVideo.value) {
-          reloadVideoPlayer(false)
+          fluid.reload(false)
         }
       }
     }
@@ -322,7 +308,7 @@
     probeVideoPoster()
 
     // The keyed <video> is recreated for the new source, so drop the player bound to the old one
-    destroyVideoPlayer()
+    fluid.destroy()
   })
 
   const error = ref<Error | null>(null)
@@ -343,6 +329,9 @@
   const mediaAspectRatio = computed(() =>
     props.mediaSrcWidth && props.mediaSrcHeight ? `${props.mediaSrcWidth}/${props.mediaSrcHeight}` : undefined
   )
+  const aspectRatioStyle = computed(() =>
+    mediaAspectRatio.value ? `aspect-ratio: ${mediaAspectRatio.value};` : undefined
+  )
   const isShortMedia = computed(() => {
     if (!props.mediaSrcWidth || !props.mediaSrcHeight) {
       return false
@@ -357,7 +346,7 @@
 
     return [
       {
-        rel: 'preload',
+        rel: 'preload' as const,
         as: 'image' as const,
         // cleanMediaUrl decodes %20 in local paths, but absolute URLs are already encoded
         href: localPosterSrc.value.startsWith('/') ? encodeURI(localPosterSrc.value) : localPosterSrc.value,
@@ -370,11 +359,7 @@
     link: lcpVideoPosterPreloadLinks.value
   }))
 
-  let videoPlayer: FluidPlayerInstance | undefined
-  let videoPlayerInitPromise: Promise<void> | null = null
-  let videoPlayerIdleScheduled = false
-  let videoPlayerInitTimeout: number | null = null
-  let hasCountedVideoRender = false
+  const fluid = useFluidVideoPlayer({ getVideoElement, getSource: () => localSrc.value })
 
   const isAnimatedMediaLoading = ref(false)
   const isAnimatedMediaPlaying = ref(false)
@@ -406,15 +391,6 @@
 
     stopPosterProbe()
     stopVideoProbe()
-
-    if (videoPlayerInitTimeout !== null) {
-      window.clearTimeout(videoPlayerInitTimeout)
-      videoPlayerInitTimeout = null
-      videoPlayerIdleScheduled = false
-    }
-
-    // The video element can already be gone (error card, sandbox), so destroy before the element check
-    destroyVideoPlayer()
 
     let finalMediaElement = getResolvedMediaElement()
 
@@ -459,261 +435,6 @@
     })
   }
 
-  async function createVideoPlayer() {
-    const videoElement = getVideoElement()
-
-    if (!videoElement) {
-      throw new Error('Media element not found')
-    }
-
-    if (!isVideo.value) {
-      throw new Error('Media is not a video')
-    }
-
-    const fluidPlayerModule = await loadFluidPlayer()
-
-    const initializedVideoElement = getVideoElement()
-
-    if (isUnmounted || !initializedVideoElement) {
-      return
-    }
-
-    const fluidPlayer = fluidPlayerModule.default
-    const adList: NonNullable<VastOptions['adList']> = []
-
-    const fluidPlayerOptions: FluidPlayerOptionsWithPlaybackRates = {
-      layoutControls: {
-        primaryColor: 'rgba(0, 0, 0, 0.7)',
-
-        fillToContainer: true,
-
-        // Round only the top, like the card; Fluid applies it to its wrapper and the video.
-        // It takes any CSS border-radius shorthand at runtime, its typings only allow a number.
-        roundedCorners: '6px 6px 0 0' as unknown as number,
-
-        preload: 'none',
-
-        loop: true,
-
-        playbackRateEnabled: true,
-
-        allowTheatre: false,
-
-        autoRotateFullScreen: true,
-
-        // Fix: Opening in fullscreen when searching something with "F"
-        keyboardControl: false,
-
-        controlBar: {
-          autoHide: true,
-
-          playbackRates: ['x2', 'x1.5', 'x1', 'x0.75', 'x0.5', 'x0.25']
-        },
-
-        contextMenu: {
-          controls: true,
-
-          links: [
-            {
-              label: t('media.removeAds'),
-              href: localePath('/premium?utm_source=internal&utm_medium=player-context-menu#pricing')
-            },
-            {
-              label: t('media.download'),
-              href: localSrc.value
-            }
-          ]
-        },
-
-        miniPlayer: {
-          enabled: false
-        }
-      },
-
-      onBeforeXMLHttpRequest(request) {
-        request.withCredentials = false
-      },
-
-      vastOptions: {
-        adText: t('media.adText'),
-
-        vastAdvanced: {
-          /**
-           * Handle empty VAST
-           */
-          vastVideoEndedCallback() {
-            const currentVideoElement = getVideoElement()
-
-            if (!currentVideoElement?.src.endsWith('/null')) {
-              return
-            }
-
-            currentVideoElement.src = localSrc.value
-            videoPlayer?.play()
-          }
-        },
-
-        adList
-      }
-    }
-
-    if (!isPremium.value) {
-      // Count each mounted video once, not on every fallback/retry player re-creation
-      if (!hasCountedVideoRender) {
-        hasCountedVideoRender = true
-        timesVideoHasRendered.value++
-      }
-
-      // Only show pause roll ads every 2 videos
-      if (timesVideoHasRendered.value % 2 === 0) {
-        adList.push(
-          // In-Video Banner
-          {
-            roll: 'onPauseRoll',
-            vastTag:
-              /**
-               * ExoClick
-               * Pros:
-               * Cons: Low revenue (7)
-               */
-              'https://s.magsrv.com/splash.php?idzone=5386214'
-          }
-        )
-      }
-      //
-
-      // Only show preroll ads after 3 videos, and every 3 videos
-      if (timesVideoHasRendered.value > 3 && timesVideoHasRendered.value % 3 === 0) {
-        adList.push(
-          // In-Stream Video
-          {
-            roll: 'preRoll',
-            vastTag:
-              /**
-               * ExoClick
-               * Pros:
-               * Cons: Low revenue (9)
-               */
-              'https://s.magsrv.com/splash.php?idzone=5386496'
-
-            /**
-             * HilltopAds
-             * Pros:
-             * Cons: Low revenue (4)
-             */
-            // 'https://ellipticaltrack.com/dCm.FXz/doGMNPv/Z-GhUX/OermX9/u-ZqUEltk/PYTgYBy/ODTZQI5oNHDDEHtdNbjLIS5eNvDhk/0uMGgu?limit=1'
-
-            /**
-             * Clickadu
-             * Pros:
-             * Cons:
-             */
-            // 'https://anewfeedliberty.com/ceef/gdt3g0/tbt/2034767/tlk.xml'
-
-            /**
-             * AdSession
-             * Pros:
-             * Cons:
-             */
-            // 'https://s.eunow4u.com/v1/vast.php?idzone=2310'
-          }
-        )
-      }
-    }
-
-    videoPlayer = fluidPlayer(initializedVideoElement, fluidPlayerOptions)
-
-    // Fluid clips its wrapper (overflow: hidden), which cuts off the right-click menu near the edges. Without the clip
-    // the inline-block wrapper sits on the text baseline and leaves a gap under the video, so align it to the top.
-    const wrapper = initializedVideoElement.closest<HTMLElement>('.fluid_video_wrapper')
-    wrapper?.style.setProperty('overflow', 'visible')
-    wrapper?.style.setProperty('vertical-align', 'top')
-
-    // TODO: Handle poster error
-  }
-
-  function initializeVideoPlayer() {
-    if (videoPlayer || videoPlayerInitPromise) {
-      return videoPlayerInitPromise
-    }
-
-    videoPlayerInitPromise = createVideoPlayer()
-      .catch((initError) => {
-        // Dynamic import or player initialization failed; the native video remains usable.
-        if (import.meta.dev) {
-          console.error('[PostMedia] Fluid Player failed to initialize', initError)
-        }
-      })
-      .finally(() => {
-        videoPlayerInitPromise = null
-      })
-
-    return videoPlayerInitPromise
-  }
-
-  function scheduleVideoPlayerInitialization(delay = 1200, timeout = 4000) {
-    if (videoPlayer || videoPlayerInitPromise) {
-      return
-    }
-
-    // The deferral below only protects the cold page load. Once Fluid Player is in memory, upgrade right away
-    // so videos scrolled into view never show the native player first, even if an idle upgrade is still queued
-    // (its callback re-checks the player state, so it cannot initialize twice).
-    if (isFluidPlayerLoaded()) {
-      initializeVideoPlayer()
-      return
-    }
-
-    if (videoPlayerIdleScheduled) {
-      return
-    }
-
-    videoPlayerIdleScheduled = true
-
-    videoPlayerInitTimeout = window.setTimeout(() => {
-      videoPlayerInitTimeout = null
-
-      scheduleIdleTask(() => {
-        videoPlayerIdleScheduled = false
-
-        // No viewport check on purpose: once queued, upgrade even if scrolled away, so the player never
-        // visibly swaps in over the native one while the user scrolls past.
-        if (isUnmounted || videoPlayer || videoPlayerInitPromise || !getVideoElement() || !isVideo.value) {
-          return
-        }
-
-        initializeVideoPlayer()
-      }, timeout)
-    }, delay)
-  }
-
-  function destroyVideoPlayer() {
-    if (!videoPlayer) {
-      return
-    }
-
-    videoPlayer.destroy()
-    videoPlayer = undefined
-  }
-
-  async function reloadVideoPlayer(shouldPlay: boolean = false) {
-    await nextTick()
-    destroyVideoPlayer()
-
-    await nextTick()
-    try {
-      await initializeVideoPlayer()
-    } catch {
-      // Player re-creation failed
-      return
-    }
-
-    if (shouldPlay) {
-      await nextTick()
-      videoPlayer?.play()
-    }
-  }
-
   function startPlayingAnimatedMedia() {
     isAnimatedMediaLoading.value = true
     isAnimatedMediaPlaying.value = true
@@ -729,10 +450,9 @@
       return
     }
 
-    const targetElement = payload.target as HTMLElement | null
-    const isImageTag = targetElement instanceof HTMLImageElement || targetElement?.tagName === 'IMG'
-    const isVideoTag = targetElement instanceof HTMLVideoElement || targetElement?.tagName === 'VIDEO'
-    const target = (isImageTag || isVideoTag ? targetElement : null) as HTMLImageElement | HTMLVideoElement | null
+    const target =
+      payload.target instanceof HTMLImageElement || payload.target instanceof HTMLVideoElement ? payload.target : null
+    const isVideoTag = target instanceof HTMLVideoElement
 
     if (!target?.src) {
       return
@@ -747,7 +467,7 @@
     }
 
     // Never treat post-playback completion events on videos as media load failures
-    if (isVideoTag && (target as HTMLVideoElement).ended) {
+    if (isVideoTag && target.ended) {
       return
     }
 
@@ -759,7 +479,7 @@
     // Case 1: The poster image failed to load for animated media
     if (isAnimatedMedia.value && !isAnimatedMediaPlaying.value) {
       if (posterCandidateIndex.value === 0 && !isPosterDirectBlocked.value && rawPosterSrc.value) {
-        pendingPosterDirectFailure = true
+        pendingDirectFailure.poster = true
       }
 
       if (posterCandidateIndex.value + 1 < posterCandidates.value.length) {
@@ -776,13 +496,13 @@
     // A host that already served the video is not at fault for a later stall (a loaded animated poster says nothing
     // about the GIF itself)
     if (isDirectRequest.value && !isDirectBlocked.value && !(isVideo.value && mediaHasLoaded.value)) {
-      pendingMediaDirectFailure = true
+      pendingDirectFailure.media = true
     }
 
     if (srcCandidateIndex.value + 1 < srcCandidates.value.length) {
       srcCandidateIndex.value += 1
       if (isVideo.value) {
-        reloadVideoPlayer(true)
+        fluid.reload(true)
       }
       return
     }
@@ -815,7 +535,7 @@
 
       nextTick(async () => {
         probeVideoPoster()
-        await reloadVideoPlayer()
+        await fluid.reload()
         // Prompt browser to fetch media stream on retry
         getVideoElement()?.load()
       })
@@ -866,22 +586,13 @@
     }
 
     if (entry.isIntersecting) {
-      scheduleVideoPlayerInitialization(isLikelyLcpMedia.value ? 1200 : 1600)
+      fluid.scheduleUpgrade(isLikelyLcpMedia.value ? 1200 : 1600)
       return
     }
 
-    if (videoPlayerInitTimeout !== null) {
-      window.clearTimeout(videoPlayerInitTimeout)
-      videoPlayerInitTimeout = null
-      videoPlayerIdleScheduled = false
-    }
-
+    fluid.cancelScheduledUpgrade()
     getVideoElement()?.pause()
-    try {
-      videoPlayer?.pause()
-    } catch {
-      // Ignore if player is torn down
-    }
+    fluid.pause()
   }
 
   function onMediaLoad() {
@@ -891,17 +602,13 @@
     const isDirectCandidate = isShowingPoster ? posterCandidateIndex.value === 0 : isDirectRequest.value
     const rawTargetSrc = isShowingPoster ? rawPosterSrc.value || props.mediaPosterSrc : rawMediaSrc.value
 
+    const failureKind = isShowingPoster ? 'poster' : 'media'
+
     if (isDirectCandidate && rawTargetSrc) {
-      if (isShowingPoster) {
-        pendingPosterDirectFailure = false
-      } else {
-        pendingMediaDirectFailure = false
-      }
+      pendingDirectFailure[failureKind] = false
       recordDirectSuccess(rawTargetSrc, isShowingPoster ? 'image' : props.mediaType)
-    } else if (isShowingPoster) {
-      confirmPendingPosterFailure()
     } else {
-      confirmPendingMediaFailure()
+      confirmPendingFailure(failureKind)
     }
 
     // Clear loading state if it's a GIF
@@ -968,12 +675,12 @@
 </script>
 
 <template>
-  <div :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined">
+  <div :style="aspectRatioStyle">
     <!-- Error Overlay -->
     <template v-if="hasError">
       <div
         :class="isShortMedia ? 'px-4 py-4 sm:px-5 sm:py-4.5' : 'px-4 py-6 sm:px-6 sm:py-8'"
-        :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
+        :style="aspectRatioStyle"
         class="relative flex h-full min-h-[200px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-linear-to-b from-base-900/60 via-base-950 to-base-1000 text-center select-none"
       >
         <div
@@ -983,7 +690,7 @@
           <!-- Error Title & Concise Context Subtitle -->
           <div class="flex flex-col items-center space-y-1 text-center">
             <h3 class="text-base font-semibold tracking-wide text-base-content-highlight">
-              {{ error?.message || t('errors.mediaLoadError') }}
+              {{ error?.message }}
             </h3>
             <p
               v-if="showHostBlockHint"
@@ -1057,12 +764,12 @@
     <div
       v-else-if="useIframePlayer"
       v-intersection-observer="onIframeIntersectionObserver"
-      :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
+      :style="aspectRatioStyle"
       class="group relative flex h-full min-h-[200px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-base-950"
     >
       <!-- Minimal close control to return to error overlay -->
       <button
-        :aria-label="t('common.close') || 'Close'"
+        :aria-label="t('common.close')"
         class="absolute top-2.5 right-2.5 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-base-950/80 text-base-content ring-1 ring-base-0/20 backdrop-blur-md transition-colors hover:bg-base-900 hover:text-base-content-highlight focus-visible:focus-outline-util"
         type="button"
         @click="closeIframePlayer"
@@ -1133,7 +840,7 @@
         :loading="mediaLoading"
         :preload="mediaPreload"
         :src="localSrc"
-        :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
+        :style="aspectRatioStyle"
         :width="mediaSrcWidthAttribute"
         class="h-auto w-full rounded-t-md"
         :referrerpolicy="mediaReferrerPolicy"
@@ -1156,7 +863,7 @@
         :loading="mediaLoading"
         :preload="mediaPreload"
         :src="isAnimatedMediaPlaying ? localSrc : localPosterSrc"
-        :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
+        :style="aspectRatioStyle"
         :width="mediaSrcWidthAttribute"
         class="h-auto w-full rounded-t-md"
         :referrerpolicy="isAnimatedMediaPlaying ? mediaReferrerPolicy : posterReferrerPolicy"
@@ -1230,7 +937,7 @@
         :height="mediaSrcHeightAttribute"
         :poster="localPosterSrc"
         :src="localSrc"
-        :style="mediaAspectRatio ? `aspect-ratio: ${mediaAspectRatio};` : undefined"
+        :style="aspectRatioStyle"
         :width="mediaSrcWidthAttribute"
         class="h-auto w-full rounded-t-md"
         controls
@@ -1240,9 +947,9 @@
         @play="onVideoPlay"
         @error="onMediaError"
         @loadeddata="onMediaLoad"
-        @focus="initializeVideoPlayer"
-        @pointerdown="initializeVideoPlayer"
-        @pointerenter="initializeVideoPlayer"
+        @focus="fluid.initialize()"
+        @pointerdown="fluid.initialize()"
+        @pointerenter="fluid.initialize()"
       />
     </div>
   </div>

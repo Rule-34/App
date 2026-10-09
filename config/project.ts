@@ -2,49 +2,49 @@
 // TYPE DEFINITIONS
 // =============================================================================
 
-export interface ProjectUrls {
+interface ProjectUrls {
   production: URL
   development: URL
 }
 
-export interface BrandingColors {
+interface BrandingColors {
   primary: string
   secondary: string
   background: string
 }
 
-export interface Branding {
+interface Branding {
   colors: BrandingColors
 }
 
-export interface Analytics {
+interface Analytics {
   formbricksEnvironmentId?: string
   formbricksAppUrl?: string
 }
 
-export interface Sentry {
+interface Sentry {
   applicationKey: string
 }
 
-export interface SEO {
+interface SEO {
   title: string
   description: string
   keywords: string[]
 }
 
-export interface Social {
+interface Social {
   twitter: string
   discord: string
   github: string
 }
 
-export interface Imgproxy {
+interface Imgproxy {
   baseUrl: string
   internalProxyUrl: string
   mediaProxyUrls: string[]
 }
 
-export interface DiscordOauth {
+interface DiscordOauth {
   clientId: string
   redirectUri: string
 }
@@ -53,7 +53,7 @@ export interface DiscordOauth {
  * Main project configuration interface
  * This defines the complete structure of the project configuration
  */
-export interface ProjectConfig {
+interface ProjectConfig {
   name: string
   shortName: string
   description: string
