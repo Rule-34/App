@@ -666,6 +666,38 @@ describe('/', async () => {
       expect(await videoPost.textContent()).not.toContain('Error loading media')
     }, 45000)
 
+    it('upgrades the replacement video to Fluid Player when the metadata probe advances to the next candidate', async () => {
+      // Arrange: poster dead, direct video stalls long enough for the idle upgrade, then fails; only the proxy answers
+      const page = await createTrackedPage()
+      await signInAsPremiumUser(page)
+      await page.route(/example\.local\/thumbnails\//, (route) => route.abort('failed'))
+      await page.route(/example\.local\/.*videos\//, async (route) => {
+        await new Promise((resolve) => setTimeout(resolve, 3500))
+        await route.abort('failed').catch(() => {})
+      })
+      await page.route(/api\/cors-proxy/, (route) =>
+        route.fulfill({ status: 200, contentType: 'audio/wav', body: createSilentWav() })
+      )
+      const testId = `safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`
+      const videoPost = page.getByTestId(testId).first()
+
+      // Act
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
+
+      // Assert: the player is re-created around the proxied video instead of leaving a native one behind
+      await page.waitForFunction(
+        (id) =>
+          document
+            .querySelector(`[data-testid="${id}"] .fluid_video_wrapper video`)
+            ?.getAttribute('src')
+            ?.includes('cors-proxy'),
+        testId,
+        { timeout: 15000 }
+      )
+      // The superseded wrapper goes away with its keyed <video>, leaving exactly one player
+      await expect.poll(() => videoPost.locator('.fluid_video_wrapper').count(), { timeout: 5000 }).toBe(1)
+    }, 60000)
+
     it('keeps deferring the first Fluid Player upgrade on a cold page load', async () => {
       // Arrange: record when the custom player first appears, relative to navigation start
       const page = await createTrackedPage()

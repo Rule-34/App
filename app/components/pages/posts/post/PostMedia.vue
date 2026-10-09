@@ -11,8 +11,7 @@
     onDomainHealthChange,
     recordDirectFailure,
     recordDirectSuccess,
-    resetDomainBreaker,
-    type MediaReferrerPolicy
+    resetDomainBreaker
   } from '~/assets/js/media-resilience'
 
   const localePath = useLocalePath()
@@ -153,20 +152,6 @@
 
   const mediaReferrerPolicy = computed(() => getMediaReferrerPolicy(localSrc.value))
   const posterReferrerPolicy = computed(() => getMediaReferrerPolicy(localPosterSrc.value))
-  const videoReferrerPolicy = computed<MediaReferrerPolicy>(() => {
-    const mediaPolicy = mediaReferrerPolicy.value
-    const posterPolicy = posterReferrerPolicy.value
-
-    if (mediaPolicy === 'origin' || posterPolicy === 'origin') {
-      return 'origin'
-    }
-
-    if (mediaPolicy === 'no-referrer' || posterPolicy === 'no-referrer') {
-      return 'no-referrer'
-    }
-
-    return 'strict-origin-when-cross-origin'
-  })
 
   function probeVideoPoster() {
     if (import.meta.server || isUnmounted || !isVideo.value || !posterCandidates.value.length) {
@@ -287,6 +272,8 @@
       // Try the next candidate (e.g. the premium proxy) before giving up
       if (srcCandidateIndex.value + 1 < srcCandidates.value.length) {
         srcCandidateIndex.value += 1
+        // The keyed <video> is recreated for the new source; the fresh element upgrades through the normal path
+        destroyVideoPlayer()
         nextTick(() => probeVideoSource(token))
         return
       }
@@ -329,6 +316,9 @@
     posterProbeToken += 1
     stopVideoProbe()
     probeVideoPoster()
+
+    // The keyed <video> is recreated for the new source, so drop the player bound to the old one
+    destroyVideoPlayer()
   })
 
   const error = ref<Error | null>(null)
@@ -423,6 +413,9 @@
       videoPlayerIdleScheduled = false
     }
 
+    // The video element can already be gone (error card, sandbox), so destroy before the element check
+    destroyVideoPlayer()
+
     let finalMediaElement = getResolvedMediaElement()
 
     if (finalMediaElement == null) {
@@ -446,7 +439,6 @@
     //
     else if (isVideo.value) {
       getVideoElement()?.pause()
-      destroyVideoPlayer()
     }
   })
 
@@ -1237,7 +1229,6 @@
         loop
         playsinline
         preload="none"
-        :referrerpolicy="videoReferrerPolicy"
         @play="onVideoPlay"
         @error="onMediaError"
         @loadeddata="onMediaLoad"
