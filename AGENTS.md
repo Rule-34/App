@@ -272,6 +272,9 @@ the `@headlessui/tailwindcss` plugin.
 - Debug mode: import `debugBrowserOptions` from `test/helper.ts` for headful playback with slowMo.
 - Plain Vitest suites that import app modules directly do not get Nuxt's runtime alias resolution; keep repository/pure
   modules importable through relative paths or import them directly from their app path in those suites.
+- Vue warnings (hydration mismatches included) are stripped from the production build the e2e tests run against, so
+  assert on the SSR HTML (for example an `h1` inside a `p`) or on `pageerror`/console errors via `collectConsoleProblems`
+  in `test/pages/posts.test.ts`. Use `pushRoute` there for client-side navigation that keeps the document alive.
 - **`@nuxt/test-utils` `$fetch` has no `.raw`** — it is a path-resolving wrapper around `ofetch`. For redirect status
   and `Location` headers, use `fetch` from `@nuxt/test-utils` with `{ redirect: 'manual' }` (see
   `test/server/redirect-removed-locales.test.ts`).
