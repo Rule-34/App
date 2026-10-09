@@ -1355,6 +1355,34 @@ describe('/', async () => {
       expect(await probeReferer(page)).toBeUndefined()
     }, 45000)
 
+    it('sends the origin on the real e621 <video> request, and nothing for other boorus', async () => {
+      const page = await createTrackedPage()
+      const referers: Record<string, string | undefined> = {}
+      await page.route(/(static1\.e621\.net|example\.local)\//, (route) => {
+        const requestUrl = route.request().url()
+        if (/\.(mp4|webm)$/.test(requestUrl)) {
+          referers[new URL(requestUrl).host] = route.request().headers()['referer']
+          return route.fulfill({ status: 200, contentType: 'audio/wav', body: createSilentWav() })
+        }
+        return route.fulfill({ status: 200, contentType: 'image/png', body: PIXEL_PNG })
+      })
+      const forceVideoRequest = (testIdPrefix: string) =>
+        page.evaluate((prefix) => {
+          const video = document.querySelector<HTMLVideoElement>(`[data-testid^="${prefix}"] video`)!
+          video.preload = 'metadata'
+          video.load()
+        }, testIdPrefix)
+
+      await page.goto(url('/posts/e621.net?tags=video_test'), { waitUntil: 'networkidle' })
+      await forceVideoRequest('e621.net-')
+      await expect.poll(() => referers['static1.e621.net']).toBe(`${new URL(url('/')).origin}/`)
+
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
+      await forceVideoRequest('safebooru.org-')
+      await expect.poll(() => 'example.local' in referers).toBe(true)
+      expect(referers['example.local']).toBeUndefined()
+    }, 60000)
+
     it('follows in-app domain switches without a reload', async () => {
       const page = await createTrackedPage()
       await page.goto(url('/posts/rule34.xxx'), { waitUntil: 'networkidle' })

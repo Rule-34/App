@@ -759,8 +759,9 @@
 
     // Case 2: Main media failed to load (image, gif, or video)
     // If Candidate 0 (direct request) failed, record failure for the domain
-    // A host that already served the file is not at fault for a later stall
-    if (isDirectRequest.value && !isDirectBlocked.value && !mediaHasLoaded.value) {
+    // A host that already served the video is not at fault for a later stall (a loaded animated poster says nothing
+    // about the GIF itself)
+    if (isDirectRequest.value && !isDirectBlocked.value && !(isVideo.value && mediaHasLoaded.value)) {
       pendingMediaDirectFailure = true
     }
 
