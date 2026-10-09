@@ -172,8 +172,10 @@ function collectConsoleProblems(page: TrackedPage) {
   page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`))
   page.on('console', (message) => {
     const text = message.text()
-    // The mocked PocketBase answers its realtime stream with JSON, which the browser rejects as an event stream
-    const isNetworkNoise = text.startsWith('Failed to load resource') || text.includes('EventSource')
+    // The mocked PocketBase answers its realtime stream with JSON, which the browser rejects as an event stream (the
+    // cloud sync then logs that it could not subscribe)
+    const isNetworkNoise =
+      text.startsWith('Failed to load resource') || text.includes('EventSource') || text.includes('premium cloud sync')
     const isVueProblem = /Vue warn|Hydration/.test(text)
 
     if ((message.type() === 'error' && !isNetworkNoise) || isVueProblem) {
@@ -1610,7 +1612,7 @@ describe('/', async () => {
 
       // e621 -> other booru: its media must not inherit the origin
       referers.other.length = 0
-      await pushRoute(page, '/posts/safebooru.org?tags=video_test')
+      await pushRoute(page, '/posts/safebooru.org?tags=multi_video_test') // other posters, so none is served from cache
       await expect.poll(() => referers.other.length).toBeGreaterThan(0)
       expect(referers.other).toEqual(referers.other.map(() => undefined))
     }, 60000)
