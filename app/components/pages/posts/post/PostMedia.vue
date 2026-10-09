@@ -161,12 +161,7 @@
     posterProbeToken += 1
     const currentToken = posterProbeToken
 
-    if (activeProbe) {
-      activeProbe.onload = null
-      activeProbe.onerror = null
-      activeProbe.src = ''
-      activeProbe = null
-    }
+    stopPosterProbe()
 
     const candidateIdx = posterCandidateIndex.value
 
@@ -213,6 +208,15 @@
     }
 
     probeCandidate(candidateIdx)
+  }
+
+  function stopPosterProbe() {
+    if (activeProbe) {
+      activeProbe.onload = null
+      activeProbe.onerror = null
+      activeProbe.src = ''
+      activeProbe = null
+    }
   }
 
   function stopVideoProbe() {
@@ -399,12 +403,7 @@
       unsubscribeHealthChange = null
     }
 
-    if (activeProbe) {
-      activeProbe.onload = null
-      activeProbe.onerror = null
-      activeProbe = null
-    }
-
+    stopPosterProbe()
     stopVideoProbe()
 
     if (videoPlayerInitTimeout !== null) {
@@ -448,9 +447,13 @@
       return
     }
 
+    pauseOtherVideos(current)
+  }
+
+  function pauseOtherVideos(except?: HTMLVideoElement) {
     document.querySelectorAll('video').forEach((v) => {
-      if (v !== current && !v.paused) {
-        v.pause?.()
+      if (v !== except && !v.paused) {
+        v.pause()
       }
     })
   }
@@ -821,11 +824,7 @@
   }
 
   function playInIframe() {
-    document.querySelectorAll('video').forEach((v) => {
-      if (!v.paused) {
-        v.pause?.()
-      }
-    })
+    pauseOtherVideos()
     useIframePlayer.value = true
     error.value = null
   }

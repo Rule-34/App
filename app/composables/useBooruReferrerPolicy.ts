@@ -1,6 +1,6 @@
-// Per agreement, e621 gets the origin referrer; every other booru gets none.
-// <video> cannot set its own referrerpolicy, so the page policy has to carry it.
-const ORIGIN_REFERRER_DOMAINS = ['e621.net']
+import { ORIGIN_REFERRER_DOMAINS } from '~/assets/js/media-resilience'
+
+// <video> cannot set its own referrerpolicy, so the page policy carries the e621 agreement (see ORIGIN_REFERRER_DOMAINS).
 
 /**
  * One always-present `<meta name="referrer">` driven by the current route. It must never disappear on navigation:

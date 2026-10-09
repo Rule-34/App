@@ -81,6 +81,9 @@ export function cleanMediaUrl(url?: string | null): string | null {
   return parsed.href
 }
 
+/** Hosts that get the `origin` referrer by agreement; the page-level policy and per-media policy both read this. */
+export const ORIGIN_REFERRER_DOMAINS = ['e621.net']
+
 /** Tailscale CGNAT range 100.64.0.0/10 */
 const TAILSCALE_CGNAT_HOST = /^100\.(?:6[4-9]|[7-9]\d|1[01]\d|12[0-7])\.\d{1,3}\.\d{1,3}$/
 
@@ -118,7 +121,7 @@ export function getMediaReferrerPolicy(rawUrl?: string | null): MediaReferrerPol
 
   const hostname = parsed.hostname.toLowerCase()
 
-  if (/(^|\.)e621\.net$/.test(hostname)) {
+  if (ORIGIN_REFERRER_DOMAINS.some((domain) => hostname === domain || hostname.endsWith(`.${domain}`))) {
     return 'origin'
   }
 
@@ -143,17 +146,9 @@ export function getMediaReferrerPolicy(rawUrl?: string | null): MediaReferrerPol
  * @returns A composite key of hostname and category, or null if invalid.
  */
 function getDomainKey(rawUrl: string, mediaType?: PostMediaType | string): string | null {
-  if (!rawUrl) return null
-  const trimmed = rawUrl.trim()
-  if (!trimmed) return null
-
-  const stripped = trimmed.split('#')[0]
-  if (!stripped) return null
-
-  const parsed = URL.parse(stripped)
-  if (!parsed || (parsed.protocol !== 'https:' && parsed.protocol !== 'http:')) {
-    return null
-  }
+  const clean = cleanMediaUrl(rawUrl)
+  const parsed = clean ? URL.parse(clean) : null
+  if (!parsed) return null
 
   const mediaCategory = mediaType === 'video' ? 'video' : 'image'
   return `${parsed.hostname}:${mediaCategory}`
@@ -274,13 +269,9 @@ export function getCandidateSources(options: CandidateSourceOptions): string[] {
   // Premium users get a dedicated media branch: proxied and automatically enhanced via imgproxy,
   // falling back to the dedicated premium backend proxy — never degraded through public third-party proxies.
   if (isPremium) {
-    try {
-      candidates.push(proxyUrl(cleanUrl))
-    } catch {
-      // Ignored if invalid
-    }
+    candidates.push(proxyUrl(cleanUrl))
 
-    return Array.from(new Set(candidates))
+    return candidates
   }
 
   if (mediaType === 'video') {
@@ -289,15 +280,15 @@ export function getCandidateSources(options: CandidateSourceOptions): string[] {
 
   // Free/non-premium users: free fallback chain across public image CDNs
   const photon = toPhotonUrl(cleanUrl)
-  if (photon && photon !== cleanUrl) {
+  if (photon !== cleanUrl) {
     candidates.push(photon)
   }
   const ddg = toDdgUrl(cleanUrl)
-  if (ddg && ddg !== cleanUrl) {
+  if (ddg !== cleanUrl) {
     candidates.push(ddg)
   }
 
-  return Array.from(new Set(candidates))
+  return candidates
 }
 
 /**
@@ -312,14 +303,7 @@ export function isDomainDirectBlocked(rawUrl: string, mediaType?: PostMediaType 
   const key = getDomainKey(rawUrl, mediaType)
   if (!key) return false
 
-  const entry = domainHealthMap.get(key)
-  if (!entry) return false
-
-  if (entry.blockedUntil > Date.now()) {
-    return true
-  }
-
-  return false
+  return (domainHealthMap.get(key)?.blockedUntil ?? 0) > Date.now()
 }
 
 /**
@@ -355,14 +339,11 @@ export function recordDirectFailure(rawUrl: string, mediaType?: PostMediaType | 
     return
   }
 
-  // Half-open probe: if the cooldown period has elapsed, reset failure count so a single probe failure
-  // does not immediately re-trip the breaker.
-  if (entry.blockedUntil > 0 && now >= entry.blockedUntil) {
+  // Half-open probe (cooldown elapsed) or stale sub-threshold failures older than the cooldown window:
+  // reset the count so a single failure does not immediately re-trip the breaker.
+  if (entry.blockedUntil > 0 || (entry.lastFailureAt && now - entry.lastFailureAt > BREAKER_COOLDOWN_MS)) {
     entry.consecutiveFailures = 0
     entry.blockedUntil = 0
-  } else if (entry.lastFailureAt && now - entry.lastFailureAt > BREAKER_COOLDOWN_MS) {
-    // Stale sub-threshold failures older than the cooldown window decay to 0.
-    entry.consecutiveFailures = 0
   }
 
   entry.consecutiveFailures += 1
