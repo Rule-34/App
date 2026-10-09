@@ -10,11 +10,13 @@ import { ORIGIN_REFERRER_DOMAINS } from '~/assets/js/media-resilience'
  * because unhead appended a second tag instead of adopting the server-rendered one on hydration.
  */
 export function useBooruReferrerPolicy() {
-  const route = useRoute()
+  // The router's own route flips when navigation resolves; `useRoute()` outside a page only updates after the new
+  // page rendered, by which time its media requests have already gone out under the previous policy.
+  const route = useRouter().currentRoute
 
   const policy = computed(() => {
-    const domain = route.params.domain
-    const isPostsRoute = route.path.split('/').includes('posts')
+    const domain = route.value.params.domain
+    const isPostsRoute = route.value.path.split('/').includes('posts')
 
     return isPostsRoute && typeof domain === 'string' && ORIGIN_REFERRER_DOMAINS.includes(domain)
       ? 'origin'

@@ -359,7 +359,8 @@
       {
         rel: 'preload',
         as: 'image' as const,
-        href: encodeURI(localPosterSrc.value),
+        // cleanMediaUrl decodes %20 in local paths, but absolute URLs are already encoded
+        href: localPosterSrc.value.startsWith('/') ? encodeURI(localPosterSrc.value) : localPosterSrc.value,
         fetchpriority: 'high' as const
       }
     ]
