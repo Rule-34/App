@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import type { IPost, PostMediaType } from '~/assets/js/post.dto'
   import { vIntersectionObserver } from '@vueuse/components'
+  import { isFluidPlayerLoaded, loadFluidPlayer, prefetchFluidPlayerWhenIdle } from '~/assets/js/fluid-player-loader'
   import { ArrowTopRightOnSquareIcon, CubeTransparentIcon, XMarkIcon } from '@heroicons/vue/20/solid'
   import {
     cleanMediaUrl,
@@ -385,6 +386,10 @@
   const mediaHasLoaded = ref(false)
 
   onMounted(() => {
+    if (isVideo.value) {
+      prefetchFluidPlayerWhenIdle()
+    }
+
     const resolvedMediaElement = getResolvedMediaElement()
 
     if (!resolvedMediaElement) {
@@ -469,10 +474,7 @@
       throw new Error('Media is not a video')
     }
 
-    const [fluidPlayerModule] = await Promise.all([
-      import('fluid-player'),
-      import('fluid-player/src/css/fluidplayer.css')
-    ])
+    const fluidPlayerModule = await loadFluidPlayer()
 
     const initializedVideoElement = getVideoElement()
 
@@ -645,6 +647,13 @@
 
   function scheduleVideoPlayerInitialization(delay = 1200, timeout = 4000) {
     if (videoPlayer || videoPlayerInitPromise || videoPlayerIdleScheduled) {
+      return
+    }
+
+    // The deferral below only protects the cold page load. Once Fluid Player is in memory, upgrade right away
+    // so videos scrolled into view never show the native player first.
+    if (isFluidPlayerLoaded()) {
+      initializeVideoPlayer()
       return
     }
 
