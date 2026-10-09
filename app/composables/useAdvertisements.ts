@@ -235,14 +235,18 @@ export default function () {
         defer: true,
 
         // Fix for CORS issues - https://unhead.unjs.io/usage/composables/use-script#referrerpolicy-and-crossorigin
-        crossorigin: 'anonymous'
+        crossorigin: 'anonymous',
+
+        // Only e621 media gets a referrer (see useBooruReferrerPolicy); third-party scripts are pinned to none
+        referrerpolicy: 'no-referrer'
       },
       {
         src: pushScript.value,
         async: false,
         defer: true,
 
-        crossorigin: 'anonymous'
+        crossorigin: 'anonymous',
+        referrerpolicy: 'no-referrer'
       }
     ]
   })

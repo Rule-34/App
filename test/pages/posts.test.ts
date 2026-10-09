@@ -1383,6 +1383,35 @@ describe('/', async () => {
       expect(referers['example.local']).toBeUndefined()
     }, 60000)
 
+    it('keeps everything except the e621 media on no-referrer, even on an e621 page', async () => {
+      const page = await createTrackedPage()
+      const requests: Array<{ host: string; referer: string | undefined }> = []
+      page.on('request', (request) =>
+        requests.push({ host: new URL(request.url()).host, referer: request.headers()['referer'] })
+      )
+
+      await page.goto(url('/posts/e621.net'), { waitUntil: 'networkidle' })
+      await page.getByTestId('domain-selector').waitFor({ state: 'visible' })
+
+      // Cross-origin elements the page renders (favicons, iframes, scripts) must opt out of the page policy
+      const unpinned = await page.evaluate(() => {
+        const pinnable = Array.from(document.querySelectorAll<HTMLElement>('img[src], iframe[src], script[src]'))
+
+        return pinnable
+          .filter((element) => {
+            const target = new URL((element as HTMLImageElement).src, location.href)
+            return target.origin !== location.origin && !target.host.endsWith('e621.net')
+          })
+          .filter((element) => (element as HTMLImageElement).referrerPolicy !== 'no-referrer')
+          .map((element) => `${element.tagName} ${(element as HTMLImageElement).src}`)
+      })
+      expect(unpinned).toEqual([])
+
+      const favicons = requests.filter((request) => request.host.endsWith('google.com'))
+      expect(favicons.length).toBeGreaterThan(0)
+      expect(favicons.map((request) => request.referer)).toEqual(favicons.map(() => undefined))
+    }, 60000)
+
     it('follows in-app domain switches without a reload', async () => {
       const page = await createTrackedPage()
       await page.goto(url('/posts/rule34.xxx'), { waitUntil: 'networkidle' })
