@@ -185,7 +185,7 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
 - Fluid wraps the `<video>` in an inline-block `.fluid_video_wrapper` and sets `overflow: hidden` plus `roundedCorners`
   (any CSS radius string at runtime) inline. `PostMedia` lifts the clip so the context menu can escape and sets
   `vertical-align: top`; without it the wrapper sits on the text baseline and adds a ~6px gap, shifting content when the
-  upgrade happens. Check layout shift with a `PerformanceObserver`; Lighthouse refuses the plain-http dev server.
+  upgrade happens. Check layout shift with a `PerformanceObserver` or Lighthouse.
 
 ### Headless UI
 
@@ -213,6 +213,10 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
 
 ### Performance
 
+- **Run Lighthouse before merging** (`mcp__lighthouse__get_core_web_vitals`, one URL at a time; parallel audits fail).
+  Audit the address the server actually listens on: a dev server bound to a Tailscale or LAN IP refuses `127.0.0.1`,
+  which Lighthouse reports as `CHROME_INTERSTITIAL_ERROR`. Plain http works; no cert flag is needed. Prefer a production
+  build for final numbers.
 - **Server over client when equivalent** — every global route middleware, duplicated redirect helper, and client-only SEO
   shim is bundle + hydration cost on routes that never needed it. Default to Nitro middleware, server plugins, and SSR
   head tags; reach for `app/middleware` only when SPA navigation truly requires client-side routing behavior.
