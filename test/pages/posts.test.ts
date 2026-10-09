@@ -1300,6 +1300,70 @@ describe('/', async () => {
     }, 60000)
   })
 
+  describe('Referrer policy', async () => {
+    const META_ORIGIN = '<meta name="referrer" content="origin">'
+    const META_NONE = '<meta name="referrer" content="no-referrer">'
+
+    async function selectDomain(page: TrackedPage, domain: string) {
+      await page.getByTestId('domain-selector').click({ force: true })
+      const option = page.getByRole('option', { name: new RegExp(domain.replace('.', '\\.'), 'i') }).first()
+      await option.waitFor({ state: 'visible' })
+      const navigation = page.waitForURL(`**/posts/${domain}`, { waitUntil: 'commit' })
+      await option.click({ force: true })
+      await navigation
+    }
+
+    // fetch() and <video> follow the same document policy, so one probe request shows what a video would send
+    async function probeReferer(page: TrackedPage) {
+      let referer: string | undefined
+      await page.route('https://static1.e621.net/referrer-probe', (route) => {
+        referer = route.request().headers()['referer']
+        return route.fulfill({ status: 204 })
+      })
+      await page.evaluate(() => fetch('https://static1.e621.net/referrer-probe', { mode: 'no-cors' }))
+      await page.unroute('https://static1.e621.net/referrer-probe')
+      return referer
+    }
+
+    it('renders the origin referrer meta for e621 pages and no-referrer for other boorus', async () => {
+      const page = await createTrackedPage()
+      const htmlOf = async (path: string) => (await page.request.get(url(path))).text()
+
+      for (const path of ['/posts/e621.net', '/es/posts/e621.net', '/posts/e621.net/hair_bun']) {
+        expect(await htmlOf(path), path).toContain(META_ORIGIN)
+      }
+
+      for (const path of ['/posts/rule34.xxx', '/posts/safebooru.org', '/posts/safebooru.org/hair_bun']) {
+        expect(await htmlOf(path), path).toContain(META_NONE)
+      }
+    }, 45000)
+
+    it('sends the origin to e621 and nothing to other boorus', async () => {
+      const page = await createTrackedPage()
+
+      await page.goto(url('/posts/e621.net'), { waitUntil: 'networkidle' })
+      expect(await probeReferer(page)).toBe(`${new URL(url('/')).origin}/`)
+
+      await page.goto(url('/posts/rule34.xxx'), { waitUntil: 'networkidle' })
+      expect(await probeReferer(page)).toBeUndefined()
+    }, 45000)
+
+    it('follows in-app domain switches without a reload', async () => {
+      const page = await createTrackedPage()
+      await page.goto(url('/posts/rule34.xxx'), { waitUntil: 'networkidle' })
+      await page.getByTestId('domain-selector').waitFor({ state: 'visible' })
+      expect(await probeReferer(page)).toBeUndefined()
+
+      await selectDomain(page, 'e621.net')
+      await page.waitForSelector('meta[name="referrer"][content="origin"]', { state: 'attached' })
+      expect(await probeReferer(page)).toBe(`${new URL(url('/')).origin}/`)
+
+      await selectDomain(page, 'safebooru.org')
+      await page.waitForSelector('meta[name="referrer"][content="no-referrer"]', { state: 'attached' })
+      expect(await probeReferer(page)).toBeUndefined()
+    }, 60000)
+  })
+
   describe('Domain', async () => {
     it('defaults domain to rule34.xxx', async () => {
       // Arrange

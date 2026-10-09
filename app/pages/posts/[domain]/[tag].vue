@@ -41,6 +41,9 @@
 
     return booru
   })
+
+  useBooruReferrerPolicy(() => selectedBooru.value.domain)
+
   const formattedTag = computed(() => normalizeStringForTitle(tagParam.value) ?? tagParam.value)
   const selectedTags = computed(() => [new Tag(Object.assign(new TagDTO(), { name: tagParam.value })).toJSON()])
   const fullPostsRoute = computed(() =>

@@ -138,6 +138,8 @@
     return booru
   })
 
+  useBooruReferrerPolicy(() => selectedBooru.value.domain)
+
   watch(
     selectedBooru,
     (booru) => {

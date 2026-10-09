@@ -174,9 +174,11 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
   egress IP. Worker fetches must use clean upstream headers instead of forwarding inbound `CF-*`, `X-Forwarded-*`,
   `X-Real-IP`, cookies, or authorization headers; leaked caller metadata can make imgproxy fetches return `429`.
 
-- `<video>` has no `referrerpolicy` attribute, so videos follow the page policy. nuxt-security defaults it to `no-referrer`,
-  which e621's CDN rejects for video (images are fine; they set `referrerpolicy` per element). Only the e621 pages
-  override it to `strict-origin-when-cross-origin` through route rules in `nuxt.config.ts`; other boorus keep `no-referrer`.
+- `<video>` has no `referrerpolicy` attribute, so videos follow the page policy (`no-referrer` from nuxt-security). By
+  agreement e621 gets the origin referrer and no other booru does: `useBooruReferrerPolicy` adds
+  `<meta name="referrer" content="origin">` on e621.net pages (`no-referrer` elsewhere, since removing the tag would not revert the
+  policy). A meta tag, unlike a route-rule header, also follows
+  client-side domain switches. Images and links keep their per-element policies.
 
 ### Headless UI
 
