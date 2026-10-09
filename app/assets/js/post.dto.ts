@@ -1,4 +1,5 @@
 import type { IPocketbasePost } from './pocketbase.dto'
+import { cleanMediaUrl } from './media-resilience'
 
 export interface IPostPage {
   data: IPost[]
@@ -114,17 +115,17 @@ export default class Post extends PostDTO {
       domain: post.original_domain,
 
       high_res_file: {
-        url: post.high_res_file,
+        url: cleanMediaUrl(post.high_res_file),
         width: post.high_res_file_width ?? null,
         height: post.high_res_file_height ?? null
       },
       low_res_file: {
-        url: post.low_res_file ?? null,
+        url: cleanMediaUrl(post.low_res_file),
         width: post.low_res_file_width ?? null,
         height: post.low_res_file_height ?? null
       },
       preview_file: {
-        url: post.preview_file ?? null,
+        url: cleanMediaUrl(post.preview_file),
         width: post.preview_file_width ?? null,
         height: post.preview_file_height ?? null
       },
@@ -140,5 +141,39 @@ export default class Post extends PostDTO {
       rating: post.rating ?? null,
       media_type: post.media_type ?? null
     })
+  }
+}
+
+/**
+ * Normalizes an IPostFile by stripping fragments and validating that its URL is a valid HTTP(S) URL.
+ */
+export function normalizePostFile(file?: IPostFile | null): IPostFile {
+  return {
+    url: cleanMediaUrl(file?.url),
+    width: file?.width ?? null,
+    height: file?.height ?? null
+  }
+}
+
+/**
+ * Normalizes an IPost by ensuring all media URLs (high_res_file, low_res_file, preview_file)
+ * are validated, stripped of fragments, and restricted to safe HTTP(S) protocols at ingestion.
+ */
+export function normalizePost(post: IPost): IPost {
+  return {
+    ...post,
+    high_res_file: normalizePostFile(post.high_res_file),
+    low_res_file: normalizePostFile(post.low_res_file),
+    preview_file: normalizePostFile(post.preview_file)
+  }
+}
+
+/**
+ * Normalizes a full IPostPage received from network endpoints or repositories.
+ */
+export function normalizePostPage<T extends { data: IPost[] }>(page: T): T {
+  return {
+    ...page,
+    data: page.data.map(normalizePost)
   }
 }

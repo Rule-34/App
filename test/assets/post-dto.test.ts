@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import Post, { PostDTO, isRenderablePost, type IPost } from '../../app/assets/js/post.dto'
+import Post, {
+  PostDTO,
+  isRenderablePost,
+  normalizePost,
+  normalizePostFile,
+  normalizePostPage,
+  type IPost,
+  type IPostPage
+} from '../../app/assets/js/post.dto'
 import type { IPocketbasePost } from '../../app/assets/js/pocketbase.dto'
 
 describe('isRenderablePost', () => {
@@ -163,5 +171,76 @@ describe('Post', () => {
     expect(post.tags.meta).toEqual([])
     expect(post.rating).toBeNull()
     expect(post.media_type).toBeNull()
+  })
+})
+
+describe('normalizePostFile', () => {
+  it('cleans valid http/https URLs and strips fragments', () => {
+    const file = normalizePostFile({
+      url: 'https://example.com/image.jpg#frag',
+      width: 100,
+      height: 200
+    })
+
+    expect(file).toEqual({
+      url: 'https://example.com/image.jpg',
+      width: 100,
+      height: 200
+    })
+  })
+
+  it('normalizes missing, invalid, or malicious URLs to null', () => {
+    expect(normalizePostFile(null)).toEqual({ url: null, width: null, height: null })
+    expect(normalizePostFile({ url: '', width: 50, height: 50 })).toEqual({ url: null, width: 50, height: 50 })
+    expect(normalizePostFile({ url: 'javascript:alert(1)', width: 50, height: 50 })).toEqual({
+      url: null,
+      width: 50,
+      height: 50
+    })
+  })
+})
+
+describe('normalizePost & normalizePostPage', () => {
+  it('normalizes all file URLs in an IPost at the ingestion boundary', () => {
+    const rawPost: IPost = {
+      domain: 'rule34.xxx',
+      id: 123,
+      high_res_file: { url: 'https://example.com/high.jpg#tag', width: 1000, height: 800 },
+      low_res_file: { url: 'javascript:bad()', width: 500, height: 400 },
+      preview_file: { url: '  https://example.com/preview.jpg  ', width: 200, height: 160 },
+      tags: { artist: [], character: [], copyright: [], general: [], meta: [] },
+      sources: [],
+      rating: 'safe',
+      media_type: 'image'
+    }
+
+    const clean = normalizePost(rawPost)
+
+    expect(clean.high_res_file.url).toBe('https://example.com/high.jpg')
+    expect(clean.low_res_file.url).toBeNull()
+    expect(clean.preview_file.url).toBe('https://example.com/preview.jpg')
+  })
+
+  it('normalizes all posts across an IPostPage', () => {
+    const page: IPostPage = {
+      data: [
+        {
+          domain: 'rule34.xxx',
+          id: 1,
+          high_res_file: { url: 'https://example.com/1.jpg#section', width: 100, height: 100 },
+          low_res_file: { url: null, width: null, height: null },
+          preview_file: { url: null, width: null, height: null },
+          tags: { artist: [], character: [], copyright: [], general: [], meta: [] },
+          sources: [],
+          rating: 'safe',
+          media_type: 'image'
+        }
+      ],
+      meta: { items_count: 1, total_items: 1, current_page: 1, total_pages: 1, items_per_page: 1 },
+      links: { self: '', first: '', last: '', prev: '', next: '' }
+    }
+
+    const cleanPage = normalizePostPage(page)
+    expect(cleanPage.data[0].high_res_file.url).toBe('https://example.com/1.jpg')
   })
 })

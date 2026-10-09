@@ -103,6 +103,7 @@
         loading="lazy"
         marginheight="0"
         marginwidth="0"
+        referrerpolicy="no-referrer"
         sandbox="allow-scripts allow-same-origin"
         scrolling="no"
       />
@@ -118,7 +119,6 @@
     >
       <!-- TODO: Temporarily hardcode post index for promoted content -->
       <PostMedia
-        :alt-media-src="null"
         :media-alt="$t('media.promotedContent')"
         :media-poster-src="null"
         :media-src="promo.media"

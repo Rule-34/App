@@ -8,6 +8,9 @@ import {
   mockPostsPage1,
   mockPostsPageWithOfflineMedia,
   mockPostsPageWithUnknownMedia,
+  mockPostsPageWithE621Video,
+  mockPostsPageWithVideoMedia,
+  mockPostsPageWithMultipleVideos,
   mockPostsPageWithoutResults
 } from '../pages/posts.mock-data'
 
@@ -31,7 +34,7 @@ type NitroPlugin = (nitroApp: unknown) => unknown
 const defineNitroPluginSafe =
   typeof defineNitroPlugin === 'function' ? defineNitroPlugin : <T extends NitroPlugin>(plugin: T) => plugin
 
-function localizeMockPageLinks(page: typeof mockPostsPage0, requestUrl: URL) {
+function localizeMockPageLinks<T extends { links: Record<string, string | null> }>(page: T, requestUrl: URL): T {
   const localizedPage = structuredClone(page)
 
   localizedPage.links = Object.fromEntries(
@@ -56,7 +59,7 @@ function localizeMockPageLinks(page: typeof mockPostsPage0, requestUrl: URL) {
 
       return [key, `${localizedHref.pathname}${localizedHref.search}${localizedHref.hash}`]
     })
-  ) as typeof localizedPage.links
+  ) as T['links']
 
   return localizedPage
 }
@@ -97,6 +100,16 @@ function resolveMockPostsPage(requestUrl: URL) {
 
   if (tags === 'offline_test') {
     return mockPostsPageWithOfflineMedia
+  }
+
+  if (tags === 'video_test') {
+    return requestUrl.searchParams.get('baseEndpoint') === 'e621.net'
+      ? mockPostsPageWithE621Video
+      : mockPostsPageWithVideoMedia
+  }
+
+  if (tags === 'multi_video_test') {
+    return mockPostsPageWithMultipleVideos
   }
 
   if (tags === 'unknown_media_test') {
