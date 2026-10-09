@@ -9,6 +9,8 @@
     }
   })
 
+  useBooruReferrerPolicy()
+
   // These meta tags will only be added during server-side rendering
   if (import.meta.server) {
     const requestUrl = useRequestURL()

@@ -1313,6 +1313,11 @@ describe('/', async () => {
       await navigation
     }
 
+    const referrerMetaContents = (page: TrackedPage) =>
+      page.evaluate(() =>
+        Array.from(document.querySelectorAll('meta[name="referrer"]')).map((meta) => meta.getAttribute('content'))
+      )
+
     // fetch() and <video> follow the same document policy, so one probe request shows what a video would send
     async function probeReferer(page: TrackedPage) {
       let referer: string | undefined
@@ -1342,9 +1347,11 @@ describe('/', async () => {
       const page = await createTrackedPage()
 
       await page.goto(url('/posts/e621.net'), { waitUntil: 'networkidle' })
+      expect(await referrerMetaContents(page)).toEqual(['origin'])
       expect(await probeReferer(page)).toBe(`${new URL(url('/')).origin}/`)
 
       await page.goto(url('/posts/rule34.xxx'), { waitUntil: 'networkidle' })
+      expect(await referrerMetaContents(page)).toEqual(['no-referrer'])
       expect(await probeReferer(page)).toBeUndefined()
     }, 45000)
 
@@ -1356,10 +1363,32 @@ describe('/', async () => {
 
       await selectDomain(page, 'e621.net')
       await page.waitForSelector('meta[name="referrer"][content="origin"]', { state: 'attached' })
+      expect(await referrerMetaContents(page)).toEqual(['origin'])
       expect(await probeReferer(page)).toBe(`${new URL(url('/')).origin}/`)
 
       await selectDomain(page, 'safebooru.org')
       await page.waitForSelector('meta[name="referrer"][content="no-referrer"]', { state: 'attached' })
+      expect(await referrerMetaContents(page)).toEqual(['no-referrer'])
+      expect(await probeReferer(page)).toBeUndefined()
+    }, 60000)
+
+    it('falls back to no-referrer when navigating from e621 to a non-posts page without a reload', async () => {
+      const page = await createTrackedPage()
+      await page.goto(url('/posts/e621.net'), { waitUntil: 'networkidle' })
+      expect(await referrerMetaContents(page)).toEqual(['origin'])
+
+      // Client-side navigation through a layout link, so the document (and its policy) stays alive
+      await page.evaluate(() => ((window as unknown as { __noReload: boolean }).__noReload = true))
+      await page.getByRole('button', { name: /open main menu/i }).click()
+      await page
+        .getByRole('link', { name: /^premium$/i })
+        .first()
+        .click()
+      await page.waitForURL('**/premium')
+      await page.waitForSelector('meta[name="referrer"][content="no-referrer"]', { state: 'attached' })
+
+      expect(await page.evaluate(() => (window as unknown as { __noReload?: boolean }).__noReload)).toBe(true)
+      expect(await referrerMetaContents(page)).toEqual(['no-referrer'])
       expect(await probeReferer(page)).toBeUndefined()
     }, 60000)
   })

@@ -174,11 +174,11 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
   egress IP. Worker fetches must use clean upstream headers instead of forwarding inbound `CF-*`, `X-Forwarded-*`,
   `X-Real-IP`, cookies, or authorization headers; leaked caller metadata can make imgproxy fetches return `429`.
 
-- `<video>` has no `referrerpolicy` attribute, so videos follow the page policy (`no-referrer` from nuxt-security). By
-  agreement e621 gets the origin referrer and no other booru does: `useBooruReferrerPolicy` adds
-  `<meta name="referrer" content="origin">` on e621.net pages (`no-referrer` elsewhere, since removing the tag would not revert the
-  policy). A meta tag, unlike a route-rule header, also follows
-  client-side domain switches. Images and links keep their per-element policies.
+- `<video>` has no `referrerpolicy` attribute, so videos follow the page policy. By agreement e621 gets the origin
+  referrer and no other booru does: `useBooruReferrerPolicy` (called once in `app/app.vue`) renders a single
+  `<meta name="referrer">`, `origin` on `/posts/e621.net` routes and `no-referrer` everywhere else. A meta tag, unlike a
+  route-rule header, follows client-side navigation, and it must never be removed because removing a referrer meta does
+  not revert the policy. Images and links keep their per-element policies.
 
 ### Headless UI
 
