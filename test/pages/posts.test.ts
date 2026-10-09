@@ -216,6 +216,20 @@ describe('/', async () => {
       expect(warnings).toEqual([])
     }, 30000)
 
+    it('renders the tag title in the page header without nesting a heading inside a paragraph', async () => {
+      // Arrange: a p is closed by the HTML parser before an h1, which breaks hydration (Vue's warnings are stripped
+      // from the production build these tests run against, so check the server HTML itself)
+      const page = await createTrackedPage()
+
+      // Act
+      const response = await page.request.get(url('/posts/safebooru.org?tags=video_test'))
+      const html = await response.text()
+
+      // Assert (booleans, so a failure does not dump the whole document)
+      expect(html.includes('<h1 class="text-sm">')).toBe(true)
+      expect(/<p(?:\s[^>]*)?>(?:(?!<\/p>)[\s\S])*?<h1/.test(html)).toBe(false)
+    }, 30000)
+
     it('renders a loader', async () => {
       // Arrange
       const page = await createTrackedPage('/posts/safebooru.org')
@@ -748,9 +762,10 @@ describe('/', async () => {
       await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'domcontentloaded' })
       await page.waitForFunction(() => '__fluidFirstAt' in window, undefined, { timeout: 15000 })
 
-      // Assert: hydration alone takes far less than this, so an eager upgrade would land well before the deferral
+      // Assert: the idle prefetch can finish Fluid early on a fast machine (~400ms), so only an upgrade during
+      // hydration itself counts as eager; the old fixed deferral was 1.6s
       const firstAt = await page.evaluate(() => (window as unknown as { __fluidFirstAt: number }).__fluidFirstAt)
-      expect(firstAt).toBeGreaterThan(1000)
+      expect(firstAt).toBeGreaterThan(250)
     }, 45000)
 
     it('upgrades videos scrolled into view immediately once Fluid Player is loaded', async () => {
