@@ -636,7 +636,7 @@ describe('/', async () => {
       expect(pageErrors.filter((message) => /Fluid Player|toLowerCase/.test(message))).toEqual([])
     }, 30000)
 
-    it('rounds the top of the Fluid Player like the card and lets its context menu leave the video box', async () => {
+    it('rounds the top of the Fluid Player like the card, lets its context menu leave the box and adds no height', async () => {
       const page = await createTrackedPage()
       await mockReachableVideoPosters(page)
       await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
@@ -652,7 +652,9 @@ describe('/', async () => {
           wrapperTop: [computed.borderTopLeftRadius, computed.borderTopRightRadius],
           wrapperBottom: [computed.borderBottomLeftRadius, computed.borderBottomRightRadius],
           videoTop: [video.borderTopLeftRadius, video.borderTopRightRadius],
-          overflow: computed.overflow
+          overflow: computed.overflow,
+          // The wrapper must fill its container, otherwise the post grows when Fluid mounts
+          gap: wrapper.parentElement!.getBoundingClientRect().height - wrapper.getBoundingClientRect().height
         }
       })
 
@@ -660,7 +662,8 @@ describe('/', async () => {
         wrapperTop: ['6px', '6px'],
         wrapperBottom: ['0px', '0px'],
         videoTop: ['6px', '6px'],
-        overflow: 'visible'
+        overflow: 'visible',
+        gap: 0
       })
     }, 30000)
 

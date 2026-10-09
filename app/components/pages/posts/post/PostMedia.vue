@@ -619,8 +619,11 @@
 
     videoPlayer = fluidPlayer(initializedVideoElement, fluidPlayerOptions)
 
-    // Fluid clips its wrapper (overflow: hidden), which cuts off the right-click menu near the edges
-    initializedVideoElement.closest<HTMLElement>('.fluid_video_wrapper')?.style.setProperty('overflow', 'visible')
+    // Fluid clips its wrapper (overflow: hidden), which cuts off the right-click menu near the edges. Without the clip
+    // the inline-block wrapper sits on the text baseline and leaves a gap under the video, so align it to the top.
+    const wrapper = initializedVideoElement.closest<HTMLElement>('.fluid_video_wrapper')
+    wrapper?.style.setProperty('overflow', 'visible')
+    wrapper?.style.setProperty('vertical-align', 'top')
 
     // TODO: Handle poster error
   }
