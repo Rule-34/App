@@ -180,6 +180,13 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
   route-rule header, follows client-side navigation, and it must never be removed because removing a referrer meta does
   not revert the policy. Images and links keep their per-element policies.
 
+### Fluid Player layout
+
+- Fluid wraps the `<video>` in an inline-block `.fluid_video_wrapper` and sets `overflow: hidden` plus `roundedCorners`
+  (any CSS radius string at runtime) inline. `PostMedia` lifts the clip so the context menu can escape and sets
+  `vertical-align: top`; without it the wrapper sits on the text baseline and adds a ~6px gap, shifting content when the
+  upgrade happens. Check layout shift with a `PerformanceObserver`; Lighthouse refuses the plain-http dev server.
+
 ### Headless UI
 
 - Do not add `provideHeadlessUseId` in `app/app.vue` while the project uses Vue 3.5+ and `@headlessui/vue` 1.7.23+; those
