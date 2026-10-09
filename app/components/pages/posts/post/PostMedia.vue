@@ -1212,9 +1212,10 @@
     <div
       v-else-if="isVideo"
       :key="localSrc"
+      class="overflow-hidden rounded-t-md"
     >
       <!-- TODO: Add load animation -->
-      <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
+      <!-- Fluid Player wraps the video in square layers (poster, overlays), so the container clips them to the card's corners -->
       <video
         ref="mediaElement"
         v-intersection-observer="[onVideoIntersectionObserver, { rootMargin: '100px' }]"

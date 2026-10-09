@@ -636,6 +636,23 @@ describe('/', async () => {
       expect(pageErrors.filter((message) => /Fluid Player|toLowerCase/.test(message))).toEqual([])
     }, 30000)
 
+    it('clips the video and its Fluid Player layers to the card corners', async () => {
+      const page = await createTrackedPage()
+      await mockReachableVideoPosters(page)
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
+      const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
+      await videoPost.locator('video').first().scrollIntoViewIfNeeded()
+      await videoPost.locator('.fluid_video_wrapper').waitFor({ state: 'attached', timeout: 15000 })
+
+      const clip = await videoPost.locator('.fluid_video_wrapper').evaluate((wrapper) => {
+        const container = wrapper.parentElement!
+        const style = getComputedStyle(container)
+        return { overflow: style.overflow, topLeft: style.borderTopLeftRadius, topRight: style.borderTopRightRadius }
+      })
+
+      expect(clip).toEqual({ overflow: 'hidden', topLeft: '6px', topRight: '6px' })
+    }, 30000)
+
     it('falls back to the premium proxy for a video whose direct source and poster are blocked', async () => {
       // Arrange: a premium user, direct poster and video blocked, only the proxy answers
       const page = await createTrackedPage()
