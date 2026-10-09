@@ -38,8 +38,10 @@
   type MediaElementRef = HTMLElement | { $el?: Element } | null
   type FluidPlayerOptionsWithPlaybackRates = Partial<FluidPlayerOptions> & {
     layoutControls?: Partial<
-      Omit<LayoutControls, 'controlBar'> & {
+      Omit<LayoutControls, 'controlBar' | 'roundedCorners'> & {
         controlBar?: Partial<LayoutControls['controlBar'] & { playbackRates: string[] }>
+        // Fluid takes any CSS border-radius shorthand at runtime, its typings only allow a number
+        roundedCorners: number | string
       }
     >
   }
@@ -483,6 +485,9 @@
 
         fillToContainer: true,
 
+        // Round only the top, like the card; Fluid applies it to its wrapper and the video
+        roundedCorners: '6px 6px 0 0',
+
         preload: 'none',
 
         loop: true,
@@ -614,6 +619,9 @@
     }
 
     videoPlayer = fluidPlayer(initializedVideoElement, fluidPlayerOptions)
+
+    // Fluid clips its wrapper (overflow: hidden), which cuts off the right-click menu near the edges
+    initializedVideoElement.closest<HTMLElement>('.fluid_video_wrapper')?.style.setProperty('overflow', 'visible')
 
     // TODO: Handle poster error
   }
@@ -1212,10 +1220,8 @@
     <div
       v-else-if="isVideo"
       :key="localSrc"
-      class="overflow-hidden rounded-t-md"
     >
       <!-- TODO: Add load animation -->
-      <!-- Fluid Player wraps the video in square layers (poster, overlays), so the container clips them to the card's corners -->
       <video
         ref="mediaElement"
         v-intersection-observer="[onVideoIntersectionObserver, { rootMargin: '100px' }]"

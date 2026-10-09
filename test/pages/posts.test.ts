@@ -636,7 +636,7 @@ describe('/', async () => {
       expect(pageErrors.filter((message) => /Fluid Player|toLowerCase/.test(message))).toEqual([])
     }, 30000)
 
-    it('clips the video and its Fluid Player layers to the card corners', async () => {
+    it('rounds the top of the Fluid Player like the card and lets its context menu leave the video box', async () => {
       const page = await createTrackedPage()
       await mockReachableVideoPosters(page)
       await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'networkidle' })
@@ -644,13 +644,24 @@ describe('/', async () => {
       await videoPost.locator('video').first().scrollIntoViewIfNeeded()
       await videoPost.locator('.fluid_video_wrapper').waitFor({ state: 'attached', timeout: 15000 })
 
-      const clip = await videoPost.locator('.fluid_video_wrapper').evaluate((wrapper) => {
-        const container = wrapper.parentElement!
-        const style = getComputedStyle(container)
-        return { overflow: style.overflow, topLeft: style.borderTopLeftRadius, topRight: style.borderTopRightRadius }
+      const style = await videoPost.locator('.fluid_video_wrapper').evaluate((wrapper) => {
+        const computed = getComputedStyle(wrapper)
+        const video = getComputedStyle(wrapper.querySelector('video')!)
+
+        return {
+          wrapperTop: [computed.borderTopLeftRadius, computed.borderTopRightRadius],
+          wrapperBottom: [computed.borderBottomLeftRadius, computed.borderBottomRightRadius],
+          videoTop: [video.borderTopLeftRadius, video.borderTopRightRadius],
+          overflow: computed.overflow
+        }
       })
 
-      expect(clip).toEqual({ overflow: 'hidden', topLeft: '6px', topRight: '6px' })
+      expect(style).toEqual({
+        wrapperTop: ['6px', '6px'],
+        wrapperBottom: ['0px', '0px'],
+        videoTop: ['6px', '6px'],
+        overflow: 'visible'
+      })
     }, 30000)
 
     it('falls back to the premium proxy for a video whose direct source and poster are blocked', async () => {
