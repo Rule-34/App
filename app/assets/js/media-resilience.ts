@@ -84,9 +84,6 @@ export function cleanMediaUrl(url?: string | null): string | null {
 /** Hosts that get the `origin` referrer by agreement; the page-level policy and per-media policy both read this. */
 export const ORIGIN_REFERRER_DOMAINS = ['e621.net']
 
-/** Tailscale CGNAT range 100.64.0.0/10 */
-const TAILSCALE_CGNAT_HOST = /^100\.(?:6[4-9]|[7-9]\d|1[01]\d|12[0-7])\.\d{1,3}\.\d{1,3}$/
-
 export type MediaReferrerPolicy = 'origin' | 'strict-origin-when-cross-origin' | 'no-referrer'
 
 /**
@@ -125,13 +122,7 @@ export function getMediaReferrerPolicy(rawUrl?: string | null): MediaReferrerPol
     return 'origin'
   }
 
-  if (
-    /(^|\.)(r34\.app|akbal\.dev)$/.test(hostname) ||
-    hostname === 'localhost' ||
-    hostname === '127.0.0.1' ||
-    TAILSCALE_CGNAT_HOST.test(hostname) ||
-    hostname.endsWith('.ts.net')
-  ) {
+  if (/(^|\.)(r34\.app|akbal\.dev)$/.test(hostname) || hostname === 'localhost' || hostname === '127.0.0.1') {
     return 'strict-origin-when-cross-origin'
   }
 

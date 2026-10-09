@@ -214,7 +214,7 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
 ### Performance
 
 - **Run Lighthouse before merging** (`mcp__lighthouse__get_core_web_vitals`, one URL at a time; parallel audits fail).
-  Audit the address the server actually listens on: a dev server bound to a Tailscale or LAN IP refuses `127.0.0.1`,
+  Audit the address the server actually listens on: a dev server bound to a LAN or VPN IP refuses `127.0.0.1`,
   which Lighthouse reports as `CHROME_INTERSTITIAL_ERROR`. Plain http works; no cert flag is needed. Prefer a production
   build for final numbers.
 - **Server over client when equivalent** — every global route middleware, duplicated redirect helper, and client-only SEO
