@@ -244,6 +244,8 @@ the `@headlessui/tailwindcss` plugin.
 
 ### Testing
 
+- Prefer end-to-end browser tests that exercise the app the way users do. Add unit tests only when they are critical
+  and clearly better than an end-to-end test.
 - Tests use `@nuxt/test-utils` with Playwright inside `describe` blocks that call `await setup({ browser: true })`.
 - Server-side API calls are mocked via a test-only Nitro plugin at `test/server-mocks/plugin.ts`, injected through
   `nuxt.config.ts` → `$test.nitro.plugins`.

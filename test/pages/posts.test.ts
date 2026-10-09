@@ -91,6 +91,46 @@ async function signInAsPremiumUser(page: TrackedPage) {
   ])
 }
 
+/**
+ * Resolves with how long (ms) the Fluid Player wrapper takes to appear in the post after the video is
+ * brought into view (scroll) or poked (pointerenter). Timed in-page to avoid test-runner latency.
+ */
+async function timeFluidUpgrade(page: TrackedPage, testId: string, trigger: 'scroll' | 'pointerenter') {
+  return page.evaluate(
+    ({ id, how }) =>
+      new Promise<number>((resolve, reject) => {
+        const post = document.querySelector(`[data-testid="${id}"]`)
+        const video = post?.querySelector('video')
+
+        if (!post || !video) {
+          reject(new Error('post or video not found'))
+          return
+        }
+
+        const startedAt = performance.now()
+        const observer = new MutationObserver(() => {
+          if (post.querySelector('.fluid_video_wrapper')) {
+            observer.disconnect()
+            resolve(performance.now() - startedAt)
+          }
+        })
+
+        observer.observe(post, { childList: true, subtree: true })
+        setTimeout(() => {
+          observer.disconnect()
+          reject(new Error('Fluid Player did not mount within 3s'))
+        }, 3000)
+
+        if (how === 'scroll') {
+          video.scrollIntoView({ block: 'center' })
+        } else {
+          video.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }))
+        }
+      }),
+    { id: testId, how: trigger }
+  )
+}
+
 /** Video mocks point at unreachable hosts; a reachable poster keeps them looking healthy until played. */
 async function mockReachableVideoPosters(page: TrackedPage) {
   await page.route(/example\.local\/thumbnails\//, (route) =>
@@ -624,6 +664,83 @@ describe('/', async () => {
       await proxiedVideoResponse
       await page.waitForTimeout(1000)
       expect(await videoPost.textContent()).not.toContain('Error loading media')
+    }, 45000)
+
+    it('keeps deferring the first Fluid Player upgrade on a cold page load', async () => {
+      // Arrange
+      const page = await createTrackedPage()
+      await mockReachableVideoPosters(page)
+
+      // Act: the server-rendered HTML never contains the custom player
+      const html = await (await page.request.get(url('/posts/safebooru.org?tags=video_test'))).text()
+
+      // Assert
+      expect(html).toContain('<video')
+      expect(html).not.toContain('fluid_video_wrapper')
+
+      // And the browser still upgrades it on its own afterwards
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'domcontentloaded' })
+      const videoPost = page.getByTestId(`safebooru.org-${mockPostsPageWithVideoMedia.data[0].id}`).first()
+      expect(await videoPost.locator('.fluid_video_wrapper').count()).toBe(0)
+      await videoPost.locator('.fluid_video_wrapper').waitFor({ state: 'attached', timeout: 15000 })
+    }, 45000)
+
+    it('upgrades videos scrolled into view immediately once Fluid Player is loaded', async () => {
+      // Arrange: short viewport so the second video starts below the fold
+      const page = await createTrackedPage()
+      await mockReachableVideoPosters(page)
+      await page.setViewportSize({ width: 1280, height: 400 })
+
+      const firstId = `safebooru.org-${mockPostsPageWithMultipleVideos.data[0].id}`
+      const secondId = `safebooru.org-${mockPostsPageWithMultipleVideos.data[1].id}`
+
+      await page.goto(url('/posts/safebooru.org?tags=multi_video_test'), { waitUntil: 'networkidle' })
+
+      // The first upgrade loads the module, so every later video should skip the cold-load deferral
+      await page
+        .locator(`[data-testid="${firstId}"] .fluid_video_wrapper`)
+        .waitFor({ state: 'attached', timeout: 15000 })
+
+      const secondIsBelowFold = await page.evaluate((id) => {
+        const video = document.querySelector(`[data-testid="${id}"] video`)
+        const wrapper = document.querySelector(`[data-testid="${id}"] .fluid_video_wrapper`)
+
+        return !!video && !wrapper && video.getBoundingClientRect().top > innerHeight + 100
+      }, secondId)
+      expect(secondIsBelowFold).toBe(true)
+
+      // Act
+      const elapsed = await timeFluidUpgrade(page, secondId, 'scroll')
+
+      // Assert: previously ~1600ms (1.6s deferral + idle wait)
+      expect(elapsed).toBeLessThan(500)
+    }, 60000)
+
+    it('prefetches Fluid Player when idle, without any video asking for it', async () => {
+      // Arrange: no video can ever report being in view, so only the idle prefetch can load the module
+      const page = await createTrackedPage()
+      await mockReachableVideoPosters(page)
+      await page.addInitScript(() => {
+        window.IntersectionObserver = class {
+          observe() {}
+          unobserve() {}
+          disconnect() {}
+          takeRecords() {
+            return []
+          }
+        } as unknown as typeof IntersectionObserver
+      })
+
+      const fluidCssRequested = page.waitForRequest((request) => /fluidplayer.*\.css/.test(request.url()), {
+        timeout: 20000
+      })
+
+      // Act
+      await page.goto(url('/posts/safebooru.org?tags=video_test'), { waitUntil: 'domcontentloaded' })
+
+      // Assert: the module is fetched anyway, and no player was mounted by a video-driven upgrade
+      await fluidCssRequested
+      expect(await page.locator('.fluid_video_wrapper').count()).toBe(0)
     }, 45000)
 
     it('does not display media load error when video completes or ends normally', async () => {
