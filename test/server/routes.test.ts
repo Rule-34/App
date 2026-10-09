@@ -306,18 +306,33 @@ describe('Server & Nitro Routes', async () => {
   })
 
   describe('Referrer-Policy', () => {
-    it('lets pages that render videos send the origin, since <video> cannot set its own policy', async () => {
-      for (const path of ['/posts/e621.net', '/es/posts/e621.net', '/premium/saved-posts/e621.net']) {
+    it('sends the origin only on e621 pages, since <video> cannot set its own policy and e621 rejects video without it', async () => {
+      for (const path of [
+        '/posts/e621.net',
+        '/posts/e621.net?tags=webm',
+        '/posts/e621.net/webm',
+        '/es/posts/e621.net',
+        '/premium/saved-posts/e621.net'
+      ]) {
         const response = await fetch(path)
 
         expect(response.headers.get('referrer-policy'), path).toBe('strict-origin-when-cross-origin')
       }
     })
 
-    it('keeps the strict no-referrer default everywhere else', async () => {
-      const response = await fetch('/legal')
+    it('keeps the strict no-referrer default for every other booru and page', async () => {
+      for (const path of [
+        '/posts/rule34.xxx',
+        '/posts/safebooru.org?tags=video_test',
+        '/posts/e6ai.net',
+        '/es/posts/rule34.xxx',
+        '/premium/saved-posts/rule34.xxx',
+        '/legal'
+      ]) {
+        const response = await fetch(path)
 
-      expect(response.headers.get('referrer-policy')).toBe('no-referrer')
+        expect(response.headers.get('referrer-policy'), path).toBe('no-referrer')
+      }
     })
   })
 })

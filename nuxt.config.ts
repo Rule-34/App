@@ -46,16 +46,20 @@ const shouldUploadSentrySourceMaps =
   Boolean(process.env.SENTRY_ORG && process.env.SENTRY_PROJECT && process.env.SENTRY_AUTH_TOKEN)
 
 // <video> has no referrerpolicy attribute, so it follows the page policy (nuxt-security defaults to no-referrer).
-// e621's CDN rejects video requests without a Referer, so the pages that render videos send the origin cross-origin.
-// Images and external links keep their own per-element policies.
-const videoPageSecurity = { headers: { referrerPolicy: 'strict-origin-when-cross-origin' as const } }
+// e621's CDN rejects video requests without a Referer, so only its pages send the origin cross-origin; every other
+// booru keeps no-referrer. Images and external links keep their own per-element policies.
+const e621PageSecurity = {
+  xssValidator: false as const,
+  headers: { referrerPolicy: 'strict-origin-when-cross-origin' as const }
+}
 
 const pageRouteRules = {
   // Not prerendered because it needs to redirect old URLs
   '/': { headers: cacheHeaders },
 
   // @see https://github.com/Baroshem/nuxt-security/issues/364
-  '/posts/**': { security: { xssValidator: false as const, ...videoPageSecurity }, headers: cacheHeaders },
+  '/posts/**': { security: { xssValidator: false as const }, headers: cacheHeaders },
+  '/posts/e621.net/**': { security: e621PageSecurity, headers: cacheHeaders },
   // Static pages (prerendered)
   '/other-sites': { prerender: true, headers: cacheHeaders },
   '/legal': { prerender: true, headers: cacheHeaders },
@@ -72,7 +76,8 @@ const pageRouteRules = {
 
   // Premium dashboard pages (client-side rendered)
   '/premium/dashboard': { ssr: false, headers: cacheHeaders },
-  '/premium/saved-posts/**': { ssr: false, security: videoPageSecurity, headers: cacheHeaders },
+  '/premium/saved-posts/**': { ssr: false, headers: cacheHeaders },
+  '/premium/saved-posts/e621.net': { ssr: false, security: e621PageSecurity, headers: cacheHeaders },
   '/premium/tag-collections': { ssr: false, headers: cacheHeaders },
   '/premium/additional-boorus': { ssr: false, headers: cacheHeaders },
   '/premium/backup': { ssr: false, headers: cacheHeaders }

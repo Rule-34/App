@@ -175,8 +175,8 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
   `X-Real-IP`, cookies, or authorization headers; leaked caller metadata can make imgproxy fetches return `429`.
 
 - `<video>` has no `referrerpolicy` attribute, so videos follow the page policy. nuxt-security defaults it to `no-referrer`,
-  which e621's CDN rejects for video (images are fine; they set `referrerpolicy` per element). Pages that render videos
-  override it to `strict-origin-when-cross-origin` through route rules in `nuxt.config.ts`.
+  which e621's CDN rejects for video (images are fine; they set `referrerpolicy` per element). Only the e621 pages
+  override it to `strict-origin-when-cross-origin` through route rules in `nuxt.config.ts`; other boorus keep `no-referrer`.
 
 ### Headless UI
 
