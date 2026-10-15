@@ -15,12 +15,6 @@ const domainHealthMap = new Map<string, DomainHealthEntry>()
 type HealthChangeListener = () => void
 const healthChangeListeners = new Set<HealthChangeListener>()
 
-/**
- * Registers a listener callback invoked when any domain health status changes.
- *
- * @param listener - Callback function invoked on domain health change.
- * @returns An unsubscribe function to remove the listener.
- */
 export function onDomainHealthChange(listener: HealthChangeListener): () => void {
   healthChangeListeners.add(listener)
   return () => {
@@ -28,9 +22,6 @@ export function onDomainHealthChange(listener: HealthChangeListener): () => void
   }
 }
 
-/**
- * Notifies all registered domain health change listeners.
- */
 function notifyHealthChange(): void {
   for (const listener of healthChangeListeners) {
     try {
@@ -45,9 +36,6 @@ function notifyHealthChange(): void {
  * Sanitizes and validates a media URL.
  * Trims whitespace, strips URI fragment identifiers (#...), ensures the URL can be parsed,
  * and strictly restricts protocols to http: or https: to guard against malicious/bogus URI schemes.
- *
- * @param url - The raw media URL string to sanitize.
- * @returns The canonical URL string, or null if the URL is empty, invalid, or non-HTTP(S).
  */
 export function cleanMediaUrl(url?: string | null): string | null {
   if (!url) {
@@ -90,7 +78,7 @@ export type MediaReferrerPolicy = 'origin' | 'strict-origin-when-cross-origin' |
  * Determines the host-aware Referrer-Policy for media loading.
  *
  * Rules:
- * 1. e621 CDN (static1.e621.net, etc.): requires 'origin' per e621 CDN agreement (e926/e6ai are not covered).
+ * 1. Hosts in ORIGIN_REFERRER_DOMAINS (and their subdomains): 'origin', by agreement.
  * 2. Relative paths and first-party hosts (the caller supplies them, see `useFirstPartyHosts`):
  *    'strict-origin-when-cross-origin'.
  * 3. Third-party boorus (Danbooru, Gelbooru, Paheal, etc.) and fallback proxies (Photon, DuckDuckGo):
@@ -133,13 +121,6 @@ export function getMediaReferrerPolicy(
   return 'no-referrer'
 }
 
-/**
- * Extracts a normalized domain key from a media URL and media category.
- *
- * @param rawUrl - The target media URL.
- * @param mediaType - The media type (image, video, etc.).
- * @returns A composite key of hostname and category, or null if invalid.
- */
 function getDomainKey(rawUrl: string, mediaType?: PostMediaType | string): string | null {
   const clean = cleanMediaUrl(rawUrl)
   const parsed = clean ? URL.parse(clean) : null
@@ -154,9 +135,6 @@ function getDomainKey(rawUrl: string, mediaType?: PostMediaType | string): strin
  * Converts an HTTP/S image URL into a WordPress Photon cache URL.
  * Drops non-standard ports or query parameters (as Photon does not forward them)
  * by returning the raw URL directly so it can be skipped in fallback ladders.
- *
- * @param rawUrl - The image URL to convert.
- * @returns The Photon CDN URL, or rawUrl if incompatible.
  */
 export function toPhotonUrl(rawUrl: string): string {
   const url = URL.parse(rawUrl)
@@ -175,12 +153,6 @@ export function toPhotonUrl(rawUrl: string): string {
   return `https://i${shard}.wp.com/${hostAndPath}${sslParam}`
 }
 
-/**
- * DuckDuckGo image proxy URL generator.
- *
- * @param rawUrl - The image URL to convert.
- * @returns The DuckDuckGo image proxy URL.
- */
 export function toDdgUrl(rawUrl: string): string {
   return `https://external-content.duckduckgo.com/iu/?u=${encodeURIComponent(rawUrl)}&f=1&nofb=1`
 }
@@ -191,12 +163,6 @@ export interface CandidateSourceOptions {
   isPremium: boolean
 }
 
-/**
- * Returns an ordered array of candidate fallback URLs for a given media URL.
- *
- * @param options - Candidate source options including URL, media type, and premium status.
- * @returns An array of candidate URLs starting with the direct URL.
- */
 export function getCandidateSources(options: CandidateSourceOptions): string[] {
   const { rawUrl, mediaType, isPremium } = options
   const cleanUrl = cleanMediaUrl(rawUrl)
@@ -228,14 +194,6 @@ export function getCandidateSources(options: CandidateSourceOptions): string[] {
   return candidates
 }
 
-/**
- * Checks whether direct access to the given domain and media type is currently blocked
- * by the circuit breaker.
- *
- * @param rawUrl - The target media URL.
- * @param mediaType - The media type (image, video, etc.).
- * @returns True if direct access is blocked.
- */
 export function isDomainDirectBlocked(rawUrl: string, mediaType?: PostMediaType | string): boolean {
   const key = getDomainKey(rawUrl, mediaType)
   if (!key) return false
@@ -243,12 +201,6 @@ export function isDomainDirectBlocked(rawUrl: string, mediaType?: PostMediaType 
   return (domainHealthMap.get(key)?.blockedUntil ?? 0) > Date.now()
 }
 
-/**
- * Resets the circuit breaker for a domain and media type.
- *
- * @param rawUrl - The target media URL.
- * @param mediaType - The media type.
- */
 export function resetDomainBreaker(rawUrl: string, mediaType?: PostMediaType | string): void {
   const key = getDomainKey(rawUrl, mediaType)
   if (!key) return
@@ -260,9 +212,6 @@ export function resetDomainBreaker(rawUrl: string, mediaType?: PostMediaType | s
 /**
  * Records a direct request failure for a domain and trips the circuit breaker
  * if the failure threshold is reached.
- *
- * @param rawUrl - The target media URL.
- * @param mediaType - The media type.
  */
 export function recordDirectFailure(rawUrl: string, mediaType?: PostMediaType | string): void {
   const key = getDomainKey(rawUrl, mediaType)
@@ -294,12 +243,6 @@ export function recordDirectFailure(rawUrl: string, mediaType?: PostMediaType | 
   notifyHealthChange()
 }
 
-/**
- * Records a successful direct request for a domain and clears any existing failure count.
- *
- * @param rawUrl - The target media URL.
- * @param mediaType - The media type.
- */
 export function recordDirectSuccess(rawUrl: string, mediaType?: PostMediaType | string): void {
   const key = getDomainKey(rawUrl, mediaType)
   if (!key) return
@@ -310,9 +253,6 @@ export function recordDirectSuccess(rawUrl: string, mediaType?: PostMediaType | 
   }
 }
 
-/**
- * Resets all domain circuit breaker state across all domains and media types.
- */
 export function resetDomainHealth(): void {
   domainHealthMap.clear()
   notifyHealthChange()

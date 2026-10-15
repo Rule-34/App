@@ -178,7 +178,8 @@ deliberately generated at 1x density only (webp format) to reduce bandwidth.
   referrer and no other booru does: `useBooruReferrerPolicy` (called once in `app/app.vue`) renders a single
   `<meta name="referrer">`, `origin` on `/posts/e621.net` routes and `no-referrer` everywhere else. A meta tag, unlike a
   route-rule header, follows client-side navigation, and it must never be removed because removing a referrer meta does
-  not revert the policy. Images and links keep their per-element policies.
+  not revert the policy. Only post media pins a per-element policy (`getMediaReferrerPolicy`); nothing else needs
+  one, since the origin alone is our own public site.
 
 ### Fluid Player layout
 
