@@ -26,8 +26,11 @@ export function useFluidVideoPlayer({ getVideoElement, getSource }: FluidVideoPl
   let upgradeTimeout: number | null = null
   let hasCountedRender = false
   let isDisposed = false
+  // Bumped by destroy() so a create() still awaiting the module cannot attach to an element that is being replaced
+  let generation = 0
 
   async function create() {
+    const startGeneration = generation
     const videoElement = getVideoElement()
 
     if (!videoElement) {
@@ -39,7 +42,7 @@ export function useFluidVideoPlayer({ getVideoElement, getSource }: FluidVideoPl
     // The element can be replaced or removed while the module loads
     const currentElement = getVideoElement()
 
-    if (isDisposed || !currentElement) {
+    if (isDisposed || !currentElement || startGeneration !== generation) {
       return
     }
 
@@ -89,7 +92,7 @@ export function useFluidVideoPlayer({ getVideoElement, getSource }: FluidVideoPl
       return initPromise
     }
 
-    initPromise = create()
+    const promise = create()
       .catch((initError) => {
         // Dynamic import or player initialization failed; the native video remains usable.
         if (import.meta.dev) {
@@ -97,10 +100,15 @@ export function useFluidVideoPlayer({ getVideoElement, getSource }: FluidVideoPl
         }
       })
       .finally(() => {
-        initPromise = null
+        // destroy() may already have replaced it with a newer init
+        if (initPromise === promise) {
+          initPromise = null
+        }
       })
 
-    return initPromise
+    initPromise = promise
+
+    return promise
   }
 
   function cancelScheduledUpgrade() {
@@ -150,6 +158,8 @@ export function useFluidVideoPlayer({ getVideoElement, getSource }: FluidVideoPl
   }
 
   function destroy() {
+    generation++
+    initPromise = null
     player?.destroy()
     player = undefined
   }
