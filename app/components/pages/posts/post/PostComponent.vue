@@ -1,5 +1,12 @@
 <script lang="ts" setup>
-  import { ChevronDownIcon } from '@heroicons/vue/24/outline'
+  import {
+    ArrowDownTrayIcon,
+    BookmarkIcon,
+    ChevronDownIcon,
+    LinkIcon,
+    ShareIcon,
+    SparklesIcon
+  } from '@heroicons/vue/24/outline'
   import { generatePostTagLandingPath } from '~/assets/js/RouterHelper'
   import type { IPost, IRenderablePost } from '~/assets/js/post.dto'
   import Tag, { TagDTO } from '~/assets/js/tag.dto'
@@ -327,17 +334,87 @@
             aria-hidden="true"
             class="flex items-center p-2"
           >
-            <PostSaveFallback v-if="mediaFile.file" />
+            <button
+              v-if="mediaFile.file"
+              :aria-label="$t('common.savePost')"
+              class="flex items-center rounded-md px-1.5 py-1"
+              disabled
+              tabindex="-1"
+              type="button"
+            >
+              <BookmarkIcon
+                aria-hidden="true"
+                class="h-5 w-5 text-base-content"
+              />
+            </button>
 
-            <PostDownloadFallback v-if="mediaFile.file" />
+            <button
+              v-if="mediaFile.file"
+              :aria-label="$t('common.downloadPost')"
+              class="flex items-center rounded-md px-1.5 py-1"
+              disabled
+              tabindex="-1"
+              type="button"
+            >
+              <ArrowDownTrayIcon
+                aria-hidden="true"
+                class="h-5 w-5 text-base-content"
+              />
+            </button>
 
-            <PostSourceFallback />
+            <button
+              :aria-label="$t('common.openPostSourceOptions')"
+              class="flex items-center rounded-md px-1.5 py-1"
+              disabled
+              tabindex="-1"
+              type="button"
+            >
+              <LinkIcon
+                aria-hidden="true"
+                class="h-5 w-5 text-base-content"
+              />
+            </button>
 
-            <PostShareFallback />
+            <button
+              :aria-label="$t('common.sharePage')"
+              class="flex items-center rounded-md px-1.5 py-1"
+              disabled
+              tabindex="-1"
+              type="button"
+            >
+              <ShareIcon
+                aria-hidden="true"
+                class="h-5 w-5 text-base-content"
+              />
+            </button>
 
-            <PostChatWithAiFallback v-if="!isPremium" />
+            <button
+              v-if="!isPremium"
+              :aria-label="$t('common.chatWithAi')"
+              class="flex items-center gap-1 rounded-md px-1.5 py-1"
+              disabled
+              tabindex="-1"
+              type="button"
+            >
+              <SparklesIcon
+                aria-hidden="true"
+                class="h-5 w-5 text-base-content"
+              />
+              <span class="text-sm font-medium text-base-content">AI</span>
+            </button>
 
-            <PostTagsToggleFallback />
+            <button
+              class="ml-auto flex items-center gap-1 rounded-md px-1.5 py-1"
+              disabled
+              tabindex="-1"
+              type="button"
+            >
+              <span class="text-sm text-base-content">{{ $t('common.tags') }}</span>
+              <ChevronDownIcon
+                aria-hidden="true"
+                class="h-5 w-5 text-base-content"
+              />
+            </button>
           </div>
         </template>
       </ClientOnly>

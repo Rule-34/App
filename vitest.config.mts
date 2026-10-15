@@ -7,8 +7,8 @@ const maxWorkers = configuredMaxWorkers > 0 ? configuredMaxWorkers : 2
 export default defineConfig({
   resolve: {
     alias: {
-      '~': path.resolve(__dirname, './app'),
-      '~~': path.resolve(__dirname, './')
+      '~': path.resolve(import.meta.dirname, './app'),
+      '~~': path.resolve(import.meta.dirname, './')
     }
   },
   test: {
@@ -17,7 +17,8 @@ export default defineConfig({
     hookTimeout: 180000,
     exclude: [...configDefaults.exclude, 'API/**', 'R34-premium-ab-test/**', 'Universal-Booru-Wrapper/**'],
     typecheck: {
-      include: ['app/types/**/*.d.ts', 'test/**/*.test.ts'],
+      // Vitest 5 treats every included file as a test suite; app types are covered by `nuxt typecheck`.
+      include: ['test/**/*.test.ts'],
       tsconfig: './.nuxt/tsconfig.json'
     }
   }

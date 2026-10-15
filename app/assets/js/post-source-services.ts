@@ -1,4 +1,4 @@
-export type PostSourceServiceAction = 'find' | 'edit'
+type PostSourceServiceAction = 'find' | 'edit'
 
 export type PostSourceService = {
   serviceName: string
