@@ -91,12 +91,16 @@ export type MediaReferrerPolicy = 'origin' | 'strict-origin-when-cross-origin' |
  *
  * Rules:
  * 1. e621 CDN (static1.e621.net, etc.): requires 'origin' per e621 CDN agreement (e926/e6ai are not covered).
- * 2. First-party and internal endpoints (r34.app, akbal.dev, localhost, relative paths): 'strict-origin-when-cross-origin'.
+ * 2. Relative paths and first-party hosts (the caller supplies them, see `useFirstPartyHosts`):
+ *    'strict-origin-when-cross-origin'.
  * 3. Third-party boorus (Danbooru, Gelbooru, Paheal, etc.) and fallback proxies (Photon, DuckDuckGo):
  *    'no-referrer' to bypass foreign referrer blocks / hotlinking 403s.
  * 4. Empty or invalid URLs: 'no-referrer'.
  */
-export function getMediaReferrerPolicy(rawUrl?: string | null): MediaReferrerPolicy {
+export function getMediaReferrerPolicy(
+  rawUrl?: string | null,
+  firstPartyHosts: readonly string[] = []
+): MediaReferrerPolicy {
   if (!rawUrl) {
     return 'no-referrer'
   }
@@ -122,7 +126,7 @@ export function getMediaReferrerPolicy(rawUrl?: string | null): MediaReferrerPol
     return 'origin'
   }
 
-  if (/(^|\.)(r34\.app|akbal\.dev)$/.test(hostname) || hostname === 'localhost' || hostname === '127.0.0.1') {
+  if (firstPartyHosts.some((host) => hostname === host || hostname.endsWith(`.${host}`))) {
     return 'strict-origin-when-cross-origin'
   }
 

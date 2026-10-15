@@ -150,8 +150,9 @@
     () => posterCandidates.value[posterCandidateIndex.value] ?? (rawPosterSrc.value || undefined)
   )
 
-  const mediaReferrerPolicy = computed(() => getMediaReferrerPolicy(localSrc.value))
-  const posterReferrerPolicy = computed(() => getMediaReferrerPolicy(localPosterSrc.value))
+  const firstPartyHosts = useFirstPartyHosts()
+  const mediaReferrerPolicy = computed(() => getMediaReferrerPolicy(localSrc.value, firstPartyHosts))
+  const posterReferrerPolicy = computed(() => getMediaReferrerPolicy(localPosterSrc.value, firstPartyHosts))
 
   function probeVideoPoster() {
     if (import.meta.server || isUnmounted || !isVideo.value || !posterCandidates.value.length) {
@@ -175,7 +176,7 @@
 
       const probe = new Image()
       activeProbe = probe
-      probe.referrerPolicy = getMediaReferrerPolicy(candidateUrl)
+      probe.referrerPolicy = getMediaReferrerPolicy(candidateUrl, firstPartyHosts)
 
       probe.onload = () => {
         if (isUnmounted || currentToken !== posterProbeToken) return
@@ -1082,7 +1083,7 @@
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
         allowfullscreen
         loading="lazy"
-        :referrerpolicy="getMediaReferrerPolicy(rawMediaSrc)"
+        :referrerpolicy="getMediaReferrerPolicy(rawMediaSrc, firstPartyHosts)"
         sandbox="allow-same-origin"
       />
     </div>

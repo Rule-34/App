@@ -130,14 +130,20 @@ describe('media-resilience', () => {
       expect(getMediaReferrerPolicy('https://static1.e6ai.net/data/sample/123.jpg')).toBe('no-referrer')
     })
 
-    it('returns strict-origin-when-cross-origin for first-party and local development hosts', () => {
-      expect(getMediaReferrerPolicy('https://r34.app/img/featured.jpg')).toBe('strict-origin-when-cross-origin')
-      expect(getMediaReferrerPolicy('https://images.r34.app/preview.webp')).toBe('strict-origin-when-cross-origin')
-      expect(getMediaReferrerPolicy('https://akbal.dev/test.png')).toBe('strict-origin-when-cross-origin')
-      expect(getMediaReferrerPolicy('https://cdn.akbal.dev/test.png')).toBe('strict-origin-when-cross-origin')
-      expect(getMediaReferrerPolicy('http://localhost:3000/img.jpg')).toBe('strict-origin-when-cross-origin')
-      expect(getMediaReferrerPolicy('http://127.0.0.1:3000/img.jpg')).toBe('strict-origin-when-cross-origin')
-      expect(getMediaReferrerPolicy('//cdn.example.com/img.jpg')).toBe('no-referrer')
+    it('returns strict-origin-when-cross-origin for the first-party hosts it is given, subdomains included', () => {
+      const hosts = ['r34.app', 'mirror.example', '127.0.0.1']
+
+      expect(getMediaReferrerPolicy('https://r34.app/img/featured.jpg', hosts)).toBe('strict-origin-when-cross-origin')
+      expect(getMediaReferrerPolicy('https://imgproxy2.r34.app/x.webp', hosts)).toBe('strict-origin-when-cross-origin')
+      expect(getMediaReferrerPolicy('https://cdn.mirror.example/x.png', hosts)).toBe('strict-origin-when-cross-origin')
+      expect(getMediaReferrerPolicy('http://127.0.0.1:3000/img.jpg', hosts)).toBe('strict-origin-when-cross-origin')
+      expect(getMediaReferrerPolicy('//cdn.example.com/img.jpg', hosts)).toBe('no-referrer')
+      expect(getMediaReferrerPolicy('https://notr34.app/x.png', hosts)).toBe('no-referrer')
+    })
+
+    it('treats no host as first party unless it is passed in, so a mirror is never hardcoded', () => {
+      expect(getMediaReferrerPolicy('https://r34.app/img.jpg')).toBe('no-referrer')
+      expect(getMediaReferrerPolicy('http://localhost:3000/img.jpg')).toBe('no-referrer')
     })
 
     it('returns no-referrer for third-party boorus and fallback proxies to avoid hotlink blocks', () => {
