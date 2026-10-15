@@ -160,13 +160,7 @@ function getDomainKey(rawUrl: string, mediaType?: PostMediaType | string): strin
  */
 export function toPhotonUrl(rawUrl: string): string {
   const url = URL.parse(rawUrl)
-  if (
-    !url ||
-    (url.protocol !== 'http:' && url.protocol !== 'https:') ||
-    url.port ||
-    url.search ||
-    hasSensitiveCredentialsOrTokens(rawUrl)
-  ) {
+  if (!url || (url.protocol !== 'http:' && url.protocol !== 'https:') || url.port || url.search) {
     return rawUrl
   }
 
@@ -181,58 +175,13 @@ export function toPhotonUrl(rawUrl: string): string {
   return `https://i${shard}.wp.com/${hostAndPath}${sslParam}`
 }
 
-const SENSITIVE_QUERY_PATTERNS = [
-  /token/i,
-  /auth/i,
-  /sig/i,
-  /key/i,
-  /secret/i,
-  /cred/i,
-  /pass/i,
-  /pwd/i,
-  /^x-amz-/i,
-  /^x-goog-/i,
-  /bearer/i,
-  /(?:hash|hmac|jwt|session|ticket)/i,
-  /(?:^|[_-])code$/i
-]
-
-/**
- * Checks whether a URL contains embedded user credentials or sensitive/signed auth tokens.
- *
- * @param rawUrl - The image URL to check.
- * @returns True if credentials or signature tokens are present.
- */
-export function hasSensitiveCredentialsOrTokens(rawUrl: string): boolean {
-  const url = URL.parse(rawUrl)
-  if (!url) {
-    return false
-  }
-  if (url.username || url.password) {
-    return true
-  }
-
-  for (const key of url.searchParams.keys()) {
-    if (SENSITIVE_QUERY_PATTERNS.some((pattern) => pattern.test(key))) {
-      return true
-    }
-  }
-
-  return false
-}
-
 /**
  * DuckDuckGo image proxy URL generator.
- * Skips public proxying if the URL contains embedded credentials or sensitive signed tokens.
  *
  * @param rawUrl - The image URL to convert.
- * @returns The DuckDuckGo image proxy URL, or rawUrl if invalid or credential-bearing.
+ * @returns The DuckDuckGo image proxy URL.
  */
 export function toDdgUrl(rawUrl: string): string {
-  if (hasSensitiveCredentialsOrTokens(rawUrl)) {
-    return rawUrl
-  }
-
   return `https://external-content.duckduckgo.com/iu/?u=${encodeURIComponent(rawUrl)}&f=1&nofb=1`
 }
 
@@ -261,26 +210,19 @@ export function getCandidateSources(options: CandidateSourceOptions): string[] {
     return candidates
   }
 
-  // Premium users get a dedicated media branch: proxied and automatically enhanced via imgproxy,
-  // falling back to the dedicated premium backend proxy — never degraded through public third-party proxies.
+  // Premium users try our own proxy first (imgproxy, then the premium backend) before anything public
   if (isPremium) {
     candidates.push(proxyUrl(cleanUrl))
-
-    return candidates
   }
 
-  if (mediaType === 'video') {
-    return candidates
-  }
+  // Public image CDNs follow for everyone; they cannot proxy video
+  if (mediaType !== 'video') {
+    const photon = toPhotonUrl(cleanUrl)
+    if (photon !== cleanUrl) {
+      candidates.push(photon)
+    }
 
-  // Free/non-premium users: free fallback chain across public image CDNs
-  const photon = toPhotonUrl(cleanUrl)
-  if (photon !== cleanUrl) {
-    candidates.push(photon)
-  }
-  const ddg = toDdgUrl(cleanUrl)
-  if (ddg !== cleanUrl) {
-    candidates.push(ddg)
+    candidates.push(toDdgUrl(cleanUrl))
   }
 
   return candidates

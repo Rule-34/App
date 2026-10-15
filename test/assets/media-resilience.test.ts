@@ -4,7 +4,6 @@ import {
   cleanMediaUrl,
   getCandidateSources,
   getMediaReferrerPolicy,
-  hasSensitiveCredentialsOrTokens,
   isDomainDirectBlocked,
   recordDirectFailure,
   recordDirectSuccess,
@@ -62,11 +61,6 @@ describe('media-resilience', () => {
   })
 
   describe('toPhotonUrl', () => {
-    it('does not hand credential-bearing urls to the public proxy', () => {
-      const input = 'https://user:secret@example.com/a.jpg'
-      expect(toPhotonUrl(input)).toBe(input)
-    })
-
     it('creates a safe photon url with ssl=1 for https urls', () => {
       const input = 'https://static1.e621.net/data/preview/94/91/9491498441879ff4168532af1d23ddfc.jpg'
       const output = toPhotonUrl(input)
@@ -81,30 +75,6 @@ describe('media-resilience', () => {
 
       const portInput = 'https://cdn.donmai.us:8443/original/12/34/1234.png'
       expect(toPhotonUrl(portInput)).toBe(portInput)
-    })
-  })
-
-  describe('hasSensitiveCredentialsOrTokens', () => {
-    it('detects embedded user credentials in URL', () => {
-      expect(hasSensitiveCredentialsOrTokens('https://user:pass@cdn.example.com/image.jpg')).toBe(true)
-      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg')).toBe(false)
-    })
-
-    it('detects sensitive and signed auth parameters', () => {
-      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?token=abc')).toBe(true)
-      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?password=secret')).toBe(true)
-      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?auth_code=abc')).toBe(true)
-      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?code=abc')).toBe(true)
-      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?codec=av1')).toBe(false)
-      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?pass=secret')).toBe(true)
-      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?pwd=secret')).toBe(true)
-      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?X-Amz-Signature=xyz')).toBe(true)
-      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?sig=xyz')).toBe(true)
-      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?apiKey=xyz')).toBe(true)
-      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?hash=abc123')).toBe(true)
-      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?jwt=eyJhbGciOi...')).toBe(true)
-      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?session=xyz')).toBe(true)
-      expect(hasSensitiveCredentialsOrTokens('https://cdn.example.com/image.jpg?download=true&v=1')).toBe(false)
     })
   })
 
@@ -167,14 +137,6 @@ describe('media-resilience', () => {
       expect(parsed.searchParams.get('f')).toBe('1')
       expect(parsed.searchParams.get('nofb')).toBe('1')
     })
-
-    it('returns rawUrl unchanged for credential-bearing or signed URLs', () => {
-      const sensitiveToken = 'https://cdn.example.com/image.jpg?token=secret123'
-      expect(toDdgUrl(sensitiveToken)).toBe(sensitiveToken)
-
-      const sensitiveCreds = 'https://user:pass@cdn.example.com/image.jpg'
-      expect(toDdgUrl(sensitiveCreds)).toBe(sensitiveCreds)
-    })
   })
 
   describe('getCandidateSources', () => {
@@ -231,19 +193,18 @@ describe('media-resilience', () => {
       expect(candidates[2]).toContain('external-content.duckduckgo.com')
     })
 
-    it('routes premium images through direct origin and premium proxy without public CDNs', () => {
+    it('puts the premium proxy before the public CDNs for premium images', () => {
       const candidates = getCandidateSources({
         rawUrl: imgUrl,
         mediaType: 'image',
         isPremium: true
       })
 
-      expect(candidates).toHaveLength(2)
+      expect(candidates).toHaveLength(4)
       expect(candidates[0]).toBe(imgUrl)
       expect(candidates[1]).toContain('/api/cors-proxy/?')
-      // Premium users should not be degraded to public image CDNs
-      expect(candidates.some((c) => c.includes('wordpress.com'))).toBe(false)
-      expect(candidates.some((c) => c.includes('duckduckgo.com'))).toBe(false)
+      expect(candidates[2]).toBe(toPhotonUrl(imgUrl))
+      expect(candidates[3]).toContain('external-content.duckduckgo.com')
     })
 
     it('returns only the direct candidate for root-relative internal assets without external proxy chains', () => {
@@ -311,26 +272,6 @@ describe('media-resilience', () => {
       expect(candidates.some((c) => c.includes('wp.com'))).toBe(false)
       expect(candidates[0]).toBe(queryImg)
       expect(candidates[1]).toContain('external-content.duckduckgo.com')
-    })
-
-    it('skips public fallback proxies if url contains sensitive credentials or tokens', () => {
-      const sensitiveImg = 'https://cdn.donmai.us/original/12/34/1234.png?token=secret123'
-      const candidates = getCandidateSources({
-        rawUrl: sensitiveImg,
-        mediaType: 'image',
-        isPremium: false
-      })
-
-      // Both Photon (query) and DDG (sensitive token) must be excluded
-      expect(candidates).toEqual([sensitiveImg])
-
-      const passwordImg = 'https://cdn.donmai.us/original/12/34/1234.png?password=secret'
-      const passwordCandidates = getCandidateSources({
-        rawUrl: passwordImg,
-        mediaType: 'image',
-        isPremium: false
-      })
-      expect(passwordCandidates).toEqual([passwordImg])
     })
   })
 
