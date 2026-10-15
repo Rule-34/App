@@ -45,17 +45,10 @@
   )
   const isImage = computed(() => props.mediaType === 'image' && !isAnimatedMedia.value)
 
-  /**
-   * Identifies whether Candidate index 0 is rendered via the server-side imgproxy service
-   * (used for premium users and early SSR posts) rather than directly fetching from the origin booru.
-   */
   const isIndexZeroViaImgproxy = computed(
     () => isImage.value && (isPremium.value || (wasCurrentPageSSR.value && props.postIndex < 8))
   )
 
-  /**
-   * Identifies whether the active media request is an unproxied, direct fetch to the origin booru.
-   */
   const isDirectRequest = computed(() => srcCandidateIndex.value === 0 && !isIndexZeroViaImgproxy.value)
 
   const domainHealthVersion = shallowRef(0)
@@ -136,8 +129,9 @@
     () => posterCandidates.value[posterCandidateIndex.value] ?? (rawPosterSrc.value || undefined)
   )
 
-  const mediaReferrerPolicy = computed(() => getMediaReferrerPolicy(localSrc.value))
-  const posterReferrerPolicy = computed(() => getMediaReferrerPolicy(localPosterSrc.value))
+  const firstPartyHosts = useFirstPartyHosts()
+  const mediaReferrerPolicy = computed(() => getMediaReferrerPolicy(localSrc.value, firstPartyHosts))
+  const posterReferrerPolicy = computed(() => getMediaReferrerPolicy(localPosterSrc.value, firstPartyHosts))
 
   function probeVideoPoster() {
     if (import.meta.server || isUnmounted || !isVideo.value || !posterCandidates.value.length) {
@@ -161,7 +155,7 @@
 
       const probe = new Image()
       activeProbe = probe
-      probe.referrerPolicy = getMediaReferrerPolicy(candidateUrl)
+      probe.referrerPolicy = getMediaReferrerPolicy(candidateUrl, firstPartyHosts)
 
       probe.onload = () => {
         if (isUnmounted || currentToken !== posterProbeToken) return
@@ -259,10 +253,8 @@
         pendingDirectFailure.media = true
       }
 
-      // Try the next candidate (e.g. the premium proxy) before giving up
       if (srcCandidateIndex.value + 1 < srcCandidates.value.length) {
         srcCandidateIndex.value += 1
-        // The keyed <video> is recreated for the new source; the fresh element upgrades through the normal path
         fluid.destroy()
         nextTick(() => probeVideoSource(token))
         return
@@ -276,7 +268,7 @@
 
   const useIframePlayer = shallowRef(false)
 
-  // When domain breaker trips while cards are mounted, uncompleted direct requests advance to Candidate 1 (Photon)
+  // When the domain breaker trips while cards are mounted, pending direct requests move on to the first fallback
   watch(isDirectBlocked, (blocked) => {
     if (blocked && !mediaHasLoaded.value && !hasError.value && !isIndexZeroViaImgproxy.value) {
       if (srcCandidateIndex.value === 0 && srcCandidates.value.length > 1) {
@@ -476,7 +468,6 @@
       isAnimatedMediaLoading.value = false
     }
 
-    // Case 1: The poster image failed to load for animated media
     if (isAnimatedMedia.value && !isAnimatedMediaPlaying.value) {
       if (posterCandidateIndex.value === 0 && !isPosterDirectBlocked.value && rawPosterSrc.value) {
         pendingDirectFailure.poster = true
@@ -487,12 +478,9 @@
         return
       }
 
-      // Poster exhausted: gracefully allow the user to click play to load the GIF
       return
     }
 
-    // Case 2: Main media failed to load (image, gif, or video)
-    // If Candidate 0 (direct request) failed, record failure for the domain
     // A host that already served the video is not at fault for a later stall (a loaded animated poster says nothing
     // about the GIF itself)
     if (isDirectRequest.value && !isDirectBlocked.value && !(isVideo.value && mediaHasLoaded.value)) {
@@ -536,7 +524,6 @@
       nextTick(async () => {
         probeVideoPoster()
         await fluid.reload()
-        // Prompt browser to fetch media stream on retry
         getVideoElement()?.load()
       })
     } else {
@@ -676,7 +663,6 @@
 
 <template>
   <div :style="aspectRatioStyle">
-    <!-- Error Overlay -->
     <template v-if="hasError">
       <div
         :class="isShortMedia ? 'px-4 py-4 sm:px-5 sm:py-4.5' : 'px-4 py-6 sm:px-6 sm:py-8'"
@@ -687,7 +673,6 @@
           :class="isShortMedia ? 'gap-3 sm:gap-3.5' : 'gap-4 sm:gap-5'"
           class="relative z-10 flex w-full max-w-sm flex-col items-center justify-center"
         >
-          <!-- Error Title & Concise Context Subtitle -->
           <div class="flex flex-col items-center space-y-1 text-center">
             <h3 class="text-base font-semibold tracking-wide text-base-content-highlight">
               {{ error?.message }}
@@ -700,7 +685,6 @@
             </p>
           </div>
 
-          <!-- Actions (identical for every media type) -->
           <div class="flex w-full flex-col gap-2.5">
             <!-- Premium bypasses host blocks automatically, so it is the one filled action -->
             <NuxtLink
@@ -760,14 +744,12 @@
       </div>
     </template>
 
-    <!-- Iframe fallback for videos -->
     <div
       v-else-if="useIframePlayer"
       v-intersection-observer="onIframeIntersectionObserver"
       :style="aspectRatioStyle"
       class="group relative flex h-full min-h-[200px] w-full flex-col items-center justify-center overflow-hidden rounded-t-md bg-base-950"
     >
-      <!-- Minimal close control to return to error overlay -->
       <button
         :aria-label="t('common.close')"
         class="absolute top-2.5 right-2.5 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-base-950/80 text-base-content ring-1 ring-base-0/20 backdrop-blur-md transition-colors hover:bg-base-900 hover:text-base-content-highlight focus-visible:focus-outline-util"
@@ -789,7 +771,7 @@
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
         allowfullscreen
         loading="lazy"
-        :referrerpolicy="getMediaReferrerPolicy(rawMediaSrc)"
+        :referrerpolicy="getMediaReferrerPolicy(rawMediaSrc, firstPartyHosts)"
         sandbox="allow-same-origin"
       />
     </div>
@@ -805,7 +787,6 @@
         ]
       "
     >
-      <!-- Fix(rounded borders): add the same rounded borders that the parent has -->
       <NuxtPicture
         v-if="isIndexZeroViaImgproxy && srcCandidateIndex === 0"
         ref="mediaElement"

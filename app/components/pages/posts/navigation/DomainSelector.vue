@@ -88,7 +88,6 @@
         <img
           :alt="t('common.favicon')"
           :src="useFaviconUrl(props.modelValue.domain)"
-          referrerpolicy="no-referrer"
           class="h-5 w-5 shrink-0 rounded-sm"
           height="64"
           width="64"
@@ -143,7 +142,6 @@
                 <img
                   :alt="t('common.favicon')"
                   :src="useFaviconUrl(booru.domain)"
-                  referrerpolicy="no-referrer"
                   class="h-5 w-5 shrink-0 rounded-sm"
                   height="64"
                   width="64"

@@ -132,7 +132,6 @@
                   <img
                     :alt="t('common.favicon')"
                     :src="useFaviconUrl(source)"
-                    referrerpolicy="no-referrer"
                     class="mr-3 h-5 w-5 shrink-0 rounded-sm"
                     height="64"
                     width="64"
@@ -168,7 +167,6 @@
                 <img
                   :alt="t('common.favicon')"
                   :src="useFaviconUrl(service.link)"
-                  referrerpolicy="no-referrer"
                   class="mr-3 h-5 w-5 shrink-0 rounded-sm"
                   height="64"
                   width="64"
@@ -195,7 +193,6 @@
                 <img
                   :alt="t('common.favicon')"
                   :src="useFaviconUrl(service.link)"
-                  referrerpolicy="no-referrer"
                   class="mr-3 h-5 w-5 shrink-0 rounded-sm"
                   height="64"
                   width="64"
