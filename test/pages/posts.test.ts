@@ -388,7 +388,7 @@ describe('/', async () => {
       })
 
       // Fulfill fallback CDN requests with a valid image
-      await page.route(/https:\/\/(i[0-3]\.wp\.com|external-content\.duckduckgo\.com)\//, async (route) => {
+      await page.route(/https:\/\/(i0\.wp\.com|external-content\.duckduckgo\.com)\//, async (route) => {
         await route.fulfill({
           status: 200,
           contentType: 'image/png',
@@ -529,7 +529,7 @@ describe('/', async () => {
 
       const requested: string[] = []
       await page.route(
-        /https:\/\/(imgproxy2\.r34\.app|safebooru\.org\/samples|i[0-3]\.wp\.com|external-content\.duckduckgo\.com)\//,
+        /https:\/\/(imgproxy2\.r34\.app|safebooru\.org\/samples|i0\.wp\.com|external-content\.duckduckgo\.com)\//,
         async (route) => {
           requested.push(route.request().url())
           await route.abort('failed')
@@ -741,6 +741,43 @@ describe('/', async () => {
         { x: outsideX, y: menuBox.y + 4 }
       )
       expect(hit).toBe(true)
+    }, 45000)
+
+    it('tries our own proxies before the public CDNs for a premium image', async () => {
+      // Arrange: a premium user whose imgproxy, premium proxy and direct host all fail; only the public CDNs answer
+      const page = await createTrackedPage()
+      await signInAsPremiumUser(page)
+      const sample = mockPostsPage0.data[0].low_res_file.url
+      const filename = sample.split('/').pop()!
+      const order: string[] = []
+
+      page.on('request', (request) => {
+        const requestUrl = request.url()
+        const decoded = decodeURIComponent(requestUrl)
+        const isFirstPostImage = decoded.includes(filename) || decodeImgproxySourceUrl(requestUrl)?.includes(filename)
+
+        if (!isFirstPostImage) return
+
+        if (requestUrl.startsWith('https://imgproxy2.r34.app/')) order.push('imgproxy')
+        else if (requestUrl.includes('/api/cors-proxy/')) order.push('premium-proxy')
+        else if (/^https:\/\/i\d\.wp\.com\//.test(requestUrl)) order.push('photon')
+        else if (requestUrl.includes('duckduckgo.com')) order.push('duckduckgo')
+        else if (requestUrl === sample) order.push('direct')
+      })
+      await page.route(/imgproxy2\.r34\.app|\/api\/cors-proxy|safebooru\.org\/samples/, (route) =>
+        route.abort('failed')
+      )
+      await page.route(/i\d\.wp\.com|duckduckgo\.com/, (route) =>
+        route.fulfill({ status: 200, contentType: 'image/png', body: PIXEL_PNG })
+      )
+
+      // Act
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'networkidle' })
+      await page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`).first().waitFor({ state: 'visible' })
+      await expect.poll(() => order.includes('photon'), { timeout: 15000 }).toBe(true)
+
+      // Assert: each of our own proxies is tried once, in order, before the first public CDN
+      expect([...new Set(order)].slice(0, 3)).toEqual(['imgproxy', 'premium-proxy', 'photon'])
     }, 45000)
 
     it('falls back to the premium proxy for a video whose direct source and poster are blocked', async () => {
@@ -1516,6 +1553,22 @@ describe('/', async () => {
       await forceVideoRequest('safebooru.org-')
       await expect.poll(() => 'example.local' in referers).toBe(true)
       expect(referers['example.local']).toBeUndefined()
+    }, 60000)
+
+    it('keeps favicons on no-referrer even on an e621 page', async () => {
+      const page = await createTrackedPage()
+      const referers: Array<string | undefined> = []
+      page.on('request', (request) => {
+        if (new URL(request.url()).host.endsWith('google.com')) {
+          referers.push(request.headers()['referer'])
+        }
+      })
+
+      await page.goto(url('/posts/e621.net'), { waitUntil: 'networkidle' })
+      await page.getByTestId('domain-selector').waitFor({ state: 'visible' })
+
+      expect(referers.length).toBeGreaterThan(0)
+      expect(referers).toEqual(referers.map(() => undefined))
     }, 60000)
 
     it('follows in-app domain switches without a reload', async () => {
