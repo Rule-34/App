@@ -17,11 +17,12 @@
       <slot name="title" />
     </component>
 
-    <p
+    <!-- A div, not a p: the slot can hold block content like an h1, and the HTML parser closes a p before it -->
+    <div
       v-if="$slots.text"
       class="text-base-content"
     >
       <slot name="text" />
-    </p>
+    </div>
   </div>
 </template>

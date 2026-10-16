@@ -2,7 +2,13 @@
   import { ArrowPathIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
   import { fallbackBooruDomain, generatePostsRoute, getSingleRouteParam } from '~/assets/js/RouterHelper'
   import { normalizeStringForTitle } from '~/assets/js/SeoHelper'
-  import { isRenderablePost, type IPostFile, type IPostPage, type IRenderablePost } from '~/assets/js/post.dto'
+  import {
+    isRenderablePost,
+    normalizePostPage,
+    type IPostFile,
+    type IPostPage,
+    type IRenderablePost
+  } from '~/assets/js/post.dto'
   import Tag, { TagDTO } from '~/assets/js/tag.dto'
   import { project } from '~~/config/project'
 
@@ -35,6 +41,7 @@
 
     return booru
   })
+
   const formattedTag = computed(() => normalizeStringForTitle(tagParam.value) ?? tagParam.value)
   const selectedTags = computed(() => [new Tag(Object.assign(new TagDTO(), { name: tagParam.value })).toJSON()])
   const fullPostsRoute = computed(() =>
@@ -57,8 +64,8 @@
 
   const { data, error, pending } = await useAsyncData(
     () => `tag-landing:${selectedBooru.value.domain}:${tagParam.value}`,
-    () =>
-      $fetch<IPostPage>(`/booru/${selectedBooru.value.type.type}/posts`, {
+    async () => {
+      const page = await $fetch<IPostPage>(`/booru/${selectedBooru.value.type.type}/posts`, {
         baseURL: config.public.apiUrl,
         params: {
           baseEndpoint: selectedBooru.value.domain,
@@ -68,7 +75,9 @@
           httpScheme: (selectedBooru.value.config?.options as BooruHttpOptions | undefined)?.HTTPScheme ?? undefined
         },
         retry: false
-      }),
+      })
+      return normalizePostPage(page)
+    },
     {
       deep: false
     }
