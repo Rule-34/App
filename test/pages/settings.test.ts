@@ -216,18 +216,34 @@ describe('Settings', async () => {
   })
 
   describe('Reset', () => {
+    const settingKeys = [
+      'settings-postFullSizeImages',
+      'settings-postsPerPage',
+      'settings-autoplayAnimatedMedia',
+      'settings-blockAiGeneratedImages'
+    ]
+
     it('clears every stored setting and restores the defaults', async () => {
       const page = await createTrackedPage('/settings')
 
       const toggle = page.getByRole('switch', { name: /Full size images/ })
       await toggle.click()
-      await expect.poll(() => readStoredSetting(page, 'settings-postFullSizeImages')).toBe('true')
+      await page.getByRole('switch', { name: /Autoplay GIFs/ }).click()
+      await page.getByRole('switch', { name: /Block AI posts/ }).click()
+      await page.getByLabel(/Posts per page/).fill('12')
+
+      for (const key of settingKeys) {
+        await expect.poll(() => readStoredSetting(page, key)).not.toBeNull()
+      }
 
       page.once('dialog', (dialog) => void dialog.accept())
 
       await Promise.all([page.waitForEvent('load'), page.locator('#reset').click()])
 
-      expect(await readStoredSetting(page, 'settings-postFullSizeImages')).toBeNull()
+      for (const key of settingKeys) {
+        expect(await readStoredSetting(page, key)).toBeNull()
+      }
+
       await expect.poll(() => toggle.getAttribute('aria-checked')).toBe('false')
     })
   })
