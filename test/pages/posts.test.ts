@@ -779,6 +779,47 @@ describe('/', async () => {
       expect([...new Set(order)]).toEqual(['imgproxy', 'direct', 'photon', 'duckduckgo', 'premium-proxy'])
     }, 45000)
 
+    it('skips the origin for a premium image once the breaker has tripped for its host', async () => {
+      // Arrange: imgproxy and the origin fail, the public CDN answers, so each failed origin is confirmed as blocked
+      const page = await createTrackedPage()
+      await page.setViewportSize({ width: 1280, height: 4000 })
+      await signInAsPremiumUser(page)
+      const photonRequests: string[] = []
+      const directRequests: string[] = []
+      const filenameOf = (post: { low_res_file: { url: string } }) => post.low_res_file.url.split('/').pop()!
+      const page1Filenames = mockPostsPage1.data.map(filenameOf)
+
+      page.on('request', (request) => {
+        const requestUrl = request.url()
+
+        if (/^https:\/\/i0\.wp\.com\//.test(requestUrl)) photonRequests.push(requestUrl)
+        else if (requestUrl.includes('safebooru.org/samples/')) directRequests.push(requestUrl)
+      })
+      await page.route(/imgproxy2\.r34\.app|safebooru\.org\/samples/, (route) => route.abort('failed'))
+      await page.route(/i0\.wp\.com/, (route) =>
+        route.fulfill({ status: 200, contentType: 'image/png', body: PIXEL_PNG })
+      )
+
+      // Act: three posts fail at the origin and load through Photon, which trips the breaker (threshold 3)
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'networkidle' })
+      await expect.poll(() => new Set(directRequests).size, { timeout: 15000 }).toBeGreaterThanOrEqual(3)
+      await expect.poll(() => new Set(photonRequests).size, { timeout: 15000 }).toBeGreaterThanOrEqual(3)
+
+      directRequests.length = 0
+      photonRequests.length = 0
+      await pushRoute(page, '/posts/safebooru.org?tags=1girl')
+      await expect
+        .poll(() => photonRequests.some((requestUrl) => page1Filenames.some((name) => requestUrl.includes(name))), {
+          timeout: 15000
+        })
+        .toBe(true)
+
+      // Assert: the next posts went from imgproxy straight to Photon without asking the blocked origin
+      expect(directRequests.filter((requestUrl) => page1Filenames.some((name) => requestUrl.includes(name)))).toEqual(
+        []
+      )
+    }, 60000)
+
     it('falls back to the premium proxy for a video whose direct source and poster are blocked', async () => {
       // Arrange: a premium user, direct poster and video blocked, only the proxy answers
       const page = await createTrackedPage()
