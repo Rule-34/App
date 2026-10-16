@@ -743,8 +743,8 @@ describe('/', async () => {
       expect(hit).toBe(true)
     }, 45000)
 
-    it('tries our own proxies before the public CDNs for a premium image', async () => {
-      // Arrange: a premium user whose imgproxy, premium proxy and direct host all fail; only the public CDNs answer
+    it('tries imgproxy, the origin, the public CDNs and finally our proxy for a premium image', async () => {
+      // Arrange: a premium user whose imgproxy, origin and public CDNs all fail; only our proxy answers
       const page = await createTrackedPage()
       await signInAsPremiumUser(page)
       const sample = mockPostsPage0.data[0].low_res_file.url
@@ -764,20 +764,19 @@ describe('/', async () => {
         else if (requestUrl.includes('duckduckgo.com')) order.push('duckduckgo')
         else if (requestUrl === sample) order.push('direct')
       })
-      await page.route(/imgproxy2\.r34\.app|\/api\/cors-proxy|safebooru\.org\/samples/, (route) =>
+      await page.route(/imgproxy2\.r34\.app|safebooru\.org\/samples|i0\.wp\.com|duckduckgo\.com/, (route) =>
         route.abort('failed')
       )
-      await page.route(/i\d\.wp\.com|duckduckgo\.com/, (route) =>
+      await page.route(/\/api\/cors-proxy/, (route) =>
         route.fulfill({ status: 200, contentType: 'image/png', body: PIXEL_PNG })
       )
 
       // Act
       await page.goto(url('/posts/safebooru.org'), { waitUntil: 'networkidle' })
       await page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`).first().waitFor({ state: 'visible' })
-      await expect.poll(() => order.includes('photon'), { timeout: 15000 }).toBe(true)
+      await expect.poll(() => order.includes('premium-proxy'), { timeout: 15000 }).toBe(true)
 
-      // Assert: each of our own proxies is tried once, in order, before the first public CDN
-      expect([...new Set(order)].slice(0, 3)).toEqual(['imgproxy', 'premium-proxy', 'photon'])
+      expect([...new Set(order)]).toEqual(['imgproxy', 'direct', 'photon', 'duckduckgo', 'premium-proxy'])
     }, 45000)
 
     it('falls back to the premium proxy for a video whose direct source and poster are blocked', async () => {

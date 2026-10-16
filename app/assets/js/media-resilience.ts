@@ -169,12 +169,7 @@ export function getCandidateSources(options: CandidateSourceOptions): string[] {
     return candidates
   }
 
-  // Premium users try our own proxy first (imgproxy, then the premium backend) before anything public
-  if (isPremium) {
-    candidates.push(proxyUrl(cleanUrl))
-  }
-
-  // Public image CDNs follow for everyone; they cannot proxy video
+  // Public image CDNs; they cannot proxy video
   if (mediaType !== 'video') {
     const photon = toPhotonUrl(cleanUrl)
     if (photon !== cleanUrl) {
@@ -182,6 +177,11 @@ export function getCandidateSources(options: CandidateSourceOptions): string[] {
     }
 
     candidates.push(toDdgUrl(cleanUrl))
+  }
+
+  // Our own proxy is the last resort for premium
+  if (isPremium) {
+    candidates.push(proxyUrl(cleanUrl))
   }
 
   return candidates
