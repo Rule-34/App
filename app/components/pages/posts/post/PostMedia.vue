@@ -49,7 +49,11 @@
     () => isImage.value && (isPremium.value || (wasCurrentPageSSR.value && props.postIndex < 8))
   )
 
-  const isDirectRequest = computed(() => srcCandidateIndex.value === 0 && !isIndexZeroViaImgproxy.value)
+  // Index 0 renders through imgproxy for these posts. Premium then tries the origin itself (index 1) before the
+  // public CDNs and our proxy; free posts skip the origin, since imgproxy already fetched it.
+  const directCandidateIndex = computed(() => (isIndexZeroViaImgproxy.value ? (isPremium.value ? 1 : -1) : 0))
+
+  const isDirectRequest = computed(() => srcCandidateIndex.value === directCandidateIndex.value)
 
   const domainHealthVersion = shallowRef(0)
 
@@ -101,13 +105,16 @@
     return isDomainDirectBlocked(rawPosterSrc.value, 'image')
   })
 
-  const srcCandidates = computed(() =>
-    getCandidateSources({
+  const srcCandidates = computed(() => {
+    const candidates = getCandidateSources({
       rawUrl: rawMediaSrc.value,
       mediaType: props.mediaType,
       isPremium: isPremium.value
     })
-  )
+
+    // The imgproxy attempt and the direct attempt use the same source URL
+    return directCandidateIndex.value === 1 ? [candidates[0]!, ...candidates] : candidates
+  })
 
   const posterCandidates = computed(() =>
     getCandidateSources({
@@ -268,14 +275,27 @@
 
   const useIframePlayer = shallowRef(false)
 
+  /** Moves to the next candidate, skipping the origin when the breaker says it is blocked. */
+  function advanceToNextCandidate() {
+    let next = srcCandidateIndex.value + 1
+
+    if (next === directCandidateIndex.value && isDirectBlocked.value) {
+      next += 1
+    }
+
+    if (next >= srcCandidates.value.length) {
+      return false
+    }
+
+    srcCandidateIndex.value = next
+    return true
+  }
+
   // When the domain breaker trips while cards are mounted, pending direct requests move on to the first fallback
   watch(isDirectBlocked, (blocked) => {
-    if (blocked && !mediaHasLoaded.value && !hasError.value && !isIndexZeroViaImgproxy.value) {
-      if (srcCandidateIndex.value === 0 && srcCandidates.value.length > 1) {
-        srcCandidateIndex.value = 1
-        if (isVideo.value) {
-          fluid.reload(false)
-        }
+    if (blocked && !mediaHasLoaded.value && !hasError.value && isDirectRequest.value) {
+      if (advanceToNextCandidate() && isVideo.value) {
+        fluid.reload(false)
       }
     }
   })
@@ -487,8 +507,7 @@
       pendingDirectFailure.media = true
     }
 
-    if (srcCandidateIndex.value + 1 < srcCandidates.value.length) {
-      srcCandidateIndex.value += 1
+    if (advanceToNextCandidate()) {
       if (isVideo.value) {
         fluid.reload(true)
       }

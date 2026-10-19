@@ -65,7 +65,7 @@ describe('media-resilience', () => {
       const input = 'https://static1.e621.net/data/preview/94/91/9491498441879ff4168532af1d23ddfc.jpg'
       const output = toPhotonUrl(input)
       expect(output).toMatch(
-        /^https:\/\/i[0-3]\.wp\.com\/static1\.e621\.net\/data\/preview\/94\/91\/9491498441879ff4168532af1d23ddfc\.jpg\?ssl=1$/
+        /^https:\/\/i0\.wp\.com\/static1\.e621\.net\/data\/preview\/94\/91\/9491498441879ff4168532af1d23ddfc\.jpg\?ssl=1$/
       )
     })
 
@@ -193,7 +193,7 @@ describe('media-resilience', () => {
       expect(candidates[2]).toContain('external-content.duckduckgo.com')
     })
 
-    it('puts the premium proxy before the public CDNs for premium images', () => {
+    it('puts our own proxy after the public CDNs for premium images', () => {
       const candidates = getCandidateSources({
         rawUrl: imgUrl,
         mediaType: 'image',
@@ -202,9 +202,9 @@ describe('media-resilience', () => {
 
       expect(candidates).toHaveLength(4)
       expect(candidates[0]).toBe(imgUrl)
-      expect(candidates[1]).toContain('/api/cors-proxy/?')
-      expect(candidates[2]).toBe(toPhotonUrl(imgUrl))
-      expect(candidates[3]).toContain('external-content.duckduckgo.com')
+      expect(candidates[1]).toBe(toPhotonUrl(imgUrl))
+      expect(candidates[2]).toContain('external-content.duckduckgo.com')
+      expect(candidates[3]).toContain('/api/cors-proxy/?')
     })
 
     it('returns only the direct candidate for root-relative internal assets without external proxy chains', () => {

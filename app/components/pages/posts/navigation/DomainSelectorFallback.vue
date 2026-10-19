@@ -25,6 +25,7 @@
       <img
         :alt="$t('common.favicon')"
         :src="faviconUrl"
+        referrerpolicy="no-referrer"
         class="h-5 w-5 shrink-0 rounded-sm"
         height="20"
         width="20"

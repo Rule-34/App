@@ -131,8 +131,7 @@ function getDomainKey(rawUrl: string, mediaType?: PostMediaType | string): strin
 }
 
 /**
- * WordPress Photon CDN URL generator.
- * Converts an HTTP/S image URL into a WordPress Photon cache URL.
+ * Converts an HTTP/S image URL into a WordPress Photon cache URL (one host, so HTTP/2 reuses a single connection).
  * Drops non-standard ports or query parameters (as Photon does not forward them)
  * by returning the raw URL directly so it can be skipped in fallback ladders.
  */
@@ -142,15 +141,9 @@ export function toPhotonUrl(rawUrl: string): string {
     return rawUrl
   }
 
-  const hostAndPath = `${url.hostname}${url.pathname}`
-  let hash = 0
-  for (let i = 0; i < hostAndPath.length; i += 1) {
-    hash = (hash * 31 + hostAndPath.charCodeAt(i)) & 0xffffffff
-  }
-  const shard = Math.abs(hash) % 4
   const sslParam = url.protocol === 'https:' ? '?ssl=1' : ''
 
-  return `https://i${shard}.wp.com/${hostAndPath}${sslParam}`
+  return `https://i0.wp.com/${url.hostname}${url.pathname}${sslParam}`
 }
 
 export function toDdgUrl(rawUrl: string): string {
@@ -176,12 +169,7 @@ export function getCandidateSources(options: CandidateSourceOptions): string[] {
     return candidates
   }
 
-  // Premium users try our own proxy first (imgproxy, then the premium backend) before anything public
-  if (isPremium) {
-    candidates.push(proxyUrl(cleanUrl))
-  }
-
-  // Public image CDNs follow for everyone; they cannot proxy video
+  // Public image CDNs; they cannot proxy video
   if (mediaType !== 'video') {
     const photon = toPhotonUrl(cleanUrl)
     if (photon !== cleanUrl) {
@@ -189,6 +177,11 @@ export function getCandidateSources(options: CandidateSourceOptions): string[] {
     }
 
     candidates.push(toDdgUrl(cleanUrl))
+  }
+
+  // Our own proxy is the last resort for premium
+  if (isPremium) {
+    candidates.push(proxyUrl(cleanUrl))
   }
 
   return candidates

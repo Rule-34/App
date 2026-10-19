@@ -47,9 +47,10 @@
       </ol>
 
       <p>
-        Please note that {{ project.name }} cannot process DMCA notices or remove content from third-party websites. We
-        are merely a search engine that indexes and links to content hosted elsewhere on the internet. If you have any
-        further questions or concerns, please contact us at {{ project.email }}.
+        {{ project.name }} respects intellectual property rights and complies with applicable copyright provisions under
+        17 U.S.C. § 512(d). While we do not host third-party files directly, we review valid notifications and promptly
+        remove or disable access to links and search results indexing allegedly infringing material.
+        To submit a link removal notice, please contact us with the specific URLs at {{ project.email }}.
       </p>
     </div>
   </main>

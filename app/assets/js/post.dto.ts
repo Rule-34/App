@@ -144,9 +144,6 @@ export default class Post extends PostDTO {
   }
 }
 
-/**
- * Normalizes an IPostFile by stripping fragments and validating that its URL is a valid HTTP(S) URL.
- */
 export function normalizePostFile(file?: IPostFile | null): IPostFile {
   return {
     url: cleanMediaUrl(file?.url),
@@ -155,10 +152,6 @@ export function normalizePostFile(file?: IPostFile | null): IPostFile {
   }
 }
 
-/**
- * Normalizes an IPost by ensuring all media URLs (high_res_file, low_res_file, preview_file)
- * are validated, stripped of fragments, and restricted to safe HTTP(S) protocols at ingestion.
- */
 export function normalizePost(post: IPost): IPost {
   return {
     ...post,
@@ -168,9 +161,6 @@ export function normalizePost(post: IPost): IPost {
   }
 }
 
-/**
- * Normalizes a full IPostPage received from network endpoints or repositories.
- */
 export function normalizePostPage<T extends { data: IPost[] }>(page: T): T {
   return {
     ...page,

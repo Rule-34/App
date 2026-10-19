@@ -388,7 +388,7 @@ describe('/', async () => {
       })
 
       // Fulfill fallback CDN requests with a valid image
-      await page.route(/https:\/\/(i[0-3]\.wp\.com|external-content\.duckduckgo\.com)\//, async (route) => {
+      await page.route(/https:\/\/(i0\.wp\.com|external-content\.duckduckgo\.com)\//, async (route) => {
         await route.fulfill({
           status: 200,
           contentType: 'image/png',
@@ -529,7 +529,7 @@ describe('/', async () => {
 
       const requested: string[] = []
       await page.route(
-        /https:\/\/(imgproxy2\.r34\.app|safebooru\.org\/samples|i[0-3]\.wp\.com|external-content\.duckduckgo\.com)\//,
+        /https:\/\/(imgproxy2\.r34\.app|safebooru\.org\/samples|i0\.wp\.com|external-content\.duckduckgo\.com)\//,
         async (route) => {
           requested.push(route.request().url())
           await route.abort('failed')
@@ -742,6 +742,83 @@ describe('/', async () => {
       )
       expect(hit).toBe(true)
     }, 45000)
+
+    it('tries imgproxy, the origin, the public CDNs and finally our proxy for a premium image', async () => {
+      // Arrange: a premium user whose imgproxy, origin and public CDNs all fail; only our proxy answers
+      const page = await createTrackedPage()
+      await signInAsPremiumUser(page)
+      const sample = mockPostsPage0.data[0].low_res_file.url
+      const filename = sample.split('/').pop()!
+      const order: string[] = []
+
+      page.on('request', (request) => {
+        const requestUrl = request.url()
+        const decoded = decodeURIComponent(requestUrl)
+        const isFirstPostImage = decoded.includes(filename) || decodeImgproxySourceUrl(requestUrl)?.includes(filename)
+
+        if (!isFirstPostImage) return
+
+        if (requestUrl.startsWith('https://imgproxy2.r34.app/')) order.push('imgproxy')
+        else if (requestUrl.includes('/api/cors-proxy/')) order.push('premium-proxy')
+        else if (/^https:\/\/i\d\.wp\.com\//.test(requestUrl)) order.push('photon')
+        else if (requestUrl.includes('duckduckgo.com')) order.push('duckduckgo')
+        else if (requestUrl === sample) order.push('direct')
+      })
+      await page.route(/imgproxy2\.r34\.app|safebooru\.org\/samples|i0\.wp\.com|duckduckgo\.com/, (route) =>
+        route.abort('failed')
+      )
+      await page.route(/\/api\/cors-proxy/, (route) =>
+        route.fulfill({ status: 200, contentType: 'image/png', body: PIXEL_PNG })
+      )
+
+      // Act
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'networkidle' })
+      await page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`).first().waitFor({ state: 'visible' })
+      await expect.poll(() => order.includes('premium-proxy'), { timeout: 15000 }).toBe(true)
+
+      expect([...new Set(order)]).toEqual(['imgproxy', 'direct', 'photon', 'duckduckgo', 'premium-proxy'])
+    }, 45000)
+
+    it('skips the origin for a premium image once the breaker has tripped for its host', async () => {
+      // Arrange: imgproxy and the origin fail, the public CDN answers, so each failed origin is confirmed as blocked
+      const page = await createTrackedPage()
+      await page.setViewportSize({ width: 1280, height: 4000 })
+      await signInAsPremiumUser(page)
+      const photonRequests: string[] = []
+      const directRequests: string[] = []
+      const filenameOf = (post: { low_res_file: { url: string } }) => post.low_res_file.url.split('/').pop()!
+      const page1Filenames = mockPostsPage1.data.map(filenameOf)
+
+      page.on('request', (request) => {
+        const requestUrl = request.url()
+
+        if (/^https:\/\/i0\.wp\.com\//.test(requestUrl)) photonRequests.push(requestUrl)
+        else if (requestUrl.includes('safebooru.org/samples/')) directRequests.push(requestUrl)
+      })
+      await page.route(/imgproxy2\.r34\.app|safebooru\.org\/samples/, (route) => route.abort('failed'))
+      await page.route(/i0\.wp\.com/, (route) =>
+        route.fulfill({ status: 200, contentType: 'image/png', body: PIXEL_PNG })
+      )
+
+      // Act: three posts fail at the origin and load through Photon, which trips the breaker (threshold 3)
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'networkidle' })
+      await expect.poll(() => new Set(directRequests).size, { timeout: 15000 }).toBeGreaterThanOrEqual(3)
+      await expect.poll(() => new Set(photonRequests).size, { timeout: 15000 }).toBeGreaterThanOrEqual(3)
+
+      directRequests.length = 0
+      photonRequests.length = 0
+      await pushRoute(page, '/posts/safebooru.org?tags=1girl')
+      await expect
+        .poll(() => photonRequests.some((requestUrl) => page1Filenames.some((name) => requestUrl.includes(name))), {
+          timeout: 15000
+        })
+        .toBe(true)
+
+      // Assert: the next posts went from imgproxy straight to Photon without asking the blocked origin
+      expect(directRequests.filter((requestUrl) => page1Filenames.some((name) => requestUrl.includes(name)))).toEqual(
+        []
+      )
+    }, 60000)
 
     it('falls back to the premium proxy for a video whose direct source and poster are blocked', async () => {
       // Arrange: a premium user, direct poster and video blocked, only the proxy answers
@@ -1516,6 +1593,22 @@ describe('/', async () => {
       await forceVideoRequest('safebooru.org-')
       await expect.poll(() => 'example.local' in referers).toBe(true)
       expect(referers['example.local']).toBeUndefined()
+    }, 60000)
+
+    it('keeps favicons on no-referrer even on an e621 page', async () => {
+      const page = await createTrackedPage()
+      const referers: Array<string | undefined> = []
+      page.on('request', (request) => {
+        if (new URL(request.url()).host.endsWith('google.com')) {
+          referers.push(request.headers()['referer'])
+        }
+      })
+
+      await page.goto(url('/posts/e621.net'), { waitUntil: 'networkidle' })
+      await page.getByTestId('domain-selector').waitFor({ state: 'visible' })
+
+      expect(referers.length).toBeGreaterThan(0)
+      expect(referers).toEqual(referers.map(() => undefined))
     }, 60000)
 
     it('follows in-app domain switches without a reload', async () => {
