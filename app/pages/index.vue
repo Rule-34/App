@@ -371,22 +371,57 @@
         {
           name: t('pages.home.noAi'),
           path: '/posts/rule34.paheal.net?tags=-ai_generated',
-          media: [
-            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-1.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-2.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/animated-3.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-1.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-2.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-3.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-4.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-5.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-6.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-7.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-8.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-9.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-10.jpg' },
-            { type: 'image', src: '/img/featured/rule34.paheal.net/top-11.jpg' }
-          ]
+          media: featuredMedia('rule34.paheal.net', 'no-ai', 8)
+        },
+        {
+          name: 'Pokémon',
+          path: '/posts/rule34.paheal.net?tags=pokemon',
+          media: featuredMedia('rule34.paheal.net', 'pokemon', 3)
+        },
+        {
+          name: 'My Little Pony',
+          path: '/posts/rule34.paheal.net?tags=my_little_pony',
+          media: featuredMedia('rule34.paheal.net', 'my_little_pony', 3)
+        },
+        {
+          name: 'Genshin Impact',
+          path: '/posts/rule34.paheal.net?tags=genshin_impact',
+          media: featuredMedia('rule34.paheal.net', 'genshin_impact', 3)
+        },
+        {
+          name: 'Sonic the Hedgehog',
+          path: '/posts/rule34.paheal.net?tags=sonic_the_hedgehog_(series)',
+          media: featuredMedia('rule34.paheal.net', 'sonic_the_hedgehog', 3)
+        },
+        {
+          name: 'Super Mario',
+          path: '/posts/rule34.paheal.net?tags=super_mario_bros.',
+          media: featuredMedia('rule34.paheal.net', 'super_mario', 3)
+        },
+        {
+          name: 'Zootopia',
+          path: '/posts/rule34.paheal.net?tags=zootopia',
+          media: featuredMedia('rule34.paheal.net', 'zootopia', 3)
+        },
+        {
+          name: 'Resident Evil',
+          path: '/posts/rule34.paheal.net?tags=resident_evil',
+          media: featuredMedia('rule34.paheal.net', 'resident_evil', 3)
+        },
+        {
+          name: 'Overwatch',
+          path: '/posts/rule34.paheal.net?tags=overwatch',
+          media: featuredMedia('rule34.paheal.net', 'overwatch', 3)
+        },
+        {
+          name: 'League of Legends',
+          path: '/posts/rule34.paheal.net?tags=league_of_legends',
+          media: featuredMedia('rule34.paheal.net', 'league_of_legends', 3)
+        },
+        {
+          name: 'World of Warcraft',
+          path: '/posts/rule34.paheal.net?tags=world_of_warcraft',
+          media: featuredMedia('rule34.paheal.net', 'world_of_warcraft', 3)
         }
       ]
     },
@@ -437,6 +472,58 @@
     //     }
     //   ]
     // },
+    {
+      domain: 'danbooru.donmai.us',
+      path: '/posts/danbooru.donmai.us',
+      isPremium: false,
+      tags: [
+        {
+          name: t('pages.home.topPosts'),
+          path: '/posts/danbooru.donmai.us?filter%5Bsort%5D=score',
+          media: [
+            { type: 'image', src: '/img/featured/danbooru.donmai.us/top-1.jpg' },
+            { type: 'image', src: '/img/featured/danbooru.donmai.us/top-2.jpg' },
+            { type: 'image', src: '/img/featured/danbooru.donmai.us/top-3.jpg' },
+            { type: 'image', src: '/img/featured/danbooru.donmai.us/top-4.jpg' }
+          ]
+        },
+        {
+          name: t('pages.home.trendingPosts'),
+          path: '/posts/danbooru.donmai.us?filter%5Bscore%5D=>%3D50',
+          media: [
+            { type: 'image', src: '/img/featured/danbooru.donmai.us/top-5.jpg' },
+            { type: 'image', src: '/img/featured/danbooru.donmai.us/top-6.jpg' },
+            { type: 'image', src: '/img/featured/danbooru.donmai.us/top-7.jpg' },
+            { type: 'image', src: '/img/featured/danbooru.donmai.us/top-8.jpg' }
+          ]
+        },
+        {
+          name: t('pages.home.animatedVideo'),
+          path: '/posts/danbooru.donmai.us?tags=animated',
+          media: [{ type: 'image', src: '/img/featured/danbooru.donmai.us/animated.jpeg' }]
+        },
+        {
+          name: t('pages.home.noAi'),
+          path: '/posts/danbooru.donmai.us?tags=-ai_generated',
+          media: featuredMedia('danbooru.donmai.us', 'no-ai', 8)
+        },
+        {
+          name: 'Genshin Impact',
+          path: '/posts/danbooru.donmai.us?tags=genshin_impact',
+          media: featuredMedia('danbooru.donmai.us', 'genshin_impact', 4)
+        },
+        {
+          name: 'Blue Archive',
+          path: '/posts/danbooru.donmai.us?tags=blue_archive',
+          media: featuredMedia('danbooru.donmai.us', 'blue_archive', 4)
+        },
+        {
+          name: 'Hololive',
+          path: '/posts/danbooru.donmai.us?tags=hololive',
+          media: featuredMedia('danbooru.donmai.us', 'hololive', 4)
+        }
+      ]
+    },
     {
       domain: 'e621.net',
       path: '/posts/e621.net',

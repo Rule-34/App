@@ -10,7 +10,7 @@
   import { postHasBlockedTag } from '~/assets/js/post-blocklist'
   import Tag, { toggleSelectedTag } from '~/assets/js/tag.dto'
   import { booruTypeList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
-  import { isRenderablePost, type IPostPage, type IRenderablePost } from '~/assets/js/post.dto'
+  import { isRenderablePost, normalizePostPage, type IPostPage, type IRenderablePost } from '~/assets/js/post.dto'
   import { generatePostsRoute, getFilterQueryValue, getSingleQueryValue } from '~/assets/js/RouterHelper'
   import { useTagTitle } from '~/composables/useTagTitle'
   import { PremiumCloudRepository, type PremiumCloudPocketBaseClient } from '~/repositories/PremiumCloudRepository'
@@ -348,7 +348,7 @@
   }: QueryFunctionContext<readonly unknown[], number>): Promise<IPostPageFromPocketBase> {
     const page = pageParam
 
-    return repository.value.loadSavedPostsPage({
+    const pageData = await repository.value.loadSavedPostsPage({
       page,
       perPage: postsPerPage.value,
       tags: selectedTags.value.map((selectedTag) => selectedTag.name),
@@ -359,6 +359,8 @@
         sort: selectedFilters.value.sort
       }
     })
+
+    return normalizePostPage(pageData)
   }
 
   const {
@@ -697,12 +699,14 @@
 
   <!-- Container -->
   <main class="container mx-auto max-w-3xl flex-1 px-4 py-4 sm:px-6 lg:px-8">
-    <section class="mb-4">
+    <section class="mb-4 flex flex-wrap items-center gap-2">
       <DomainSelector
         :boorus="booruList"
         :model-value="savedPostsBooru"
         @update:model-value="onDomainChange"
       />
+
+      <VisitWebsiteLink :booru="savedPostsBooru" />
 
       <!-- TODO: Move filters here -->
     </section>
