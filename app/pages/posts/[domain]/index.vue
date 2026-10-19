@@ -46,7 +46,7 @@
   const buildTagTitle = useTagTitle()
 
   const { postsPerPage } = useUserSettings()
-  const { isPremium, hasPremiumAccess } = useUserData()
+  const { isFree, hasPremiumAccess } = useUserData()
   const { hasInteracted } = useInteractionDetector()
   const { schedule: scheduleIdleTask } = useIdleTask()
   const { booruList } = useBooruList()
@@ -988,15 +988,10 @@
           source_booru: domain
         }
 
-        return navigateTo(
-          {
-            path: localePath(`/posts/${fallbackBooruDomain}`),
-            query: redirectQuery
-          },
-          {
-            redirectCode: 302
-          }
-        )
+        return navigateTo({
+          path: localePath(`/posts/${fallbackBooruDomain}`),
+          query: redirectQuery
+        })
       }
     ],
 
@@ -1233,7 +1228,7 @@
                 />
 
                 <!-- Promoted content -->
-                <template v-if="!isPremium && row.virtualRow.index !== 0 && row.virtualRow.index % 7 === 0">
+                <template v-if="isFree && row.virtualRow.index !== 0 && row.virtualRow.index % 7 === 0">
                   <LazyPromotedContent class="mt-4" />
                 </template>
               </template>

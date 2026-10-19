@@ -62,7 +62,7 @@
       })}${t('posts.seo.descriptionEnding', { name: project.shortName })}`
   )
 
-  const { data, error, pending } = await useAsyncData(
+  const { data, error, pending, status } = await useAsyncData(
     () => `tag-landing:${selectedBooru.value.domain}:${tagParam.value}`,
     async () => {
       const page = await $fetch<IPostPage>(`/booru/${selectedBooru.value.type.type}/posts`, {
@@ -204,19 +204,16 @@
           return
         }
 
-        return navigateTo(
-          {
-            path: localePath(`/posts/${fallbackBooruDomain}/${encodeURIComponent(tag)}`),
-            query: {
-              utm_source: 'internal',
-              utm_medium: 'unauthorized-tag-booru-redirect',
-              utm_campaign: 'additional-boorus',
-              utm_content: domain,
-              source_booru: domain
-            }
-          },
-          { redirectCode: 302 }
-        )
+        return navigateTo({
+          path: localePath(`/posts/${fallbackBooruDomain}/${encodeURIComponent(tag)}`),
+          query: {
+            utm_source: 'internal',
+            utm_medium: 'unauthorized-tag-booru-redirect',
+            utm_campaign: 'additional-boorus',
+            utm_content: domain,
+            source_booru: domain
+          }
+        })
       }
     ],
 
@@ -254,7 +251,7 @@
     </div>
 
     <section class="my-4">
-      <template v-if="pending">
+      <template v-if="pending || status === 'idle'">
         <div class="flex h-80 w-full animate-pulse flex-col items-center justify-center gap-4 text-lg">
           <ArrowPathIcon
             aria-hidden="true"

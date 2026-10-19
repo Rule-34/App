@@ -13,7 +13,7 @@
 
   const { t } = useI18n()
   const { toast } = useLazyToast()
-  const { isPremium } = useUserData()
+  const { hasPremiumAccess } = useUserData()
   const { tutorialPostSource } = useAppStatistics()
 
   const referenceEl = ref<HTMLElement>()
@@ -49,7 +49,7 @@
   }
 
   function openSourceFinder(url: string) {
-    if (!isPremium.value) {
+    if (!hasPremiumAccess.value) {
       const { open: promptPremium, currentIndex } = usePremiumDialog()
 
       currentIndex.value = premiumPromotionIndices.sourceFinder

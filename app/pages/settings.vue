@@ -41,7 +41,7 @@
   const appVersion = version
 
   const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia, blockAiGeneratedImages } = useUserSettings()
-  const { isPremium } = useUserData()
+  const { hasPremiumAccess } = useUserData()
   const { selectedList, selectedBlockList, defaultBlockList, customBlockList } = useBlockLists()
   const { setCustomBlockList } = usePremiumCloudSync()
 
@@ -64,7 +64,7 @@
       return
     }
 
-    if (option.value === blockListOptions.Custom && !isPremium.value) {
+    if (option.value === blockListOptions.Custom && !hasPremiumAccess.value) {
       toast.error(t('toasts.premiumRequiredBlocklist'))
       return
     }

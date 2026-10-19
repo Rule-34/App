@@ -15,10 +15,10 @@
     }
   })
 
-  const { isPremium } = useUserData()
+  const { hasPremiumAccess } = useUserData()
 
   async function downloadMedia() {
-    if (!isPremium.value) {
+    if (!hasPremiumAccess.value) {
       const { open: promptPremium, currentIndex } = usePremiumDialog()
 
       currentIndex.value = premiumPromotionIndices.downloadPost

@@ -63,7 +63,7 @@
   }))
 
   const { postFullSizeImages } = useUserSettings()
-  const { isPremium } = useUserData()
+  const { hasPremiumAccess } = useUserData()
   const { open: promptPremium, currentIndex } = usePremiumDialog()
 
   const areTagsOpen = ref(false)
@@ -105,7 +105,7 @@
     areTagsOpen.value = false
     shouldRestoreTagsOpen.value = true
 
-    if (!isPremium.value) {
+    if (!hasPremiumAccess.value) {
       currentIndex.value = premiumPromotionIndices.tagCollections
       promptPremium.value = true
       return
@@ -249,7 +249,7 @@
           />
 
           <LazyPostChatWithAi
-            v-if="!isPremium"
+            v-if="!hasPremiumAccess"
             :media-type="post.media_type"
             :media-url="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
             :tags="post.tags"

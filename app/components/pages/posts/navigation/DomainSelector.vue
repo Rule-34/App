@@ -23,7 +23,7 @@
   const { t } = useI18n()
   const { toast } = useLazyToast()
   const localePath = useLocalePath()
-  const { isPremium } = useUserData()
+  const { isPremium, hasPremiumAccess } = useUserData()
   const { tutorialDomainSwitcher } = useAppStatistics()
 
   const referenceEl = ref<HTMLElement>()
@@ -36,7 +36,7 @@
 
   function onModelValueChange(domain: Domain) {
     // Premium prompt
-    if (domain.isPremium && !isPremium.value) {
+    if (domain.isPremium && !hasPremiumAccess.value) {
       const { open: promptPremium, currentIndex } = usePremiumDialog()
 
       currentIndex.value = premiumPromotionIndices.additionalBoorus
@@ -48,7 +48,7 @@
   }
 
   function shouldBooruBeDisabled(booru: Domain) {
-    if (booru.isPremium && !isPremium.value) {
+    if (booru.isPremium && !hasPremiumAccess.value) {
       return true
     }
 

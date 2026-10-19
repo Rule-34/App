@@ -12,12 +12,12 @@
   }>()
 
   const { getSavedPost, initializeInBackground, isInitialized, savePost, deleteSavedPost } = usePremiumCloudSync()
-  const { isPremium } = useUserData()
+  const { hasPremiumAccess } = useUserData()
   const { isLoading: isUpdating, execute: updateSavedPost } = useAsyncState(updateSavedPostState, undefined, {
     immediate: false,
     throwError: true
   })
-  const saveButtonDisabled = computed(() => (isPremium.value && !isInitialized.value) || isUpdating.value)
+  const saveButtonDisabled = computed(() => (hasPremiumAccess.value && !isInitialized.value) || isUpdating.value)
 
   const isPostSaved = computed(() => {
     return !!getSavedPost(props.post)
@@ -28,7 +28,7 @@
   })
 
   async function onClick() {
-    if (!isPremium.value) {
+    if (!hasPremiumAccess.value) {
       const { open: promptPremium, currentIndex } = usePremiumDialog()
 
       currentIndex.value = premiumPromotionIndices.savePost
