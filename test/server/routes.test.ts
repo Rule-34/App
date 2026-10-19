@@ -29,6 +29,24 @@ describe('Server & Nitro Routes', async () => {
     })
   })
 
+  describe('Cross-origin embedder policy', () => {
+    // The sandbox button frames the booru's file; under COEP the browser blocks any cross-origin frame that doesn't opt in
+    const mediaRoutes = ['/posts/rule34.xxx', '/es/posts/rule34.xxx', '/premium/saved-posts/rule34.xxx']
+
+    it.each(mediaRoutes)('does not send COEP on %s', async (path) => {
+      const response = await fetch(path)
+
+      expect(response.status).toBe(200)
+      expect(response.headers.get('cross-origin-embedder-policy')).toBeNull()
+    })
+
+    it('keeps COEP on the other pages', async () => {
+      const response = await fetch('/legal')
+
+      expect(response.headers.get('cross-origin-embedder-policy')).toBe('credentialless')
+    })
+  })
+
   describe('Sitemap', () => {
     function getLocs(xml: string): string[] {
       return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1] ?? '')

@@ -50,7 +50,11 @@ const pageRouteRules = {
   '/': { headers: cacheHeaders },
 
   // @see https://github.com/Baroshem/nuxt-security/issues/364
-  '/posts/**': { security: { xssValidator: false as const }, headers: cacheHeaders },
+  // No COEP on pages that render posts: the sandbox button frames the booru's file, which sends no COEP/CORP opt-in
+  '/posts/**': {
+    security: { xssValidator: false as const, headers: { crossOriginEmbedderPolicy: false as const } },
+    headers: cacheHeaders
+  },
   // Static pages (prerendered)
   '/other-sites': { prerender: true, headers: cacheHeaders },
   '/legal': { prerender: true, headers: cacheHeaders },
@@ -67,7 +71,11 @@ const pageRouteRules = {
 
   // Premium dashboard pages (client-side rendered)
   '/premium/dashboard': { ssr: false, headers: cacheHeaders },
-  '/premium/saved-posts/**': { ssr: false, headers: cacheHeaders },
+  '/premium/saved-posts/**': {
+    ssr: false,
+    security: { headers: { crossOriginEmbedderPolicy: false as const } },
+    headers: cacheHeaders
+  },
   '/premium/tag-collections': { ssr: false, headers: cacheHeaders },
   '/premium/additional-boorus': { ssr: false, headers: cacheHeaders },
   '/premium/backup': { ssr: false, headers: cacheHeaders }
