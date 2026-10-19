@@ -24,20 +24,25 @@ function parsePocketBaseAuthCookie(
   }
 }
 
+// The server never knows who is logged in: HTML is cached and shared, so SSR output must not depend on the visitor.
+// Auth is applied on the client only; `useUserData().isPremium` stays false until the app has mounted.
 // https://github.com/pocketbase/js-sdk#ssr-integration
 export default defineNuxtPlugin<{ pocketBase: PocketBase }>({
   name: 'pocketbase',
   parallel: true,
-  async setup() {
+  async setup(nuxtApp) {
     const pb = new PocketBase('https://pocketbase.r34.app')
-    const secureCookie = import.meta.server
-      ? useRequestURL().protocol === 'https:'
-      : window.location.protocol === 'https:'
 
-    // TODO: Store in localStorage for better caching
+    // False on the server and while hydrating SSR HTML; routes that are not server-rendered can use auth straight away
+    const hydrated = useState<boolean>('auth-hydrated', () => import.meta.client && !nuxtApp.isHydrating)
+
+    if (import.meta.server) {
+      return { provide: { pocketBase: pb } }
+    }
+
     const cookie = useCookie<PocketBaseAuthCookie | null>('pb_auth', {
       path: '/',
-      secure: secureCookie,
+      secure: window.location.protocol === 'https:',
       sameSite: 'strict',
       httpOnly: false,
       maxAge: 60 * 60 * 24 * 90 // 90 days // Same as PocketBase config?
@@ -50,7 +55,7 @@ export default defineNuxtPlugin<{ pocketBase: PocketBase }>({
       pb.authStore.save(authCookie.token, authCookie.model)
     }
 
-    // send back the default 'pb_auth' cookie to the client with the latest store state
+    // keep the 'pb_auth' cookie in sync with the latest store state
     pb.authStore.onChange(() => {
       cookie.value = {
         token: pb.authStore.token,
@@ -58,9 +63,13 @@ export default defineNuxtPlugin<{ pocketBase: PocketBase }>({
       }
     })
 
+    nuxtApp.hook('app:mounted', () => {
+      hydrated.value = true
+    })
+
     try {
       // get an up-to-date auth store state by verifying and refreshing the loaded auth model (if any)
-      if (pb.authStore.isValid && import.meta.client) {
+      if (pb.authStore.isValid) {
         await pb.collection('users').authRefresh()
       }
     } catch {

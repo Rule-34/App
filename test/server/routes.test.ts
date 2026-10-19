@@ -1,3 +1,7 @@
+import { createHash } from 'node:crypto'
+import { readFileSync, readdirSync } from 'node:fs'
+import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { $fetch, fetch, setup } from '@nuxt/test-utils'
 import { describe, expect, it } from 'vitest'
 import { defaultLocale, locales, prefixedLocaleCodes, removedLocaleCodes } from '../../config/i18n'
@@ -44,6 +48,29 @@ describe('Server & Nitro Routes', async () => {
       const response = await fetch('/legal')
 
       expect(response.headers.get('cross-origin-embedder-policy')).toBe('credentialless')
+    })
+  })
+
+  describe('i18n messages', () => {
+    // Same digest the i18n module puts in the messages URL: sha256 of the sorted locale files
+    function currentMessagesHash() {
+      const hash = createHash('sha256')
+      const directory = fileURLToPath(new URL('../../i18n/locales', import.meta.url))
+
+      for (const file of readdirSync(directory).sort()) hash.update(readFileSync(join(directory, file)))
+
+      return hash.digest('hex').slice(0, 8)
+    }
+
+    it('serves the messages of the current build and rejects any other version', async () => {
+      // The route ignores the hash it is given, so a rollout could cache another build's messages as immutable
+      const current = await fetch(`/_i18n/${currentMessagesHash()}/en/messages.json`)
+      expect(current.status).toBe(200)
+      expect(JSON.stringify(await current.json())).toContain('viewInSandbox')
+
+      const stale = await fetch('/_i18n/00000000/en/messages.json')
+      expect(stale.status).toBe(404)
+      expect(stale.headers.get('cache-control')).toBe('no-store')
     })
   })
 

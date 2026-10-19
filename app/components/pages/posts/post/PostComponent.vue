@@ -335,7 +335,8 @@
 
             <PostShareFallback />
 
-            <PostChatWithAiFallback v-if="!isPremium" />
+            <!-- Same for everyone: SSR HTML is shared, and this placeholder is replaced once the client mounts -->
+            <PostChatWithAiFallback />
 
             <PostTagsToggleFallback />
           </div>

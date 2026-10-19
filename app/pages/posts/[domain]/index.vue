@@ -46,7 +46,7 @@
   const buildTagTitle = useTagTitle()
 
   const { postsPerPage } = useUserSettings()
-  const { isPremium } = useUserData()
+  const { isPremium, hasPremiumAccess } = useUserData()
   const { hasInteracted } = useInteractionDetector()
   const { schedule: scheduleIdleTask } = useIdleTask()
   const { booruList } = useBooruList()
@@ -70,7 +70,7 @@
     const hasLoadedAds = ref(false)
 
     watch(
-      [hasInteracted, isPremium],
+      [hasInteracted, hasPremiumAccess],
       ([hasInteracted, isPremiumUser]) => {
         if (hasLoadedAds.value) {
           return
@@ -85,7 +85,7 @@
         }
 
         scheduleIdleTask(async () => {
-          if (hasLoadedAds.value || isPremium.value) {
+          if (hasLoadedAds.value || hasPremiumAccess.value) {
             return
           }
 
@@ -102,7 +102,7 @@
   // Reopen the existing premium upsell when a non-premium user lands here
   // via redirect from a premium-only booru to the fallback booru route.
   onMounted(() => {
-    if (isPremium.value) {
+    if (hasPremiumAccess.value) {
       return
     }
 
@@ -554,7 +554,10 @@
     }
   })
 
-  onServerPrefetch(suspense)
+  // Premium-only boorus are gated on the client: keep their posts out of the shared server HTML
+  if (!selectedBooru.value.isPremium) {
+    onServerPrefetch(suspense)
+  }
 
   /**
    * Virtualization
@@ -872,7 +875,9 @@
   useSeoMeta({
     title: shortTitle,
 
-    description
+    description,
+
+    robots: () => (selectedBooru.value.isPremium ? 'noindex, nofollow' : undefined)
   })
 
   // Override i18n's generic `?tags` canonical: simple positive-tag searches have dedicated landing pages.
@@ -947,11 +952,16 @@
   definePageMeta({
     middleware: [
       (to) => {
+        // The server cannot know who is asking (cached, shared HTML): the gate is applied on the client
+        if (import.meta.server) {
+          return
+        }
+
         const { booruList } = useBooruList()
-        const { isPremium } = useUserData()
+        const { hasPremiumAccess } = useUserData()
         const localePath = useLocalePath()
 
-        if (isPremium.value) {
+        if (hasPremiumAccess.value) {
           return
         }
 

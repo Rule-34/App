@@ -79,7 +79,10 @@
       return normalizePostPage(page)
     },
     {
-      deep: false
+      deep: false,
+
+      // Premium-only boorus are gated on the client: keep their posts out of the shared server HTML
+      server: !selectedBooru.value.isPremium
     }
   )
 
@@ -127,7 +130,8 @@
   useSeoMeta({
     title: pageTitle,
     description: pageDescription,
-    ogImage: ogImageUrl
+    ogImage: ogImageUrl,
+    robots: () => (selectedBooru.value.isPremium ? 'noindex, nofollow' : undefined)
   })
 
   const firstPostsAsSchema = computed(() => {
@@ -180,13 +184,18 @@
   definePageMeta({
     middleware: [
       (to) => {
+        // The server cannot know who is asking (cached, shared HTML): the gate is applied on the client
+        if (import.meta.server) {
+          return
+        }
+
         const { booruList } = useBooruList()
-        const { isPremium } = useUserData()
+        const { hasPremiumAccess } = useUserData()
         const localePath = useLocalePath()
         const domain = getSingleRouteParam(to.params.domain)
         const tag = getSingleRouteParam(to.params.tag)
 
-        if (isPremium.value || domain === fallbackBooruDomain) {
+        if (hasPremiumAccess.value || domain === fallbackBooruDomain) {
           return
         }
 

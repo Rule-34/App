@@ -286,6 +286,24 @@ the `@headlessui/tailwindcss` plugin.
   Unit tests can prove payload and repository behavior, but real-browser traces catch request bursts, realtime echo
   refreshes, auth redirects, and UI state changes that are easy to miss in isolated tests.
 
+### Shared HTML must not depend on the visitor
+
+Cloudflare caches SSR HTML (`s-maxage=300`) without looking at cookies, so server output must be identical for everyone.
+A cached premium render once leaked a user's email and license and crashed hydration for other premium visitors.
+
+- Never read `pb_auth` or build account state on the server (`app/plugins/030.pocketbase.ts`, `usePocketbase()`); the
+  server payload must carry no email, license or token. `test/pages/auth-agnostic-ssr.test.ts` guards this.
+- `useUserData().isPremium` is for rendering and stays false until the app has mounted, so the first client render matches
+  the anonymous HTML. Use `hasPremiumAccess` (known immediately on the client) for logic: route middleware, ad loading.
+- Never flip a `v-if` on SSR'd markup right after mount when it contains a `Lazy*` component or sits next to a
+  `<ClientOnly>` swap: unmounting un-hydrated async nodes throws `insertBefore ... not a child of this node`. Render the
+  placeholder for everyone (see the AI placeholder in `PostComponent.vue`) and let the client swap it.
+- Premium-only boorus are gated on the client (route middleware returns on the server); their SSR shell skips the data
+  prefetch and is `noindex`.
+- `server/middleware/i18n-messages-guard.ts` 404s `/_i18n/**` hashes from another build: the module's messages route
+  ignores the hash ([nuxt-modules/i18n#3970](https://github.com/nuxt-modules/i18n/issues/3970)), so a rollout could
+  cache another build's messages as `immutable`.
+
 ### Premium Cloud Sync
 
 - Empty cloud state means "no user-authored cloud override"; do not seed PocketBase from local defaults during initial
