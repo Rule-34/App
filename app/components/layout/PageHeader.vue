@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  export interface PageHeaderProps {
+  interface PageHeaderProps {
     as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
   }
 

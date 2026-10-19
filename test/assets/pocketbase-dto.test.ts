@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { PocketbasePost, PocketbasePostDTO, type IPocketbasePost } from '../../app/assets/js/pocketbase.dto'
+import { PocketbasePost, type IPocketbasePost } from '../../app/assets/js/pocketbase.dto'
 import Post, { type IPost } from '../../app/assets/js/post.dto'
 
-describe('PocketbasePostDTO', () => {
+describe('PocketbasePost defaults', () => {
   it('initializes with default values', () => {
-    const dto = new PocketbasePostDTO()
+    const dto = new PocketbasePost({} as IPocketbasePost)
 
     expect(dto.id).toBeUndefined()
     expect(dto.user_id).toBe('')
