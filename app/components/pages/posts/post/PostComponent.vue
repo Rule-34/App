@@ -64,6 +64,11 @@
 
   const { postFullSizeImages } = useUserSettings()
   const { hasPremiumAccess } = useUserData()
+  const { booruList } = useBooruList()
+
+  const isPremiumOnlyBooru = computed(
+    () => booruList.value.find((booru) => booru.domain === props.post.domain)?.isPremium ?? false
+  )
   const { open: promptPremium, currentIndex } = usePremiumDialog()
 
   const areTagsOpen = ref(false)
@@ -205,6 +210,7 @@
       :media-src-width="mediaFile.width"
       :media-type="post.media_type"
       :post-index="props.postIndex"
+      :premium-only-booru="isPremiumOnlyBooru"
     />
 
     <figcaption>

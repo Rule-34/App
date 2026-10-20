@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { fetch, setup, url } from '@nuxt/test-utils'
 import { mockPostsPage0 } from './posts.mock-data'
 import { defaultSetupConfig, useTrackedPageFactory } from '../helper'
+import { project } from '../../config/project'
 
 type TrackedPage = Awaited<ReturnType<ReturnType<typeof useTrackedPageFactory>>>
 
@@ -208,6 +209,10 @@ describe('Server rendering does not depend on the visitor', async () => {
       await page.getByTestId(`gelbooru.com-${mockPostsPage0.data[0].id}`).first().waitFor({ state: 'visible' })
 
       expect(await page.getByRole('dialog').count()).toBe(0)
+      // The origin only works through imgproxy, even on a client-side navigation
+      expect(await page.locator('li[data-index="0"] img').first().getAttribute('src')).toContain(
+        project.imgproxy.baseUrl
+      )
     }, 45000)
 
     it('shows a premium visitor every post on a cold load', async () => {

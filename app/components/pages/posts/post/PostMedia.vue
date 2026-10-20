@@ -31,6 +31,9 @@
     mediaPosterSrc: string | null
     mediaType: PostMediaType
     mediaAlt: string
+
+    /** Its origin only works through imgproxy, so the free preview uses it on client-side navigations too */
+    premiumOnlyBooru?: boolean
   }
 
   const props = defineProps<PostMediaProps>()
@@ -55,7 +58,9 @@
   const isImage = computed(() => props.mediaType === 'image' && !isAnimatedMedia.value)
 
   const isIndexZeroViaImgproxy = computed(
-    () => isImage.value && (hasPremiumAccess.value || (wasCurrentPageSSR.value && props.postIndex < 8))
+    () =>
+      isImage.value &&
+      (hasPremiumAccess.value || ((wasCurrentPageSSR.value || props.premiumOnlyBooru) && props.postIndex < 8))
   )
 
   // Index 0 renders through imgproxy for these posts. Premium then tries the origin itself (index 1) before the
