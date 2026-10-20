@@ -298,8 +298,9 @@ A cached premium render once leaked a user's email and license and crashed hydra
 - Never flip a `v-if` on SSR'd markup right after mount when it contains a `Lazy*` component or sits next to a
   `<ClientOnly>` swap: unmounting un-hydrated async nodes throws `insertBefore ... not a child of this node`. Render the
   placeholder for everyone (see the AI placeholder in `PostComponent.vue`) and let the client swap it.
-- Premium-only boorus are gated on the client (route middleware returns on the server); their SSR shell skips the data
-  prefetch and is `noindex`.
+- Premium-only boorus are indexable previews, not redirects: everyone gets the first 7 posts, then the Additional Boorus
+  promotion as row 8 (`isPreviewOnly` in `pages/posts/[domain]/index.vue`). It keys on `isPremium`, so SSR and hydration
+  show the preview to everyone and premium visitors get the full list after mount.
 - `server/middleware/i18n-messages-guard.ts` 404s `/_i18n/**` hashes from another build: the module's messages route
   ignores the hash ([nuxt-modules/i18n#3970](https://github.com/nuxt-modules/i18n/issues/3970)), so a rollout could
   cache another build's messages as `immutable`.

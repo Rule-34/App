@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { ArrowPathIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
-  import { fallbackBooruDomain, generatePostsRoute, getSingleRouteParam } from '~/assets/js/RouterHelper'
+  import { generatePostsRoute, getSingleRouteParam } from '~/assets/js/RouterHelper'
   import { normalizeStringForTitle } from '~/assets/js/SeoHelper'
   import {
     isRenderablePost,
@@ -62,7 +62,7 @@
       })}${t('posts.seo.descriptionEnding', { name: project.shortName })}`
   )
 
-  const { data, error, pending, status } = await useAsyncData(
+  const { data, error, pending } = await useAsyncData(
     () => `tag-landing:${selectedBooru.value.domain}:${tagParam.value}`,
     async () => {
       const page = await $fetch<IPostPage>(`/booru/${selectedBooru.value.type.type}/posts`, {
@@ -79,10 +79,7 @@
       return normalizePostPage(page)
     },
     {
-      deep: false,
-
-      // Premium-only boorus are gated on the client: keep their posts out of the shared server HTML
-      server: !selectedBooru.value.isPremium
+      deep: false
     }
   )
 
@@ -130,8 +127,7 @@
   useSeoMeta({
     title: pageTitle,
     description: pageDescription,
-    ogImage: ogImageUrl,
-    robots: () => (selectedBooru.value.isPremium ? 'noindex, nofollow' : undefined)
+    ogImage: ogImageUrl
   })
 
   const firstPostsAsSchema = computed(() => {
@@ -182,41 +178,6 @@
   ])
 
   definePageMeta({
-    middleware: [
-      (to) => {
-        // The server cannot know who is asking (cached, shared HTML): the gate is applied on the client
-        if (import.meta.server) {
-          return
-        }
-
-        const { booruList } = useBooruList()
-        const { hasPremiumAccess } = useUserData()
-        const localePath = useLocalePath()
-        const domain = getSingleRouteParam(to.params.domain)
-        const tag = getSingleRouteParam(to.params.tag)
-
-        if (hasPremiumAccess.value || domain === fallbackBooruDomain) {
-          return
-        }
-
-        const booru = booruList.value.find((booru) => booru.domain === domain)
-        if (!booru?.isPremium) {
-          return
-        }
-
-        return navigateTo({
-          path: localePath(`/posts/${fallbackBooruDomain}/${encodeURIComponent(tag)}`),
-          query: {
-            utm_source: 'internal',
-            utm_medium: 'unauthorized-tag-booru-redirect',
-            utm_campaign: 'additional-boorus',
-            utm_content: domain,
-            source_booru: domain
-          }
-        })
-      }
-    ],
-
     validate: async (route) => {
       const { booruList } = useBooruList()
       const domain = getSingleRouteParam(route.params.domain)
@@ -251,7 +212,7 @@
     </div>
 
     <section class="my-4">
-      <template v-if="pending || status === 'idle'">
+      <template v-if="pending">
         <div class="flex h-80 w-full animate-pulse flex-col items-center justify-center gap-4 text-lg">
           <ArrowPathIcon
             aria-hidden="true"

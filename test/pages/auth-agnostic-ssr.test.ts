@@ -93,17 +93,20 @@ describe('Server rendering does not depend on the visitor', async () => {
   const createTrackedPage = useTrackedPageFactory()
 
   describe('shared HTML', () => {
-    it.each(['/posts/safebooru.org', '/es/posts/safebooru.org', '/posts/safebooru.org/hair_bun'])(
-      'is identical for anonymous and premium visitors and carries no account data: %s',
-      async (path) => {
-        const anonymous = await (await fetch(path)).text()
-        const premium = await (await fetch(path, { headers: { cookie: `pb_auth=${authValue}` } })).text()
+    it.each([
+      '/posts/safebooru.org',
+      '/es/posts/safebooru.org',
+      '/posts/safebooru.org/hair_bun',
+      '/posts/gelbooru.com',
+      '/posts/gelbooru.com/hair_bun'
+    ])('is identical for anonymous and premium visitors and carries no account data: %s', async (path) => {
+      const anonymous = await (await fetch(path)).text()
+      const premium = await (await fetch(path, { headers: { cookie: `pb_auth=${authValue}` } })).text()
 
-        expect(firstDifference(withoutNonces(anonymous), withoutNonces(premium))).toBeNull()
-        expect(premium).not.toContain(email)
-        expect(premium).not.toContain(license)
-      }
-    )
+      expect(firstDifference(withoutNonces(anonymous), withoutNonces(premium))).toBeNull()
+      expect(premium).not.toContain(email)
+      expect(premium).not.toContain(license)
+    })
   })
 
   describe('hydration', () => {
@@ -138,39 +141,68 @@ describe('Server rendering does not depend on the visitor', async () => {
     }, 45000)
   })
 
-  describe('premium-only booru gate', () => {
-    it.each(['/posts/gelbooru.com', '/posts/gelbooru.com/hair_bun'])(
-      'keeps posts out of the shared HTML and out of search engines: %s',
-      async (path) => {
-        const response = await fetch(path, { redirect: 'manual' })
-        const html = await response.text()
+  describe('premium-only booru preview', () => {
+    const previewPostLimit = 7
+    const promotion = '[data-testid="premium-booru-promotion"]'
 
-        expect(response.status).toBe(200)
-        expect(html).toMatch(/<meta[^>]+name="robots"[^>]+content="noindex, nofollow"/)
-        expect(html).not.toContain(`data-testid="gelbooru.com-${mockPostsPage0.data[0].id}"`)
-      }
-    )
+    /** Scrolls to the end of the virtualized list until it renders a row at or past `index`. */
+    async function scrollToRow(page: TrackedPage, index: number) {
+      await expect
+        .poll(
+          () =>
+            page.evaluate(() => {
+              window.scrollTo(0, document.body.scrollHeight)
+              return Math.max(
+                -1,
+                ...[...document.querySelectorAll('li[data-index]')].map((li) => Number(li.getAttribute('data-index')))
+              )
+            }),
+          { timeout: 20000 }
+        )
+        .toBeGreaterThanOrEqual(index)
+    }
 
-    it('sends a free visitor to the free booru', async () => {
+    const firstPostId = mockPostsPage0.data[0].id
+
+    it.each([
+      ['/posts/gelbooru.com', `data-testid="gelbooru.com-${firstPostId}"`],
+      ['/posts/gelbooru.com/hair_bun', `#${firstPostId}`]
+    ])('renders posts in the shared HTML and lets search engines index them: %s', async (path, firstPost) => {
+      const response = await fetch(path, { redirect: 'manual' })
+      const html = await response.text()
+
+      expect(response.status).toBe(200)
+      expect(html).not.toMatch(/<meta[^>]+name="robots"[^>]+noindex/)
+      expect(html).toContain(firstPost)
+    })
+
+    it('shows a free visitor the first posts, then the premium promotion', async () => {
+      expect(mockPostsPage0.data.length).toBeGreaterThan(previewPostLimit)
+
       const page = await createTrackedPage()
+      const problems = collectPageProblems(page)
 
       await page.goto(url('/posts/gelbooru.com?tags=hair_bun'), { waitUntil: 'networkidle' })
+      await scrollToRow(page, previewPostLimit)
 
-      const landed = new URL(page.url())
-      expect(landed.pathname).toBe('/posts/rule34.xxx')
-      expect(landed.searchParams.get('utm_medium')).toBe('unauthorized-booru-redirect')
-      expect(landed.searchParams.get('tags')).toBe('hair_bun')
+      await expect.poll(() => page.locator(`li[data-index="${previewPostLimit}"] ${promotion}`).count()).toBe(1)
+      expect(await page.locator(`li[data-index="${previewPostLimit + 1}"]`).count()).toBe(0)
+      expect(await page.getByTestId('load-next-page').count()).toBe(0)
+      expect(new URL(page.url()).pathname).toBe('/posts/gelbooru.com')
+      expect(await readNuxtError(page)).toBeNull()
+      expect(problems).toEqual([])
     }, 45000)
 
-    it('lets a premium visitor in on a cold load', async () => {
+    it('shows a premium visitor every post on a cold load', async () => {
       const page = await createTrackedPage()
       const problems = collectPageProblems(page)
       await signInAsPremiumUser(page, 'cookie')
 
       await page.goto(url('/posts/gelbooru.com'), { waitUntil: 'networkidle' })
       await page.getByTestId(`gelbooru.com-${mockPostsPage0.data[0].id}`).first().waitFor({ state: 'visible' })
+      await scrollToRow(page, previewPostLimit + 1)
 
-      expect(new URL(page.url()).pathname).toBe('/posts/gelbooru.com')
+      expect(await page.locator(promotion).count()).toBe(0)
       expect(await readNuxtError(page)).toBeNull()
       expect(problems).toEqual([])
     }, 45000)

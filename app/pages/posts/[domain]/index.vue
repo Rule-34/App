@@ -10,13 +10,13 @@
   import { postHasBlockedTag } from '~/assets/js/post-blocklist'
   import { measureVirtualItemsAfterVueUpdate } from '~/assets/js/virtualizer-measurement'
   import {
-    fallbackBooruDomain,
     generatePostsRoute,
     getFilterQueryValue,
     getSingleRouteParam,
     getSinglePositiveTagQueryValue,
     getSingleQueryValue
   } from '~/assets/js/RouterHelper'
+  import { additionalBoorusPromotion } from '~/assets/js/promotions'
   import { stripLocaleFromPath } from '~/composables/locale'
   import { useTagTitle } from '~/composables/useTagTitle'
   import type { Domain } from '~/assets/js/domain'
@@ -24,7 +24,6 @@
   import { shouldReportTagSearchError } from '~/assets/js/tag-search-error'
   import Tag, { type ITag, toggleSelectedTag } from '~/assets/js/tag.dto'
   import { project } from '~~/config/project'
-  import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
   type FilterValue = string | number | boolean | null | undefined
   type SearchSubmitPayload = {
@@ -46,7 +45,7 @@
   const buildTagTitle = useTagTitle()
 
   const { postsPerPage } = useUserSettings()
-  const { isFree, hasPremiumAccess } = useUserData()
+  const { isPremium, isFree, hasPremiumAccess } = useUserData()
   const { hasInteracted } = useInteractionDetector()
   const { schedule: scheduleIdleTask } = useIdleTask()
   const { booruList } = useBooruList()
@@ -97,29 +96,6 @@
       },
       { immediate: true }
     )
-  })
-
-  // Reopen the existing premium upsell when a non-premium user lands here
-  // via redirect from a premium-only booru to the fallback booru route.
-  onMounted(() => {
-    if (hasPremiumAccess.value) {
-      return
-    }
-
-    if (selectedBooru.value.domain !== fallbackBooruDomain) {
-      return
-    }
-
-    const sourceBooru = getSingleQueryValue(route.query.source_booru)
-
-    if (!sourceBooru) {
-      return
-    }
-
-    const { open: promptPremium, currentIndex } = usePremiumDialog()
-
-    currentIndex.value = premiumPromotionIndices.additionalBoorus
-    promptPremium.value = true
   })
 
   /**
@@ -554,10 +530,16 @@
     }
   })
 
-  // Premium-only boorus are gated on the client: keep their posts out of the shared server HTML
-  if (!selectedBooru.value.isPremium) {
-    onServerPrefetch(suspense)
-  }
+  onServerPrefetch(suspense)
+
+  // Premium-only boorus show a preview to everyone else, then the premium promotion.
+  // `isPremium` is false until mount, so the server and hydration render the preview for every visitor.
+  const previewPostLimit = 7
+  const isPreviewOnly = computed(() => selectedBooru.value.isPremium && !isPremium.value)
+  const canLoadNextPage = computed(() => hasNextPage.value && !isPreviewOnly.value)
+  const trailingRowKind = computed(() =>
+    isPreviewOnly.value ? 'premium-promotion' : canLoadNextPage.value ? 'next-page' : null
+  )
 
   /**
    * Virtualization
@@ -573,7 +555,7 @@
     }
 
     // Flatten pages
-    return data.value.pages.flatMap((page) => {
+    const rows = data.value.pages.flatMap((page) => {
       //
 
       return page.data
@@ -594,7 +576,13 @@
           }
         })
     })
+
+    return isPreviewOnly.value ? rows.slice(0, previewPostLimit) : rows
   })
+
+  function getTrailingRowKey() {
+    return `${selectedBooru.value.domain}-${trailingRowKind.value}`
+  }
 
   const parentRef = ref<HTMLElement | null>(null)
   const parentOffsetRef = ref(0)
@@ -608,12 +596,12 @@
 
   const rowVirtualizerOptions = computed(() => {
     return {
-      count: hasNextPage.value ? allRows.value.length + 1 : allRows.value.length,
+      count: trailingRowKind.value ? allRows.value.length + 1 : allRows.value.length,
 
       getItemKey: (index: number) => {
         const post = allRows.value[index]
 
-        return post ? getPostRowKey(post) : `${selectedBooru.value.domain}-next-page`
+        return post ? getPostRowKey(post) : getTrailingRowKey()
       },
 
       estimateSize: () => estimatedRowSize,
@@ -650,7 +638,7 @@
         start,
         size: estimatedRowSize,
         end: start + estimatedRowSize,
-        key: post ? getPostRowKey(post) : `${selectedBooru.value.domain}-next-page`,
+        key: post ? getPostRowKey(post) : getTrailingRowKey(),
         lane: 0
       }
     })
@@ -684,6 +672,11 @@
         key: string
         virtualRow: RenderVirtualItem
       }
+    | {
+        kind: 'premium-promotion'
+        key: string
+        virtualRow: RenderVirtualItem
+      }
 
   const renderRows = computed<RenderVirtualRow[]>(() =>
     virtualRows.value.map((virtualRow) => {
@@ -692,7 +685,7 @@
 
       if (!post) {
         return {
-          kind: 'next-page',
+          kind: isPreviewOnly.value ? 'premium-promotion' : 'next-page',
           key,
           virtualRow
         }
@@ -737,7 +730,7 @@
     // THEN load next page automatically
     if (
       lastItem.index >= allRows.value.length - 1 &&
-      hasNextPage.value &&
+      canLoadNextPage.value &&
       !isFetchingNextPage.value &&
       !isError.value
     ) {
@@ -875,9 +868,7 @@
   useSeoMeta({
     title: shortTitle,
 
-    description,
-
-    robots: () => (selectedBooru.value.isPremium ? 'noindex, nofollow' : undefined)
+    description
   })
 
   // Override i18n's generic `?tags` canonical: simple positive-tag searches have dedicated landing pages.
@@ -904,7 +895,7 @@
   const firstPostsPageAsSchema = computed(() => {
     const firstPagePosts = (data.value?.pages[0]?.data ?? []).filter(isRenderablePost)
 
-    return firstPagePosts.slice(0, 8).map((post) => {
+    return firstPagePosts.slice(0, selectedBooru.value.isPremium ? previewPostLimit : 8).map((post) => {
       if (post.media_type === 'video') {
         return defineVideo({
           url: post.high_res_file.url,
@@ -950,51 +941,6 @@
   ])
 
   definePageMeta({
-    middleware: [
-      (to) => {
-        // The server cannot know who is asking (cached, shared HTML): the gate is applied on the client
-        if (import.meta.server) {
-          return
-        }
-
-        const { booruList } = useBooruList()
-        const { hasPremiumAccess } = useUserData()
-        const localePath = useLocalePath()
-
-        if (hasPremiumAccess.value) {
-          return
-        }
-
-        const domain = Array.isArray(to.params.domain) ? to.params.domain[0] : to.params.domain
-
-        if (!domain || domain === fallbackBooruDomain) {
-          return
-        }
-
-        const booru = booruList.value.find((booru) => booru.domain === domain)
-
-        if (!booru?.isPremium) {
-          return
-        }
-
-        const tags = getSingleQueryValue(to.query.tags)
-        const redirectQuery = {
-          ...(tags ? { tags } : {}),
-          utm_source: 'internal',
-          utm_medium: 'unauthorized-booru-redirect',
-          utm_campaign: 'additional-boorus',
-          utm_content: domain,
-          // Used after landing to reopen the existing premium upsell modal.
-          source_booru: domain
-        }
-
-        return navigateTo({
-          path: localePath(`/posts/${fallbackBooruDomain}`),
-          query: redirectQuery
-        })
-      }
-    ],
-
     validate: async (route) => {
       const { booruList } = useBooruList()
 
@@ -1178,9 +1124,16 @@
               :data-virtual-key="row.key"
               :data-testid="row.kind === 'post' ? row.dataTestId : undefined"
             >
+              <!-- Premium-only booru: the preview ends here -->
+              <LazyPromotedContent
+                v-if="row.kind === 'premium-promotion'"
+                :promotion="additionalBoorusPromotion"
+                data-testid="premium-booru-promotion"
+              />
+
               <!-- Next Pagination -->
               <div
-                v-if="row.kind === 'next-page'"
+                v-else-if="row.kind === 'next-page'"
                 data-testid="load-next-page"
                 class="flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-base-content"
               >
@@ -1238,7 +1191,7 @@
 
         <!-- Nothing more to load message -->
         <div
-          v-if="!hasNextPage && !isFetching && allRows.length"
+          v-if="!hasNextPage && !isPreviewOnly && !isFetching && allRows.length"
           class="mt-4 flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-base-content"
         >
           <span class="block rounded-md px-1.5 py-1"> {{ t('posts.nothingMoreToLoad') }} </span>
