@@ -64,9 +64,28 @@ function localizeMockPageLinks<T extends { links: Record<string, string | null> 
   return localizedPage
 }
 
+/** Tags the first `count` posts as AI generated, so the AI blocklist hides them. */
+function withAiGeneratedPosts(page: typeof mockPostsPage0, count: number) {
+  const taggedPage = structuredClone(page)
+
+  for (const post of taggedPage.data.slice(0, count)) {
+    post.tags.general.push('ai_generated')
+  }
+
+  return taggedPage
+}
+
 function resolveMockPostsPage(requestUrl: URL) {
   const tags = requestUrl.searchParams.get('tags')
   const pageID = requestUrl.searchParams.get('pageID') ?? '0'
+
+  if ((tags === 'ai_first_post_test' || tags === 'ai_whole_page_test') && pageID !== '1') {
+    return withAiGeneratedPosts(mockPostsPage0, tags === 'ai_first_post_test' ? 1 : mockPostsPage0.data.length)
+  }
+
+  if (tags === 'ai_generated') {
+    return withAiGeneratedPosts(mockPostsPage0, mockPostsPage0.data.length)
+  }
 
   if (tags === 'empty_test') {
     return mockPostsPageWithoutResults

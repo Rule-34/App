@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { fetch, setup, url } from '@nuxt/test-utils'
 import { mockPostsPage0 } from './posts.mock-data'
-import { defaultSetupConfig, useTrackedPageFactory } from '../helper'
+import { collectPostsRequests, defaultSetupConfig, readNuxtError, useTrackedPageFactory } from '../helper'
 import { project } from '../../config/project'
 
 type TrackedPage = Awaited<ReturnType<ReturnType<typeof useTrackedPageFactory>>>
@@ -74,18 +74,6 @@ function collectPageProblems(page: TrackedPage) {
   })
 
   return problems
-}
-
-function readNuxtError(page: TrackedPage) {
-  return page.evaluate(() => {
-    const app = (
-      document.querySelector('#__nuxt') as unknown as {
-        __vue_app__: { config: { globalProperties: { $nuxt: { payload: { error?: { message?: string } } } } } }
-      }
-    ).__vue_app__
-
-    return app.config.globalProperties.$nuxt.payload.error?.message ?? null
-  })
 }
 
 describe('Server rendering does not depend on the visitor', async () => {
@@ -224,6 +212,65 @@ describe('Server rendering does not depend on the visitor', async () => {
       await page.getByTestId(`gelbooru.com-${mockPostsPage0.data[0].id}`).first().waitFor({ state: 'visible' })
       await scrollToRow(page, previewPostLimit + 1)
 
+      expect(await page.locator(promotion).count()).toBe(0)
+      expect(await readNuxtError(page)).toBeNull()
+      expect(problems).toEqual([])
+    }, 45000)
+
+    it.each([
+      '/posts/gelbooru.com?page=3',
+      '/posts/gelbooru.com?tags=hair_bun|1girl',
+      '/posts/gelbooru.com?filter[sort]=score'
+    ])(
+      'shows a free visitor only the premium promotion beyond the preview: %s',
+      async (path) => {
+        const page = await createTrackedPage()
+        const problems = collectPageProblems(page)
+        const requests = collectPostsRequests(page)
+
+        const html = await (await fetch(path)).text()
+        expect(html).not.toContain(`data-testid="gelbooru.com-${firstPostId}"`)
+
+        await page.goto(url(path), { waitUntil: 'networkidle' })
+
+        await expect.poll(() => page.locator(promotion).count()).toBe(1)
+        expect(await page.locator('li[data-index]').count()).toBe(0)
+        expect(requests).toEqual([])
+        expect(await readNuxtError(page)).toBeNull()
+        expect(problems).toEqual([])
+      },
+      45000
+    )
+
+    it('previews at the default page size, whatever the posts-per-page setting', async () => {
+      const page = await createTrackedPage('/settings')
+      const requests = collectPostsRequests(page)
+
+      await page.evaluate(() => window.localStorage.setItem('settings-postsPerPage', '7'))
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'networkidle' })
+      await page.getByTestId('domain-selector').click()
+      await page
+        .getByRole('option', { name: /gelbooru\.com/i })
+        .first()
+        .click()
+      await page.getByTestId(`gelbooru.com-${firstPostId}`).first().waitFor({ state: 'visible' })
+
+      const gelbooruLimits = requests
+        .filter((params) => params.get('baseEndpoint') === 'gelbooru.com')
+        .map((params) => params.get('limit'))
+      expect(gelbooruLimits).toEqual(['29'])
+    }, 45000)
+
+    it('loads the requested page for a premium visitor', async () => {
+      const page = await createTrackedPage()
+      const problems = collectPageProblems(page)
+      const requests = collectPostsRequests(page)
+      await signInAsPremiumUser(page, 'cookie')
+
+      await page.goto(url('/posts/gelbooru.com?page=3'), { waitUntil: 'networkidle' })
+      await expect.poll(() => page.locator('li[data-index="0"]').count()).toBe(1)
+
+      expect(requests.map((params) => params.get('pageID'))).toEqual(['3'])
       expect(await page.locator(promotion).count()).toBe(0)
       expect(await readNuxtError(page)).toBeNull()
       expect(problems).toEqual([])

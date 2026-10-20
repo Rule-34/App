@@ -62,7 +62,9 @@ export default defineNuxtPlugin<{ pocketBase: PocketBase }>({
       }
     })
 
-    nuxtApp.hook('app:mounted', () => {
+    // Not `app:mounted`: it fires before async page components under <Suspense> have hydrated.
+    // Nuxt ends hydration (`isHydrating = false`) on `app:suspense:resolve`.
+    nuxtApp.hooks.hookOnce('app:suspense:resolve', () => {
       hydrated.value = true
     })
 

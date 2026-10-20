@@ -486,6 +486,11 @@ export default defineNuxtConfig({
       enabled: false
     },
 
+    // Keeps Vue's hydration mismatch reports in the production build the e2e tests run against
+    debug: {
+      hydration: true
+    },
+
     runtimeConfig: {
       public: {
         apiUrl: '' // routes $fetch(baseURL: '') to local Nitro server

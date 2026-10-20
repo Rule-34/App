@@ -7,7 +7,7 @@ import {
   mockPostsPageWithVideoMedia,
   mockPostsPageWithMultipleVideos
 } from './posts.mock-data'
-import { defaultSetupConfig, useTrackedPageFactory } from '../helper'
+import { collectConsoleProblems, defaultSetupConfig, pushRoute, useTrackedPageFactory } from '../helper'
 
 function decodeImgproxySourceUrl(src: string) {
   const encodedSource = src.split('/').pop()
@@ -166,39 +166,6 @@ async function getPostImageSrc(page: TrackedPage, testId: string) {
 }
 
 /** Collects real app problems from the console; failed loads of the mocked external hosts are not app issues. */
-function collectConsoleProblems(page: TrackedPage) {
-  const problems: string[] = []
-
-  page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`))
-  page.on('console', (message) => {
-    const text = message.text()
-    // The mocked PocketBase answers its realtime stream with JSON, which the browser rejects as an event stream (the
-    // cloud sync then logs that it could not subscribe)
-    const isNetworkNoise =
-      text.startsWith('Failed to load resource') || text.includes('EventSource') || text.includes('premium cloud sync')
-    const isVueProblem = /Vue warn|Hydration/.test(text)
-
-    if ((message.type() === 'error' && !isNetworkNoise) || isVueProblem) {
-      problems.push(`${message.type()}: ${text.slice(0, 200)}`)
-    }
-  })
-
-  return problems
-}
-
-/** Client-side navigation that keeps the document (and its referrer policy) alive. */
-function pushRoute(page: TrackedPage, path: string) {
-  return page.evaluate(
-    (target) =>
-      (
-        document.querySelector('#__nuxt') as unknown as {
-          __vue_app__: { config: { globalProperties: { $router: { push: (to: string) => Promise<unknown> } } } }
-        }
-      ).__vue_app__.config.globalProperties.$router.push(target),
-    path
-  )
-}
-
 describe('/', async () => {
   await setup(defaultSetupConfig)
 

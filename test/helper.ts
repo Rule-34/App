@@ -53,6 +53,79 @@ export const serverSetupConfig: Partial<TestOptions> = {
   }
 }
 
+export type TrackedPage = Awaited<ReturnType<typeof createPage>>
+
+/** Page errors, console errors and Vue/hydration warnings, without the mocked-network noise. */
+export function collectConsoleProblems(page: TrackedPage) {
+  const problems: string[] = []
+
+  page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`))
+  page.on('console', (message) => {
+    const text = message.text()
+    // The mocked PocketBase answers its realtime stream with JSON, which the browser rejects as an event stream (the
+    // cloud sync then logs that it could not subscribe)
+    const isNetworkNoise =
+      text.startsWith('Failed to load resource') || text.includes('EventSource') || text.includes('premium cloud sync')
+    const isVueProblem = /Vue warn|Hydration/.test(text)
+
+    if ((message.type() === 'error' && !isNetworkNoise) || isVueProblem) {
+      problems.push(`${message.type()}: ${text.slice(0, 200)}`)
+    }
+  })
+
+  return problems
+}
+
+/** Writes `localStorage` before any page script runs, like a returning visitor. */
+export function seedLocalStorage(page: TrackedPage, entries: Record<string, string>) {
+  return page.addInitScript((values) => {
+    for (const [key, value] of Object.entries(values)) window.localStorage.setItem(key, value)
+  }, entries)
+}
+
+/** Posts requests made by the browser (the server's own fetches are not observable here). */
+export function collectPostsRequests(page: TrackedPage) {
+  const requests: URLSearchParams[] = []
+
+  page.on('request', (request) => {
+    const requestUrl = new URL(request.url())
+
+    if (requestUrl.pathname.startsWith('/booru/') && requestUrl.pathname.endsWith('/posts')) {
+      requests.push(requestUrl.searchParams)
+    }
+  })
+
+  return requests
+}
+
+/** Client-side navigation, so the browser fetches the data and the document stays alive. */
+export async function pushRoute(page: TrackedPage, path: string) {
+  // The router only exists once the app has hydrated
+  await page.waitForFunction(() => (document.querySelector('#__nuxt') as { __vue_app__?: unknown } | null)?.__vue_app__)
+
+  return page.evaluate(
+    (target) =>
+      (
+        document.querySelector('#__nuxt') as unknown as {
+          __vue_app__: { config: { globalProperties: { $router: { push: (to: string) => Promise<unknown> } } } }
+        }
+      ).__vue_app__.config.globalProperties.$router.push(target),
+    path
+  )
+}
+
+export function readNuxtError(page: TrackedPage) {
+  return page.evaluate(() => {
+    const app = (
+      document.querySelector('#__nuxt') as unknown as {
+        __vue_app__: { config: { globalProperties: { $nuxt: { payload: { error?: { message?: string } } } } } }
+      }
+    ).__vue_app__
+
+    return app.config.globalProperties.$nuxt.payload.error?.message ?? null
+  })
+}
+
 export function useTrackedPageFactory() {
   const pages = new Set<Awaited<ReturnType<typeof createPage>>>()
 

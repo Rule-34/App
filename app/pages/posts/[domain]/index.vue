@@ -152,6 +152,19 @@
     }
   })
 
+  // Free visitors preview premium-only boorus: the first page of at most one tag, unfiltered, at the default size.
+  // Anything beyond that is left to the client, since the server can't tell who is visiting.
+  const isPremiumOnlyRequest = computed(
+    () =>
+      selectedBooru.value.isPremium &&
+      (selectedPage.value !== selectedBooru.value.type.initialPageID ||
+        selectedTags.value.length > 1 ||
+        Object.values(selectedFilters.value).some((value) => value != null))
+  )
+  const postsLimit = computed(() =>
+    selectedBooru.value.isPremium && !hasPremiumAccess.value ? defaultPostsPerPage : postsPerPage.value
+  )
+
   const filterConfig = computed(() => ({
     sort: {
       type: 'select' as const,
@@ -414,14 +427,19 @@
   /**
    * Data fetching
    */
+  const isSearchedTagBlocked = computed(() =>
+    selectedTags.value.some((tag) => selectedBlockList.value.includes(tag.name))
+  )
+
+  // The block list is only known in the browser, so a server-rendered page shows the error once hydrated
+  const isAppMounted = useAuthHydrated()
+  const blockedSearchError = computed(() =>
+    isAppMounted.value && isSearchedTagBlocked.value ? new Error(t('errors.tagInBlockList')) : null
+  )
+
   async function fetchPosts({ pageParam }: QueryFunctionContext<readonly unknown[], string>): Promise<IPostPage> {
     // Return early if selectedTags is in blocklist
-    if (
-      selectedBlockList.value.length > 0 &&
-      //
-      // selectedTags.value.some((tag) => selectedBlockList.value.includes(tag.name)) &&
-      selectedBlockList.value.some((blocklistTag) => selectedTags.value.map((tag) => tag.name).includes(blocklistTag))
-    ) {
+    if (isSearchedTagBlocked.value) {
       throw new Error(t('errors.tagInBlockList'))
     }
 
@@ -442,7 +460,7 @@
       params: {
         baseEndpoint: selectedBooru.value.domain,
 
-        limit: postsPerPage.value,
+        limit: postsLimit.value,
 
         pageID: selectedPage.value,
 
@@ -475,7 +493,7 @@
     // from infinite scroll. Making this reactive resets the appended list.
     selectedPage.value,
     //
-    postsPerPage.value
+    postsLimit.value
   ]
 
   const {
@@ -498,6 +516,8 @@
     queryKey: postsQueryKey,
 
     queryFn: fetchPosts,
+
+    enabled: computed(() => !isPremiumOnlyRequest.value || hasPremiumAccess.value),
 
     // Stale after 5 minutes
     // Same as Nuxt route rules
@@ -530,14 +550,16 @@
     }
   })
 
-  onServerPrefetch(suspense)
+  if (!isPremiumOnlyRequest.value) {
+    onServerPrefetch(suspense)
+  }
 
   // Premium-only boorus show a preview to everyone else, then the premium promotion.
   // `isPremium` is false until mount, so the server and hydration render the preview for every visitor.
   // The promotion is only added after mount (`isFree`): a server-rendered one would be unmounted for premium visitors.
   const previewPostLimit = 7
   const isPreviewOnly = computed(() => selectedBooru.value.isPremium && !isPremium.value)
-  const canLoadNextPage = computed(() => hasNextPage.value && !isPreviewOnly.value)
+  const canLoadNextPage = computed(() => hasNextPage.value && !isPreviewOnly.value && !blockedSearchError.value)
   const trailingRowKind = computed(() =>
     isPreviewOnly.value ? (isFree.value ? 'premium-promotion' : null) : canLoadNextPage.value ? 'next-page' : null
   )
@@ -548,7 +570,8 @@
   const estimatedRowSize = 600
   const rowGap = 16
 
-  const blockedTags = computed(() => new Set(selectedBlockList.value))
+  // The server renders without the visitor's block list, so it applies once hydration has finished
+  const blockedTags = computed(() => new Set(isAppMounted.value ? selectedBlockList.value : []))
 
   const allRows = computed<PostRow[]>(() => {
     if (!data.value) {
@@ -1052,8 +1075,15 @@
     </div>
 
     <section class="my-4">
+      <!-- Premium-only booru: other pages, multi-tag searches and filters are premium -->
+      <LazyPromotedContent
+        v-if="isFree && isPremiumOnlyRequest"
+        :promotion="additionalBoorusPromotion"
+        data-testid="premium-booru-promotion"
+      />
+
       <!-- Pending -->
-      <template v-if="isPending">
+      <template v-else-if="isPending">
         <div
           class="flex h-80 w-full animate-pulse flex-col items-center justify-center gap-4 text-lg"
           data-testid="posts-loader"
@@ -1068,9 +1098,9 @@
       </template>
 
       <!-- Error (initial load only) -->
-      <template v-else-if="isError && !allRows.length">
+      <template v-else-if="blockedSearchError || (isError && !allRows.length)">
         <PostPageError
-          :error="error"
+          :error="blockedSearchError ?? error"
           :on-retry="onRetryClick"
           class="mt-32"
         />

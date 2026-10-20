@@ -1,28 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { setup, url } from '@nuxt/test-utils'
 import { mockPostsPage0 } from './posts.mock-data'
-import { defaultSetupConfig, useTrackedPageFactory } from '../helper'
+import { defaultSetupConfig, pushRoute, useTrackedPageFactory } from '../helper'
 
 type TrackedPage = Awaited<ReturnType<ReturnType<typeof useTrackedPageFactory>>>
 
 const firstPost = mockPostsPage0.data[0]
 const firstPostTestId = `safebooru.org-${firstPost.id}`
-
-/** Client-side navigation, so the posts are fetched by the browser (observable and routable) instead of the SSR. */
-async function pushRoute(page: TrackedPage, path: string) {
-  // The router only exists once the app has hydrated
-  await page.waitForFunction(() => (document.querySelector('#__nuxt') as { __vue_app__?: unknown } | null)?.__vue_app__)
-
-  return page.evaluate(
-    (target) =>
-      (
-        document.querySelector('#__nuxt') as unknown as {
-          __vue_app__: { config: { globalProperties: { $router: { push: (to: string) => Promise<unknown> } } } }
-        }
-      ).__vue_app__.config.globalProperties.$router.push(target),
-    path
-  )
-}
 
 /** The first SSR posts go through imgproxy, which base64url-encodes the source; compare on the decoded source. */
 function sourceOf(src: string | null) {
