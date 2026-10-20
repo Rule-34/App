@@ -534,11 +534,12 @@
 
   // Premium-only boorus show a preview to everyone else, then the premium promotion.
   // `isPremium` is false until mount, so the server and hydration render the preview for every visitor.
+  // The promotion is only added after mount (`isFree`): a server-rendered one would be unmounted for premium visitors.
   const previewPostLimit = 7
   const isPreviewOnly = computed(() => selectedBooru.value.isPremium && !isPremium.value)
   const canLoadNextPage = computed(() => hasNextPage.value && !isPreviewOnly.value)
   const trailingRowKind = computed(() =>
-    isPreviewOnly.value ? 'premium-promotion' : canLoadNextPage.value ? 'next-page' : null
+    isPreviewOnly.value ? (isFree.value ? 'premium-promotion' : null) : canLoadNextPage.value ? 'next-page' : null
   )
 
   /**
@@ -685,7 +686,7 @@
 
       if (!post) {
         return {
-          kind: isPreviewOnly.value ? 'premium-promotion' : 'next-page',
+          kind: trailingRowKind.value === 'premium-promotion' ? 'premium-promotion' : 'next-page',
           key,
           virtualRow
         }
