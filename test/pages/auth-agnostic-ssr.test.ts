@@ -197,13 +197,13 @@ describe('Server rendering does not depend on the visitor', async () => {
       const page = await createTrackedPage()
 
       await page.goto(url('/posts/safebooru.org'), { waitUntil: 'networkidle' })
-      await page.getByTestId('domain-selector').click({ force: true })
+      await page.getByTestId('domain-selector').click()
 
       const option = page.getByRole('option', { name: /gelbooru\.com/i }).first()
       await option.waitFor({ state: 'visible' })
       expect(await option.textContent()).toContain('Premium')
 
-      await option.click({ force: true })
+      await option.click()
       await page.waitForURL('**/posts/gelbooru.com')
       await page.getByTestId(`gelbooru.com-${mockPostsPage0.data[0].id}`).first().waitFor({ state: 'visible' })
 

@@ -69,7 +69,8 @@
         baseURL: config.public.apiUrl,
         params: {
           baseEndpoint: selectedBooru.value.domain,
-          limit: 12,
+          // Premium-only boorus get the same 7-post preview as their posts page
+          limit: selectedBooru.value.isPremium ? 7 : 12,
           pageID: selectedBooru.value.type.initialPageID,
           tags: tagParam.value,
           httpScheme: (selectedBooru.value.config?.options as BooruHttpOptions | undefined)?.HTTPScheme ?? undefined
