@@ -10,6 +10,7 @@
     type IRenderablePost
   } from '~/assets/js/post.dto'
   import Tag, { TagDTO } from '~/assets/js/tag.dto'
+  import { resolveBooruApiEndpoint } from '~/assets/js/BooruEndpointHelper'
   import { project } from '~~/config/project'
 
   const route = useRoute()
@@ -68,7 +69,7 @@
       const page = await $fetch<IPostPage>(`/booru/${selectedBooru.value.type.type}/posts`, {
         baseURL: config.public.apiUrl,
         params: {
-          baseEndpoint: selectedBooru.value.domain,
+          baseEndpoint: resolveBooruApiEndpoint(selectedBooru.value.domain),
           limit: 12,
           pageID: selectedBooru.value.type.initialPageID,
           tags: tagParam.value,
