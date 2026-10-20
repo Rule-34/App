@@ -3,7 +3,6 @@
   import { PlusIcon } from '@heroicons/vue/24/solid'
   import { flip, offset, shift, useFloating } from '@floating-ui/vue'
   import type { Domain } from '~/assets/js/domain'
-  import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
   defineOptions({
     inheritAttrs: false
@@ -34,25 +33,9 @@
     middleware: [offset(16), flip(), shift()]
   })
 
-  function onModelValueChange(domain: Domain) {
-    // Premium prompt
-    if (domain.isPremium && !hasPremiumAccess.value) {
-      const { open: promptPremium, currentIndex } = usePremiumDialog()
-
-      currentIndex.value = premiumPromotionIndices.additionalBoorus
-      promptPremium.value = true
-      return
-    }
-
-    emit('update:modelValue', domain)
-  }
-
-  function shouldBooruBeDisabled(booru: Domain) {
-    if (booru.isPremium && !hasPremiumAccess.value) {
-      return true
-    }
-
-    return false
+  // Premium-only boorus open as a preview for free users; the badge tells them it is a premium feature
+  function shouldShowPremiumBadge(booru: Domain) {
+    return booru.isPremium && !hasPremiumAccess.value
   }
 
   function onDomainSelectorClick() {
@@ -73,7 +56,7 @@
   <HeadlessListbox
     :model-value="props.modelValue"
     as="template"
-    @update:model-value="onModelValueChange"
+    @update:model-value="emit('update:modelValue', $event)"
   >
     <!-- Select -->
     <HeadlessListboxButton
@@ -155,7 +138,7 @@
 
                 <!-- Premium badge-->
                 <span
-                  v-if="shouldBooruBeDisabled(booru)"
+                  v-if="shouldShowPremiumBadge(booru)"
                   class="ml-2 inline-flex items-center rounded-full border-2 border-primary-500/60 px-2.5 py-0.5 text-xs font-medium text-base-content-highlight"
                 >
                   {{ t('common.premium') }}

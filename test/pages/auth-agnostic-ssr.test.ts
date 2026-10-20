@@ -193,6 +193,23 @@ describe('Server rendering does not depend on the visitor', async () => {
       expect(problems).toEqual([])
     }, 45000)
 
+    it('opens the preview from the domain menu, with the premium badge', async () => {
+      const page = await createTrackedPage()
+
+      await page.goto(url('/posts/safebooru.org'), { waitUntil: 'networkidle' })
+      await page.getByTestId('domain-selector').click({ force: true })
+
+      const option = page.getByRole('option', { name: /gelbooru\.com/i }).first()
+      await option.waitFor({ state: 'visible' })
+      expect(await option.textContent()).toContain('Premium')
+
+      await option.click({ force: true })
+      await page.waitForURL('**/posts/gelbooru.com')
+      await page.getByTestId(`gelbooru.com-${mockPostsPage0.data[0].id}`).first().waitFor({ state: 'visible' })
+
+      expect(await page.getByRole('dialog').count()).toBe(0)
+    }, 45000)
+
     it('shows a premium visitor every post on a cold load', async () => {
       const page = await createTrackedPage()
       const problems = collectPageProblems(page)
