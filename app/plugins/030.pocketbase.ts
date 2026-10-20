@@ -33,8 +33,7 @@ export default defineNuxtPlugin<{ pocketBase: PocketBase }>({
   async setup(nuxtApp) {
     const pb = new PocketBase('https://pocketbase.r34.app')
 
-    // False on the server and while hydrating SSR HTML; routes that are not server-rendered can use auth straight away
-    const hydrated = useState<boolean>('auth-hydrated', () => import.meta.client && !nuxtApp.isHydrating)
+    const hydrated = useAuthHydrated()
 
     if (import.meta.server) {
       return { provide: { pocketBase: pb } }

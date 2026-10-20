@@ -1,7 +1,7 @@
 export default function () {
   const { $pocketBase } = useNuxtApp()
   const { subscription_expires_at, license, email } = usePocketbase()
-  const hydrated = useState<boolean>('auth-hydrated')
+  const hydrated = useAuthHydrated()
 
   const hasPremiumAccess = computed(
     //
