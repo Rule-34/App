@@ -2,6 +2,7 @@
   import { ArrowPathIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
   import { generatePostsRoute, getSingleRouteParam } from '~/assets/js/RouterHelper'
   import { normalizeStringForTitle } from '~/assets/js/SeoHelper'
+  import { premiumBooruPreviewLimit } from '~/assets/js/promotions'
   import {
     isRenderablePost,
     normalizePostPage,
@@ -70,7 +71,7 @@
         params: {
           baseEndpoint: selectedBooru.value.domain,
           // Premium-only boorus get the same 7-post preview as their posts page
-          limit: selectedBooru.value.isPremium ? 7 : 12,
+          limit: selectedBooru.value.isPremium ? premiumBooruPreviewLimit : 12,
           pageID: selectedBooru.value.type.initialPageID,
           tags: tagParam.value,
           httpScheme: (selectedBooru.value.config?.options as BooruHttpOptions | undefined)?.HTTPScheme ?? undefined

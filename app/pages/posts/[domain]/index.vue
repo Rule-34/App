@@ -16,7 +16,7 @@
     getSinglePositiveTagQueryValue,
     getSingleQueryValue
   } from '~/assets/js/RouterHelper'
-  import { additionalBoorusPromotion } from '~/assets/js/promotions'
+  import { additionalBoorusPromotion, premiumBooruPreviewLimit } from '~/assets/js/promotions'
   import { stripLocaleFromPath } from '~/composables/locale'
   import { useTagTitle } from '~/composables/useTagTitle'
   import type { Domain } from '~/assets/js/domain'
@@ -557,7 +557,6 @@
   // Premium-only boorus show a preview to everyone else, then the premium promotion.
   // `isPremium` is false until mount, so the server and hydration render the preview for every visitor.
   // The promotion is only added after mount (`isFree`): a server-rendered one would be unmounted for premium visitors.
-  const previewPostLimit = 7
   const isPreviewOnly = computed(() => selectedBooru.value.isPremium && !isPremium.value)
   const canLoadNextPage = computed(() => hasNextPage.value && !isPreviewOnly.value && !blockedSearchError.value)
   const trailingRowKind = computed(() =>
@@ -601,7 +600,7 @@
         })
     })
 
-    return isPreviewOnly.value ? rows.slice(0, previewPostLimit) : rows
+    return isPreviewOnly.value ? rows.slice(0, premiumBooruPreviewLimit) : rows
   })
 
   function getTrailingRowKey() {
@@ -708,11 +707,8 @@
       const key = String(virtualRow.key)
 
       if (!post) {
-        return {
-          kind: trailingRowKind.value === 'premium-promotion' ? 'premium-promotion' : 'next-page',
-          key,
-          virtualRow
-        }
+        // The virtualizer can lag a render behind the row count
+        return { kind: trailingRowKind.value ?? 'next-page', key, virtualRow }
       }
 
       return {
@@ -919,7 +915,7 @@
   const firstPostsPageAsSchema = computed(() => {
     const firstPagePosts = (data.value?.pages[0]?.data ?? []).filter(isRenderablePost)
 
-    return firstPagePosts.slice(0, selectedBooru.value.isPremium ? previewPostLimit : 8).map((post) => {
+    return firstPagePosts.slice(0, selectedBooru.value.isPremium ? premiumBooruPreviewLimit : 8).map((post) => {
       if (post.media_type === 'video') {
         return defineVideo({
           url: post.high_res_file.url,

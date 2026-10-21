@@ -1,9 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { setup, url } from '@nuxt/test-utils'
 import { mockPostsPage0 } from './posts.mock-data'
-import { defaultSetupConfig, pushRoute, useTrackedPageFactory } from '../helper'
-
-type TrackedPage = Awaited<ReturnType<ReturnType<typeof useTrackedPageFactory>>>
+import { defaultSetupConfig, pushRoute, seedLocalStorage, type TrackedPage, useTrackedPageFactory } from '../helper'
 
 const firstPost = mockPostsPage0.data[0]
 const firstPostTestId = `safebooru.org-${firstPost.id}`
@@ -25,13 +23,6 @@ function readImageSource(page: TrackedPage, testId: string) {
 
 function readStoredSetting(page: TrackedPage, key: string) {
   return page.evaluate((storageKey) => window.localStorage.getItem(storageKey), key)
-}
-
-function seedSetting(page: TrackedPage, key: string, value: string) {
-  return page.addInitScript(([storageKey, storageValue]) => window.localStorage.setItem(storageKey, storageValue), [
-    key,
-    value
-  ] as const)
 }
 
 describe('Settings', async () => {
@@ -72,7 +63,7 @@ describe('Settings', async () => {
 
     it('goes back to the sample image when toggled off', async () => {
       const page = await createTrackedPage()
-      await seedSetting(page, 'settings-postFullSizeImages', 'true')
+      await seedLocalStorage(page, { 'settings-postFullSizeImages': 'true' })
       await page.goto(url('/settings'))
 
       const toggle = page.getByRole('switch', { name: /Full size images/ })
@@ -186,7 +177,7 @@ describe('Settings', async () => {
 
     it('plays right away once enabled', async () => {
       const page = await createTrackedPage()
-      await seedSetting(page, 'settings-autoplayAnimatedMedia', 'true')
+      await seedLocalStorage(page, { 'settings-autoplayAnimatedMedia': 'true' })
       await page.goto(url('/settings'))
       const gifUrl = await routeAnimatedFirstPost(page)
 

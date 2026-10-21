@@ -8,6 +8,9 @@ export type Promotion = {
   link: string | null
 }
 
+/** Free visitors see this many posts of a premium-only booru, then `additionalBoorusPromotion`. */
+export const premiumBooruPreviewLimit = 7
+
 export const additionalBoorusPromotion = {
   media: '/img/promo/premium/Additional Boorus.jpg',
   mediaWidth: 1280,

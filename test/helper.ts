@@ -1,5 +1,5 @@
 import { createPage, type TestOptions, url } from '@nuxt/test-utils'
-import { afterEach } from 'vitest'
+import { afterEach, expect } from 'vitest'
 
 const transparentImage = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=',
@@ -114,6 +114,23 @@ export async function pushRoute(page: TrackedPage, path: string) {
   )
 }
 
+/** Scrolls to the end of the virtualized posts list until it renders a row at or past `index`. */
+export async function scrollToRow(page: TrackedPage, index: number) {
+  await expect
+    .poll(
+      () =>
+        page.evaluate(() => {
+          window.scrollTo(0, document.body.scrollHeight)
+          return Math.max(
+            -1,
+            ...[...document.querySelectorAll('li[data-index]')].map((li) => Number(li.getAttribute('data-index')))
+          )
+        }),
+      { timeout: 20000 }
+    )
+    .toBeGreaterThanOrEqual(index)
+}
+
 export function readNuxtError(page: TrackedPage) {
   return page.evaluate(() => {
     const app = (
@@ -127,7 +144,7 @@ export function readNuxtError(page: TrackedPage) {
 }
 
 export function useTrackedPageFactory() {
-  const pages = new Set<Awaited<ReturnType<typeof createPage>>>()
+  const pages = new Set<TrackedPage>()
 
   afterEach(async () => {
     await Promise.all(

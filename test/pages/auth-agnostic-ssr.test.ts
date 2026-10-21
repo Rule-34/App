@@ -1,23 +1,22 @@
 import { describe, expect, it } from 'vitest'
 import { fetch, setup, url } from '@nuxt/test-utils'
 import { mockPostsPage0 } from './posts.mock-data'
-import { collectPostsRequests, defaultSetupConfig, readNuxtError, useTrackedPageFactory } from '../helper'
+import {
+  collectConsoleProblems,
+  collectPostsRequests,
+  defaultSetupConfig,
+  readNuxtError,
+  scrollToRow,
+  seedLocalStorage,
+  useTrackedPageFactory
+} from '../helper'
+import { premiumSession, signInAsPremiumUser } from '../pocketbase-mock'
+import { premiumBooruPreviewLimit as previewPostLimit } from '../../app/assets/js/promotions'
+import { defaultPostsPerPage } from '../../app/composables/useUserSettings'
 import { project } from '../../config/project'
 
-type TrackedPage = Awaited<ReturnType<ReturnType<typeof useTrackedPageFactory>>>
-
-const license = 'SLX-TEST-LICENSE-0001'
-const email = 'premium-ssr@example.test'
-const encode = (value: object) => Buffer.from(JSON.stringify(value)).toString('base64url')
-const token = `${encode({ alg: 'HS256', typ: 'JWT' })}.${encode({ exp: Math.floor(Date.now() / 1000) + 86400 })}.sig`
-const record = {
-  id: 'premium-ssr-user',
-  collectionName: 'users',
-  email,
-  username: license,
-  subscription_expires_at: new Date(Date.now() + 86400_000).toISOString()
-}
-const authValue = encodeURIComponent(JSON.stringify({ token, model: record }))
+const { authValue, record } = premiumSession
+const { email, username: license } = record
 
 /** CSP nonces are random per request; everything else must be identical for every visitor. */
 const withoutNonces = (html: string) =>
@@ -40,42 +39,6 @@ function firstDifference(a: string, b: string) {
   return { at: index, anonymous: a.slice(index - 80, index + 160), premium: b.slice(index - 80, index + 160) }
 }
 
-/** Fake premium session: the SDK only decodes the JWT expiry, and auth-refresh is answered locally. */
-async function signInAsPremiumUser(page: TrackedPage, via: 'cookie' | 'localStorage') {
-  await page.route(/pocketbase\.r34\.app/, (route) => {
-    if (route.request().url().includes('auth-refresh')) {
-      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ token, record }) })
-    }
-
-    return route.fulfill({
-      status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify({ items: [], totalItems: 0 })
-    })
-  })
-
-  if (via === 'cookie') {
-    await page.context().addCookies([{ name: 'pb_auth', value: authValue, url: url('/') }])
-    return
-  }
-
-  await page.addInitScript(
-    (value) => window.localStorage.setItem('pocketbase_auth', decodeURIComponent(value)),
-    authValue
-  )
-}
-
-function collectPageProblems(page: TrackedPage) {
-  const problems: string[] = []
-
-  page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`))
-  page.on('console', (message) => {
-    if (/Vue warn|Hydration/.test(message.text())) problems.push(`${message.type()}: ${message.text().slice(0, 200)}`)
-  })
-
-  return problems
-}
-
 describe('Server rendering does not depend on the visitor', async () => {
   await setup(defaultSetupConfig)
 
@@ -89,8 +52,10 @@ describe('Server rendering does not depend on the visitor', async () => {
       '/posts/gelbooru.com',
       '/posts/gelbooru.com/hair_bun'
     ])('is identical for anonymous and premium visitors and carries no account data: %s', async (path) => {
-      const anonymous = await (await fetch(path)).text()
-      const premium = await (await fetch(path, { headers: { cookie: `pb_auth=${authValue}` } })).text()
+      const [anonymous, premium] = await Promise.all([
+        fetch(path).then((response) => response.text()),
+        fetch(path, { headers: { cookie: `pb_auth=${authValue}` } }).then((response) => response.text())
+      ])
 
       expect(firstDifference(withoutNonces(anonymous), withoutNonces(premium))).toBeNull()
       expect(premium).not.toContain(email)
@@ -103,7 +68,7 @@ describe('Server rendering does not depend on the visitor', async () => {
       'hydrates a premium visitor (%s session) from the anonymous HTML without errors',
       async (via) => {
         const page = await createTrackedPage()
-        const problems = collectPageProblems(page)
+        const problems = collectConsoleProblems(page)
         await signInAsPremiumUser(page, via)
 
         await page.goto(url('/posts/safebooru.org'), { waitUntil: 'networkidle' })
@@ -119,7 +84,7 @@ describe('Server rendering does not depend on the visitor', async () => {
 
     it('keeps an anonymous visitor on the free UI', async () => {
       const page = await createTrackedPage()
-      const problems = collectPageProblems(page)
+      const problems = collectConsoleProblems(page)
 
       await page.goto(url('/posts/safebooru.org'), { waitUntil: 'networkidle' })
       await page.getByTestId(`safebooru.org-${mockPostsPage0.data[0].id}`).first().waitFor({ state: 'visible' })
@@ -131,25 +96,7 @@ describe('Server rendering does not depend on the visitor', async () => {
   })
 
   describe('premium-only booru preview', () => {
-    const previewPostLimit = 7
     const promotion = '[data-testid="premium-booru-promotion"]'
-
-    /** Scrolls to the end of the virtualized list until it renders a row at or past `index`. */
-    async function scrollToRow(page: TrackedPage, index: number) {
-      await expect
-        .poll(
-          () =>
-            page.evaluate(() => {
-              window.scrollTo(0, document.body.scrollHeight)
-              return Math.max(
-                -1,
-                ...[...document.querySelectorAll('li[data-index]')].map((li) => Number(li.getAttribute('data-index')))
-              )
-            }),
-          { timeout: 20000 }
-        )
-        .toBeGreaterThanOrEqual(index)
-    }
 
     const firstPostId = mockPostsPage0.data[0].id
 
@@ -169,7 +116,7 @@ describe('Server rendering does not depend on the visitor', async () => {
       expect(mockPostsPage0.data.length).toBeGreaterThan(previewPostLimit)
 
       const page = await createTrackedPage()
-      const problems = collectPageProblems(page)
+      const problems = collectConsoleProblems(page)
 
       await page.goto(url('/posts/gelbooru.com?tags=hair_bun'), { waitUntil: 'networkidle' })
       await scrollToRow(page, previewPostLimit)
@@ -205,7 +152,7 @@ describe('Server rendering does not depend on the visitor', async () => {
 
     it('shows a premium visitor every post on a cold load', async () => {
       const page = await createTrackedPage()
-      const problems = collectPageProblems(page)
+      const problems = collectConsoleProblems(page)
       await signInAsPremiumUser(page, 'cookie')
 
       await page.goto(url('/posts/gelbooru.com'), { waitUntil: 'networkidle' })
@@ -225,7 +172,7 @@ describe('Server rendering does not depend on the visitor', async () => {
       'shows a free visitor only the premium promotion beyond the preview: %s',
       async (path) => {
         const page = await createTrackedPage()
-        const problems = collectPageProblems(page)
+        const problems = collectConsoleProblems(page)
         const requests = collectPostsRequests(page)
 
         const html = await (await fetch(path)).text()
@@ -243,10 +190,10 @@ describe('Server rendering does not depend on the visitor', async () => {
     )
 
     it('previews at the default page size, whatever the posts-per-page setting', async () => {
-      const page = await createTrackedPage('/settings')
+      const page = await createTrackedPage()
       const requests = collectPostsRequests(page)
 
-      await page.evaluate(() => window.localStorage.setItem('settings-postsPerPage', '7'))
+      await seedLocalStorage(page, { 'settings-postsPerPage': '7' })
       await page.goto(url('/posts/safebooru.org'), { waitUntil: 'networkidle' })
       await page.getByTestId('domain-selector').click()
       await page
@@ -258,12 +205,12 @@ describe('Server rendering does not depend on the visitor', async () => {
       const gelbooruLimits = requests
         .filter((params) => params.get('baseEndpoint') === 'gelbooru.com')
         .map((params) => params.get('limit'))
-      expect(gelbooruLimits).toEqual(['29'])
+      expect(gelbooruLimits).toEqual([String(defaultPostsPerPage)])
     }, 45000)
 
     it('loads the requested page for a premium visitor', async () => {
       const page = await createTrackedPage()
-      const problems = collectPageProblems(page)
+      const problems = collectConsoleProblems(page)
       const requests = collectPostsRequests(page)
       await signInAsPremiumUser(page, 'cookie')
 

@@ -7,7 +7,14 @@ import {
   mockPostsPageWithVideoMedia,
   mockPostsPageWithMultipleVideos
 } from './posts.mock-data'
-import { collectConsoleProblems, defaultSetupConfig, pushRoute, useTrackedPageFactory } from '../helper'
+import {
+  collectConsoleProblems,
+  defaultSetupConfig,
+  pushRoute,
+  type TrackedPage,
+  useTrackedPageFactory
+} from '../helper'
+import { signInAsPremiumUser } from '../pocketbase-mock'
 
 function decodeImgproxySourceUrl(src: string) {
   const encodedSource = src.split('/').pop()
@@ -33,8 +40,6 @@ function expectImageSrcToReference(src: string | null, expectedUrl: string) {
   expect(src).toBe(expectedUrl)
 }
 
-type TrackedPage = Awaited<ReturnType<ReturnType<typeof useTrackedPageFactory>>>
-
 const PIXEL_PNG = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=',
   'base64'
@@ -57,38 +62,6 @@ function createSilentWav(samples = 800) {
   header.writeUInt32LE(samples, 40)
 
   return Buffer.concat([header, Buffer.alloc(samples, 128)])
-}
-
-/** Signs a fake premium user in: the SDK only decodes the JWT expiry, and auth-refresh is answered locally. */
-async function signInAsPremiumUser(page: TrackedPage) {
-  const encode = (value: object) => Buffer.from(JSON.stringify(value)).toString('base64url')
-  const token = `${encode({ alg: 'HS256', typ: 'JWT' })}.${encode({ exp: Math.floor(Date.now() / 1000) + 86400 })}.sig`
-  const record = {
-    id: 'premium-test-user',
-    collectionName: 'users',
-    email: 'premium@example.test',
-    subscription_expires_at: new Date(Date.now() + 86400_000).toISOString()
-  }
-
-  await page.route(/pocketbase\.r34\.app/, (route) => {
-    if (route.request().url().includes('auth-refresh')) {
-      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ token, record }) })
-    }
-
-    return route.fulfill({
-      status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify({ items: [], totalItems: 0 })
-    })
-  })
-
-  await page.context().addCookies([
-    {
-      name: 'pb_auth',
-      value: encodeURIComponent(JSON.stringify({ token, model: record })),
-      url: url('/')
-    }
-  ])
 }
 
 /**
@@ -165,7 +138,6 @@ async function getPostImageSrc(page: TrackedPage, testId: string) {
   return page.evaluate((id) => document.querySelector(`[data-testid="${id}"] img`)?.getAttribute('src') ?? null, testId)
 }
 
-/** Collects real app problems from the console; failed loads of the mocked external hosts are not app issues. */
 describe('/', async () => {
   await setup(defaultSetupConfig)
 

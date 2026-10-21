@@ -1,14 +1,16 @@
 import { describe, expect, it } from 'vitest'
 import { setup, url } from '@nuxt/test-utils'
 import { mockPostsPage0, mockPostsPage1 } from './posts.mock-data'
+import { premiumBooruPreviewLimit } from '../../app/assets/js/promotions'
+import { defaultPostsPerPage } from '../../app/composables/useUserSettings'
 import {
   collectConsoleProblems,
   collectPostsRequests,
   defaultSetupConfig,
   pushRoute,
   readNuxtError,
+  scrollToRow,
   seedLocalStorage,
-  type TrackedPage,
   useTrackedPageFactory
 } from '../helper'
 
@@ -20,23 +22,6 @@ import {
 const firstPostId = mockPostsPage0.data[0].id
 const secondPostId = mockPostsPage0.data[1].id
 const nextPageFirstPostId = mockPostsPage1.data[0].id
-
-/** Scrolls to the end of the virtualized list until it renders a row at or past `index`. */
-async function scrollToRow(page: TrackedPage, index: number) {
-  await expect
-    .poll(
-      () =>
-        page.evaluate(() => {
-          window.scrollTo(0, document.body.scrollHeight)
-          return Math.max(
-            -1,
-            ...[...document.querySelectorAll('li[data-index]')].map((li) => Number(li.getAttribute('data-index')))
-          )
-        }),
-      { timeout: 20000 }
-    )
-    .toBeGreaterThanOrEqual(index)
-}
 
 /** The first row of the next page, once every post of the first page is shown. */
 const nextPageRow = mockPostsPage0.data.length
@@ -245,11 +230,13 @@ describe('Settings edge cases', async () => {
     })
 
     await page.getByTestId(`gelbooru.com-${secondPostId}`).first().waitFor({ state: 'visible' })
-    await scrollToRow(page, 7)
+    await scrollToRow(page, premiumBooruPreviewLimit)
     await page.getByTestId('premium-booru-promotion').waitFor({ state: 'visible' })
 
     expect(await page.getByTestId(`gelbooru.com-${firstPostId}`).count()).toBe(0)
-    expect(requests.map((params) => params.get('limit')).filter((limit) => limit !== '29')).toEqual([])
+    expect(
+      requests.map((params) => params.get('limit')).filter((limit) => limit !== String(defaultPostsPerPage))
+    ).toEqual([])
     expect(await readNuxtError(page)).toBeNull()
     expect(problems).toEqual([])
   }, 45000)
