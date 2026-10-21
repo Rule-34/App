@@ -123,7 +123,7 @@ describe('Settings edge cases', async () => {
     }, 45000)
 
     it('does not page through a blocked search on a cold load', async () => {
-      const { page } = await coldLoad('/posts/safebooru.org?tags=ai_generated', {
+      const { page, requests } = await coldLoad('/posts/safebooru.org?tags=ai_generated', {
         'settings-blockAiGeneratedImages': 'true'
       })
 
@@ -132,6 +132,8 @@ describe('Settings edge cases', async () => {
       await page.waitForTimeout(3000)
 
       expect(new URL(page.url()).searchParams.get('page')).toBeNull()
+      // The server rendered the first page, and the browser must not fetch a blocked search
+      expect(requests).toEqual([])
     }, 45000)
 
     it.each(['garbage', '"default"', ''])(
