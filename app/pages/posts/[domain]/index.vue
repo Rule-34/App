@@ -432,9 +432,9 @@
   )
 
   // The block list is only known in the browser, so a server-rendered page shows the error once hydrated
-  const isAppMounted = useAuthHydrated()
+  const isHydrated = useAuthHydrated()
   const blockedSearchError = computed(() =>
-    isAppMounted.value && isSearchedTagBlocked.value ? new Error(t('errors.tagInBlockList')) : null
+    isHydrated.value && isSearchedTagBlocked.value ? new Error(t('errors.tagInBlockList')) : null
   )
 
   async function fetchPosts({ pageParam }: QueryFunctionContext<readonly unknown[], string>): Promise<IPostPage> {
@@ -571,7 +571,7 @@
   const rowGap = 16
 
   // The server renders without the visitor's block list, so it applies once hydration has finished
-  const blockedTags = computed(() => new Set(isAppMounted.value ? selectedBlockList.value : []))
+  const blockedTags = computed(() => new Set(isHydrated.value ? selectedBlockList.value : []))
 
   const allRows = computed<PostRow[]>(() => {
     if (!data.value) {

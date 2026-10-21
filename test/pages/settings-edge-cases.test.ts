@@ -122,6 +122,18 @@ describe('Settings edge cases', async () => {
       expect(problems).toEqual([])
     }, 45000)
 
+    it('does not page through a blocked search on a cold load', async () => {
+      const { page } = await coldLoad('/posts/safebooru.org?tags=ai_generated', {
+        'settings-blockAiGeneratedImages': 'true'
+      })
+
+      await page.getByText('One of your selected tags is in the block list').first().waitFor({ state: 'visible' })
+      // Infinite scroll is throttled; give it time to move on if it is going to
+      await page.waitForTimeout(3000)
+
+      expect(new URL(page.url()).searchParams.get('page')).toBeNull()
+    }, 45000)
+
     it.each(['garbage', '"default"', ''])(
       'ignores a stored block list choice of %j',
       async (value) => {
