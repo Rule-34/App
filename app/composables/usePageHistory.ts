@@ -6,20 +6,6 @@ interface PageHistory {
   date: string
 }
 
-function readPageHistory(raw: string): PageHistory[] {
-  let value: unknown
-
-  try {
-    value = JSON.parse(raw)
-  } catch {
-    return []
-  }
-
-  return Array.isArray(value)
-    ? value.filter((page): page is PageHistory => typeof page?.path === 'string' && typeof page.date === 'string')
-    : []
-}
-
 export default function () {
   const router = useRouter()
   const getRouteBaseName = useRouteBaseName()
@@ -55,11 +41,11 @@ export default function () {
   if (import.meta.client) {
     pageHistory = useLocalStorage<PageHistory[]>('settings-pageHistory', [], {
       writeDefaults: false,
-      // Keep only well-formed entries, so a corrupt stored value can't break navigation
-      serializer: {
-        read: readPageHistory,
-        write: (value) => JSON.stringify(value)
-      }
+      // Keep only well-formed entries, so an old or hand-edited value can't break navigation
+      mergeDefaults: (stored) =>
+        Array.isArray(stored)
+          ? stored.filter((page) => typeof page?.path === 'string' && typeof page.date === 'string')
+          : []
     })
   }
 
