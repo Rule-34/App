@@ -427,22 +427,15 @@
   /**
    * Data fetching
    */
-  const isSearchedTagBlocked = computed(() =>
-    selectedTags.value.some((tag) => selectedBlockList.value.includes(tag.name))
-  )
-
   // The block list is only known in the browser, so a server-rendered page shows the error once hydrated
   const isHydrated = useAuthHydrated()
   const blockedSearchError = computed(() =>
-    isHydrated.value && isSearchedTagBlocked.value ? new Error(t('errors.tagInBlockList')) : null
+    isHydrated.value && selectedTags.value.some((tag) => selectedBlockList.value.includes(tag.name))
+      ? new Error(t('errors.tagInBlockList'))
+      : null
   )
 
   async function fetchPosts({ pageParam }: QueryFunctionContext<readonly unknown[], string>): Promise<IPostPage> {
-    // Return early if selectedTags is in blocklist
-    if (isSearchedTagBlocked.value) {
-      throw new Error(t('errors.tagInBlockList'))
-    }
-
     if (pageParam) {
       const page = await $fetch<IPostPage>(pageParam, {
         retry: false
@@ -517,7 +510,8 @@
 
     queryFn: fetchPosts,
 
-    enabled: computed(() => !isPremiumOnlyRequest.value || hasPremiumAccess.value),
+    // Browser fetches only happen after hydration, so `blockedSearchError` covers every blocked search
+    enabled: computed(() => !blockedSearchError.value && (!isPremiumOnlyRequest.value || hasPremiumAccess.value)),
 
     // Stale after 5 minutes
     // Same as Nuxt route rules
@@ -558,10 +552,11 @@
   // `isPremium` is false until mount, so the server and hydration render the preview for every visitor.
   // The promotion is only added after mount (`isFree`): a server-rendered one would be unmounted for premium visitors.
   const isPreviewOnly = computed(() => selectedBooru.value.isPremium && !isPremium.value)
-  const canLoadNextPage = computed(() => hasNextPage.value && !isPreviewOnly.value && !blockedSearchError.value)
-  const trailingRowKind = computed(() =>
-    isPreviewOnly.value ? (isFree.value ? 'premium-promotion' : null) : canLoadNextPage.value ? 'next-page' : null
-  )
+  const trailingRowKind = computed(() => {
+    if (isPreviewOnly.value) return isFree.value ? 'premium-promotion' : null
+
+    return hasNextPage.value && !blockedSearchError.value ? 'next-page' : null
+  })
 
   /**
    * Virtualization
@@ -750,7 +745,7 @@
     // THEN load next page automatically
     if (
       lastItem.index >= allRows.value.length - 1 &&
-      canLoadNextPage.value &&
+      trailingRowKind.value === 'next-page' &&
       !isFetchingNextPage.value &&
       !isError.value
     ) {
