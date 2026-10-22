@@ -1073,6 +1073,15 @@
         data-testid="premium-booru-promotion"
       />
 
+      <!-- Error (initial load only); a blocked search never fetches, so it stays pending -->
+      <template v-else-if="blockedSearchError || (isError && !allRows.length)">
+        <PostPageError
+          :error="blockedSearchError ?? error"
+          :on-retry="onRetryClick"
+          class="mt-32"
+        />
+      </template>
+
       <!-- Pending -->
       <template v-else-if="isPending">
         <div
@@ -1086,15 +1095,6 @@
 
           <h3>{{ t('posts.loadingPosts') }}</h3>
         </div>
-      </template>
-
-      <!-- Error (initial load only) -->
-      <template v-else-if="blockedSearchError || (isError && !allRows.length)">
-        <PostPageError
-          :error="blockedSearchError ?? error"
-          :on-retry="onRetryClick"
-          class="mt-32"
-        />
       </template>
 
       <!-- No results -->
