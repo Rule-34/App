@@ -119,34 +119,6 @@
         >
           <div class="px-4 py-2 text-sm font-medium text-base-content-highlight">{{ t('source.postSource') }}</div>
 
-          <!-- The post on its booru: always first, so it stays in the same place -->
-          <div
-            v-if="postBooruUrl"
-            class="py-1"
-          >
-            <HeadlessMenuItem v-slot="{ active }">
-              <NuxtLink
-                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
-                :href="postBooruUrl"
-                :title="t('source.viewOnBooru', { domain: postDomain })"
-                class="group flex w-full items-center px-4 py-2 text-sm"
-                data-testid="post-booru-link"
-                target="_blank"
-              >
-                <img
-                  :alt="t('common.favicon')"
-                  :src="useFaviconUrl(postBooruUrl)"
-                  referrerpolicy="no-referrer"
-                  class="mr-3 h-5 w-5 shrink-0 rounded-sm"
-                  height="64"
-                  width="64"
-                />
-
-                <span class="truncate">{{ t('source.viewOnBooru', { domain: postDomain }) }}</span>
-              </NuxtLink>
-            </HeadlessMenuItem>
-          </div>
-
           <!-- No source found -->
           <div
             v-if="!postSources.length"
@@ -192,6 +164,34 @@
                   {{ source }}
                 </span>
               </template>
+            </HeadlessMenuItem>
+          </div>
+
+          <!-- The post on its booru, right before the source finders -->
+          <div
+            v-if="postBooruUrl"
+            class="py-1"
+          >
+            <HeadlessMenuItem v-slot="{ active }">
+              <NuxtLink
+                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                :href="postBooruUrl"
+                :title="t('source.viewOnBooru', { domain: postDomain })"
+                class="group flex w-full items-center px-4 py-2 text-sm"
+                data-testid="post-booru-link"
+                target="_blank"
+              >
+                <img
+                  :alt="t('common.favicon')"
+                  :src="useFaviconUrl(postBooruUrl)"
+                  referrerpolicy="no-referrer"
+                  class="mr-3 h-5 w-5 shrink-0 rounded-sm"
+                  height="64"
+                  width="64"
+                />
+
+                <span class="truncate">{{ t('source.viewOnBooru', { domain: postDomain }) }}</span>
+              </NuxtLink>
             </HeadlessMenuItem>
           </div>
 
