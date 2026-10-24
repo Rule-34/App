@@ -1,3 +1,4 @@
+import { url } from '@nuxt/test-utils'
 import type { Page, Route } from 'playwright-core'
 import type { IPocketbasePost, ISimplePocketbasePost } from '../app/assets/js/pocketbase.dto'
 
@@ -36,6 +37,49 @@ export async function addPocketBaseAuthCookie(page: Page, appUrl: string) {
       JSON.stringify(JSON.parse(decodeURIComponent(value)) as { token: string; model: unknown })
     )
   }, cookieValue)
+}
+
+const encodeJwtPart = (value: object) => Buffer.from(JSON.stringify(value)).toString('base64url')
+
+/** A premium user whose session expires in a day. The license is the username, as on the real backend. */
+export const premiumSession = (() => {
+  const token = `${encodeJwtPart({ alg: 'HS256', typ: 'JWT' })}.${encodeJwtPart({ exp: Math.floor(Date.now() / 1000) + 86400 })}.sig`
+  const record = {
+    id: 'premium-test-user',
+    collectionName: 'users',
+    email: 'premium@example.test',
+    username: 'SLX-TEST-LICENSE-0001',
+    subscription_expires_at: new Date(Date.now() + 86400_000).toISOString()
+  }
+
+  return { token, record, authValue: encodeURIComponent(JSON.stringify({ token, model: record })) }
+})()
+
+/** Signs the premium user in: the SDK only decodes the JWT expiry, and auth-refresh is answered locally. */
+export async function signInAsPremiumUser(page: Page, via: 'cookie' | 'localStorage' = 'cookie') {
+  const { token, record, authValue } = premiumSession
+
+  await page.route(/pocketbase\.r34\.app/, (route) => {
+    if (route.request().url().includes('auth-refresh')) {
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ token, record }) })
+    }
+
+    return route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ items: [], totalItems: 0 })
+    })
+  })
+
+  if (via === 'cookie') {
+    await page.context().addCookies([{ name: 'pb_auth', value: authValue, url: url('/') }])
+    return
+  }
+
+  await page.addInitScript(
+    (value) => window.localStorage.setItem('pocketbase_auth', decodeURIComponent(value)),
+    authValue
+  )
 }
 
 type PocketBaseRecord = Record<string, unknown> & { id: string }

@@ -16,7 +16,7 @@
 
   const localePath = useLocalePath()
   const { t } = useI18n()
-  const { isPremium } = useUserData()
+  const { hasPremiumAccess } = useUserData()
   const { autoplayAnimatedMedia } = useUserSettings()
   const { timesVideoHasRendered } = useEthics()
   const { wasCurrentPageSSR } = useSSRDetection()
@@ -31,6 +31,9 @@
     mediaPosterSrc: string | null
     mediaType: PostMediaType
     mediaAlt: string
+
+    /** Its origin only works through imgproxy, so the free preview uses it on client-side navigations too */
+    premiumOnlyBooru?: boolean
   }
 
   const props = defineProps<PostMediaProps>()
@@ -55,12 +58,14 @@
   const isImage = computed(() => props.mediaType === 'image' && !isAnimatedMedia.value)
 
   const isIndexZeroViaImgproxy = computed(
-    () => isImage.value && (isPremium.value || (wasCurrentPageSSR.value && props.postIndex < 8))
+    () =>
+      isImage.value &&
+      (hasPremiumAccess.value || ((wasCurrentPageSSR.value || props.premiumOnlyBooru) && props.postIndex < 8))
   )
 
   // Index 0 renders through imgproxy for these posts. Premium then tries the origin itself (index 1) before the
   // public CDNs and our proxy; free posts skip the origin, since imgproxy already fetched it.
-  const directCandidateIndex = computed(() => (isIndexZeroViaImgproxy.value ? (isPremium.value ? 1 : -1) : 0))
+  const directCandidateIndex = computed(() => (isIndexZeroViaImgproxy.value ? (hasPremiumAccess.value ? 1 : -1) : 0))
 
   const isDirectRequest = computed(() => srcCandidateIndex.value === directCandidateIndex.value)
 
@@ -123,7 +128,7 @@
     const candidates = getCandidateSources({
       rawUrl: rawMediaSrc.value,
       mediaType: props.mediaType,
-      isPremium: isPremium.value
+      isPremium: hasPremiumAccess.value
     })
 
     // The imgproxy attempt and the direct attempt use the same source URL
@@ -134,7 +139,7 @@
     getCandidateSources({
       rawUrl: rawPosterSrc.value,
       mediaType: 'image',
-      isPremium: isPremium.value
+      isPremium: hasPremiumAccess.value
     })
   )
 
@@ -569,7 +574,7 @@
       }
     }
 
-    if (!isPremium.value) {
+    if (!hasPremiumAccess.value) {
       // Count each mounted video once, not on every fallback/retry player re-creation
       if (!hasCountedVideoRender) {
         hasCountedVideoRender = true
@@ -1000,7 +1005,7 @@
           <div class="flex w-full flex-col gap-2.5">
             <!-- Premium bypasses host blocks automatically, so it is the one filled action -->
             <NuxtLink
-              v-if="!isPremium"
+              v-if="!hasPremiumAccess"
               :href="localePath('/premium?utm_source=internal&utm_medium=media-error#pricing')"
               class="inline-flex min-h-[40px] w-full items-center justify-center rounded-md bg-primary-700 px-4 py-2 text-center text-sm font-semibold text-base-content-highlight shadow-sm transition-colors hover:bg-primary-600 hover:hover-text-util focus-visible:focus-outline-util active:bg-primary-800"
             >
@@ -1012,7 +1017,7 @@
               <button
                 v-if="rawMediaSrc"
                 :class="
-                  isPremium
+                  hasPremiumAccess
                     ? 'bg-primary-700 text-base-content-highlight shadow-sm hover:bg-primary-600 active:bg-primary-800'
                     : 'text-base-content ring-1 ring-base-0/20 hover:hover-bg-util'
                 "

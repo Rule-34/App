@@ -10,13 +10,13 @@
   import { postHasBlockedTag } from '~/assets/js/post-blocklist'
   import { measureVirtualItemsAfterVueUpdate } from '~/assets/js/virtualizer-measurement'
   import {
-    fallbackBooruDomain,
     generatePostsRoute,
     getFilterQueryValue,
     getSingleRouteParam,
     getSinglePositiveTagQueryValue,
     getSingleQueryValue
   } from '~/assets/js/RouterHelper'
+  import { additionalBoorusPromotion, premiumBooruPreviewLimit } from '~/assets/js/promotions'
   import { stripLocaleFromPath } from '~/composables/locale'
   import { useTagTitle } from '~/composables/useTagTitle'
   import type { Domain } from '~/assets/js/domain'
@@ -24,7 +24,6 @@
   import { shouldReportTagSearchError } from '~/assets/js/tag-search-error'
   import Tag, { type ITag, toggleSelectedTag } from '~/assets/js/tag.dto'
   import { project } from '~~/config/project'
-  import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
   type FilterValue = string | number | boolean | null | undefined
   type SearchSubmitPayload = {
@@ -46,7 +45,7 @@
   const buildTagTitle = useTagTitle()
 
   const { postsPerPage } = useUserSettings()
-  const { isPremium } = useUserData()
+  const { isPremium, isFree, hasPremiumAccess } = useUserData()
   const { hasInteracted } = useInteractionDetector()
   const { schedule: scheduleIdleTask } = useIdleTask()
   const { booruList } = useBooruList()
@@ -70,7 +69,7 @@
     const hasLoadedAds = ref(false)
 
     watch(
-      [hasInteracted, isPremium],
+      [hasInteracted, hasPremiumAccess],
       ([hasInteracted, isPremiumUser]) => {
         if (hasLoadedAds.value) {
           return
@@ -85,7 +84,7 @@
         }
 
         scheduleIdleTask(async () => {
-          if (hasLoadedAds.value || isPremium.value) {
+          if (hasLoadedAds.value || hasPremiumAccess.value) {
             return
           }
 
@@ -97,29 +96,6 @@
       },
       { immediate: true }
     )
-  })
-
-  // Reopen the existing premium upsell when a non-premium user lands here
-  // via redirect from a premium-only booru to the fallback booru route.
-  onMounted(() => {
-    if (isPremium.value) {
-      return
-    }
-
-    if (selectedBooru.value.domain !== fallbackBooruDomain) {
-      return
-    }
-
-    const sourceBooru = getSingleQueryValue(route.query.source_booru)
-
-    if (!sourceBooru) {
-      return
-    }
-
-    const { open: promptPremium, currentIndex } = usePremiumDialog()
-
-    currentIndex.value = premiumPromotionIndices.additionalBoorus
-    promptPremium.value = true
   })
 
   /**
@@ -175,6 +151,19 @@
       score: getFilterQueryValue(route.query, 'score') ?? undefined
     }
   })
+
+  // Free visitors preview premium-only boorus: the first page of at most one tag, unfiltered, at the default size.
+  // Anything beyond that is left to the client, since the server can't tell who is visiting.
+  const isPremiumOnlyRequest = computed(
+    () =>
+      selectedBooru.value.isPremium &&
+      (selectedPage.value !== selectedBooru.value.type.initialPageID ||
+        selectedTags.value.length > 1 ||
+        Object.values(selectedFilters.value).some((value) => value != null))
+  )
+  const postsLimit = computed(() =>
+    selectedBooru.value.isPremium && !hasPremiumAccess.value ? defaultPostsPerPage : postsPerPage.value
+  )
 
   const filterConfig = computed(() => ({
     sort: {
@@ -438,17 +427,15 @@
   /**
    * Data fetching
    */
-  async function fetchPosts({ pageParam }: QueryFunctionContext<readonly unknown[], string>): Promise<IPostPage> {
-    // Return early if selectedTags is in blocklist
-    if (
-      selectedBlockList.value.length > 0 &&
-      //
-      // selectedTags.value.some((tag) => selectedBlockList.value.includes(tag.name)) &&
-      selectedBlockList.value.some((blocklistTag) => selectedTags.value.map((tag) => tag.name).includes(blocklistTag))
-    ) {
-      throw new Error(t('errors.tagInBlockList'))
-    }
+  // The block list is only known in the browser, so a server-rendered page shows the error once hydrated
+  const isHydrated = useAuthHydrated()
+  const blockedSearchError = computed(() =>
+    isHydrated.value && selectedTags.value.some((tag) => selectedBlockList.value.includes(tag.name))
+      ? new Error(t('errors.tagInBlockList'))
+      : null
+  )
 
+  async function fetchPosts({ pageParam }: QueryFunctionContext<readonly unknown[], string>): Promise<IPostPage> {
     if (pageParam) {
       const page = await $fetch<IPostPage>(pageParam, {
         retry: false
@@ -466,7 +453,7 @@
       params: {
         baseEndpoint: selectedBooru.value.domain,
 
-        limit: postsPerPage.value,
+        limit: postsLimit.value,
 
         pageID: selectedPage.value,
 
@@ -499,7 +486,7 @@
     // from infinite scroll. Making this reactive resets the appended list.
     selectedPage.value,
     //
-    postsPerPage.value
+    postsLimit.value
   ]
 
   const {
@@ -522,6 +509,9 @@
     queryKey: postsQueryKey,
 
     queryFn: fetchPosts,
+
+    // Browser fetches only happen after hydration, so `blockedSearchError` covers every blocked search
+    enabled: computed(() => !blockedSearchError.value && (!isPremiumOnlyRequest.value || hasPremiumAccess.value)),
 
     // Stale after 5 minutes
     // Same as Nuxt route rules
@@ -554,7 +544,19 @@
     }
   })
 
-  onServerPrefetch(suspense)
+  if (!isPremiumOnlyRequest.value) {
+    onServerPrefetch(suspense)
+  }
+
+  // Premium-only boorus show a preview to everyone else, then the premium promotion.
+  // `isPremium` is false until mount, so the server and hydration render the preview for every visitor.
+  // The promotion is only added after mount (`isFree`): a server-rendered one would be unmounted for premium visitors.
+  const isPreviewOnly = computed(() => selectedBooru.value.isPremium && !isPremium.value)
+  const trailingRowKind = computed(() => {
+    if (isPreviewOnly.value) return isFree.value ? 'premium-promotion' : null
+
+    return hasNextPage.value && !blockedSearchError.value ? 'next-page' : null
+  })
 
   /**
    * Virtualization
@@ -562,7 +564,8 @@
   const estimatedRowSize = 600
   const rowGap = 16
 
-  const blockedTags = computed(() => new Set(selectedBlockList.value))
+  // The server renders without the visitor's block list, so it applies once hydration has finished
+  const blockedTags = computed(() => new Set(isHydrated.value ? selectedBlockList.value : []))
 
   const allRows = computed<PostRow[]>(() => {
     if (!data.value) {
@@ -570,7 +573,7 @@
     }
 
     // Flatten pages
-    return data.value.pages.flatMap((page) => {
+    const rows = data.value.pages.flatMap((page) => {
       //
 
       return page.data
@@ -591,7 +594,13 @@
           }
         })
     })
+
+    return isPreviewOnly.value ? rows.slice(0, premiumBooruPreviewLimit) : rows
   })
+
+  function getTrailingRowKey() {
+    return `${selectedBooru.value.domain}-${trailingRowKind.value}`
+  }
 
   const parentRef = ref<HTMLElement | null>(null)
   const parentOffsetRef = ref(0)
@@ -605,12 +614,12 @@
 
   const rowVirtualizerOptions = computed(() => {
     return {
-      count: hasNextPage.value ? allRows.value.length + 1 : allRows.value.length,
+      count: trailingRowKind.value ? allRows.value.length + 1 : allRows.value.length,
 
       getItemKey: (index: number) => {
         const post = allRows.value[index]
 
-        return post ? getPostRowKey(post) : `${selectedBooru.value.domain}-next-page`
+        return post ? getPostRowKey(post) : getTrailingRowKey()
       },
 
       estimateSize: () => estimatedRowSize,
@@ -647,7 +656,7 @@
         start,
         size: estimatedRowSize,
         end: start + estimatedRowSize,
-        key: post ? getPostRowKey(post) : `${selectedBooru.value.domain}-next-page`,
+        key: post ? getPostRowKey(post) : getTrailingRowKey(),
         lane: 0
       }
     })
@@ -681,6 +690,11 @@
         key: string
         virtualRow: RenderVirtualItem
       }
+    | {
+        kind: 'premium-promotion'
+        key: string
+        virtualRow: RenderVirtualItem
+      }
 
   const renderRows = computed<RenderVirtualRow[]>(() =>
     virtualRows.value.map((virtualRow) => {
@@ -688,11 +702,8 @@
       const key = String(virtualRow.key)
 
       if (!post) {
-        return {
-          kind: 'next-page',
-          key,
-          virtualRow
-        }
+        // The virtualizer can lag a render behind the row count
+        return { kind: trailingRowKind.value ?? 'next-page', key, virtualRow }
       }
 
       return {
@@ -734,7 +745,7 @@
     // THEN load next page automatically
     if (
       lastItem.index >= allRows.value.length - 1 &&
-      hasNextPage.value &&
+      trailingRowKind.value === 'next-page' &&
       !isFetchingNextPage.value &&
       !isError.value
     ) {
@@ -945,51 +956,6 @@
   ])
 
   definePageMeta({
-    middleware: [
-      (to) => {
-        const { booruList } = useBooruList()
-        const { isPremium } = useUserData()
-        const localePath = useLocalePath()
-
-        if (isPremium.value) {
-          return
-        }
-
-        const domain = Array.isArray(to.params.domain) ? to.params.domain[0] : to.params.domain
-
-        if (!domain || domain === fallbackBooruDomain) {
-          return
-        }
-
-        const booru = booruList.value.find((booru) => booru.domain === domain)
-
-        if (!booru?.isPremium) {
-          return
-        }
-
-        const tags = getSingleQueryValue(to.query.tags)
-        const redirectQuery = {
-          ...(tags ? { tags } : {}),
-          utm_source: 'internal',
-          utm_medium: 'unauthorized-booru-redirect',
-          utm_campaign: 'additional-boorus',
-          utm_content: domain,
-          // Used after landing to reopen the existing premium upsell modal.
-          source_booru: domain
-        }
-
-        return navigateTo(
-          {
-            path: localePath(`/posts/${fallbackBooruDomain}`),
-            query: redirectQuery
-          },
-          {
-            redirectCode: 302
-          }
-        )
-      }
-    ],
-
     validate: async (route) => {
       const { booruList } = useBooruList()
 
@@ -1100,8 +1066,24 @@
     </div>
 
     <section class="my-4">
+      <!-- Premium-only booru: other pages, multi-tag searches and filters are premium -->
+      <LazyPromotedContent
+        v-if="isFree && isPremiumOnlyRequest"
+        :promotion="additionalBoorusPromotion"
+        data-testid="premium-booru-promotion"
+      />
+
+      <!-- Error (initial load only); a blocked search never fetches, so it stays pending -->
+      <template v-else-if="blockedSearchError || (isError && !allRows.length)">
+        <PostPageError
+          :error="blockedSearchError ?? error"
+          :on-retry="onRetryClick"
+          class="mt-32"
+        />
+      </template>
+
       <!-- Pending -->
-      <template v-if="isPending">
+      <template v-else-if="isPending">
         <div
           class="flex h-80 w-full animate-pulse flex-col items-center justify-center gap-4 text-lg"
           data-testid="posts-loader"
@@ -1113,15 +1095,6 @@
 
           <h3>{{ t('posts.loadingPosts') }}</h3>
         </div>
-      </template>
-
-      <!-- Error (initial load only) -->
-      <template v-else-if="isError && !allRows.length">
-        <PostPageError
-          :error="error"
-          :on-retry="onRetryClick"
-          class="mt-32"
-        />
       </template>
 
       <!-- No results -->
@@ -1173,9 +1146,16 @@
               :data-virtual-key="row.key"
               :data-testid="row.kind === 'post' ? row.dataTestId : undefined"
             >
+              <!-- Premium-only booru: the preview ends here -->
+              <LazyPromotedContent
+                v-if="row.kind === 'premium-promotion'"
+                :promotion="additionalBoorusPromotion"
+                data-testid="premium-booru-promotion"
+              />
+
               <!-- Next Pagination -->
               <div
-                v-if="row.kind === 'next-page'"
+                v-else-if="row.kind === 'next-page'"
                 data-testid="load-next-page"
                 class="flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-base-content"
               >
@@ -1223,7 +1203,7 @@
                 />
 
                 <!-- Promoted content -->
-                <template v-if="!isPremium && row.virtualRow.index !== 0 && row.virtualRow.index % 7 === 0">
+                <template v-if="isFree && row.virtualRow.index !== 0 && row.virtualRow.index % 7 === 0">
                   <LazyPromotedContent class="mt-4" />
                 </template>
               </template>
@@ -1233,7 +1213,7 @@
 
         <!-- Nothing more to load message -->
         <div
-          v-if="!hasNextPage && !isFetching && allRows.length"
+          v-if="!hasNextPage && !isPreviewOnly && !isFetching && allRows.length"
           class="mt-4 flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-base-content"
         >
           <span class="block rounded-md px-1.5 py-1"> {{ t('posts.nothingMoreToLoad') }} </span>

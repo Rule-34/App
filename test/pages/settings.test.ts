@@ -1,28 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { setup, url } from '@nuxt/test-utils'
 import { mockPostsPage0 } from './posts.mock-data'
-import { defaultSetupConfig, useTrackedPageFactory } from '../helper'
-
-type TrackedPage = Awaited<ReturnType<ReturnType<typeof useTrackedPageFactory>>>
+import { defaultSetupConfig, pushRoute, seedLocalStorage, type TrackedPage, useTrackedPageFactory } from '../helper'
 
 const firstPost = mockPostsPage0.data[0]
 const firstPostTestId = `safebooru.org-${firstPost.id}`
-
-/** Client-side navigation, so the posts are fetched by the browser (observable and routable) instead of the SSR. */
-async function pushRoute(page: TrackedPage, path: string) {
-  // The router only exists once the app has hydrated
-  await page.waitForFunction(() => (document.querySelector('#__nuxt') as { __vue_app__?: unknown } | null)?.__vue_app__)
-
-  return page.evaluate(
-    (target) =>
-      (
-        document.querySelector('#__nuxt') as unknown as {
-          __vue_app__: { config: { globalProperties: { $router: { push: (to: string) => Promise<unknown> } } } }
-        }
-      ).__vue_app__.config.globalProperties.$router.push(target),
-    path
-  )
-}
 
 /** The first SSR posts go through imgproxy, which base64url-encodes the source; compare on the decoded source. */
 function sourceOf(src: string | null) {
@@ -41,13 +23,6 @@ function readImageSource(page: TrackedPage, testId: string) {
 
 function readStoredSetting(page: TrackedPage, key: string) {
   return page.evaluate((storageKey) => window.localStorage.getItem(storageKey), key)
-}
-
-function seedSetting(page: TrackedPage, key: string, value: string) {
-  return page.addInitScript(([storageKey, storageValue]) => window.localStorage.setItem(storageKey, storageValue), [
-    key,
-    value
-  ] as const)
 }
 
 describe('Settings', async () => {
@@ -88,7 +63,7 @@ describe('Settings', async () => {
 
     it('goes back to the sample image when toggled off', async () => {
       const page = await createTrackedPage()
-      await seedSetting(page, 'settings-postFullSizeImages', 'true')
+      await seedLocalStorage(page, { 'settings-postFullSizeImages': 'true' })
       await page.goto(url('/settings'))
 
       const toggle = page.getByRole('switch', { name: /Full size images/ })
@@ -202,7 +177,7 @@ describe('Settings', async () => {
 
     it('plays right away once enabled', async () => {
       const page = await createTrackedPage()
-      await seedSetting(page, 'settings-autoplayAnimatedMedia', 'true')
+      await seedLocalStorage(page, { 'settings-autoplayAnimatedMedia': 'true' })
       await page.goto(url('/settings'))
       const gifUrl = await routeAnimatedFirstPost(page)
 

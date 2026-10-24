@@ -9,6 +9,11 @@
   import randomWeightedChoice from 'random-weighted-choice'
   import { isExternalHref } from '~/composables/locale'
 
+  const props = defineProps<{
+    /** Shows this promotion instead of a random one */
+    promotion?: Promotion
+  }>()
+
   const localePath = useLocalePath()
 
   const weightedPromotions = [
@@ -43,14 +48,14 @@
     return typeof value === 'string' && value in promotionPools
   }
 
-  const selectedPromotionsName = randomWeightedChoice(weightedPromotions)
+  const selectedPromotionsName = props.promotion ? 'premiumPromotions' : randomWeightedChoice(weightedPromotions)
   const selectedPromotionPoolName = isPromotionPoolName(selectedPromotionsName)
     ? selectedPromotionsName
     : 'premiumPromotions'
   const selectedPromotions = promotionPools[selectedPromotionPoolName]
 
   const promoIndex = Math.floor(Math.random() * selectedPromotions.length)
-  const promo = selectedPromotions[promoIndex] as Promotion | undefined
+  const promo = props.promotion ?? (selectedPromotions[promoIndex] as Promotion | undefined)
 
   if (!promo) {
     throw new Error('No promotion is available')

@@ -286,6 +286,33 @@ the `@headlessui/tailwindcss` plugin.
   Unit tests can prove payload and repository behavior, but real-browser traces catch request bursts, realtime echo
   refreshes, auth redirects, and UI state changes that are easy to miss in isolated tests.
 
+### Shared HTML must not depend on the visitor
+
+Cloudflare caches SSR HTML (`s-maxage=300`) without looking at cookies, so server output must be identical for everyone.
+A cached premium render once leaked a user's email and license and crashed hydration for other premium visitors.
+
+- Never read `pb_auth` or build account state on the server (`app/plugins/030.pocketbase.ts`, `usePocketbase()`); the
+  server payload must carry no email, license or token. `test/pages/auth-agnostic-ssr.test.ts` guards this.
+- `useUserData().isPremium` is for rendering and stays false until hydration has finished, so the first client render
+  matches the anonymous HTML. Use `hasPremiumAccess` (known immediately on the client) for logic: route middleware, ad
+  loading. The flag flips on `app:suspense:resolve`, not `app:mounted`, which fires before async page components hydrate.
+- Settings live in `localStorage` (client only), so the server renders defaults. Validate stored values where they are
+  read (`postsPerPage` in `useUserSettings`) and show setting-driven states that differ from the SSR HTML only after
+  hydration (the blocked-tag error in `pages/posts/[domain]/index.vue`). `test/pages/settings-edge-cases.test.ts` cold-loads
+  pages with unusual stored settings.
+- Never flip a `v-if` on SSR'd markup right after mount when it contains a `Lazy*` component or sits next to a
+  `<ClientOnly>` swap: unmounting un-hydrated async nodes throws `insertBefore ... not a child of this node`. Render the
+  placeholder for everyone (see the AI placeholder in `PostComponent.vue`) and let the client swap it.
+- Premium-only boorus are indexable previews, not redirects: everyone gets the first 12 posts
+  (`premiumBooruPreviewLimit`), then the Additional Boorus promotion (`isPreviewOnly` in
+  `pages/posts/[domain]/index.vue`). It keys on `isPremium`, so SSR and hydration
+  show the preview to everyone and premium visitors get the full list after mount.
+  Tag landings (`pages/posts/[domain]/[tag].vue`) also show 12 posts on every booru, so neither looks thin (soft 404)
+  to crawlers.
+- `server/middleware/i18n-messages-guard.ts` 404s `/_i18n/**` hashes from another build: the module's messages route
+  ignores the hash ([nuxt-modules/i18n#3970](https://github.com/nuxt-modules/i18n/issues/3970)), so a rollout could
+  cache another build's messages as `immutable`.
+
 ### Premium Cloud Sync
 
 - Empty cloud state means "no user-authored cloud override"; do not seed PocketBase from local defaults during initial

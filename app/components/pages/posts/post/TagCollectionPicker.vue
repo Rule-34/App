@@ -12,7 +12,7 @@
 
   const { t } = useI18n()
   const { toast } = useLazyToast()
-  const { isPremium } = useUserData()
+  const { hasPremiumAccess } = useUserData()
   const { tagCollections } = useTagCollections()
   const { setTagCollections } = usePremiumCloudSync()
 
@@ -29,7 +29,7 @@
   }
 
   async function addTagToCollection(tagCollectionName: string) {
-    if (!isPremium.value) {
+    if (!hasPremiumAccess.value) {
       openPremiumPrompt()
       return
     }
@@ -63,7 +63,7 @@
   }
 
   async function createTagCollectionFromTag() {
-    if (!isPremium.value) {
+    if (!hasPremiumAccess.value) {
       openPremiumPrompt()
       return
     }

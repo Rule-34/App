@@ -40,7 +40,12 @@ export default function () {
 
   if (import.meta.client) {
     pageHistory = useLocalStorage<PageHistory[]>('settings-pageHistory', [], {
-      writeDefaults: false
+      writeDefaults: false,
+      // Keep only well-formed entries, so an old or hand-edited value can't break navigation
+      mergeDefaults: (stored) =>
+        Array.isArray(stored)
+          ? stored.filter((page) => typeof page?.path === 'string' && typeof page.date === 'string')
+          : []
     })
   }
 

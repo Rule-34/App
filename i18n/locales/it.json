@@ -446,6 +446,7 @@
   },
   "source": {
     "postSource": "Pubblica fonte",
+    "viewOnBooru": "Vedi su {domain}",
     "noSourceFound": "Nessuna fonte trovata:(",
     "findWithService": "Trova con {service}",
     "editWithService": "Modifica con {service}"

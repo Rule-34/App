@@ -68,3 +68,24 @@ export function buildImageRelatedSourceServices(postFileUrl: string): PostSource
     }
   ]
 }
+
+/**
+ * The post's page on the booru it came from (comments, full tags, reporting), by booru software
+ */
+export function buildBooruPostUrl(domain: string, booruType: string, postId: number): string | undefined {
+  switch (booruType) {
+    case 'gelbooru':
+    case 'gelbooru.com':
+    case 'rule34.xxx':
+    case 'realbooru.com':
+      return `https://${domain}/index.php?page=post&s=view&id=${postId}`
+    case 'danbooru2':
+    case 'e621.net':
+      return `https://${domain}/posts/${postId}`
+    case 'danbooru':
+    case 'moebooru':
+      return `https://${domain}/post/show/${postId}`
+    case 'rule34.paheal.net':
+      return `https://${domain}/post/view/${postId}`
+  }
+}

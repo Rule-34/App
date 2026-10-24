@@ -446,6 +446,7 @@
   },
   "source": {
     "postSource": "帖子来源",
+    "viewOnBooru": "在 {domain} 查看",
     "noSourceFound": "没有找到来源:(",
     "findWithService": "使用 {service} 查找",
     "editWithService": "使用 {service} 编辑"

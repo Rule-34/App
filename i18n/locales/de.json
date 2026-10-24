@@ -446,6 +446,7 @@
   },
   "source": {
     "postSource": "Beitragsquelle",
+    "viewOnBooru": "Auf {domain} ansehen",
     "noSourceFound": "Keine Quelle gefunden :(",
     "findWithService": "Mit {service} finden",
     "editWithService": "Mit {service} bearbeiten"

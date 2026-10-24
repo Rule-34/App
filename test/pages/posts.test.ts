@@ -7,7 +7,14 @@ import {
   mockPostsPageWithVideoMedia,
   mockPostsPageWithMultipleVideos
 } from './posts.mock-data'
-import { defaultSetupConfig, useTrackedPageFactory } from '../helper'
+import {
+  collectConsoleProblems,
+  defaultSetupConfig,
+  pushRoute,
+  type TrackedPage,
+  useTrackedPageFactory
+} from '../helper'
+import { signInAsPremiumUser } from '../pocketbase-mock'
 
 function decodeImgproxySourceUrl(src: string) {
   const encodedSource = src.split('/').pop()
@@ -33,8 +40,6 @@ function expectImageSrcToReference(src: string | null, expectedUrl: string) {
   expect(src).toBe(expectedUrl)
 }
 
-type TrackedPage = Awaited<ReturnType<ReturnType<typeof useTrackedPageFactory>>>
-
 const PIXEL_PNG = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=',
   'base64'
@@ -57,38 +62,6 @@ function createSilentWav(samples = 800) {
   header.writeUInt32LE(samples, 40)
 
   return Buffer.concat([header, Buffer.alloc(samples, 128)])
-}
-
-/** Signs a fake premium user in: the SDK only decodes the JWT expiry, and auth-refresh is answered locally. */
-async function signInAsPremiumUser(page: TrackedPage) {
-  const encode = (value: object) => Buffer.from(JSON.stringify(value)).toString('base64url')
-  const token = `${encode({ alg: 'HS256', typ: 'JWT' })}.${encode({ exp: Math.floor(Date.now() / 1000) + 86400 })}.sig`
-  const record = {
-    id: 'premium-test-user',
-    collectionName: 'users',
-    email: 'premium@example.test',
-    subscription_expires_at: new Date(Date.now() + 86400_000).toISOString()
-  }
-
-  await page.route(/pocketbase\.r34\.app/, (route) => {
-    if (route.request().url().includes('auth-refresh')) {
-      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ token, record }) })
-    }
-
-    return route.fulfill({
-      status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify({ items: [], totalItems: 0 })
-    })
-  })
-
-  await page.context().addCookies([
-    {
-      name: 'pb_auth',
-      value: encodeURIComponent(JSON.stringify({ token, model: record })),
-      url: url('/')
-    }
-  ])
 }
 
 /**
@@ -163,40 +136,6 @@ async function getPostImageSrc(page: TrackedPage, testId: string) {
   }
 
   return page.evaluate((id) => document.querySelector(`[data-testid="${id}"] img`)?.getAttribute('src') ?? null, testId)
-}
-
-/** Collects real app problems from the console; failed loads of the mocked external hosts are not app issues. */
-function collectConsoleProblems(page: TrackedPage) {
-  const problems: string[] = []
-
-  page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`))
-  page.on('console', (message) => {
-    const text = message.text()
-    // The mocked PocketBase answers its realtime stream with JSON, which the browser rejects as an event stream (the
-    // cloud sync then logs that it could not subscribe)
-    const isNetworkNoise =
-      text.startsWith('Failed to load resource') || text.includes('EventSource') || text.includes('premium cloud sync')
-    const isVueProblem = /Vue warn|Hydration/.test(text)
-
-    if ((message.type() === 'error' && !isNetworkNoise) || isVueProblem) {
-      problems.push(`${message.type()}: ${text.slice(0, 200)}`)
-    }
-  })
-
-  return problems
-}
-
-/** Client-side navigation that keeps the document (and its referrer policy) alive. */
-function pushRoute(page: TrackedPage, path: string) {
-  return page.evaluate(
-    (target) =>
-      (
-        document.querySelector('#__nuxt') as unknown as {
-          __vue_app__: { config: { globalProperties: { $router: { push: (to: string) => Promise<unknown> } } } }
-        }
-      ).__vue_app__.config.globalProperties.$router.push(target),
-    path
-  )
 }
 
 describe('/', async () => {
@@ -374,6 +313,16 @@ describe('/', async () => {
       await sourceButton.click({ timeout: 10000 })
 
       await page.getByText('static.miraheze.org').waitFor({ state: 'visible', timeout: 10000 })
+
+      // The post on its booru comes right after the reported sources
+      const booruLink = page.getByTestId('post-booru-link')
+      expect(await booruLink.getAttribute('href')).toBe(
+        `https://safebooru.org/index.php?page=post&s=view&id=${mockPostsPage0.data[0].id}`
+      )
+      const menuItems = await page
+        .getByRole('menuitem')
+        .evaluateAll((items) => items.map((item) => item.textContent?.trim()))
+      expect(menuItems.indexOf('View on safebooru.org')).toBe(menuItems.indexOf('static.miraheze.org') + 1)
     }, 30000)
 
     // TODO: Test that verifies if a post with 'unknown' media type is not rendered

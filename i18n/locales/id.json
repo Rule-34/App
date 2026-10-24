@@ -446,6 +446,7 @@
   },
   "source": {
     "postSource": "Sumber posting",
+    "viewOnBooru": "Lihat di {domain}",
     "noSourceFound": "Tidak ada sumber yang ditemukan:(",
     "findWithService": "Temukan dengan {service}",
     "editWithService": "Sunting dengan {service}"
