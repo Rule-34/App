@@ -313,6 +313,13 @@ describe('/', async () => {
       await sourceButton.click({ timeout: 10000 })
 
       await page.getByText('static.miraheze.org').waitFor({ state: 'visible', timeout: 10000 })
+
+      // The post on its booru comes first
+      const booruLink = page.getByTestId('post-booru-link')
+      expect(await booruLink.getAttribute('href')).toBe(
+        `https://safebooru.org/index.php?page=post&s=view&id=${mockPostsPage0.data[0].id}`
+      )
+      expect(await page.getByRole('menuitem').first().getAttribute('data-testid')).toBe('post-booru-link')
     }, 30000)
 
     // TODO: Test that verifies if a post with 'unknown' media type is not rendered

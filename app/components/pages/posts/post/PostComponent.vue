@@ -243,7 +243,9 @@
           />
 
           <LazyPostSource
+            :post-domain="post.domain"
             :post-file-url="postSourceFileUrl"
+            :post-id="post.id"
             :post-sources="post.sources"
           />
 
