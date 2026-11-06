@@ -84,16 +84,8 @@
     if (typeof value === 'string' && value) {
       tags = value
         .split('\n')
-        // Remove empty lines
-        .flatMap((tag: string) => {
-          tag = tag.trim()
-
-          if (!tag) {
-            return []
-          }
-
-          return tag
-        })
+        .map((tag) => tag.trim())
+        .filter(Boolean)
     }
 
     if (await setCustomBlockList(tags)) {

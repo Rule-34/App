@@ -49,8 +49,8 @@
       <p>
         {{ project.name }} respects intellectual property rights and complies with applicable copyright provisions under
         17 U.S.C. § 512(d). While we do not host third-party files directly, we review valid notifications and promptly
-        remove or disable access to links and search results indexing allegedly infringing material.
-        To submit a link removal notice, please contact us with the specific URLs at {{ project.email }}.
+        remove or disable access to links and search results indexing allegedly infringing material. To submit a link
+        removal notice, please contact us with the specific URLs at {{ project.email }}.
       </p>
     </div>
   </main>

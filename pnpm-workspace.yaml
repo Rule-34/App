@@ -47,4 +47,9 @@ overrides:
   '@tiptap/starter-kit': 3.22.5
   '@tiptap/suggestion': 3.22.5
   '@tiptap/vue-3': 3.22.5
+
+  # ajv pins an affected fast-uri release; keep the patched 3.x line.
+  # @see https://github.com/advisories/GHSA-jqff-g426-hqxp
+  fast-uri: ^3.1.6
+
   workbox-build: 7.4.1
