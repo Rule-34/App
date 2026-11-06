@@ -5,7 +5,7 @@
 
   const localePath = useLocalePath()
   const { t, locale } = useI18n()
-  const { isPremium } = useUserData()
+  const { hasPremiumAccess } = useUserData()
   const { pageHistory } = usePageHistory()
 
   const relativeTimeFormatter = computed(() => new Intl.RelativeTimeFormat(locale.value, { numeric: 'auto' }))
@@ -95,7 +95,7 @@
   }
 
   function onHistoryItemClick(path: string) {
-    if (!isPremium.value) {
+    if (!hasPremiumAccess.value) {
       const { open: promptPremium, currentIndex } = usePremiumDialog()
 
       currentIndex.value = premiumPromotionIndices.history

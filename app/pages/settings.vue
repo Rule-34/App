@@ -40,8 +40,8 @@
 
   const appVersion = version
 
-  const { postFullSizeImages, postsPerPage, autoplayAnimatedMedia, blockAiGeneratedImages } = useUserSettings()
-  const { isPremium } = useUserData()
+  const { postFullSizeImages, storedPostsPerPage, autoplayAnimatedMedia, blockAiGeneratedImages } = useUserSettings()
+  const { hasPremiumAccess } = useUserData()
   const { selectedList, selectedBlockList, defaultBlockList, customBlockList } = useBlockLists()
   const { setCustomBlockList } = usePremiumCloudSync()
 
@@ -64,7 +64,7 @@
       return
     }
 
-    if (option.value === blockListOptions.Custom && !isPremium.value) {
+    if (option.value === blockListOptions.Custom && !hasPremiumAccess.value) {
       toast.error(t('toasts.premiumRequiredBlocklist'))
       return
     }
@@ -279,7 +279,7 @@
         <!-- postsPerPage -->
         <li>
           <SettingNumber
-            v-model.number="postsPerPage"
+            v-model.number="storedPostsPerPage"
             :max="100"
             :min="1"
           >

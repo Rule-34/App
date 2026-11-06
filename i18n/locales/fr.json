@@ -446,6 +446,7 @@
   },
   "source": {
     "postSource": "Source du post",
+    "viewOnBooru": "Voir sur {domain}",
     "noSourceFound": "Aucune source trouvée :(",
     "findWithService": "Trouver avec {service}",
     "editWithService": "Modifier avec {service}"

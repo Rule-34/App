@@ -446,6 +446,7 @@
   },
   "source": {
     "postSource": "Nguồn bài đăng",
+    "viewOnBooru": "Xem trên {domain}",
     "noSourceFound": "Không tìm thấy nguồn:(",
     "findWithService": "Tìm với {service}",
     "editWithService": "Chỉnh sửa bằng {service}"

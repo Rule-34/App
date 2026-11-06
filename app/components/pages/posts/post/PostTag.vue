@@ -30,7 +30,7 @@
     searchBooru: [tag: string]
   }>()
 
-  const { isPremium } = useUserData()
+  const { hasPremiumAccess } = useUserData()
   const { customBlockList, selectedList } = useBlockLists()
   const { setCustomBlockList } = usePremiumCloudSync()
   const { copy } = useClipboard()
@@ -60,7 +60,7 @@
   }
 
   async function toggleBlockedTag(tag: Tag) {
-    if (!isPremium.value) {
+    if (!hasPremiumAccess.value) {
       emit('blocklistPremiumRequired')
       return
     }
