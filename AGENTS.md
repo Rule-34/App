@@ -298,8 +298,9 @@ A cached premium render once leaked a user's email and license and crashed hydra
   loading. The flag flips on `app:suspense:resolve`, not `app:mounted`, which fires before async page components hydrate.
 - Settings live in `localStorage` (client only), so the server renders defaults. Validate stored values where they are
   read (`postsPerPage` in `useUserSettings`) and show setting-driven states that differ from the SSR HTML only after
-  hydration (the blocked-tag error in `pages/posts/[domain]/index.vue`). `test/pages/settings-edge-cases.test.ts` cold-loads
-  pages with unusual stored settings.
+  hydration (the blocked-tag error in `pages/posts/[domain]/index.vue`). The posts query keeps `defaultPostsPerPage`
+  until hydration, then tracks the `postsLimit` computed so a stored size is fetched without changing the shared
+  payload. `test/pages/settings-edge-cases.test.ts` cold-loads pages with unusual stored settings.
 - Never flip a `v-if` on SSR'd markup right after mount when it contains a `Lazy*` component or sits next to a
   `<ClientOnly>` swap: unmounting un-hydrated async nodes throws `insertBefore ... not a child of this node`. Render the
   placeholder for everyone (see the AI placeholder in `PostComponent.vue`) and let the client swap it.

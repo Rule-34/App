@@ -61,6 +61,18 @@ describe('Settings edge cases', async () => {
       },
       45000
     )
+
+    it('requests the stored page size after a cold load hydrates', async () => {
+      const { page, problems, requests } = await coldLoad('/posts/safebooru.org', { 'settings-postsPerPage': '7' })
+
+      await page.getByTestId(`safebooru.org-${firstPostId}`).first().waitFor({ state: 'visible' })
+
+      // The server rendered the default size. The browser asks for the stored size only once hydration is done.
+      await expect.poll(() => requests.map((params) => params.get('limit'))).toContain('7')
+      expect(requests.map((params) => params.get('limit'))).not.toContain(String(defaultPostsPerPage))
+      expect(await readNuxtError(page)).toBeNull()
+      expect(problems).toEqual([])
+    }, 45000)
   })
 
   describe('block list', () => {

@@ -161,9 +161,16 @@
         selectedTags.value.length > 1 ||
         Object.values(selectedFilters.value).some((value) => value != null))
   )
-  const postsLimit = computed(() =>
-    selectedBooru.value.isPremium && !hasPremiumAccess.value ? defaultPostsPerPage : postsPerPage.value
-  )
+  // localStorage and the session are client-only. Keep the server's default page size until hydration
+  // finishes so the Vue Query key matches the dehydrated payload.
+  const isHydrated = useAuthHydrated()
+  const postsLimit = computed(() => {
+    if (!isHydrated.value || (selectedBooru.value.isPremium && !hasPremiumAccess.value)) {
+      return defaultPostsPerPage
+    }
+
+    return postsPerPage.value
+  })
 
   const filterConfig = computed(() => ({
     sort: {
@@ -428,7 +435,6 @@
    * Data fetching
    */
   // The block list is only known in the browser, so a server-rendered page shows the error once hydrated
-  const isHydrated = useAuthHydrated()
   const blockedSearchError = computed(() =>
     isHydrated.value && selectedTags.value.some((tag) => selectedBlockList.value.includes(tag.name))
       ? new Error(t('errors.tagInBlockList'))
@@ -485,8 +491,9 @@
     // Capture the initial page without tracking later ?page= progress updates
     // from infinite scroll. Making this reactive resets the appended list.
     selectedPage.value,
-    //
-    postsLimit.value
+    // Computed ref, not `.value`: after hydration the stored page size (and a premium session on a
+    // premium-only booru) has to select a new query. A snapshot keeps the server's default forever.
+    postsLimit
   ]
 
   const {

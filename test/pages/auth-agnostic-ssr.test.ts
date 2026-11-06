@@ -24,6 +24,9 @@ const withoutNonces = (html: string) =>
     .replace(/nonce="[^"]*"/g, 'nonce=""')
     // Query cache timestamps in the serialized state
     .replace(/\b1\d{12}\b/g, '0')
+    // Homepage featured cards pick one public image per request. That choice is not the visitor.
+    // The payload escapes slashes as \u002F, so both forms have to collapse to the same string.
+    .replace(/featured(?:\\u002F|\/)(?:[^"'\\]|\\u002F)+/g, 'featured/normalized')
 
 /** Only free visitors get the AI button (a placeholder in the SSR HTML, the real one after hydration). */
 const freeOnlyButton = 'button[aria-label="Chat with AI"]'
@@ -46,11 +49,15 @@ describe('Server rendering does not depend on the visitor', async () => {
 
   describe('shared HTML', () => {
     it.each([
+      '/',
       '/posts/safebooru.org',
       '/es/posts/safebooru.org',
       '/posts/safebooru.org/hair_bun',
       '/posts/gelbooru.com',
-      '/posts/gelbooru.com/hair_bun'
+      '/posts/gelbooru.com/hair_bun',
+      '/settings',
+      '/premium/dashboard',
+      '/premium/sign-in'
     ])('is identical for anonymous and premium visitors and carries no account data: %s', async (path) => {
       const [anonymous, premium] = await Promise.all([
         fetch(path).then((response) => response.text()),
@@ -81,6 +88,37 @@ describe('Server rendering does not depend on the visitor', async () => {
       },
       45000
     )
+
+    it('shows a premium visitor their dashboard and keeps the account out of the anonymous response', async () => {
+      const response = await fetch('/premium/dashboard', { redirect: 'manual' })
+      const html = await response.text()
+
+      expect(html).not.toContain(email)
+      expect(html).not.toContain(license)
+
+      const page = await createTrackedPage()
+      const problems = collectConsoleProblems(page)
+      await signInAsPremiumUser(page, 'cookie')
+
+      await page.goto(url('/premium/dashboard'), { waitUntil: 'networkidle' })
+      await page.getByText(email).waitFor({ state: 'visible' })
+
+      expect(page.url()).toContain('/premium/dashboard')
+      expect(await readNuxtError(page)).toBeNull()
+      expect(problems).toEqual([])
+    }, 45000)
+
+    it('sends an anonymous visitor away from the dashboard', async () => {
+      const page = await createTrackedPage()
+      const problems = collectConsoleProblems(page)
+
+      await page.goto(url('/premium/dashboard'), { waitUntil: 'networkidle' })
+      await page.waitForURL('**/premium/sign-in**')
+
+      expect(await page.getByText(email).count()).toBe(0)
+      expect(await readNuxtError(page)).toBeNull()
+      expect(problems).toEqual([])
+    }, 45000)
 
     it('keeps an anonymous visitor on the free UI', async () => {
       const page = await createTrackedPage()
@@ -206,6 +244,29 @@ describe('Server rendering does not depend on the visitor', async () => {
         .filter((params) => params.get('baseEndpoint') === 'gelbooru.com')
         .map((params) => params.get('limit'))
       expect(gelbooruLimits).toEqual([String(defaultPostsPerPage)])
+    }, 45000)
+
+    it('hydrates a premium visitor with a stored page size, then loads that size', async () => {
+      const page = await createTrackedPage()
+      const problems = collectConsoleProblems(page)
+      const requests = collectPostsRequests(page)
+      await signInAsPremiumUser(page, 'cookie')
+      await seedLocalStorage(page, { 'settings-postsPerPage': '40' })
+
+      await page.goto(url('/posts/gelbooru.com'), { waitUntil: 'networkidle' })
+      await page.getByTestId(`gelbooru.com-${firstPostId}`).first().waitFor({ state: 'visible' })
+      await scrollToRow(page, previewPostLimit + 1)
+
+      await expect
+        .poll(() =>
+          requests
+            .filter((params) => params.get('baseEndpoint') === 'gelbooru.com')
+            .map((params) => params.get('limit'))
+        )
+        .toContain('40')
+      expect(await page.locator(promotion).count()).toBe(0)
+      expect(await readNuxtError(page)).toBeNull()
+      expect(problems).toEqual([])
     }, 45000)
 
     it('loads the requested page for a premium visitor', async () => {
