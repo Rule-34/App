@@ -1,38 +1,46 @@
 import { defineNuxtPlugin } from '#imports'
 import { useIdleTask } from '~/composables/useIdleTask'
-import type { PremiumLandingVariation } from '~/composables/useExperiments'
-
-type MatomoQueueItem = [string, ...unknown[]]
-type MatomoQueue = MatomoQueueItem[]
-type MatomoWindow = Window & { _paq?: MatomoQueue }
+import { configureMatomo, ensureMatomoLoaded, isPremiumRoute, trackMatomoPageView } from '~/assets/js/matomo'
 
 /**
- * Track page view using Matomo
- * For the Script,
- * @see nuxt.config.ts
+ * Track page views with Matomo.
+ * Every `/premium` route loads the tracker on page load so scroll-only visits are counted,
+ * the landing experiment can assign a variation, and premium goals can be queued immediately.
+ * Every other route keeps the interaction + idle boundary.
  *
  * @see https://developer.matomo.org/guides/spa-tracking#solution-2-embedding-the-tracking-code-manually
+ * @see https://developer.matomo.org/guides/ab-tests/browser
  */
 export default defineNuxtPlugin({
   parallel: true,
   setup() {
     const router = useRouter()
-    const { premiumLandingVariation } = useExperiments()
+    let navigationId = 0
 
-    let hasLoaded = false
+    configureMatomo({ enabled: useRuntimeConfig().public.matomoEnabled !== false })
 
     router.afterEach((to) => {
+      const trackedNavigationId = ++navigationId
+
       // Keep this idle boundary: afterEach runs before Nuxt finishes updating document.title.
       onNuxtReady(() => {
-        const _paq = (window as MatomoWindow)._paq
-
-        if (!hasLoaded || !_paq || router.currentRoute.value.fullPath !== to.fullPath) {
+        if (router.currentRoute.value.fullPath !== to.fullPath) {
           return
         }
 
-        trackPageView(_paq, to.fullPath, premiumLandingVariation)
+        void trackMatomoPageView(to.fullPath, trackedNavigationId)
       })
     })
+
+    if (isPremiumRoute(router.currentRoute.value.path)) {
+      void ensureMatomoLoaded()
+
+      onNuxtReady(() => {
+        void trackMatomoPageView(router.currentRoute.value.fullPath, navigationId)
+      })
+
+      return
+    }
 
     const { hasInteracted } = useInteractionDetector()
     const { schedule } = useIdleTask()
@@ -41,84 +49,13 @@ export default defineNuxtPlugin({
       hasInteracted,
       (val) => {
         if (val) {
-          schedule(ensureMatomoLoaded)
+          schedule(() => {
+            void trackMatomoPageView(router.currentRoute.value.fullPath, navigationId, { load: true })
+          })
           stop()
         }
       },
       { flush: 'post', immediate: true }
     )
-
-    function ensureMatomoLoaded() {
-      if (hasLoaded) {
-        return
-      }
-
-      hasLoaded = true
-
-      const _paq = ((window as MatomoWindow)._paq = (window as MatomoWindow)._paq || [])
-
-      const matomoUrl = 'https://matomo.akbal.dev/'
-      _paq.push(['setTrackerUrl', matomoUrl + 'matomo.php'])
-      _paq.push(['setSiteId', '1'])
-      _paq.push(['setDomains', ['*.r34.app']])
-
-      _paq.push(['enableCrossDomainLinking'])
-      _paq.push(['setExcludedQueryParams', ['page', 'cursor']])
-      _paq.push(['enableLinkTracking'])
-
-      trackPageView(_paq, router.currentRoute.value.fullPath, premiumLandingVariation)
-
-      const script = document.createElement('script')
-      script.src = matomoUrl + 'matomo.js'
-      script.async = true
-      script.defer = true
-      document.head.appendChild(script)
-    }
   }
 })
-
-function isPremiumLanding(path: string) {
-  return /\/premium\/?$/.test(path)
-}
-
-function trackPageView(_paq: MatomoQueue, path: string, premiumLandingVariation: { value: PremiumLandingVariation }) {
-  _paq.push(['setCustomUrl', path])
-  _paq.push(['setDocumentTitle', document.title])
-
-  loadAbTesting(_paq, premiumLandingVariation)
-
-  _paq.push(['trackPageView'])
-}
-
-function loadAbTesting(_paq: MatomoQueue, premiumLandingVariation: { value: PremiumLandingVariation }) {
-  _paq.push([
-    'AbTesting::create',
-    {
-      name: 'PremiumLandingV1',
-      percentage: 100,
-      includedTargets: [{ attribute: 'url', inverted: '0', type: 'any', value: '' }],
-      excludedTargets: [],
-      trigger: () => isPremiumLanding(location.pathname),
-      variations: [
-        {
-          name: 'original',
-          activate: () => {
-            premiumLandingVariation.value = 'original'
-          }
-        },
-        {
-          name: 'OfferFirst',
-          activate: () => {
-            premiumLandingVariation.value = 'OfferFirst'
-          }
-        },
-        {
-          name: 'YearlyFocus',
-          activate: () => {
-            premiumLandingVariation.value = 'YearlyFocus'
-          }
-        }
-      ]
-    }
-  ])
-}
