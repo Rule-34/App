@@ -1,6 +1,12 @@
 import { defineNuxtPlugin } from '#imports'
 import { useIdleTask } from '~/composables/useIdleTask'
-import { configureMatomo, ensureMatomoLoaded, isPremiumRoute, trackMatomoPageView } from '~/assets/js/matomo'
+import {
+  configureMatomo,
+  ensureMatomoLoaded,
+  isPremiumRoute,
+  noteMatomoNavigation,
+  trackMatomoPageView
+} from '~/assets/js/matomo'
 
 /**
  * Track page views with Matomo.
@@ -21,6 +27,7 @@ export default defineNuxtPlugin({
 
     router.afterEach((to) => {
       const trackedNavigationId = ++navigationId
+      noteMatomoNavigation(trackedNavigationId)
 
       // Keep this idle boundary: afterEach runs before Nuxt finishes updating document.title.
       onNuxtReady(() => {
@@ -28,15 +35,16 @@ export default defineNuxtPlugin({
           return
         }
 
-        void trackMatomoPageView(to.fullPath, trackedNavigationId)
+        void trackMatomoPageView(`${window.location.pathname}${window.location.search}`, trackedNavigationId)
       })
     })
 
     if (isPremiumRoute(router.currentRoute.value.path)) {
+      noteMatomoNavigation(navigationId)
       void ensureMatomoLoaded()
 
       onNuxtReady(() => {
-        void trackMatomoPageView(router.currentRoute.value.fullPath, navigationId)
+        void trackMatomoPageView(`${window.location.pathname}${window.location.search}`, navigationId)
       })
 
       return
@@ -50,7 +58,9 @@ export default defineNuxtPlugin({
       (val) => {
         if (val) {
           schedule(() => {
-            void trackMatomoPageView(router.currentRoute.value.fullPath, navigationId, { load: true })
+            void trackMatomoPageView(`${window.location.pathname}${window.location.search}`, navigationId, {
+              load: true
+            })
           })
           stop()
         }

@@ -6,6 +6,7 @@ import {
   PREMIUM_LANDING_EXPERIMENT_NAME,
   PREMIUM_LANDING_VARIATIONS,
   premiumLandingExperimentOptions,
+  premiumLandingTargetFromRoute,
   premiumLandingVariationFromSearch
 } from '../../app/assets/js/matomo'
 
@@ -21,6 +22,7 @@ describe('premium landing experiment', () => {
     expect(canonicalPremiumLandingVariation('YearlyFocus')).toBeNull()
     expect(premiumLandingVariationFromSearch('?pk_ab_test=original')).toBe('original')
     expect(premiumLandingVariationFromSearch('?pk_ab_test=other,VisualFirst')).toBe('VisualFirst')
+    expect(premiumLandingVariationFromSearch('?pk_ab_test=OfferFirst#pricing')).toBe('OfferFirst')
     expect(premiumLandingVariationFromSearch('?pk_ab_test=YearlyFocus')).toBeNull()
     expect(premiumLandingVariationFromSearch('')).toBeNull()
   })
@@ -43,10 +45,16 @@ describe('premium landing experiment', () => {
     expect(isPremiumRoute('/posts/rule34.xxx')).toBe(false)
     expect(isPremiumRoute('/premiumium')).toBe(false)
 
-    const options = premiumLandingExperimentOptions(() => {})
+    const options = premiumLandingExperimentOptions(() => {}, { path: '/premium', search: '' })
 
     expect(options.name).toBe('PremiumLandingV2')
     expect(options.variations.map((variation) => variation.name)).toEqual(['original', 'OfferFirst', 'VisualFirst'])
-    expect(options.trigger).toBeTypeOf('function')
+    expect(options.trigger()).toBe(true)
+    expect(
+      premiumLandingTargetFromRoute({ path: '/premium', fullPath: '/premium?pk_ab_test=VisualFirst#pricing' })
+    ).toEqual({
+      path: '/premium',
+      search: '?pk_ab_test=VisualFirst'
+    })
   })
 })

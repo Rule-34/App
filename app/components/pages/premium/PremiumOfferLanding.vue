@@ -17,10 +17,10 @@
   const props = defineProps<{ variant: 'OfferFirst' | 'VisualFirst' }>()
 
   const visualHeroPreviews = [
-    { src: '/img/featured/rule34.xxx/top-1.jpg', priority: true },
-    { src: '/img/featured/rule34.xxx/top-2.jpg', priority: false },
-    { src: '/img/featured/rule34.xxx/top-3.jpg', priority: false },
-    { src: '/img/featured/rule34.xxx/top-4.jpg', priority: false }
+    { src: '/img/featured/rule34.xxx/top-1.jpg' },
+    { src: '/img/featured/rule34.xxx/top-2.jpg' },
+    { src: '/img/featured/rule34.xxx/top-3.jpg' },
+    { src: '/img/featured/rule34.xxx/top-4.jpg' }
   ]
 
   const { shouldShow } = useActivePromotion()
@@ -254,14 +254,13 @@
         <NuxtImg
           v-for="preview in visualHeroPreviews"
           :key="preview.src"
-          :decoding="preview.priority ? 'sync' : 'async'"
-          :fetchpriority="preview.priority ? 'high' : 'low'"
-          :loading="preview.priority ? 'eager' : 'lazy'"
-          :preload="preview.priority ? { fetchPriority: 'high' } : false"
           :src="preview.src"
           alt=""
           class="aspect-[2/3] w-full object-cover"
+          decoding="async"
+          fetchpriority="low"
           height="360"
+          loading="lazy"
           width="240"
         />
       </div>

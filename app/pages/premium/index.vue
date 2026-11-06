@@ -1,61 +1,35 @@
 <script lang="ts" setup>
+  import { defineAsyncComponent } from 'vue'
   import PremiumLandingOriginal from '~/components/pages/premium/PremiumLandingOriginal.vue'
-  import PremiumOfferLanding from '~/components/pages/premium/PremiumOfferLanding.vue'
-  import {
-    activatePremiumLandingExperiment,
-    premiumLandingVariationFromSearch,
-    type PremiumLandingVariation
-  } from '~/assets/js/matomo'
+  import { activatePremiumLandingExperiment, type PremiumLandingTarget } from '~/assets/js/matomo'
+
+  const PremiumOfferLanding = defineAsyncComponent(() => import('~/components/pages/premium/PremiumOfferLanding.vue'))
 
   const { premiumLandingVariation } = useExperiments()
-  const nuxtApp = useNuxtApp()
-  const hydrating = import.meta.server || nuxtApp.isHydrating
-  const queriedVariation = import.meta.client ? premiumLandingVariationFromSearch(window.location.search) : null
-  const pending = ref(true)
 
   definePageMeta({
     middleware: ['premium-landing']
   })
 
-  useHead(() => ({
-    htmlAttrs: {
-      'data-premium-ab': pending.value ? 'pending' : undefined
-    }
-  }))
+  useHead({
+    script: [
+      {
+        key: 'premium-landing-search',
+        innerHTML: 'window.__premiumLandingSearch=location.search',
+        tagPriority: 'critical'
+      }
+    ]
+  })
 
-  function revealLanding() {
-    pending.value = false
-
-    if (import.meta.client) {
-      document.documentElement.removeAttribute('data-premium-ab')
-    }
-  }
-
-  async function showAssignedVariation(variation: PremiumLandingVariation) {
-    const changed = variation !== premiumLandingVariation.value
-
-    premiumLandingVariation.value = variation
-
-    if (changed) {
-      await nextTick()
+  onMounted(() => {
+    const target: PremiumLandingTarget = {
+      path: window.location.pathname,
+      search: window.location.search
     }
 
-    revealLanding()
-  }
-
-  onMounted(async () => {
-    if (!hydrating) {
-      revealLanding()
-      return
-    }
-
-    if (queriedVariation) {
-      await showAssignedVariation(queriedVariation)
-      void activatePremiumLandingExperiment()
-      return
-    }
-
-    await showAssignedVariation(await activatePremiumLandingExperiment())
+    void activatePremiumLandingExperiment(target).then((variation) => {
+      premiumLandingVariation.value = variation
+    })
   })
 </script>
 
