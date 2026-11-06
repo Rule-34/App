@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://r34.app/sitemap.xml
+Sitemap: https://r34.app/blog/sitemap.xml
