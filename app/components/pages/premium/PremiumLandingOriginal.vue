@@ -2,6 +2,7 @@
   import { CheckIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/20/solid'
   import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
   import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+  import { trackPremiumPlanClick } from '~/assets/js/matomo'
   import {
     Dialog,
     DialogPanel,
@@ -159,15 +160,13 @@
     () => paymentIntervals.value.find((p) => p.key === selectedPaymentIntervalKey.value) ?? paymentIntervals.value[0]!
   )
 
-  type MatomoWindow = Window & { _paq?: { push: (event: unknown[]) => void } }
-
   const isPaymentDialogOpen = ref(false)
 
   function onIntervalClick(interval: (typeof paymentIntervals.value)[0]) {
     selectedPaymentIntervalKey.value = interval.key as typeof selectedPaymentIntervalKey.value
 
     isPaymentDialogOpen.value = true
-    ;(window as MatomoWindow)._paq?.push(['trackEvent', 'Premium', 'Plan Click', interval.key])
+    trackPremiumPlanClick(interval.key)
   }
 
   // Payment methods categorization

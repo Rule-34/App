@@ -93,7 +93,7 @@ describe('Matomo on /premium routes', () => {
     expect(matomoWindow._paq).toContainEqual(['trackPageView'])
     expect(experimentCount()).toBe(0)
 
-    matomoWindow._paq.push(['trackEvent', 'Premium', 'Subscribed', 'sellapp'])
+    matomo.trackPremiumSubscribed('sellapp')
 
     expect(matomoWindow._paq).toContainEqual(['trackEvent', 'Premium', 'Subscribed', 'sellapp'])
   })
@@ -109,7 +109,7 @@ describe('Matomo on /premium routes', () => {
     expect(matomoWindow._paq).toContainEqual(['setCustomUrl', '/premium?pk_ab_test=VisualFirst'])
     expect(matomoWindow._paq).toContainEqual(['trackPageView'])
 
-    matomoWindow._paq.push(['trackEvent', 'Premium', 'Plan Click', 'yearly'])
+    matomo.trackPremiumPlanClick('yearly')
 
     expect(matomoWindow._paq).toContainEqual(['trackEvent', 'Premium', 'Plan Click', 'yearly'])
   })
@@ -211,10 +211,16 @@ describe('Matomo on /premium routes', () => {
     const matomo = await import('../../app/assets/js/matomo')
     matomo.configureMatomo({ enabled: true })
 
-    const started = Date.now()
-    await expect(matomo.activatePremiumLandingExperiment({ path: '/premium', search: '' })).resolves.toBe('original')
+    vi.useFakeTimers()
 
-    expect(Date.now() - started).toBeLessThan(6000)
+    try {
+      const result = matomo.activatePremiumLandingExperiment({ path: '/premium', search: '' })
+      await vi.advanceTimersByTimeAsync(4000)
+
+      await expect(result).resolves.toBe('original')
+    } finally {
+      vi.useRealTimers()
+    }
   })
 
   it('does not send a pageview for a navigation that already moved on', async () => {
@@ -267,5 +273,93 @@ describe('Matomo on /premium routes', () => {
     await expect(
       matomo.activatePremiumLandingExperiment({ path: '/premium', search: '?pk_ab_test=OfferFirst#pricing' })
     ).resolves.toBe('OfferFirst')
+  })
+
+  it('does not copy the source page query onto a premium destination', async () => {
+    vi.resetModules()
+    const queue: unknown[][] = []
+    const matomoWindow = {
+      _paq: queue,
+      __premiumLandingSearch: '?tags=cat',
+      Matomo: undefined as
+        { AbTesting: { Experiment: new () => { getActivatedVariationName(): string | undefined } } } | undefined
+    }
+
+    vi.stubGlobal('window', matomoWindow)
+    vi.stubGlobal('location', { pathname: '/other-sites', search: '?tags=cat', hash: '' })
+    vi.stubGlobal('history', {
+      state: null,
+      replaceState() {
+        throw new Error('should not rewrite the source url')
+      }
+    })
+    vi.stubGlobal('document', {
+      title: 'Other',
+      createElement: () => ({ src: '', async: true, onload: undefined as (() => void) | undefined }),
+      head: {
+        appendChild(script: { onload?: () => void }) {
+          matomoWindow.Matomo = {
+            AbTesting: {
+              Experiment: class {
+                getActivatedVariationName() {
+                  return 'original'
+                }
+              }
+            }
+          }
+          script.onload?.()
+        }
+      }
+    })
+
+    const matomo = await import('../../app/assets/js/matomo')
+    matomo.configureMatomo({ enabled: true })
+    await matomo.activatePremiumLandingExperiment({ path: '/premium', search: '' })
+    await matomo.premiumLandingExperimentSettled({ path: '/premium', search: '' })
+
+    expect(queue.filter((item) => item[0] === 'setCustomUrl').map((item) => item[1])).not.toContain('/premium?tags=cat')
+  })
+
+  it('uses the variation Matomo activates when the URL does not force one', async () => {
+    vi.resetModules()
+    vi.stubGlobal('window', { _paq: [] as unknown[][] })
+    vi.stubGlobal('location', { pathname: '/premium', search: '' })
+    vi.stubGlobal('document', {
+      title: 'Premium',
+      createElement: () => ({ src: '', async: true, onload: undefined as (() => void) | undefined }),
+      head: {
+        appendChild(script: { onload?: () => void }) {
+          const matomoWindow = window as Window & {
+            Matomo?: {
+              AbTesting: {
+                Experiment: new (options: {
+                  variations: { name: string; activate: (this: { name: string }) => void }[]
+                }) => { getActivatedVariationName(): string }
+              }
+            }
+          }
+          matomoWindow.Matomo = {
+            AbTesting: {
+              Experiment: class {
+                constructor(options: { variations: { name: string; activate: (this: { name: string }) => void }[] }) {
+                  const offer = options.variations.find((variation) => variation.name === 'OfferFirst')
+                  offer?.activate.call(offer!)
+                }
+
+                getActivatedVariationName() {
+                  return 'OfferFirst'
+                }
+              }
+            }
+          }
+          script.onload?.()
+        }
+      }
+    })
+
+    const matomo = await import('../../app/assets/js/matomo')
+    matomo.configureMatomo({ enabled: true })
+
+    await expect(matomo.activatePremiumLandingExperiment({ path: '/premium', search: '' })).resolves.toBe('OfferFirst')
   })
 })

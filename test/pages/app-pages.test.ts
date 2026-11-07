@@ -170,6 +170,25 @@ describe('App pages', async () => {
       expect(await page.getByTestId('premium-visual-hero').count()).toBe(0)
       await page.close()
     }, 20000)
+
+    it('shows a cached variation on /premium when the URL does not force one', async () => {
+      const page = await createPage()
+      await page.addInitScript(
+        ({ storageKey, experiment }) => {
+          localStorage.setItem(
+            storageKey,
+            JSON.stringify({
+              [`variation:${experiment}`]: { value: 'VisualFirst', expire: Date.now() + 86_400_000 }
+            })
+          )
+        },
+        { storageKey: MATOMO_AB_STORAGE_KEY, experiment: PREMIUM_LANDING_EXPERIMENT_NAME }
+      )
+      await page.goto(url('/premium'))
+      await page.getByTestId('premium-visual-hero').waitFor({ state: 'visible', timeout: 2000 })
+      expect(page.url()).not.toContain('pk_ab_test')
+      await page.close()
+    }, 20000)
   })
 
   describe('Other sites page /other-sites', () => {

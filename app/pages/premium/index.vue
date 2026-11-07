@@ -28,6 +28,10 @@
     }
 
     void activatePremiumLandingExperiment(target).then((variation) => {
+      if (`${window.location.pathname}${window.location.search}` !== `${target.path}${target.search}`) {
+        return
+      }
+
       premiumLandingVariation.value = variation
     })
   })

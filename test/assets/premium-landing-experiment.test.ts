@@ -50,6 +50,7 @@ describe('premium landing experiment', () => {
     expect(options.name).toBe('PremiumLandingV2')
     expect(options.variations.map((variation) => variation.name)).toEqual(['original', 'OfferFirst', 'VisualFirst'])
     expect(options.trigger()).toBe(true)
+    expect(premiumLandingExperimentOptions(() => {}, { path: '/premium/dashboard', search: '' }).trigger()).toBe(false)
     expect(
       premiumLandingTargetFromRoute({ path: '/premium', fullPath: '/premium?pk_ab_test=VisualFirst#pricing' })
     ).toEqual({

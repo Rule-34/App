@@ -238,18 +238,17 @@ function restoreCapturedSearch() {
   history.replaceState(history.state, '', `${location.pathname}${search}${location.hash}`)
 }
 function withLiveSearch(target: PremiumLandingTarget): PremiumLandingTarget {
-  const liveSearch = capturedSearch()
+  const search = target.search.split('#')[0] ?? ''
 
-  if (target.search || location.pathname !== target.path || !liveSearch) {
-    return {
-      path: target.path,
-      search: (target.search || liveSearch).split('#')[0] ?? ''
-    }
+  // The live search belongs to whatever page is currently shown. During client
+  // navigation that is still the source URL, so it must not be copied onto the destination.
+  if (search || location.pathname !== target.path) {
+    return { path: target.path, search }
   }
 
   return {
     path: target.path,
-    search: liveSearch
+    search: capturedSearch().split('#')[0] ?? ''
   }
 }
 
@@ -282,6 +281,14 @@ function whenLocationMatches(target: PremiumLandingTarget) {
       }
     }, 16)
   })
+}
+
+export function trackPremiumPlanClick(intervalKey: string) {
+  matomoQueue().push(['trackEvent', 'Premium', 'Plan Click', intervalKey])
+}
+
+export function trackPremiumSubscribed(platform: string) {
+  matomoQueue().push(['trackEvent', 'Premium', 'Subscribed', platform])
 }
 
 export function noteMatomoNavigation(navigationId: number) {
@@ -357,7 +364,9 @@ async function assignWithMatomo(target: PremiumLandingTarget): Promise<PremiumLa
   const queried = premiumLandingVariationFromSearch(target.search)
   const cached = cachedPremiumLandingVariation(readStorage())
 
-  restoreCapturedSearch()
+  if (location.pathname === target.path) {
+    restoreCapturedSearch()
+  }
 
   // `pk_ab_test` is read by Matomo from window.location. During client navigation that
   // location is still the source URL, so wait until it matches the destination.
