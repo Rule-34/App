@@ -320,3 +320,14 @@ the `@headlessui/tailwindcss` plugin.
 
 Key settings: 120-char print width, no semicolons, single quotes, trailing commas removed, single attribute per line in
 Vue templates.
+
+## Change discipline
+
+- Smallest diff that fully solves the task. Fix the root cause; don't point-hack.
+- Reuse before writing: search for existing vars, helpers, modules and installed libraries first. Extend an existing file before creating one.
+- Defaults: safe or hardened behavior is ON by default; exceptions are explicit opt-out settings.
+- Don't add, unless asked: docs or runbooks (the PR body is the doc), refactors or code moves, new config knobs with no caller, or comments that restate code.
+- Never cut: validation at trust boundaries, auth and security checks, or error handling that prevents data loss.
+- Before opening a PR, run `git diff --shortstat origin/main...HEAD`. Compare the result against your up-front estimate for this task. If it clearly overshoots or adds new files, shrink it, or justify each one in the first line of the PR body.
+- PR body: 25 lines or fewer. Include what and why, the verify command, rollback, what was skipped, and open questions.
+- Never push to `main`. Loop on CodeRabbit, reviewer and CI feedback until none remains.
