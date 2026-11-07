@@ -215,7 +215,8 @@ export default defineNuxtConfig({
 
     public: {
       apiUrl: undefined,
-      sentryDsn: undefined
+      sentryDsn: undefined,
+      matomoEnabled: true
     }
   },
 
@@ -480,7 +481,8 @@ export default defineNuxtConfig({
 
     runtimeConfig: {
       public: {
-        apiUrl: '' // routes $fetch(baseURL: '') to local Nitro server
+        apiUrl: '', // routes $fetch(baseURL: '') to local Nitro server
+        matomoEnabled: false
       }
     },
 

@@ -2,6 +2,7 @@
   import { CheckIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/20/solid'
   import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
   import { completeBooruList, defaultBooruList } from '~/assets/lib/rule-34-shared-resources/src/util/BooruUtils'
+  import { trackPremiumPlanClick } from '~/assets/js/matomo'
   import {
     Dialog,
     DialogPanel,
@@ -14,7 +15,14 @@
   } from '@headlessui/vue'
   import { project } from '~~/config/project'
 
-  const props = defineProps<{ variant: 'OfferFirst' | 'YearlyFocus' }>()
+  const props = defineProps<{ variant: 'OfferFirst' | 'VisualFirst' }>()
+
+  const visualHeroPreviews = [
+    { src: '/img/featured/rule34.xxx/top-1.jpg' },
+    { src: '/img/featured/rule34.xxx/top-2.jpg' },
+    { src: '/img/featured/rule34.xxx/top-3.jpg' },
+    { src: '/img/featured/rule34.xxx/top-4.jpg' }
+  ]
 
   const { shouldShow } = useActivePromotion()
   const { t } = useI18n()
@@ -146,15 +154,6 @@
     }
   ])
 
-  const displayedPaymentIntervals = computed(() => {
-    if (props.variant !== 'YearlyFocus') {
-      return paymentIntervals.value
-    }
-
-    const yearly = paymentIntervals.value.find((interval) => interval.key === 'yearly')!
-    return [yearly, ...paymentIntervals.value.filter((interval) => interval !== yearly)]
-  })
-
   const faqs = computed(() => [
     { question: t('pages.premium.landingPage.faq1Question'), answer: t('pages.premium.landingPage.faq1Answer') },
     { question: t('pages.premium.landingPage.faq2Question'), answer: t('pages.premium.landingPage.faq2Answer') },
@@ -173,15 +172,13 @@
     () => paymentIntervals.value.find((p) => p.key === selectedPaymentIntervalKey.value) ?? paymentIntervals.value[0]!
   )
 
-  type MatomoWindow = Window & { _paq?: { push: (event: unknown[]) => void } }
-
   const isPaymentDialogOpen = ref(false)
 
   function onIntervalClick(interval: (typeof paymentIntervals.value)[0]) {
     selectedPaymentIntervalKey.value = interval.key as typeof selectedPaymentIntervalKey.value
 
     isPaymentDialogOpen.value = true
-    ;(window as MatomoWindow)._paq?.push(['trackEvent', 'Premium', 'Plan Click', interval.key])
+    trackPremiumPlanClick(interval.key)
   }
 
   // Payment methods categorization
@@ -246,6 +243,31 @@
   </ClientOnly>
 
   <main class="flex-1">
+    <section
+      v-if="props.variant === 'VisualFirst'"
+      aria-hidden="true"
+      class="relative mx-auto max-w-6xl px-4 pt-6 sm:px-6"
+      data-testid="premium-visual-hero"
+    >
+      <div class="grid grid-cols-2 gap-1.5 overflow-hidden rounded-2xl sm:grid-cols-4 sm:gap-2">
+        <NuxtImg
+          v-for="preview in visualHeroPreviews"
+          :key="preview.src"
+          :src="preview.src"
+          alt=""
+          class="aspect-[2/3] w-full object-cover"
+          decoding="async"
+          fetchpriority="low"
+          height="360"
+          loading="lazy"
+          width="240"
+        />
+      </div>
+      <div
+        class="pointer-events-none absolute inset-x-4 bottom-0 h-16 bg-linear-to-t from-black to-transparent sm:inset-x-6"
+      />
+    </section>
+
     <div class="container mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-14 lg:px-8">
       <section
         id="pricing"
@@ -304,14 +326,9 @@
 
           <div class="mt-5 grid gap-4 sm:grid-cols-2">
             <article
-              v-for="interval in displayedPaymentIntervals"
+              v-for="interval in paymentIntervals"
               :key="interval.name"
-              :class="
-                props.variant === 'YearlyFocus' && interval.key === 'yearly'
-                  ? 'ring-2 ring-primary-600'
-                  : 'ring-1 ring-base-0/15'
-              "
-              class="relative flex min-h-64 flex-col rounded-2xl bg-base-1000/70 p-6 transition-colors hover:bg-base-0/5 hover:ring-base-0/30"
+              class="relative flex min-h-64 flex-col rounded-2xl bg-base-1000/70 p-6 ring-1 ring-base-0/15 transition-colors hover:bg-base-0/5 hover:ring-base-0/30"
             >
               <p
                 v-if="interval.originalPrice"
