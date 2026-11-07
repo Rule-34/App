@@ -287,7 +287,7 @@ export function trackPremiumPlanClick(intervalKey: string) {
   matomoQueue().push(['trackEvent', 'Premium', 'Plan Click', intervalKey])
 }
 
-export function trackPremiumSubscribed(platform: string) {
+export function trackPremiumSubscribed(platform: string | undefined) {
   matomoQueue().push(['trackEvent', 'Premium', 'Subscribed', platform])
 }
 
