@@ -1,6 +1,7 @@
 import {
   activatePremiumLandingExperiment,
   isPremiumLandingPath,
+  markPremiumLandingWrite,
   premiumLandingTargetFromRoute
 } from '~/assets/js/matomo'
 
@@ -29,5 +30,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return
   }
 
+  markPremiumLandingWrite()
   premiumLandingVariation.value = variation
 })

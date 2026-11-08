@@ -1,8 +1,11 @@
+import { readFileSync } from 'node:fs'
 import { describe, expect, it, vi } from 'vitest'
 import {
   activatePremiumLandingExperiment,
   canonicalPremiumLandingVariation,
   configureMatomo,
+  currentPremiumLandingWriteId,
+  markPremiumLandingWrite,
   isPremiumLandingPath,
   isPremiumRoute,
   PREMIUM_LANDING_EXPERIMENT_NAME,
@@ -144,5 +147,34 @@ describe('premium landing experiment', () => {
       vi.unstubAllGlobals()
       configureMatomo({ enabled: false })
     }
+  })
+
+  it('drops a forced query when navigating to /premium and restores it only when the address bar is empty', async () => {
+    vi.stubGlobal('window', { _paq: [] as unknown[][], __premiumLandingSearch: '?pk_ab_test=VisualFirst' })
+    vi.stubGlobal('localStorage', { getItem: () => null })
+    configureMatomo({ enabled: false })
+
+    try {
+      vi.stubGlobal('location', { pathname: '/premium', search: '?pk_ab_test=VisualFirst', hash: '' })
+      await expect(activatePremiumLandingExperiment({ path: '/premium', search: '' })).resolves.toBe('original')
+
+      vi.stubGlobal('location', { pathname: '/premium', search: '', hash: '' })
+      await expect(activatePremiumLandingExperiment({ path: '/premium', search: '' })).resolves.toBe('VisualFirst')
+    } finally {
+      vi.unstubAllGlobals()
+    }
+  })
+
+  it('invalidates an in-flight landing write when a newer one is recorded', () => {
+    const writeId = currentPremiumLandingWriteId()
+    markPremiumLandingWrite()
+    expect(currentPremiumLandingWriteId()).not.toBe(writeId)
+
+    const page = readFileSync(new URL('../../app/pages/premium/index.vue', import.meta.url), 'utf8')
+    const middleware = readFileSync(new URL('../../app/middleware/premium-landing.ts', import.meta.url), 'utf8')
+    expect(page).toContain('const writeId = currentPremiumLandingWriteId()')
+    expect(page).toContain('currentPremiumLandingWriteId() !== writeId')
+    expect(page).toContain('markPremiumLandingWrite()')
+    expect(middleware).toContain('markPremiumLandingWrite()')
   })
 })

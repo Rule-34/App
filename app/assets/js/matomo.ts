@@ -266,7 +266,10 @@ function withLiveSearch(target: PremiumLandingTarget): PremiumLandingTarget {
 
   // The live search belongs to whatever page is currently shown. During client
   // navigation that is still the source URL, so it must not be copied onto the destination.
-  if (search || location.pathname !== target.path) {
+  // A captured pk_ab_test is only restored when the address bar itself has no query,
+  // which is the hydration case where the router dropped it. An explicit navigation
+  // to /premium must not keep the previous forced arm.
+  if (search || location.pathname !== target.path || location.search) {
     return { path: target.path, search }
   }
 
@@ -274,6 +277,16 @@ function withLiveSearch(target: PremiumLandingTarget): PremiumLandingTarget {
     path: target.path,
     search: capturedSearch().split('#')[0] ?? ''
   }
+}
+
+let premiumLandingWriteId = 0
+
+export function markPremiumLandingWrite() {
+  premiumLandingWriteId += 1
+}
+
+export function currentPremiumLandingWriteId() {
+  return premiumLandingWriteId
 }
 
 function targetFromLocation(): PremiumLandingTarget {

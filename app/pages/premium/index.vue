@@ -4,7 +4,11 @@
   import {
     activatePremiumLandingExperiment,
     commitPremiumLandingAssignment,
+    currentPremiumLandingWriteId,
+    isPremiumLandingPath,
+    markPremiumLandingWrite,
     premiumLandingVariationFromSearch,
+    synchronousPremiumLandingVariation,
     type PremiumLandingTarget
   } from '~/assets/js/matomo'
 
@@ -27,6 +31,16 @@
     const forced = premiumLandingVariationFromSearch(useRequestURL().search)
     if (forced) {
       premiumLandingVariation.value = forced
+    }
+  } else if (isPremiumLandingPath(window.location.pathname)) {
+    const known = synchronousPremiumLandingVariation(
+      { path: window.location.pathname, search: window.location.search },
+      window.localStorage
+    )
+
+    if (known === 'VisualFirst') {
+      const image = new Image()
+      image.src = visualFirstLcpSrc
     }
   }
 
@@ -66,8 +80,13 @@
       search: window.location.search
     }
     const variationAtStart = premiumLandingVariation.value
+    const writeId = currentPremiumLandingWriteId()
 
     void activatePremiumLandingExperiment(target).then((variation) => {
+      if (currentPremiumLandingWriteId() !== writeId) {
+        return
+      }
+
       if (
         !commitPremiumLandingAssignment(
           landingMounted,
@@ -79,6 +98,8 @@
       ) {
         return
       }
+
+      markPremiumLandingWrite()
 
       if (variation === 'VisualFirst') {
         const image = new Image()
