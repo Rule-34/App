@@ -1,6 +1,8 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import {
+  activatePremiumLandingExperiment,
   canonicalPremiumLandingVariation,
+  configureMatomo,
   isPremiumLandingPath,
   isPremiumRoute,
   PREMIUM_LANDING_EXPERIMENT_NAME,
@@ -82,5 +84,46 @@ describe('premium landing experiment', () => {
         { path: '/premium', search: '' }
       )
     ).toBe(false)
+  })
+
+  it('keeps VisualFirst when a pending assignment resolves after a forced navigation', async () => {
+    vi.useFakeTimers()
+    const location = { pathname: '/premium', search: '', hash: '' }
+
+    vi.stubGlobal('window', { _paq: [] as unknown[][] })
+    vi.stubGlobal('location', location)
+    vi.stubGlobal('localStorage', { getItem: () => null })
+    vi.stubGlobal('document', {
+      title: 'Premium',
+      createElement: () => ({ src: '', async: true }),
+      head: { appendChild() {} }
+    })
+    configureMatomo({ enabled: true })
+
+    try {
+      const pending = activatePremiumLandingExperiment({ path: '/premium', search: '' })
+
+      location.search = '?pk_ab_test=VisualFirst'
+      const forced = await activatePremiumLandingExperiment({
+        path: '/premium',
+        search: '?pk_ab_test=VisualFirst'
+      })
+      expect(forced).toBe('VisualFirst')
+
+      await vi.advanceTimersByTimeAsync(4000)
+      const stale = await pending
+      expect(stale).toBe('original')
+
+      let rendered = forced
+      if (premiumLandingAssignmentStillApplies(location, { path: '/premium', search: '' })) {
+        rendered = stale
+      }
+
+      expect(rendered).toBe('VisualFirst')
+    } finally {
+      vi.useRealTimers()
+      vi.unstubAllGlobals()
+      configureMatomo({ enabled: false })
+    }
   })
 })

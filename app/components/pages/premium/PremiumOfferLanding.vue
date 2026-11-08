@@ -251,15 +251,16 @@
     >
       <div class="grid grid-cols-2 gap-1.5 overflow-hidden rounded-2xl sm:grid-cols-4 sm:gap-2">
         <NuxtImg
-          v-for="preview in visualHeroPreviews"
+          v-for="(preview, index) in visualHeroPreviews"
           :key="preview.src"
-          :src="preview.src"
           alt=""
+          :decoding="index === 0 ? undefined : 'async'"
+          :fetchpriority="index === 0 ? undefined : 'low'"
+          :loading="index === 0 ? 'eager' : 'lazy'"
+          :preload="index === 0 ? { fetchPriority: 'high' } : false"
+          :src="preview.src"
           class="aspect-[2/3] w-full object-cover"
-          decoding="async"
-          fetchpriority="low"
           height="360"
-          loading="lazy"
           width="240"
         />
       </div>
