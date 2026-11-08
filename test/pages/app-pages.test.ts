@@ -81,6 +81,7 @@ describe('App pages', async () => {
       expect(forcedVisual).toContain('link.fetchPriority="high"')
       expect(forcedVisual).toContain('"/img/featured/rule34.xxx/top-1.jpg"')
       expect(forcedVisual).toContain('VisualFirst')
+      expect(forcedVisual).toContain('URLSearchParams')
     })
 
     it('shows the hero and pricing with JavaScript disabled', async () => {
@@ -202,6 +203,11 @@ describe('App pages', async () => {
       await page.addInitScript(() => localStorage.removeItem('MatomoAbTesting'))
       await page.goto(url('/premium?pk_ab_test=VisualFirst'))
       await page.getByTestId('premium-visual-hero').waitFor({ state: 'visible' })
+      await page.locator('[data-vf-slot] #vf-early').waitFor({ state: 'attached' })
+      await page.locator('#vf-early').evaluate((image) => {
+        document.body.appendChild(image)
+      })
+      expect(await page.locator('body > #vf-early').count()).toBe(1)
       await page.waitForFunction(
         () => (document.querySelector('#__nuxt') as { __vue_app__?: unknown } | null)?.__vue_app__
       )

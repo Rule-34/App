@@ -50,14 +50,17 @@
       image.src = visualFirstLcpSrc
     }
 
-    earlyHeroPresent.value = document.getElementById('vf-early') !== null
+    // Leave a server-rendered hero image in place until hydration. The prerendered page has no hero.
+    if (premiumLandingVariation.value !== 'VisualFirst' && document.getElementById('vf-early')) {
+      earlyHeroPresent.value = true
+    }
   }
 
   useHead({
     script: [
       {
         key: 'premium-landing-search',
-        innerHTML: `window.__premiumLandingSearch=location.search;(function(){function pick(raw){if(!raw)return "";var names=["original","OfferFirst","VisualFirst"];var parts=String(raw).split(",");for(var i=0;i<parts.length;i++){var token=parts[i].trim().toLowerCase();for(var j=0;j<names.length;j++)if(names[j].toLowerCase()===token)return names[j]}return ""}function stored(){try{var parsed=JSON.parse(localStorage.getItem(${JSON.stringify(MATOMO_AB_STORAGE_KEY)})||"null");var entry=parsed&&parsed[${JSON.stringify(`variation:${PREMIUM_LANDING_EXPERIMENT_NAME}`)}];if(!entry||(typeof entry.expire==="number"&&Date.now()>=entry.expire))return "";return pick(typeof entry==="string"?entry:entry.value||"")}catch(e){return ""}}var arm="";var q=/(?:^|[?&])pk_ab_test=([^&#]*)/.exec(location.search);if(q)arm=pick(decodeURIComponent(q[1].replace(/\\+/g," ")));if(!arm)arm=stored();if(arm!=="VisualFirst")return;var src=${JSON.stringify(visualFirstLcpSrc)};var link=document.createElement("link");link.rel="preload";link.as="image";link.href=src;link.fetchPriority="high";document.head.appendChild(link);var img=document.createElement("img");img.id="vf-early";img.alt="";img.src=src;img.width=400;img.height=600;img.decoding="sync";img.setAttribute("fetchpriority","high");img.style.cssText="position:absolute;top:80px;left:16px;z-index:5;display:block;width:min(187px,calc((100vw - 38px) / 2));height:auto;aspect-ratio:2/3;object-fit:cover";document.body.insertBefore(img,document.body.firstChild);function place(){var slot=document.querySelector("[data-vf-slot]");if(!slot)return false;img.style.cssText="";img.className="absolute inset-0 h-full w-full object-cover";slot.appendChild(img);return true}if(!place()){var observer=new MutationObserver(function(){if(place())observer.disconnect()});observer.observe(document.documentElement,{childList:true,subtree:true})}})()`,
+        innerHTML: `window.__premiumLandingSearch=location.search;(function(){function pick(raw){if(!raw)return "";var names=["original","OfferFirst","VisualFirst"];var parts=String(raw).split(",");for(var i=0;i<parts.length;i++){var token=parts[i].trim().toLowerCase();for(var j=0;j<names.length;j++)if(names[j].toLowerCase()===token)return names[j]}return ""}function stored(){try{var parsed=JSON.parse(localStorage.getItem(${JSON.stringify(MATOMO_AB_STORAGE_KEY)})||"null");var entry=parsed&&parsed[${JSON.stringify(`variation:${PREMIUM_LANDING_EXPERIMENT_NAME}`)}];if(!entry||(typeof entry.expire==="number"&&Date.now()>=entry.expire))return "";return pick(typeof entry==="string"?entry:entry.value||"")}catch(e){return ""}}var arm="";try{arm=pick(new URLSearchParams(location.search).get("pk_ab_test"))}catch(e){}if(!arm)arm=stored();if(arm!=="VisualFirst")return;var src=${JSON.stringify(visualFirstLcpSrc)};var link=document.createElement("link");link.rel="preload";link.as="image";link.href=src;link.fetchPriority="high";document.head.appendChild(link);var img=document.createElement("img");img.id="vf-early";img.alt="";img.src=src;img.width=400;img.height=600;img.decoding="sync";img.setAttribute("fetchpriority","high");img.style.cssText="position:absolute;top:80px;left:16px;z-index:5;display:block;width:min(187px,calc((100vw - 38px) / 2));height:auto;aspect-ratio:2/3;object-fit:cover";document.body.insertBefore(img,document.body.firstChild)})()`,
         tagPosition: 'bodyOpen',
         tagPriority: 'critical'
       }
@@ -106,10 +109,30 @@
     document.getElementById('vf-early')?.remove()
   }
 
+  function placeEarlyHeroImage() {
+    const early = document.getElementById('vf-early')
+    const slot = document.querySelector('[data-vf-slot]')
+
+    if (!early || !slot) {
+      return
+    }
+
+    if (!slot.contains(early)) {
+      early.style.cssText = ''
+      early.className = 'absolute inset-0 h-full w-full object-cover'
+      slot.appendChild(early)
+    }
+
+    earlyHeroPresent.value = true
+  }
+
   watch(premiumLandingVariation, (variation) => {
     if (variation !== 'VisualFirst') {
       removeEarlyHeroImage()
+      return
     }
+
+    void nextTick(() => placeEarlyHeroImage())
   })
 
   onUnmounted(() => {
@@ -153,7 +176,12 @@
       }
 
       premiumLandingVariation.value = variation
+      void nextTick(() => placeEarlyHeroImage())
     })
+
+    if (premiumLandingVariation.value === 'VisualFirst') {
+      void nextTick(() => placeEarlyHeroImage())
+    }
   })
 </script>
 
