@@ -12,7 +12,6 @@ export type PremiumLandingTarget = {
 }
 
 const ASSIGNMENT_TIMEOUT_MS = 4000
-const LEGACY_AB_STORAGE_KEY = 'PiwikAbTesting'
 
 type MatomoQueue = unknown[][]
 
@@ -166,7 +165,7 @@ export function cachedPremiumLandingVariation(storage: Storage | null | undefine
   }
 
   try {
-    const raw = storage.getItem(MATOMO_AB_STORAGE_KEY) || storage.getItem(LEGACY_AB_STORAGE_KEY)
+    const raw = storage.getItem(MATOMO_AB_STORAGE_KEY)
 
     if (!raw) {
       return null

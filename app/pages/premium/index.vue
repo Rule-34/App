@@ -4,8 +4,6 @@
   import {
     activatePremiumLandingExperiment,
     commitPremiumLandingAssignment,
-    MATOMO_AB_STORAGE_KEY,
-    PREMIUM_LANDING_EXPERIMENT_NAME,
     currentPremiumLandingWriteId,
     finishPremiumLandingHydration,
     isPremiumLandingHydrating,
@@ -13,18 +11,14 @@
     premiumLandingTargetFromRoute,
     markPremiumLandingWrite,
     premiumLandingVariationFromSearch,
-    readStorage,
-    synchronousPremiumLandingVariation,
     type PremiumLandingTarget
   } from '~/assets/js/matomo'
 
   const PremiumOfferLanding = defineAsyncComponent(() => import('~/components/pages/premium/PremiumOfferLanding.vue'))
 
   const { premiumLandingVariation } = useExperiments()
-  const visualFirstLcpSrc = '/img/featured/rule34.xxx/top-1.jpg'
-  const earlyHeroPresent = ref(false)
   const visualHeroPreviews = [
-    visualFirstLcpSrc,
+    '/img/featured/rule34.xxx/top-1.jpg',
     '/img/featured/rule34.xxx/top-2.jpg',
     '/img/featured/rule34.xxx/top-3.jpg',
     '/img/featured/rule34.xxx/top-4.jpg'
@@ -39,44 +33,16 @@
     if (forced) {
       premiumLandingVariation.value = forced
     }
-  } else if (isPremiumLandingPath(window.location.pathname)) {
-    const known = synchronousPremiumLandingVariation(
-      { path: window.location.pathname, search: window.location.search },
-      readStorage()
-    )
-
-    if (known === 'VisualFirst') {
-      const image = new Image()
-      image.src = visualFirstLcpSrc
-    }
-
-    // Leave a server-rendered hero image in place until hydration. The prerendered page has no hero.
-    if (premiumLandingVariation.value !== 'VisualFirst' && document.getElementById('vf-early')) {
-      earlyHeroPresent.value = true
-    }
   }
 
   useHead({
     script: [
       {
         key: 'premium-landing-search',
-        innerHTML: `window.__premiumLandingSearch=location.search;(function(){if(document.querySelector("[data-vf-slot] img"))return;function pick(raw){if(!raw)return "";var names=["original","OfferFirst","VisualFirst"];var parts=String(raw).split(",");for(var i=0;i<parts.length;i++){var token=parts[i].trim().toLowerCase();for(var j=0;j<names.length;j++)if(names[j].toLowerCase()===token)return names[j]}return ""}function stored(){try{var parsed=JSON.parse(localStorage.getItem(${JSON.stringify(MATOMO_AB_STORAGE_KEY)})||"null");var entry=parsed&&parsed[${JSON.stringify(`variation:${PREMIUM_LANDING_EXPERIMENT_NAME}`)}];if(!entry||(typeof entry.expire==="number"&&Date.now()>=entry.expire))return "";return pick(typeof entry==="string"?entry:entry.value||"")}catch(e){return ""}}var arm="";try{arm=pick(new URLSearchParams(location.search).get("pk_ab_test"))}catch(e){}if(!arm)arm=stored();if(arm!=="VisualFirst")return;var src=${JSON.stringify(visualFirstLcpSrc)};var link=document.createElement("link");link.rel="preload";link.as="image";link.href=src;link.fetchPriority="high";document.head.appendChild(link);var img=document.createElement("img");img.id="vf-early";img.alt="";img.src=src;img.width=400;img.height=600;img.decoding="sync";img.setAttribute("fetchpriority","high");img.style.cssText="position:absolute;top:80px;left:16px;z-index:5;display:block;width:min(187px,calc((100vw - 38px) / 2));height:auto;aspect-ratio:2/3;object-fit:cover";document.body.insertBefore(img,document.body.firstChild)})()`,
-        tagPosition: 'bodyClose',
+        innerHTML: 'window.__premiumLandingSearch=location.search',
         tagPriority: 'critical'
       }
-    ],
-    link:
-      import.meta.server && premiumLandingVariation.value === 'VisualFirst'
-        ? [
-            {
-              rel: 'preload',
-              as: 'image',
-              href: visualFirstLcpSrc,
-              fetchpriority: 'high',
-              tagPriority: -100
-            }
-          ]
-        : []
+    ]
   })
 
   const route = useRoute()
@@ -103,46 +69,12 @@
   )
 
   let landingMounted = true
-  const showRestOfHero = ref(false)
-
-  function removeEarlyHeroImage() {
-    document.getElementById('vf-early')?.remove()
-  }
-
-  function placeEarlyHeroImage() {
-    const early = document.getElementById('vf-early')
-    const slot = document.querySelector('[data-vf-slot]')
-
-    if (!early || !slot) {
-      return
-    }
-
-    if (!slot.contains(early)) {
-      early.style.cssText = ''
-      early.className = 'absolute inset-0 h-full w-full object-cover'
-      slot.appendChild(early)
-    }
-
-    earlyHeroPresent.value = true
-  }
-
-  watch(premiumLandingVariation, (variation) => {
-    if (variation !== 'VisualFirst') {
-      removeEarlyHeroImage()
-      earlyHeroPresent.value = false
-      return
-    }
-
-    void nextTick(() => placeEarlyHeroImage())
-  })
 
   onUnmounted(() => {
     landingMounted = false
-    removeEarlyHeroImage()
   })
 
   onMounted(() => {
-    showRestOfHero.value = true
     const target: PremiumLandingTarget = {
       path: window.location.pathname,
       search: window.location.search
@@ -170,19 +102,8 @@
       }
 
       markPremiumLandingWrite()
-
-      if (variation === 'VisualFirst') {
-        const image = new Image()
-        image.src = visualFirstLcpSrc
-      }
-
       premiumLandingVariation.value = variation
-      void nextTick(() => placeEarlyHeroImage())
     })
-
-    if (premiumLandingVariation.value === 'VisualFirst') {
-      void nextTick(() => placeEarlyHeroImage())
-    }
   })
 </script>
 
@@ -195,41 +116,26 @@
       data-testid="premium-visual-hero"
     >
       <div class="grid grid-cols-2 gap-1.5 overflow-hidden rounded-2xl sm:grid-cols-4 sm:gap-2">
-        <div
-          class="relative aspect-[2/3] w-full"
-          data-vf-slot
-        >
-          <img
-            v-if="!earlyHeroPresent"
-            :src="visualFirstLcpSrc"
-            alt=""
-            class="absolute inset-0 h-full w-full object-cover"
-            decoding="sync"
-            fetchpriority="high"
-            height="600"
-            width="400"
-          />
-        </div>
-        <template
+        <img
+          :src="visualHeroPreviews[0]"
+          alt=""
+          class="aspect-[2/3] w-full object-cover"
+          fetchpriority="high"
+          height="600"
+          loading="eager"
+          width="400"
+        />
+        <img
           v-for="src in visualHeroPreviews.slice(1)"
           :key="src"
-        >
-          <img
-            v-if="showRestOfHero"
-            :src="src"
-            alt=""
-            class="aspect-[2/3] w-full object-cover"
-            decoding="async"
-            fetchpriority="low"
-            height="600"
-            loading="lazy"
-            width="400"
-          />
-          <div
-            v-else
-            class="aspect-[2/3] w-full"
-          />
-        </template>
+          :src="src"
+          alt=""
+          class="aspect-[2/3] w-full object-cover"
+          fetchpriority="low"
+          height="600"
+          loading="lazy"
+          width="400"
+        />
       </div>
       <div
         class="pointer-events-none absolute inset-x-4 bottom-0 h-16 bg-linear-to-t from-black to-transparent sm:inset-x-6"

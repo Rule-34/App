@@ -78,10 +78,6 @@ describe('App pages', async () => {
 
       const forcedVisual = await fetch(url('/premium?pk_ab_test=VisualFirst')).then((response) => response.text())
       expect(forcedVisual).not.toContain('data-testid="premium-visual-hero"')
-      expect(forcedVisual).toContain('link.fetchPriority="high"')
-      expect(forcedVisual).toContain('"/img/featured/rule34.xxx/top-1.jpg"')
-      expect(forcedVisual).toContain('VisualFirst')
-      expect(forcedVisual).toContain('URLSearchParams')
     })
 
     it('shows the hero and pricing with JavaScript disabled', async () => {
@@ -146,26 +142,11 @@ describe('App pages', async () => {
       await visual.getByTestId('premium-visual-hero').waitFor({ state: 'visible' })
       expect(await visual.locator('h1').getAttribute('class')).toContain('text-pretty')
       await visual.getByRole('heading', { name: 'Premium Plans' }).waitFor({ state: 'visible' })
-      const lcpImage = visual.locator('#vf-early')
-      await lcpImage.waitFor({ state: 'visible' })
-      expect(await lcpImage.getAttribute('fetchpriority')).toBe('high')
-      expect(await lcpImage.getAttribute('src')).toBe('/img/featured/rule34.xxx/top-1.jpg')
-      const aligned = await visual.evaluate(() => {
-        const image = document.getElementById('vf-early')
-        const slot = document.querySelector('[data-vf-slot]')
-        if (!image || !slot) return false
-        const imageBox = image.getBoundingClientRect()
-        const slotBox = slot.getBoundingClientRect()
-        return (
-          slot.contains(image) &&
-          Math.abs(imageBox.left - slotBox.left) < 2 &&
-          Math.abs(imageBox.top - slotBox.top) < 2 &&
-          Math.abs(imageBox.width - slotBox.width) < 2
-        )
-      })
-      expect(aligned).toBe(true)
-      const preload = visual.locator('link[rel="preload"][as="image"][href="/img/featured/rule34.xxx/top-1.jpg"]')
-      expect(await preload.getAttribute('fetchpriority')).toBe('high')
+      const leadImage = visual.locator('[data-testid="premium-visual-hero"] img').first()
+      await leadImage.waitFor({ state: 'visible' })
+      expect(await leadImage.getAttribute('fetchpriority')).toBe('high')
+      expect(await leadImage.getAttribute('loading')).toBe('eager')
+      expect(await leadImage.getAttribute('src')).toBe('/img/featured/rule34.xxx/top-1.jpg')
     }, 30000)
 
     it('uses the cached VisualFirst arm when pk_ab_test is not a known variation', async () => {
@@ -183,18 +164,9 @@ describe('App pages', async () => {
       )
       await page.goto(url('/premium?pk_ab_test=unknown'))
       await page.getByTestId('premium-visual-hero').waitFor({ state: 'visible' })
-      await page.locator('#vf-early').waitFor({ state: 'visible' })
-      const aligned = await page.evaluate(() => {
-        const image = document.getElementById('vf-early')
-        const slot = document.querySelector('[data-vf-slot]')
-        if (!image || !slot) return false
-        const imageBox = image.getBoundingClientRect()
-        const slotBox = slot.getBoundingClientRect()
-        return (
-          slot.contains(image) && Math.abs(imageBox.left - slotBox.left) < 2 && Math.abs(imageBox.top - slotBox.top) < 2
-        )
-      })
-      expect(aligned).toBe(true)
+      expect(await page.locator('[data-testid="premium-visual-hero"] img').first().getAttribute('src')).toBe(
+        '/img/featured/rule34.xxx/top-1.jpg'
+      )
       await page.close()
     }, 30000)
 
@@ -203,11 +175,6 @@ describe('App pages', async () => {
       await page.addInitScript(() => localStorage.removeItem('MatomoAbTesting'))
       await page.goto(url('/premium?pk_ab_test=VisualFirst'))
       await page.getByTestId('premium-visual-hero').waitFor({ state: 'visible' })
-      await page.locator('[data-vf-slot] #vf-early').waitFor({ state: 'attached' })
-      await page.locator('#vf-early').evaluate((image) => {
-        document.body.appendChild(image)
-      })
-      expect(await page.locator('body > #vf-early').count()).toBe(1)
       await page.waitForFunction(
         () => (document.querySelector('#__nuxt') as { __vue_app__?: unknown } | null)?.__vue_app__
       )
@@ -229,7 +196,6 @@ describe('App pages', async () => {
         timeout: 10000
       })
       expect(await page.getByRole('heading', { name: 'Browse Ad-free & Save Posts' }).count()).toBeGreaterThan(0)
-      expect(await page.locator('#vf-early').count()).toBe(0)
       await page.close()
     }, 30000)
 
