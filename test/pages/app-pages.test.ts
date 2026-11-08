@@ -75,6 +75,12 @@ describe('App pages', async () => {
       expect(html).toContain('Premium Plans')
       expect(html).not.toContain('data-premium-ab="pending"')
       expect(html).not.toContain('premium-visual-hero')
+
+      const forcedVisual = await fetch(url('/premium?pk_ab_test=VisualFirst')).then((response) => response.text())
+      expect(forcedVisual).toContain('data-testid="premium-visual-hero"')
+      expect(forcedVisual).toContain('fetchpriority="high"')
+      expect(forcedVisual).toContain('rel="preload"')
+      expect(forcedVisual).toContain('/img/featured/rule34.xxx/top-1.jpg')
     })
 
     it('shows the hero and pricing with JavaScript disabled', async () => {
@@ -139,7 +145,11 @@ describe('App pages', async () => {
       await visual.getByTestId('premium-visual-hero').waitFor({ state: 'visible' })
       expect(await visual.locator('h1').getAttribute('class')).toContain('text-pretty')
       await visual.getByRole('heading', { name: 'Premium Plans' }).waitFor({ state: 'visible' })
-      await visual.locator('[data-premium-landing] img').first().waitFor({ state: 'visible' })
+      const lcpImage = visual.locator('[data-testid="premium-visual-hero"] img').first()
+      await lcpImage.waitFor({ state: 'visible' })
+      expect(await lcpImage.getAttribute('fetchpriority')).toBe('high')
+      expect(await lcpImage.getAttribute('src')).toBe('/img/featured/rule34.xxx/top-1.jpg')
+      expect(await visual.locator('link[rel="preload"][as="image"]').count()).toBeGreaterThan(0)
     }, 30000)
 
     it('applies the cached arm on client navigation to /premium', async () => {

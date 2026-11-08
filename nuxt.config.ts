@@ -61,7 +61,8 @@ const pageRouteRules = {
 
   '/settings': { ssr: false, headers: cacheHeaders },
 
-  '/premium': { prerender: true, headers: cacheHeaders },
+  // SSR, not prerendered, so a forced pk_ab_test arm is in the first HTML.
+  '/premium': { headers: cacheHeaders },
   '/premium/sign-in': { prerender: true, headers: cacheHeaders },
   '/premium/forgot-password': { prerender: true, headers: cacheHeaders },
 

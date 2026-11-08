@@ -15,14 +15,7 @@
   } from '@headlessui/vue'
   import { project } from '~~/config/project'
 
-  const props = defineProps<{ variant: 'OfferFirst' | 'VisualFirst' }>()
-
-  const visualHeroPreviews = [
-    { src: '/img/featured/rule34.xxx/top-1.jpg' },
-    { src: '/img/featured/rule34.xxx/top-2.jpg' },
-    { src: '/img/featured/rule34.xxx/top-3.jpg' },
-    { src: '/img/featured/rule34.xxx/top-4.jpg' }
-  ]
+  defineProps<{ variant: 'OfferFirst' | 'VisualFirst' }>()
 
   const { shouldShow } = useActivePromotion()
   const { t } = useI18n()
@@ -243,32 +236,6 @@
   </ClientOnly>
 
   <main class="flex-1">
-    <section
-      v-if="props.variant === 'VisualFirst'"
-      aria-hidden="true"
-      class="relative mx-auto max-w-6xl px-4 pt-6 sm:px-6"
-      data-testid="premium-visual-hero"
-    >
-      <div class="grid grid-cols-2 gap-1.5 overflow-hidden rounded-2xl sm:grid-cols-4 sm:gap-2">
-        <NuxtImg
-          v-for="(preview, index) in visualHeroPreviews"
-          :key="preview.src"
-          alt=""
-          :decoding="index === 0 ? undefined : 'async'"
-          :fetchpriority="index === 0 ? undefined : 'low'"
-          :loading="index === 0 ? 'eager' : 'lazy'"
-          :preload="index === 0 ? { fetchPriority: 'high' } : false"
-          :src="preview.src"
-          class="aspect-[2/3] w-full object-cover"
-          height="360"
-          width="240"
-        />
-      </div>
-      <div
-        class="pointer-events-none absolute inset-x-4 bottom-0 h-16 bg-linear-to-t from-black to-transparent sm:inset-x-6"
-      />
-    </section>
-
     <div class="container mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-14 lg:px-8">
       <section
         id="pricing"
