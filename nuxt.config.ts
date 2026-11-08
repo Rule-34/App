@@ -61,9 +61,7 @@ const pageRouteRules = {
 
   '/settings': { ssr: false, headers: cacheHeaders },
 
-  // SSR, not prerendered, so a forced pk_ab_test arm is in the first HTML.
-  // Private: a signed-in response embeds account fields in the Nuxt payload.
-  '/premium': { headers: { 'Cache-Control': 'private, no-store' } },
+  '/premium': { prerender: true, headers: cacheHeaders },
   '/premium/sign-in': { prerender: true, headers: cacheHeaders },
   '/premium/forgot-password': { prerender: true, headers: cacheHeaders },
 

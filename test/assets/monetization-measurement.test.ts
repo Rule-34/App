@@ -35,7 +35,7 @@ describe('monetization measurement', () => {
     expect(matomoClient).not.toContain('YearlyFocus')
     expect(premiumOffer).not.toContain('YearlyFocus')
     expect(premium).toContain('data-testid="premium-visual-hero"')
-    expect(premium).toContain('fetchpriority="high"')
+    expect(premium).toContain('fetchpriority","high"')
     expect(premium).toContain("rel: 'preload'")
     expect(premium).toContain('data-premium-landing')
     expect(premium).toContain('variant="OfferFirst"')

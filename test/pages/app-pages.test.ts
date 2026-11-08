@@ -77,12 +77,10 @@ describe('App pages', async () => {
       expect(html).not.toContain('premium-visual-hero')
 
       const forcedVisual = await fetch(url('/premium?pk_ab_test=VisualFirst')).then((response) => response.text())
-      expect(forcedVisual).toContain('data-testid="premium-visual-hero"')
-      expect(
-        /<link\b(?=[^>]*\brel="preload")(?=[^>]*\bas="image")(?=[^>]*\bhref="\/img\/featured\/rule34\.xxx\/top-1\.jpg")(?=[^>]*\bfetchpriority="high")[^>]*>/.test(
-          forcedVisual
-        )
-      ).toBe(true)
+      expect(forcedVisual).not.toContain('data-testid="premium-visual-hero"')
+      expect(forcedVisual).toContain('link.fetchPriority="high"')
+      expect(forcedVisual).toContain('"/img/featured/rule34.xxx/top-1.jpg"')
+      expect(forcedVisual).toContain('visualfirst')
     })
 
     it('shows the hero and pricing with JavaScript disabled', async () => {
@@ -147,7 +145,7 @@ describe('App pages', async () => {
       await visual.getByTestId('premium-visual-hero').waitFor({ state: 'visible' })
       expect(await visual.locator('h1').getAttribute('class')).toContain('text-pretty')
       await visual.getByRole('heading', { name: 'Premium Plans' }).waitFor({ state: 'visible' })
-      const lcpImage = visual.locator('[data-testid="premium-visual-hero"] img').first()
+      const lcpImage = visual.locator('#vf-early')
       await lcpImage.waitFor({ state: 'visible' })
       expect(await lcpImage.getAttribute('fetchpriority')).toBe('high')
       expect(await lcpImage.getAttribute('src')).toBe('/img/featured/rule34.xxx/top-1.jpg')

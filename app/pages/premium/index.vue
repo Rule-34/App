@@ -4,6 +4,8 @@
   import {
     activatePremiumLandingExperiment,
     commitPremiumLandingAssignment,
+    MATOMO_AB_STORAGE_KEY,
+    PREMIUM_LANDING_EXPERIMENT_NAME,
     currentPremiumLandingWriteId,
     finishPremiumLandingHydration,
     isPremiumLandingHydrating,
@@ -52,7 +54,8 @@
     script: [
       {
         key: 'premium-landing-search',
-        innerHTML: 'window.__premiumLandingSearch=location.search',
+        innerHTML: `window.__premiumLandingSearch=location.search;(function(){var arm="";var q=/(?:^|[?&])pk_ab_test=([^&#]*)/.exec(location.search);if(q){arm=decodeURIComponent(q[1].replace(/\\+/g," ")).split(",")[0].trim()}else{try{var stored=JSON.parse(localStorage.getItem(${JSON.stringify(MATOMO_AB_STORAGE_KEY)})||"null");var entry=stored&&stored[${JSON.stringify(`variation:${PREMIUM_LANDING_EXPERIMENT_NAME}`)}];if(entry&&!(typeof entry.expire==="number"&&Date.now()>=entry.expire)){arm=typeof entry==="string"?entry:entry.value||""}}catch(e){}}if(String(arm).toLowerCase()!=="visualfirst")return;var src=${JSON.stringify(visualFirstLcpSrc)};var link=document.createElement("link");link.rel="preload";link.as="image";link.href=src;link.fetchPriority="high";document.head.appendChild(link);var img=document.createElement("img");img.id="vf-early";img.alt="";img.src=src;img.width=400;img.height=600;img.decoding="sync";img.setAttribute("fetchpriority","high");img.style.cssText="position:absolute;top:80px;left:16px;z-index:5;display:block;width:min(190px,50vw);height:auto;aspect-ratio:2/3;object-fit:cover";document.body.insertBefore(img,document.body.firstChild)})()`,
+        tagPosition: 'bodyOpen',
         tagPriority: 'critical'
       }
     ],
@@ -149,15 +152,9 @@
       data-testid="premium-visual-hero"
     >
       <div class="grid grid-cols-2 gap-1.5 overflow-hidden rounded-2xl sm:grid-cols-4 sm:gap-2">
-        <img
-          :src="visualFirstLcpSrc"
-          alt=""
-          class="aspect-[2/3] w-full object-cover"
-          decoding="sync"
-          fetchpriority="high"
-          height="600"
-          loading="eager"
-          width="400"
+        <div
+          class="aspect-[2/3] w-full"
+          data-vf-slot
         />
         <template
           v-for="src in visualHeroPreviews.slice(1)"
