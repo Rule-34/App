@@ -69,6 +69,14 @@ export function isPremiumRoute(path: string) {
   return /(?:^|\/)premium(?:\/|$)/.test(pathnameOf(path))
 }
 
+/** A late assignment still applies while the visitor is on the same path. Query changes must not freeze the arm. */
+export function premiumLandingAssignmentStillApplies(
+  current: { pathname: string; search: string },
+  target: { path: string; search: string }
+) {
+  return current.pathname === target.path
+}
+
 function runsInBrowser() {
   return import.meta.client || (typeof window !== 'undefined' && import.meta.server !== true)
 }

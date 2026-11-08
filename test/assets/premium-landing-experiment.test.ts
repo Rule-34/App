@@ -5,6 +5,7 @@ import {
   isPremiumRoute,
   PREMIUM_LANDING_EXPERIMENT_NAME,
   PREMIUM_LANDING_VARIATIONS,
+  premiumLandingAssignmentStillApplies,
   premiumLandingExperimentOptions,
   premiumLandingTargetFromRoute,
   premiumLandingVariationFromSearch
@@ -57,5 +58,17 @@ describe('premium landing experiment', () => {
       path: '/premium',
       search: '?pk_ab_test=VisualFirst'
     })
+    expect(
+      premiumLandingAssignmentStillApplies(
+        { pathname: '/premium', search: '?utm_source=ad' },
+        { path: '/premium', search: '' }
+      )
+    ).toBe(true)
+    expect(
+      premiumLandingAssignmentStillApplies(
+        { pathname: '/posts/rule34.xxx', search: '?utm_source=ad' },
+        { path: '/premium', search: '' }
+      )
+    ).toBe(false)
   })
 })

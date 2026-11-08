@@ -157,6 +157,9 @@ describe('App pages', async () => {
       )
       await page.goto(url('/other-sites'))
       await page.getByRole('heading', { name: 'Other sites' }).waitFor({ state: 'visible', timeout: 10000 })
+      await page.waitForFunction(
+        () => (document.querySelector('#__nuxt') as { __vue_app__?: unknown } | null)?.__vue_app__
+      )
       await page.evaluate(() => {
         ;(window as unknown as { __spa?: boolean }).__spa = true
       })

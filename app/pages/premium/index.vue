@@ -1,7 +1,11 @@
 <script lang="ts" setup>
   import { defineAsyncComponent } from 'vue'
   import PremiumLandingOriginal from '~/components/pages/premium/PremiumLandingOriginal.vue'
-  import { activatePremiumLandingExperiment, type PremiumLandingTarget } from '~/assets/js/matomo'
+  import {
+    activatePremiumLandingExperiment,
+    premiumLandingAssignmentStillApplies,
+    type PremiumLandingTarget
+  } from '~/assets/js/matomo'
 
   const PremiumOfferLanding = defineAsyncComponent(() => import('~/components/pages/premium/PremiumOfferLanding.vue'))
 
@@ -28,7 +32,7 @@
     }
 
     void activatePremiumLandingExperiment(target).then((variation) => {
-      if (`${window.location.pathname}${window.location.search}` !== `${target.path}${target.search}`) {
+      if (!premiumLandingAssignmentStillApplies(window.location, target)) {
         return
       }
 
