@@ -25,6 +25,12 @@
     ]
   })
 
+  let landingMounted = true
+
+  onUnmounted(() => {
+    landingMounted = false
+  })
+
   onMounted(() => {
     const target: PremiumLandingTarget = {
       path: window.location.pathname,
@@ -32,7 +38,7 @@
     }
 
     void activatePremiumLandingExperiment(target).then((variation) => {
-      if (!premiumLandingAssignmentStillApplies(window.location, target)) {
+      if (!landingMounted || !premiumLandingAssignmentStillApplies(window.location, target)) {
         return
       }
 

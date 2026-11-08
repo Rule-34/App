@@ -66,7 +66,19 @@ describe('premium landing experiment', () => {
     ).toBe(true)
     expect(
       premiumLandingAssignmentStillApplies(
+        { pathname: '/premium', search: '?pk_ab_test=OfferFirst&utm_source=ad' },
+        { path: '/premium', search: '?pk_ab_test=OfferFirst' }
+      )
+    ).toBe(true)
+    expect(
+      premiumLandingAssignmentStillApplies(
         { pathname: '/posts/rule34.xxx', search: '?utm_source=ad' },
+        { path: '/premium', search: '' }
+      )
+    ).toBe(false)
+    expect(
+      premiumLandingAssignmentStillApplies(
+        { pathname: '/premium', search: '?pk_ab_test=VisualFirst' },
         { path: '/premium', search: '' }
       )
     ).toBe(false)

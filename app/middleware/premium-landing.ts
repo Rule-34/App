@@ -4,6 +4,8 @@ import {
   premiumLandingTargetFromRoute
 } from '~/assets/js/matomo'
 
+let premiumLandingNavigation = 0
+
 /**
  * On a client navigation to the premium landing, assign the variation before the page
  * renders. The destination route is the target: window.location is still the page we
@@ -19,7 +21,13 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return
   }
 
+  const navigation = ++premiumLandingNavigation
   const { premiumLandingVariation } = useExperiments()
+  const variation = await activatePremiumLandingExperiment(premiumLandingTargetFromRoute(to))
 
-  premiumLandingVariation.value = await activatePremiumLandingExperiment(premiumLandingTargetFromRoute(to))
+  if (navigation !== premiumLandingNavigation) {
+    return
+  }
+
+  premiumLandingVariation.value = variation
 })
