@@ -38,7 +38,6 @@ type MatomoWindow = Window & {
       Experiment: new (options: MatomoExperimentOptions) => PremiumLandingExperiment
     }
   }
-  matomoAbTestingAsyncInit?: () => void
 }
 
 type PageTrack = {
@@ -385,11 +384,6 @@ export function ensureMatomoLoaded() {
   queue.push(['enableCrossDomainLinking'])
   queue.push(['setExcludedQueryParams', ['page', 'cursor']])
   queue.push(['enableLinkTracking'])
-
-  const previousInit = matomoWindow().matomoAbTestingAsyncInit
-  matomoWindow().matomoAbTestingAsyncInit = () => {
-    previousInit?.()
-  }
 
   const script = document.createElement('script')
   script.src = MATOMO_SCRIPT_URL

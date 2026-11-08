@@ -23,8 +23,7 @@ async function loadMatomoModule(pathname: string, search = '') {
             }) => { getActivatedVariationName(): string | undefined }
           }
         }
-      | undefined,
-    matomoAbTestingAsyncInit: undefined as (() => void) | undefined
+      | undefined
   }
 
   vi.stubGlobal('window', matomoWindow)
@@ -65,7 +64,6 @@ async function loadMatomoModule(pathname: string, search = '') {
             }
           }
         }
-        matomoWindow.matomoAbTestingAsyncInit?.()
         script.onload?.()
       }
     }
@@ -127,8 +125,7 @@ describe('Matomo on /premium routes', () => {
     vi.resetModules()
     const matomoWindow = {
       _paq: [] as unknown[][],
-      Matomo: undefined,
-      matomoAbTestingAsyncInit: undefined as (() => void) | undefined
+      Matomo: undefined
     }
 
     vi.stubGlobal('window', matomoWindow)
