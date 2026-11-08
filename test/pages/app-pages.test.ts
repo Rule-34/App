@@ -80,7 +80,7 @@ describe('App pages', async () => {
       expect(forcedVisual).not.toContain('data-testid="premium-visual-hero"')
       expect(forcedVisual).toContain('link.fetchPriority="high"')
       expect(forcedVisual).toContain('"/img/featured/rule34.xxx/top-1.jpg"')
-      expect(forcedVisual).toContain('visualfirst')
+      expect(forcedVisual).toContain('VisualFirst')
     })
 
     it('shows the hero and pricing with JavaScript disabled', async () => {
@@ -149,8 +149,52 @@ describe('App pages', async () => {
       await lcpImage.waitFor({ state: 'visible' })
       expect(await lcpImage.getAttribute('fetchpriority')).toBe('high')
       expect(await lcpImage.getAttribute('src')).toBe('/img/featured/rule34.xxx/top-1.jpg')
+      const aligned = await visual.evaluate(() => {
+        const image = document.getElementById('vf-early')
+        const slot = document.querySelector('[data-vf-slot]')
+        if (!image || !slot) return false
+        const imageBox = image.getBoundingClientRect()
+        const slotBox = slot.getBoundingClientRect()
+        return (
+          slot.contains(image) &&
+          Math.abs(imageBox.left - slotBox.left) < 2 &&
+          Math.abs(imageBox.top - slotBox.top) < 2 &&
+          Math.abs(imageBox.width - slotBox.width) < 2
+        )
+      })
+      expect(aligned).toBe(true)
       const preload = visual.locator('link[rel="preload"][as="image"][href="/img/featured/rule34.xxx/top-1.jpg"]')
       expect(await preload.getAttribute('fetchpriority')).toBe('high')
+    }, 30000)
+
+    it('uses the cached VisualFirst arm when pk_ab_test is not a known variation', async () => {
+      const page = await createPage()
+      await page.addInitScript(
+        ({ storageKey, experiment }) => {
+          localStorage.setItem(
+            storageKey,
+            JSON.stringify({
+              [`variation:${experiment}`]: { value: 'VisualFirst', expire: Date.now() + 86_400_000 }
+            })
+          )
+        },
+        { storageKey: MATOMO_AB_STORAGE_KEY, experiment: PREMIUM_LANDING_EXPERIMENT_NAME }
+      )
+      await page.goto(url('/premium?pk_ab_test=unknown'))
+      await page.getByTestId('premium-visual-hero').waitFor({ state: 'visible' })
+      await page.locator('#vf-early').waitFor({ state: 'visible' })
+      const aligned = await page.evaluate(() => {
+        const image = document.getElementById('vf-early')
+        const slot = document.querySelector('[data-vf-slot]')
+        if (!image || !slot) return false
+        const imageBox = image.getBoundingClientRect()
+        const slotBox = slot.getBoundingClientRect()
+        return (
+          slot.contains(image) && Math.abs(imageBox.left - slotBox.left) < 2 && Math.abs(imageBox.top - slotBox.top) < 2
+        )
+      })
+      expect(aligned).toBe(true)
+      await page.close()
     }, 30000)
 
     it('shows original after a client navigation away from a forced query', async () => {
@@ -179,6 +223,7 @@ describe('App pages', async () => {
         timeout: 10000
       })
       expect(await page.getByRole('heading', { name: 'Browse Ad-free & Save Posts' }).count()).toBeGreaterThan(0)
+      expect(await page.locator('#vf-early').count()).toBe(0)
       await page.close()
     }, 30000)
 

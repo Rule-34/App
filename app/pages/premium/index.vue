@@ -22,6 +22,7 @@
 
   const { premiumLandingVariation } = useExperiments()
   const visualFirstLcpSrc = '/img/featured/rule34.xxx/top-1.jpg'
+  const earlyHeroPresent = ref(false)
   const visualHeroPreviews = [
     visualFirstLcpSrc,
     '/img/featured/rule34.xxx/top-2.jpg',
@@ -48,13 +49,15 @@
       const image = new Image()
       image.src = visualFirstLcpSrc
     }
+
+    earlyHeroPresent.value = document.getElementById('vf-early') !== null
   }
 
   useHead({
     script: [
       {
         key: 'premium-landing-search',
-        innerHTML: `window.__premiumLandingSearch=location.search;(function(){var arm="";var q=/(?:^|[?&])pk_ab_test=([^&#]*)/.exec(location.search);if(q){arm=decodeURIComponent(q[1].replace(/\\+/g," ")).split(",")[0].trim()}else{try{var stored=JSON.parse(localStorage.getItem(${JSON.stringify(MATOMO_AB_STORAGE_KEY)})||"null");var entry=stored&&stored[${JSON.stringify(`variation:${PREMIUM_LANDING_EXPERIMENT_NAME}`)}];if(entry&&!(typeof entry.expire==="number"&&Date.now()>=entry.expire)){arm=typeof entry==="string"?entry:entry.value||""}}catch(e){}}if(String(arm).toLowerCase()!=="visualfirst")return;var src=${JSON.stringify(visualFirstLcpSrc)};var link=document.createElement("link");link.rel="preload";link.as="image";link.href=src;link.fetchPriority="high";document.head.appendChild(link);var img=document.createElement("img");img.id="vf-early";img.alt="";img.src=src;img.width=400;img.height=600;img.decoding="sync";img.setAttribute("fetchpriority","high");img.style.cssText="position:absolute;top:80px;left:16px;z-index:5;display:block;width:min(190px,50vw);height:auto;aspect-ratio:2/3;object-fit:cover";document.body.insertBefore(img,document.body.firstChild)})()`,
+        innerHTML: `window.__premiumLandingSearch=location.search;(function(){function pick(raw){if(!raw)return "";var names=["original","OfferFirst","VisualFirst"];var parts=String(raw).split(",");for(var i=0;i<parts.length;i++){var token=parts[i].trim().toLowerCase();for(var j=0;j<names.length;j++)if(names[j].toLowerCase()===token)return names[j]}return ""}function stored(){try{var parsed=JSON.parse(localStorage.getItem(${JSON.stringify(MATOMO_AB_STORAGE_KEY)})||"null");var entry=parsed&&parsed[${JSON.stringify(`variation:${PREMIUM_LANDING_EXPERIMENT_NAME}`)}];if(!entry||(typeof entry.expire==="number"&&Date.now()>=entry.expire))return "";return pick(typeof entry==="string"?entry:entry.value||"")}catch(e){return ""}}var arm="";var q=/(?:^|[?&])pk_ab_test=([^&#]*)/.exec(location.search);if(q)arm=pick(decodeURIComponent(q[1].replace(/\\+/g," ")));if(!arm)arm=stored();if(arm!=="VisualFirst")return;var src=${JSON.stringify(visualFirstLcpSrc)};var link=document.createElement("link");link.rel="preload";link.as="image";link.href=src;link.fetchPriority="high";document.head.appendChild(link);var img=document.createElement("img");img.id="vf-early";img.alt="";img.src=src;img.width=400;img.height=600;img.decoding="sync";img.setAttribute("fetchpriority","high");img.style.cssText="position:absolute;top:80px;left:16px;z-index:5;display:block;width:min(187px,calc((100vw - 38px) / 2));height:auto;aspect-ratio:2/3;object-fit:cover";document.body.insertBefore(img,document.body.firstChild);function place(){var slot=document.querySelector("[data-vf-slot]");if(!slot)return false;img.style.cssText="";img.className="absolute inset-0 h-full w-full object-cover";slot.appendChild(img);return true}if(!place()){var observer=new MutationObserver(function(){if(place())observer.disconnect()});observer.observe(document.documentElement,{childList:true,subtree:true})}})()`,
         tagPosition: 'bodyOpen',
         tagPriority: 'critical'
       }
@@ -99,8 +102,19 @@
   let landingMounted = true
   const showRestOfHero = ref(false)
 
+  function removeEarlyHeroImage() {
+    document.getElementById('vf-early')?.remove()
+  }
+
+  watch(premiumLandingVariation, (variation) => {
+    if (variation !== 'VisualFirst') {
+      removeEarlyHeroImage()
+    }
+  })
+
   onUnmounted(() => {
     landingMounted = false
+    removeEarlyHeroImage()
   })
 
   onMounted(() => {
@@ -153,9 +167,20 @@
     >
       <div class="grid grid-cols-2 gap-1.5 overflow-hidden rounded-2xl sm:grid-cols-4 sm:gap-2">
         <div
-          class="aspect-[2/3] w-full"
+          class="relative aspect-[2/3] w-full"
           data-vf-slot
-        />
+        >
+          <img
+            v-if="!earlyHeroPresent"
+            :src="visualFirstLcpSrc"
+            alt=""
+            class="absolute inset-0 h-full w-full object-cover"
+            decoding="sync"
+            fetchpriority="high"
+            height="600"
+            width="400"
+          />
+        </div>
         <template
           v-for="src in visualHeroPreviews.slice(1)"
           :key="src"
