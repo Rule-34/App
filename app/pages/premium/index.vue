@@ -5,9 +5,13 @@
     activatePremiumLandingExperiment,
     commitPremiumLandingAssignment,
     currentPremiumLandingWriteId,
+    finishPremiumLandingHydration,
+    isPremiumLandingHydrating,
     isPremiumLandingPath,
+    premiumLandingTargetFromRoute,
     markPremiumLandingWrite,
     premiumLandingVariationFromSearch,
+    readStorage,
     synchronousPremiumLandingVariation,
     type PremiumLandingTarget
   } from '~/assets/js/matomo'
@@ -35,7 +39,7 @@
   } else if (isPremiumLandingPath(window.location.pathname)) {
     const known = synchronousPremiumLandingVariation(
       { path: window.location.pathname, search: window.location.search },
-      window.localStorage
+      readStorage()
     )
 
     if (known === 'VisualFirst') {
@@ -66,6 +70,29 @@
         : []
   })
 
+  const route = useRoute()
+
+  watch(
+    () => route.fullPath,
+    () => {
+      if (import.meta.server || isPremiumLandingHydrating() || !isPremiumLandingPath(route.path)) {
+        return
+      }
+
+      const target = premiumLandingTargetFromRoute(route)
+      const writeId = currentPremiumLandingWriteId()
+
+      void activatePremiumLandingExperiment(target).then((variation) => {
+        if (currentPremiumLandingWriteId() !== writeId) {
+          return
+        }
+
+        markPremiumLandingWrite()
+        premiumLandingVariation.value = variation
+      })
+    }
+  )
+
   let landingMounted = true
   const showRestOfHero = ref(false)
 
@@ -81,8 +108,10 @@
     }
     const variationAtStart = premiumLandingVariation.value
     const writeId = currentPremiumLandingWriteId()
+    const pendingAssignment = activatePremiumLandingExperiment(target)
+    finishPremiumLandingHydration()
 
-    void activatePremiumLandingExperiment(target).then((variation) => {
+    void pendingAssignment.then((variation) => {
       if (currentPremiumLandingWriteId() !== writeId) {
         return
       }

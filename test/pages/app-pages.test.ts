@@ -155,6 +155,35 @@ describe('App pages', async () => {
       expect(await preload.getAttribute('fetchpriority')).toBe('high')
     }, 30000)
 
+    it('shows original after a client navigation away from a forced query', async () => {
+      const page = await createPage()
+      await page.addInitScript(() => localStorage.removeItem('MatomoAbTesting'))
+      await page.goto(url('/premium?pk_ab_test=VisualFirst'))
+      await page.getByTestId('premium-visual-hero').waitFor({ state: 'visible' })
+      await page.waitForFunction(
+        () => (document.querySelector('#__nuxt') as { __vue_app__?: unknown } | null)?.__vue_app__
+      )
+      await page.evaluate(() => {
+        localStorage.removeItem('MatomoAbTesting')
+        const app = (
+          document.querySelector('#__nuxt') as unknown as {
+            __vue_app__: { config: { globalProperties: { $router: { push: (to: string) => Promise<unknown> } } } }
+          }
+        ).__vue_app__
+        return app.config.globalProperties.$router.push('/premium')
+      })
+      await page.waitForFunction(
+        () => location.pathname === '/premium' && !location.search.includes('pk_ab_test'),
+        null,
+        { timeout: 10000 }
+      )
+      await page.waitForFunction(() => document.querySelector('[data-testid="premium-visual-hero"]') == null, null, {
+        timeout: 10000
+      })
+      expect(await page.getByRole('heading', { name: 'Browse Ad-free & Save Posts' }).count()).toBeGreaterThan(0)
+      await page.close()
+    }, 30000)
+
     it('applies the cached arm on client navigation to /premium', async () => {
       const page = await createPage()
       await page.addInitScript(

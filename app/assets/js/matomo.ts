@@ -234,12 +234,22 @@ function matomoQueue() {
   return target._paq
 }
 
-function readStorage() {
+export function readStorage() {
   try {
     return localStorage
   } catch {
     return null
   }
+}
+
+let premiumLandingHydrating = true
+
+export function finishPremiumLandingHydration() {
+  premiumLandingHydrating = false
+}
+
+export function isPremiumLandingHydrating() {
+  return premiumLandingHydrating
 }
 
 function capturedSearch() {
@@ -253,6 +263,10 @@ function capturedSearch() {
 }
 
 function restoreCapturedSearch() {
+  if (!premiumLandingHydrating) {
+    return
+  }
+
   const search = capturedSearch()
 
   if (!search.includes('pk_ab_test=') || location.search.includes('pk_ab_test=')) {
@@ -269,7 +283,7 @@ function withLiveSearch(target: PremiumLandingTarget): PremiumLandingTarget {
   // A captured pk_ab_test is only restored when the address bar itself has no query,
   // which is the hydration case where the router dropped it. An explicit navigation
   // to /premium must not keep the previous forced arm.
-  if (search || location.pathname !== target.path || location.search) {
+  if (search || location.pathname !== target.path || location.search || !premiumLandingHydrating) {
     return { path: target.path, search }
   }
 

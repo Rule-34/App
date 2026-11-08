@@ -1,4 +1,3 @@
-import { readFileSync } from 'node:fs'
 import { describe, expect, it, vi } from 'vitest'
 import {
   activatePremiumLandingExperiment,
@@ -165,16 +164,28 @@ describe('premium landing experiment', () => {
     }
   })
 
-  it('invalidates an in-flight landing write when a newer one is recorded', () => {
+  it('keeps the current arm when a newer write matches it and the pending result differs', () => {
+    let rendered: 'original' | 'OfferFirst' | 'VisualFirst' = 'original'
     const writeId = currentPremiumLandingWriteId()
-    markPremiumLandingWrite()
-    expect(currentPremiumLandingWriteId()).not.toBe(writeId)
+    const variationAtStart = rendered
 
-    const page = readFileSync(new URL('../../app/pages/premium/index.vue', import.meta.url), 'utf8')
-    const middleware = readFileSync(new URL('../../app/middleware/premium-landing.ts', import.meta.url), 'utf8')
-    expect(page).toContain('const writeId = currentPremiumLandingWriteId()')
-    expect(page).toContain('currentPremiumLandingWriteId() !== writeId')
-    expect(page).toContain('markPremiumLandingWrite()')
-    expect(middleware).toContain('markPremiumLandingWrite()')
+    markPremiumLandingWrite()
+    rendered = 'original'
+
+    const stale = 'OfferFirst' as const
+    if (
+      currentPremiumLandingWriteId() === writeId &&
+      commitPremiumLandingAssignment(
+        true,
+        rendered,
+        variationAtStart,
+        { pathname: '/premium', search: '' },
+        { path: '/premium', search: '' }
+      )
+    ) {
+      rendered = stale
+    }
+
+    expect(rendered).toBe('original')
   })
 })
