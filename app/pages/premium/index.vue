@@ -3,7 +3,7 @@
   import PremiumLandingOriginal from '~/components/pages/premium/PremiumLandingOriginal.vue'
   import {
     activatePremiumLandingExperiment,
-    premiumLandingAssignmentStillApplies,
+    commitPremiumLandingAssignment,
     type PremiumLandingTarget
   } from '~/assets/js/matomo'
 
@@ -36,9 +36,18 @@
       path: window.location.pathname,
       search: window.location.search
     }
+    const variationAtStart = premiumLandingVariation.value
 
     void activatePremiumLandingExperiment(target).then((variation) => {
-      if (!landingMounted || !premiumLandingAssignmentStillApplies(window.location, target)) {
+      if (
+        !commitPremiumLandingAssignment(
+          landingMounted,
+          premiumLandingVariation.value,
+          variationAtStart,
+          window.location,
+          target
+        )
+      ) {
         return
       }
 

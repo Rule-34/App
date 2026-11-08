@@ -7,6 +7,7 @@ import {
   isPremiumRoute,
   PREMIUM_LANDING_EXPERIMENT_NAME,
   PREMIUM_LANDING_VARIATIONS,
+  commitPremiumLandingAssignment,
   premiumLandingAssignmentStillApplies,
   premiumLandingExperimentOptions,
   premiumLandingTargetFromRoute,
@@ -115,11 +116,29 @@ describe('premium landing experiment', () => {
       expect(stale).toBe('original')
 
       let rendered = forced
-      if (premiumLandingAssignmentStillApplies(location, { path: '/premium', search: '' })) {
+      if (commitPremiumLandingAssignment(true, rendered, 'original', location, { path: '/premium', search: '' })) {
         rendered = stale
       }
 
       expect(rendered).toBe('VisualFirst')
+
+      let replacedByMiddleware: 'original' | 'OfferFirst' | 'VisualFirst' = 'OfferFirst'
+      if (
+        commitPremiumLandingAssignment(
+          true,
+          replacedByMiddleware,
+          'original',
+          { pathname: '/premium', search: '?utm_source=ad' },
+          {
+            path: '/premium',
+            search: ''
+          }
+        )
+      ) {
+        replacedByMiddleware = stale
+      }
+
+      expect(replacedByMiddleware).toBe('OfferFirst')
     } finally {
       vi.useRealTimers()
       vi.unstubAllGlobals()

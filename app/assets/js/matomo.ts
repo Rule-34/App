@@ -83,6 +83,16 @@ export function premiumLandingAssignmentStillApplies(
   )
 }
 
+export function commitPremiumLandingAssignment(
+  mounted: boolean,
+  currentVariation: PremiumLandingVariation,
+  variationAtStart: PremiumLandingVariation,
+  current: { pathname: string; search: string },
+  target: { path: string; search: string }
+) {
+  return mounted && currentVariation === variationAtStart && premiumLandingAssignmentStillApplies(current, target)
+}
+
 function runsInBrowser() {
   return import.meta.client || (typeof window !== 'undefined' && import.meta.server !== true)
 }
