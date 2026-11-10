@@ -12,6 +12,7 @@
   import type { Platform } from '~/types/enums/Platform'
   import { detectPlatform, PLATFORM_URLS } from '~/types/enums/Platform'
   import { project } from '~~/config/project'
+  import { trackPremiumSubscribed } from '~/assets/js/matomo'
 
   const { $pocketBase } = useNuxtApp()
   const route = useRoute()
@@ -156,7 +157,7 @@
       return
     }
 
-    getMatomoQueue()?.push(['trackEvent', 'Premium', 'Subscribed', platformOfPurchase.value])
+    trackPremiumSubscribed(platformOfPurchase.value)
     // <--- Event Tracking ---
   })
 
