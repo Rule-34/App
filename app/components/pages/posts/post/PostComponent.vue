@@ -63,7 +63,12 @@
   }))
 
   const { postFullSizeImages } = useUserSettings()
-  const { isPremium } = useUserData()
+  const { hasPremiumAccess } = useUserData()
+  const { booruList } = useBooruList()
+
+  const isPremiumOnlyBooru = computed(
+    () => booruList.value.find((booru) => booru.domain === props.post.domain)?.isPremium ?? false
+  )
   const { open: promptPremium, currentIndex } = usePremiumDialog()
 
   const areTagsOpen = ref(false)
@@ -105,7 +110,7 @@
     areTagsOpen.value = false
     shouldRestoreTagsOpen.value = true
 
-    if (!isPremium.value) {
+    if (!hasPremiumAccess.value) {
       currentIndex.value = premiumPromotionIndices.tagCollections
       promptPremium.value = true
       return
@@ -205,6 +210,7 @@
       :media-src-width="mediaFile.width"
       :media-type="post.media_type"
       :post-index="props.postIndex"
+      :premium-only-booru="isPremiumOnlyBooru"
     />
 
     <figcaption>
@@ -237,7 +243,9 @@
           />
 
           <LazyPostSource
+            :post-domain="post.domain"
             :post-file-url="postSourceFileUrl"
+            :post-id="post.id"
             :post-sources="post.sources"
           />
 
@@ -249,7 +257,7 @@
           />
 
           <LazyPostChatWithAi
-            v-if="!isPremium"
+            v-if="!hasPremiumAccess"
             :media-type="post.media_type"
             :media-url="post.high_res_file.url ?? post.low_res_file.url ?? (mediaFile.file as string)"
             :tags="post.tags"
@@ -335,7 +343,8 @@
 
             <PostShareFallback />
 
-            <PostChatWithAiFallback v-if="!isPremium" />
+            <!-- Same for everyone: SSR HTML is shared, and this placeholder is replaced once the client mounts -->
+            <PostChatWithAiFallback />
 
             <PostTagsToggleFallback />
           </div>

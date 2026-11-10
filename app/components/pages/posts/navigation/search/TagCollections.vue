@@ -13,7 +13,7 @@
   }>()
 
   const localePath = useLocalePath()
-  const { isPremium } = useUserData()
+  const { hasPremiumAccess } = useUserData()
   const { t } = useI18n()
   const { toast } = useLazyToast()
 
@@ -21,7 +21,7 @@
   const { setTagCollections } = usePremiumCloudSync()
 
   function setTagCollectionAsSelected(tagCollection: TagCollection) {
-    if (!isPremium.value) {
+    if (!hasPremiumAccess.value) {
       emit('premiumRequired')
       return
     }

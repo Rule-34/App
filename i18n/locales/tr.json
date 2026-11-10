@@ -446,6 +446,7 @@
   },
   "source": {
     "postSource": "Gönderi kaynağı",
+    "viewOnBooru": "{domain} üzerinde görüntüle",
     "noSourceFound": "Kaynak bulunamadı:(",
     "findWithService": "{service} ile bul",
     "editWithService": "{service} ile düzenleyin"

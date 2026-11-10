@@ -2,10 +2,17 @@
   import { LinkIcon } from '@heroicons/vue/24/outline'
   import { useFloating, offset, flip, shift } from '@floating-ui/vue'
   import type { IPost } from '~/assets/js/post.dto'
-  import { buildAnimeRelatedSourceServices, buildImageRelatedSourceServices } from '~/assets/js/post-source-services'
+  import {
+    buildAnimeRelatedSourceServices,
+    buildBooruPostUrl,
+    buildImageRelatedSourceServices
+  } from '~/assets/js/post-source-services'
   import { premiumPromotionIndices } from '~/composables/usePremiumDialog'
 
   const props = defineProps<{
+    postDomain: string
+    postId: number
+
     postSources: IPost['sources']
 
     postFileUrl: string
@@ -13,7 +20,7 @@
 
   const { t } = useI18n()
   const { toast } = useLazyToast()
-  const { isPremium } = useUserData()
+  const { hasPremiumAccess } = useUserData()
   const { tutorialPostSource } = useAppStatistics()
 
   const referenceEl = ref<HTMLElement>()
@@ -22,6 +29,14 @@
   const { floatingStyles } = useFloating(referenceEl, floatingEl, {
     placement: 'bottom-start',
     middleware: [offset(6), flip(), shift()]
+  })
+
+  const { booruList } = useBooruList()
+
+  const postBooruUrl = computed(() => {
+    const booru = booruList.value.find((booru) => booru.domain === props.postDomain)
+
+    return booru ? buildBooruPostUrl(booru.domain, booru.type.type, props.postId) : undefined
   })
 
   const imageAnimeRelatedServiceOptions = computed(() => buildAnimeRelatedSourceServices(props.postFileUrl))
@@ -49,7 +64,7 @@
   }
 
   function openSourceFinder(url: string) {
-    if (!isPremium.value) {
+    if (!hasPremiumAccess.value) {
       const { open: promptPremium, currentIndex } = usePremiumDialog()
 
       currentIndex.value = premiumPromotionIndices.sourceFinder
@@ -100,7 +115,7 @@
         <HeadlessMenuItems
           ref="floatingEl"
           :style="floatingStyles"
-          class="z-50 w-56 divide-y divide-base-0/20 rounded-md bg-base-1000 ring-1 ring-base-0/20 focus:outline-hidden"
+          class="z-50 w-64 divide-y divide-base-0/20 rounded-md bg-base-1000 ring-1 ring-base-0/20 focus:outline-hidden"
         >
           <div class="px-4 py-2 text-sm font-medium text-base-content-highlight">{{ t('source.postSource') }}</div>
 
@@ -149,6 +164,34 @@
                   {{ source }}
                 </span>
               </template>
+            </HeadlessMenuItem>
+          </div>
+
+          <!-- The post on its booru, right before the source finders -->
+          <div
+            v-if="postBooruUrl"
+            class="py-1"
+          >
+            <HeadlessMenuItem v-slot="{ active }">
+              <NuxtLink
+                :class="[active ? 'bg-base-0/20 text-base-content-highlight' : 'text-base-content']"
+                :href="postBooruUrl"
+                :title="t('source.viewOnBooru', { domain: postDomain })"
+                class="group flex w-full items-center px-4 py-2 text-sm"
+                data-testid="post-booru-link"
+                target="_blank"
+              >
+                <img
+                  :alt="t('common.favicon')"
+                  :src="useFaviconUrl(postBooruUrl)"
+                  referrerpolicy="no-referrer"
+                  class="mr-3 h-5 w-5 shrink-0 rounded-sm"
+                  height="64"
+                  width="64"
+                />
+
+                <span class="truncate">{{ t('source.viewOnBooru', { domain: postDomain }) }}</span>
+              </NuxtLink>
             </HeadlessMenuItem>
           </div>
 

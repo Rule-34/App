@@ -7,7 +7,8 @@ export default function () {
 
   const authModel = $pocketBase.authStore.model
 
-  if ($pocketBase.authStore.isValid && authModel) {
+  // Server state is serialized into the shared HTML payload: never put account data in it
+  if (import.meta.client && $pocketBase.authStore.isValid && authModel) {
     email.value = authModel.email
     license.value = authModel.username
     subscription_expires_at.value = authModel.subscription_expires_at

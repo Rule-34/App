@@ -446,6 +446,7 @@
   },
   "source": {
     "postSource": "게시물 출처",
+    "viewOnBooru": "{domain}에서 보기",
     "noSourceFound": "출처를 찾을 수 없습니다:(",
     "findWithService": "{service}로 찾기",
     "editWithService": "{service}로 편집"

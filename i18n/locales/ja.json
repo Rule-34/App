@@ -446,6 +446,7 @@
   },
   "source": {
     "postSource": "投稿のソース",
+    "viewOnBooru": "{domain} で見る",
     "noSourceFound": "ソースが見つかりません :(",
     "findWithService": "{service}で検索",
     "editWithService": "{service}で編集"

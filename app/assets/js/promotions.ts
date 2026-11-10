@@ -8,6 +8,17 @@ export type Promotion = {
   link: string | null
 }
 
+/** Free visitors see this many posts of a premium-only booru, then `additionalBoorusPromotion`. */
+export const premiumBooruPreviewLimit = 12
+
+export const additionalBoorusPromotion = {
+  media: '/img/promo/premium/Additional Boorus.jpg',
+  mediaWidth: 1280,
+  mediaHeight: 1280,
+  mediaType: 'image',
+  link: '/premium#pricing'
+} as const satisfies Promotion
+
 export const premiumPromotions = [
   // Premium
   {
@@ -38,13 +49,7 @@ export const premiumPromotions = [
     mediaType: 'image',
     link: '/premium#pricing'
   },
-  {
-    media: '/img/promo/premium/Additional Boorus.jpg',
-    mediaWidth: 1280,
-    mediaHeight: 1280,
-    mediaType: 'image',
-    link: '/premium#pricing'
-  },
+  additionalBoorusPromotion,
   {
     media: '/img/promo/premium/One-Click Downloads.jpg',
     mediaWidth: 1280,

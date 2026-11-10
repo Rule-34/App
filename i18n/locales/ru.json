@@ -446,6 +446,7 @@
   },
   "source": {
     "postSource": "Источник поста",
+    "viewOnBooru": "Открыть на {domain}",
     "noSourceFound": "Источник не найден :(",
     "findWithService": "Найти через {service}",
     "editWithService": "Редактировать через {service}"

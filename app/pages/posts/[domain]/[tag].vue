@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { ArrowPathIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
-  import { fallbackBooruDomain, generatePostsRoute, getSingleRouteParam } from '~/assets/js/RouterHelper'
+  import { generatePostsRoute, getSingleRouteParam } from '~/assets/js/RouterHelper'
   import { normalizeStringForTitle } from '~/assets/js/SeoHelper'
   import {
     isRenderablePost,
@@ -178,39 +178,6 @@
   ])
 
   definePageMeta({
-    middleware: [
-      (to) => {
-        const { booruList } = useBooruList()
-        const { isPremium } = useUserData()
-        const localePath = useLocalePath()
-        const domain = getSingleRouteParam(to.params.domain)
-        const tag = getSingleRouteParam(to.params.tag)
-
-        if (isPremium.value || domain === fallbackBooruDomain) {
-          return
-        }
-
-        const booru = booruList.value.find((booru) => booru.domain === domain)
-        if (!booru?.isPremium) {
-          return
-        }
-
-        return navigateTo(
-          {
-            path: localePath(`/posts/${fallbackBooruDomain}/${encodeURIComponent(tag)}`),
-            query: {
-              utm_source: 'internal',
-              utm_medium: 'unauthorized-tag-booru-redirect',
-              utm_campaign: 'additional-boorus',
-              utm_content: domain,
-              source_booru: domain
-            }
-          },
-          { redirectCode: 302 }
-        )
-      }
-    ],
-
     validate: async (route) => {
       const { booruList } = useBooruList()
       const domain = getSingleRouteParam(route.params.domain)

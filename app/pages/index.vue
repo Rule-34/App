@@ -45,7 +45,7 @@
   const { toast } = useLazyToast()
   const localePath = useLocalePath()
 
-  const { isPremium } = useUserData()
+  const { hasPremiumAccess } = useUserData()
   const { hasInteracted } = useInteractionDetector()
   const { schedule: scheduleIdleTask } = useIdleTask()
   const { seasonalEmoji } = useSeasonalIcon()
@@ -188,7 +188,7 @@
     const hasLoadedAds = ref(false)
 
     watch(
-      [hasInteracted, isPremium],
+      [hasInteracted, hasPremiumAccess],
       ([hasInteracted, isPremiumUser]) => {
         if (hasLoadedAds.value) {
           return
@@ -203,7 +203,7 @@
         }
 
         scheduleIdleTask(async () => {
-          if (hasLoadedAds.value || isPremium.value) {
+          if (hasLoadedAds.value || hasPremiumAccess.value) {
             return
           }
 
