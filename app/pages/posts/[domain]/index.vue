@@ -23,6 +23,7 @@
   import { isRenderablePost, normalizePostPage, type IPostPage, type IRenderablePost } from '~/assets/js/post.dto'
   import { shouldReportTagSearchError } from '~/assets/js/tag-search-error'
   import Tag, { type ITag, toggleSelectedTag } from '~/assets/js/tag.dto'
+  import { resolveBooruApiEndpoint } from '~/assets/js/BooruEndpointHelper'
   import { project } from '~~/config/project'
 
   type FilterValue = string | number | boolean | null | undefined
@@ -295,7 +296,7 @@
         baseURL: config.public.apiUrl,
 
         params: {
-          baseEndpoint: selectedBooru.value.domain,
+          baseEndpoint: resolveBooruApiEndpoint(selectedBooru.value.domain),
 
           tag,
           order: 'count',
@@ -457,7 +458,7 @@
       baseURL: config.public.apiUrl,
 
       params: {
-        baseEndpoint: selectedBooru.value.domain,
+        baseEndpoint: resolveBooruApiEndpoint(selectedBooru.value.domain),
 
         limit: postsLimit.value,
 
