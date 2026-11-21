@@ -503,7 +503,24 @@
       "title": "情人节特别优惠",
       "description": "爱就在空气中！享受高级版 30% 折扣",
       "cta": "获得高级版"
-    }
+    },
+    "halloween": {
+      "title": "万圣节促销",
+      "description": "不给糖就捣蛋——Premium 立减 30%。",
+      "cta": "获取 Premium"
+    },
+    "christmas": {
+      "title": "圣诞节促销",
+      "description": "我们的一点心意——Premium 立减 30%。",
+      "cta": "获取 Premium"
+    },
+    "newYear": {
+      "title": "新年促销",
+      "description": "以 Premium 立减 30% 开启新的一年。",
+      "cta": "获取 Premium"
+    },
+    "monthlyOffer": "月付立减 {percent}%",
+    "yearlyOffer": "年付立减 {percent}%"
   },
   "time": {
     "days": "天",

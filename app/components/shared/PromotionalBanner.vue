@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-  import { CheckIcon, DocumentDuplicateIcon, XMarkIcon } from '@heroicons/vue/20/solid'
-  import { useClipboard, useNow } from '@vueuse/core'
+  import { XMarkIcon } from '@heroicons/vue/20/solid'
+  import { useNow } from '@vueuse/core'
+  import { ghostOfferUrl, trackPromotionCheckout } from '~/assets/js/promotion-checkout'
 
   const { activePromotion, shouldShow, dismiss } = useActivePromotion()
   const localePath = useLocalePath()
@@ -8,18 +9,6 @@
 
   // Use VueUse's reactive current time (updates every second)
   const now = useNow({ interval: 1000 })
-
-  /**
-   * Convert MonthDay to full Date object for the current year
-   */
-  const endDate = computed(() => {
-    if (!activePromotion.value) return null
-
-    const year = now.value.getFullYear()
-
-    // Create date at end of day (23:59:59)
-    return new Date(year, activePromotion.value.endDate.month - 1, activePromotion.value.endDate.day, 23, 59, 59)
-  })
 
   /**
    * Countdown timer showing remaining time (using VueUse's reactive now)
@@ -32,9 +21,10 @@
   }))
 
   const countdownText = computed(() => {
-    if (!endDate.value) return null
+    const end = activePromotion.value?.range.end
+    if (!end) return null
 
-    const diff = endDate.value.getTime() - now.value.getTime()
+    const diff = end.getTime() - now.value.getTime()
 
     if (diff <= 0) return null
 
@@ -60,10 +50,31 @@
   })
 
   /**
-   * Clipboard utilities using VueUse (auto-handles permissions and errors)
+   * Offer links apply the discount in Ghost checkout; no code to copy.
    */
-  const { copy: copyMonthly, copied: copiedMonthly } = useClipboard()
-  const { copy: copyYearly, copied: copiedYearly } = useClipboard()
+  const offerLinks = computed(() => {
+    const promotion = activePromotion.value
+    if (!promotion) return []
+
+    return [
+      {
+        cadence: 'monthly' as const,
+        cadenceLabel: t('common.monthly'),
+        label: t('promotions.monthlyOffer', { percent: promotion.discountPercent }),
+        url: ghostOfferUrl(promotion.offers.monthly)
+      },
+      {
+        cadence: 'yearly' as const,
+        cadenceLabel: t('common.yearly'),
+        label: t('promotions.yearlyOffer', { percent: promotion.discountPercent }),
+        url: ghostOfferUrl(promotion.offers.yearly)
+      }
+    ]
+  })
+
+  function onOfferClick(cadence: 'monthly' | 'yearly') {
+    if (activePromotion.value) trackPromotionCheckout(activePromotion.value.id, cadence)
+  }
 </script>
 
 <template>
@@ -132,55 +143,22 @@
         >
       </p>
 
-      <!-- Discount codes -->
-      <div class="space-y-2.5">
-        <!-- Monthly code -->
-        <button
-          class="group flex w-full items-center justify-between rounded-lg p-3 ring-1 ring-base-0/20 transition-colors hover:hover-bg-util focus-visible:focus-outline-util"
-          type="button"
-          @click="copyMonthly(activePromotion.monthlyCode)"
+      <!-- Offer links: the discount is applied at checkout -->
+      <div class="grid gap-2.5 sm:grid-cols-2">
+        <a
+          v-for="offer in offerLinks"
+          :key="offer.cadence"
+          :href="offer.url"
+          class="group flex flex-col rounded-lg p-3 ring-1 ring-base-0/20 transition-colors hover:hover-bg-util focus-visible:focus-outline-util"
+          rel="nofollow noopener noreferrer"
+          target="_blank"
+          @click="onOfferClick(offer.cadence)"
         >
-          <div class="min-w-0 flex-1">
-            <span class="block text-xs text-base-content">{{ t('common.monthly') }}</span>
-            <span class="block truncate font-mono text-sm font-semibold text-base-content-highlight">
-              {{ activePromotion.monthlyCode }}
-            </span>
-          </div>
-          <CheckIcon
-            v-if="copiedMonthly"
-            aria-hidden="true"
-            class="ml-2 h-4 w-4 shrink-0 text-primary-400"
-          />
-          <DocumentDuplicateIcon
-            v-else
-            aria-hidden="true"
-            class="ml-2 h-4 w-4 shrink-0 text-base-content transition-colors group-hover:text-base-content-hover"
-          />
-        </button>
-
-        <!-- Yearly code -->
-        <button
-          class="group flex w-full items-center justify-between rounded-lg p-3 ring-1 ring-base-0/20 transition-colors hover:hover-bg-util focus-visible:focus-outline-util"
-          type="button"
-          @click="copyYearly(activePromotion.yearlyCode)"
-        >
-          <div class="min-w-0 flex-1">
-            <span class="block text-xs text-base-content">{{ t('common.yearly') }}</span>
-            <span class="block truncate font-mono text-sm font-semibold text-base-content-highlight">
-              {{ activePromotion.yearlyCode }}
-            </span>
-          </div>
-          <CheckIcon
-            v-if="copiedYearly"
-            aria-hidden="true"
-            class="ml-2 h-4 w-4 shrink-0 text-primary-400"
-          />
-          <DocumentDuplicateIcon
-            v-else
-            aria-hidden="true"
-            class="ml-2 h-4 w-4 shrink-0 text-base-content transition-colors group-hover:text-base-content-hover"
-          />
-        </button>
+          <span class="text-xs text-base-content">{{ offer.cadenceLabel }}</span>
+          <span class="text-sm font-semibold text-primary-400 group-hover:text-primary-300">
+            {{ offer.label }}
+          </span>
+        </a>
       </div>
 
       <!-- CTA button -->

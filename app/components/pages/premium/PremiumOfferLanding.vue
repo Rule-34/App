@@ -13,10 +13,11 @@
     TransitionRoot
   } from '@headlessui/vue'
   import { project } from '~~/config/project'
+  import { ghostOfferUrl, trackPromotionCheckout, withSellAppCoupon } from '~/assets/js/promotion-checkout'
 
   const props = defineProps<{ variant: 'OfferFirst' | 'YearlyFocus' }>()
 
-  const { shouldShow } = useActivePromotion()
+  const { activePromotion, shouldShow } = useActivePromotion()
   const { t } = useI18n()
   const localePath = useLocalePath()
   const customerCount = 2363
@@ -45,106 +46,122 @@
     { text: t('pages.premium.landingPage.testimonial4Text'), from: t('pages.premium.landingPage.testimonial4From') }
   ])
 
-  const paymentIntervals = computed(() => [
-    {
-      key: 'monthly',
-      name: t('pages.premium.landingPage.planMonthlyName'),
-      description: t('pages.premium.landingPage.planMonthlyDescription'),
-      price: 7,
-      checkoutPrice: 7,
-      originalPrice: 12.99,
-      interval: 'month',
-      links: [
-        {
-          name: 'Credit Card',
-          url: 'https://www.refinedsoft.com/shop-premium-features-discord-role/#/portal/signup/6881f5fb9c83c40001487e13/monthly',
-          category: 'creditCard',
-          cta: t('pages.premium.landingPage.subscribeWithCreditCard')
-        },
-        {
-          name: 'SellApp',
-          url: 'https://refinedsoft.sell.app/product/premium-monthly-crypto?payment_method=XMR',
-          faviconDomain: 'https://sell.app',
-          category: 'crypto',
-          cta: t('pages.premium.landingPage.subscribeWithCrypto')
-        }
-      ]
-    },
-    {
-      key: '30days',
-      name: t('pages.premium.landingPage.plan30DaysName'),
-      description: t('pages.premium.landingPage.oneTimePayment'),
-      price: 12.99,
-      checkoutPrice: 12.99,
-      originalPrice: undefined,
-      interval: 'once',
-      links: [
-        {
-          name: 'SellApp',
-          url: 'https://refinedsoft.sell.app/product/premium-30-days-access',
-          faviconDomain: 'https://sell.app',
-          category: 'creditCard',
-          cta: t('pages.premium.landingPage.payWithCreditCard')
-        },
-        {
-          name: 'SellApp',
-          url: 'https://refinedsoft.sell.app/product/premium-30-days-access?payment_method=XMR',
-          faviconDomain: 'https://sell.app',
-          category: 'crypto',
-          cta: t('pages.premium.landingPage.payWithCrypto')
-        }
-      ]
-    },
-    {
-      key: 'yearly',
-      name: t('pages.premium.landingPage.planYearlyName'),
-      description: t('pages.premium.landingPage.planYearlyDescription'),
-      price: 4.97,
-      checkoutPrice: 59.64,
-      originalPrice: 12.99,
-      interval: 'month',
-      links: [
-        {
-          name: 'Credit Card',
-          url: 'https://www.refinedsoft.com/shop-premium-features-discord-role/#/portal/signup/6881f5fb9c83c40001487e13/yearly',
-          category: 'creditCard',
-          cta: t('pages.premium.landingPage.subscribeWithCreditCard')
-        },
-        {
-          name: 'SellApp',
-          url: 'https://refinedsoft.sell.app/product/premium-yearly-crypto?payment_method=XMR',
-          faviconDomain: 'https://sell.app',
-          category: 'crypto',
-          cta: t('pages.premium.landingPage.subscribeWithCrypto')
-        }
-      ]
-    },
-    {
-      key: 'lifetime',
-      name: t('pages.premium.landingPage.planLifetimeName'),
-      description: t('pages.premium.landingPage.oneTimePayment'),
-      price: 199.99,
-      checkoutPrice: 199.99,
-      originalPrice: 699.99,
-      interval: 'once',
-      links: [
-        {
-          name: 'SellApp',
-          url: 'https://refinedsoft.sell.app/product/premium-lifetime',
-          faviconDomain: 'https://sell.app',
-          category: 'creditCard',
-          cta: t('pages.premium.landingPage.payWithCreditCard')
-        },
-        {
-          name: 'SellApp',
-          url: 'https://refinedsoft.sell.app/product/premium-lifetime?payment_method=XMR',
-          faviconDomain: 'https://sell.app',
-          category: 'crypto',
-          cta: t('pages.premium.landingPage.payWithCrypto')
-        }
-      ]
+  function promotionCheckoutUrl(intervalKey: string, link: { name: string; url: string }) {
+    const promotion = activePromotion.value
+    if (!promotion) return link.url
+
+    if ((intervalKey === 'monthly' || intervalKey === 'yearly') && link.name === 'Credit Card') {
+      return ghostOfferUrl(promotion.offers[intervalKey])
     }
-  ])
+
+    return withSellAppCoupon(link.url, promotion.sellAppCoupon)
+  }
+
+  const paymentIntervals = computed(() =>
+    [
+      {
+        key: 'monthly',
+        name: t('pages.premium.landingPage.planMonthlyName'),
+        description: t('pages.premium.landingPage.planMonthlyDescription'),
+        price: 7,
+        checkoutPrice: 7,
+        originalPrice: 12.99,
+        interval: 'month',
+        links: [
+          {
+            name: 'Credit Card',
+            url: 'https://www.refinedsoft.com/shop-premium-features-discord-role/#/portal/signup/6881f5fb9c83c40001487e13/monthly',
+            category: 'creditCard',
+            cta: t('pages.premium.landingPage.subscribeWithCreditCard')
+          },
+          {
+            name: 'SellApp',
+            url: 'https://refinedsoft.sell.app/product/premium-monthly-crypto?payment_method=XMR',
+            faviconDomain: 'https://sell.app',
+            category: 'crypto',
+            cta: t('pages.premium.landingPage.subscribeWithCrypto')
+          }
+        ]
+      },
+      {
+        key: '30days',
+        name: t('pages.premium.landingPage.plan30DaysName'),
+        description: t('pages.premium.landingPage.oneTimePayment'),
+        price: 12.99,
+        checkoutPrice: 12.99,
+        originalPrice: undefined,
+        interval: 'once',
+        links: [
+          {
+            name: 'SellApp',
+            url: 'https://refinedsoft.sell.app/product/premium-30-days-access',
+            faviconDomain: 'https://sell.app',
+            category: 'creditCard',
+            cta: t('pages.premium.landingPage.payWithCreditCard')
+          },
+          {
+            name: 'SellApp',
+            url: 'https://refinedsoft.sell.app/product/premium-30-days-access?payment_method=XMR',
+            faviconDomain: 'https://sell.app',
+            category: 'crypto',
+            cta: t('pages.premium.landingPage.payWithCrypto')
+          }
+        ]
+      },
+      {
+        key: 'yearly',
+        name: t('pages.premium.landingPage.planYearlyName'),
+        description: t('pages.premium.landingPage.planYearlyDescription'),
+        price: 4.97,
+        checkoutPrice: 59.64,
+        originalPrice: 12.99,
+        interval: 'month',
+        links: [
+          {
+            name: 'Credit Card',
+            url: 'https://www.refinedsoft.com/shop-premium-features-discord-role/#/portal/signup/6881f5fb9c83c40001487e13/yearly',
+            category: 'creditCard',
+            cta: t('pages.premium.landingPage.subscribeWithCreditCard')
+          },
+          {
+            name: 'SellApp',
+            url: 'https://refinedsoft.sell.app/product/premium-yearly-crypto?payment_method=XMR',
+            faviconDomain: 'https://sell.app',
+            category: 'crypto',
+            cta: t('pages.premium.landingPage.subscribeWithCrypto')
+          }
+        ]
+      },
+      {
+        key: 'lifetime',
+        name: t('pages.premium.landingPage.planLifetimeName'),
+        description: t('pages.premium.landingPage.oneTimePayment'),
+        price: 199.99,
+        checkoutPrice: 199.99,
+        originalPrice: 699.99,
+        interval: 'once',
+        links: [
+          {
+            name: 'SellApp',
+            url: 'https://refinedsoft.sell.app/product/premium-lifetime',
+            faviconDomain: 'https://sell.app',
+            category: 'creditCard',
+            cta: t('pages.premium.landingPage.payWithCreditCard')
+          },
+          {
+            name: 'SellApp',
+            url: 'https://refinedsoft.sell.app/product/premium-lifetime?payment_method=XMR',
+            faviconDomain: 'https://sell.app',
+            category: 'crypto',
+            cta: t('pages.premium.landingPage.payWithCrypto')
+          }
+        ]
+      }
+    ].map((interval) => ({
+      ...interval,
+      links: interval.links.map((link) => ({ ...link, url: promotionCheckoutUrl(interval.key, link) }))
+    }))
+  )
 
   const displayedPaymentIntervals = computed(() => {
     if (props.variant !== 'YearlyFocus') {
@@ -301,6 +318,17 @@
           <h2 class="text-2xl font-bold tracking-tight text-base-content-highlight sm:text-3xl">
             {{ $t('pages.premium.landingPage.premiumPlans') }}
           </h2>
+
+          <p
+            v-if="activePromotion"
+            class="mt-3 inline-flex items-center gap-1.5 rounded-full bg-primary-500/20 px-3 py-1 text-xs font-semibold text-primary-400 ring-1 ring-primary-500/30"
+          >
+            <span aria-hidden="true">{{ activePromotion.emoji }}</span>
+            <span>
+              {{ $t('promotions.percentOff', { percent: activePromotion.discountPercent }) }} ·
+              {{ $t(activePromotion.title) }}
+            </span>
+          </p>
 
           <div class="mt-5 grid gap-4 sm:grid-cols-2">
             <article
@@ -555,6 +583,20 @@
                 {{ $t('pages.premium.landingPage.paymentDialogTitle', { name: selectedPaymentInterval.name }) }}
               </DialogTitle>
 
+              <p
+                v-if="
+                  activePromotion &&
+                  (selectedPaymentIntervalKey === 'monthly' || selectedPaymentIntervalKey === 'yearly')
+                "
+                class="mt-2 inline-flex items-center gap-1.5 rounded-full bg-primary-500/20 px-3 py-1 text-xs font-semibold text-primary-400 ring-1 ring-primary-500/30"
+              >
+                <span aria-hidden="true">{{ activePromotion.emoji }}</span>
+                <span>
+                  {{ $t('promotions.percentOff', { percent: activePromotion.discountPercent }) }} ·
+                  {{ $t(activePromotion.title) }}
+                </span>
+              </p>
+
               <p class="mt-3 text-3xl font-bold tracking-tight text-base-content-highlight">
                 €{{ selectedPaymentInterval.checkoutPrice }}
               </p>
@@ -607,6 +649,7 @@
                       class="flex items-center gap-2 rounded-lg px-3 py-2 text-center text-sm font-medium text-base-content-highlight ring-1 ring-base-0/20 hover:hover-text-util focus-visible:focus-outline-util"
                       rel="nofollow noopener noreferrer"
                       target="_blank"
+                      @click="activePromotion && trackPromotionCheckout(activePromotion.id, selectedPaymentIntervalKey)"
                     >
                       <img
                         :alt="`${link.name} favicon`"

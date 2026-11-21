@@ -503,7 +503,24 @@
       "title": "Valentine's Day Special",
       "description": "Love is in the air! Get 30% off Premium",
       "cta": "Get Premium"
-    }
+    },
+    "halloween": {
+      "title": "Halloween Sale",
+      "description": "Trick or treat — get 30% off Premium.",
+      "cta": "Get Premium"
+    },
+    "christmas": {
+      "title": "Christmas Sale",
+      "description": "A little gift from us — 30% off Premium.",
+      "cta": "Get Premium"
+    },
+    "newYear": {
+      "title": "New Year Sale",
+      "description": "Start the year with 30% off Premium.",
+      "cta": "Get Premium"
+    },
+    "monthlyOffer": "{percent}% off monthly",
+    "yearlyOffer": "{percent}% off yearly"
   },
   "time": {
     "days": "d",

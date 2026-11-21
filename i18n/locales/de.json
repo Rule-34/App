@@ -503,7 +503,24 @@
       "title": "Valentinstag-Special",
       "description": "Liebe liegt in der Luft! Hol dir 30 % Rabatt auf Premium",
       "cta": "Premium holen"
-    }
+    },
+    "halloween": {
+      "title": "Halloween-Angebot",
+      "description": "Süßes oder Saures – sichere dir 30 % Rabatt auf Premium.",
+      "cta": "Premium holen"
+    },
+    "christmas": {
+      "title": "Weihnachtsangebot",
+      "description": "Ein kleines Geschenk von uns – 30 % Rabatt auf Premium.",
+      "cta": "Premium holen"
+    },
+    "newYear": {
+      "title": "Neujahrsangebot",
+      "description": "Starte ins neue Jahr mit 30 % Rabatt auf Premium.",
+      "cta": "Premium holen"
+    },
+    "monthlyOffer": "{percent} % Rabatt monatlich",
+    "yearlyOffer": "{percent} % Rabatt jährlich"
   },
   "time": {
     "days": "T",

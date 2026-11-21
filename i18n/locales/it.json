@@ -503,7 +503,24 @@
       "title": "Speciale San Valentino",
       "description": "L'amore è nell'aria! Ottieni uno sconto del 30% su Premium",
       "cta": "Ottieni Premium"
-    }
+    },
+    "halloween": {
+      "title": "Offerta di Halloween",
+      "description": "Dolcetto o scherzetto: ottieni il 30% di sconto su Premium.",
+      "cta": "Ottieni Premium"
+    },
+    "christmas": {
+      "title": "Offerta di Natale",
+      "description": "Un piccolo regalo da parte nostra: 30% di sconto su Premium.",
+      "cta": "Ottieni Premium"
+    },
+    "newYear": {
+      "title": "Offerta di Capodanno",
+      "description": "Inizia l'anno con il 30% di sconto su Premium.",
+      "cta": "Ottieni Premium"
+    },
+    "monthlyOffer": "{percent}% di sconto al mese",
+    "yearlyOffer": "{percent}% di sconto all'anno"
   },
   "time": {
     "days": "d",

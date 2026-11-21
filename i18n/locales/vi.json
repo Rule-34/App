@@ -503,7 +503,24 @@
       "title": "Ngày lễ tình nhân đặc biệt",
       "description": "Tình yêu ở trong không khí! Nhận 30% giảm giá cao cấp",
       "cta": "Nhận phí bảo hiểm"
-    }
+    },
+    "halloween": {
+      "title": "Khuyến mãi Halloween",
+      "description": "Cho kẹo hay bị ghẹo — giảm 30% cho Premium.",
+      "cta": "Nhận Premium"
+    },
+    "christmas": {
+      "title": "Khuyến mãi Giáng sinh",
+      "description": "Món quà nhỏ từ chúng tôi — giảm 30% cho Premium.",
+      "cta": "Nhận Premium"
+    },
+    "newYear": {
+      "title": "Khuyến mãi Năm mới",
+      "description": "Bắt đầu năm mới với ưu đãi giảm 30% cho Premium.",
+      "cta": "Nhận Premium"
+    },
+    "monthlyOffer": "Giảm {percent}% hàng tháng",
+    "yearlyOffer": "Giảm {percent}% hàng năm"
   },
   "time": {
     "days": "d",

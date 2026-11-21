@@ -503,7 +503,24 @@
       "title": "Spécial Saint-Valentin",
       "description": "L'amour est dans l'air ! Obtiens 30% de réduction sur Premium",
       "cta": "Passer Premium"
-    }
+    },
+    "halloween": {
+      "title": "Promo Halloween",
+      "description": "Des friandises ou un sort — profitez de 30 % de réduction sur Premium.",
+      "cta": "Obtenir Premium"
+    },
+    "christmas": {
+      "title": "Promo de Noël",
+      "description": "Un petit cadeau de notre part — 30 % de réduction sur Premium.",
+      "cta": "Obtenir Premium"
+    },
+    "newYear": {
+      "title": "Promo du Nouvel An",
+      "description": "Commencez l'année avec 30 % de réduction sur Premium.",
+      "cta": "Obtenir Premium"
+    },
+    "monthlyOffer": "{percent} % de réduction par mois",
+    "yearlyOffer": "{percent} % de réduction par an"
   },
   "time": {
     "days": "j",

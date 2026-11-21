@@ -503,7 +503,24 @@
       "title": "День святого Валентина",
       "description": "Любовь витает в воздухе! Скидка 30% на Premium",
       "cta": "Получить Premium"
-    }
+    },
+    "halloween": {
+      "title": "Хэллоуинская распродажа",
+      "description": "Сладость или гадость — скидка 30% на Premium.",
+      "cta": "Получить Premium"
+    },
+    "christmas": {
+      "title": "Рождественская распродажа",
+      "description": "Небольшой подарок от нас — скидка 30% на Premium.",
+      "cta": "Получить Premium"
+    },
+    "newYear": {
+      "title": "Новогодняя распродажа",
+      "description": "Начните год со скидкой 30% на Premium.",
+      "cta": "Получить Premium"
+    },
+    "monthlyOffer": "Скидка {percent}% на месяц",
+    "yearlyOffer": "Скидка {percent}% на год"
   },
   "time": {
     "days": "д",
