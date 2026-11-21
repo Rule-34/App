@@ -520,7 +520,8 @@
       "cta": "Premium holen"
     },
     "monthlyOffer": "{percent} % Rabatt monatlich",
-    "yearlyOffer": "{percent} % Rabatt jährlich"
+    "yearlyOffer": "{percent} % Rabatt jährlich",
+    "monthlyAndYearly": "Monatlich & jährlich"
   },
   "time": {
     "days": "T",

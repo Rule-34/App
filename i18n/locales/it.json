@@ -520,7 +520,8 @@
       "cta": "Ottieni Premium"
     },
     "monthlyOffer": "{percent}% di sconto al mese",
-    "yearlyOffer": "{percent}% di sconto all'anno"
+    "yearlyOffer": "{percent}% di sconto all'anno",
+    "monthlyAndYearly": "Mensile e annuale"
   },
   "time": {
     "days": "d",

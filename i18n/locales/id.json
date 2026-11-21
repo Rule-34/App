@@ -520,7 +520,8 @@
       "cta": "Dapatkan Premium"
     },
     "monthlyOffer": "Diskon {percent}% per bulan",
-    "yearlyOffer": "Diskon {percent}% per tahun"
+    "yearlyOffer": "Diskon {percent}% per tahun",
+    "monthlyAndYearly": "Bulanan & tahunan"
   },
   "time": {
     "days": "d",

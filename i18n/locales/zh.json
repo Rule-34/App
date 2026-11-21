@@ -520,7 +520,8 @@
       "cta": "获取 Premium"
     },
     "monthlyOffer": "月付立减 {percent}%",
-    "yearlyOffer": "年付立减 {percent}%"
+    "yearlyOffer": "年付立减 {percent}%",
+    "monthlyAndYearly": "月付及年付"
   },
   "time": {
     "days": "天",

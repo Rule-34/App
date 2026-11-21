@@ -520,7 +520,8 @@
       "cta": "Nhận Premium"
     },
     "monthlyOffer": "Giảm {percent}% hàng tháng",
-    "yearlyOffer": "Giảm {percent}% hàng năm"
+    "yearlyOffer": "Giảm {percent}% hàng năm",
+    "monthlyAndYearly": "Hàng tháng và hàng năm"
   },
   "time": {
     "days": "d",

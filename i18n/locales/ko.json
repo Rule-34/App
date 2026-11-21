@@ -520,7 +520,8 @@
       "cta": "Premium 받기"
     },
     "monthlyOffer": "월간 {percent}% 할인",
-    "yearlyOffer": "연간 {percent}% 할인"
+    "yearlyOffer": "연간 {percent}% 할인",
+    "monthlyAndYearly": "월간 및 연간"
   },
   "time": {
     "days": "디",

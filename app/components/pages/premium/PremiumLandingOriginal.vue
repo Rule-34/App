@@ -49,8 +49,8 @@
     const promotion = activePromotion.value
     if (!promotion) return link.url
 
-    if ((intervalKey === 'monthly' || intervalKey === 'yearly') && link.name === 'Credit Card') {
-      return ghostOfferUrl(promotion.offers[intervalKey])
+    if (intervalKey === 'monthly' || intervalKey === 'yearly') {
+      return link.name === 'Credit Card' ? ghostOfferUrl(promotion.offers[intervalKey]) : link.url
     }
 
     return withSellAppCoupon(link.url, promotion.sellAppCoupon)
@@ -370,7 +370,7 @@
               <span aria-hidden="true">{{ activePromotion.emoji }}</span>
               <span>
                 {{ $t('promotions.percentOff', { percent: activePromotion.discountPercent }) }} ·
-                {{ $t(activePromotion.title) }}
+                {{ $t(activePromotion.title) }} · {{ $t('promotions.monthlyAndYearly') }}
               </span>
             </p>
 

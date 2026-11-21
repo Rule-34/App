@@ -520,7 +520,8 @@
       "cta": "Premium'a Geç"
     },
     "monthlyOffer": "Aylık %{percent} indirim",
-    "yearlyOffer": "Yıllık %{percent} indirim"
+    "yearlyOffer": "Yıllık %{percent} indirim",
+    "monthlyAndYearly": "Aylık ve yıllık"
   },
   "time": {
     "days": "d",

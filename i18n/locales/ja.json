@@ -520,7 +520,8 @@
       "cta": "Premiumを取得"
     },
     "monthlyOffer": "月額{percent}%オフ",
-    "yearlyOffer": "年額{percent}%オフ"
+    "yearlyOffer": "年額{percent}%オフ",
+    "monthlyAndYearly": "月額・年額"
   },
   "time": {
     "days": "日",

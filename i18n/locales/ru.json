@@ -520,7 +520,8 @@
       "cta": "Получить Premium"
     },
     "monthlyOffer": "Скидка {percent}% на месяц",
-    "yearlyOffer": "Скидка {percent}% на год"
+    "yearlyOffer": "Скидка {percent}% на год",
+    "monthlyAndYearly": "Месяц и год"
   },
   "time": {
     "days": "д",
