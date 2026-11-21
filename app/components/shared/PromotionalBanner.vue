@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-  import { XMarkIcon } from '@heroicons/vue/20/solid'
+  import { ArrowTopRightOnSquareIcon, XMarkIcon } from '@heroicons/vue/20/solid'
   import { useNow } from '@vueuse/core'
-  import { ghostOfferUrl, trackPromotionCheckout } from '~/assets/js/promotion-checkout'
+  import { ghostOfferUrl } from '~~/config/promotions'
 
   const { activePromotion, shouldShow, dismiss } = useActivePromotion()
   const localePath = useLocalePath()
@@ -9,6 +9,20 @@
 
   // Use VueUse's reactive current time (updates every second)
   const now = useNow({ interval: 1000 })
+
+  /**
+   * Convert MonthDay to full Date object for the current year
+   */
+  const endDate = computed(() => {
+    if (!activePromotion.value) return null
+
+    const { month, day } = activePromotion.value.endDate
+    // Ranges that cross New Year end next year
+    const year = now.value.getUTCFullYear() + (month < now.value.getUTCMonth() + 1 ? 1 : 0)
+
+    // Create date at end of day (23:59:59)
+    return new Date(Date.UTC(year, month - 1, day, 23, 59, 59))
+  })
 
   /**
    * Countdown timer showing remaining time (using VueUse's reactive now)
@@ -21,10 +35,9 @@
   }))
 
   const countdownText = computed(() => {
-    const end = activePromotion.value?.range.end
-    if (!end) return null
+    if (!endDate.value) return null
 
-    const diff = end.getTime() - now.value.getTime()
+    const diff = endDate.value.getTime() - now.value.getTime()
 
     if (diff <= 0) return null
 
@@ -48,33 +61,6 @@
       return `${seconds}${s}`
     }
   })
-
-  /**
-   * Offer links apply the discount in Ghost checkout; no code to copy.
-   */
-  const offerLinks = computed(() => {
-    const promotion = activePromotion.value
-    if (!promotion) return []
-
-    return [
-      {
-        cadence: 'monthly' as const,
-        cadenceLabel: t('common.monthly'),
-        label: t('promotions.monthlyOffer', { percent: promotion.discountPercent }),
-        url: ghostOfferUrl(promotion.offers.monthly)
-      },
-      {
-        cadence: 'yearly' as const,
-        cadenceLabel: t('common.yearly'),
-        label: t('promotions.yearlyOffer', { percent: promotion.discountPercent }),
-        url: ghostOfferUrl(promotion.offers.yearly)
-      }
-    ]
-  })
-
-  function onOfferClick(cadence: 'monthly' | 'yearly') {
-    if (activePromotion.value) trackPromotionCheckout(activePromotion.value.id, cadence)
-  }
 </script>
 
 <template>
@@ -143,21 +129,44 @@
         >
       </p>
 
-      <!-- Offer links: the discount is applied at checkout -->
-      <div class="grid gap-2.5 sm:grid-cols-2">
+      <!-- Discounted checkout links -->
+      <div class="space-y-2.5">
+        <!-- Monthly offer -->
         <a
-          v-for="offer in offerLinks"
-          :key="offer.cadence"
-          :href="offer.url"
-          class="group flex flex-col rounded-lg p-3 ring-1 ring-base-0/20 transition-colors hover:hover-bg-util focus-visible:focus-outline-util"
+          :href="ghostOfferUrl(activePromotion.offers.monthly)"
+          class="group flex w-full items-center justify-between rounded-lg p-3 text-center ring-1 ring-base-0/20 transition-colors hover:hover-bg-util focus-visible:focus-outline-util"
           rel="nofollow noopener noreferrer"
           target="_blank"
-          @click="onOfferClick(offer.cadence)"
         >
-          <span class="text-xs text-base-content">{{ offer.cadenceLabel }}</span>
-          <span class="text-sm font-semibold text-primary-400 group-hover:text-primary-300">
-            {{ offer.label }}
-          </span>
+          <div class="min-w-0 flex-1">
+            <span class="block text-xs text-base-content">{{ t('common.monthly') }}</span>
+            <span class="block truncate font-mono text-sm font-semibold text-base-content-highlight">
+              {{ t('promotions.percentOff', { percent: activePromotion.discountPercent }) }}
+            </span>
+          </div>
+          <ArrowTopRightOnSquareIcon
+            aria-hidden="true"
+            class="ml-2 h-4 w-4 shrink-0 text-base-content transition-colors group-hover:text-base-content-hover"
+          />
+        </a>
+
+        <!-- Yearly offer -->
+        <a
+          :href="ghostOfferUrl(activePromotion.offers.yearly)"
+          class="group flex w-full items-center justify-between rounded-lg p-3 text-center ring-1 ring-base-0/20 transition-colors hover:hover-bg-util focus-visible:focus-outline-util"
+          rel="nofollow noopener noreferrer"
+          target="_blank"
+        >
+          <div class="min-w-0 flex-1">
+            <span class="block text-xs text-base-content">{{ t('common.yearly') }}</span>
+            <span class="block truncate font-mono text-sm font-semibold text-base-content-highlight">
+              {{ t('promotions.percentOff', { percent: activePromotion.discountPercent }) }}
+            </span>
+          </div>
+          <ArrowTopRightOnSquareIcon
+            aria-hidden="true"
+            class="ml-2 h-4 w-4 shrink-0 text-base-content transition-colors group-hover:text-base-content-hover"
+          />
         </a>
       </div>
 

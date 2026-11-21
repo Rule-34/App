@@ -503,25 +503,7 @@
       "title": "Especial de Dia dos Namorados",
       "description": "O amor está no ar! Ganhe 30% de desconto no Premium",
       "cta": "Assinar Premium"
-    },
-    "halloween": {
-      "title": "Promoção de Halloween",
-      "description": "Travessuras ou gostosuras — ganhe 30% de desconto no Premium.",
-      "cta": "Obter Premium"
-    },
-    "christmas": {
-      "title": "Promoção de Natal",
-      "description": "Um pequeno presente nosso — 30% de desconto no Premium.",
-      "cta": "Obter Premium"
-    },
-    "newYear": {
-      "title": "Promoção de Ano Novo",
-      "description": "Comece o ano com 30% de desconto no Premium.",
-      "cta": "Obter Premium"
-    },
-    "monthlyOffer": "{percent}% de desconto mensal",
-    "yearlyOffer": "{percent}% de desconto anual",
-    "monthlyAndYearly": "Mensal e anual"
+    }
   },
   "time": {
     "days": "d",

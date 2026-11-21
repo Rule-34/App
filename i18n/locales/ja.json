@@ -503,25 +503,7 @@
       "title": "バレンタインデースペシャル",
       "description": "愛が空に漂っています！Premiumが30%オフ",
       "cta": "Premiumを取得"
-    },
-    "halloween": {
-      "title": "ハロウィンセール",
-      "description": "トリック・オア・トリート — Premiumが30%オフ。",
-      "cta": "Premiumを取得"
-    },
-    "christmas": {
-      "title": "クリスマスセール",
-      "description": "私たちからのちょっとした贈り物 — Premiumが30%オフ。",
-      "cta": "Premiumを取得"
-    },
-    "newYear": {
-      "title": "年末年始セール",
-      "description": "新年をPremiumの30%オフで始めましょう。",
-      "cta": "Premiumを取得"
-    },
-    "monthlyOffer": "月額{percent}%オフ",
-    "yearlyOffer": "年額{percent}%オフ",
-    "monthlyAndYearly": "月額・年額"
+    }
   },
   "time": {
     "days": "日",

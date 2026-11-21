@@ -503,25 +503,7 @@
       "title": "Sevgililer Günü Özel",
       "description": "Havada aşk var! Premium'da %30 indirimden yararlanın",
       "cta": "Premium'u Alın"
-    },
-    "halloween": {
-      "title": "Cadılar Bayramı İndirimi",
-      "description": "Şeker mi şaka mı — Premium'da %30 indirim kazanın.",
-      "cta": "Premium'a Geç"
-    },
-    "christmas": {
-      "title": "Noel İndirimi",
-      "description": "Bizden küçük bir hediye — Premium'da %30 indirim.",
-      "cta": "Premium'a Geç"
-    },
-    "newYear": {
-      "title": "Yılbaşı İndirimi",
-      "description": "Yeni yıla Premium'da %30 indirimle başlayın.",
-      "cta": "Premium'a Geç"
-    },
-    "monthlyOffer": "Aylık %{percent} indirim",
-    "yearlyOffer": "Yıllık %{percent} indirim",
-    "monthlyAndYearly": "Aylık ve yıllık"
+    }
   },
   "time": {
     "days": "d",

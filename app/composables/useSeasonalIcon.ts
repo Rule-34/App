@@ -1,18 +1,10 @@
-import { getSeasonalEmoji, getSeasonalSeason } from '~~/config/promotions'
-
-/**
- * Seasonal icon for the logo. The active campaign is the single source of
- * truth; Pride is the only season without a discount campaign.
- */
+// The icon follows the active promotion, so the icon and the discount always switch together
 export function useSeasonalIcon() {
   const { activePromotion } = useActivePromotion()
-  const now = useState('promotion-reference-time', () => Date.now())
 
-  const season = computed(() => getSeasonalSeason(activePromotion.value, new Date(now.value)))
-  const seasonalEmoji = computed(() => getSeasonalEmoji(activePromotion.value, new Date(now.value)))
+  const seasonalEmoji = computed(() => activePromotion.value?.emoji ?? null)
 
   return {
-    season,
     seasonalEmoji
   }
 }

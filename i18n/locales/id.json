@@ -503,25 +503,7 @@
       "title": "Spesial Hari Valentine",
       "description": "Cinta ada di udara! Dapatkan diskon 30% Premium",
       "cta": "Dapatkan Premium"
-    },
-    "halloween": {
-      "title": "Promo Halloween",
-      "description": "Trick or treat — dapatkan diskon 30% untuk Premium.",
-      "cta": "Dapatkan Premium"
-    },
-    "christmas": {
-      "title": "Promo Natal",
-      "description": "Hadiah kecil dari kami — diskon 30% untuk Premium.",
-      "cta": "Dapatkan Premium"
-    },
-    "newYear": {
-      "title": "Promo Tahun Baru",
-      "description": "Mulai tahun baru dengan diskon 30% untuk Premium.",
-      "cta": "Dapatkan Premium"
-    },
-    "monthlyOffer": "Diskon {percent}% per bulan",
-    "yearlyOffer": "Diskon {percent}% per tahun",
-    "monthlyAndYearly": "Bulanan & tahunan"
+    }
   },
   "time": {
     "days": "d",
