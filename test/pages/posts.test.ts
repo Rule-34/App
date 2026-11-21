@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { setup, url } from '@nuxt/test-utils'
+import { fetch as fetchFromServer, setup, url } from '@nuxt/test-utils'
 import {
   mockPostsPage0,
   mockPostsPage1,
@@ -1827,6 +1827,59 @@ describe('/', async () => {
       expect(description).not.toMatch(/,\s*,/)
       expect(description).toContain('from safebooru.org')
     }, 30000)
+
+    describe('robots meta', () => {
+      const robotsMetaTags = (html: string) => html.match(/<meta[^>]*name="robots"[^>]*>/g) ?? []
+
+      it.each([
+        '/posts/safebooru.org?tags=empty_test',
+        '/posts/safebooru.org/empty_test',
+        '/de/posts/safebooru.org?tags=empty_test',
+        '/de/posts/safebooru.org/empty_test'
+      ])('noindexes a page whose posts request succeeded with zero posts: %s', async (path) => {
+        const response = await fetchFromServer(path, { redirect: 'manual' })
+        const robots = robotsMetaTags(await response.text())
+
+        expect(response.status).toBe(200)
+        expect(robots).toHaveLength(1)
+        expect(robots[0]).toContain('content="noindex, follow"')
+      })
+
+      it.each([
+        // Posts
+        '/posts/safebooru.org',
+        '/posts/safebooru.org?tags=1girl',
+        '/posts/safebooru.org/1girl',
+        // The posts request failed, which says nothing about the tag
+        '/posts/safebooru.org?tags=rate_limited_502_test',
+        '/posts/safebooru.org/rate_limited_502_test',
+        '/posts/safebooru.org?tags=client_429_test',
+        '/posts/safebooru.org/client_429_test'
+      ])('keeps the page indexable: %s', async (path) => {
+        const response = await fetchFromServer(path, { redirect: 'manual' })
+
+        expect(response.status).toBe(200)
+        expect(robotsMetaTags(await response.text())).toEqual([])
+      })
+
+      it('keeps the noindex through hydration and drops it when the client navigates to posts', async () => {
+        const page = await createTrackedPage()
+        const robotsContents = () =>
+          page.locator('meta[name="robots"]').evaluateAll((tags) => tags.map((tag) => tag.getAttribute('content')))
+
+        await page.goto(url('/posts/safebooru.org?tags=empty_test'), { waitUntil: 'load' })
+        await page.waitForFunction(
+          () => (document.querySelector('#__nuxt') as { __vue_app__?: unknown } | null)?.__vue_app__
+        )
+        await page.getByRole('heading', { name: /no results/i }).waitFor({ state: 'visible' })
+
+        expect(await robotsContents()).toEqual(['noindex, follow'])
+
+        await pushRoute(page, '/posts/safebooru.org?tags=1girl')
+
+        await expect.poll(robotsContents, { timeout: 10000 }).toEqual([])
+      }, 30000)
+    })
   })
 
   describe('Tag landing page', async () => {
