@@ -625,20 +625,6 @@
                 {{ $t('pages.premium.landingPage.paymentDialogTitle', { name: selectedPaymentInterval.name }) }}
               </DialogTitle>
 
-              <p
-                v-if="
-                  activePromotion &&
-                  (selectedPaymentIntervalKey === 'monthly' || selectedPaymentIntervalKey === 'yearly')
-                "
-                class="mt-2 inline-flex items-center gap-1.5 rounded-full bg-primary-500/20 px-3 py-1 text-xs font-semibold text-primary-400 ring-1 ring-primary-500/30"
-              >
-                <span aria-hidden="true">{{ activePromotion.emoji }}</span>
-                <span>
-                  {{ $t('promotions.percentOff', { percent: activePromotion.discountPercent }) }} ·
-                  {{ $t(activePromotion.title) }}
-                </span>
-              </p>
-
               <p class="mt-2 text-sm text-pretty text-base-content">
                 {{ $t('pages.premium.landingPage.paymentDialogSubtitle') }}
               </p>
@@ -661,6 +647,17 @@
                     <h4 class="text-lg font-medium text-base-content-highlight">
                       {{ group.method.name }}
                     </h4>
+                    <span
+                      v-if="
+                        group.category === 'creditCard' &&
+                        activePromotion &&
+                        (selectedPaymentIntervalKey === 'monthly' || selectedPaymentIntervalKey === 'yearly')
+                      "
+                      class="rounded-full bg-primary-500/20 px-2 py-0.5 text-xs font-semibold text-primary-400 ring-1 ring-primary-500/30"
+                    >
+                      {{ activePromotion.emoji }}
+                      {{ $t('promotions.percentOff', { percent: activePromotion.discountPercent }) }}
+                    </span>
                     <span
                       v-if="group.category === 'crypto'"
                       class="rounded-full bg-primary-700 px-2 py-0.5 text-xs font-semibold text-base-content-highlight"
