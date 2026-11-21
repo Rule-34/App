@@ -890,7 +890,11 @@
   useSeoMeta({
     title: shortTitle,
 
-    description
+    description,
+
+    // The posts API answers "no results" with 200 and an empty `data`; a failed request leaves `data` unset,
+    // so an upstream outage never de-indexes a real search
+    robots: () => (data.value?.pages[0]?.data.length === 0 ? 'noindex, follow' : undefined)
   })
 
   // Override i18n's generic `?tags` canonical: simple positive-tag searches have dedicated landing pages.

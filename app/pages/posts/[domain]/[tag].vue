@@ -127,7 +127,11 @@
   useSeoMeta({
     title: pageTitle,
     description: pageDescription,
-    ogImage: ogImageUrl
+    ogImage: ogImageUrl,
+
+    // The posts API answers "no results" with 200 and an empty `data`; a failed request leaves `data` unset,
+    // so an upstream outage never de-indexes a real tag
+    robots: () => (data.value?.data.length === 0 ? 'noindex, follow' : undefined)
   })
 
   const firstPostsAsSchema = computed(() => {
