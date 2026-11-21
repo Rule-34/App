@@ -37,26 +37,20 @@ export function useActivePromotion() {
   /**
    * Session storage for dismissal state.
    * Uses the year-specific ID so a dismissal does not leak into next year's campaign.
+   * One reactive binding avoids creating a storage watcher per clock tick.
    */
-  const dismissalState = computed(() => {
-    if (!activePromotion.value) return null
-
-    return useSessionStorage(`promotion-dismissed-${activePromotion.value.id}`, false, {
-      writeDefaults: false
-    })
-  })
+  const dismissalKey = computed(() => `promotion-dismissed-${activePromotion.value?.id ?? 'none'}`)
+  const dismissalState = useSessionStorage(dismissalKey, false, { writeDefaults: false })
 
   const shouldShow = computed(() => {
     if (!activePromotion.value) return false
     if (isPremium.value) return false
 
-    return !(dismissalState.value?.value ?? false)
+    return !dismissalState.value
   })
 
   function dismiss() {
-    if (dismissalState.value) {
-      dismissalState.value.value = true
-    }
+    dismissalState.value = true
   }
 
   return {
