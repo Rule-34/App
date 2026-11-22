@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-  import { CheckIcon, DocumentDuplicateIcon, XMarkIcon } from '@heroicons/vue/20/solid'
-  import { useClipboard, useNow } from '@vueuse/core'
+  import { ArrowTopRightOnSquareIcon, XMarkIcon } from '@heroicons/vue/20/solid'
+  import { useNow } from '@vueuse/core'
+  import { ghostOfferUrl } from '~~/config/promotions'
 
   const { activePromotion, shouldShow, dismiss } = useActivePromotion()
   const localePath = useLocalePath()
@@ -15,10 +16,12 @@
   const endDate = computed(() => {
     if (!activePromotion.value) return null
 
-    const year = now.value.getFullYear()
+    const { month, day } = activePromotion.value.endDate
+    // Ranges that cross New Year end next year
+    const year = now.value.getUTCFullYear() + (month < now.value.getUTCMonth() + 1 ? 1 : 0)
 
     // Create date at end of day (23:59:59)
-    return new Date(year, activePromotion.value.endDate.month - 1, activePromotion.value.endDate.day, 23, 59, 59)
+    return new Date(Date.UTC(year, month - 1, day, 23, 59, 59))
   })
 
   /**
@@ -58,12 +61,6 @@
       return `${seconds}${s}`
     }
   })
-
-  /**
-   * Clipboard utilities using VueUse (auto-handles permissions and errors)
-   */
-  const { copy: copyMonthly, copied: copiedMonthly } = useClipboard()
-  const { copy: copyYearly, copied: copiedYearly } = useClipboard()
 </script>
 
 <template>
@@ -132,55 +129,45 @@
         >
       </p>
 
-      <!-- Discount codes -->
+      <!-- Discounted checkout links -->
       <div class="space-y-2.5">
-        <!-- Monthly code -->
-        <button
-          class="group flex w-full items-center justify-between rounded-lg p-3 ring-1 ring-base-0/20 transition-colors hover:hover-bg-util focus-visible:focus-outline-util"
-          type="button"
-          @click="copyMonthly(activePromotion.monthlyCode)"
+        <!-- Monthly offer -->
+        <a
+          :href="ghostOfferUrl(activePromotion.offers.monthly)"
+          class="group flex w-full items-center justify-between rounded-lg p-3 text-center ring-1 ring-base-0/20 transition-colors hover:hover-bg-util focus-visible:focus-outline-util"
+          rel="nofollow noopener noreferrer"
+          target="_blank"
         >
           <div class="min-w-0 flex-1">
             <span class="block text-xs text-base-content">{{ t('common.monthly') }}</span>
             <span class="block truncate font-mono text-sm font-semibold text-base-content-highlight">
-              {{ activePromotion.monthlyCode }}
+              {{ t('promotions.percentOff', { percent: activePromotion.discountPercent }) }}
             </span>
           </div>
-          <CheckIcon
-            v-if="copiedMonthly"
-            aria-hidden="true"
-            class="ml-2 h-4 w-4 shrink-0 text-primary-400"
-          />
-          <DocumentDuplicateIcon
-            v-else
+          <ArrowTopRightOnSquareIcon
             aria-hidden="true"
             class="ml-2 h-4 w-4 shrink-0 text-base-content transition-colors group-hover:text-base-content-hover"
           />
-        </button>
+        </a>
 
-        <!-- Yearly code -->
-        <button
-          class="group flex w-full items-center justify-between rounded-lg p-3 ring-1 ring-base-0/20 transition-colors hover:hover-bg-util focus-visible:focus-outline-util"
-          type="button"
-          @click="copyYearly(activePromotion.yearlyCode)"
+        <!-- Yearly offer -->
+        <a
+          :href="ghostOfferUrl(activePromotion.offers.yearly)"
+          class="group flex w-full items-center justify-between rounded-lg p-3 text-center ring-1 ring-base-0/20 transition-colors hover:hover-bg-util focus-visible:focus-outline-util"
+          rel="nofollow noopener noreferrer"
+          target="_blank"
         >
           <div class="min-w-0 flex-1">
             <span class="block text-xs text-base-content">{{ t('common.yearly') }}</span>
             <span class="block truncate font-mono text-sm font-semibold text-base-content-highlight">
-              {{ activePromotion.yearlyCode }}
+              {{ t('promotions.percentOff', { percent: activePromotion.discountPercent }) }}
             </span>
           </div>
-          <CheckIcon
-            v-if="copiedYearly"
-            aria-hidden="true"
-            class="ml-2 h-4 w-4 shrink-0 text-primary-400"
-          />
-          <DocumentDuplicateIcon
-            v-else
+          <ArrowTopRightOnSquareIcon
             aria-hidden="true"
             class="ml-2 h-4 w-4 shrink-0 text-base-content transition-colors group-hover:text-base-content-hover"
           />
-        </button>
+        </a>
       </div>
 
       <!-- CTA button -->

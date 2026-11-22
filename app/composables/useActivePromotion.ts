@@ -1,5 +1,5 @@
 import type { Promotion, MonthDay } from '~~/config/promotions'
-import { promotions } from '~~/config/promotions'
+import { ghostOfferUrl, promotions } from '~~/config/promotions'
 import { useSessionStorage } from '@vueuse/core'
 
 /**
@@ -8,14 +8,16 @@ import { useSessionStorage } from '@vueuse/core'
 interface PromotionWithId extends Promotion {
   /** Year-specific ID (e.g., 'black-friday-2025') */
   id: string
+  /** End date resolved for the current year */
+  endDate: MonthDay
 }
 
 /**
- * Check if a date falls within a month/day range (year-agnostic)
+ * Check if a date falls within a month/day range (year-agnostic, UTC)
  */
 function isWithinDateRange(current: Date, start: MonthDay, end: MonthDay): boolean {
-  const currentMonth = current.getMonth() + 1 // getMonth() returns 0-11
-  const currentDay = current.getDate()
+  const currentMonth = current.getUTCMonth() + 1 // getUTCMonth() returns 0-11
+  const currentDay = current.getUTCDate()
 
   // Create comparable numbers: MMDD format
   const currentValue = currentMonth * 100 + currentDay
@@ -36,6 +38,18 @@ function generatePromotionId(baseId: string, year: number): string {
   return `${baseId}-${year}`
 }
 
+/** The promotion active at `now` (UTC) with a year-specific ID, or null */
+export function getActivePromotion(now: Date): PromotionWithId | null {
+  const year = now.getUTCFullYear()
+  const resolve = (date: Promotion['startDate']) => (typeof date === 'function' ? date(year) : date)
+
+  const active = promotions.find((promo) => isWithinDateRange(now, resolve(promo.startDate), resolve(promo.endDate)))
+
+  if (!active) return null
+
+  return { ...active, id: generatePromotionId(active.baseId, year), endDate: resolve(active.endDate) }
+}
+
 /**
  * Composable to manage the currently active promotion
  * Handles promotion selection, dismissal state, and visibility logic
@@ -49,23 +63,7 @@ export function useActivePromotion() {
    * 1. Current date (month/day) is within promotion range
    * Returns the first matching promotion with a year-specific ID or null
    */
-  const activePromotion = computed<PromotionWithId | null>(() => {
-    const now = new Date()
-    const currentYear = now.getFullYear()
-
-    const active = promotions.find((promo) => {
-      // Check if current date is within the promotion period (year-agnostic)
-      return isWithinDateRange(now, promo.startDate, promo.endDate)
-    })
-
-    if (!active) return null
-
-    // Add year-specific ID to the promotion
-    return {
-      ...active,
-      id: generatePromotionId(active.baseId, currentYear)
-    }
-  })
+  const activePromotion = computed(() => getActivePromotion(new Date()))
 
   /**
    * Session storage for dismissal state
@@ -100,6 +98,21 @@ export function useActivePromotion() {
     }
   }
 
+  /** Card subscriptions open the Ghost offer; SellApp one-time plans get the coupon when there is one */
+  function checkoutUrl(plan: string, link: { url: string; category: string }): string {
+    const promotion = activePromotion.value
+
+    if (plan === 'monthly' || plan === 'yearly') {
+      return promotion && link.category === 'creditCard' ? ghostOfferUrl(promotion.offers[plan]) : link.url
+    }
+
+    if (!promotion?.sellAppCoupon) return link.url
+
+    const url = new URL(link.url)
+    url.searchParams.set('coupon', promotion.sellAppCoupon)
+    return url.href
+  }
+
   return {
     /** The currently active promotion or null */
     activePromotion: readonly(activePromotion),
@@ -108,6 +121,7 @@ export function useActivePromotion() {
     shouldShow: readonly(shouldShow),
 
     /** Function to dismiss the current promotion */
-    dismiss
+    dismiss,
+    checkoutUrl
   }
 }

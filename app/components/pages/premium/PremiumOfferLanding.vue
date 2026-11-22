@@ -16,7 +16,7 @@
 
   const props = defineProps<{ variant: 'OfferFirst' | 'YearlyFocus' }>()
 
-  const { shouldShow } = useActivePromotion()
+  const { shouldShow, checkoutUrl } = useActivePromotion()
   const { t } = useI18n()
   const localePath = useLocalePath()
   const customerCount = 2363
@@ -603,7 +603,7 @@
                           ? 'bg-primary-700/10 ring-primary-700/70 hover:bg-primary-700/20'
                           : 'hover:hover-bg-util'
                       "
-                      :href="link.url"
+                      :href="checkoutUrl(selectedPaymentInterval.key, link)"
                       class="flex items-center gap-2 rounded-lg px-3 py-2 text-center text-sm font-medium text-base-content-highlight ring-1 ring-base-0/20 hover:hover-text-util focus-visible:focus-outline-util"
                       rel="nofollow noopener noreferrer"
                       target="_blank"
